@@ -1,137 +1,95 @@
 {% extends '::base.html.twig' %}
 
+{% block meta %}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% endblock %}
+
+
 {% block stylesheets %}
-   {{ parent() }}
-   {% stylesheets filter='?uglifycss' filter='cssrewrite' output='assets/backend/css/main.css'
-        'design/common/css/bootstrap.min.css'
-        'design/common/css/bootstrap-rtl.css'
-        'design/website/font-awesome/css/font-awesome.min.css'
-        'design/common/js/libs/css/ui-lightness/jquery-ui-1.9.2.custom.min.css'
-        'design/admin-panel/js/plugins/magnific/magnific-popup.css'
-        'design/admin-panel/js/plugins/icheck/skins/minimal/blue.css'
-        'design/admin-panel/js/plugins/datepicker/datepicker.css'
-        'js/plugins/select2/select2.css'
-        'design/admin-panel/js/plugins/simplecolorpicker/jquery.simplecolorpicker.css'
-        'design/admin-panel/js/plugins/timepicker/bootstrap-timepicker.css'
-        'design/admin-panel/js/plugins/fileupload/bootstrap-fileupload.css'
-        'design/admin-panel/css/target-admin.css'
-        'design/admin-panel/css/demos/ui-notifications.css'
-        'design/admin-panel/css/backend.css'
-        'design/admin-panel/css/flipclock.css'
-        'design/website/css/dropzone.css'
-        'js/plugins/jcrop/css/jquery.Jcrop.css'
-        'design/admin-panel/fancybox/jquery.fancybox.css'
-   %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
-    <!--[if IE]>
-	<link rel="stylesheet" type="text/css" href="{{ asset('design/admin-panel/css/ie.css') }}" />
-<![endif]-->
+    {{ parent() }}
+    <!-- Favicons AND TOUCH ICONS   -->
+    <link rel="icon" href="{{ asset('bundles/ibtikarglancedashboard/assets/images/'~style_Sheet_name~'/favicon.ico')}}">
+    <link rel="apple-touch-icon" href="{{ asset('bundles/ibtikarglancedashboard/assets/images/'~style_Sheet_name~'/apple-touch-icon.png')}}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('bundles/ibtikarglancedashboard/assets/images/'~style_Sheet_name~'/apple-touch-icon-72x72.png')}}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('bundles/ibtikarglancedashboard/assets/images/'~style_Sheet_name~'/apple-touch-icon-114x114.png')}}">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+
+    <!-- /global stylesheets -->
+
+    <!-- file upload Plugin CSS -->
+    <link rel="stylesheet" href="{{ asset('bundles/ibtikarglancedashboard/assets/js/plugins/fileupload/bootstrap-fileupload.css')}}">
+    <link href="{{ asset('bundles/ibtikarglancedashboard/assets/css/custom.css')}}" rel="stylesheet" type="text/css">
+
+    <link href="{{ asset('bundles/ibtikarglancedashboard/assets/css/'~style_Sheet_name~'.css')}}" rel="stylesheet" type="text/css">
+    {#    {% stylesheets
+            'bundles/ibtikarglancedashboard/assets/css/icons/icomoon/styles.css'
+            'bundles/ibtikarglancedashboard/assets/css/bootstrap.css'
+            'bundles/ibtikarglancedashboard/assets/css/core.css'
+            'bundles/ibtikarglancedashboard/assets/css/components.css'
+            'bundles/ibtikarglancedashboard/assets/css/colors.css'
+             filter='cssrewrite' output='assets/backend/css/main.css'
+
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+
+        {% endstylesheets %}#}
+
+    <!-- Global stylesheets -->
+    <link href="{{ asset('bundles/ibtikarglancedashboard/assets/css/icons/icomoon/styles.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('bundles/ibtikarglancedashboard/assets/css/bootstrap.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('bundles/ibtikarglancedashboard/assets/css/core.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('bundles/ibtikarglancedashboard/assets/css/components.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('bundles/ibtikarglancedashboard/assets/css/colors.css')}}" rel="stylesheet" type="text/css">
+
+    <!-- /global stylesheets -->
+
+    <!-- file upload Plugin CSS -->
+    <link rel="{{ asset('bundles/ibtikarglancedashboard/stylesheet" href="assets/js/plugins/fileupload/bootstrap-fileupload.css')}}">
+
+
+
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('design/common/js/libs/jquery-ui-1.9.2.custom.min.js') }}"></script>
     {{ parent() }}
-        <!--[if lt IE 9]>
-        <script src="{{ asset('js/place-holder.js') }}"></script>
-        <script src="{{ asset('js/libs/excanvas.compiled.js') }}"></script>
-        <![endif]-->
-        <script>
-           {# var delayMaterialTimerUrl = '{{ path("delay_material_timer") }}';
-            var staffAlmostFinishedMaterialURL = '{{ path('staff_almost_finished_material') }}';
-            var materialNotificationSeenURL = '{{ path('material_notification_seen') }}';#}
-        </script>
-    {% if fixSort is defined %}
-    {% javascripts filter='?uglifyjs2' output='assets/backend/js/main-without-sortable.js'
-        'design/website/js/bootstrap.js'
-        'js/plugins/jquery.livequery.min.js'
-        'design/admin-panel/js/target-admin.js'
-        'design/admin-panel/js/demos/ui-notifications.js'
-        'design/admin-panel/js/modernizr.custom.js'
-        'design/admin-panel/js/plugins/progress/classie.js'
-        'design/admin-panel/js/plugins/progress/progressButton.js'
-        'js/plugins/jquery.form.js'
-        'design/admin-panel/js/plugins/datatables/jquery.dataTables.min.js'
-        'design/admin-panel/js/plugins/datatables/DT_bootstrap.js'
-        'design/admin-panel/js/plugins/tableCheckable/jquery.tableCheckable.js'
-        'design/admin-panel/js/plugins/icheck/jquery.icheck.min.js'
-        'design/admin-panel/js/plugins/parsley/parsley.js'
-        'design/admin-panel/js/plugins/datepicker/bootstrap-datepicker.js'
-        'design/admin-panel/js/plugins/timepicker/bootstrap-timepicker.js'
-        'design/admin-panel/js/plugins/simplecolorpicker/jquery.simplecolorpicker.js'
-        'js/plugins/select2/select2.js'
-        'js/plugins/select2/select2_locale_ar.js'
-        'js/plugins/jquery-validation/jquery.validate.min.js'
-        'js/plugins/jquery-validation/additional-methods.min.js'
-        'js/validation.js'
-        'js/plugins/jquery-validation/messages_ar.js'
-        'design/admin-panel/js/plugins/magnific/jquery.magnific-popup.min.js'
-        'design/admin-panel/js/plugins/fileupload/bootstrap-fileupload.js'
-        'js/plugins/jquery.fileDownload.js'
-        'design/website/js/dropzone.js'
-        'design/admin-panel/js/plugins/multiselect/jquery-picklist.js'
-        'js/plugins/phone-format/PhoneFormat.js'
-        'design/admin-panel/js/plugins/flags/jquery.dd.min.js'
-        'design/admin-panel/js/flipclock.js'
-        'design/admin-panel/fancybox/jquery.fancybox.js'
-        'design/admin-panel/js/plugins/jquery.countdown.min.js'
-        'bundles/ibtikarbackend/js/timerNotification.js'
-    %}
-    <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-    {% else %}
-    {% javascripts filter='?uglifyjs2' output='assets/backend/js/main.js'
-        'design/website/js/bootstrap.js'
-        'js/plugins/jquery.livequery.min.js'
-        'design/admin-panel/js/target-admin.js'
-        'design/admin-panel/js/demos/ui-notifications.js'
-        'design/admin-panel/js/modernizr.custom.js'
-        'design/admin-panel/js/plugins/progress/classie.js'
-        'design/admin-panel/js/plugins/progress/progressButton.js'
-        'js/plugins/jquery.form.js'
-        'design/admin-panel/js/plugins/datatables/jquery.dataTables.min.js'
-        'design/admin-panel/js/plugins/datatables/DT_bootstrap.js'
-        'design/admin-panel/js/plugins/tableCheckable/jquery.tableCheckable.js'
-        'design/admin-panel/js/plugins/icheck/jquery.icheck.min.js'
-        'design/admin-panel/js/plugins/parsley/parsley.js'
-        'design/admin-panel/js/plugins/datepicker/bootstrap-datepicker.js'
-        'design/admin-panel/js/plugins/timepicker/bootstrap-timepicker.js'
-        'design/admin-panel/js/plugins/simplecolorpicker/jquery.simplecolorpicker.js'
-        'js/plugins/select2/select2.js'
-        'js/plugins/select2/select2_locale_ar.js'
-        'js/plugins/jquery-validation/jquery.validate.min.js'
-        'js/plugins/jquery-validation/additional-methods.min.js'
-        'js/validation.js'
-        'js/plugins/jquery-validation/messages_ar.js'
-        'design/admin-panel/js/plugins/magnific/jquery.magnific-popup.min.js'
-        'design/website/js/jquery.sortable.js'
-        'design/admin-panel/js/plugins/fileupload/bootstrap-fileupload.js'
-        'js/plugins/jquery.fileDownload.js'
-        'design/website/js/dropzone.js'
-        'design/admin-panel/js/plugins/multiselect/jquery.ui.widget.js'
-        'design/admin-panel/js/plugins/multiselect/jquery-picklist.js'
-        'js/plugins/phone-format/PhoneFormat.js'
-        'design/admin-panel/js/plugins/flags/jquery.dd.min.js'
-        'design/admin-panel/js/flipclock.js'
-        'design/admin-panel/fancybox/jquery.fancybox.js'
-        'design/admin-panel/js/plugins/jquery.countdown.min.js'
-        'bundles/ibtikarbackend/js/timerNotification.js'
-    %}
-    <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-    {% endif %}
-        {% javascripts filter='?uglifyjs2' output='assets/backend/js/backend.js'
-            'bundles/ibtikarbackend/js/backend.js'
+
+    {#   {% javascripts
+                'bundles/ibtikarglancedashboard/assets/js/plugins/loaders/pace.min.js'
+                'bundles/ibtikarglancedashboard/assets/js/core/libraries/jquery.min.js'
+                'bundles/ibtikarglancedashboard/assets/js/core/libraries/bootstrap.min.js'
+                'bundles/ibtikarglancedashboard/assets/js/plugins/loaders/blockui.min.js'
+                'bundles/ibtikarglancedashboard/assets/js/plugins/ui/nicescroll.min.js'
+                'bundles/ibtikarglancedashboard/assets/js/plugins/ui/drilldown.js'
+                'bundles/ibtikarglancedashboard/assets/js/pages/layout_sidebar_sticky_custom.js'
+                'bundles/ibtikarglancedashboard/assets/js/plugins/notifications/pnotify.min.js'
+                'bundles/ibtikarglancedashboard/assets/js/pages/components_notifications_pnotify.js'
+                'bundles/ibtikarglancedashboard/assets/js/core/jquery.easing.min.js'
+                filter='?uglifyjs2' output='assets/backend/js/backend.js'
         %}
         <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}
-        <script>
-            loginUrl = '{{ path('staff_login') }}';
-     {#       notFoundUrl = '{{ path('backend_not_found') }}';
-            var defaultConfirmationMessage = '{% trans %}Are you sure you want to continue ?{% endtrans %}';#}
-        </script>
-        {% if app.request.get('iframe') != 'true' %}
-        {# chatwee integration #}
-{#        <script id="chatwee-js-tag" src="https://repository.chatwee.com/scripts/72e4b84d2ef104b50494d305ab4bde88.js" type="text/javascript" charset="UTF-8"></script>#}
-        {% endif %}
+        {% endjavascripts %}#}
+
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/plugins/loaders/pace.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/core/libraries/jquery.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/core/libraries/bootstrap.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/plugins/loaders/blockui.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/plugins/ui/nicescroll.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/plugins/ui/drilldown.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/pages/layout_sidebar_sticky_custom.js')}}"></script>
+
+    <!-- /core JS files -->
+
+    <!-- alerts messages -->
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/plugins/notifications/pnotify.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/pages/components_notifications_pnotify.js')}}"></script>
+
+    <script src="{{ asset('bundles/ibtikarglancedashboard/assets/js/core/jquery.easing.min.js')}}"></script>
+
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/core/app.js')}}"></script>
+
 {% endblock %}

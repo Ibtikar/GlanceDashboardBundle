@@ -1,3 +1,5 @@
-ibtikar_glance_dashboard_homepage:
-    path:     /
-    defaults: { _controller: IbtikarGlanceDashboardBundle:Default:index }
+ibtikar_glance_dashboard_home:
+    path:     /backend
+    defaults: { _controller: IbtikarGlanceDashboardBundle:base\Backend:home }
+
+

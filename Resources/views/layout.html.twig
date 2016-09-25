@@ -1,113 +1,232 @@
-{% extends location is defined and app.environment == 'dev' ? 'IbtikarBackendBundle::twigLayout.html.twig' : 'IbtikarBackendBundle::assetsLayout.html.twig' %}
+{% extends location is defined and app.environment == 'dev' ? 'IbtikarGlanceDashboardBundle::twigLayout.html.twig' : 'IbtikarGlanceDashboardBundle::assetsLayout.html.twig' %}
 
 {% block body %}
-        {{ include('GlanceDashboardBundle::navbar.html.twig') }}
+    {{ include('IbtikarGlanceDashboardBundle::header.html.twig') }}
+    {{ include('IbtikarGlanceDashboardBundle::navbar.html.twig') }}
 
-        {{ include('GlanceDashboardBundle::header.html.twig') }}
+
+    <!-- Page container -->
+    <div class="page-container">
+
+        <!-- Page content -->
+        <div class="page-content">
 
 
-                            {{ include('GlanceDashboardBundle::sidebar.html.twig') }}
+            {{ include('IbtikarGlanceDashboardBundle::sidebar.html.twig') }}
+
+
+
+
+            <!-- Main content -->
+            <div class="content-wrapper">
+
+
+
+
+
+
+                {% block content %}
+
+                {% endblock %}
+
+            </div>
+            <!-- /main content -->
+
+        </div>
+        <!-- /page content -->
+
+    </div>
+    <!-- /page container -->
+
+
+
+
+
+
+
 
 
     {% block modal %}
 
     {% endblock %}
-    {#    <div id="basicModal" class="modal fade" tabindex='-1'>
-            <div class="modal-dialog">
-                <div class="modal-content">
+    <!-- Primary modal -->
+    <div id="modal_theme_primary" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h6 class="modal-title">خانات الجدول
+                        <span class="badge bg-dark position-right">243</span>
+                    </h6>
+                </div>
 
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->#}
-       {# <div id="confirmationModal" class="modal fade" tabindex='-1'>
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3 class="modal-title">
-                        </h3>
-                    </div>
-                    <div class="modal-body">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default dev-confirm-cancel" data-dismiss="modal">{% trans %}Cancel{% endtrans %}</button>
-                        <button type="button" class="btn btn-primary dev-confirm">{% trans %}Ok{% endtrans %}</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
-                <div id="secondConfirmationModal" class="modal fade" tabindex='-1'>
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3 class="modal-title">
-                        </h3>
-                    </div>
-                    <div class="modal-body">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default dev-confirm-cancel" data-dismiss="modal">{% trans %}Cancel{% endtrans %}</button>
-                        <button type="button" class="btn btn-primary dev-confirm">{% trans %}Ok{% endtrans %}</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                <div class="modal-body">
 
-        <div id="choices-modal" class="modal fade" tabindex='-1'>
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3 class="modal-title">
-                        </h3>
-                    </div>
-                    <div class="modal-body">
-                    </div>
-                    <div class="modal-footer">
 
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                    <ul class="dropdown-menu dropdown-menu-sortable" style="display: block; position: static; width: 100%; margin-top: 0; float: none;">
 
-        <div id="alertModal" class="modal fade"  tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3 class="modal-title">
-                            {% trans %}Alert{% endtrans %}
-                        </h3>
-                    </div>
-                    <div class="modal-body">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary dev-alert" data-dismiss="modal">{% trans %}Ok{% endtrans %}</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
-
-        <div id="iframeModal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3 class="modal-title"></h3>
-                    </div>
-                    <div class="modal-body">
-                            <div id="iframe-loader" class="loading">
+                        <li>
+                            <div class="media-left media-middle">
+                                <i class="icon icon-move dragula-handle"></i>
                             </div>
-                        <iframe class="dev-iframe-auto-resize" src="" scrolling="no" width="100%" style="border: none;"></iframe>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->#}
+
+
+                            <div class="media-body">
+                                <div class="media-heading">الاسم</div>
+                            </div>
+
+
+                            <div class="media-right media-middle">
+                                <div class="checkbox checkbox-switchery switchery-xs">
+                                    <label>
+                                        <input type="checkbox" class="switchery switchery-primary" checked="checked">
+
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+
+
+                        <li>
+                            <div class="media-left media-middle">
+                                <i class="icon icon-move dragula-handle"></i>
+                            </div>
+
+
+                            <div class="media-body">
+                                <div class="media-heading">التاريخ</div>
+                            </div>
+
+
+                            <div class="media-right media-middle">
+                                <div class="checkbox checkbox-switchery switchery-xs">
+                                    <label>
+                                        <input type="checkbox" class="switchery switchery-primary" checked="checked">
+
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+
+
+
+                        <li>
+                            <div class="media-left media-middle">
+                                <i class="icon icon-move dragula-handle"></i>
+                            </div>
+
+
+                            <div class="media-body">
+                                <div class="media-heading">الصلحيات</div>
+                            </div>
+
+
+                            <div class="media-right media-middle">
+                                <div class="checkbox checkbox-switchery switchery-xs">
+                                    <label>
+                                        <input type="checkbox" class="switchery switchery-primary" checked="checked">
+
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+
+
+
+                        <li>
+                            <div class="media-left media-middle">
+                                <i class="icon icon-move dragula-handle"></i>
+                            </div>
+
+
+                            <div class="media-body">
+                                <div class="media-heading">الاخبار</div>
+                            </div>
+
+
+                            <div class="media-right media-middle">
+                                <div class="checkbox checkbox-switchery switchery-xs">
+                                    <label>
+                                        <input type="checkbox" class="switchery switchery-primary" checked="checked">
+
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+
+
+
+                        <li>
+                            <div class="media-left media-middle">
+                                <i class="icon icon-move dragula-handle"></i>
+                            </div>
+
+
+                            <div class="media-body">
+                                <div class="media-heading">الاخبار</div>
+                            </div>
+
+
+                            <div class="media-right media-middle">
+                                <div class="checkbox checkbox-switchery switchery-xs">
+                                    <label>
+                                        <input type="checkbox" class="switchery switchery-primary" checked="checked">
+
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+
+
+
+                        <li>
+                            <div class="media-left media-middle">
+                                <i class="icon icon-move dragula-handle"></i>
+                            </div>
+
+
+                            <div class="media-body">
+                                <div class="media-heading">الفعاليات</div>
+                            </div>
+
+
+                            <div class="media-right media-middle">
+                                <div class="checkbox checkbox-switchery switchery-xs">
+                                    <label>
+                                        <input type="checkbox" class="switchery switchery-primary" checked="checked">
+
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+
+
+
+
+                    </ul>
+
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">الغاء</button>
+                    <button type="button" class="btn btn-primary">حفظ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /primary modal -->
+
 
 {% endblock %}
 
 {% block javascripts %}
-   {{ parent() }}
-      
+    {{ parent() }}
+
 {% endblock %}

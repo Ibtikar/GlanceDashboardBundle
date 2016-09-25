@@ -1,0 +1,7 @@
+{% extends 'IbtikarGlanceDashboardBundle::layout.html.twig' %}
+
+{% block title %}{% trans from translationDomain %}Welcome{% endtrans %} {{ app.user }}{% endblock %}
+
+{% block content %}
+    <h1>{{ block('title') }}</h1>
+{% endblock %}
