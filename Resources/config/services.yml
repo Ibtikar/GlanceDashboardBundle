@@ -1,0 +1,7 @@
+services:
+#    ibtikar_glance_dashboard.example:
+#        class: Ibtikar\GlanceDashboardBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]
+    list_view:
+        class: Ibtikar\GlanceDashboardBundle\Service\ListView
+        arguments: ["@service_container" ]

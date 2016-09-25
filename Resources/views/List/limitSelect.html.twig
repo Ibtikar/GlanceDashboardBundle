@@ -1,0 +1,9 @@
+{% if paginationData['totalCount'] > limit_per_page|first %}
+<select name="maxItemPerPage" class="limit-select select2-without-search" id="maxItemPerPage" autocomplete=off>
+      {% for i in limit_per_page|keys %}
+{#          {% if paginationData['totalCount'] >= limit_per_page[i] or (paginationData['totalCount'] < limit_per_page[i] and (limit_per_page[i-1] is defined and paginationData['totalCount'] > limit_per_page[i-1])) %}#}
+               <option value="{{limit_per_page[i]}}" {% if app.request.get('limit',50)== limit_per_page[i] %}selected{% endif %} >{{ limit_per_page[i] }}</option>
+{#          {% endif %}#}
+      {% endfor %}
+</select>
+{% endif %}

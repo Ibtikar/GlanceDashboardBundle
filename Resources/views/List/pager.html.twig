@@ -1,0 +1,47 @@
+{# empty Twig template #}
+{# default Sliding pagination control implementation #}
+    <div class="col-sm-12">
+        <div class="dataTables_paginate paging_bootstrap">
+{% if pageCount > 1 %}
+
+            <ul class="pagination">
+    {% if first is defined and current != first %}
+                <li class="first"><a href="{{ path(route, query|merge({(pageParameterName): first})) }}">{% trans %}First{% endtrans %}</a>
+                </li>
+    {% endif %}
+    {% if previous is defined %}
+                <li class="prev"><a href="{{ path(route, query|merge({(pageParameterName): previous})) }}">{% trans %}previous{% endtrans %}</a>
+                </li>
+    {% endif %}
+    {% if previous is not defined %}
+                <li class="prev disabled"><a href="javascript:">{% trans %}previous{% endtrans %}</a>
+                </li>
+    {% endif %}
+
+    {% for page in pagesInRange %}
+        {% if page != current %}
+                <li><a href="{{ path(route, query|merge({(pageParameterName): page})) }}">{{ page }}</a>
+                </li>
+        {% else %}
+            <li class="active"><a class="dev-current-page" href="{{ path(route, query|merge({(pageParameterName): page})) }}">{{ page }}</a>
+                </li>
+        {% endif %}
+
+    {% endfor %}
+
+        {% if next is defined %}
+                <li class="next"><a href="{{ path(route, query|merge({(pageParameterName): next})) }}">{% trans %}next{% endtrans %}</a>
+                </li>
+    {% endif %}
+    {% if next is not defined %}
+                <li class="next disabled"><a href="javascript:">{% trans %}next{% endtrans %}</a>
+                </li>
+    {% endif %}
+    {% if last is defined and current != last %}
+        <li class="last"><a href="{{ path(route, query|merge({(pageParameterName): last})) }}">{% trans %}Last{% endtrans %}</a></li>
+    {% endif %}
+
+            </ul>
+{% endif %}
+        </div>
+    </div>

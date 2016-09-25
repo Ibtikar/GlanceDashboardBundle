@@ -1,0 +1,30 @@
+{% if  form is defined %}
+<div class="ajax-content-wrapper">
+    {% if form.vars.valid == false %}
+        <input type="hidden" class="form-state" value = "false"/>
+    {% endif %}
+
+    {% if form.vars.valid == true %}
+        <input type="hidden" class="form-state" value = "true"/>
+    {% endif %}
+{% endif %}
+
+{% for flashMessage in app.session.flashbag.get('success') %}
+    <div class="alert alert-success remove-5s">
+        <a aria-hidden="true" href="#" data-dismiss="alert" class="close">×</a>
+        {{ flashMessage }}
+    </div>
+{% endfor %}
+
+{% for flashMessage in app.session.flashbag.get('error') %}
+    <div class="alert alert-danger remove-5s">
+        <a aria-hidden="true" href="#" data-dismiss="alert" class="close">×</a>
+        {{ flashMessage }}
+    </div>
+{% endfor %}
+
+{% block content %}{% endblock %}
+
+{% if  form is defined %}
+</div>
+{% endif %}

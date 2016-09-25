@@ -1,0 +1,35 @@
+{# empty Twig template #}
+{# default Sliding pagination control implementation #}
+<div class="col-sm-12">
+    <div class="dataTables_paginate paging_bootstrap">
+        {% if pageCount > 1 %}
+
+            <ul class="pagination">
+                {% if first is defined and current != first %}
+                    <li class="first"><a href="{{ path(route, query|merge({(pageParameterName): first})) }}">«</a>
+                    </li>
+                {% else %}
+                    <li class="first disabled"><a aria-label="Previous" href="javascript:void(0)"><span aria-hidden="true">«</span></a></li>
+                {% endif %}
+
+                {% for page in pagesInRange %}
+                    {% if page != current %}
+                        <li><a href="{{ path(route, query|merge({(pageParameterName): page})) }}">{{ page }}</a>
+                        </li>
+                    {% else %}
+                        <li class="active"><a class="dev-current-page" href="{{ path(route, query|merge({(pageParameterName): page})) }}">{{ page }}</a>
+                        </li>
+                    {% endif %}
+
+                {% endfor %}
+
+                {% if last is defined and current != last %}
+                    <li class="last"><a href="{{ path(route, query|merge({(pageParameterName): last})) }}" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                {% else %}
+                    <li class="last disabled"><a href="javascript:void(0)" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                {% endif %}
+
+            </ul>
+        {% endif %}
+    </div>
+</div>

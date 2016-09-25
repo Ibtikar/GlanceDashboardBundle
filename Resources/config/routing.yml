@@ -1,0 +1,3 @@
+ibtikar_glance_dashboard_homepage:
+    path:     /
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Default:index }
