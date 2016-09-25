@@ -413,8 +413,8 @@ class BackendController extends Controller {
 
 
     public function homeAction() {
+
         return $this->render('IbtikarGlanceDashboardBundle::backendHome.html.twig', array(
-                    'translationDomain' => $this->translationDomain
         ));
     }
 
