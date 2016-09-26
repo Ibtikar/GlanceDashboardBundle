@@ -14,14 +14,6 @@ jQuery.validator.addMethod('phone', function (value, element) {
     return isValidNumber(phoneText, countryElement.val());
 }, 'phone must be in the right format');
 
-jQuery.validator.addMethod('reCaptchaMethod', function (value, element, param) {
-            if (grecaptcha.getResponse() == ''){
-                return false;
-            } else {
-                // I would like also to check server side if the recaptcha response is good
-                return true
-            }
-        }, 'You must complete the antispam verification');
 
 jQuery.validator.addMethod('phone-international', function (value, element) {
     if (this.optional(element) || $(element).is(":focus")) {
@@ -386,66 +378,8 @@ jQuery.validator.addMethod('unique', function (value, element) {
     }
 }, jQuery.validator.format('Not available.'));
 
-jQuery.validator.addMethod('duplicate', function(value, element) {
-    if (($(element).is(':focus') && 'undefined' === typeof $(element).attr('data-unique-valid'))) {
-        return true;
-    }
-    if (this.optional(element) || $(element).attr('data-force-unique-valid') === 'true' || $(element).closest('form').attr('data-force-unique-valid') === 'true') {
-        $(element).attr('data-remove-color', 'true');
-        return true;
-    }
-    if ('undefined' === typeof $(element).attr('data-unique-valid')) {
-        $(element).attr('data-remove-color', 'true');
-        setTimeout(function() {
-            checkUniqueValidation(element);
-        }, 200);
-        return true;
-    }
-    if ($(element).attr('data-unique-valid') === 'true') {
-        return true;
-    }
-}, jQuery.validator.format('duplicate'));
 
 
-jQuery.validator.addMethod('contactMessage', function(value, element) {
-    if (($(element).is(':focus') && 'undefined' === typeof $(element).attr('data-unique-valid'))) {
-        return true;
-    }
-    if (this.optional(element) || $(element).attr('data-force-unique-valid') === 'true' || $(element).closest('form').attr('data-force-unique-valid') === 'true') {
-        $(element).attr('data-remove-color', 'true');
-        return true;
-    }
-    if ('undefined' === typeof $(element).attr('data-unique-valid')) {
-        $(element).attr('data-remove-color', 'true');
-        setTimeout(function() {
-            checkUniqueValidation(element);
-        }, 200);
-        return true;
-    }
-    if ($(element).attr('data-unique-valid') === 'true') {
-        return true;
-    }
-}, jQuery.validator.format('contactMessage'));
-
-//jQuery.validator.addMethod('published', function (value, element) {
-//    if (($(element).is(':focus') && 'undefined' === typeof $(element).attr('data-published-valid'))) {
-//        return true;
-//    }
-//    if (this.optional(element) || $(element).attr('data-force-published-valid') === 'true' || $(element).closest('form').attr('data-force-published-valid') === 'true') {
-//        $(element).attr('data-remove-color', 'true');
-//        return true;
-//    }
-//    if ('undefined' === typeof $(element).attr('data-published-valid')) {
-//        $(element).attr('data-remove-color', 'true');
-//        setTimeout(function() {
-//            checkPublishedValidation(element);
-//        }, 200);
-//        return true;
-//    }
-//    if ($(element).attr('data-published-valid') === 'true') {
-//        return true;
-//    }
-//}, 'true');
 
 /**
  * remove error block
@@ -544,7 +478,7 @@ function markElementAsNotValid(element) {
                 $($(element).attr('data-error-after-selector')).after('<span class="help-block">' + $(element).attr('data-validation-message') + '</span>');
 
             } else {
-                $(element).parents($(element).attr('data-error-after-selector')).after('<div class="help-block">' + $(element).attr('data-validation-message') + '</div>');
+                $(element).parents($(element).attr('data-error-after-selector')).after('<span class="help-block">' + $(element).attr('data-validation-message') + '</span>');
 
             }
         } else {

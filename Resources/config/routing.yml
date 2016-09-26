@@ -1,5 +1,5 @@
 ibtikar_glance_dashboard_home:
-    path:     /backend
+    path:     /
     defaults: { _controller: IbtikarGlanceDashboardBundle:base\Backend:home }
 
 

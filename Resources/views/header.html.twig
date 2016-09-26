@@ -201,7 +201,7 @@
                     <li class="dropdown dropdown-user">
                         <a class="dropdown-toggle" data-toggle="dropdown">
                             <img src="{{ asset('bundles/ibtikarglancedashboard/assets/images/placeholder.jpg')}}" alt="">
-                            <span>علا حمدي</span>
+                            <span> {{ app.user }}</span>
                             <i class="caret"></i>
                         </a>
 
@@ -210,7 +210,7 @@
                             <li><a href="#"><span class="badge badge-warning pull-right">58</span> <i class="icon-comment-discussion"></i> الرسائل</a></li>
                             <li class="divider"></li>
                             <li><a href="#"><i class="icon-cog5"></i> الضبط</a></li>
-                            <li><a href="#"><i class="icon-switch2"></i> الخروج</a></li>
+                            <li><a href="{{ path('logout')}}"><i class="icon-switch2"></i> الخروج</a></li>
                         </ul>
                     </li>
                 </ul>

@@ -1,6 +1,6 @@
 {% extends 'IbtikarGlanceDashboardBundle::layout.html.twig' %}
 
-{% block title %}{% trans  %}Welcome{% endtrans %} {{ app.user.getPath }}{% endblock %}
+{% block title %}{% trans  %}Welcome{% endtrans %} {{ app.user }}{% endblock %}
 
 {% block content %}
     <h1>{{ block('title') }}</h1>
