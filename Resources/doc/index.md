@@ -19,10 +19,9 @@ Installation steps
 
 4.Add this route to your routing file
 
-    ibtikar_share_economy_ums:
+   ibtikar_glance_dashboard:
         resource: "@IbtikarGlanceDashboardBundle/Resources/config/routing.yml"
-        prefix:   /
-
+        prefix:   /backend
 
 
 5.Add the next line to your .gitignore file
