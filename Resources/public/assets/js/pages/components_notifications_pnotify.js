@@ -829,7 +829,7 @@ $(function() {
             <span class="sr-only">0%</span>\
             </div>\
             </div>',
-            addclass: 'bg-primary stack-top-left',
+            addclass: 'bg-primary',
             icon: 'icon-spinner4 spinner',
             hide: false,
             buttons: {
@@ -839,7 +839,9 @@ $(function() {
             history: {
                 history: false
             },
-            stack: stack_top_left,
+            width: "100%",
+            cornerclass: "no-border-radius",
+            stack: stack_custom_top,
             before_open: function(PNotify) {
                 progress = PNotify.get().find("div.progress-bar");
                 progress.width(cur_value + "%").attr("aria-valuenow", cur_value).find("span").html(cur_value + "%");
@@ -1166,7 +1168,6 @@ $(function() {
     //
     // Initialize
     //
-
     // Top left
     $('#pnotify-stack-top-left').on('click', function () {
         show_stack_top_left('primary');
@@ -1194,7 +1195,7 @@ $(function() {
 
     // Custom top
     $('#pnotify-stack-custom-top').on('click', function () {
-        show_stack_custom_top('info');
+        show_stack_custom_top('success');
     });
 
     // Custom bottom

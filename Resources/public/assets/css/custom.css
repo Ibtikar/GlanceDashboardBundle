@@ -285,6 +285,46 @@ textarea{
   cursor: move;
   background: #eee;
 }
+.dataTable{
+   table-layout: fixed;
+/*    word-break: break-all;*/
+}
+.progress{
+    height: 8px;
+}
+
+.intl-tel-input,.intl-tel-input .country-list,.intl-tel-input .flag-container{
+    width: 100%;
+}
+.phoneNumber .intl-tel-input .country-list{
+    text-align: right;
+}
+
+.phoneNumber .intl-tel-input.allow-dropdown input,.phoneNumber .intl-tel-input.allow-dropdown input[type="text"],.phoneNumber .intl-tel-input.allow-dropdown input[type="tel"] {
+  margin-right: 0;
+  padding-right: 52px;
+  padding-left: 6px;
+}
+
+.phoneNumber .intl-tel-input .selected-flag .iti-arrow{
+    right: auto;
+    left: 6px;
+}
+.phoneNumber .intl-tel-input .selected-flag {
+  padding: 0 8px 0 0px;
+}
+.phoneNumber .intl-tel-input .country-list .flag-box,.phoneNumber .intl-tel-input .country-list .country-name {
+  margin-right: 0px;
+  margin-left: 6px;
+}
+.dataTable tbody > tr:first-child > th, .dataTable tbody > tr:first-child > td {
+  border-top: 0 none;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.stack-custom-top {
+    margin: 10px;
+}
 /* responsive style ----------------------------------------------------------------- */
 /* Large Devices, Wide Screens */
 @media only screen and (min-width : 1200px) {

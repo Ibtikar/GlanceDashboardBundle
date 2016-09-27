@@ -7666,8 +7666,8 @@ legend.alpaca-container-label {
  *
  * ---------------------------------------------------------------------------- */
 .ui-pnotify {
-  top: 20px;
-  left: 20px;
+  top: 0px;
+  left: 0px;
   position: absolute;
   height: auto;
   z-index: 2;
@@ -16674,7 +16674,7 @@ thead .htCollapseButton:after {
 }
   .datatable-scroll {
     width: 100%;
-    overflow-x: scroll;
+    overflow-x: auto;
   }
 @media (max-width: 768px) {
   .datatable-scroll-sm {
