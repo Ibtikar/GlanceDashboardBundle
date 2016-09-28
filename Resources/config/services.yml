@@ -5,3 +5,7 @@ services:
     list_view:
         class: Ibtikar\GlanceDashboardBundle\Service\ListView
         arguments: ["@service_container" ]
+
+    base_email:
+        class: Ibtikar\GlanceDashboardBundle\Service\BaseEmail
+        arguments: ["@templating"]

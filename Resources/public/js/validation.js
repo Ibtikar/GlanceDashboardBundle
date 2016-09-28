@@ -1,253 +1,4 @@
-jQuery.validator.addMethod('phone', function (value, element) {
-    if (this.optional(element) || $(element).is(':focus')) {
-        return true;
-    }
-    var $element = $(element);
-    $element.attr('data-remove-color', 'false');
-    var phoneText = formatPhoneText($element);
-    var countryElement = $element.parent().find('select.dev-phone-country-select');
-    var phoneCountry = countryForE164Number(phoneText);
-    if (phoneCountry.toUpperCase() !== countryElement.val().toUpperCase()) {
-        $element.attr('data-remove-color', 'false');
-        return false;
-    }
-    return isValidNumber(phoneText, countryElement.val());
-}, 'phone must be in the right format');
-
-
-jQuery.validator.addMethod('phone-international', function (value, element) {
-    if (this.optional(element) || $(element).is(":focus")) {
-        return true;
-    }
-    $(element).attr('data-remove-color', 'false');
-    var phoneFormatter;
-    if(typeof eventCollection !='undefined'){
-        if($(element).attr('id').indexOf('1') != -1){
-            phoneFormatter = new InternationalPhoneEvent('phone1', true);
-        }
-        else if($(element).attr('id').indexOf('2') != -1){
-            phoneFormatter = new InternationalPhoneEvent('phone2', false, true);
-        }
-        else{
-            phoneFormatter = new InternationalPhoneEvent('venuePhone', false, true);
-        }
-    } else if(document.location.pathname.indexOf('advance-search') != -1){
-        phoneFormatter = new InternationalPhoneEvent('mobile', false, true);
-    }else {
-        if (typeof formName != 'undefined') {
-            phoneFormatter = new InternationalPhone(false, true);
-        } else {
-            phoneFormatter = new InternationalPhone();
-
-        }
-    }
-    var phoneText = phoneFormatter.formatPhoneText($(element));
-    var countryElement;
-    if (typeof eventCollection != 'undefined') {
-        if ($(element).attr('id').indexOf('1') != -1) {
-            countryElement = $(element).parent().find("#event_type_phone1_countryCode");
-        }
-        else if ($(element).attr('id').indexOf('2') != -1) {
-            countryElement = $(element).parent().find("#event_type_phone2_countryCode");
-        }
-        else {
-            countryElement = $(element).parent().find("#event_type_venuePhone_countryCode");
-        }
-    } else {
-        if (typeof formName != 'undefined') {
-            countryElement = $(element).parent().find("#" + formName + "_mobile_countryCode");
-        } else {
-            countryElement = $(element).parent().find(".countries");
-        }
-    }
-
-    var phoneCountry = countryForE164Number(phoneText);
-    if (phoneCountry.toUpperCase() !== countryElement.val().toUpperCase()) {
-        $(element).attr('data-remove-color', 'false');
-        return false;
-    }
-    return isValidNumber(phoneText, countryElement.val());
-}, 'phone must be in the right format');
-
-jQuery.validator.addMethod('lessthan', function (value, element, param) {
-    if(this.optional(element)) {
-        return true;
-    }
-    if(!(/^-?\d+$/.test($($(element).attr('data-lessthan-selector')).val()))) {
-        return false;
-    }
-    return parseInt($($(element).attr('data-lessthan-selector')).val()) < value ;
-}, jQuery.validator.format('Should be larger than commentsMaximumCharacters.'));
-
-jQuery.validator.addMethod('hashtaglesslength', function (value, element, param) {
-    var hashTagArr = value.split(",");
-    if(hashTagArr.length == 0 || hashTagArr[0] == '') {
-        return true;
-    }
-
-    var flag=0;
-    var loopIndex = 1;
-    $.each(hashTagArr, function(e,v){
-        if(v.length < 3) {
-            return false;
-        }
-        if(loopIndex == hashTagArr.length && v.length >= 3) {
-            flag = 1;
-        }
-        loopIndex += 1;
-    });
-
-    if(flag) {
-        return true;
-    }
-
-}, jQuery.validator.format('Please enter a value greater than or equal to {0}.'));
-
-jQuery.validator.addMethod('taglength', function (value, element, param) {
-    var hashTagArr = value.split(",");
-    if(hashTagArr.length == 0 || hashTagArr[0] == '') {
-        return true;
-    }
-
-    var flag=0;
-    var loopIndex = 1;
-    $.each(hashTagArr, function(e,v){
-        if(v.length > 330) {
-            return false;
-        }
-        if(loopIndex == hashTagArr.length && v.length <= 330) {
-            flag = 1;
-        }
-        loopIndex += 1;
-    });
-
-    if(flag) {
-        return true;
-    }
-
-}, jQuery.validator.format('Please enter a value less than or equal to {0}.'));
-
-jQuery.validator.addMethod('hobbylength', function (value, element, param) {
-    var hobbyArr = value.split(",");
-    if(hobbyArr.length == 0 || hobbyArr[0] == '') {
-        return true;
-    }
-
-    var flag=0;
-    var loopIndex = 1;
-    $.each(hobbyArr, function(e,v){
-        if(v.length > 200) {
-            return false;
-        }
-        if(loopIndex == hobbyArr.length && v.length <= 200) {
-            flag = 1;
-        }
-        loopIndex += 1;
-    });
-
-    if(flag) {
-        return true;
-    }
-
-}, jQuery.validator.format('Please enter a value less than or equal to {0}.'));
-
-jQuery.validator.addMethod('min', function (value, element, param) {
-    if(this.optional(element)) {
-        return true;
-    }
-    if(!(/^-?\d+$/.test(value))) {
-        return true;
-    }
-    if(value >= param) {
-        return true;
-    }
-}, jQuery.validator.format('Please enter a value greater than or equal to {0}.'));
-
-jQuery.validator.addMethod('numberMaxlength', function (value, element, param) {
-    var fieldValue = value.trim();
-    if (fieldValue != '' && fieldValue.length > 3) {
-        return false
-    }
-    return true;
-}, jQuery.validator.format('Please enter a value greater than or equal to {0}.'));
-
-jQuery.validator.addMethod('numberonly', function (value, element, param) {
-    if (/^[0-9]+$/.test(value) || value.trim() =='')
-    {
-        return true;
-    }
-    return false;
-}, jQuery.validator.format('Please enter a value greater than or equal to {0}.'));
-
-jQuery.validator.addMethod('terms', function (value, element) {
-    return element.checked;
-}, 'You must agree on our terms.');
-
-jQuery.validator.addMethod('filesize', function (value, element, param) {
-    // param = size (bytes)
-    // element = element to validate (<input>)
-    // value = value of the element (file name)
-    return this.optional(element) || (element.files[0].size <= (param * 1024 * 1024));
-}, jQuery.validator.format('file must be less than {0} mb'));
-
-jQuery.validator.addMethod('largerThanCurrentTime', function (value, element, param) {
-    var dateString = $(param).attr('data-validation-string');
-    if (!dateString) {
-        return true;
-    }
-    var dateParts = dateString.split(/[^0-9]/);
-    var validatedDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], dateParts[3], dateParts[4], dateParts[5]);
-    var minDate = new Date();
-    return this.optional(element) || minDate < validatedDate;
-}, jQuery.validator.format('Please specify a date after now'));
-
-jQuery.validator.addMethod('dateAfterToday', function (value, element, param) {
-    var selectedDate = $(element).hasClass('dev-datetimepicker')?$(element).parent().find('.dev-date-box:eq(0)').data("DateTimePicker").viewDate():$(element).datepicker('getDate');
-
-    var minDate = new Date();
-    minDate.setHours(0, 0, 0, 0);
-    return this.optional(element) || minDate < selectedDate;
-}, jQuery.validator.format('Please specify a date after today'));
-
-jQuery.validator.addMethod('dimensions', function (value, element, param) {
-    var width = $(element).attr('data-image-width');
-    var height = $(element).attr('data-image-height');
-    if (width && height) {
-        return this.optional(element) || (width >= param && height >= param)
-    } else {
-        return true;
-    }
-}, 'image dimensions must be greater than 200*200');
-
-jQuery.validator.addMethod('coverdimensions', function (value, element, param) {
-    var width = $(element).attr('data-image-width');
-    var height = $(element).attr('data-image-height');
-    if (width && height) {
-        return this.optional(element) || (width >= 1920 && height >= 200)
-    } else {
-        return true;
-    }
-}, 'image dimensions must be greater than 200*1920');
-
-jQuery.validator.addMethod('seodimension', function (value, element, param) {
-    var width = $(element).attr('data-image-width');
-    var height = $(element).attr('data-image-height');
-    if (width && height) {
-        return this.optional(element) || (width >= 250 && height >= 205)
-    } else {
-        return true;
-    }
-}, 'Image dimension must be greater than 250*205');
-
-
-jQuery.validator.addMethod('logosize', function (value, element, param) {
-    // param = size (bytes)
-    // element = element to validate (<input>)
-    // value = value of the element (file name)
-    return this.optional(element) || (element.files[0].size <= param)
-}, 'file must be less than 1 mb');
-
-jQuery.validator.addMethod('email', function(value, element) {
+$.validator.addMethod('email', function(value, element) {
 //    return this.optional(element) || /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value);
     $(element).attr('data-remove-color', 'false');
     if (!value) {
@@ -265,7 +16,7 @@ jQuery.validator.addMethod('email', function(value, element) {
     return false;
 }, 'Please enter a valid email address.');
 
-jQuery.validator.addMethod('staffUsername', function (value, element) {
+$.validator.addMethod('staffUsername', function (value, element) {
     var unicodeWord = "^[a-zA-Z0-9\u0600-\u06ff\-]{0,}$";
     var match = value.match(unicodeWord);
     if (match == null) {
@@ -277,7 +28,7 @@ jQuery.validator.addMethod('staffUsername', function (value, element) {
     }
 }, jQuery.validator.format('not valid'));
 
-jQuery.validator.addMethod('slug', function (value, element) {
+$.validator.addMethod('slug', function (value, element) {
     //remove tachkil
     value = value.replace(/[\u0617-\u061A\u064B-\u0652]/g,"");
     $(element).val(value);
@@ -292,73 +43,23 @@ jQuery.validator.addMethod('slug', function (value, element) {
     }
 }, jQuery.validator.format('not valid'));
 
-jQuery.validator.addMethod('hashtag', function (value, element) {
-    var unicodeWord = "^(?=.{2,50}$)(#|\uff03){1}([0-9_a-zA-Z\u0600-\u06ff]*[_a-zA-Z\u0600-\u06ff][0-9_a-zA-Z\u0600-\u06ff]*)$";
-    var match = value.match(unicodeWord);
-    if (match == null) {
-        return this.optional(element) || false;
-    }
-    else
-    {
-        return true;
-    }
-}, 'not valid');
 
-jQuery.validator.addMethod('title', function (value, element) {
-    var unicodeWord = "^[a-zA-Z0-9\u0600-\u06ff\ -]{0,}$";
-    var match = value.match(unicodeWord);
-    if (match == null) {
-        return false;
-    }
-    else
-    {
-        return true;
-    }
-}, jQuery.validator.format('not valid'));
 
-jQuery.validator.addMethod('password', function (value, element) {
+
+$.validator.addMethod('password', function (value, element) {
     return this.optional(element) || (/\D+/.test(value) && /\d+/.test(value) && value.length > 7) || $(element).attr('data-remove-password-validation') === 'true';
 }, 'The Password must be at least {{ limit }} characters and numbers length');
 
-jQuery.validator.addMethod('passwordMax', function (value, element) {
+$.validator.addMethod('passwordMax', function (value, element) {
     return this.optional(element) || value.length < 4096 || $(element).attr('data-remove-password-validation') === 'true';
 }, 'The Password must be {{ limit }} maximum characters and numbers length');
 
-jQuery.validator.addMethod('mincheck', function (value, element, options) {
+$.validator.addMethod('mincheck', function (value, element, options) {
     return $('input[name="' + $(element).attr('name') + '"]:checked').length >= parseInt(options);
 }, jQuery.validator.format('Please select at least {0} of these fields.'));
 
-jQuery.validator.addMethod('tagMincheck', function (value, element, options) {
-   if(value.trim() ==''){
-       return false;
-   }
-   return true;
-}, jQuery.validator.format('Please select at least 1 of these fields.'));
 
-jQuery.validator.addMethod('hobbyMincheck', function (value, element, options) {
-   var hobbyArr = value.split(",");
-    if(hobbyArr.length == 0 || hobbyArr[0] == '') {
-        return true;
-    }
-
-    var flag=0;
-    var loopIndex = 1;
-    $.each(hobbyArr, function(e,v){
-        if(v.length < 3) {
-            return false;
-        }
-        if(loopIndex == hobbyArr.length && v.length >= 3) {
-            flag = 1;
-        }
-        loopIndex += 1;
-    });
-
-    if(flag) {
-        return true;
-    }
-}, jQuery.validator.format('Please select at least 3 of these fields.'));
-
-jQuery.validator.addMethod('unique', function (value, element) {
+$.validator.addMethod('unique', function (value, element) {
     if (($(element).is(':focus') && 'undefined' === typeof $(element).attr('data-unique-valid'))) {
         return true;
     }
