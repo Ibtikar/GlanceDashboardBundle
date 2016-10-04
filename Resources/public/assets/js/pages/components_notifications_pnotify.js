@@ -1197,6 +1197,10 @@ $(function() {
     $('#pnotify-stack-custom-top').on('click', function () {
         show_stack_custom_top('success');
     });
+    // Custom top
+    $('#pnotify-stack-custom-top1').on('click', function () {
+        show_stack_custom_top('error');
+    });
 
     // Custom bottom
     $('#pnotify-stack-custom-bottom').on('click', function () {

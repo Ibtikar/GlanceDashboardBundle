@@ -9,3 +9,9 @@ services:
     base_email:
         class: Ibtikar\GlanceDashboardBundle\Service\BaseEmail
         arguments: ["@templating"]
+
+    not_found_listener:
+        class: Ibtikar\GlanceDashboardBundle\Service\NotFoundExceptionListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException}
+        arguments: [ "@templating" ]

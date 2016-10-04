@@ -54,9 +54,10 @@ $(function() {
 
     // File input
     $(".file-styled").uniform({
-        wrapperClass: 'bg-blue',
+        fileButtonClass: 'action btn btn-default',
         fileButtonHtml: '<i class="icon-file-plus"></i>'
     });
+
 
 
     //

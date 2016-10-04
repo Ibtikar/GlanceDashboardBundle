@@ -418,4 +418,10 @@ class BackendController extends Controller {
         ));
     }
 
+    public function backendNotFoundAction() {
+        $response = new Response();
+        $response->setStatusCode(404);
+        return $this->render('IbtikarGlanceDashboardBundle:Exception:error.html.twig', array('exception' => new \Exception('Wrong id'), 'status_code' => 404), $response);
+    }
+
 }

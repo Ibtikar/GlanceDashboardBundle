@@ -12,30 +12,13 @@
     <!-- Favicons AND TOUCH ICONS   -->
     <link rel="icon" href="{{ asset('bundles/ibtikarglancedashboard/assets/images/'~style_Sheet_name~'/favicon.ico')}}">
     <link rel="apple-touch-icon" href="{{ asset('bundles/ibtikarglancedashboard/assets/images/'~style_Sheet_name~'/apple-touch-icon.png')}}">
-    <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('bundles/ibtikarglancedashboard/assets/images/'~style_Sheet_name~'/apple-touch-icon-72x72.png')}}">
-    <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('bundles/ibtikarglancedashboard/assets/images/'~style_Sheet_name~'/apple-touch-icon-114x114.png')}}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('bundles/ibtikarglancedashboard/assets/images/'~style_Sheet_name~'/apple-touch-icon-76x76.png')}}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('bundles/ibtikarglancedashboard/assets/images/'~style_Sheet_name~'/apple-touch-icon-120x120.png')}}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('bundles/ibtikarglancedashboard/assets/images/'~style_Sheet_name~'/apple-touch-icon-152x152.png')}}">
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
 
-    <!-- /global stylesheets -->
 
-    <!-- file upload Plugin CSS -->
-    <link rel="stylesheet" href="{{ asset('bundles/ibtikarglancedashboard/assets/js/plugins/fileupload/bootstrap-fileupload.css')}}">
-    <link href="{{ asset('bundles/ibtikarglancedashboard/assets/css/custom.css')}}" rel="stylesheet" type="text/css">
-
-    <link href="{{ asset('bundles/ibtikarglancedashboard/assets/css/'~style_Sheet_name~'.css')}}" rel="stylesheet" type="text/css">
-    {#    {% stylesheets
-            'bundles/ibtikarglancedashboard/assets/css/icons/icomoon/styles.css'
-            'bundles/ibtikarglancedashboard/assets/css/bootstrap.css'
-            'bundles/ibtikarglancedashboard/assets/css/core.css'
-            'bundles/ibtikarglancedashboard/assets/css/components.css'
-            'bundles/ibtikarglancedashboard/assets/css/colors.css'
-             filter='cssrewrite' output='assets/backend/css/main.css'
-
-        %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-
-        {% endstylesheets %}#}
 
     <!-- Global stylesheets -->
     <link href="{{ asset('bundles/ibtikarglancedashboard/assets/css/icons/icomoon/styles.css')}}" rel="stylesheet" type="text/css">
@@ -48,6 +31,10 @@
 
     <!-- file upload Plugin CSS -->
     <link rel="{{ asset('bundles/ibtikarglancedashboard/stylesheet" href="assets/js/plugins/fileupload/bootstrap-fileupload.css')}}">
+        <link href="{{ asset('bundles/ibtikarglancedashboard/assets/css/custom.css')}}" rel="stylesheet" type="text/css">
+
+        <link href="{{ asset('bundles/ibtikarglancedashboard/assets/css/'~style_Sheet_name~'.css')}}" rel="stylesheet" type="text/css">
+
 
 
 
@@ -56,21 +43,6 @@
 {% block javascripts %}
     {{ parent() }}
 
-    {#   {% javascripts
-                'bundles/ibtikarglancedashboard/assets/js/plugins/loaders/pace.min.js'
-                'bundles/ibtikarglancedashboard/assets/js/core/libraries/jquery.min.js'
-                'bundles/ibtikarglancedashboard/assets/js/core/libraries/bootstrap.min.js'
-                'bundles/ibtikarglancedashboard/assets/js/plugins/loaders/blockui.min.js'
-                'bundles/ibtikarglancedashboard/assets/js/plugins/ui/nicescroll.min.js'
-                'bundles/ibtikarglancedashboard/assets/js/plugins/ui/drilldown.js'
-                'bundles/ibtikarglancedashboard/assets/js/pages/layout_sidebar_sticky_custom.js'
-                'bundles/ibtikarglancedashboard/assets/js/plugins/notifications/pnotify.min.js'
-                'bundles/ibtikarglancedashboard/assets/js/pages/components_notifications_pnotify.js'
-                'bundles/ibtikarglancedashboard/assets/js/core/jquery.easing.min.js'
-                filter='?uglifyjs2' output='assets/backend/js/backend.js'
-        %}
-        <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}#}
 
 
     <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/plugins/loaders/pace.min.js')}}"></script>

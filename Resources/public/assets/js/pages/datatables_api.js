@@ -40,12 +40,12 @@ $(function() {
         },
         
                  { 
-            width: '150px',
+            width: '200px',
             targets: [4]
         },
                 
                  { 
-            width: '100px',
+            width: '200px',
             targets: [5]
         },
          { 
@@ -54,10 +54,10 @@ $(function() {
             width: '200px',
             targets: [-1]
         }],
-        dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
+        dom: '<"datatable-scroll"t><"datatable-footer"lip>',
         language: {
             search: '<span>بحث:</span> _INPUT_',
-            lengthMenu: '<span>اظهار:</span> _MENU_',
+            lengthMenu: '_MENU_',
             sLengthMenu: "اظهر _MENU_ ",
             sInfo: " _START_ - _END_ من _TOTAL_ ",
             sZeroRecords: "لا يوجد ما تبحث عنه",
@@ -95,22 +95,22 @@ $(function() {
     });
 
 
-    // Individual column searching with text inputs
-    $('.datatable-column-search-inputs tfoot td').not(':last-child').not(':first-child').each(function () {
-        var title = $('.datatable-column-search-inputs thead th').eq($(this).index()).text();
+    // Setup - add a text input to each footer cell
+    $('.datatable-column-search-inputs thead tr#filterrow th').not(':last-child').not(':first-child').each( function () {
+        var title = $('.datatable-column-search-inputs thead th').eq( $(this).index() ).text();
         $(this).html('<input type="text" class="form-control input-sm" placeholder="بحث '+title+'" />');
-    });
-    
-    
-
-    
+    } );
+ 
+    // DataTable
     var table = $('.datatable-column-search-inputs').DataTable();
-    table.columns().every( function () {
-        var that = this;
-        $('input', this.footer()).on('keyup change', function () {
-            that.search(this.value).draw();
-        });
-    });
+     
+    // Apply the filter
+    $(".datatable-column-search-inputs thead input").on( 'keyup change', function () {
+        table
+            .column( $(this).parent().index()+':visible' )
+            .search( this.value )
+            .draw();
+    } );
 
 
     // Individual column searching with selects

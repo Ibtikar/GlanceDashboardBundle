@@ -3,3 +3,8 @@ ibtikar_glance_dashboard_home:
     defaults: { _controller: IbtikarGlanceDashboardBundle:base\Backend:home }
 
 
+ibtikar_glance_dashboard_not_found:
+    path:  /not-found
+    defaults: { _controller: IbtikarGlanceDashboardBundle:base\Backend:backendNotFound }
+
+

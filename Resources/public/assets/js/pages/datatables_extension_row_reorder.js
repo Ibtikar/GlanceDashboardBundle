@@ -18,14 +18,9 @@ $(function() {
     // Setting datatable defaults
     $.extend( $.fn.dataTable.defaults, {
         autoWidth: false,
-        bSort : false,
+//         bSort : false,
         bPaginate: false,
-        columnDefs: [{
-            orderable: false,
-            width: '100px'
-//            targets: [ 4 ]
-        }],
-        dom: '<"datatable-header"fl><"datatable-scroll-wrap"t><"datatable-footer"ip>',
+        dom: '<"datatable-scroll"t><"datatable-footer"lip>',
         language: {
             search: '<span>Filter:</span> _INPUT_',
             lengthMenu: '<span>Show:</span> _MENU_',
@@ -55,11 +50,30 @@ $(function() {
 
     // Full row selection
     $('.datatable-row-full').DataTable({
+        
         rowReorder: {
             selector: 'tr'
         },
+
+//        responsive: true,
         columnDefs: [
-            {   targets: 0, visible: true }
+
+            { 
+            bSort : false,
+            orderable: false,
+            width: '100px',
+            targets: [1]
+        },          { 
+            bSort : false,
+            orderable: false,
+            targets: [0,2,3,4,5]
+        },
+                     { 
+            bSort : false,
+            orderable: false,
+            width: '200px',
+            targets: [-1]
+        }
         ]
     });
 

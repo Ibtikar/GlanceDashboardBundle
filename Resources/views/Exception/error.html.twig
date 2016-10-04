@@ -1,0 +1,69 @@
+{% extends location is defined and app.environment == 'dev' ? 'IbtikarGlanceDashboardBundle::twigLayout.html.twig' : 'IbtikarGlanceDashboardBundle::assetsLayout.html.twig' %}
+{% block title %}
+    الصفحة غير موجودة
+{% endblock %}
+
+{% block body %}
+
+<div class="page-container">
+
+    <!-- Page content -->
+    <div class="page-content">
+
+			<!-- Main content -->
+			<div class="content-wrapper">
+
+				<!-- Error title -->
+				<div class="text-center content-group">
+					<h1 class="error-title">404</h1>
+					<h5>عفوا !! هذا الرابط غير صحيح </h5>
+				</div>
+				<!-- /error title -->
+
+
+				<!-- Error content -->
+                                		<div class="row">
+					<div class="col-lg-4 col-lg-offset-4 col-sm-6 col-sm-offset-3">
+						<form action="#" class="main-search">
+						{#	<div class="input-group content-group">
+								<input type="text" class="form-control input-lg" placeholder="بحث">
+
+								<div class="input-group-btn">
+									<button type="submit" class="btn bg-primary btn-icon btn-lg"><i class="icon-search4"></i></button>
+								</div>
+							</div>#}
+
+							<div class="row">
+								<div class="col-sm-12">
+									<a href="#" class="btn btn-primary btn-block content-group"><i class="icon-circle-left2 position-left"></i> العودة للرئيسية  </a>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- /error wrapper -->
+
+			</div>
+			<!-- /main content -->
+
+
+    </div>
+    <!-- /page content -->
+
+</div>
+{% endblock %}
+{% block javascripts %}
+  <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/plugins/loaders/pace.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/core/libraries/jquery.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/core/libraries/bootstrap.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/plugins/loaders/blockui.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/plugins/ui/nicescroll.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/plugins/ui/drilldown.js')}}"></script>
+
+
+    <script src="{{ asset('bundles/ibtikarglancedashboard/assets/js/core/jquery.easing.min.js')}}"></script>
+
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/assets/js/core/app.js')}}"></script>
+{% endblock %}
