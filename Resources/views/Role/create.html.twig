@@ -1,0 +1,202 @@
+{% extends 'IbtikarGlanceDashboardBundle::formLayout.html.twig' %}
+
+
+
+{% block title %}{% trans from translationDomain %}Add new role{% endtrans %}{% endblock %}
+
+{% block form_container %}
+
+
+
+                                    {{ form_start(form)}}
+
+                                    {{ form_row(form.name) }}
+
+                                    {{ form_row(form.description) }}
+                                    <div class="row">
+
+
+                                        <div class="col-md-12">
+                                            <div class="panel panel-flat">
+                                                <div class="panel-heading">
+                                                    <h6 class="panel-title"> اضف الصلاحية</h6>
+
+                                                </div>
+
+                                                <div class="panel-body">
+                                                    <div class="tabbable">
+                                                        <ul class="nav nav-tabs nav-tabs-highlight">
+                                                            {% for key,tab in tabs %}
+                                                                <li class="{% if loop.first %}active{%endif %}"><a href="#badges-tab-{{key}}" data-toggle="tab"><span class="badge badge-primary position-left">78</span> {{ tab.title }}</a></li>
+                                                                {% endfor %}
+                                                        </ul>
+
+                                                        <div class="tab-content">
+                                                            {% for key,tab in tabs %}
+                                                                <div class="tab-pane {% if loop.first %}active{%endif %}" id="badges-tab-{{key}}">
+                                                                    <div class="table-responsive">
+                                                                        <table class="table text-nowrap" style="border:1px solid #ddd">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th class="text-center" style="width: 20px;"><i class="icon-arrow-down12"></i></th>
+                                                                                    <th style="width: 200px;">الاسم</th>
+                                                                                        {% for permission in tab.permission %}
+                                                                                        <th style="width:50px" class="text-center">{{ permission }}</th>
+                                                                                        {% endfor %}
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+
+                                                                                <tr class="active border-double">
+                                                                                    <td class="text-center">
+                                                                                        <div class="form-group">
+                                                                                            <label class="checkbox-inline">
+                                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </td>
+
+                                                                                    <td colspan="{{ tab.permission|length +1 }}">
+
+                                                                                        <span class="pull-left"> module 1</span>
+
+                                                                                        <span class="badge bg-primary pull-right">2</span>
+                                                                                    </td>
+
+                                                                                </tr>
+
+                                                                                {% for key,value in tab %}
+                                                                                    {% if key=='modules' %}
+
+                                                                                        {% for name,module in value %}
+                                                                                            <tr>
+
+                                                                                                <td class="text-center">
+
+                                                                                                    <div class="form-group">
+                                                                                                        <label class="checkbox-inline">
+                                                                                                            <input type="checkbox" class="styled selectAllRow">
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                                <td>
+
+
+                                                                                                    <div class="media-body">
+                                                                                                        <a href="#" class="display-inline-block text-default letter-icon-title"> {{ name}} </a>
+
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                                {% for permission in tab.permission %}
+
+
+                                                                                                    <td class="text-center">
+                                                                                                        {% if 'ROLE_'~name~'_'~permission in module %}
+
+                                                                                                            <div class="form-group">
+                                                                                                                <label class="checkbox-inline">
+                                                                                                                    <input type="checkbox" class="styled" {{ block('widget_attributes') }} value="{{ 'ROLE_'~name~'_'~permission }}" name="form[permissions][]" data-rule-mincheck="1" data-error-after-selector=".table-responsive" data-msg-mincheck="{% trans from 'role' %}You must have at least 1 Permission{% endtrans %}" />
+
+                                                                                                                </label>
+                                                                                                            </div>
+                                                                                                        {% endif %}
+                                                                                                    </td>
+
+                                                                                                {% endfor%}
+
+
+
+                                                                                            </tr>
+                                                                                        {% endfor %}
+                                                                                    {% endif %}
+                                                                                {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div><!-- table-responeive -->
+
+                                                                </div><!-- tab 1 -->
+
+                                                            {% endfor%}
+                                        {{ form_widget(form.permissions) }}
+
+                                        {{ form_errors(form.permissions) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    {{ form_end(form) }}
+
+
+{% endblock %}
+{% block form_buttons %}
+    <div class="row actionButtons">
+        <div class="col-xs-12">
+            <button class="btn btn-primary btn-lg dev-form-save-button progress-button dev-padding-progress-btn" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
+            <button class="btn btn-defualt btn-lg dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/rolegrid.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/uniform.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
+
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
+        <script src="{{ asset('bundles/ibtikarglancedashboard/js/plugins/jquery-validation/jquery.validate.min.js')}}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/plugins/jquery-validation/additional-methods.min.js')}}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/plugins/jquery-validation/messages_ar.js')}}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/backend.js') }}"></script>
+
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/validation.js')}}"></script>
+    <script>
+        var availableMessage = '{% trans %}valid{% endtrans %}';
+        var unAvailableMessage = '{% trans %}not valid{% endtrans %}';
+                    var requestId = '{{ app.request.get('id') }}';
+
+
+    </script>
+    <script>
+
+        $(document).ready(function () {
+            $('body').on('click', '.selectAllRow', function () {
+
+                if (!$($(this).parent('span')).hasClass("checked")) {
+                    $(this).closest('tr').find(".checker span").each(function () {
+                        console.log($(this));
+                        $(this).addClass('checked');
+                    });
+                }
+                else {
+                    $(this).closest('tr').find(".checker span").each(function () {
+                        console.log($(this));
+                        $(this).removeClass('checked');
+                    });
+                }
+
+            });
+        })
+
+
+    </script>
+{% endblock %}

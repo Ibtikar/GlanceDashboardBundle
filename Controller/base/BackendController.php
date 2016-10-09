@@ -299,7 +299,7 @@ class BackendController extends Controller {
         return 'IbtikarGlanceDashboardBundle:' . $this->calledClassName;
     }
 
-    public function trans($string, $param = array(), $translationDomain = null) {
+    public function trans($string, $param = array(), $translationDomain = 'messages') {
         if (is_null($translationDomain)) {
             $translationDomain = $this->translationDomain;
         }
@@ -422,6 +422,35 @@ class BackendController extends Controller {
         $response = new Response();
         $response->setStatusCode(404);
         return $this->render('IbtikarGlanceDashboardBundle:Exception:error.html.twig', array('exception' => new \Exception('Wrong id'), 'status_code' => 404), $response);
+    }
+
+    public function checkFieldUniqueAction(Request $request) {
+        $securityContext = $this->container->get('security.authorization_checker');
+
+        $loggedInUser = $this->getUser();
+        if (!$loggedInUser) {
+            return new JsonResponse(array('status' => 'login'));
+        }
+
+        $fieledName = $request->get('fieldName');
+        $fieledValue = $request->get('fieldValue');
+        $id = $request->get('id');
+        $em = $this->get('doctrine_mongodb')->getManager();
+        if ($fieledName == 'email') {
+            $fieledValue = strtolower($fieledValue);
+        }
+        $count = $em->createQueryBuilder($this->getObjectShortName())
+                        ->field('deleted')->equals(FALSE)
+                        ->field($fieledName)->equals(trim($fieledValue));
+        if ($id) {
+            $count = $count->field('id')->notEqual($id);
+        }
+        $count = $count->getQuery()->execute()->count();
+        if ($count > 0) {
+            return new JsonResponse(array('status' => 'success', 'unique' => FALSE, 'message' => $this->trans('not valid')));
+        } else {
+            return new JsonResponse(array('status' => 'success', 'unique' => TRUE, 'message' => $this->trans('valid')));
+        }
     }
 
 }

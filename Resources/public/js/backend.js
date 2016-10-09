@@ -7,12 +7,44 @@ var submitButtonConfirmFunction;
 
 
 
+var stack_custom_top = {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 1};
 
 
 /**
  * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
  */
 function submitAjaxForm() {
+    var cur_value = 1,
+        progress;
+
+        // Make a loader.
+        var loader = new PNotify({
+            title: "يتم الحفظ",
+            text: '<div class="progress progress-striped active" style="margin:0">\
+            <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0">\
+            <span class="sr-only">0%</span>\
+            </div>\
+            </div>',
+            addclass: 'bg-primary',
+            icon: 'icon-spinner4 spinner',
+            hide: false,
+            buttons: {
+                closer: false,
+                sticker: false
+            },
+            history: {
+                history: false
+            },
+            width: "100%",
+            cornerclass: "no-border-radius",
+            stack: stack_custom_top,
+            before_open: function(PNotify) {
+                progress = PNotify.get().find("div.progress-bar");
+                progress.width(cur_value + "%").attr("aria-valuenow", cur_value).find("span").html(cur_value + "%");
+
+
+            }
+        });
     var formSubmitUrl = $('form.dev-page-main-form').attr('action');
     if (!formSubmitUrl) {
         formSubmitUrl = window.location.href;
@@ -21,13 +53,15 @@ function submitAjaxForm() {
     $('form.dev-page-main-form').attr('ajax-running', 'true');
     $('form.dev-page-main-form').ajaxSubmit({
         url: formSubmitUrl,
+
         success: function(data){
             if(typeof data != 'object') {
             var form = $(data).find('.dev-page-main-form');
             var messages = $(data).find('.alert-success.remove-5s,.alert-danger.remove-5s');
             $('.alert.remove-5s').remove();
-            $('#leftSide .dev-page-main-form').replaceWith(form);
-            $('#leftSide').prepend(messages);
+                $('.content-wrapper .dev-page-main-form').replaceWith(form);
+                $('.content-wrapper .panel-body:first').prepend(messages);
+
 
 //            initializePlugins();
             initFormValidation();
@@ -38,7 +72,7 @@ function submitAjaxForm() {
                 $('body').trigger('closeIframeIfExist');
             }
 
-            scrollToFirstNotification();
+//            scrollToFirstNotification();
             } else {
                 $('body').trigger('ajaxJsonResponseCallback');
             }
@@ -58,11 +92,13 @@ function submitAjaxForm() {
                 var state = $(jqxhr.responseText).find('.form-state').val();
                 if(state == 'true'){
                     $('body').trigger('onSuccessSubmitForm');
-                    submitButtonProgress = 1;
+                    progress.width( "100%").attr("aria-valuenow", 100).find("span").html("100%");
+ loader.remove();
                 } else {
                     $('body').trigger('onFailSubmitForm');
                     submitButtonProgress = 0;
-                    document.submitBtns._stop(-1);
+                     loader.remove();
+//                    document.submitBtns._stop(-1);
                 }
             }
         },
@@ -71,6 +107,8 @@ function submitAjaxForm() {
             xhr.upload.addEventListener('progress', function(evt) {
                 if (evt.lengthComputable) {
                     submitButtonProgress = (evt.loaded / evt.total) / 2;
+                    progress.width( submitButtonProgress*100+"%").attr("aria-valuenow", submitButtonProgress*100).find("span").html(submitButtonProgress*100+"%");
+
                 }
             }, false);
 
@@ -78,6 +116,8 @@ function submitAjaxForm() {
                 if (evt.lengthComputable) {
                     var percentComplete = evt.loaded / evt.total;
                     submitButtonProgress = (percentComplete / 2) + .5;
+                    progress.width( submitButtonProgress*100+"%").attr("aria-valuenow", submitButtonProgress*100).find("span").html(submitButtonProgress*100+"%");
+
                 }
             }, false);
 
@@ -131,24 +171,24 @@ jQuery(document).ready(function($) {
     ajaxSubmitClickHandler = function(e) {
         $('body').trigger('preAjaxCallback',e);
         if(typeof cityCollection !='undefined' && cityCollection=='city'){
-            document.submitBtns = new ProgressButton(e.currentTarget, {
-            statusTime: 800,
-            callback: function(instance) {
-                $('.remove-5s').slideUp();
-                if ($('form.dev-page-main-form').attr('data-form-valid') === 'true') {
-                    submitButtonProgress = 0;
-                    var interval = setInterval(function() {
-                        instance._setProgress(submitButtonProgress);
-                        if (submitButtonProgress === 1) {
-                            instance._stop(1);
-                            clearInterval(interval);
-                        }
-                    }, 200);
-                } else {
-                    instance._stop(-1);
-                }
-            }
-        });
+//            document.submitBtns = new ProgressButton(e.currentTarget, {
+//            statusTime: 800,
+//            callback: function(instance) {
+//                $('.remove-5s').slideUp();
+//                if ($('form.dev-page-main-form').attr('data-form-valid') === 'true') {
+//                    submitButtonProgress = 0;
+//                    var interval = setInterval(function() {
+//                        instance._setProgress(submitButtonProgress);
+//                        if (submitButtonProgress === 1) {
+//                            instance._stop(1);
+//                            clearInterval(interval);
+//                        }
+//                    }, 200);
+//                } else {
+//                    instance._stop(-1);
+//                }
+//            }
+//        });
     }
         var $this = $(this);
         $('form.dev-page-main-form').attr('data-force-unique-valid', 'true');
@@ -196,27 +236,31 @@ jQuery(document).ready(function($) {
     });
 
     // the submit button progress plugin
-    $('button.progress-button:not(.dev-ignore-progress)').each(function() {
-        document.submitBtns = new ProgressButton(this, {
-            statusTime: 800,
-            callback: function(instance) {
-                $('.remove-5s').slideUp();
-                if ($('form.dev-page-main-form').attr('data-form-valid') === 'true') {
-                    submitButtonProgress = 0;
-                    var interval = setInterval(function() {
-                        instance._setProgress(submitButtonProgress);
-                        if (submitButtonProgress === 1) {
-                            instance._stop(1);
-                            clearInterval(interval);
-                        }
-                    }, 200);
-                } else {
-                    instance._stop(-1);
-                }
-            }
-        });
-    }).click(ajaxSubmitClickHandler);
+//    $('button.progress-button:not(.dev-ignore-progress)').each(function() {
+//        document.submitBtns = new ProgressButton(this, {
+//            statusTime: 800,
+//            callback: function(instance) {
+//                $('.remove-5s').slideUp();
+//                if ($('form.dev-page-main-form').attr('data-form-valid') === 'true') {
+//                    submitButtonProgress = 0;
+//                    var interval = setInterval(function() {
+//                        instance._setProgress(submitButtonProgress);
+//                        if (submitButtonProgress === 1) {
+//                            instance._stop(1);
+//                            clearInterval(interval);
+//                        }
+//                    }, 200);
+//                } else {
+//                    instance._stop(-1);
+//                }
+//            }
+//        });
+//    }).click(ajaxSubmitClickHandler);
 
+  $('.dev-form-save-button').on('click', function () {
+//        $('.dev-main-form-container form').submit();
+ajaxSubmitClickHandler();
+    });
     // select2 plugin initialization
 //    initSelect2();
     // the confirmation modal button click listener

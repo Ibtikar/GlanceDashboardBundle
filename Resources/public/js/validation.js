@@ -141,12 +141,13 @@ function unhighlightElement(element, removeUniqueMessageOnly) {
  * @param object element
  */
 function markElementAsValid(element) {
-//    console.log('element valid');
-//    console.log(element);
+    console.log('element valid');
+    console.log(element);
     if ($(element).hasClass('dev-datetimepicker')) {
        $(element).closest('.form-group').removeClass('has-error').find('.help-block').remove();
        }
     $(element).closest('.form-group').addClass('has-success');
+    console.log($(element).attr('data-validation-message') === availableMessage);
     if ($(element).attr('data-validation-message') === availableMessage) {
         if ($(element).val().trim() != '') {
             $(element).after('<span class="help-block">' + $(element).attr('data-validation-message') + '</span>');
@@ -234,7 +235,7 @@ function checkUniqueValidation(element) {
     if ($this.valid()) {
         $this.removeAttr('data-force-unique-valid');
         $this.removeAttr('data-unique-valid');
-        var $loader = $this.closest('.form-group').find('.InputLoader').show();
+        var $loader = $this.closest('.form-group').find('.dev-inputLoader').show();
         var validatedValue = $this.val();
         $.ajax({
             url: $this.attr('data-url'),
@@ -245,8 +246,10 @@ function checkUniqueValidation(element) {
                 }
                 if (data.unique) {
                     $this.attr('data-unique-valid', 'true');
+                    $this.closest('.form-group').find('.dev-successLoader').show();
                 } else {
                     $this.attr('data-unique-valid', 'false');
+                    $this.closest('.form-group').find('.dev-failLoader').show();
                 }
                 $this.attr('data-unique-validated-value', validatedValue);
                 $this.removeAttr('data-remove-color');
