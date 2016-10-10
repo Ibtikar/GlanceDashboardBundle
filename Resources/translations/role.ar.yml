@@ -14,5 +14,6 @@
 'CITY': 'مدينه'
 'user': 'اداره المستخدمين'
 'city': 'المدن'
+'You must have at least 1 Permission': 'يجب إختيار صلاحية واحدة علي الأقل'
 
 

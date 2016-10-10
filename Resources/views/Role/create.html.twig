@@ -91,7 +91,7 @@
 
                                                                                                             <div class="form-group">
                                                                                                                 <label class="checkbox-inline">
-                                                                                                                    <input type="checkbox" class="styled" {{ block('widget_attributes') }} value="{{ 'ROLE_'~name~'_'~permission }}" name="form[permissions][]" data-rule-mincheck="1"   {% if 'ROLE_'~name~'_'~permission in permissionSelected %} checked="checked"{% endif %} data-error-after-selector=".table-responsive" data-msg-mincheck="{% trans from 'role' %}You must have at least 1 Permission{% endtrans %}" />
+                                                                                                                    <input type="checkbox" class="styled" {{ block('widget_attributes') }} value="{{ 'ROLE_'~name~'_'~permission }}" name="form[permissions][]" data-rule-mincheck="1"   {% if 'ROLE_'~name~'_'~permission in permissionSelected %} checked="checked"{% endif %} data-error-after-selector=".panel-flat .tabbable" data-parent-element=".panel-body" data-msg-mincheck="{% trans from 'role' %}You must have at least 1 Permission{% endtrans %}" />
 
                                                                                                                 </label>
                                                                                                             </div>

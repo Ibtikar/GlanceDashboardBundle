@@ -164,11 +164,7 @@ function markElementAsValid(element) {
     }
 }
 
-/**
- * set error status for not valid field
- * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
- * @param object element
- */
+
 function markElementAsNotValid(element) {
 //    console.log('element not valid');
 //    console.log(element);
@@ -186,6 +182,9 @@ function markElementAsNotValid(element) {
             $(element).parent().find('.help-block').after('<span class="help-block">' + $(element).attr('data-validation-message') + '</span>');
         }
 
+    }
+    if(typeof $(element).attr('data-parent-element') != 'undefined'){
+        $(element).closest($(element).attr('data-parent-element')).addClass('has-error');
     }
     $(element).closest('.form-group').addClass('has-error');
 }
