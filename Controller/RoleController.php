@@ -11,8 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 class RoleController extends BackendController {
 
     protected $translationDomain = 'role';
-    protected  $tabs=array('user'=>array('title'=>'user','modules'=>array('STAFF'=>array(),'VISITOR'=>array()),'permission'=>array()),
-        'city'=>array('title'=>'city','modules'=>array('CITY'=>array()),'permission'=>array()));
+    protected  $tabs=array('user'=>array('title'=>'user','count'=>0,'modules'=>array('STAFF'=>array(),'VISITOR'=>array()),'permission'=>array()),
+        'city'=>array('title'=>'city','count'=>0,'modules'=>array('CITY'=>array()),'permission'=>array()));
     protected $tabsnames=array('user','city');
     private $internalPermissions = array(
         'ROLE_ADMIN', 'ROLE_STAFF',
@@ -179,6 +179,7 @@ class RoleController extends BackendController {
 
                 }
                 $this->tabs[$tabsName]['modules'][strtoupper($permission[0])][]=$key;
+                $this->tabs[$tabsName]['count']++;
             }
              }
             $value = $translator->trans($permission[0], array("wordByWord"=>true,"flip"=>true), $this->translationDomain)." ".$permission[1];

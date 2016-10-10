@@ -23,7 +23,7 @@
                                                     <div class="tabbable">
                                                         <ul class="nav nav-tabs nav-tabs-highlight">
                                                             {% for key,tab in tabs %}
-                                                                <li class="{% if loop.first %}active{%endif %}"><a href="#badges-tab-{{key}}" data-toggle="tab"><span class="badge badge-primary position-left">78</span> {{ tab.title|trans({},translationDomain) }}</a></li>
+                                                                <li class="{% if loop.first %}active{%endif %}"><a href="#badges-tab-{{key}}" data-toggle="tab"><span class="badge badge-primary position-left">{{tab.count}}</span> {{ tab.title|trans({},translationDomain) }}</a></li>
                                                                 {% endfor %}
                                                         </ul>
 
@@ -54,7 +54,7 @@
 
                                                                                     <td colspan="{{ tab.permission|length +1 }}">
 
-                                                                                        <span class="pull-left"> module 1</span>
+                                                                                        <span class="pull-left"> module {{loop.index}}</span>
 
                                                                                         <span class="badge bg-primary pull-right">2</span>
                                                                                     </td>
@@ -135,7 +135,6 @@
 {% block javascripts %}
     {{ parent() }}
 
-    <script src="{{ asset('bundles/ibtikarglancedashboard/js/rolegrid.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/uniform.min.js')}}"></script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
@@ -144,6 +143,7 @@
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
 
     <script>
+
 
         $(document).ready(function () {
             $('body').on('click', '.selectAllRow', function () {
@@ -162,6 +162,11 @@
                 }
 
             });
+            $('body').on('ajaxCallback',function(){
+            var grid = $('.permission-grid-container .permission-grid').parent().clone();
+             $('#form_permissions').replaceWith(grid);
+             });
+            $('body').trigger('ajaxCallback');
         })
 
 
