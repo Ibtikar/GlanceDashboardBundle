@@ -1,6 +1,12 @@
-{% extends location is defined and app.environment == 'dev' ? 'IbtikarGlanceDashboardBundle::twigLayout.html.twig' : 'IbtikarGlanceDashboardBundle::iframeFormLayout.html.twig' : 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard.html.twig' %}
+{% extends location is defined and app.environment == 'dev' ? 'IbtikarGlanceDashboardBundle::twigLayout.html.twig' : 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard.html.twig' %}
 {% block title %}
     الصفحة غير موجودة
+{% endblock %}
+{% block header %}
+{% endblock %}
+{% block navbar %}
+{% endblock %}
+{% block side_menu %}
 {% endblock %}
 
 {% block body %}
