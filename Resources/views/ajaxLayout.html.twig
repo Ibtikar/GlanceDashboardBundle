@@ -1,30 +1,19 @@
-{% if  form is defined %}
-<div class="ajax-content-wrapper">
-    {% if form.vars.valid == false %}
-        <input type="hidden" class="form-state" value = "false"/>
-    {% endif %}
+{% form_theme form 'IbtikarShareEconomyDashboardDesignBundle:Theme:dashboard.html.twig' %}
 
-    {% if form.vars.valid == true %}
-        <input type="hidden" class="form-state" value = "true"/>
-    {% endif %}
-{% endif %}
-
-{% for flashMessage in app.session.flashbag.get('success') %}
-    <div class="alert alert-success remove-5s">
-        <a aria-hidden="true" href="#" data-dismiss="alert" class="close">×</a>
-        {{ flashMessage }}
+    <div class="panel-body dev-main-form-container">
+        <div class="row">
+            <div class="col-md-12">
+                {% for flashMessageType, flashMessageArray in app.session.flashBag.all %}
+                    {% for flashMessage in flashMessageArray %}
+                <div class="alert {{ flashMessageType == 'error' ? 'alert-danger' : flashMessageType == 'success' ? 'alert-success' : 'alert-info' }} no-border">
+                    <button data-dismiss="alert" class="close" type="button"><span>×</span><span class="sr-only">{% trans %}Close{% endtrans %}</span></button>{{ flashMessage }}
+                </div>
+                    {% endfor %}
+                {% endfor %}
+                {% block form_container %}
+                {{ form(form) }}
+                {% endblock %}
+            </div>
+        </div>
     </div>
-{% endfor %}
 
-{% for flashMessage in app.session.flashbag.get('error') %}
-    <div class="alert alert-danger remove-5s">
-        <a aria-hidden="true" href="#" data-dismiss="alert" class="close">×</a>
-        {{ flashMessage }}
-    </div>
-{% endfor %}
-
-{% block content %}{% endblock %}
-
-{% if  form is defined %}
-</div>
-{% endif %}

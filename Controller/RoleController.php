@@ -121,19 +121,24 @@ class RoleController extends BackendController {
     }
 
     public function createAction(Request $request) {
-        $breadcrumbs = $this->get("white_october_breadcrumbs");
-//        $breadcrumbs->addItem('backend-home', $this->generateUrl('backend_home'));
-//        $breadcrumbs->addItem('List Role', $this->generateUrl('role_list'));
-//        $breadcrumbs->addItem('Add new role', $this->generateUrl('ibtikar_glance_dashboard_role_create'));
+
+        $breadCrumb= new \stdClass();
+        $breadCrumb->active=true;
+        $breadCrumb->link= $this->generateUrl('ibtikar_glance_dashboard_role_create');
+        $breadCrumb->linkType= 'add';
+        $breadCrumb->text= $this->trans('role create',array(),  $this->translationDomain);
+
         $permissions = $this->container->getParameter('permissions');
         $permissions = $this->customPermissionsArray($permissions);
         $role = new Role();
 
         $form = $this->buildForm($role, $permissions);
+        $permissionSelected=array();
 
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
-
+            $formData = $request->get('form');
+            $permissionSelected=$formData['permissions'];
             if ($form->isValid()) {
                 $dm = $this->get('doctrine_mongodb')->getManager();
                 $role->setPermissionscount(count($role->getPermissions()));
@@ -142,23 +147,15 @@ class RoleController extends BackendController {
                 $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('done sucessfully'));
 
                 return $this->redirect($request->getUri());
-            }  else {
-                  foreach ($form->getIterator() as $key => $child) {
-//        if ($child instanceof Form) {
-            foreach ($child->getErrors() as $error) {
-                $errors[$key] = $error->getMessage();
-//            }
-        }
-    }
-                   \Doctrine\Common\Util\Debug::dump($errors);
-            exit;
             }
         }
 
         return $this->render('IbtikarGlanceDashboardBundle:Role:create.html.twig', array(
                     'form' => $form->createView(),
-                    'title'=>'add role',
+                    'breadcrumb'=>array($breadCrumb),
+                    'title'=>$this->trans('Add new role',array(),  $this->translationDomain),
                     'tabs'=> $this->tabs,
+                    'permissionSelected'=>$permissionSelected,
                     'translationDomain' => $this->translationDomain
         ));
     }
@@ -195,7 +192,7 @@ class RoleController extends BackendController {
 
     private function buildForm($role, $permissions) {
         return $this->createFormBuilder($role, array('translation_domain' => $this->translationDomain,'attr'=>array('class'=>'dev-page-main-form dev-js-validation form-horizontal')))
-                        ->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class,array('attr' => array('data-rule-unique' => 'ibtikar_glance_dashboard_role_check_field_unique','data-name'=>'name','data-rule-maxlength' => 330,'data-url'=>  $this->generateUrl('ibtikar_glance_dashboard_role_check_field_unique'))))
+                        ->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class,array('attr' => array('data-rule-unique' => 'ibtikar_glance_dashboard_role_check_field_unique','data-msg-unique'=>  $this->trans('not valid'),'data-name'=>'name','data-rule-maxlength' => 330,'data-url'=>  $this->generateUrl('ibtikar_glance_dashboard_role_check_field_unique'),'placeholder'=>'')))
                         ->add('description', \Symfony\Component\Form\Extension\Core\Type\TextareaType::class, array('required' => false))
                         ->add('permissions', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
                             'choices' => $permissions,

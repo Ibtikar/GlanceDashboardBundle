@@ -16,7 +16,7 @@ use Ibtikar\GlanceUMSBundle\Document\User;
  * @MongoDB\HasLifecycleCallbacks
  * @MongoDB\Index(keys={"name"="asc"})
  */
-class Role  {
+class Role extends Document {
 
     /**
      * @MongoDB\Id

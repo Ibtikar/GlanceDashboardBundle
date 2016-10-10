@@ -26,7 +26,7 @@ $.validator.addMethod('staffUsername', function (value, element) {
     {
         return true;
     }
-}, jQuery.validator.format('not valid'));
+}, $.validator.format('not valid'));
 
 $.validator.addMethod('slug', function (value, element) {
     //remove tachkil
@@ -41,7 +41,7 @@ $.validator.addMethod('slug', function (value, element) {
     {
         return true;
     }
-}, jQuery.validator.format('not valid'));
+}, $.validator.format('not valid'));
 
 
 
@@ -56,7 +56,7 @@ $.validator.addMethod('passwordMax', function (value, element) {
 
 $.validator.addMethod('mincheck', function (value, element, options) {
     return $('input[name="' + $(element).attr('name') + '"]:checked').length >= parseInt(options);
-}, jQuery.validator.format('Please select at least {0} of these fields.'));
+}, $.validator.format('Please select at least {0} of these fields.'));
 
 
 $.validator.addMethod('unique', function (value, element) {
@@ -77,7 +77,7 @@ $.validator.addMethod('unique', function (value, element) {
     if ($(element).attr('data-unique-valid') === 'true') {
         return true;
     }
-}, jQuery.validator.format('Not available.'));
+}, $.validator.format('unique'));
 
 
 
@@ -103,6 +103,7 @@ function removeUniquHelpBlock($helpBlock) {
  */
 function unhighlightElement(element, removeUniqueMessageOnly) {
 //    console.log('unhighlight: ');
+    $(element).siblings('.dev-loader').hide();
     var $this = $(element);
     var errorSelector = '.help-block';
     if($this.attr('data-error-template-selector')) {
@@ -141,13 +142,11 @@ function unhighlightElement(element, removeUniqueMessageOnly) {
  * @param object element
  */
 function markElementAsValid(element) {
-    console.log('element valid');
-    console.log(element);
+
     if ($(element).hasClass('dev-datetimepicker')) {
        $(element).closest('.form-group').removeClass('has-error').find('.help-block').remove();
        }
     $(element).closest('.form-group').addClass('has-success');
-    console.log($(element).attr('data-validation-message') === availableMessage);
     if ($(element).attr('data-validation-message') === availableMessage) {
         if ($(element).val().trim() != '') {
             $(element).after('<span class="help-block">' + $(element).attr('data-validation-message') + '</span>');
@@ -350,11 +349,15 @@ function initFormValidation(form_selector) {
 
             },
             onkeyup: function(element, event) {
+                $(element).siblings('.dev-loader').hide()
+
                 if(event.keyCode !== 9) {
                     validateElement(element);
                 }
             },
             onfocusout: function (element) {
+                $(element).siblings('.dev-loader').hide()
+
                 if ($(element).attr('autofocus')) {
                     setTimeout(function () {
                         if (!disableValidation) {

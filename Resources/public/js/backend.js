@@ -14,8 +14,8 @@ var stack_custom_top = {"dir1": "down", "dir2": "right", "push": "top", "spacing
  * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
  */
 function submitAjaxForm() {
-    var cur_value = 1,
-        progress;
+    var cur_value = 0,
+        progressStatus;
 
         // Make a loader.
         var loader = new PNotify({
@@ -39,8 +39,8 @@ function submitAjaxForm() {
             cornerclass: "no-border-radius",
             stack: stack_custom_top,
             before_open: function(PNotify) {
-                progress = PNotify.get().find("div.progress-bar");
-                progress.width(cur_value + "%").attr("aria-valuenow", cur_value).find("span").html(cur_value + "%");
+                progressStatus = PNotify.get().find("div.progress-bar");
+                progressStatus.width(cur_value + "%").attr("aria-valuenow", cur_value).find("span").html(cur_value + "%");
 
 
             }
@@ -57,10 +57,12 @@ function submitAjaxForm() {
         success: function(data){
             if(typeof data != 'object') {
             var form = $(data).find('.dev-page-main-form');
-            var messages = $(data).find('.alert-success.remove-5s,.alert-danger.remove-5s');
-            $('.alert.remove-5s').remove();
-                $('.content-wrapper .dev-page-main-form').replaceWith(form);
-                $('.content-wrapper .panel-body:first').prepend(messages);
+            var messages = $(data).find('.alert-success,.alert-danger');
+
+
+            $('.alert').remove();
+                $('.dev-main-form-container .dev-page-main-form').replaceWith(form);
+                $('.dev-main-form-container .col-md-12:first').prepend(messages);
 
 
 //            initializePlugins();
@@ -92,32 +94,31 @@ function submitAjaxForm() {
                 var state = $(jqxhr.responseText).find('.form-state').val();
                 if(state == 'true'){
                     $('body').trigger('onSuccessSubmitForm');
-                    progress.width( "100%").attr("aria-valuenow", 100).find("span").html("100%");
- loader.remove();
+                    progressStatus.width( "100%").attr("aria-valuenow", 100).find("span").html("100%");
+                    loader.remove();
                 } else {
                     $('body').trigger('onFailSubmitForm');
-                    submitButtonProgress = 0;
-                     loader.remove();
-//                    document.submitBtns._stop(-1);
+                    loader.remove();
                 }
             }
         },
-        xhr: function() {
+        xhr: function () {
             var xhr = new window.XMLHttpRequest();
-            xhr.upload.addEventListener('progress', function(evt) {
+            // Upload progress
+            xhr.upload.addEventListener("progress", function (evt) {
+
                 if (evt.lengthComputable) {
-                    submitButtonProgress = (evt.loaded / evt.total) / 2;
-                    progress.width( submitButtonProgress*100+"%").attr("aria-valuenow", submitButtonProgress*100).find("span").html(submitButtonProgress*100+"%");
+                    var percentComplete = (evt.loaded * 100) / evt.total;
+                    progressStatus.width(percentComplete + "%").attr("aria-valuenow", percentComplete / 100).find("span").html(percentComplete + "%");
 
                 }
             }, false);
 
-            xhr.addEventListener('progress', function(evt) {
+            // Download progress
+            xhr.addEventListener("progress", function (evt) {
                 if (evt.lengthComputable) {
-                    var percentComplete = evt.loaded / evt.total;
-                    submitButtonProgress = (percentComplete / 2) + .5;
-                    progress.width( submitButtonProgress*100+"%").attr("aria-valuenow", submitButtonProgress*100).find("span").html(submitButtonProgress*100+"%");
-
+                    var percentComplete = (evt.loaded * 100) / evt.total;
+                    progressStatus.width(percentComplete + "%").attr("aria-valuenow", percentComplete / 100).find("span").html(percentComplete + "%");
                 }
             }, false);
 
@@ -170,26 +171,7 @@ jQuery(document).ready(function($) {
 
     ajaxSubmitClickHandler = function(e) {
         $('body').trigger('preAjaxCallback',e);
-        if(typeof cityCollection !='undefined' && cityCollection=='city'){
-//            document.submitBtns = new ProgressButton(e.currentTarget, {
-//            statusTime: 800,
-//            callback: function(instance) {
-//                $('.remove-5s').slideUp();
-//                if ($('form.dev-page-main-form').attr('data-form-valid') === 'true') {
-//                    submitButtonProgress = 0;
-//                    var interval = setInterval(function() {
-//                        instance._setProgress(submitButtonProgress);
-//                        if (submitButtonProgress === 1) {
-//                            instance._stop(1);
-//                            clearInterval(interval);
-//                        }
-//                    }, 200);
-//                } else {
-//                    instance._stop(-1);
-//                }
-//            }
-//        });
-    }
+
         var $this = $(this);
         $('form.dev-page-main-form').attr('data-force-unique-valid', 'true');
             if (typeof CKEDITOR == 'object') {
@@ -204,14 +186,14 @@ jQuery(document).ready(function($) {
             }
         if ($('form.dev-page-main-form').valid()) {
             $('form.dev-page-main-form').attr('data-form-valid', 'true');
-            if (mainFormNeedConfirm) {
-                if (!mainFormConfirmed) {
-                    document.submitBtns._enable();
-                    submitButtonConfirmFunction($this);
-                    return;
-                }
-                mainFormConfirmed = false;
-            }
+//            if (mainFormNeedConfirm) {
+//                if (!mainFormConfirmed) {
+//                    document.submitBtns._enable();
+//                    submitButtonConfirmFunction($this);
+//                    return;
+//                }
+//                mainFormConfirmed = false;
+//            }
             submitAjaxForm();
         } else {
             $('form.dev-page-main-form').removeAttr('data-force-unique-valid');
@@ -221,66 +203,27 @@ jQuery(document).ready(function($) {
             if(typeof $('#news-accordion').val() !== 'undefined'){
               $('body').trigger('openAccordion');
             }
-            scrollToFirstNotification();
+//            scrollToFirstNotification();
         }
     };
 
 
     // the ajax submit of all forms
-//    $('input[type="text"]:visible:enabled:first').focus();
     $('body').on('submit', 'form.dev-page-main-form', function(e) {
         e.preventDefault();
         if ($(this).find('[type="submit"]').length < 1) {
-            $('button.progress-button').click();
+            $('button.dev-form-submit-btn').click();
         }
     });
 
-    // the submit button progress plugin
-//    $('button.progress-button:not(.dev-ignore-progress)').each(function() {
-//        document.submitBtns = new ProgressButton(this, {
-//            statusTime: 800,
-//            callback: function(instance) {
-//                $('.remove-5s').slideUp();
-//                if ($('form.dev-page-main-form').attr('data-form-valid') === 'true') {
-//                    submitButtonProgress = 0;
-//                    var interval = setInterval(function() {
-//                        instance._setProgress(submitButtonProgress);
-//                        if (submitButtonProgress === 1) {
-//                            instance._stop(1);
-//                            clearInterval(interval);
-//                        }
-//                    }, 200);
-//                } else {
-//                    instance._stop(-1);
-//                }
-//            }
-//        });
-//    }).click(ajaxSubmitClickHandler);
 
-  $('.dev-form-save-button').on('click', function () {
-//        $('.dev-main-form-container form').submit();
-ajaxSubmitClickHandler();
-    });
-    // select2 plugin initialization
-//    initSelect2();
-    // the confirmation modal button click listener
-    $('#confirmationModal .dev-confirm').click(function() {
-        $('#confirmationModal').modal('hide');
-        callbackFunction();
-    });
-    // the alert modal button click listener
-    $('.dev-alert').click(function() {
-        $('#alertModal').modal('hide');
-        callbackFunction();
-    });
 
-    // datepicker remove date icon and hide widget
-    $(document).on('click', '.dev-close-calender', function(){
-        $('.ui-datepicker').datepicker('hide');
-        $(this).prev().val('');
-    });
+  $('.dev-form-submit-btn').on('click', function () {
+    if(typeof  $('form.dev-page-main-form').attr('ajax-running') == 'undefined' || $('form.dev-page-main-form').attr('ajax-running') =='true') {
+        ajaxSubmitClickHandler();
 
-//    initializePlugins();
+    }
+    });
 
 
 });

@@ -1,0 +1,18 @@
+# #############Labels############
+'Description': الوصف
+'Name': 'الاسم'
+'Add new role': 'إدخال دور جديد'
+'role create': 'إدخال دور'
+'VIEW': 'مشاهدة'
+'CREATE': 'إدخال'
+'EDIT': 'تعديل'
+'ACTIVATEDEACTIVATE': 'تفعيل'
+'DELETE': 'حذف'
+'VIEWONE': 'عرض'
+'STAFF': 'موظف'
+'VISITOR': 'عضو'
+'CITY': 'مدينه'
+'user': 'اداره المستخدمين'
+'city': 'المدن'
+
+

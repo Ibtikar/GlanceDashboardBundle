@@ -1,7 +1,6 @@
 {% extends 'IbtikarGlanceDashboardBundle::formLayout.html.twig' %}
 
 
-
 {% block title %}{% trans from translationDomain %}Add new role{% endtrans %}{% endblock %}
 
 {% block form_container %}
@@ -13,10 +12,7 @@
                                     {{ form_row(form.name) }}
 
                                     {{ form_row(form.description) }}
-                                    <div class="row">
 
-
-                                        <div class="col-md-12">
                                             <div class="panel panel-flat">
                                                 <div class="panel-heading">
                                                     <h6 class="panel-title"> اضف الصلاحية</h6>
@@ -27,7 +23,7 @@
                                                     <div class="tabbable">
                                                         <ul class="nav nav-tabs nav-tabs-highlight">
                                                             {% for key,tab in tabs %}
-                                                                <li class="{% if loop.first %}active{%endif %}"><a href="#badges-tab-{{key}}" data-toggle="tab"><span class="badge badge-primary position-left">78</span> {{ tab.title }}</a></li>
+                                                                <li class="{% if loop.first %}active{%endif %}"><a href="#badges-tab-{{key}}" data-toggle="tab"><span class="badge badge-primary position-left">78</span> {{ tab.title|trans({},translationDomain) }}</a></li>
                                                                 {% endfor %}
                                                         </ul>
 
@@ -41,7 +37,7 @@
                                                                                     <th class="text-center" style="width: 20px;"><i class="icon-arrow-down12"></i></th>
                                                                                     <th style="width: 200px;">الاسم</th>
                                                                                         {% for permission in tab.permission %}
-                                                                                        <th style="width:50px" class="text-center">{{ permission }}</th>
+                                                                                        <th style="width:50px" class="text-center">{{ permission|trans({},translationDomain) }}</th>
                                                                                         {% endfor %}
                                                                                 </tr>
                                                                             </thead>
@@ -83,7 +79,7 @@
 
 
                                                                                                     <div class="media-body">
-                                                                                                        <a href="#" class="display-inline-block text-default letter-icon-title"> {{ name}} </a>
+                                                                                                        <a href="#" class="display-inline-block text-default letter-icon-title"> {{ name|trans({},translationDomain)}} </a>
 
                                                                                                     </div>
                                                                                                 </td>
@@ -95,7 +91,7 @@
 
                                                                                                             <div class="form-group">
                                                                                                                 <label class="checkbox-inline">
-                                                                                                                    <input type="checkbox" class="styled" {{ block('widget_attributes') }} value="{{ 'ROLE_'~name~'_'~permission }}" name="form[permissions][]" data-rule-mincheck="1" data-error-after-selector=".table-responsive" data-msg-mincheck="{% trans from 'role' %}You must have at least 1 Permission{% endtrans %}" />
+                                                                                                                    <input type="checkbox" class="styled" {{ block('widget_attributes') }} value="{{ 'ROLE_'~name~'_'~permission }}" name="form[permissions][]" data-rule-mincheck="1"   {% if 'ROLE_'~name~'_'~permission in permissionSelected %} checked="checked"{% endif %} data-error-after-selector=".table-responsive" data-msg-mincheck="{% trans from 'role' %}You must have at least 1 Permission{% endtrans %}" />
 
                                                                                                                 </label>
                                                                                                             </div>
@@ -113,14 +109,6 @@
 
 
 
-
-
-
-
-
-
-
-
                                                                             </tbody>
                                                                         </table>
                                                                     </div><!-- table-responeive -->
@@ -135,23 +123,14 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
 
-                                    </div>
 
                                     {{ form_end(form) }}
 
 
 {% endblock %}
-{% block form_buttons %}
-    <div class="row actionButtons">
-        <div class="col-xs-12">
-            <button class="btn btn-primary btn-lg dev-form-save-button progress-button dev-padding-progress-btn" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
-            <button class="btn btn-defualt btn-lg dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
-        </div>
-    </div>
-{% endblock %}
+
 
 {% block javascripts %}
     {{ parent() }}
@@ -163,19 +142,7 @@
 
 
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
-        <script src="{{ asset('bundles/ibtikarglancedashboard/js/plugins/jquery-validation/jquery.validate.min.js')}}"></script>
-    <script src="{{ asset('bundles/ibtikarglancedashboard/js/plugins/jquery-validation/additional-methods.min.js')}}"></script>
-    <script src="{{ asset('bundles/ibtikarglancedashboard/js/plugins/jquery-validation/messages_ar.js')}}"></script>
-    <script src="{{ asset('bundles/ibtikarglancedashboard/js/backend.js') }}"></script>
 
-    <script src="{{ asset('bundles/ibtikarglancedashboard/js/validation.js')}}"></script>
-    <script>
-        var availableMessage = '{% trans %}valid{% endtrans %}';
-        var unAvailableMessage = '{% trans %}not valid{% endtrans %}';
-                    var requestId = '{{ app.request.get('id') }}';
-
-
-    </script>
     <script>
 
         $(document).ready(function () {
