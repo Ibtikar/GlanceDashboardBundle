@@ -27,6 +27,8 @@ class Role extends Document {
      * @Assert\NotBlank
      * @MongoDB\String
      * @Assert\Length(
+     *      min=3,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
      *      max = 330,
      *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
      * )
@@ -40,6 +42,10 @@ class Role extends Document {
 
     /**
      * @MongoDB\String
+     * @Assert\Length(
+     *      max = 500,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
      */
     protected $description;
 

@@ -7,6 +7,7 @@ use Ibtikar\GlanceDashboardBundle\Document\Document;
 use Ibtikar\GlanceDashboardBundle\Document\Role;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type as formType;
 
 class RoleController extends BackendController {
 
@@ -193,9 +194,14 @@ class RoleController extends BackendController {
 
     private function buildForm($role, $permissions) {
         return $this->createFormBuilder($role, array('translation_domain' => $this->translationDomain,'attr'=>array('class'=>'dev-page-main-form dev-js-validation form-horizontal')))
-                        ->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class,array('attr' => array('data-rule-unique' => 'ibtikar_glance_dashboard_role_check_field_unique','data-msg-unique'=>  $this->trans('not valid'),'data-name'=>'name','data-rule-maxlength' => 330,'data-url'=>  $this->generateUrl('ibtikar_glance_dashboard_role_check_field_unique'),'placeholder'=>'')))
-                        ->add('description', \Symfony\Component\Form\Extension\Core\Type\TextareaType::class, array('required' => false))
-                        ->add('permissions', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
+                        ->add('name', formType\TextType::class,
+                                array('attr' => array('data-rule-unique' => 'ibtikar_glance_dashboard_role_check_field_unique','data-msg-unique'=>  $this->trans('not valid'),'data-name'=>'name',
+                                    'data-rule-maxlength' => 330,
+                                    'data-rule-minlength' => 3,
+                                    'data-url'=>  $this->generateUrl('ibtikar_glance_dashboard_role_check_field_unique'),
+                                    'placeholder'=>'')))
+                        ->add('description',formType\TextareaType::class, array('required' => false, 'attr' => array( 'data-rule-maxlength' => 500)))
+                        ->add('permissions', formType\ChoiceType::class, array(
                             'choices' => $permissions,
                             'multiple' => true,
                             'expanded' => true,
@@ -205,7 +211,7 @@ class RoleController extends BackendController {
                                 "data-error-after-selector"=>".dev-page-main-form .table-responsive"
                             )
                         ))
-                        ->add('save', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+                        ->add('save', formType\SubmitType::class)
                         ->getForm();
     }
 
