@@ -1,7 +1,16 @@
-{% extends 'IbtikarGlanceDashboardBundle::layout.html.twig' %}
+{% extends 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard.html.twig' %}
 
 {% block title %}{% trans  %}Welcome{% endtrans %} {{ app.user }}{% endblock %}
 
-{% block content %}
+{% block header %}
+    {{ include('IbtikarGlanceDashboardBundle::header.html.twig') }}
+{% endblock %}
+{% block navbar %}
+    {{ include('IbtikarGlanceDashboardBundle::navbar.html.twig') }}
+{% endblock %}
+{% block side_menu %}
+    {{ include('IbtikarGlanceDashboardBundle::sidebar.html.twig') }}
+{% endblock %}
+{% block body %}
     <h1>{{ block('title') }}</h1>
 {% endblock %}

@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 class RoleController extends BackendController {
 
     protected $translationDomain = 'role';
-    protected  $tabs=array('user'=>array('title'=>'user','count'=>0,'modules'=>array('STAFF'=>array(),'VISITOR'=>array()),'permission'=>array()),
+    protected  $tabs=array('user'=>array('title'=>'user','count'=>0,'modules'=>array('STAFF'=>array(),'VISITOR'=>array(),'ROLE'=>array()),'permission'=>array()),
         'city'=>array('title'=>'city','count'=>0,'modules'=>array('CITY'=>array()),'permission'=>array()));
     protected $tabsnames=array('user','city');
     private $internalPermissions = array(

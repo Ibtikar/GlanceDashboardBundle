@@ -67,18 +67,18 @@ class UpdateActionsUsers implements EventSubscriber {
     public function preUpdate(LifecycleEventArgs $args) {
         $document = $args->getDocument();
         if (php_sapi_name() !== 'cli') {
-        $route = $this->container->get('request')->get('_route');
+        $route = $this->container->get('request_stack')->getCurrentRequest()->get('_route');
         if (is_subclass_of($document, 'Ibtikar\GlanceDashboardBundle\Document\Document')) {
-            if($route != 'app_view' && $route != 'get_slug_details'){
-                $user = $this->getLoggedinUser();
-                if ($user && is_a($user, 'Ibtikar\GlanceUMSBundle\Document\User')) {
-                    $document->setUpdatedBy($user);
-                }
-                $document->setUpdatedAt(new \DateTime());
-                $dm = $args->getDocumentManager();
-                $class = $dm->getClassMetadata(get_class($document));
-                $dm->getUnitOfWork()->recomputeSingleDocumentChangeSet($class, $document);
-            }
+//            if($route != 'app_view' && $route != 'get_slug_details'){
+//                $user = $this->getLoggedinUser();
+//                if ($user && is_a($user, 'Ibtikar\GlanceUMSBundle\Document\User')) {
+//                    $document->setUpdatedBy($user);
+//                }
+//                $document->setUpdatedAt(new \DateTime());
+//                $dm = $args->getDocumentManager();
+//                $class = $dm->getClassMetadata(get_class($document));
+//                $dm->getUnitOfWork()->recomputeSingleDocumentChangeSet($class, $document);
+//            }
         }
         }
     }
