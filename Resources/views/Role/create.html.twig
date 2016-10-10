@@ -162,11 +162,12 @@
                 }
 
             });
+            $('#form_permissions').replaceWith('');
+
             $('body').on('ajaxCallback',function(){
-            var grid = $('.permission-grid-container .permission-grid').parent().clone();
-             $('#form_permissions').replaceWith(grid);
+             $('#form_permissions').replaceWith('');
+             $('.styled').uniform();
              });
-            $('body').trigger('ajaxCallback');
         })
 
 

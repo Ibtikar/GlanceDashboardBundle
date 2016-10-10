@@ -48,17 +48,17 @@ class UpdateActionsUsers implements EventSubscriber {
      * @param \Doctrine\ODM\MongoDB\Event\LifecycleEventArgs $args
      */
     public function prePersist(LifecycleEventArgs $args) {
-        $document = $args->getDocument();
-        if (is_subclass_of($document, 'Ibtikar\GlanceDashboardBundle\Document\Document')) {
-            $user = $this->getLoggedinUser();
-            if ($user && is_a($user, 'Ibtikar\GlanceUMSBundle\Document\User')) {
-                $document->setCreatedBy($user);
-            }
-            if($document->getCreatedAt() === null) {
-                $document->setCreatedAt(new \DateTime());
-            }
-            $document->updateReferencesCounts(1);
-        }
+//        $document = $args->getDocument();
+//        if (is_subclass_of($document, 'Ibtikar\GlanceDashboardBundle\Document\Document')) {
+//            $user = $this->getLoggedinUser();
+//            if ($user && is_a($user, 'Ibtikar\GlanceUMSBundle\Document\User')) {
+//                $document->setCreatedBy($user);
+//            }
+//            if($document->getCreatedAt() === null) {
+//                $document->setCreatedAt(new \DateTime());
+//            }
+//            $document->updateReferencesCounts(1);
+//        }
     }
 
     /**
