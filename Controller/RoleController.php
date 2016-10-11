@@ -196,7 +196,7 @@ class RoleController extends BackendController {
         return $this->createFormBuilder($role, array('translation_domain' => $this->translationDomain,'attr'=>array('class'=>'dev-page-main-form dev-js-validation form-horizontal')))
                         ->add('name', formType\TextType::class,
                                 array('required' => true,'attr' => array('data-rule-unique' => 'ibtikar_glance_dashboard_role_check_field_unique','data-msg-unique'=>  $this->trans('not valid'),'data-name'=>'name',
-                                    'data-rule-maxlength' => 330,
+                                    'data-rule-maxlength' => 150,
                                     'data-rule-minlength' => 3,
                                     'data-url'=>  $this->generateUrl('ibtikar_glance_dashboard_role_check_field_unique'),
                                     'placeholder'=>'')))

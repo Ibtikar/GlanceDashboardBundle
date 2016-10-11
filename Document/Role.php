@@ -29,7 +29,7 @@ class Role extends Document {
      * @Assert\Length(
      *      min=3,
      *      minMessage = "Your name must be at least {{ limit }} characters long",
-     *      max = 330,
+     *      max = 150,
      *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
      * )
      */
