@@ -28,17 +28,17 @@ class Document {
     protected $deletedAt;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\User", simple=true)
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\User")
      */
     private $createdBy;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\User", simple=true)
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\User")
      */
     private $updatedBy;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\User", simple=true)
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\User")
      */
     protected $deletedBy;
 

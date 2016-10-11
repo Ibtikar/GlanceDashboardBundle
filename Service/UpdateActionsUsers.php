@@ -48,17 +48,18 @@ class UpdateActionsUsers implements EventSubscriber {
      * @param \Doctrine\ODM\MongoDB\Event\LifecycleEventArgs $args
      */
     public function prePersist(LifecycleEventArgs $args) {
-//        $document = $args->getDocument();
-//        if (is_subclass_of($document, 'Ibtikar\GlanceDashboardBundle\Document\Document')) {
-//            $user = $this->getLoggedinUser();
-//            if ($user && is_a($user, 'Ibtikar\GlanceUMSBundle\Document\User')) {
-//                $document->setCreatedBy($user);
-//            }
-//            if($document->getCreatedAt() === null) {
-//                $document->setCreatedAt(new \DateTime());
-//            }
-//            $document->updateReferencesCounts(1);
-//        }
+        $document = $args->getDocument();
+
+        if (is_subclass_of($document, 'Ibtikar\GlanceDashboardBundle\Document\Document')) {
+            $user = $this->getLoggedinUser();
+            if ($user && is_a($user, 'Ibtikar\GlanceUMSBundle\Document\User')) {
+                $document->setCreatedBy($user);
+            }
+            if($document->getCreatedAt() === null) {
+                $document->setCreatedAt(new \DateTime());
+            }
+            $document->updateReferencesCounts(1);
+        }
     }
 
     /**
@@ -69,16 +70,16 @@ class UpdateActionsUsers implements EventSubscriber {
         if (php_sapi_name() !== 'cli') {
         $route = $this->container->get('request_stack')->getCurrentRequest()->get('_route');
         if (is_subclass_of($document, 'Ibtikar\GlanceDashboardBundle\Document\Document')) {
-//            if($route != 'app_view' && $route != 'get_slug_details'){
-//                $user = $this->getLoggedinUser();
-//                if ($user && is_a($user, 'Ibtikar\GlanceUMSBundle\Document\User')) {
-//                    $document->setUpdatedBy($user);
-//                }
-//                $document->setUpdatedAt(new \DateTime());
-//                $dm = $args->getDocumentManager();
-//                $class = $dm->getClassMetadata(get_class($document));
-//                $dm->getUnitOfWork()->recomputeSingleDocumentChangeSet($class, $document);
-//            }
+            if($route != 'app_view' && $route != 'get_slug_details'){
+                $user = $this->getLoggedinUser();
+                if ($user && is_a($user, 'Ibtikar\GlanceUMSBundle\Document\User')) {
+                    $document->setUpdatedBy($user);
+                }
+                $document->setUpdatedAt(new \DateTime());
+                $dm = $args->getDocumentManager();
+                $class = $dm->getClassMetadata(get_class($document));
+                $dm->getUnitOfWork()->recomputeSingleDocumentChangeSet($class, $document);
+            }
         }
         }
     }
