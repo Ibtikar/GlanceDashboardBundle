@@ -210,6 +210,10 @@
             $('body').on('ajaxCallback',function(){
              $('#form_permissions').replaceWith('');
              $('.styled').uniform();
+               $('.dev-check-all').each(function() {
+              refreshCount($(this))
+
+            });
              });
         })
 
