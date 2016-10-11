@@ -186,6 +186,10 @@
 
             });
 
+            $('.selectAllRow,.dev-check-all').change(function(){
+                validateElement($('.dev-checkbox'))
+            })
+
         $(document).on('click','.dev-checkbox',function(){
                if($(this).is(':checked')){
                     if($(this).parents('tr').find('input.dev-checkbox').length==$(this).parents('tr').find('input:checked.dev-checkbox').length){
@@ -210,10 +214,13 @@
             $('body').on('ajaxCallback',function(){
              $('#form_permissions').replaceWith('');
              $('.styled').uniform();
-               $('.dev-check-all').each(function() {
-              refreshCount($(this))
+                $('.dev-check-all').each(function() {
+                 refreshCount($(this))
 
-            });
+                });
+                $('.selectAllRow,.dev-check-all').change(function(){
+                validateElement($('.dev-checkbox'))
+                })
              });
         })
 

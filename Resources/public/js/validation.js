@@ -103,7 +103,6 @@ function removeUniquHelpBlock($helpBlock) {
  */
 function unhighlightElement(element, removeUniqueMessageOnly) {
 //    console.log('unhighlight: ');
-    $(element).siblings('.dev-loader').hide();
     var $this = $(element);
     var errorSelector = '.help-block';
     if($this.attr('data-error-template-selector')) {
@@ -132,6 +131,7 @@ function unhighlightElement(element, removeUniqueMessageOnly) {
         $(errorSelector).html('');
     } else {
         $this.closest('.form-group').removeClass('has-error').removeClass('has-success').find(errorSelector).remove();
+        $this.siblings('.dev-loader').hide();
 
     }
 }
@@ -147,6 +147,9 @@ function markElementAsValid(element) {
        $(element).closest('.form-group').removeClass('has-error').find('.help-block').remove();
        }
     $(element).closest('.form-group').addClass('has-success');
+    $(element).closest('.form-group').find('.dev-failLoader').hide();
+    $(element).closest('.form-group').find('.dev-successLoader').show();
+
     if ($(element).attr('data-validation-message') === availableMessage) {
         if ($(element).val().trim() != '') {
             $(element).after('<span class="help-block">' + $(element).attr('data-validation-message') + '</span>');
@@ -187,6 +190,9 @@ function markElementAsNotValid(element) {
         $(element).closest($(element).attr('data-parent-element')).addClass('has-error');
     }
     $(element).closest('.form-group').addClass('has-error');
+    $(element).closest('.form-group').find('.dev-failLoader').show();
+    $(element).closest('.form-group').find('.dev-successLoader').hide();
+
 }
 
 /**
@@ -247,7 +253,6 @@ function checkUniqueValidation(element) {
                     $this.closest('.form-group').find('.dev-successLoader').show();
                 } else {
                     $this.attr('data-unique-valid', 'false');
-                    $this.closest('.form-group').find('.dev-failLoader').show();
                 }
                 $this.attr('data-unique-validated-value', validatedValue);
                 $this.removeAttr('data-remove-color');
@@ -348,14 +353,14 @@ function initFormValidation(form_selector) {
 
             },
             onkeyup: function(element, event) {
-                $(element).siblings('.dev-loader').hide()
+//                $(element).siblings('.dev-loader').hide()
 
                 if(event.keyCode !== 9) {
                     validateElement(element);
                 }
             },
             onfocusout: function (element) {
-                $(element).siblings('.dev-loader').hide()
+//                $(element).siblings('.dev-loader').hide()
 
                 if ($(element).attr('autofocus')) {
                     setTimeout(function () {
@@ -413,6 +418,8 @@ function initFormValidation(form_selector) {
                     return;
                 }
                 $(element).after(error);
+                $(element).closest('.form-group').find('.dev-failLoader').show();
+                $(element).closest('.form-group').find('.dev-successLoader').hide();
             },
             highlight: function (element) {
                 unhighlightElement(element);
@@ -420,6 +427,8 @@ function initFormValidation(form_selector) {
                     return;
                 }
                 markElementAsNotValid(element);
+                $(element).closest('.form-group').find('.dev-failLoader').show();
+                $(element).closest('.form-group').find('.dev-successLoader').hide();
             },
             success: function (label, element) {
                 unhighlightElement(element);
@@ -427,6 +436,8 @@ function initFormValidation(form_selector) {
                     return;
                 }
                 markElementAsValid(element);
+                $(element).closest('.form-group').find('.dev-failLoader').hide();
+                $(element).closest('.form-group').find('.dev-successLoader').show();
                 if ($(element).attr('data-rule-equalto')) {
                     var $equalToElement = $($(element).attr('data-rule-equalto'));
                     if ($equalToElement.length > 0) {
