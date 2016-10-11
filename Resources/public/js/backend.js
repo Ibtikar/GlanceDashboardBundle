@@ -74,7 +74,7 @@ function submitAjaxForm() {
                 $('body').trigger('closeIframeIfExist');
             }
 
-//            scrollToFirstNotification();
+            scrollToFirstNotification();
             } else {
                 $('body').trigger('ajaxJsonResponseCallback');
             }

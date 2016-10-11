@@ -220,8 +220,8 @@ function validateElement(element) {
 function scrollToFirstNotification() {
     setTimeout(
             function(){
-                if ($('.alert:eq(0)').is(':visible')) {
-                    $("html, body").animate({scrollTop: $('#leftSide').offset().top - 20}, 500);
+                if ($('.alert-success:eq(0)').is(':visible')) {
+                    $("html, body").animate({scrollTop: $('.content-wrapper').offset().top - 20}, 500);
                 } else if ($('.help-error:eq(0)').length > 0) {
                     $("html, body").animate({scrollTop: $('.help-error:eq(0)').offset().top - 75}, 500);
                 }

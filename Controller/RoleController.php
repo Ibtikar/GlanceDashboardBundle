@@ -127,7 +127,7 @@ class RoleController extends BackendController {
         $breadCrumb->active=true;
         $breadCrumb->link= $this->generateUrl('ibtikar_glance_dashboard_role_create');
         $breadCrumb->linkType= 'add';
-        $breadCrumb->text= $this->trans('role create',array(),  $this->translationDomain);
+        $breadCrumb->text= $this->trans('Add new role',array(),  $this->translationDomain);
 
         $permissions = $this->container->getParameter('permissions');
         $permissions = $this->customPermissionsArray($permissions);
