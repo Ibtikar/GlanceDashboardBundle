@@ -47,7 +47,7 @@
                                                                                     <td class="text-center">
                                                                                         <div class="form-group">
                                                                                             <label class="checkbox-inline">
-                                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                                                <input type="checkbox" class="styled dev-check-all dev-check-all-{{key }} " onclick="checkAllModuleBox($(this))">
                                                                                             </label>
                                                                                         </div>
                                                                                     </td>
@@ -56,13 +56,13 @@
 
                                                                                         <span class="pull-left"> module {{loop.index}}</span>
 
-                                                                                        <span class="badge bg-primary pull-right">2</span>
+                                                                                        <span class="badge bg-primary pull-right dev-count"></span>
                                                                                     </td>
 
                                                                                 </tr>
 
-                                                                                {% for key,value in tab %}
-                                                                                    {% if key=='modules' %}
+                                                                                {% for tabkey,value in tab %}
+                                                                                    {% if tabkey=='modules' %}
 
                                                                                         {% for name,module in value %}
                                                                                             <tr>
@@ -71,7 +71,7 @@
 
                                                                                                     <div class="form-group">
                                                                                                         <label class="checkbox-inline">
-                                                                                                            <input type="checkbox" class="styled selectAllRow">
+                                                                                                            <input type="checkbox" class="styled selectAllRow" onclick="checkAllRow($(this))">
                                                                                                         </label>
                                                                                                     </div>
                                                                                                 </td>
@@ -79,7 +79,7 @@
 
 
                                                                                                     <div class="media-body">
-                                                                                                        <a href="#" class="display-inline-block text-default letter-icon-title"> {{ name|trans({},translationDomain)}} </a>
+                                                                                                        <a href="javascript:void(0)" class="display-inline-block text-default letter-icon-title"> {{ name|trans({},translationDomain)}} </a>
 
                                                                                                     </div>
                                                                                                 </td>
@@ -91,7 +91,7 @@
 
                                                                                                             <div class="form-group">
                                                                                                                 <label class="checkbox-inline">
-                                                                                                                    <input type="checkbox" class="styled" {{ block('widget_attributes') }} value="{{ 'ROLE_'~name~'_'~permission }}" name="form[permissions][]" data-rule-mincheck="1"   {% if 'ROLE_'~name~'_'~permission in permissionSelected %} checked="checked"{% endif %} data-error-after-selector=".panel-flat .tabbable" data-parent-element=".panel-body" data-msg-mincheck="{% trans from 'role' %}You must have at least 1 Permission{% endtrans %}" />
+                                                                                                                    <input type="checkbox" class="styled dev-checkbox"  value="{{ 'ROLE_'~name~'_'~permission }}" name="form[permissions][]" data-rule-mincheck="1"   {% if 'ROLE_'~name~'_'~permission in permissionSelected %} checked="checked"{% endif %} data-error-after-selector=".panel-flat .tabbable" data-parent-element=".panel-body" data-msg-mincheck="{% trans from 'role' %}You must have at least 1 Permission{% endtrans %}" />
 
                                                                                                                 </label>
                                                                                                             </div>
@@ -143,26 +143,69 @@
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
 
     <script>
+        $('#form_permissions').replaceWith('');
 
+        function refreshCount(element){
+              $(element).closest('.tab-pane').find('.dev-count').html($(element).closest('.tab-pane').find('input:checked.dev-checkbox').length);
+
+        }
+        function checkAllModuleBox(element){
+           if(element.is(":checked")){
+                $(element).closest('.tab-pane').find('.styled').prop('checked',true).uniform('refresh');
+        {#                $(element.closest('.tab-pane')).find('.dev-count').html($(element.closest('.tab-pane')).find('.dev-checkbox').length)#}
+            }else{
+                $(element).closest('.tab-pane').find('.styled').prop('checked',false).uniform('refresh');
+        {#                $(element.closest('.tab-pane')).find('.dev-count').html(0)#}
+
+            }
+            refreshCount(element)
+
+        }
+        function checkAllRow(element){
+
+            if (($(element).is(":checked"))) {
+                $(element).closest('tr').find('input[type=checkbox]').prop('checked',true).uniform('refresh');
+                if($(element).closest('.tab-pane').find('.selectAllRow').length== $(element).closest('.tab-pane').find('.selectAllRow:checked').length){
+                    $(element).closest('.tab-pane').find('.dev-check-all').prop('checked',true).uniform('refresh');
+                }
+            }
+            else {
+                $(element).closest('tr').find("input[type=checkbox]").prop('checked',false).uniform('refresh');
+                $(element).closest('.tab-pane').find('.dev-check-all').prop('checked',false).uniform('refresh');
+
+
+            }
+            refreshCount(element)
+
+
+        }
 
         $(document).ready(function () {
-            $('body').on('click', '.selectAllRow', function () {
-
-                if (!$($(this).parent('span')).hasClass("checked")) {
-                    $(this).closest('tr').find(".checker span").each(function () {
-                        console.log($(this));
-                        $(this).addClass('checked');
-                    });
-                }
-                else {
-                    $(this).closest('tr').find(".checker span").each(function () {
-                        console.log($(this));
-                        $(this).removeClass('checked');
-                    });
-                }
+           $('.dev-check-all').each(function() {
+              refreshCount($(this))
 
             });
-            $('#form_permissions').replaceWith('');
+
+        $(document).on('click','.dev-checkbox',function(){
+               if($(this).is(':checked')){
+                    if($(this).parents('tr').find('input.dev-checkbox').length==$(this).parents('tr').find('input:checked.dev-checkbox').length){
+                       $(this).parents('tr').find('.selectAllRow').prop('checked',true).uniform('refresh');
+                    if($(this).closest('.tab-pane').find('.selectAllRow').length== $(this).closest('.tab-pane').find('.selectAllRow:checked').length){
+                     $(this).closest('.tab-pane').find('.dev-check-all').prop('checked',true).uniform('refresh');
+                    }
+                    }
+                }else{
+                    if($(this).parents('tr').find('input.dev-checkbox').length!=$(this).parents('tr').find('input:checked.dev-checkbox').length){
+                       $(this).parents('tr').find('.selectAllRow').prop('checked',false).uniform('refresh');
+                       $(this).closest('.tab-pane').find('.dev-check-all').prop('checked',false).uniform('refresh');
+
+                    }
+
+
+                }
+                refreshCount($(this))
+
+            })
 
             $('body').on('ajaxCallback',function(){
              $('#form_permissions').replaceWith('');

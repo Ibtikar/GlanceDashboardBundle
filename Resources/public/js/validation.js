@@ -440,7 +440,7 @@ function initFormValidation(form_selector) {
 
 jQuery(document).ready(function ($) {
     $('body').on('ajaxCallback', function () {
-        if (!$('.alert-success.remove-5s').is(':visible')) {
+        if (!$('.alert-success').is(':visible')) {
             $('*[data-rule-unique]').each(function () {
                 var $this = $(this);
                 if (!$this.closest('.form-group').hasClass('has-error')) {
