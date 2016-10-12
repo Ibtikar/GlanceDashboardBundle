@@ -63,7 +63,7 @@ class JobController extends BackendController {
                 return $this->redirect($request->getUri());
             }
         }
-        return $this->render('IbtikarGlanceDashboardBundle:Job:create.html.twig', array(
+        return $this->render('IbtikarGlanceDashboardBundle::formLayout.html.twig', array(
                     'form' => $form->createView(),
                     'breadcrumb'=>array($breadCrumb),
                     'title'=>$this->trans('Add new job',array(),  $this->translationDomain),
@@ -76,22 +76,23 @@ class JobController extends BackendController {
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function editAction(Request $request,$id) {
-        //build breadcrumb
-        $breadcrumbs = $this->get("white_october_breadcrumbs");
-        $breadcrumbs->addItem('backend-home', $this->generateUrl('backend_home'));
-        $breadcrumbs->addItem('List Job', $this->generateUrl('job_list'));
-        $breadcrumbs->addItem('Edit Job', $this->generateUrl('job_edit',array('id' => $id)));
-
+        $breadCrumb = new \stdClass();
+        $breadCrumb->active = true;
+        $breadCrumb->link = $this->generateUrl('ibtikar_glance_dashboard_job_create');
+        $breadCrumb->linkType = 'add';
+        $breadCrumb->text = $this->trans('Add new job', array(), $this->translationDomain);
+        $dm = $this->get('doctrine_mongodb')->getManager();
         //prepare form
-        $job = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarBackendBundle:Job')->find($id);
-        if(!$job || in_array($job->getTitleEn(), Job::$systemEnglishJobTitles)) {
+        $job = $dm->getRepository('IbtikarGlanceDashboardBundle:Job')->find($id);
+        if (!$job) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
-        $form = $this->createFormBuilder($job, array('translation_domain' => $this->translationDomain))
-                ->add('title',null, array('attr' => array('data-rule-unique' => 'job_check_field_unique','data-name'=>'title','data-rule-maxlength' => 330)))
-                ->add('title_en',null, array('attr' => array('data-rule-unique' => 'job_check_field_unique','data-name'=>'title_en','data-rule-maxlength' => 330)))
-                ->add('save', 'submit')
+        $form = $this->createFormBuilder($job, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
+                ->add('title', null, array('required' => true, 'attr' => array('data-rule-maxlength' => 150, 'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique', 'data-name' => 'title', 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
+                ->add('title_en', null, array('required' => true, 'attr' => array('data-rule-maxlength' => 150, 'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique', 'data-name' => 'title_en', 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
+                ->add('save', formType\SubmitType::class)
                 ->getForm();
+
 
         //handle form submission
         if ($request->getMethod() === 'POST') {
@@ -99,18 +100,18 @@ class JobController extends BackendController {
             $form->handleRequest($request);
 
             if ($form->isValid()) {
-                $dm = $this->get('doctrine_mongodb')->getManager();
-                $dm->persist($job);
                 $dm->flush();
-                $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('done sucessfully'));
+                $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
 
                 return $this->redirect($request->getUri());
             }
         }
 
         //return template
-        return $this->render('IbtikarBackendBundle:Job:edit.html.twig', array(
+        return $this->render('IbtikarGlanceDashboardBundle::formLayout.html.twig', array(
                     'form' => $form->createView(),
+                    'breadcrumb'=>array($breadCrumb),
+                    'title'=>$this->trans('Edit Job',array(),  $this->translationDomain),
                     'translationDomain' => $this->translationDomain
         ));
     }
