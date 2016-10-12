@@ -47,10 +47,11 @@ class RoleController extends BackendController {
      * @return type
      */
     public function editAction(Request $request, $id) {
-        $breadcrumbs = $this->get('white_october_breadcrumbs');
-        $breadcrumbs->addItem('backend-home', $this->generateUrl('backend_home'));
-        $breadcrumbs->addItem('List Role', $this->generateUrl('role_list'));
-        $breadcrumbs->addItem('Edit Role', $this->generateUrl('role_edit', array('id' => $id)));
+        $breadCrumb= new \stdClass();
+        $breadCrumb->active=true;
+        $breadCrumb->link= $this->generateUrl('ibtikar_glance_dashboard_role_create');
+        $breadCrumb->linkType= 'add';
+        $breadCrumb->text= $this->trans('Add new role',array(),  $this->translationDomain);
 
         $loggedInUser = $this->getUser();
         if (!$loggedInUser) {
@@ -60,63 +61,28 @@ class RoleController extends BackendController {
         $permissions = $this->customPermissionsArray($this->container->getParameter('permissions'));
         $dm = $this->get('doctrine_mongodb')->getManager();
         $role = $dm->getRepository('IbtikarGlanceDashboardBundle:Role')->find($id);
-        if(!$role) {
+        if(!$role || $role->getNotModified()) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
-        $permissionExist = FALSE;
-        if (in_array('ROLE_CONTACTGROUP_VIEW', array_values($role->getPermissions()))) {
-            $permissionExist = TRUE;
-        }
+        $permissionSelected=$role->getPermissions();
+
         $form = $this->buildForm($role, $permissions);
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
+             $formData = $request->get('form');
+            $permissionSelected=array_merge($permissionSelected,$formData['permissions']);
             if ($form->isValid()) {
                 $dm->flush();
-                $groupId = array();
-                if ($permissionExist && !in_array('ROLE_CONTACTGROUP_VIEW', array_values($role->getPermissions()))) {
-                    $groups = $dm->getRepository('IbtikarGlanceDashboardBundle:Group')->findBy(array('roles' => $role->getId()));
-                    foreach ($groups as $group) {
-                        $groupId[] = $group->getId();
-                    }
-
-                    if (!empty($groupId)) {
-                        $staffMembersQuery = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Staff')->field('deleted')->equals(false);
-                        $staffMembers = $staffMembersQuery->addAnd(
-                                        $staffMembersQuery
-                                                ->expr()
-                                                ->addOr(
-                                                        $staffMembersQuery
-                                                        ->expr()
-                                                        ->field('role')
-                                                        ->equals($role->getId())
-                                                )
-                                                ->addOr(
-                                                        $staffMembersQuery
-                                                        ->expr()
-                                                        ->field('group')
-                                                        ->in($groupId)
-                                        ))->getQuery()->execute();
-                    } else {
-                        $staffMembers = $dm->createQueryBuilder('IbtikarBackendBundle:Staff')->field('deleted')->equals(false)
-                                        ->field('role')
-                                        ->equals($role->getId())->getQuery()->execute();
-                    }
-                    foreach ($staffMembers as $staffMember) {
-                     $staffMembers = $dm->createQueryBuilder('IbtikarBackendBundle:ContactGroup')
-                                        ->update()
-                                        ->multiple(true)
-                                        ->field('staff')->exists(TRUE)->field('staff')->equals($staffMember->getId())
-                                        ->field('staff')->pull($staffMember->getId())
-                                        ->getQuery()->execute();
-                    }
-                }
-                $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('done sucessfully'));
+                $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
                 return $this->redirect($request->getUri());
             }
         }
-        return $this->render('IbtikarBackendBundle:Role:edit.html.twig', array(
-                    'entity' => $role,
+        return $this->render('IbtikarGlanceDashboardBundle:Role:create.html.twig', array(
                     'form' => $form->createView(),
+                    'breadcrumb'=>array($breadCrumb),
+                    'title'=>$this->trans('edit role',array(),  $this->translationDomain),
+                    'tabs'=> $this->tabs,
+                    'permissionSelected'=>$permissionSelected,
                     'translationDomain' => $this->translationDomain
         ));
     }
