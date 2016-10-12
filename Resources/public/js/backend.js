@@ -56,12 +56,12 @@ function submitAjaxForm() {
 
         success: function(data){
             if(typeof data != 'object') {
-            var form = $(data).find('.dev-page-main-form');
+            var form = $(data).find('form.dev-page-main-form');
             var messages = $(data).find('.alert-success,.alert-danger');
 
 
             $('.alert').remove();
-                $('.dev-main-form-container .dev-page-main-form').replaceWith(form);
+                $('form.dev-page-main-form').replaceWith(form);
                 $('.dev-main-form-container .col-md-12:first').prepend(messages);
 
 
@@ -101,6 +101,8 @@ function submitAjaxForm() {
                     loader.remove();
                 }
             }
+            $('form.dev-page-main-form').attr('ajax-running', 'false');
+
         },
         xhr: function () {
             var xhr = new window.XMLHttpRequest();
@@ -219,7 +221,7 @@ jQuery(document).ready(function($) {
 
 
   $('.dev-form-submit-btn').on('click', function () {
-    if(typeof  $('form.dev-page-main-form').attr('ajax-running') == 'undefined' || $('form.dev-page-main-form').attr('ajax-running') =='true') {
+    if(typeof  $('form.dev-page-main-form').attr('ajax-running') == 'undefined' || $('form.dev-page-main-form').attr('ajax-running') !='true') {
         ajaxSubmitClickHandler();
 
     }

@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type as formType;
 class RoleController extends BackendController {
 
     protected $translationDomain = 'role';
-    protected  $tabs=array('user'=>array('title'=>'user','count'=>0,'modules'=>array('STAFF'=>array(),'VISITOR'=>array(),'ROLE'=>array()),'permission'=>array()),
+    protected  $tabs=array('user'=>array('title'=>'user','count'=>0,'modules'=>array('STAFF'=>array(),'VISITOR'=>array(),'ROLE'=>array(),'JOB'=>array()),'permission'=>array()),
         'city'=>array('title'=>'city','count'=>0,'modules'=>array('CITY'=>array()),'permission'=>array()));
     protected $tabsnames=array('user','city');
     private $internalPermissions = array(
@@ -145,7 +145,7 @@ class RoleController extends BackendController {
                 $role->setPermissionscount(count($role->getPermissions()));
                 $dm->persist($role);
                 $dm->flush();
-                $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('done sucessfully'));
+                $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
 
                 return $this->redirect($request->getUri());
             }

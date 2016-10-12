@@ -10,5 +10,8 @@ ibtikar_glance_dashboard_not_found:
 ibtikar_glance_dashboard_role:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/role.yml"
     prefix:   /role
-
+    
+ibtikar_glance_dashboard_job:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/job.yml"
+    prefix:   /job
 
