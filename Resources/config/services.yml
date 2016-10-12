@@ -1,3 +1,7 @@
+parameters:
+    per_page_items: 50
+    autoCompelet_display_item: 5
+
 services:
 #    ibtikar_glance_dashboard.example:
 #        class: Ibtikar\GlanceDashboardBundle\Example

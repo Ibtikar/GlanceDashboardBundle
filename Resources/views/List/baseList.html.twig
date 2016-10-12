@@ -1,952 +1,1424 @@
-{% extends app.request.xmlHttpRequest ? 'IbtikarBackendBundle::ajaxLayout.html.twig' : 'IbtikarBackendBundle::layout.html.twig' %}
-
+{% extends app.request.xmlHttpRequest ? 'IbtikarBackendBundle::ajaxLayout.html.twig' : 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard.html.twig' %}
+{% block header %}
+    {{ include('IbtikarGlanceDashboardBundle::header.html.twig') }}
+{% endblock %}
+{% block navbar %}
+    {{ include('IbtikarGlanceDashboardBundle::navbar.html.twig') }}
+{% endblock %}
+{% block side_menu %}
+    {{ include('IbtikarGlanceDashboardBundle::sidebar.html.twig') }}
+{% endblock %}
 {% block title %}
-   {% if is_favorite_list is defined %}
-       {% trans %}Favourite Contant List{% endtrans %}
-   {%else%}
-    {{ list.listType == 'trash' ? 'View deleted items'|trans : ('List '~ listName)|trans({}, translationDomain)}}
-   {%endif%}
+    {% if is_favorite_list is defined %}
+        {% trans %}Favourite Contant List{% endtrans %}
+    {%else%}
+        {{ list.listType == 'trash' ? 'View deleted items'|trans : ('List '~ listName)|trans({}, translationDomain)}}
+    {%endif%}
 {% endblock %}
 
-{% block content %}
-    <div id="bulk-form">
-    {% block dashboardOpenTab %}{% endblock %}
-           {% block statistic %}{% endblock %}
-        <div class="row">
+{% block body %}
+     <div class="content-wrapper">
 
-            <div class="col-md-12">
-                {% if (roomType is defined and (roomType == 'Comments' or roomType == 'Events' or roomType == 'Messages') and roomName != 'dashboard') and (is_granted('ROLE_' ~ roomName|upper ~ 'ROOM_MANAGE') or is_granted('ROLE_ADMIN')) %}
-                    <a class="progress-button btn-add" href="{{ path('room_' ~ roomName|lower ~ '_assign') }}">{{ 'Add Staff To %r Room'|trans({'%r': ('List Room_' ~ roomName)|trans({}, translationDomain)}, translationDomain) }}</a>
-                {% endif %}
 
-                <div class="portlet">
+            <!-- Basic button -->
+            <div class="content-group">
+                <div class="heading-elemnts">
+                    <div class="heading-btn-group">
+                        <a class="btn btn-link btn-float has-text" href="Role-add.php"><i class="icon-add"></i><span>اضف دور</span></a>
+                        <a class="btn btn-link btn-float has-text activeLink" href="Role-view.php"><i class="icon-table2"></i> <span>مشاهدة الادوار</span></a>
 
-                    <div class="portlet-header">
 
-                        <h3>
-                            <i class="fa fa-table"></i>
-                            {% if is_favorite_list is defined %}
-                                {% trans %}Favourite Contant List{% endtrans %}
-                            {%else%}
-                                 {{ list.listType == 'trash' ? 'View deleted items'|trans : ('List '~ listName)|trans({}, translationDomain)}}
-                            {% endif %}
-                        </h3>
-                        <ul class="portlet-tools pull-left">
-                            {% if filterLink is defined %}
-                            <li>
-                                <a data-original-title="{{ filterLinkToolTip|trans }}" data-placement="top" data-toggle="tooltip" href="{{ filterLink|raw }}" class="btn btn-sm btn-icon ui-tooltip">
-                                    <i class="glyphicon glyphicon-time"></i>
-                                </a>
-                            </li>
-                            {% endif %}
-                            {% if listName|lower != 'dashboard' %}
-                                <li>
-                                    <a href="javascript:void(0)" data-original-title="{{'Column Options'|trans}}" data-placement="top" class="btn btn-sm btn-icon ui-tooltip dev-change-columns" data-toggle="modal">
-                                        <i class="glyphicon glyphicon-th"></i>
-                                    </a>
-                                </li>
-                            {% endif %}
-                            {% if list.hasAction('Add') %}
-                                {% if is_granted('ROLE_'~listName|upper~'_CREATE') or is_granted('ROLE_ADMIN')%}
-                                    <li>
-                                        <a data-original-title="{{('Add new '~ listName|lower)|trans({}, translationDomain)}}" data-placement="top" data-toggle="tooltip" href="{{ path(listName|lower~'_create') }}" class="btn btn-sm btn-icon ui-tooltip">
-                                            <i class="glyphicon glyphicon-plus-sign"></i>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                            {% endif %}
 
-                            {% if list.hasAction('export') and (is_granted('ROLE_ADMIN') or is_granted('ROLE_'~(listName == "ContactGroup"?"Contact":listName)|upper~'_EXPORT')) %}
-                                <li>
-                                    <a data-original-title="{% trans %}export to excel{% endtrans %}" data-placement="top" data-toggle="tooltip" href="javascript:void(0)" class="btn btn-sm btn-icon ui-tooltip export-btn">
-                                        <i class="glyphicon glyphicon-export"></i>
-                                        <span class="download-msg" ></span>
-                                    </a>
-                                </li>
-                            {% endif %}
-                            {% if list.hasAction('import') and (is_granted('ROLE_ADMIN') or is_granted('ROLE_'~(listName == "ContactGroup"?"Contact":listName)|upper~'_IMPORT')) %}
-                                <li>
-                                    <a data-toggle="modal" data-target="#importModal" data-original-title="{% trans %}import to excel{% endtrans %}" data-placement="top" data-toggle="tooltip" href="javascript:void(0)" class="btn btn-sm btn-icon ui-tooltip import-btn">
-                                        <i class="glyphicon glyphicon-import"></i>
-                                        <span class="download-msg" ></span>
-                                    </a>
-                                </li>
-                            {% endif %}
-                            {% if list.hasAction('Maximize') %}
-                                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_DASHBOARD_MANAGE') %}
-                                    <li>
-                                        <a data-original-title="{{'maximize'|trans}}" id="dashboardTab" href="javascript:void(0)" data-room="maximize" data-placement="top" data-toggle="tooltip" class="btn btn-sm btn-icon ui-tooltip  sort">
-                                            <i class="glyphicon glyphicon-zoom-in"></i>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                            {% endif %}
 
-                            {% if list.hasAction('Search') %}
-                                <li>
-                                    <a data-original-title="{{'Search'|trans}}" data-placement="top" data-toggle="tooltip" href="javascript:void(0)" class="btn btn-sm btn-icon ui-tooltip  search_btn">
-                                        <i class="glyphicon glyphicon-search"></i>
-                                    </a>
-                                </li>
-                                {% if searchLink is defined %}
-                                <li>
-                                    <a data-original-title="{{ searchLinkToolTip|trans }}" data-placement="top" data-toggle="tooltip" href="{{ searchLink|raw }}" class="btn btn-sm btn-icon ui-tooltip">
-                                        <i class="glyphicon glyphicon-link"></i>
-                                    </a>
-                                </li>
-                                {% endif %}
-                            {% endif %}
-                              {% if list.hasAction('AdvanceSearch') %}
-                                  {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_'~listName|upper~'_ADVANCESEARCH') %}
-                                <li>
-                                    <a data-original-title="{{'advanceSearch'|trans}}" href="javascript:void(0)" data-placement="top" data-toggle="tooltip" onclick='advanceSearch("{{ path(listName|lower~'_advance_search') }}");return false;' class="btn btn-sm btn-icon ui-tooltip  search">
-                                        <i class="glyphicon glyphicon glyphicon-zoom-in"></i>
-                                    </a>
-                                </li>
-                                   {% endif %}
-                            {% endif %}
-
-                              {% if list.hasAction('Manage') %}
-
-                                  {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_'~listName|upper~'_MANAGE') %}
-                                <li>
-                                    <a data-original-title="{{'manage'|trans}}" href="{{ path(listName|lower~'_sort') }}" data-placement="top" data-toggle="tooltip" class="btn btn-sm btn-icon ui-tooltip  sort">
-                                        <i class="glyphicon glyphicon glyphicon-sort"></i>
-                                    </a>
-                                </li>
-                                   {% endif %}
-                            {% endif %}
-
-                            {% if list.restorable%}
-                                {% if is_granted('ROLE_ADMIN')%}
-                                    <li>
-                                        <a data-original-title="{% trans %}View deleted items{% endtrans %}" data-placement="top" data-toggle="tooltip" href="{{ path(listName|lower~'_trash') }}" class="btn btn-sm btn-icon ui-tooltip">
-                                            <i class="glyphicon glyphicon-eye-close"></i>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                            {% endif %}
-
-                        </ul>
-                    </div> <!-- /.portlet-header -->
-
-                    <div class="portlet-content">
-        <div class="row">
-            <div class="col-xs-12">
-            <div class="col-xs-12 searchBox" {% if search is defined and search%}style="display: block;"{% endif %}>
-                {% block searchList %}{% endblock %}
-            </div>
-            </div>
-        </div>
-    <form method="post" action="{{ list.hasBulkActions(listName) ? path(listName|lower ~ '_bulk_actions') : '' }}" class="dev-bulk-actions-form{% if (roomType is defined) and (roomType == 'Materials')%}{%else%} dev-refresh-page{%endif%}">
-
-        {% if list.hasBulkActions(listName) or list.restorable or list.hasAction('Add') %}
-        <div class="row dt-rt">
-            <div class="col-sm-6 col-md-4 form-group">
-                {% if list.hasBulkActions(listName) %}
-                    <div class="dev-bulk-action" style="display: none;">
-                        <select name="bulk-action" data-placeholder="{% trans %}Choose Action{% endtrans %}" class="form-control select2-deselect-without-search dev-bulk-action-select">
-                            <option value=""></option>
-                            {% for action in list.bulkActions%}
-                                {% if action == "Delete" %}
-
-                                    {% if is_granted('ROLE_'~listName|upper~'_DELETE') or is_granted('ROLE_ADMIN')%}
-                                        <option value="Delete">{% trans %}Delete{% endtrans %}</option>
-                                    {% endif %}
-
-                                {% endif %}
-                                {% if action == "Activate" %}
-
-                                    {% if is_granted('ROLE_'~listName|upper~'_ACTIVATE_DEACTIVATE') or is_granted('ROLE_ADMIN')%}
-                                        <option value="Activate">{% trans %}Activate{% endtrans %}</option>
-                                    {% endif %}
-
-                                {% endif %}
-                                {% if action == "Deactivate" %}
-
-                                    {% if is_granted('ROLE_'~listName|upper~'_ACTIVATE_DEACTIVATE') or is_granted('ROLE_ADMIN')%}
-                                        <option value="Deactivate">{% trans %}Deactivate{% endtrans %}</option>
-                                    {% endif %}
-
-                                {% endif %}
-                                {% if action == "Publish" %}
-
-                                    {% if is_granted('ROLE_'~listName|upper~'_PUBLISH_UNPUBLISH') or is_granted('ROLE_ADMIN')%}
-                                        <option value="Publish">{% trans from translationDomain %}Publish{% endtrans %}</option>
-                                    {% endif %}
-
-                                {% endif %}
-                                {% if action == "Unpublish" %}
-
-                                    {% if is_granted('ROLE_'~listName|upper~'_PUBLISH_UNPUBLISH') or is_granted('ROLE_ADMIN')%}
-                                        <option value="Unpublish">{% trans from translationDomain %}Unpublish{% endtrans %}</option>
-                                    {% endif %}
-
-                                {% endif %}
-
-                                {% if action == "Forward" %}
-
-                                    {% if is_granted('ROLE_'~listName|upper~'_FORWARD') or is_granted('ROLE_ADMIN')%}
-                                        <option value="Forward">{% trans from translationDomain %}Forward{% endtrans %}</option>
-                                    {% endif %}
-
-                                {% endif %}
-
-                                {% if action == "Export" %}
-
-                                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_'~(listName == "ContactGroup"?"Contact":listName)|upper~'_EXPORT')%}
-                                        <option value="Export">{% trans %}Export{% endtrans %}</option>
-                                    {% endif %}
-
-                                {% endif %}
-                                {% if action == "Move" %}
-
-                                    {% if is_granted('ROLE_'~listName|upper~'_MOVE') or is_granted('ROLE_ADMIN')%}
-                                        <option value="Move">{% trans %}Move{% endtrans %}</option>
-                                    {% endif %}
-
-                                {% endif %}
-                                {% if action == "Favorite" %}
-
-                                    {% if is_granted('ROLE_'~listName|upper~'_FAVORITE_UNFAVORITE') or is_granted('ROLE_ADMIN')%}
-                                        <option value="Favorite">{% trans %}Add to favorite{% endtrans %}</option>
-                                    {% endif %}
-
-                                {% endif %}
-                                {% if action == "Unfavorite" %}
-
-                                    {% if is_granted('ROLE_'~listName|upper~'_FAVORITE_UNFAVORITE') or is_granted('ROLE_ADMIN')%}
-                                        <option value="Unfavorite">{% trans %}Remove from favorite{% endtrans %}</option>
-                                    {% endif %}
-
-                                {% endif %}
-                                {% if action == 'Add as contact' %}
-                                    {% if is_granted('ROLE_CONTACT_CREATE') or is_granted('ROLE_ADMIN')%}
-                                        <option value="Add as contact">{% trans %}Add as contact{% endtrans %}</option>
-                                    {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        </select>
                     </div>
-                {% endif %}
+                </div>
             </div>
+            <!-- /basic button -->
 
 
 
-    </div>
-    {% endif %}
-    {% if 'list_assigned_material' in app.request.attributes.get('_route') %}
-        <div class="form-group">
-            <label class="col-md-2 control-label"> </label>
-
-            <div class="col-md-3">
-
-            {#<select class="form-control select2">
-
-                    <option >مهامي</option>
-                    <option >الاخبار الجديدة</option>
-                    <option >المرتجعات</option>
+            <!-- Dashboard content -->
+            <div class="row">
+                <div class="col-lg-12">
 
 
-            </select>#}
 
-        </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- view roles -->
+                            <div class="panel panel-flat">
+                                <div class="panel-heading">
+                                    <h5 class="panel-title">  الادوار </h5>
+                                    <div class="heading-elements">
+                                        <span class="label bg-number heading-text">28 دور</span>
+                                        <span class="label bg-number heading-text">12338 فعال</span>
+                                        <span class="label bg-number heading-text">8973 غير فعال</span>
 
-            <div class="col-md-7 ">
-                <ul class="assignColors pull-left">
-                    {% if 'archive' in app.request.attributes.get('_route') %}
-                        <li><span class="backColor"></span>{% trans from translationDomain %}Unpublished Materials{% endtrans %}</li>
-                    {% else %}
-                        <li><span class="backColor"></span>{% trans from translationDomain %}Backward Materials{% endtrans %}</li>
-                    {% endif %}
-                    {% if 'archive' in app.request.attributes.get('_route') %}
-                        <li><span class="newColor"></span>{% trans from translationDomain %}Deleted Materials{% endtrans %}</li>
-                    {% else %}
-                        <li><span class="newColor"></span>{% trans from translationDomain %}New Materials{% endtrans %}</li>
-                    {% endif %}
-                    {% if 'chiefeditor' not in app.request.attributes.get('_route') and 'archive' not in app.request.attributes.get('_route') %}
-                        <li><span class="assignColor"></span>{% trans from translationDomain %}Assigned Materials{% endtrans %}</li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    {% endif %}
-    <div class="table-responsive">
 
-        <table
-            class="table table-bordered table-hover table-highlight table-checkable dev-list-table dev-hide-errors"
-            data-info="true"
-            data-length-change="true"
-            >
-            <thead>
-                <tr>
-                    {% if list.hasBulkActions(listName) %}
-                        <th class="checkbox-column">
-                            <input type="checkbox" class="icheck-input dev-list-check">
-                        </th>
-                    {% endif %}
-                    {# sorting of properties based on query components #}
-                    {% for field in list.fields %}
-                        {% if field.isSortable %}
-                            {% if   (field.type == 'phone') %}
-                                <th class="sorting{% if pagination.isSorted(field.propertyName) %}_{{list.getOppositeOrderDirection(field.sortOrderType,pagination.getDirection())}}{% endif %}">
-                                    {{ knp_pagination_sortable(pagination, field.title|trans({}, translationDomain), field.propertyName) }}
-                                </th>
-                            {% else %}
-                                <th class="{{field.class}} sorting{% if pagination.isSorted(field.propertyName) %}_{{list.getOppositeOrderDirection(field.sortOrderType,pagination.getDirection())}}{% endif %}">
-                                    {{ knp_pagination_sortable(pagination, field.title|trans({}, translationDomain), field.propertyName) }}
-                                </th>
-                            {% endif %}
-                        {% else %}
-                            <th class="{{field.class}}">
-                                {{ field.title|trans({}, translationDomain) }}
-                            </th>
-                        {% endif %}
-                    {% endfor %}
-                    {% if list.hasActionsColumn(listName) or translationDomain =='task' %}
-                        <th class="text-center action-th" style="padding-right: 80px; padding-left: 80px;">{% trans %}actions{% endtrans %}</th>
-                    {% endif %}
-                    <th class="error-message-th"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {# table body #}
-                {% if pagination.items is  empty %}
-                    <tr> <td class="noDataTd" colspan="{{list.fields|length + 3}}"> {% trans %}Sorry There is no results{% endtrans %}</td> </tr>
-                {% endif %}
-                {% for object in pagination %}
-                    {% if roomType is defined and roomType == 'Materials' %}
-                    <tr class="ui-tooltip{% if listName|lower != 'dashboard' %}{% if object.getRoom() is defined and object.getAssignedTo() is not null %}{% if object.getStatus() == 'new' or object.getStatus() == 'deleted' %} newNews{% elseif object.getStatus() == 'backward' or object.getStatus() == 'unpublished' %} backNews{% elseif object.getStatus() == 'assigned' %} assignNews{% endif %}{% endif %}{% elseif object.getRoom() is defined %} borderRight-{{object.getRoom()}}{% if (object.getRoom() == 'published' or object.getRoom() == 'archive') and roomTotalProcessingTime != ""  and object.getTotalProcessingTime() > roomTotalProcessingTime %} bgDenger{% endif %}{% endif %}{% if loop.index is odd %} color{% endif %}{% if "Activate_Deactivate" in list.actions and object.getEnabled()!= 1 %} activeUser{% endif %}" data-id="{{ object.id }}" data-original-title="" data-placement="top" data-toggle="tooltip">
-                    {% else %}
-                        <tr class="ui-tooltip{% if loop.index is odd %} color{% endif %}" data-id="{{ object.id }}" data-original-title="" data-placement="top" data-toggle="tooltip">
-                    {% endif %}
-                        {% if list.hasBulkActions(listName) %}
-                            <td class="checkbox-column">
-                                {% if object.getNotModified() is not defined or object.getNotModified() == false %}
-                                    <input type="checkbox" {% if 'Poll' in listName or ('Events' in listName and object.room == 'autopublished') or "studio" in app.request.attributes.get('_controller')  or 'Comics' in listName %}data-status="{{ object.status }}" {% endif %}name="ids[]" class="icheck-input dev-list-check" value="{{ object.id }}">
-                                {% endif %}
-                            </td>
-                        {% endif %}
-                        {% for field in list.fields %}
-                            {% if field.type == "date" %}
-                                <td class="{{field.class}}" {% if field.isClickable %} style="cursor:pointer" onclick="window.location='{{field.isClickable|replace({'--id--':object.document.id})}}'" {% endif %}>
-                                    {% if field.propertyName == "roomStartTime" %}
-                                        {% if object.getRoom() != 'published' and object.getRoom() != 'archive' %}
-                                            {{ attribute(object, field.propertyName) is empty ? "" : object.getCurrentRoomProcessingTime() }}
-                                        {% endif %}
-                                    {% else %}
-                                        {{ attribute(object, field.propertyName) is empty ? "" : attribute(object, field.propertyName)|date('Y-m-d') }}
-                                    {% endif %}
-                                </td>
-                            {% elseif field.type == "datetime" %}
-                                <td class="{{field.class}}" {% if field.isClickable %} style="cursor:pointer" onclick="window.location='{{field.isClickable|replace({'--id--':object.document.id})}}'" {% endif %} style="direction: ltr">
-
-                                    {{ attribute(object, field.propertyName) is empty ? "" : attribute(object, field.propertyName)|date('Y-m-d h:i A') }}
-
-                                </td>
-                            {% elseif field.type == "translated" %}
-                                <td class="{{field.class}}" {% if field.isClickable %} style="cursor:pointer" onclick="window.location='{{field.isClickable|replace({'--id--':object.document.id})}}'" {% endif %}>
-                                    {{ attribute(object, field.propertyName)|trans({},translationDomain)}}
-                                </td>
-                            {% elseif field.type == "computed" %}
-                                <td class="{{field.class}}">
-                                {{ attribute(object, field.propertyName, [field.arguments])}}
-                                </td>
-                            {% elseif field.type == "embeded" %}
-                                <td class="{{field.class}}">
-                                {{ attribute(attribute(object, field.document),field.propertyName) }}
-                                </td>
-                            {% elseif field.type == "embededTranslated" %}
-                                <td class="{{field.class}}">
-                                {{ attribute(attribute(object, field.document),field.propertyName)|trans }}
-                                </td>
-                            {% elseif (field.type == "image") %}
-                                <td class="{{field.class}}">
-                                    <div class="thumbnail">
-                                        <div class="thumbnail-view">
-                                            {% if attribute(object, 'webPath') %}
-                                                <a class="thumbnail-view-hover ui-lightbox" href="{{ asset( attribute(object, 'webPath') ) }}">
-                                                </a>
-                                                <img width="60" src="{{ asset( attribute(object, 'webPath') ) }}" alt="">
-                                            {% else %}
-                                                <img width="60" src="{{ asset('/design/website/images/news/default.jpg') }}" alt="">
-                                            {% endif %}
-
-                                        </div>
+                                        <ul class="icons-list">
+                                            <li><a data-action="collapse"></a></li>
+                                            <li><a data-action="reload"></a></li>
+                                        </ul>
                                     </div>
-                                </td>
-                            {% elseif (field.type == "albumImage") %}
-                                <td class="{{field.class}}">
-                                    <div class="thumbnail">
-                                        <div class="thumbnail-view">
-                                            <a class="thumbnail-view-hover ui-lightbox" href="{{ asset( attribute(attribute(object, field.propertyName),'webPath') ) }}">
-                                            </a>
-                                            <img width="60" src="{{ asset( attribute(attribute(object, field.propertyName),'webPath') ) }}" alt="">
-                                        </div>
-                                    </div>
-                                </td>
-                            {% elseif (field.type == "videoImage") %}
-                                <td class="{{field.class}}">
-                                    <div class="thumbnail">
-                                        <div class="thumbnail-view">
-                                            <a class="thumbnail-view-hover ui-lightbox" href="https://i.ytimg.com/vi/{{attribute(object, field.propertyName)}}/mqdefault.jpg">
-                                            </a>
-                                            <img width="60" src="https://i.ytimg.com/vi/{{attribute(object, field.propertyName)}}/default.jpg" alt="Gallery Image">
-                                        </div>
-                                    </div>
-                                </td>
-                            {% elseif (field.propertyName == "createdBy"  and object.getCreatedBy() is not null) %}
-                                <td class="{{field.class}}">
+                                </div>
 
-                                    {{get_user_information.getFullname(object.getCreatedBy().id)}}
-                                </td>
-                            {% elseif (field.propertyName == "deletedBy"  and object.getDeletedBy() is not null) %}
-                                <td class="{{field.class}}">
 
-                                    {{get_user_information.getFullname(object.getDeletedBy().id)}}
-                                </td>
-                            {% elseif (field.type == "author"  and object.getAuthor() is not null) %}
-                                <td class="{{field.class}}">
-                                    {{object.getAuthor()}}
-                                </td>
-                            {% elseif (field.type == 'number') %}
-                                <td class="{{ field.class }}">
-                                    {{ attribute(object, field.propertyName)|number_format }}
-                                </td>
-                            {% elseif (field.type == 'phone') %}
-                                <td class="{{ field.class }}">
-                                    {% if object.mobile is defined and object.mobile.getPhone() is defined and object.mobile.getPhone() %}
-                                     {{ attribute(object, field.propertyName)}}
-                                    {% endif %}
-                                </td>
-                            {% elseif field.type == 'timer' %}
-                                <td class="text-center">
-                                    <span{% if object.timerRunning and object.isTimerEndTimeValid() %} class="dev-list-timer" data-timer-end="{{ object.getTimerRemainingSeconds() }}"{% endif %}></span>
-                                </td>
-                            {% elseif field.type == 'email' %}
-                                <td class="{{field.class}}">
-                                 <!--email_off-->   {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}}<!--/email_off-->
-                                </td>
-                            {% elseif field.propertyName == "author"  %}
-                                <td class="{{field.class}}">
-                                    {% set authers=[] %}
-                                    {% for auther in object.getAuthor() %}
-                                        {% if auther.id not in authers %}
-                                            {% if not loop.first %},{% endif %}
-                                            {{ auther }}
-                                            {% set authers=authers|merge([auther.id]) %}
-                                        {% endif %}
+                                <table class="table table-hover table-striped datatable-column-search-inputs" width="100%">
+                                    <thead>
+
+
+
+                                        <tr>
+                                            <th class="text-center">
+                                    <div class="form-group">
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" class="styled" checked="checked">
+                                        </label>
+                                    </div>
+
+
+                                    </th>
+                                    {% for field in list.fields %}
+                                        {% if field.isSortable %}
+                                            <th class="{{field.class}}">
+                                                {{ knp_pagination_sortable(pagination, field.title|trans({}, translationDomain), field.propertyName) }}
+                                            </th>
+                                        {% endif%}
                                     {% endfor %}
-                                </td>
-                            {% elseif field.propertyName == "publishLocations"  %}
-                                <td class="{{field.class}}">
-                                   {% for location in object.publishLocations() %}
-                                       {{ location.getSection()|trans({},'publishLocations') }}{% if not loop.last %} , {% endif %}
-                                    {% endfor %}
-                                </td>
-                            {% elseif field.propertyName == "totalProcessingTime" %}
-                                <td class="{{field.class}}">
-                                    {% if object.getRoom() == 'published' or object.getRoom() == 'archive' %}
-                                        {{ attribute(object, field.propertyName)|trans}}
-                                    {% endif %}
-                                </td>
-                            {% else %}
-                                <td class="{{field.class}} permissionsTooltip" {% if field.isClickable %} style="cursor:pointer" onclick="window.location='{{field.isClickable|replace({'--id--':object.document.id})}}'" {% endif %}>
-                                    {% if field.tooltip %}
-                                        <span data-placement="left" data-toggle="tooltip" data-original-title="{{attribute(object,field.tooltip)|trans({},translationDomain)}}" class="ui-tooltip">
-                                    {% endif %}
-                                    {# added to fix the sorting for fields with underscore #}
-                                    {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}}
-                                    {% if field.tooltip %}
-                                        </span>
-                                    {% endif %}
-                                </td>
-                            {% endif %}
-                        {% endfor %}
-                        {% if list.hasActionsColumn(listName) or check_task_user_permission(object,app.user.id) %}
-                        <td class="text-center" data-type="{{ object.getDocumentTranslation() is defined ? object.getDocumentTranslation()|trans({}, translationDomain) }}">
-                            {% if  object.getNotModified() is not defined  or  object.getNotModified()== false %}
-                                {% for action in list.actions %}
-                                {% if action == "Edit" %}
 
-                                    {% if is_granted('ROLE_' ~ listName|upper ~'_EDIT') or is_granted('ROLE_ADMIN') or check_task_user_permission(object,app.user.id)%}
-                                        {% if roomType is defined and roomType != 'Events' and 'Room' in listName  %}
-                                            <a href = "{{ path(listName|lower ~ '_edit', {'materialId': object.id}) }}" title="{{ ('Edit ' ~  sublistName)|trans({},translationDomain)}}" data-placement="top" data-toggle="tooltip"
-                                               class="btn btn-xs btn-primary ui-tooltip btn-edit" type="button">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>
-                                        {% elseif 'Comics' in listName %}
-                                            <a href = "{{ path(listName|lower ~ '_edit', {'comicsId': object.id}) }}" title="{{ ('Edit ' ~  sublistName)|trans({},translationDomain)}}" data-placement="top" data-toggle="tooltip"
-                                               class="btn btn-xs btn-primary ui-tooltip btn-edit" type="button">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>
-                                        {% else %}
-                                            <a href = "{{ path(listName|lower ~ '_edit', {'id': object.id}) }}" title="{{ ('Edit ' ~  sublistName)|trans({},translationDomain)}}" data-placement="top" data-toggle="tooltip"
-                                               class="btn btn-xs btn-primary ui-tooltip btn-edit" type="button">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>
-                                        {% endif %}
-                                    {% endif %}
-
-                                {% elseif action == "Activate_Deactivate" %}
-
-                                    {% if is_granted('ROLE_' ~ listName|upper ~'_ACTIVATE_DEACTIVATE') or is_granted('ROLE_ADMIN')%}
-                                        {% if object.getEnabled()%}
-                                            <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-status="false" type="button" class="status btn btn-xs btn-secondary ui-tooltip btn-status" data-toggle="tooltip" data-placement="top" title="{{ ('Deactivate ' ~  sublistName)|trans({},translationDomain)}}"><i class="fa fa-ban"></i></button>
-                                            {% else %}
-                                            <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-status="true" type="button" class="status btn btn-xs btn-secondary ui-tooltip btn-status" data-toggle="tooltip" data-placement="top" title="{{ ('Activate ' ~  sublistName)|trans({},translationDomain)}}"><i class="fa fa-check"></i></button>
-                                            {% endif %}
-                                        {% endif %}
-
-                                {% elseif action == "ViewPlaces" %}
-                                    {% if is_granted('ROLE_' ~ listName|upper ~'_VIEWPLACES') or is_granted('ROLE_ADMIN')%}
-                                        <a href="{{ path('place_list', {'cityId': object.id}) }}" data-placement="top" data-toggle="tooltip" title="{{ 'View Places'|trans({},translationDomain)}}" class="btn btn-xs btn-primary ui-tooltip">
-                                            <i class="fa fa-gear fa-lg"></i>
-                                        </a>
-                                    {% endif %}
-{#check if task assigned to that user#}
-                                {% elseif action == "Update" %}
-                                    {% if check_task_assignee(object.assignee,app.user.id) %}
-                                    <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-status="false" type="button" class="btn btn-xs btn-secondary ui-tooltip dev-btn-task-update" data-toggle="tooltip" data-placement="top" title="{{ "Updatestatus"|trans({},translationDomain)}}"><i class="fa fa-gear fa-lg"></i></button>
-                                    {% endif %}
-                                {% elseif action == "AddPlaces" %}
-                                    {% if is_granted('ROLE_PLACE_CREATE') or is_granted('ROLE_ADMIN')%}
-                                        <a href="{{ path('place_create', {'cityId': object.id}) }}" data-placement="top" data-toggle="tooltip" title="{{ 'add Places'|trans({},translationDomain)}}" class="btn btn-xs btn-permission ui-tooltip">
-                                            <i class="fa fa-plus fa-lg"></i>
-                                        </a>
-                                    {% endif %}
-
-                                {% elseif action == "StopResume" %}
-
-                                    {% if object.getStatus() is defined and 'publish' in object.getStatus() and 'unpublish' not in object.getStatus() and object.getStatus()!='2-autopublish-poll' and (is_granted('ROLE_' ~ listName|upper ~'_STOPRESUME') or is_granted('ROLE_ADMIN'))%}
-                                        {% if object.getAnswersEnabled() %}
-                                            <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-status="false" type="button" class="dev-stop-resume btn btn-xs btn-secondary ui-tooltip btn-status btn-stop-answer"  data-toggle="tooltip" data-placement="top" title="{{ 'Stop Answer'|trans({},translationDomain)}}"><i class="fa fa-ban"></i></button>
-                                            {% else %}
-                                            <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-status="true" type="button" class="dev-stop-resume btn btn-xs btn-secondary ui-tooltip btn-status btn-resume-answer"  data-toggle="tooltip" data-placement="top" title="{{ 'Resume Answer'|trans({},translationDomain)}}"><i class="fa fa-check"></i></button>
-                                            {% endif %}
-                                        {% endif %}
+                                    <th  class="text-center">العمليات</th>
+                                    </tr>
 
 
-                                {% elseif action == "Delete" %}
-                                {% if (object.getStatus() is defined and  'deleted' not in object.getStatus())  or object.getStatus() is not defined  %}
-                                    {% if is_granted('ROLE_' ~ listName|upper ~'_DELETE') or is_granted('ROLE_ADMIN')%}
-                                        <button data-name="{{ object }}" data-id="{{ object.getId() }}" {% if object.getStatus() is defined %}data-status="{{ object.getStatus() }}"{%endif%} data-title="{{ object }}" title="{{('Delete ' ~  sublistName)|trans({},translationDomain)}}" data-type="{{ object.getDocumentTranslation() is defined ? object.getDocumentTranslation()|trans({}, translationDomain) }}" data-placement="top" data-toggle="tooltip"
-                                                {% if listName|upper == 'IMAGE' %}data-gender="بحذفها"{% elseif listName|upper == 'COMICS' %}data-gender="بحذفها"{% elseif listName|upper == 'VIDEO' %}data-gender="بحذفه"{% elseif listName|upper == 'ALBUM' %}data-gender="بحذفه"{% else %}data-gender=""{% endif %}
-                                                class="btn btn-xs btn-primary ui-tooltip btn-delete {% if 'Room' in listName and 'Events' not in listName and 'Messages' not in listName %}dev-material-delete-action{% elseif 'Events' in listName and object.room == 'autopublished' %}dev-event-delete-action{% elseif 'Poll' in listName %}dev-poll-delete-action{% else %}dev-delete-action{% endif %}" type="button">
-                                            <i class="fa fa-times"></i>
-                                        </button>
-                                    {% endif %}
-                                {%endif%}
-                                {% elseif action == "ViewOne" %}
+                                    </thead>
+                                    <tbody>
+                                           {% for object in pagination %}
+                                        <tr>
+                                            <td class="text-center">
+                                                <div class="form-group">
+                                                    <label class="checkbox-inline">
+                                                        <input type="checkbox" class="styled" checked="checked">
+                                                    </label>
+                                                </div>
 
-                                    {% if is_granted('ROLE_' ~ listName|upper ~'_VIEWONE') or is_granted('ROLE_ADMIN') or  check_task_user_permission(object,app.user.id) %}
 
-                                        <a href="{{ path(listName|lower~'_view', {'id': object.id}) }}" data-placement="top" data-toggle="tooltip" title="{{('View One ' ~  listName|capitalize)|trans({},translationDomain)}}" class="btn btn-xs btn-permission ui-tooltip">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    {% endif %}
+                                            </td>
+                                            {% for field in list.fields %}
+                                                {% if field.type == "date" %}
+                                                    <td class="{{field.class}}" {% if field.isClickable %} style="cursor:pointer" onclick="window.location='{{field.isClickable|replace({'--id--':object.document.id})}}'" {% endif %}>
 
-                                {% elseif action == "AutoPublish" %}
+                                                        {{ attribute(object, field.propertyName) is empty ? "" : attribute(object, field.propertyName)|date('Y-m-d') }}
+                                                    </td>
+                                                {% else %}
+                                                    <td class="{{field.class}} permissionsTooltip" {% if field.isClickable %} style="cursor:pointer" onclick="window.location='{{field.isClickable|replace({'--id--':object.document.id})}}'" {% endif %}>
 
-                                    {% if is_granted('ROLE_' ~ listName|upper ~'_AUTOPUBLISH') or is_granted('ROLE_ADMIN')%}
-                                        {% if not object.getPublish()%}
-                                             {% if object.status != "autopublish" and not (listName|upper =='POLL' and object.getStatus() =='2-autopublish-poll') %}
-                                            <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-action="autoPublish" title="{{('AutoPublish ' ~  sublistName)|trans({},translationDomain)}}" data-type="{{ object.getDocumentTranslation()|trans({}, translationDomain) }}" data-placement="top" data-toggle="tooltip"
-                                                    {% if listName|upper == 'IMAGE' or (roomType is defined and roomType|upper == 'EVENTS') %}data-gender="نشرها"{% elseif listName|upper == 'COMICS' %}data-gender="نشرها"{% elseif listName|upper == 'VIDEO' %}data-gender="نشره"{% elseif listName|upper == 'ALBUM' %}data-gender="نشره"{% else %}data-gender=""{% endif %}
-                                                    {% if roomType is defined and roomType|upper == 'EVENTS' %} data-room="{{roomShortName}}" {%endif%} class="btn btn-xs btn-secondary ui-tooltip btn-status {% if roomType is defined and roomType|upper == 'EVENTS' %}dev-autopublish-event{% elseif listName|upper =='POLL' or listName|upper =='QUESTIONNAIRE' %}dev-autopublish-poll{%else%}dev-publish-action{% endif %}" type="button">
-                                                <i class="fa fa-calendar"></i>
-                                            </button>
+                                                        {# added to fix the sorting for fields with underscore #}
+                                                        {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}}
+
+                                                    </td>
                                                 {% endif %}
-                                        {% endif %}
-                                    {% endif %}
-
-                                {% elseif action == "Publish" %}
-
-                                    {% if is_granted('ROLE_' ~ listName|upper ~'_PUBLISH') or is_granted('ROLE_ADMIN')%}
-                                        {% if not object.getPublish()%}
-                                            <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-action="publish" title="{% if  roomType is defined and roomType|upper == 'EVENTS' %}{{'Publish Event'|trans({},translationDomain)}}{% else %}{{((roomType is defined and roomType == "Materials" and listName == "Room_Archive"?"Re":"")~'Publish ' ~  sublistName)|trans({},translationDomain)}}{% endif %}" data-type="{{ object.getDocumentTranslation()|trans({}, translationDomain) }}" data-placement="top" data-toggle="tooltip"
-                                                    {% if listName|upper == 'IMAGE' or (roomType is defined and roomType|upper == 'EVENTS') %}data-gender="نشرها"{% elseif listName|upper == 'COMICS' %}data-gender="نشرها"{% elseif listName|upper == 'VIDEO' %}data-gender="نشره"{% elseif listName|upper == 'ALBUM' %}data-gender="نشره"{% else %}data-gender=""{% endif %}
-                                                    {% if roomType is defined and roomType|upper == 'EVENTS' %} data-room="{{roomShortName}}" {%endif%} class="btn btn-xs btn-secondary ui-tooltip btn-status {% if roomType is defined and roomType|upper == 'EVENTS' %}dev-publish-event{% else %}dev-publish-action{% endif %}" type="button" {% if object.getStatus() is defined %}data-status="{{object.getStatus()}}"{%endif%}>
-                                                <i class="fa fa-check"></i>
-                                            </button>
-                                        {% endif %}
-                                    {% endif %}
-                               {% elseif action == "Favorite_Unfavorite" %}
-
-                                    {% if is_granted('ROLE_' ~ listName|upper ~'_FAVORITE_UNFAVORITE') or is_granted('ROLE_ADMIN')%}
-{#                                        <i class="fa fa-star-o"></i>#}
-                                        {% if app.user in object.favoritedBy %}
-                                            <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-status="true" type="button" class="dev-favourite btn btn-xs btn-secondary ui-tooltip btn-status" data-toggle="tooltip" data-placement="top" title="{{ ('Remove from favorite')|trans({},translationDomain)}}"><i class="fa fa-star""></i></button>
-                                        {% else%}
-
-                                            <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-status="false" type="button" class="dev-favourite btn btn-xs btn-secondary ui-tooltip btn-status" data-toggle="tooltip" data-placement="top" title="{{ ('Add to favorite')|trans({},translationDomain)}}"><i class="fa fa-star-o" ></i></button>
-                                        {% endif %}
-                                    {% endif %}
-                                {% elseif action == "History" %}
-
-                                    {% if is_granted('ROLE_' ~ listName|upper ~'_HISTORY') or is_granted('ROLE_ADMIN')%}
-                                        <a href="{{ path(listName|lower~'_history',{'id':object.id})}}" title="{{'History'|trans({},translationDomain)}}" data-placement="top" data-toggle="tooltip"
-                                                    class="btn btn-xs btn-secondary ui-tooltip btn-status" type="button">
-                                                <i class="fa fa-clock-o"></i>
-                                            </a>
-                                    {% endif %}
-
-                                {% elseif action == "AssignTo" %}
-
-                                    {% if is_granted('ROLE_' ~ listName|upper ~'_ASSIGNTO') or is_granted('ROLE_ADMIN')%}
-                                        <a href="javascript:void(0);" data-url="{{ path(listName|lower~'_assignto')}}" data-id="{{ object.getId() }}" data-title="{{object.getMainTitle()}}" title="{{'AssignTo'|trans({},translationDomain)}}" data-room="{{object.getRoom()}}" data-placement="top" data-toggle="tooltip"
-                                                    class="btn btn-xs btn-secondary ui-tooltip dev-assignTo-action" type="button">
-                                                <i class="fa fa-share"></i>
-                                        </a>
-
-                                    {% endif %}
-
-                                {% elseif action == "Move" %}
-
-                                    {% if is_granted('ROLE_' ~ listName|upper ~'_MOVE') or is_granted('ROLE_ADMIN')%}
-                                        <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-title="{{ object }}" title="{{('Move to Album')|trans({},translationDomain)}}" data-placement="top" data-toggle="tooltip"
-                                                class="btn btn-xs btn-permission ui-tooltip dev-move-to-album" data-old-album-id="null" type="button" data-is-album-form="false">
-                                            <i class="fa fa-arrow-left"></i>
-                                        </button>
-                                    {% endif %}
-
-                                {% elseif action == "Forward" %}
-
-                                    {% if is_granted('ROLE_' ~ listName|upper ~'_FORWARD') or is_granted('ROLE_ADMIN')%}
-                                        <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-status="{{ object.getStatus() }}" data-title="{{ object }}" title="{{('Forward ' ~  sublistName)|trans({},translationDomain)}}" data-placement="top" data-toggle="tooltip"
-                                                class="btn btn-xs btn-permission ui-tooltip dev-forward-action" type="button">
-                                            <i class="fa fa-exchange"></i>
-                                        </button>
-                                    {% endif %}
-
-                                {% elseif action == "Unpublish" %}
-
-                                    {% if is_granted('ROLE_' ~ listName|upper ~'_UNPUBLISH') or is_granted('ROLE_ADMIN')%}
-                                        {% if object.getPublish()%}
-                                            <button data-name="{{ object }}" data-type="{{ object.getDocumentTranslation()|trans({}, translationDomain) }}" data-id="{{ object.getId() }}" data-title="{{ object }}" title="{{('Unpublish ' ~  sublistName)|trans({},translationDomain)}}" data-placement="top" data-toggle="tooltip"
-                                                    {% if listName|upper == 'IMAGE' %}data-gender="ارشفتها"{% elseif listName|upper == 'COMICS' %}data-gender="ارشفتها"{% elseif listName|upper == 'VIDEO' %}data-gender="ارشفته"{% elseif listName|upper == 'ALBUM' %}data-gender="ارشفته"{% else %}data-gender=""{% endif %}
-                                                    class="btn btn-xs btn-permission ui-tooltip dev-unpublish-action" type="button">
-                                                <i class="fa fa-ban"></i>
-                                            </button>
-                                        {% endif %}
-                                    {% endif %}
-
-                                {% elseif action == "PublishControl" %}
-
-                                    {% if is_granted('ROLE_' ~ listName|upper ~'_PUBLISHCONTROL') or is_granted('ROLE_ADMIN')%}
-                                        {% if object.getPublish() %}
-                                        <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-title="{{ object }}" data-action="publishControl" title="{{('PublishControl ' ~  sublistName)|trans({},translationDomain)}}"  data-type="{{ object.getDocumentTranslation()|trans({}, translationDomain) }}" data-placement="top" data-toggle="tooltip"
-                                                {% if listName|upper == 'IMAGE' %}data-gender="نشرها"{% elseif listName|upper == 'COMICS' %}data-gender="نشرها"{% elseif listName|upper == 'VIDEO' %}data-gender="نشره"{% elseif listName|upper == 'ALBUM' %}data-gender="نشره"{% else %}data-gender=""{% endif %}
-                                                class="btn btn-xs btn-permission ui-tooltip dev-publish-action" type="button">
-                                            <i class="fa fa-gear fa-lg"></i>
-                                        </button>
-                                        {% endif %}
-                                    {% endif %}
 
 
-                                {% elseif action == "AutoPublishControl" %}
+  {% endfor %}
 
-                                    {% if is_granted('ROLE_' ~ listName|upper ~'_AUTOPUBLISHCONTROL') or is_granted('ROLE_ADMIN') or (listName in ['Comics','Video','Image','Album'] and is_granted('ROLE_' ~ listName|upper ~'_AUTOPUBLISH')) or(listName|upper =='POLL' and is_granted('ROLE_' ~ listName|upper ~'_AUTOPUBLISH')) %}
-                                        {% if  not object.getPublish()  %}
-                                            {% if listName|upper =='POLL' and object.getStatus() =='2-autopublish-poll' or listName|upper =='QUESTIONNAIRE' and object.getStatus() =='autopublish' %}
-                                                <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-title="{{ object }}" data-action="autoPublishControl" title="{{('AutoPublishControl ' ~  sublistName)|trans({},translationDomain)}}" data-type="{{ object.getDocumentTranslation()|trans({}, translationDomain) }}" data-placement="top" data-toggle="tooltip"
-                                                        data-gender="" class="btn btn-xs btn-secondary ui-tooltip btn-status dev-autopublish-poll" type="button" data-status="autopublishControl">
-                                                    <i class="fa fa-gear fa-lg"></i>
-                                                </button>
-                                            {% elseif listName|upper !='POLL' and   "autopublish" in object.status  %}
-                                                <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-title="{{ object }}" data-action="autoPublishControl" title="{{('AutoPublishControl ' ~  sublistName)|trans({},translationDomain)}}" data-type="{{ object.getDocumentTranslation()|trans({}, translationDomain) }}" data-placement="top" data-toggle="tooltip"
-                                                        data-gender="" class="btn btn-xs btn-secondary ui-tooltip btn-status dev-publish-action {% if roomType is defined and roomType|upper == 'EVENTS' %}dev-autopublish-event{% endif %}" type="button" data-status="autopublishControl">
-                                                    <i class="fa fa-gear fa-lg"></i>
-                                                </button>
-                                            {% endif %}
-                                        {% endif %}
-                                    {% endif %}
+                                            <td class="text-center" style="white-space: nowrap;">
+                                                <a class="btn btn-defualt" href="Role-add.php" data-popup="tooltip" title="تعديل" data-placement="bottom" ><i class="icon-pencil"></i></a>
 
+                                                <a tabindex="0" class="btn btn-defualt" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="انت علي وشك حذف comments هل ترغب في حذفه  " data-html="true"
+                                                   data-html="true" data-content="
+                                                   <button type='button' class='btn btn-danger btn-block'>و ايقاف الموظفين الذين لا ينتمون الي مجموعة و دور اخر</button>
+                                                   <button type='button' class='btn btn-danger btn-block'>و حذف الموظفين الذين لا ينتمون الي مجموعة و دور اخر</button>
+                                                   "> <i class="icon-trash"></i></a>
 
-                                {% elseif action == "Backward" %}
-
-                                    {% if is_granted('ROLE_' ~ listName|upper ~'_BACKWARD') or is_granted('ROLE_ADMIN')%}
-                                        {% if roomName == 'InprogressMessages' or roomName == 'ArchiveMessages' %}
-                                            <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-title="{{ object }}" title="{{('Backward ' ~  sublistName)|trans({},translationDomain)}}" data-placement="top" data-toggle="tooltip"
-                                                    class="btn btn-xs btn-permission ui-tooltip dev-backward-message-action" type="button">
-                                                <i class="fa fa-undo"></i>
-                                            </button>
-                                        {% else %}
-                                            <button {% if object.getAllowedBackwardList() is empty or (object.getAllowedBackwardList()|length == 1 and 'room_' ~ object.getAllowedBackwardList()|keys|first in app.request.attributes.get('_route')) %}disabled{% endif %} data-name="{{ object }}" data-id="{{ object.getId() }}" data-title="{{ object }}" title="{{('Backward ' ~  sublistName)|trans({},translationDomain)}}" data-placement="top" data-toggle="tooltip"
-                                                class="btn btn-xs btn-permission ui-tooltip dev-backward-action" type="button">
-                                                <i class="fa fa-undo"></i>
-                                            </button>
-                                        {% endif %}
-                                    {% endif %}
-
-                                {% elseif action == "Restore" %}
-
-                                    {% if is_granted('ROLE_ADMIN')%}
-                                        <a href="{{ path(listName|lower~'_restore', {'id': object.id}) }}" data-placement="top" data-toggle="tooltip" title="{% trans %}Restore{% endtrans %}" class="btn btn-xs btn-primary ui-tooltip">
-                                            <i class="fa fa-refresh"></i>
-                                        </a>
-                                    {% endif %}
-
-                                {% elseif action == "Assign" %}
-                                    {% if is_granted('ROLE_ROOM_' ~ object.getRoom()|upper ~'_ASSIGN') or is_granted('ROLE_ADMIN')%}
-                                        <a href="javascript:void(0);" data-placement="top" data-toggle="tooltip" title="{% trans %}AssignToMe{% endtrans %}" class="btn btn-xs btn-permission ui-tooltip dev-assign-to-me" data-id="{{ object.getId() }}" data-url="{{ path('room_'~object.getRoom()~'_assign_to_me')}}" data-type="list">
-                                            <i class="fa fa-user"></i>
-                                        </a>
-                                    {% endif %}
-
-                                {% elseif action == "Reassign" %}
-                                    {% if is_granted('ROLE_DASHBOARD_MANAGE') or is_granted('ROLE_ADMIN')%}
-                                        {% if object.getRoom() != 'published' %}
-                                            <a href="javascript:void(0);" data-placement="top" data-toggle="tooltip" title="{% trans from translationDomain %}Reassign{% endtrans %}" class="btn btn-xs btn-permission ui-tooltip dev-forceRassign-action" data-id="{{ object.getId() }}" data-room="{{object.getRoom()}}" data-title="{{object.getMainTitle()}}" data-url="" data-type="list">
-                                                <i class="fa fa-user"></i>
-                                            </a>
-                                        {% endif %}
-                                    {% endif %}
-
-                                {% elseif action == "Show" %}
-                                    {% if is_granted('ROLE_ROOM_' ~ object.getRoom()|upper ~'_SHOW') or is_granted('ROLE_ADMIN') or is_granted('ROLE_DASHBOARD_MANAGE') %}
-                                        {% if  'dashboard'  in app.request.attributes.get('_route')  %}
-                                            <a href="{{ path('dashboard_view_material', {'id': object.id}) }}" data-placement="top" data-toggle="tooltip" title="{% trans from translationDomain %}view material{% endtrans %}" class="btn btn-xs btn-permission ui-tooltip">
-                                                <i class="fa fa-eye"></i>
-                                            </a>
-                                        {% else %}
-                                            <a href="{{ path('room_' ~ object.getRoom()|lower ~'_view_material', {'id': object.id}) }}" data-placement="top" data-toggle="tooltip" title="{% trans from translationDomain %}view material{% endtrans %}" class="btn btn-xs btn-permission ui-tooltip">
-                                                <i class="fa fa-eye"></i>
-                                            </a>
-                                        {% endif %}
-                                    {% endif %}
-
-                                {% elseif action == "Publish_Unpublish" %}
-
-                                    {% if is_granted('ROLE_' ~ listName|upper ~'_PUBLISH_UNPUBLISH') or is_granted('ROLE_ADMIN')%}
-                                        {% if object.getPublish() is defined %}
-                                            {% if object.getPublish()%}
-                                                <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-publish="false" type="button" class="publish btn btn-xs btn-secondary ui-tooltip btn-unpublish" data-toggle="tooltip" data-placement="top" title="{{ ('Unpublish ' ~  sublistName)|trans({},translationDomain)}}" {% if object.getStatus() is defined %}data-status="{{ object.getStatus() }}"{%endif%}><i class="fa fa-ban"></i></button>
-                                            {% else %}
-                                        {#        {% if object.editmode is defined and object.editmode() == "edit-then-publish" %}
-                                                    <a href = "{{ path(listName|lower ~ '_edit_to_publish', {'id': object.id}) }}" data-name="{{ object }}" data-id="{{ object.getId() }}" data-publish="true" type="button" class="btn btn-xs btn-secondary ui-tooltip btn-status" data-toggle="tooltip" data-placement="top" title="{{ ('Publish ' ~  sublistName)|trans({},translationDomain)}}"><i class="fa fa-check"></i></a>
-                                                {% else %}#}
-                                                    <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-publish="true" type="button" class="publish btn btn-xs btn-secondary ui-tooltip btn-status" data-toggle="tooltip" data-placement="top" title="{{ ('Publish ' ~  sublistName)|trans({},translationDomain)}}" {% if object.getStatus() is defined %}data-status="{{ object.getStatus() }}"{%endif%}><i class="fa fa-check"></i></button>
-{#                                                {% endif %}#}
-                                            {% endif %}
-                                        {% else %}
-                                            {% if 'publish' in object.getStatus() and 'unpublish' not in object.getStatus() %}
-                                                <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-publish="false" type="button" class="publish btn btn-xs btn-secondary ui-tooltip btn-unpublish" data-toggle="tooltip" data-placement="top" title="{{ ('Unpublish ' ~  sublistName)|trans({},translationDomain)}}" {% if object.getStatus() is defined %}data-status="{{ object.getStatus() }}"{%endif%}><i class="fa fa-ban"></i></button>
-                                            {% else %}
-                                            {#    {% if object.editmode is defined and object.editmode() == "edit-then-publish" %}
-                                                    <a href = "{{ path(listName|lower ~ '_edit_to_publish', {'id': object.id}) }}" data-name="{{ object }}" data-id="{{ object.getId() }}" data-publish="true" type="button" class="btn btn-xs btn-secondary ui-tooltip btn-status" data-toggle="tooltip" data-placement="top" title="{{ ('Publish ' ~  sublistName)|trans({},translationDomain)}}"><i class="fa fa-check"></i></a>
-                                                {% else %}#}
-                                                    <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-publish="true" type="button" class="publish btn btn-xs btn-secondary ui-tooltip btn-status" data-toggle="tooltip" data-placement="top" title="{{ ('Publish ' ~  sublistName)|trans({},translationDomain)}}" {% if object.getStatus() is defined %}data-status="{{ object.getStatus() }}"{%endif%}><i class="fa fa-check"></i></button>
-{#                                                {% endif %}#}
-                                            {% endif %}
-                                        {% endif %}
-                                    {% endif %}
+                                                <a tabindex="0" class="btn btn-defualt" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="  هل ترغب في ايقاف الموظف  " data-html="true"
+                                                   data-html="true" data-content="
+                                                   <button type='button' class='btn btn-danger'>نعم</button>
+                                                   <button type='button' class='btn btn-defualt'>الغاء</button>
+                                                   "> <i class="icon-user-block"></i></a>
 
 
-                                {% elseif action == "ManageOne" and listName == "Category" %}
-                                    {% if is_granted('ROLE_SUBCATEGORY_MANAGE') or is_granted('ROLE_ADMIN')%}
-                                        <a href = "{% if object.getSubCategroysCount() > 0 and category_published_subs_count(object.id) > 0 %}{{ path('subcategory_sort', {'id': object.id}) }}{% else %}javascript:void(0);{% endif %}" title="{{ ('manage subcategories')|trans({},translationDomain)}}" data-placement="top" data-toggle="tooltip"
-                                           class="btn btn-xs btn-primary ui-tooltip {% if object.getSubCategroysCount() > 0 and category_published_subs_count(object.id) > 0 %}btn-sort{% else %}btn-sort-disabled{% endif %}" type="button">
-                                            <i class="glyphicon glyphicon-sort"></i>
-                                        </a>
-                                    {% endif %}
-                                {% elseif action == "ManageOne" and listName == "City" %}
-                                    {% if is_granted('ROLE_PLACE_EDIT') or is_granted('ROLE_PLACE_CREATE') or is_granted('ROLE_ADMIN')%}
-                                        <a href = "{% if object.placesCount > 1 %}{{ path('place_sort', {'id': object.id}) }}{% else %}javascript:void(0){% endif %}" title="{{ ('manage places')|trans({},translationDomain)}}" data-placement="top" data-toggle="tooltip"
-                                           class="btn btn-xs btn-primary ui-tooltip {% if object.placesCount > 1 %}btn-sort{% else %}btn-sort-disabled{% endif %}" type="button">
-                                            <i class="glyphicon glyphicon-sort"></i>
-                                        </a>
-                                    {% endif %}
-                                     {% elseif action == "Viewcomment" and listName == "Visitor" %}
-                                    {% if is_granted('ROLE_VISITOR_VIEWCOMMENT') or is_granted('ROLE_ADMIN')%}
-                                        <a href = "{{path('get_visitor_comment',{'visitorId':object.id})}}" title="{{ ('view comments')|trans({},translationDomain)}}" data-placement="top" data-toggle="tooltip"
-                                           class="btn btn-xs btn-primary ui-tooltip"  type="button">
-                                           <i class="fa fa-comments-o"></i>
 
-                                        </a>
-                                    {% endif %}
-                                     {% elseif action == "Addcontact" and (listName == "Visitor" or listName == "Staff") %}
-                                    {% if (is_granted('ROLE_CONTACT_CREATE') or is_granted('ROLE_ADMIN')) and object.contact is empty %}
-                                        <a href = "{{path('contact_create',{'id':object.id})}}" title="{{ ('add contact')|trans({},translationDomain)}}" data-placement="top" data-toggle="tooltip"
-                                           class="btn btn-xs btn-primary ui-tooltip"  type="button">
-                                           <i class="fa fa-plus"></i>
+                                            </td>
 
-                                        </a>
-                                    {% endif %}
-                                     {% elseif action == "Resendmail" and listName == "Visitor" and not object.emailVerified %}
-                                         {% if is_granted('ROLE_VISITOR_RESENDMAIL') or is_granted('ROLE_ADMIN')%}
-                                            <button data-name="{{ object }}" data-id="{{ object.getId() }}" type="button" class="dev-resendMail btn btn-xs btn-secondary ui-tooltip" data-url="{{ path('visiter_resend_activate_mail')}}" data-toggle="tooltip" data-placement="top" title="{{ ('resend mail')|trans({},translationDomain)}}" {% if object.getStatus() is defined %}data-status="{{ object.getStatus() }}"{%endif%}> <i class="fa fa-envelope-o"></i></button>
-                                         {% endif %}
-
-                                     {% endif %}
-                            {% endfor %}
-                        </td>
-                        {% endif %}
-                        {% endif %}
-                        <td class="error-message-td"></td>
-                    </tr>
-                {% endfor %}
+                                        </tr>
 
 
-            </tbody>
-        </table>
-        {% if pagination.items is not empty %}
-            {% set obj = pagination[0] %}
+  {% endfor %}
 
-            {% if obj.getDocumentTranslation() is defined %}
-                <script>
-                    itemType = "{{ obj.getDocumentTranslation()|trans({}, translationDomain) }}";
-                    itemsType = "{{('the '~obj.getDocumentTranslation()~'s')|trans({}, translationDomain)}}";
-            {% if "studio" in app.request.attributes.get('_controller') %}
-                publishUrl = "{{path(obj.getDocumentTranslation()~'_publish')}}";
-            {% endif %}
-                </script>
-            {% endif %}
-        {% endif %}
 
-    </div> <!-- /.table-responsive -->
 
-        <input type="hidden" class="dev-currentPaginationPage" value="{{pageNumber}}" />
 
-    <div class="row dt-rb">
-        {{ knp_pagination_render(pagination) }}
-        <div class="col-sm-12">
-            <span> {{ include(':List:limitSelect.html.twig') }}</span>
-            <div class="dataTables_info" id="DataTables_Table_0_info"> {{'show'|trans}} {% if paginationData['firstItemNumber']>0 %}{{ paginationData['firstItemNumber'] }}{% else %}0{% endif %} {{'to'|trans}} {% if paginationData['lastItemNumber']>0 %}{{ paginationData['lastItemNumber'] }}{% else %}0{% endif %} {{'from'|trans}} {{ paginationData['totalCount'] }} {{string_utilities.getSingleItemName(sublistName|lower)|trans({}, translationDomain)}}</div>
+                                    </tbody>
+
+
+                                </table>
+                            </div>
+                            <!-- /scrollable datatable -->
+
+
+
+                        </div>
+
+                    </div>
+
+
+
+                </div><!-- col-lg-9 tabs -->
+
+
+            </div>
+            <!-- /dashboard content -->
+
         </div>
-    </div>
-</form>
-            </div> <!-- /.portlet-content -->
-        </div> <!-- /.portlet -->
-    </div> <!-- /.col -->
-</div> <!-- /.row -->
-{% block dashboardCloseTab %}{% endblock %}
-</div>
-{% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('bundles/ibtikarbackend/js/ajaxifyList.js') }}"></script>
+                {% endblock %}
 
-    <script>
-        {% if list.hasAction('Delete') %}
-            var deleteUrl = '{{ path(listName|lower~'_delete') }}';
-            var deleteOneParams = Array();
-        {% endif %}
-        {% if list.hasAction('Backward') %}
-            var backwardUrl = '{{ path(listName|lower~'_backward') }}';
-            var backwardOneParams = Array();
-        {% endif %}
-        {% if list.hasAction('Activate_Deactivate') %}
-            var changeStatusUrl = '{{ path(listName|lower~'_status_change') }}'
-            var changeStatusParams = Array();
-        {% endif %}
-        {% if list.hasAction('Publish_Unpublish') %}
-            var changePublishUrl = '{{ path(listName|lower~'_updatePublish') }}'
-            var changePublishParams = Array();
-        {% endif %}
-        {% if list.hasAction('StopResume') %}
-            var changeStatusUrl = '{{ path(listName|lower~'_status_change') }}'
-            var changeStatusParams = Array();
-        {% endif %}
+                    {% block javascripts %}
+                        <!-- Primary modal -->
+                        <div id="modal_theme_primary" class="modal fade">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h6 class="modal-title">خانات الجدول
+                                            <span class="badge bg-dark position-right">243</span>
+                                        </h6>
+                                    </div>
 
-        {% if list.hasAction('Resendmail') %}
-            var resendParameterUrl = '{{ path('visiter_resend_activate_mail')}}';
-            var resendParameter = Array();
-        {% endif %}
-
-        {% if list.hasAction('Favorite_Unfavorite') %}
-            var changeStatusFavoriteUrl = '{{ path(listName|lower~'_favorite_unfavorite') }}'
-            var changeStatusFavoriteParams = Array();
-        {% endif %}
-
-        var listMessages = {
-            deleteOneModalTitle : '{% trans from translationDomain %}Delete One Title{% endtrans %}',
-            deleteOneConfirmMessage : '{% trans from translationDomain %}Delete One Confirmation Message{% endtrans %}',
-            deleteOneTypeConfirmMessage : '{% trans from translationDomain %}Delete One type Confirmation Message{% endtrans %}',
-            deleteConfirmMessageAutoPublish : '{% trans from translationDomain %}delete one message from autopublish{% endtrans %}',
-            deleteManyConfirmMessageAutoPublish : '{% trans from translationDomain %}delete many confirmation message autopublish{% endtrans %}',
-            backwardOneModalTitle : '{% trans from translationDomain %}Backward One Title{% endtrans %}',
-            backwardOneConfirmMessage : '{% trans from translationDomain %}Backward One Confirmation Message{% endtrans %}',
-            deleteManyModalTitle : '{% trans from translationDomain %}Delete Many Title{% endtrans %}',
-            deleteManyConfirmMessage : '{% trans from translationDomain %}Delete Many confirmation Message{% endtrans %}',
-            deactivateOneModalTitle : '{% trans from translationDomain %}Deactivate One Title{% endtrans %}',
-            deactivateOneConfirmMessage : '{% trans from translationDomain %}Deactivate One confirmation Message{% endtrans %}',
-            deactivateManyModalTitle : '{% trans from translationDomain %}Deactivate Many Title{% endtrans %}',
-            deactivateManyConfirmMessage : '{% trans from translationDomain %}Deactivate Many confirmation Message{% endtrans %}',
-            activateOneModalTitle : '{% trans from translationDomain %}Activate One Title{% endtrans %}',
-            activateOneConfirmMessage : '{% trans from translationDomain %}Activate One confirmation Message{% endtrans %}',
-            activateManyModalTitle : '{% trans from translationDomain %}Activate Many Title{% endtrans %}',
-            activateManyConfirmMessage : '{% trans from translationDomain %}Activate Many confirmation Message{% endtrans %}',
-            publishManyModalTitle : '{% trans from translationDomain %}Publish Many Title{% endtrans %}',
-            publishManyConfirmMessage : '{% trans from translationDomain %}Publish Many confirmation Message{% endtrans %}',
-            unpublishManyModalTitle : '{% trans from translationDomain %}Unpublish Many Title{% endtrans %}',
-            unpublishManyConfirmMessage : '{% trans from translationDomain %}Unpublish Many confirmation Message{% endtrans %}',
-            publishOneModalTitle : '{% trans from translationDomain %}Publish One Title{% endtrans %}',
-            publishOneConfirmMessage : '{% trans from translationDomain %}Publish One confirmation Message{% endtrans %}',
-            resendMailModalTitle : '{% trans  %}resend activetd mail for visitor{% endtrans %}',
-            resendMailConfirmMessage : '{% trans %}resend activetd mail for visitor confirmation message{% endtrans %}',
-            unpublishOneModalTitle : '{% trans from translationDomain %}Unpublish One Title{% endtrans %}',
-            unpublishOneConfirmMessage : '{% trans from translationDomain %}Unpublish One confirmation Message{% endtrans %}',
-            buildFileProgress: '{% trans %}build file in progress{% endtrans %}',
-            buildFileContactProgress: '{% trans %}build file contact in progress{% endtrans %}',
-            multiSelectSourceListLabel: '{% trans %}Table Columns{% endtrans %}',
-            multiSelectTargetListLabel: '{% trans %}Selected Columns{% endtrans %}',
-            autopublishConfirmMessage : '{% trans from translationDomain %}autopublish confirm message{% endtrans %}',
-            stopOneModalTitle : '{% trans from translationDomain %}Stop One Title{% endtrans %}',
-            stopOneConfirmMessage : '{% trans from translationDomain %}stop One confirmation Message{% endtrans %}',
-            resumeOneModalTitle : '{% trans from translationDomain %}Resume One Title{% endtrans %}',
-            resumeOneConfirmMessage : '{% trans from translationDomain %}Resume One confirmation Message{% endtrans %}',
-            addAsContactManyConfirmMessage: '{% trans from translationDomain %}Add as contact confirmation message{% endtrans %}',
-            addAsContactManyModalTitle: '{% trans from translationDomain %}Add as contact{% endtrans %}',
-            favoriteManyConfirmMessage : '{% trans from translationDomain %}Favorite Many confirmation Message{% endtrans %}',
-            unfavoriteManyConfirmMessage : '{% trans from translationDomain %}Unfavorite Many confirmation Message{% endtrans %}',
-            favoriteManyModalTitle : '{% trans from translationDomain %}Favorite One Title{% endtrans %}',
-            unfavoriteManyModalTitle : '{% trans from translationDomain %}Unfavorite One Title{% endtrans %}',
-            favoriteOneConfirmMessage : '{% trans from translationDomain %}Favorite One confirmation Message{% endtrans %}',
-            unfavoriteOneConfirmMessage : '{% trans from translationDomain %}Unfavorite One confirmation Message{% endtrans %}',
-            favoriteOneModalTitle : '{% trans from translationDomain %}Favorite One Title{% endtrans %}',
-            unfavoriteOneModalTitle : '{% trans from translationDomain %}Unfavorite One Title{% endtrans %}',
-            importContactMessage: '{% trans from translationDomain %}Import Cotact Message{% endtrans %}',
-            importContactTitle: '{% trans from translationDomain %}Import Cotact Title{% endtrans %}',
+                                    <div class="modal-body">
 
 
-        };
-        var overideCloseButton=false;
-        var defaultSearchForm =  ($('#search-form').length ) ? $('#search-form').serialize() : "";
-            {% if listName|lower != 'dashboard' and  contactGroup  is not defined and task is not defined %}
-            var changeListColumnsUrl = "{{path(listName|lower~changeListColumnType~'_change_list_columns',{"listType":list.listType})}}";
+                                        <ul class="dropdown-menu dropdown-menu-sortable" style="display: block; position: static; width: 100%; margin-top: 0; float: none;">
 
-        {% endif %}
-        {% if contactGroup is defined %}
-            overideCloseButton=true;
-        {% endif %}
-    </script>
+                                            <li>
+                                                <div class="media-left media-middle">
+                                                    <i class="icon icon-move dragula-handle"></i>
+                                                </div>
 
-{% endblock %}
 
-{% block documentReady %}
-    <script>
-        var oneItem = "{{listName|trans({}, translationDomain)}}";
-        var manyItems = "{{(listName~'s')|trans({}, translationDomain)}}";
-        var itemCountLabel = "{{listName|lower|trans({}, translationDomain)}}";
-        var currentPaginatePage = {{pageNumber}};
+                                                <div class="media-body">
+                                                    <div class="media-heading">الاسم</div>
+                                                </div>
 
-        $(document).ready(function() {
 
-            if(is_touch_device()){
-                 setTimeout(function(){
-                $('[data-toggle="tooltip"]').tooltip('destroy');
-                  },100)
-            }
+                                                <div class="media-right media-middle">
+                                                    <div class="checkbox checkbox-switchery switchery-xs">
+                                                        <label>
+                                                            <input type="checkbox" class="switchery switchery-primary" checked="checked">
 
-            var list = new BaseList();
-            if(!overideCloseButton){
-            $(".search_btn").on("click",function() {
-                $(".searchBox").toggle();
-            });
-            }
-            fixChromeScrollIssue();
-        });
-    </script>
-{% endblock %}
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                            </li>
+
+
+                                            <li>
+                                                <div class="media-left media-middle">
+                                                    <i class="icon icon-move dragula-handle"></i>
+                                                </div>
+
+
+                                                <div class="media-body">
+                                                    <div class="media-heading">التاريخ</div>
+                                                </div>
+
+
+                                                <div class="media-right media-middle">
+                                                    <div class="checkbox checkbox-switchery switchery-xs">
+                                                        <label>
+                                                            <input type="checkbox" class="switchery switchery-primary" checked="checked">
+
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                            </li>
+
+
+
+                                            <li>
+                                                <div class="media-left media-middle">
+                                                    <i class="icon icon-move dragula-handle"></i>
+                                                </div>
+
+
+                                                <div class="media-body">
+                                                    <div class="media-heading">الصلحيات</div>
+                                                </div>
+
+
+                                                <div class="media-right media-middle">
+                                                    <div class="checkbox checkbox-switchery switchery-xs">
+                                                        <label>
+                                                            <input type="checkbox" class="switchery switchery-primary" checked="checked">
+
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                            </li>
+
+
+
+                                            <li>
+                                                <div class="media-left media-middle">
+                                                    <i class="icon icon-move dragula-handle"></i>
+                                                </div>
+
+
+                                                <div class="media-body">
+                                                    <div class="media-heading">الاخبار</div>
+                                                </div>
+
+
+                                                <div class="media-right media-middle">
+                                                    <div class="checkbox checkbox-switchery switchery-xs">
+                                                        <label>
+                                                            <input type="checkbox" class="switchery switchery-primary" checked="checked">
+
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                            </li>
+
+
+
+                                            <li>
+                                                <div class="media-left media-middle">
+                                                    <i class="icon icon-move dragula-handle"></i>
+                                                </div>
+
+
+                                                <div class="media-body">
+                                                    <div class="media-heading">الاخبار</div>
+                                                </div>
+
+
+                                                <div class="media-right media-middle">
+                                                    <div class="checkbox checkbox-switchery switchery-xs">
+                                                        <label>
+                                                            <input type="checkbox" class="switchery switchery-primary" checked="checked">
+
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                            </li>
+
+
+
+                                            <li>
+                                                <div class="media-left media-middle">
+                                                    <i class="icon icon-move dragula-handle"></i>
+                                                </div>
+
+
+                                                <div class="media-body">
+                                                    <div class="media-heading">الفعاليات</div>
+                                                </div>
+
+
+                                                <div class="media-right media-middle">
+                                                    <div class="checkbox checkbox-switchery switchery-xs">
+                                                        <label>
+                                                            <input type="checkbox" class="switchery switchery-primary" checked="checked">
+
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                            </li>
+
+
+
+
+                                        </ul>
+
+
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-link" data-dismiss="modal">الغاء</button>
+                                        <button type="button" class="btn btn-primary">حفظ</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /primary modal -->
+
+
+                        <!-- modal_permissions  -->
+                        <div id="modal_permissions" class="modal fade">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h6 class="modal-title"> الصلحيات
+                                            <span class="badge bg-dark position-right">3</span>
+                                        </h6>
+                                    </div>
+
+                                    <div class="modal-body">
+
+                                        <div class="tabbable">
+                                            <ul class="nav nav-tabs nav-tabs-highlight">
+                                                <li class="active"><a href="#badges-tab1" data-toggle="tab"><span class="badge badge-primary position-left">78</span> الاول</a></li>
+                                                <li><a href="#badges-tab2" data-toggle="tab"> <span class="badge badge-primary position-left">23</span> الثاني</a></li>
+                                            </ul>
+
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="badges-tab1">
+
+
+                                                    <div class="table-responsive">
+                                                        <table class="table text-nowrap" style="border:1px solid #ddd">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="text-center" style="width: 20px;"><i class="icon-arrow-down12"></i></th>
+                                                                    <th style="width: 200px;">الاسم</th>
+                                                                    <th style="width:50px" class="text-center">تعديل</th>
+                                                                    <th style="width:50px" class="text-center">إضافة</th>
+                                                                    <th style="width:50px" class="text-center">تعديل</th>
+                                                                    <th style="width:50px" class="text-center">إضافة</th>
+                                                                    <th style="width:50px" class="text-center">تعديل</th>
+                                                                    <th style="width:50px" class="text-center">إضافة</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+
+
+
+                                                                <tr class="active border-double">
+                                                                    <td class="text-center">
+
+
+                                                                        <ul class="icons-list">
+                                                                            <li class="dropdown">
+                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                                                <ul class="dropdown-menu dropdown-menu-left">
+                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                                    <li class="divider"></li>
+                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+
+                                                                    </td>
+
+                                                                    <td colspan="7">
+
+                                                                        <span class="pull-left"> module 1</span>
+
+                                                                        <span class="badge bg-primary pull-right">2</span>
+                                                                    </td>
+
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <td class="text-center">
+                                                                        <ul class="icons-list">
+                                                                            <li class="dropdown">
+                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                                                <ul class="dropdown-menu dropdown-menu-left">
+                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                                    <li class="divider"></li>
+                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                    <td>
+
+                                                                        <div class="media-body">
+                                                                            <a href="#" class="display-inline-block text-default letter-icon-title"> محرر </a>
+                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                                                ملخص للوظيفة
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <td class="text-center">
+                                                                        <ul class="icons-list">
+                                                                            <li class="dropdown">
+                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                                                <ul class="dropdown-menu dropdown-menu-left">
+                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                                    <li class="divider"></li>
+                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                    <td>
+
+                                                                        <div class="media-body">
+                                                                            <a href="#" class="display-inline-block text-default letter-icon-title"> كاتب </a>
+                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                                                ملخص عن الوظيفة
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <td class="text-center">
+                                                                        <ul class="icons-list">
+                                                                            <li class="dropdown">
+                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                                                <ul class="dropdown-menu dropdown-menu-left">
+                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                                    <li class="divider"></li>
+                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                    <td>
+
+                                                                        <div class="media-body">
+                                                                            <a href="#" class="display-inline-block text-default">مشرف</a>
+                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                                                ملخص
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+
+                                                                </tr>
+
+                                                                <tr class="active border-double">
+                                                                    <td class="text-center">
+
+
+                                                                        <ul class="icons-list">
+                                                                            <li class="dropup">
+                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                                                <ul class="dropdown-menu dropdown-menu-left">
+                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                                    <li class="divider"></li>
+                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+
+                                                                    </td>
+
+                                                                    <td colspan="7">
+
+                                                                        <span class="pull-left"> module 2</span>
+
+                                                                        <span class="badge bg-primary pull-right">2</span>
+                                                                    </td>
+
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <td class="text-center">
+                                                                        <ul class="icons-list">
+                                                                            <li class="dropup">
+                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                                                <ul class="dropdown-menu dropdown-menu-left">
+                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                                    <li class="divider"></li>
+                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+
+                                                                    <td>
+
+                                                                        <div class="media-body">
+                                                                            <a href="#" class="display-inline-block text-default">مصور</a>
+                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                                                ملخص
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                </tr>
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div><!-- table-responeive -->
+
+                                                </div><!-- tab 1 -->
+
+                                                <div class="tab-pane" id="badges-tab2">
+
+                                                    <div class="table-responsive">
+                                                        <table class="table text-nowrap" style="border:1px solid #ddd">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="text-center" style="width: 20px;"><i class="icon-arrow-down12"></i></th>
+                                                                    <th style="width: 200px;">الاسم</th>
+                                                                    <th style="width:50px" class="text-center">تعديل</th>
+                                                                    <th style="width:50px" class="text-center">إضافة</th>
+                                                                    <th style="width:50px" class="text-center">تعديل</th>
+                                                                    <th style="width:50px" class="text-center">إضافة</th>
+                                                                    <th style="width:50px" class="text-center">تعديل</th>
+                                                                    <th style="width:50px" class="text-center">إضافة</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+
+                                                                <tr class="active border-double">
+                                                                    <td class="text-center">
+
+
+                                                                        <ul class="icons-list">
+                                                                            <li class="dropdown">
+                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                                                <ul class="dropdown-menu dropdown-menu-left">
+                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                                    <li class="divider"></li>
+                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+
+                                                                    </td>
+
+                                                                    <td colspan="7">
+
+                                                                        <span class="pull-left"> module 1</span>
+
+                                                                        <span class="badge bg-primary pull-right">2</span>
+                                                                    </td>
+
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="text-center">
+                                                                        <ul class="icons-list">
+                                                                            <li class="dropdown">
+                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                                                <ul class="dropdown-menu dropdown-menu-left">
+                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                                    <li class="divider"></li>
+                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                    <td>
+
+                                                                        <div class="media-body">
+                                                                            <a href="#" class="display-inline-block text-default letter-icon-title"> محرر </a>
+                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                                                ملخص للوظيفة
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                </tr>
+
+
+                                                                <tr>
+                                                                    <td class="text-center">
+                                                                        <ul class="icons-list">
+                                                                            <li class="dropdown">
+                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                                                <ul class="dropdown-menu dropdown-menu-left">
+                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                                    <li class="divider"></li>
+                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                    <td>
+
+                                                                        <div class="media-body">
+                                                                            <a href="#" class="display-inline-block text-default letter-icon-title"> محرر </a>
+                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                                                ملخص للوظيفة
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                </tr>
+
+
+                                                                <tr>
+                                                                    <td class="text-center">
+                                                                        <ul class="icons-list">
+                                                                            <li class="dropdown">
+                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                                                <ul class="dropdown-menu dropdown-menu-left">
+                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                                    <li class="divider"></li>
+                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                    <td>
+
+                                                                        <div class="media-body">
+                                                                            <a href="#" class="display-inline-block text-default letter-icon-title"> كاتب </a>
+                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                                                ملخص عن الوظيفة
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <td class="text-center">
+                                                                        <ul class="icons-list">
+                                                                            <li class="dropdown">
+                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                                                <ul class="dropdown-menu dropdown-menu-left">
+                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                                    <li class="divider"></li>
+                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                    <td>
+
+                                                                        <div class="media-body">
+                                                                            <a href="#" class="display-inline-block text-default">مشرف</a>
+                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                                                ملخص
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+
+                                                                </tr>
+
+                                                                <tr class="active border-double">
+                                                                    <td class="text-center">
+
+
+                                                                        <ul class="icons-list">
+                                                                            <li class="dropup">
+                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                                                <ul class="dropdown-menu dropdown-menu-left">
+                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                                    <li class="divider"></li>
+                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+
+                                                                    </td>
+
+                                                                    <td colspan="7">
+
+                                                                        <span class="pull-left"> module 2</span>
+
+                                                                        <span class="badge bg-primary pull-right">2</span>
+                                                                    </td>
+
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <td class="text-center">
+                                                                        <ul class="icons-list">
+                                                                            <li class="dropdown">
+                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                                                <ul class="dropdown-menu dropdown-menu-left">
+                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                                    <li class="divider"></li>
+                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                    <td>
+
+                                                                        <div class="media-body">
+                                                                            <a href="#" class="display-inline-block text-default letter-icon-title"> محرر </a>
+                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                                                ملخص للوظيفة
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+
+                                                                </tr>
+
+
+                                                                <tr>
+                                                                    <td class="text-center">
+                                                                        <ul class="icons-list">
+                                                                            <li class="dropup">
+                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                                                <ul class="dropdown-menu dropdown-menu-left">
+                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                                    <li class="divider"></li>
+                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+
+                                                                    <td>
+
+                                                                        <div class="media-body">
+                                                                            <a href="#" class="display-inline-block text-default">مصور</a>
+                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                                                ملخص
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="checked">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" class="styled" checked="">
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    </td>
+                                                                </tr>
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div><!-- table-responeive -->
+
+                                                </div><!-- tab 2 -->
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-link" data-dismiss="modal">الغاء</button>
+                                        <button type="button" class="btn btn-primary">حفظ</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /modal_permissions  -->
+                        {{ parent() }}
+                        <script src="{{ asset('bundles/ibtikarbackend/js/ajaxifyList.js') }}"></script>
+                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/app.js') }}"></script>
+                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/loaders/blockui.min.js')}}"></script>
+                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/nicescroll.min.js')}}"></script>
+                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/drilldown.js')}}"></script>
+                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/layout_sidebar_sticky_custom.js')}}"></script>
+                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/uniform.min.js')}}"></script>
+                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
+                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
+
+
+                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
+                        <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/jquery.easing.min.js')}}"></script>
+                        <!-- datatable files -->
+                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/tables/datatables/datatables.min.js')}}"></script>
+                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/selects/select2.min.js')}}"></script>
+                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/datatables_api.js')}}"></script>
+
+                        <!-- modals files -->
+                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_modals.js')}}"></script>
+
+
+                        <!-- Drag and drop files -->
+                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/dragula.min.js')}}"></script>
+                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/extension_dnd.js')}}"></script>
+
+                        <script>
+                            var toggleButtonColor = '#D6494C';
+
+                            var buttons = document.querySelectorAll('.switchery-primary');
+                            for (var i = 0, buttonsLength = buttons.length; i < buttonsLength; i++) {
+                                new Switchery(buttons[i], {color: toggleButtonColor});
+                            }
+
+                            // Select2 selects
+                            $('.Roleselect').select2({
+                                width: 100
+                            });
+
+
+
+                            $(function () {
+
+                                // Select2 selects
+                                $('.select').select2();
+                            });
+
+                            // advanced saerch
+                            $('#advanced-search-Btn').on('click', function () {
+                                if ($(".advanced-search").hasClass("searchhidden")) {
+                                    $(".advanced-search").slideDown();
+                                    $(".advanced-search").removeClass('searchhidden');
+                                } else {
+                                    $(".advanced-search").slideUp();
+                                    $(".advanced-search").addClass('searchhidden');
+                                    $(".advanced-search-more").slideUp();
+                                }
+
+                            });
+
+
+                            // advanced-search-more
+                            $('#advanced-search-more').on('click', function () {
+                                if ($(".advanced-search-more").hasClass("searchhidden")) {
+                                    $(".advanced-search-more").slideDown();
+                                    $(".advanced-search-more").removeClass('searchhidden');
+                                } else {
+                                    $(".advanced-search-more").slideUp();
+                                    $(".advanced-search-more").addClass('searchhidden');
+                                    $(".advanced-search-more").slideUp();
+                                }
+                            });
+
+                        </script>
+
+
+                    {% endblock %}

@@ -23,7 +23,7 @@ class BackendController extends Controller {
     public $oneItem = '';
 
     /**
-     * @var \Ibtikar\BackendBundle\Service\ListView service object
+     * @var \Ibtikar\GlanceDashboardBundle\Service\ListView service object
      */
     protected $listViewOptions;
 
@@ -62,7 +62,7 @@ class BackendController extends Controller {
         if ($this->listViewOptions->getTemplate()) {
             return $this->render($this->listViewOptions->getTemplate(), $renderingParams);
         } else {
-            return $this->render('IbtikarGlanceUMSBundle:List:baseList.html.twig', $renderingParams);
+            return $this->render('IbtikarGlanceDashboardBundle:List:baseList.html.twig', $renderingParams);
         }
     }
 
@@ -70,13 +70,13 @@ class BackendController extends Controller {
         $this->listViewOptions = $this->get("list_view");
         $this->listViewOptions->setListType("trash");
         $renderingParams = $this->doList($request);
-        return $this->render('IbtikarGlanceUMSBundle:List:baseList.html.twig', $renderingParams);
+        return $this->render('IbtikarGlanceDashboardBundle:List:baseList.html.twig', $renderingParams);
     }
 
     protected function getCurrentColumns($listName) {
         /* Get List Fields */
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $document = $dm->getRepository('IbtikarBackendBundle:StaffListColumns')->findOneBy(array('staff' => $this->getUser()->getId(), "listName" => $listName));
+        $document = $dm->getRepository('IbtikarGlanceDashboardBundle:StaffListColumns')->findOneBy(array('staff' => $this->getUser()->getId(), "listName" => $listName));
         if ($document && $document->getColumns()) {
             $selectedColumns = explode(",", $document->getColumns());
         } else {
@@ -120,7 +120,7 @@ class BackendController extends Controller {
                     "sortOrderType" => "normal"
                 );
                 $fieldOptions = array_merge($defaultOptions, $fieldOptions);
-                $this->listViewOptions->addField($this->get("string_utilities")->humanize($column), $column, $fieldOptions["type"], $fieldOptions["sortOrderType"], $fieldOptions["tooltip"], $fieldOptions["getterArguments"], $fieldOptions["isSortable"], $fieldOptions["isClickable"], $fieldOptions["class"], $fieldOptions["document"]);
+                $this->listViewOptions->addField($column, $column, $fieldOptions["type"], $fieldOptions["sortOrderType"], $fieldOptions["tooltip"], $fieldOptions["getterArguments"], $fieldOptions["isSortable"], $fieldOptions["isClickable"], $fieldOptions["class"], $fieldOptions["document"]);
             }
         }
 
@@ -144,7 +144,7 @@ class BackendController extends Controller {
             $limit = $this->container->getParameter('per_page_items');
         }
 
-        $pageNumber = $this->get('request')->query->get('page', 1);
+        $pageNumber = $request->query->get('page', 1);
         if ($pageNumber < 1) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
@@ -203,28 +203,29 @@ class BackendController extends Controller {
         $this->listViewOptions->setListQueryBuilder($this->createQueryBuilder());
         $this->listViewOptions->setDefaultSortBy("createdAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
-        if ($this->listStatus != '') {
-            $breadcrumbs = array(
-                "backend-home" => $this->generateUrl('backend_home'),
-                "List " . $this->calledClassName => $this->generateUrl(strtolower($this->calledClassName) . '_' . $this->listStatus)
-            );
-        } else {
-            if ($this->dashboardRoom != '') {
-                $breadcrumbs = array(
-                    "backend-home" => $this->generateUrl('backend_home'),
-                    "List " . $this->calledClassName => $this->generateUrl(strtolower($this->calledClassName) . '_list', array('dashboardRoom' => $this->dashboardRoom))
-                );
-            } else {
-                $breadcrumbs = array(
-                    "backend-home" => $this->generateUrl('backend_home'),
-                    "List " . $this->calledClassName => $this->generateUrl(strtolower($this->calledClassName) . '_list')
-                );
-            }
-        }
+//        if ($this->listStatus != '') {
+//            $breadcrumbs = array(
+//                "backend-home" => $this->generateUrl('backend_home'),
+//                "List " . $this->calledClassName => $this->generateUrl(strtolower($this->calledClassName) . '_' . $this->listStatus)
+//            );
+//        } else {
+//            if ($this->dashboardRoom != '') {
+//                $breadcrumbs = array(
+//                    "backend-home" => $this->generateUrl('backend_home'),
+//                    "List " . $this->calledClassName => $this->generateUrl(strtolower($this->calledClassName) . '_list', array('dashboardRoom' => $this->dashboardRoom))
+//                );
+//            } else {
+//                $breadcrumbs = array(
+//                    "backend-home" => $this->generateUrl('backend_home'),
+//                    "List " . $this->calledClassName => $this->generateUrl(strtolower($this->calledClassName) . '_list')
+//                );
+//            }
+//        }
+        $breadcrumbs=array();
         $this->listViewOptions->setBreadcrumbs($breadcrumbs);
     }
 
-    protected function createQueryBuilder($documentBundle = "IbtikarBackendBundle") {
+    protected function createQueryBuilder($documentBundle = "IbtikarGlanceDashboardBundle") {
         try {
             return $this->get('doctrine_mongodb')->getManager()->createQueryBuilder($documentBundle . ':' . $this->calledClassName);
         } catch (\Exception $e) {
@@ -333,9 +334,9 @@ class BackendController extends Controller {
 
         $dm = $this->get('doctrine_mongodb')->getManager();
         if ($this->listName) {
-            $staffListColumns = $dm->getRepository('IbtikarBackendBundle:StaffListColumns')->findOneBy(array('staff' => $this->getUser()->getId(), "listName" => $this->listName));
+            $staffListColumns = $dm->getRepository('IbtikarGlanceDashboardBundle:StaffListColumns')->findOneBy(array('staff' => $this->getUser()->getId(), "listName" => $this->listName));
         } else {
-            $staffListColumns = $dm->getRepository('IbtikarBackendBundle:StaffListColumns')->findOneBy(array('staff' => $this->getUser()->getId(), "listName" => strtolower($this->calledClassName) . "_" . $this->listViewOptions->getListType()));
+            $staffListColumns = $dm->getRepository('IbtikarGlanceDashboardBundle:StaffListColumns')->findOneBy(array('staff' => $this->getUser()->getId(), "listName" => strtolower($this->calledClassName) . "_" . $this->listViewOptions->getListType()));
         }
         if ($request->getMethod() === 'GET') {
             if ($staffListColumns && $staffListColumns->getColumns()) {
@@ -370,7 +371,7 @@ class BackendController extends Controller {
                 array_push($columnsList, $columnObject);
             }
 
-            return $this->render('IbtikarBackendBundle::changeListColumns.html.twig', array("columnsList" => $columnsList, 'translationDomain' => $this->translationDomain));
+            return $this->render('IbtikarGlanceDashboardBundle::changeListColumns.html.twig', array("columnsList" => $columnsList, 'translationDomain' => $this->translationDomain));
         } else if ($request->getMethod() === 'POST') {
             if (is_array($request->get("columns"))) {
                 $columsString = implode(",", $request->get("columns"));

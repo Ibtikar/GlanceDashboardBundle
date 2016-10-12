@@ -1,6 +1,6 @@
 <?php
 
-namespace Ibtikar\BackendBundle\Service;
+namespace Ibtikar\GlanceDashboardBundle\Service;
 
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 

@@ -34,9 +34,9 @@ class RoleController extends BackendController {
     }
 
     protected function configureListParameters(Request $request) {
-        $this->listViewOptions->setActions(array ("Add","Edit","Delete"));
-        $this->listViewOptions->setBulkActions(array("Delete"));
-        $this->listViewOptions->setTemplate("IbtikarBackendBundle:Role:list.html.twig");
+        $this->listViewOptions->setActions(array ());
+        $this->listViewOptions->setBulkActions(array());
+//        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Role:list.html.twig");
     }
 
 
@@ -59,7 +59,7 @@ class RoleController extends BackendController {
 
         $permissions = $this->customPermissionsArray($this->container->getParameter('permissions'));
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $role = $dm->getRepository('IbtikarBackendBundle:Role')->find($id);
+        $role = $dm->getRepository('IbtikarGlanceDashboardBundle:Role')->find($id);
         if(!$role) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
@@ -74,13 +74,13 @@ class RoleController extends BackendController {
                 $dm->flush();
                 $groupId = array();
                 if ($permissionExist && !in_array('ROLE_CONTACTGROUP_VIEW', array_values($role->getPermissions()))) {
-                    $groups = $dm->getRepository('IbtikarBackendBundle:Group')->findBy(array('roles' => $role->getId()));
+                    $groups = $dm->getRepository('IbtikarGlanceDashboardBundle:Group')->findBy(array('roles' => $role->getId()));
                     foreach ($groups as $group) {
                         $groupId[] = $group->getId();
                     }
 
                     if (!empty($groupId)) {
-                        $staffMembersQuery = $dm->createQueryBuilder('IbtikarBackendBundle:Staff')->field('deleted')->equals(false);
+                        $staffMembersQuery = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Staff')->field('deleted')->equals(false);
                         $staffMembers = $staffMembersQuery->addAnd(
                                         $staffMembersQuery
                                                 ->expr()
