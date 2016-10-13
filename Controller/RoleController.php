@@ -72,6 +72,7 @@ class RoleController extends BackendController {
              $formData = $request->get('form');
             $permissionSelected=array_merge($permissionSelected,$formData['permissions']);
             if ($form->isValid()) {
+                $role->setEditAt( new \DateTime());
                 $dm->flush();
                 $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
                 return $this->redirect($request->getUri());

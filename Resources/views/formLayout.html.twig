@@ -28,10 +28,21 @@
     <script src="{{ asset('bundles/ibtikarglancedashboard/js/backend.js') }}"></script>
 
     <script src="{{ asset('bundles/ibtikarglancedashboard/js/validation.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/uniform.min.js')}}"></script>
+
     <script>
         var availableMessage = '{% trans %}valid{% endtrans %}';
         var unAvailableMessage = '{% trans %}not valid{% endtrans %}';
         var requestId = '{{ app.request.get('id') }}';
+        $(document).ready(function () {
+                $('.dev-form-reset-button').on('click', function () {
+
+                $('input,textarea').each(function () {
+                    unhighlightElement($(this))
+
+                })
+        })
+    })
 
 
     </script>

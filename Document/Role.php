@@ -63,7 +63,13 @@ class Role extends Document {
      */
     private $staffMembersCount = 0;
 
-    public function __toString() {
+    /**
+     * @MongoDB\Date
+     */
+    protected $editAt;
+
+    public function __toString()
+    {
         return "$this->name";
     }
 
@@ -246,4 +252,26 @@ class Role extends Document {
         return $this->staffMembersCount;
     }
 
+
+    /**
+     * Set editAt
+     *
+     * @param date $editAt
+     * @return self
+     */
+    public function setEditAt($editAt)
+    {
+        $this->editAt = $editAt;
+        return $this;
+    }
+
+    /**
+     * Get editAt
+     *
+     * @return date $editAt
+     */
+    public function getEditAt()
+    {
+        return $this->editAt;
+    }
 }
