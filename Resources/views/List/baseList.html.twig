@@ -17,100 +17,100 @@
 {% endblock %}
 
 {% block body %}
-     <div class="content-wrapper">
+    <div class="content-wrapper">
 
 
-            <!-- Basic button -->
-            <div class="content-group">
-                <div class="heading-elemnts">
-                    <div class="heading-btn-group">
-                        <a class="btn btn-link btn-float has-text" href="Role-add.php"><i class="icon-add"></i><span>اضف دور</span></a>
-                        <a class="btn btn-link btn-float has-text activeLink" href="Role-view.php"><i class="icon-table2"></i> <span>مشاهدة الادوار</span></a>
+        <!-- Basic button -->
+        <div class="content-group">
+            <div class="heading-elemnts">
+                <div class="heading-btn-group">
+                    <a class="btn btn-link btn-float has-text" href="Role-add.php"><i class="icon-add"></i><span>اضف دور</span></a>
+                    <a class="btn btn-link btn-float has-text activeLink" href="Role-view.php"><i class="icon-table2"></i> <span>مشاهدة الادوار</span></a>
 
 
 
 
-                    </div>
                 </div>
             </div>
-            <!-- /basic button -->
+        </div>
+        <!-- /basic button -->
 
 
 
-            <!-- Dashboard content -->
-            <div class="row">
-                <div class="col-lg-12">
+        <!-- Dashboard content -->
+        <div class="row">
+            <div class="col-lg-12">
 
 
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <!-- view roles -->
-                            <div class="panel panel-flat">
-                                <div class="panel-heading">
-                                    <h5 class="panel-title">  الادوار </h5>
-                                    <div class="heading-elements">
-                                        <span class="label bg-number heading-text">28 دور</span>
-                                        <span class="label bg-number heading-text">12338 فعال</span>
-                                        <span class="label bg-number heading-text">8973 غير فعال</span>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- view roles -->
+                        <div class="panel panel-flat">
+                            <div class="panel-heading">
+                                <h5 class="panel-title">  الادوار </h5>
+                                <div class="heading-elements">
+                                    <span class="label bg-number heading-text">28 دور</span>
+                                    <span class="label bg-number heading-text">12338 فعال</span>
+                                    <span class="label bg-number heading-text">8973 غير فعال</span>
 
 
-                                        <ul class="icons-list">
-                                            <li><a data-action="collapse"></a></li>
-                                            <li><a data-action="reload"></a></li>
-                                        </ul>
-                                    </div>
+                                    <ul class="icons-list">
+                                        <li><a data-action="collapse"></a></li>
+                                        <li><a data-action="reload"></a></li>
+                                    </ul>
                                 </div>
+                            </div>
 
 
-                                <table class="table table-hover table-striped datatable-column-search-inputs" width="100%">
-                                    <thead>
+                            <table class="table table-hover table-striped datatable-column-search-inputs" width="100%">
+                                <thead>
 
 
 
+                                    <tr>
+                                        <th class="text-center"></th>
+                                        {#            <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>#}
+
+
+                                        {#                                    </th>#}
+                                        {% for field in list.fields %}
+                                            {% if field.isSortable %}
+                                                <th class="">
+                                                    {{ field.title|trans({}, translationDomain) }}
+                                                </th>
+                                            {% endif%}
+                                        {% endfor %}
+
+                                        {#                                    <th  class="text-center">العمليات</th>
+                                        #}                                    </tr>
+
+
+                                </thead>
+                                <tbody>
+                                    {% for object in pagination %}
                                         <tr>
-                                            <th class="text-center">
-                                    <div class="form-group">
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" class="styled" checked="checked">
-                                        </label>
-                                    </div>
+                                            {#    <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
 
 
-                                    </th>
-                                    {% for field in list.fields %}
-                                        {% if field.isSortable %}
-                                            <th class="{{field.class}}">
-                                                {{ knp_pagination_sortable(pagination, field.title|trans({}, translationDomain), field.propertyName) }}
-                                            </th>
-                                        {% endif%}
-                                    {% endfor %}
-
-                                    <th  class="text-center">العمليات</th>
-                                    </tr>
-
-
-                                    </thead>
-                                    <tbody>
-                                           {% for object in pagination %}
-                                        <tr>
-                                            <td class="text-center">
-                                                <div class="form-group">
-                                                    <label class="checkbox-inline">
-                                                        <input type="checkbox" class="styled" checked="checked">
-                                                    </label>
-                                                </div>
-
-
-                                            </td>
+                                                </td>#}
                                             {% for field in list.fields %}
                                                 {% if field.type == "date" %}
-                                                    <td class="{{field.class}}" {% if field.isClickable %} style="cursor:pointer" onclick="window.location='{{field.isClickable|replace({'--id--':object.document.id})}}'" {% endif %}>
+                                                    <td class="{{field.class}}" {% if field.isClickable %} style="cursor:pointer" onclick="window.location = '{{field.isClickable|replace({'--id--':object.document.id})}}'" {% endif %}>
 
                                                         {{ attribute(object, field.propertyName) is empty ? "" : attribute(object, field.propertyName)|date('Y-m-d') }}
                                                     </td>
                                                 {% else %}
-                                                    <td class="{{field.class}} permissionsTooltip" {% if field.isClickable %} style="cursor:pointer" onclick="window.location='{{field.isClickable|replace({'--id--':object.document.id})}}'" {% endif %}>
+                                                    <td class="{{field.class}} permissionsTooltip" {% if field.isClickable %} style="cursor:pointer" onclick="window.location = '{{field.isClickable|replace({'--id--':object.document.id})}}'" {% endif %}>
 
                                                         {# added to fix the sorting for fields with underscore #}
                                                         {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}}
@@ -119,1306 +119,1376 @@
                                                 {% endif %}
 
 
-  {% endfor %}
+                                            {% endfor %}
 
-                                            <td class="text-center" style="white-space: nowrap;">
-                                                <a class="btn btn-defualt" href="Role-add.php" data-popup="tooltip" title="تعديل" data-placement="bottom" ><i class="icon-pencil"></i></a>
+                                            {#                                            <td class="text-center" style="white-space: nowrap;">
+                                                                                            <a class="btn btn-defualt" href="Role-add.php" data-popup="tooltip" title="تعديل" data-placement="bottom" ><i class="icon-pencil"></i></a>
 
-                                                <a tabindex="0" class="btn btn-defualt" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="انت علي وشك حذف comments هل ترغب في حذفه  " data-html="true"
-                                                   data-html="true" data-content="
-                                                   <button type='button' class='btn btn-danger btn-block'>و ايقاف الموظفين الذين لا ينتمون الي مجموعة و دور اخر</button>
-                                                   <button type='button' class='btn btn-danger btn-block'>و حذف الموظفين الذين لا ينتمون الي مجموعة و دور اخر</button>
-                                                   "> <i class="icon-trash"></i></a>
+                                                                                            <a tabindex="0" class="btn btn-defualt" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="انت علي وشك حذف comments هل ترغب في حذفه  " data-html="true"
+                                                                                               data-html="true" data-content="
+                                                                                               <button type='button' class='btn btn-danger btn-block'>و ايقاف الموظفين الذين لا ينتمون الي مجموعة و دور اخر</button>
+                                                                                               <button type='button' class='btn btn-danger btn-block'>و حذف الموظفين الذين لا ينتمون الي مجموعة و دور اخر</button>
+                                                                                               "> <i class="icon-trash"></i></a>
 
-                                                <a tabindex="0" class="btn btn-defualt" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="  هل ترغب في ايقاف الموظف  " data-html="true"
-                                                   data-html="true" data-content="
-                                                   <button type='button' class='btn btn-danger'>نعم</button>
-                                                   <button type='button' class='btn btn-defualt'>الغاء</button>
-                                                   "> <i class="icon-user-block"></i></a>
+                                                                                            <a tabindex="0" class="btn btn-defualt" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="  هل ترغب في ايقاف الموظف  " data-html="true"
+                                                                                               data-html="true" data-content="
+                                                                                               <button type='button' class='btn btn-danger'>نعم</button>
+                                                                                               <button type='button' class='btn btn-defualt'>الغاء</button>
+                                                                                               "> <i class="icon-user-block"></i></a>
 
 
 
-                                            </td>
-
+                                                                                        </td>
+                                            #}
                                         </tr>
 
 
-  {% endfor %}
+                                    {% endfor %}
 
 
 
 
-                                    </tbody>
+                                </tbody>
 
 
-                                </table>
-                            </div>
-                            <!-- /scrollable datatable -->
-
-
-
+                            </table>
                         </div>
+                        <!-- /scrollable datatable -->
+
+
 
                     </div>
 
+                </div>
 
 
-                </div><!-- col-lg-9 tabs -->
 
+            </div><!-- col-lg-9 tabs -->
 
-            </div>
-            <!-- /dashboard content -->
 
         </div>
+        <!-- /dashboard content -->
 
-                {% endblock %}
+    </div>
 
-                    {% block javascripts %}
-                        <!-- Primary modal -->
-                        <div id="modal_theme_primary" class="modal fade">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-primary">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h6 class="modal-title">خانات الجدول
-                                            <span class="badge bg-dark position-right">243</span>
-                                        </h6>
-                                    </div>
+{% endblock %}
 
-                                    <div class="modal-body">
+{% block javascripts %}
+    <!-- Primary modal -->
+    <div id="modal_theme_primary" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h6 class="modal-title">خانات الجدول
+                        <span class="badge bg-dark position-right">243</span>
+                    </h6>
+                </div>
 
-
-                                        <ul class="dropdown-menu dropdown-menu-sortable" style="display: block; position: static; width: 100%; margin-top: 0; float: none;">
-
-                                            <li>
-                                                <div class="media-left media-middle">
-                                                    <i class="icon icon-move dragula-handle"></i>
-                                                </div>
+                <div class="modal-body">
 
 
-                                                <div class="media-body">
-                                                    <div class="media-heading">الاسم</div>
-                                                </div>
+                    <ul class="dropdown-menu dropdown-menu-sortable" style="display: block; position: static; width: 100%; margin-top: 0; float: none;">
 
-
-                                                <div class="media-right media-middle">
-                                                    <div class="checkbox checkbox-switchery switchery-xs">
-                                                        <label>
-                                                            <input type="checkbox" class="switchery switchery-primary" checked="checked">
-
-                                                        </label>
-                                                    </div>
-
-                                                </div>
-                                            </li>
-
-
-                                            <li>
-                                                <div class="media-left media-middle">
-                                                    <i class="icon icon-move dragula-handle"></i>
-                                                </div>
-
-
-                                                <div class="media-body">
-                                                    <div class="media-heading">التاريخ</div>
-                                                </div>
-
-
-                                                <div class="media-right media-middle">
-                                                    <div class="checkbox checkbox-switchery switchery-xs">
-                                                        <label>
-                                                            <input type="checkbox" class="switchery switchery-primary" checked="checked">
-
-                                                        </label>
-                                                    </div>
-
-                                                </div>
-                                            </li>
-
-
-
-                                            <li>
-                                                <div class="media-left media-middle">
-                                                    <i class="icon icon-move dragula-handle"></i>
-                                                </div>
-
-
-                                                <div class="media-body">
-                                                    <div class="media-heading">الصلحيات</div>
-                                                </div>
-
-
-                                                <div class="media-right media-middle">
-                                                    <div class="checkbox checkbox-switchery switchery-xs">
-                                                        <label>
-                                                            <input type="checkbox" class="switchery switchery-primary" checked="checked">
-
-                                                        </label>
-                                                    </div>
-
-                                                </div>
-                                            </li>
-
-
-
-                                            <li>
-                                                <div class="media-left media-middle">
-                                                    <i class="icon icon-move dragula-handle"></i>
-                                                </div>
-
-
-                                                <div class="media-body">
-                                                    <div class="media-heading">الاخبار</div>
-                                                </div>
-
-
-                                                <div class="media-right media-middle">
-                                                    <div class="checkbox checkbox-switchery switchery-xs">
-                                                        <label>
-                                                            <input type="checkbox" class="switchery switchery-primary" checked="checked">
-
-                                                        </label>
-                                                    </div>
-
-                                                </div>
-                                            </li>
-
-
-
-                                            <li>
-                                                <div class="media-left media-middle">
-                                                    <i class="icon icon-move dragula-handle"></i>
-                                                </div>
-
-
-                                                <div class="media-body">
-                                                    <div class="media-heading">الاخبار</div>
-                                                </div>
-
-
-                                                <div class="media-right media-middle">
-                                                    <div class="checkbox checkbox-switchery switchery-xs">
-                                                        <label>
-                                                            <input type="checkbox" class="switchery switchery-primary" checked="checked">
-
-                                                        </label>
-                                                    </div>
-
-                                                </div>
-                                            </li>
-
-
-
-                                            <li>
-                                                <div class="media-left media-middle">
-                                                    <i class="icon icon-move dragula-handle"></i>
-                                                </div>
-
-
-                                                <div class="media-body">
-                                                    <div class="media-heading">الفعاليات</div>
-                                                </div>
-
-
-                                                <div class="media-right media-middle">
-                                                    <div class="checkbox checkbox-switchery switchery-xs">
-                                                        <label>
-                                                            <input type="checkbox" class="switchery switchery-primary" checked="checked">
-
-                                                        </label>
-                                                    </div>
-
-                                                </div>
-                                            </li>
-
-
-
-
-                                        </ul>
-
-
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-link" data-dismiss="modal">الغاء</button>
-                                        <button type="button" class="btn btn-primary">حفظ</button>
-                                    </div>
-                                </div>
+                        <li>
+                            <div class="media-left media-middle">
+                                <i class="icon icon-move dragula-handle"></i>
                             </div>
-                        </div>
-                        <!-- /primary modal -->
 
 
-                        <!-- modal_permissions  -->
-                        <div id="modal_permissions" class="modal fade">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-primary">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h6 class="modal-title"> الصلحيات
-                                            <span class="badge bg-dark position-right">3</span>
-                                        </h6>
-                                    </div>
-
-                                    <div class="modal-body">
-
-                                        <div class="tabbable">
-                                            <ul class="nav nav-tabs nav-tabs-highlight">
-                                                <li class="active"><a href="#badges-tab1" data-toggle="tab"><span class="badge badge-primary position-left">78</span> الاول</a></li>
-                                                <li><a href="#badges-tab2" data-toggle="tab"> <span class="badge badge-primary position-left">23</span> الثاني</a></li>
-                                            </ul>
-
-                                            <div class="tab-content">
-                                                <div class="tab-pane active" id="badges-tab1">
-
-
-                                                    <div class="table-responsive">
-                                                        <table class="table text-nowrap" style="border:1px solid #ddd">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th class="text-center" style="width: 20px;"><i class="icon-arrow-down12"></i></th>
-                                                                    <th style="width: 200px;">الاسم</th>
-                                                                    <th style="width:50px" class="text-center">تعديل</th>
-                                                                    <th style="width:50px" class="text-center">إضافة</th>
-                                                                    <th style="width:50px" class="text-center">تعديل</th>
-                                                                    <th style="width:50px" class="text-center">إضافة</th>
-                                                                    <th style="width:50px" class="text-center">تعديل</th>
-                                                                    <th style="width:50px" class="text-center">إضافة</th>
-
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-
-
-
-                                                                <tr class="active border-double">
-                                                                    <td class="text-center">
-
-
-                                                                        <ul class="icons-list">
-                                                                            <li class="dropdown">
-                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-                                                                                <ul class="dropdown-menu dropdown-menu-left">
-                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
-                                                                                    <li class="divider"></li>
-                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
-                                                                                </ul>
-                                                                            </li>
-                                                                        </ul>
-
-                                                                    </td>
-
-                                                                    <td colspan="7">
-
-                                                                        <span class="pull-left"> module 1</span>
-
-                                                                        <span class="badge bg-primary pull-right">2</span>
-                                                                    </td>
-
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td class="text-center">
-                                                                        <ul class="icons-list">
-                                                                            <li class="dropdown">
-                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-                                                                                <ul class="dropdown-menu dropdown-menu-left">
-                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
-                                                                                    <li class="divider"></li>
-                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
-                                                                                </ul>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </td>
-                                                                    <td>
-
-                                                                        <div class="media-body">
-                                                                            <a href="#" class="display-inline-block text-default letter-icon-title"> محرر </a>
-                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
-                                                                                ملخص للوظيفة
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td class="text-center">
-                                                                        <ul class="icons-list">
-                                                                            <li class="dropdown">
-                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-                                                                                <ul class="dropdown-menu dropdown-menu-left">
-                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
-                                                                                    <li class="divider"></li>
-                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
-                                                                                </ul>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </td>
-                                                                    <td>
-
-                                                                        <div class="media-body">
-                                                                            <a href="#" class="display-inline-block text-default letter-icon-title"> كاتب </a>
-                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
-                                                                                ملخص عن الوظيفة
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td class="text-center">
-                                                                        <ul class="icons-list">
-                                                                            <li class="dropdown">
-                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-                                                                                <ul class="dropdown-menu dropdown-menu-left">
-                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
-                                                                                    <li class="divider"></li>
-                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
-                                                                                </ul>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </td>
-                                                                    <td>
-
-                                                                        <div class="media-body">
-                                                                            <a href="#" class="display-inline-block text-default">مشرف</a>
-                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
-                                                                                ملخص
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-
-                                                                </tr>
-
-                                                                <tr class="active border-double">
-                                                                    <td class="text-center">
-
-
-                                                                        <ul class="icons-list">
-                                                                            <li class="dropup">
-                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-                                                                                <ul class="dropdown-menu dropdown-menu-left">
-                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
-                                                                                    <li class="divider"></li>
-                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
-                                                                                </ul>
-                                                                            </li>
-                                                                        </ul>
-
-                                                                    </td>
-
-                                                                    <td colspan="7">
-
-                                                                        <span class="pull-left"> module 2</span>
-
-                                                                        <span class="badge bg-primary pull-right">2</span>
-                                                                    </td>
-
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td class="text-center">
-                                                                        <ul class="icons-list">
-                                                                            <li class="dropup">
-                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-                                                                                <ul class="dropdown-menu dropdown-menu-left">
-                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
-                                                                                    <li class="divider"></li>
-                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
-                                                                                </ul>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </td>
-
-                                                                    <td>
-
-                                                                        <div class="media-body">
-                                                                            <a href="#" class="display-inline-block text-default">مصور</a>
-                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
-                                                                                ملخص
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                </tr>
-
-
-                                                            </tbody>
-                                                        </table>
-                                                    </div><!-- table-responeive -->
-
-                                                </div><!-- tab 1 -->
-
-                                                <div class="tab-pane" id="badges-tab2">
-
-                                                    <div class="table-responsive">
-                                                        <table class="table text-nowrap" style="border:1px solid #ddd">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th class="text-center" style="width: 20px;"><i class="icon-arrow-down12"></i></th>
-                                                                    <th style="width: 200px;">الاسم</th>
-                                                                    <th style="width:50px" class="text-center">تعديل</th>
-                                                                    <th style="width:50px" class="text-center">إضافة</th>
-                                                                    <th style="width:50px" class="text-center">تعديل</th>
-                                                                    <th style="width:50px" class="text-center">إضافة</th>
-                                                                    <th style="width:50px" class="text-center">تعديل</th>
-                                                                    <th style="width:50px" class="text-center">إضافة</th>
-
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-
-                                                                <tr class="active border-double">
-                                                                    <td class="text-center">
-
-
-                                                                        <ul class="icons-list">
-                                                                            <li class="dropdown">
-                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-                                                                                <ul class="dropdown-menu dropdown-menu-left">
-                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
-                                                                                    <li class="divider"></li>
-                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
-                                                                                </ul>
-                                                                            </li>
-                                                                        </ul>
-
-                                                                    </td>
-
-                                                                    <td colspan="7">
-
-                                                                        <span class="pull-left"> module 1</span>
-
-                                                                        <span class="badge bg-primary pull-right">2</span>
-                                                                    </td>
-
-                                                                </tr>
-                                                                <tr>
-                                                                    <td class="text-center">
-                                                                        <ul class="icons-list">
-                                                                            <li class="dropdown">
-                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-                                                                                <ul class="dropdown-menu dropdown-menu-left">
-                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
-                                                                                    <li class="divider"></li>
-                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
-                                                                                </ul>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </td>
-                                                                    <td>
-
-                                                                        <div class="media-body">
-                                                                            <a href="#" class="display-inline-block text-default letter-icon-title"> محرر </a>
-                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
-                                                                                ملخص للوظيفة
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                </tr>
-
-
-                                                                <tr>
-                                                                    <td class="text-center">
-                                                                        <ul class="icons-list">
-                                                                            <li class="dropdown">
-                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-                                                                                <ul class="dropdown-menu dropdown-menu-left">
-                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
-                                                                                    <li class="divider"></li>
-                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
-                                                                                </ul>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </td>
-                                                                    <td>
-
-                                                                        <div class="media-body">
-                                                                            <a href="#" class="display-inline-block text-default letter-icon-title"> محرر </a>
-                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
-                                                                                ملخص للوظيفة
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                </tr>
-
-
-                                                                <tr>
-                                                                    <td class="text-center">
-                                                                        <ul class="icons-list">
-                                                                            <li class="dropdown">
-                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-                                                                                <ul class="dropdown-menu dropdown-menu-left">
-                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
-                                                                                    <li class="divider"></li>
-                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
-                                                                                </ul>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </td>
-                                                                    <td>
-
-                                                                        <div class="media-body">
-                                                                            <a href="#" class="display-inline-block text-default letter-icon-title"> كاتب </a>
-                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
-                                                                                ملخص عن الوظيفة
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td class="text-center">
-                                                                        <ul class="icons-list">
-                                                                            <li class="dropdown">
-                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-                                                                                <ul class="dropdown-menu dropdown-menu-left">
-                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
-                                                                                    <li class="divider"></li>
-                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
-                                                                                </ul>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </td>
-                                                                    <td>
-
-                                                                        <div class="media-body">
-                                                                            <a href="#" class="display-inline-block text-default">مشرف</a>
-                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
-                                                                                ملخص
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-
-                                                                </tr>
-
-                                                                <tr class="active border-double">
-                                                                    <td class="text-center">
-
-
-                                                                        <ul class="icons-list">
-                                                                            <li class="dropup">
-                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-                                                                                <ul class="dropdown-menu dropdown-menu-left">
-                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
-                                                                                    <li class="divider"></li>
-                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
-                                                                                </ul>
-                                                                            </li>
-                                                                        </ul>
-
-                                                                    </td>
-
-                                                                    <td colspan="7">
-
-                                                                        <span class="pull-left"> module 2</span>
-
-                                                                        <span class="badge bg-primary pull-right">2</span>
-                                                                    </td>
-
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td class="text-center">
-                                                                        <ul class="icons-list">
-                                                                            <li class="dropdown">
-                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-                                                                                <ul class="dropdown-menu dropdown-menu-left">
-                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
-                                                                                    <li class="divider"></li>
-                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
-                                                                                </ul>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </td>
-                                                                    <td>
-
-                                                                        <div class="media-body">
-                                                                            <a href="#" class="display-inline-block text-default letter-icon-title"> محرر </a>
-                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
-                                                                                ملخص للوظيفة
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-
-                                                                </tr>
-
-
-                                                                <tr>
-                                                                    <td class="text-center">
-                                                                        <ul class="icons-list">
-                                                                            <li class="dropup">
-                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-                                                                                <ul class="dropdown-menu dropdown-menu-left">
-                                                                                    <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
-                                                                                    <li class="divider"></li>
-                                                                                    <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
-                                                                                </ul>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </td>
-
-                                                                    <td>
-
-                                                                        <div class="media-body">
-                                                                            <a href="#" class="display-inline-block text-default">مصور</a>
-                                                                            <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
-                                                                                ملخص
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="checked">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <div class="form-group">
-                                                                            <label class="checkbox-inline">
-                                                                                <input type="checkbox" class="styled" checked="">
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    </td>
-                                                                </tr>
-
-
-                                                            </tbody>
-                                                        </table>
-                                                    </div><!-- table-responeive -->
-
-                                                </div><!-- tab 2 -->
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-link" data-dismiss="modal">الغاء</button>
-                                        <button type="button" class="btn btn-primary">حفظ</button>
-                                    </div>
-                                </div>
+                            <div class="media-body">
+                                <div class="media-heading">الاسم</div>
                             </div>
+
+
+                            <div class="media-right media-middle">
+                                <div class="checkbox checkbox-switchery switchery-xs">
+                                    <label>
+                                        <input type="checkbox" class="switchery switchery-primary" checked="checked">
+
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+
+
+                        <li>
+                            <div class="media-left media-middle">
+                                <i class="icon icon-move dragula-handle"></i>
+                            </div>
+
+
+                            <div class="media-body">
+                                <div class="media-heading">التاريخ</div>
+                            </div>
+
+
+                            <div class="media-right media-middle">
+                                <div class="checkbox checkbox-switchery switchery-xs">
+                                    <label>
+                                        <input type="checkbox" class="switchery switchery-primary" checked="checked">
+
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+
+
+
+                        <li>
+                            <div class="media-left media-middle">
+                                <i class="icon icon-move dragula-handle"></i>
+                            </div>
+
+
+                            <div class="media-body">
+                                <div class="media-heading">الصلحيات</div>
+                            </div>
+
+
+                            <div class="media-right media-middle">
+                                <div class="checkbox checkbox-switchery switchery-xs">
+                                    <label>
+                                        <input type="checkbox" class="switchery switchery-primary" checked="checked">
+
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+
+
+
+                        <li>
+                            <div class="media-left media-middle">
+                                <i class="icon icon-move dragula-handle"></i>
+                            </div>
+
+
+                            <div class="media-body">
+                                <div class="media-heading">الاخبار</div>
+                            </div>
+
+
+                            <div class="media-right media-middle">
+                                <div class="checkbox checkbox-switchery switchery-xs">
+                                    <label>
+                                        <input type="checkbox" class="switchery switchery-primary" checked="checked">
+
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+
+
+
+                        <li>
+                            <div class="media-left media-middle">
+                                <i class="icon icon-move dragula-handle"></i>
+                            </div>
+
+
+                            <div class="media-body">
+                                <div class="media-heading">الاخبار</div>
+                            </div>
+
+
+                            <div class="media-right media-middle">
+                                <div class="checkbox checkbox-switchery switchery-xs">
+                                    <label>
+                                        <input type="checkbox" class="switchery switchery-primary" checked="checked">
+
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+
+
+
+                        <li>
+                            <div class="media-left media-middle">
+                                <i class="icon icon-move dragula-handle"></i>
+                            </div>
+
+
+                            <div class="media-body">
+                                <div class="media-heading">الفعاليات</div>
+                            </div>
+
+
+                            <div class="media-right media-middle">
+                                <div class="checkbox checkbox-switchery switchery-xs">
+                                    <label>
+                                        <input type="checkbox" class="switchery switchery-primary" checked="checked">
+
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+
+
+
+
+                    </ul>
+
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">الغاء</button>
+                    <button type="button" class="btn btn-primary">حفظ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /primary modal -->
+
+
+    <!-- modal_permissions  -->
+    <div id="modal_permissions" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h6 class="modal-title"> الصلحيات
+                        <span class="badge bg-dark position-right">3</span>
+                    </h6>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs nav-tabs-highlight">
+                            <li class="active"><a href="#badges-tab1" data-toggle="tab"><span class="badge badge-primary position-left">78</span> الاول</a></li>
+                            <li><a href="#badges-tab2" data-toggle="tab"> <span class="badge badge-primary position-left">23</span> الثاني</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="badges-tab1">
+
+
+                                <div class="table-responsive">
+                                    <table class="table text-nowrap" style="border:1px solid #ddd">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" style="width: 20px;"><i class="icon-arrow-down12"></i></th>
+                                                <th style="width: 200px;">الاسم</th>
+                                                <th style="width:50px" class="text-center">تعديل</th>
+                                                <th style="width:50px" class="text-center">إضافة</th>
+                                                <th style="width:50px" class="text-center">تعديل</th>
+                                                <th style="width:50px" class="text-center">إضافة</th>
+                                                <th style="width:50px" class="text-center">تعديل</th>
+                                                <th style="width:50px" class="text-center">إضافة</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+
+
+                                            <tr class="active border-double">
+                                                <td class="text-center">
+
+
+                                                    <ul class="icons-list">
+                                                        <li class="dropdown">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                                <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+
+                                                </td>
+
+                                                <td colspan="7">
+
+                                                    <span class="pull-left"> module 1</span>
+
+                                                    <span class="badge bg-primary pull-right">2</span>
+                                                </td>
+
+                                            </tr>
+
+                                            <tr>
+                                                <td class="text-center">
+                                                    <ul class="icons-list">
+                                                        <li class="dropdown">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                                <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                                <td>
+
+                                                    <div class="media-body">
+                                                        <a href="#" class="display-inline-block text-default letter-icon-title"> محرر </a>
+                                                        <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                            ملخص للوظيفة
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                            </tr>
+
+                                            <tr>
+                                                <td class="text-center">
+                                                    <ul class="icons-list">
+                                                        <li class="dropdown">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                                <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                                <td>
+
+                                                    <div class="media-body">
+                                                        <a href="#" class="display-inline-block text-default letter-icon-title"> كاتب </a>
+                                                        <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                            ملخص عن الوظيفة
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="text-center">
+                                                    <ul class="icons-list">
+                                                        <li class="dropdown">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                                <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                                <td>
+
+                                                    <div class="media-body">
+                                                        <a href="#" class="display-inline-block text-default">مشرف</a>
+                                                        <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                            ملخص
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+
+                                            </tr>
+
+                                            <tr class="active border-double">
+                                                <td class="text-center">
+
+
+                                                    <ul class="icons-list">
+                                                        <li class="dropup">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                                <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+
+                                                </td>
+
+                                                <td colspan="7">
+
+                                                    <span class="pull-left"> module 2</span>
+
+                                                    <span class="badge bg-primary pull-right">2</span>
+                                                </td>
+
+                                            </tr>
+
+                                            <tr>
+                                                <td class="text-center">
+                                                    <ul class="icons-list">
+                                                        <li class="dropup">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                                <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+
+                                                <td>
+
+                                                    <div class="media-body">
+                                                        <a href="#" class="display-inline-block text-default">مصور</a>
+                                                        <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                            ملخص
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                            </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div><!-- table-responeive -->
+
+                            </div><!-- tab 1 -->
+
+                            <div class="tab-pane" id="badges-tab2">
+
+                                <div class="table-responsive">
+                                    <table class="table text-nowrap" style="border:1px solid #ddd">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" style="width: 20px;"><i class="icon-arrow-down12"></i></th>
+                                                <th style="width: 200px;">الاسم</th>
+                                                <th style="width:50px" class="text-center">تعديل</th>
+                                                <th style="width:50px" class="text-center">إضافة</th>
+                                                <th style="width:50px" class="text-center">تعديل</th>
+                                                <th style="width:50px" class="text-center">إضافة</th>
+                                                <th style="width:50px" class="text-center">تعديل</th>
+                                                <th style="width:50px" class="text-center">إضافة</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr class="active border-double">
+                                                <td class="text-center">
+
+
+                                                    <ul class="icons-list">
+                                                        <li class="dropdown">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                                <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+
+                                                </td>
+
+                                                <td colspan="7">
+
+                                                    <span class="pull-left"> module 1</span>
+
+                                                    <span class="badge bg-primary pull-right">2</span>
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center">
+                                                    <ul class="icons-list">
+                                                        <li class="dropdown">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                                <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                                <td>
+
+                                                    <div class="media-body">
+                                                        <a href="#" class="display-inline-block text-default letter-icon-title"> محرر </a>
+                                                        <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                            ملخص للوظيفة
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                            </tr>
+
+
+                                            <tr>
+                                                <td class="text-center">
+                                                    <ul class="icons-list">
+                                                        <li class="dropdown">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                                <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                                <td>
+
+                                                    <div class="media-body">
+                                                        <a href="#" class="display-inline-block text-default letter-icon-title"> محرر </a>
+                                                        <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                            ملخص للوظيفة
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                            </tr>
+
+
+                                            <tr>
+                                                <td class="text-center">
+                                                    <ul class="icons-list">
+                                                        <li class="dropdown">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                                <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                                <td>
+
+                                                    <div class="media-body">
+                                                        <a href="#" class="display-inline-block text-default letter-icon-title"> كاتب </a>
+                                                        <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                            ملخص عن الوظيفة
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="text-center">
+                                                    <ul class="icons-list">
+                                                        <li class="dropdown">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                                <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                                <td>
+
+                                                    <div class="media-body">
+                                                        <a href="#" class="display-inline-block text-default">مشرف</a>
+                                                        <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                            ملخص
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+
+                                            </tr>
+
+                                            <tr class="active border-double">
+                                                <td class="text-center">
+
+
+                                                    <ul class="icons-list">
+                                                        <li class="dropup">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                                <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+
+                                                </td>
+
+                                                <td colspan="7">
+
+                                                    <span class="pull-left"> module 2</span>
+
+                                                    <span class="badge bg-primary pull-right">2</span>
+                                                </td>
+
+                                            </tr>
+
+                                            <tr>
+                                                <td class="text-center">
+                                                    <ul class="icons-list">
+                                                        <li class="dropdown">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                                <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                                <td>
+
+                                                    <div class="media-body">
+                                                        <a href="#" class="display-inline-block text-default letter-icon-title"> محرر </a>
+                                                        <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                            ملخص للوظيفة
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+
+                                            </tr>
+
+
+                                            <tr>
+                                                <td class="text-center">
+                                                    <ul class="icons-list">
+                                                        <li class="dropup">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+                                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                                <li><a href="#"><i class="icon-checkmark4 text-green"></i> تحديد الكل</a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a href="#"><i class="icon-cross2 text-danger"></i> الغاء التحديد</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+
+                                                <td>
+
+                                                    <div class="media-body">
+                                                        <a href="#" class="display-inline-block text-default">مصور</a>
+                                                        <div class="text-muted text-size-small"><span class="status-mark border-success position-left"></span>
+                                                            ملخص
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="checked">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled" checked="">
+                                                        </label>
+                                                    </div>
+
+
+                                                </td>
+                                            </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div><!-- table-responeive -->
+
+                            </div><!-- tab 2 -->
                         </div>
-                        <!-- /modal_permissions  -->
-                        {{ parent() }}
-                        <script src="{{ asset('bundles/ibtikarbackend/js/ajaxifyList.js') }}"></script>
-                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/app.js') }}"></script>
-                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/loaders/blockui.min.js')}}"></script>
-                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/nicescroll.min.js')}}"></script>
-                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/drilldown.js')}}"></script>
-                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/layout_sidebar_sticky_custom.js')}}"></script>
-                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/uniform.min.js')}}"></script>
-                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
-                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">الغاء</button>
+                    <button type="button" class="btn btn-primary">حفظ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /modal_permissions  -->
+    {{ parent() }}
+    <script src="{{ asset('bundles/ibtikarbackend/js/ajaxifyList.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/app.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/loaders/blockui.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/nicescroll.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/drilldown.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/layout_sidebar_sticky_custom.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/uniform.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
 
 
-                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
-                        <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/jquery.easing.min.js')}}"></script>
-                        <!-- datatable files -->
-                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/tables/datatables/datatables.min.js')}}"></script>
-                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/selects/select2.min.js')}}"></script>
-                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/datatables_api.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/jquery.easing.min.js')}}"></script>
+    <!-- datatable files -->
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/tables/datatables/datatables.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/selects/select2.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/datatables_api.js')}}"></script>
 
-                        <!-- modals files -->
-                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_modals.js')}}"></script>
-
-
-                        <!-- Drag and drop files -->
-                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/dragula.min.js')}}"></script>
-                        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/extension_dnd.js')}}"></script>
-
-                        <script>
-                            var toggleButtonColor = '#D6494C';
-
-                            var buttons = document.querySelectorAll('.switchery-primary');
-                            for (var i = 0, buttonsLength = buttons.length; i < buttonsLength; i++) {
-                                new Switchery(buttons[i], {color: toggleButtonColor});
-                            }
-
-                            // Select2 selects
-                            $('.Roleselect').select2({
-                                width: 100
-                            });
+    <!-- modals files -->
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_modals.js')}}"></script>
 
 
+    <!-- Drag and drop files -->
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/dragula.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/extension_dnd.js')}}"></script>
 
-                            $(function () {
+    <script>
+                                                        var toggleButtonColor = '#D6494C';
+                                                        {#                                var table = $('.datatable-column-search-inputs').DataTable({iDisplayLength:2});
+        #}                                var ajaxData = '{{path("get_json_data")}}';
 
-                                // Select2 selects
-                                $('.select').select2();
-                            });
+                                                        var table = $('.datatable-column-search-inputs').DataTable({
 
-                            // advanced saerch
-                            $('#advanced-search-Btn').on('click', function () {
-                                if ($(".advanced-search").hasClass("searchhidden")) {
-                                    $(".advanced-search").slideDown();
-                                    $(".advanced-search").removeClass('searchhidden');
-                                } else {
-                                    $(".advanced-search").slideUp();
-                                    $(".advanced-search").addClass('searchhidden');
-                                    $(".advanced-search-more").slideUp();
-                                }
+                                                            "serverSide": true,
+                                                            "iDisplayLength": 2,
+                                                                "destroy":true,
+                                                            'sAjaxSource': ajaxData,
+                                                            "lengthMenu": [10, 20, 50],
+                                                             "initComplete": function(settings, json) {
+  },
 
-                            });
-
-
-                            // advanced-search-more
-                            $('#advanced-search-more').on('click', function () {
-                                if ($(".advanced-search-more").hasClass("searchhidden")) {
-                                    $(".advanced-search-more").slideDown();
-                                    $(".advanced-search-more").removeClass('searchhidden');
-                                } else {
-                                    $(".advanced-search-more").slideUp();
-                                    $(".advanced-search-more").addClass('searchhidden');
-                                    $(".advanced-search-more").slideUp();
-                                }
-                            });
-
-                        </script>
+                                                            'fnServerData': function (sSource, aoData, fnCallback)
+                                                            {
 
 
-                    {% endblock %}
+                                                                aoData.push({"name": "from_date", "value": $("#from").val()},
+                                                                {"name": "to_date", "value": $("#to").val()});
+                                                                $.ajax
+                                                                        ({
+                                                                            'dataType': 'json',
+                                                                            'type': 'POST',
+                                                                            'url': sSource,
+                                                                            'data': aoData,
+                                                                            'success': function(json){
+                                                                                fnCallback(json)
+                                                                                setTimeout(function(){
+                                                                                      $('input').uniform();
+
+                                                                                },200)
+                                                                            }
+                                                                        });
+
+
+                                                            },
+                                                            columns: [
+                                                                {data: 'id', orderable: false ,
+                                                                    render: function (data, type, row) {
+                                                                        return '<input type="checkbox" id='+data+'>'
+                                                                    }
+                                                                },
+                                                                {data: 'name', orderable: true, bSort: true
+                                                                    ,
+                                                                    render: function (data, type, row) {
+                                                                        return '<span class="mycus-class2">' + data + '</span>'
+                                                                    }
+                                                                },
+                                                                {data: 'permissionscount', orderable: false},
+                                                                {data: 'createdAt', orderable: true},
+                                                            ],
+                                                            dom: '<"datatable-scroll"t><"datatable-footer"lip>',
+                                                            language: {
+                                                                search: '<span>بحث:</span> _INPUT_',
+                                                                lengthMenu: '_MENU_',
+                                                                sLengthMenu: "اظهر _MENU_ ",
+                                                                sInfo: " _START_ - _END_ من _TOTAL_ ",
+                                                                sZeroRecords: "لا يوجد ما تبحث عنه",
+                                                                sInfoEmpty: " 0 - 0 من 0 ",
+                                                                paginate: {'first': 'الاول', 'last': 'الاخير', 'next': '&larr;', 'previous': '&rarr;'}
+                                                            },
+                                                            drawCallback: function () {
+                                                                $(this).find('tbody tr').slice(-3).find('.dropdown, .btn-group').addClass('dropup');
+                                                            },
+                                                            preDrawCallback: function () {
+                                                                $(this).find('tbody tr').slice(-3).find('.dropdown, .btn-group').removeClass('dropup');
+                                                            }
+        {#            "order": [[0, 'desc']],#}
+            })
+
+
+            var buttons = document.querySelectorAll('.switchery-primary');
+            for (var i = 0, buttonsLength = buttons.length; i < buttonsLength; i++) {
+                new Switchery(buttons[i], {color: toggleButtonColor});
+            }
+
+            // Select2 selects
+            $('.Roleselect').select2({
+                width: 100
+            });
+
+
+
+            $(function () {
+
+                // Select2 selects
+                $('.select').select2();
+            });
+
+            // advanced saerch
+            $('#advanced-search-Btn').on('click', function () {
+                if ($(".advanced-search").hasClass("searchhidden")) {
+                    $(".advanced-search").slideDown();
+                    $(".advanced-search").removeClass('searchhidden');
+                } else {
+                    $(".advanced-search").slideUp();
+                    $(".advanced-search").addClass('searchhidden');
+                    $(".advanced-search-more").slideUp();
+                }
+
+            });
+
+
+            // advanced-search-more
+            $('#advanced-search-more').on('click', function () {
+                if ($(".advanced-search-more").hasClass("searchhidden")) {
+                    $(".advanced-search-more").slideDown();
+                    $(".advanced-search-more").removeClass('searchhidden');
+                } else {
+                    $(".advanced-search-more").slideUp();
+                    $(".advanced-search-more").addClass('searchhidden');
+                    $(".advanced-search-more").slideUp();
+                }
+            });
+
+    </script>
+
+
+{% endblock %}

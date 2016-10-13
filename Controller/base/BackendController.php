@@ -454,4 +454,36 @@ class BackendController extends Controller {
         }
     }
 
+    public function getJsonAction(Request $request)
+    {
+
+        $iColumns = $request->request->get('iColumns') ? $request->request->get('iColumns') : 3; //change later with no of column from db
+        $sortColumnIndex = $request->request->get('iSortCol_0') || $request->request->get('iSortCol_0') == 0 ? $request->request->get('iSortCol_0') : 3; // 3 change with default
+
+        $start = $request->request->get('iDisplayStart') ? $request->request->get('iDisplayStart') : 0;
+        $limit = $request->request->get('iDisplayLength') ? $request->request->get('iDisplayLength') : 2;
+        $sEcho = $request->request->get('sEcho') ? $request->request->get('sEcho') : 0;
+        $columnSort = $request->request->get("mDataProp_$sortColumnIndex") ? $request->request->get("mDataProp_$sortColumnIndex") : 'createdAt';
+        $columnDir = $request->request->get('sSortDir_0') ? $request->request->get('sSortDir_0') : 'desc';
+
+        $roleCount = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder('IbtikarGlanceDashboardBundle:Role')
+                ->getQuery()->count();
+        $roles = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder('IbtikarGlanceDashboardBundle:Role');
+        if ($columnSort && $columnDir) {
+            $roles = $roles->sort($columnSort, $columnDir);
+        }
+        $roles = $roles->skip($start)->limit($limit)->getQuery()->execute();
+        $rolesObjects = array();
+        foreach ($roles as $role) {
+            $oneRole = array();
+            $oneRole['id'] = $role->getId();
+            $oneRole['name'] = $role->getName();
+            $oneRole['permissionscount'] = $role->getPermissionscount();
+            $oneRole['createdAt'] = $role->getCreatedAt() ? $role->getCreatedAt()->format('y-m-d') : NULL;
+            $rolesObjects[] = $oneRole;
+        }
+        return new JsonResponse(array('data' => $rolesObjects, "draw" => 1, 'sEcho' => $sEcho,
+            "recordsTotal" => $roleCount,
+            "recordsFiltered" => $roleCount));
+    }
 }
