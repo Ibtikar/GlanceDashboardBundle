@@ -29,7 +29,7 @@ class StaffListColumns extends Document {
     private $columns;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\Staff", simple=true)
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\Staff")
      */
     protected $staff;
 
@@ -95,4 +95,26 @@ class StaffListColumns extends Document {
     }
 
 
+
+    /**
+     * Set staff
+     *
+     * @param Ibtikar\GlanceUMSBundle\Document\Staff $staff
+     * @return self
+     */
+    public function setStaff(\Ibtikar\GlanceUMSBundle\Document\Staff $staff)
+    {
+        $this->staff = $staff;
+        return $this;
+    }
+
+    /**
+     * Get staff
+     *
+     * @return Ibtikar\GlanceUMSBundle\Document\Staff $staff
+     */
+    public function getStaff()
+    {
+        return $this->staff;
+    }
 }
