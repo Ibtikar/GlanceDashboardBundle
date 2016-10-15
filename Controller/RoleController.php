@@ -24,12 +24,14 @@ class RoleController extends BackendController {
         $this->allListColumns = array(
             "name" => array("tooltip"=>"PermissionsDisplayText"),
             "permissionscount" => array(),
-            "createdAt" => array("type"=>"date")
+            "createdAt" => array("type"=>"date"),
+            "updatedAt" => array("type"=>"date")
         );
         $this->defaultListColumns = array(
             "name",
             "permissionscount",
-            "createdAt"
+            "createdAt",
+            'updatedAt'
         );
     }
 
@@ -200,5 +202,60 @@ class RoleController extends BackendController {
             return $this->trans(str_replace('%s', implode(',', $groupNames), $this->trans("can't delete this role because groups %s contain only this role")));
         }
     }
+
+   public function getListJsonData($request)
+    {
+        $page=($request->get('page')) ?$request->get('page'):1;
+        $columnSort=$request->get('sort')?$request->get('sort'):'createdAt';
+        $columnDir=$request->get('columnDir')?$request->get('columnDir'):'desc';
+        $limit=$request->get('limit')?$request->get('limit'):2;
+
+        $sEcho = $request->request->get('sEcho') ? $request->request->get('sEcho') : 0;
+        $roleCount = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder('IbtikarGlanceDashboardBundle:Role')
+                ->getQuery()->count();
+        $roles = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder('IbtikarGlanceDashboardBundle:Role');
+        if ($columnSort && $columnDir) {
+            $roles = $roles->sort($columnSort, $columnDir);
+        }
+        $roles = $roles->skip(($page-1)*$limit)->limit($limit)->getQuery()->execute();
+        $rolesObjects = array();
+
+
+
+        if ($this->listName) {
+            $listName = $this->listName;
+        } else {
+            $listName = 'ibtikar_glance_dashboard_role_list';
+        }
+
+        $selectedColumns = $this->getCurrentColumns($listName);
+
+
+
+
+        foreach ($roles as $role) {
+            $oneRole = array();
+            $oneRole['id'] = '<div class="form-group">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" class="styled" data-id=' . $role->getId() . '>
+                                    </label>
+                              </div>';
+          foreach ($selectedColumns as  $value) {
+
+
+            $getfunction = "get" . ucfirst($value);
+                if ($value == 'createdAt') {
+                    $oneRole[$value] = $role->$getfunction()?$role->$getfunction()->format('Y-m-d'):null;
+                } else {
+                    $oneRole[$value] = $role->$getfunction();
+                }
+            }
+            $rolesObjects[] = $oneRole;
+        }
+        return new JsonResponse(array('data' => $rolesObjects, "draw" => (int)$sEcho, 'sEcho' => (int)$sEcho,
+            "recordsTotal" => $roleCount,
+            "recordsFiltered" => $roleCount));
+    }
+
 
 }

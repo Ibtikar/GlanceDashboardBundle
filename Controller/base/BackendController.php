@@ -49,7 +49,7 @@ class BackendController extends Controller {
     public function listAction(Request $request) {
       if( $request->isXmlHttpRequest()){
 
-         return $this->getJsonAction($request);
+         return $this->getListJsonData($request);
         }
         $this->listViewOptions = $this->get("list_view");
         $this->listViewOptions->setListType("list");
@@ -164,14 +164,11 @@ class BackendController extends Controller {
             $prepareColumns[]=$column;
 
             }
-//            var_dump($value);
-//            exit;
-//          var_dump($prepareColumns );
-//        exit;
-
         $renderningParams = array(
             'sublistName' => $sublistName,
-            'pageNumber' => $pagination->count(),
+            'total' => $pagination->count(),
+            'limit' => $limit,
+            'skip'=> ($pageNumber-1)*$limit,
             'pagination' => $pagination,
             'translationDomain' => $this->translationDomain,
             'listName' => $this->calledClassName,
@@ -195,26 +192,6 @@ class BackendController extends Controller {
         $this->listViewOptions->setListQueryBuilder($this->createQueryBuilder());
         $this->listViewOptions->setDefaultSortBy("createdAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
-//        if ($this->listStatus != '') {
-//            $breadcrumbs = array(
-//                "backend-home" => $this->generateUrl('backend_home'),
-//                "List " . $this->calledClassName => $this->generateUrl(strtolower($this->calledClassName) . '_' . $this->listStatus)
-//            );
-//        } else {
-//            if ($this->dashboardRoom != '') {
-//                $breadcrumbs = array(
-//                    "backend-home" => $this->generateUrl('backend_home'),
-//                    "List " . $this->calledClassName => $this->generateUrl(strtolower($this->calledClassName) . '_list', array('dashboardRoom' => $this->dashboardRoom))
-//                );
-//            } else {
-//                $breadcrumbs = array(
-//                    "backend-home" => $this->generateUrl('backend_home'),
-//                    "List " . $this->calledClassName => $this->generateUrl(strtolower($this->calledClassName) . '_list')
-//                );
-//            }
-//        }
-        $breadcrumbs=array();
-        $this->listViewOptions->setBreadcrumbs($breadcrumbs);
     }
 
     protected function createQueryBuilder($documentBundle = "IbtikarGlanceDashboardBundle") {
@@ -338,17 +315,9 @@ class BackendController extends Controller {
                 $selectedColumns = $this->defaultListColumns;
             }
 
-            if (isset($this->roomName) && $this->roomType != "Comments" && $this->roomType != "Messages" && $this->roomType != "Events" && ($this->roomName === 'published' || $this->roomName === 'archive' || !$this->get('system_settings')->getSettingsValue('room-timer-' . $this->roomName . '-enabled'))) {
-                $selectedColumns = array_diff($selectedColumns, array('remainingTime'));
-            }
-
-
             $columnsList = array();
 
             foreach ($this->allListColumns as $index => $column) {
-                if (isset($this->roomName) && $this->roomType != "Comments" && $this->roomType != "Messages" && $this->roomType != "Events" && ($this->roomName === 'published' || $this->roomName === 'archive' || !$this->get('system_settings')->getSettingsValue('room-timer-' . $this->roomName . '-enabled')) && $index === 'remainingTime') {
-                    continue;
-                }
                 $columnObject = new \stdClass();
                 $columnObject->id = $index;
                 $columnObject->name = $index;
@@ -478,67 +447,8 @@ class BackendController extends Controller {
         }
     }
 
-    public function getJsonAction(Request $request)
-    {
-        $page=($request->get('page')) ?$request->get('page'):1;
-        $columnSort=$request->get('sort')?$request->get('sort'):'createdAt';
-        $columnDir=$request->get('columnDir')?$request->get('columnDir'):'desc';
-        $limit=$request->get('limit')?$request->get('limit'):2;
-//        $sEcho=$request->get('sEcho')?$request->get('sEcho'):1;
+    public function getListJsonData($request) {
 
-
-//        $iColumns = $request->request->get('iColumns') ? $request->request->get('iColumns') : 3; //change later with no of column from db
-//        $sortColumnIndex = $request->request->get('iSortCol_0') || $request->request->get('iSortCol_0') == 0 ? $request->request->get('iSortCol_0') : 3; // 3 change with default
-//
-//        $start = $request->request->get('iDisplayStart') ? $request->request->get('iDisplayStart') : 0;
-//        $limit = $request->request->get('iDisplayLength') ? $request->request->get('iDisplayLength') : 2;
-        $sEcho = $request->request->get('sEcho') ? $request->request->get('sEcho') : 0;
-//        $columnSort = $request->request->get("mDataProp_$sortColumnIndex") ? $request->request->get("mDataProp_$sortColumnIndex") : 'createdAt';
-//        $columnDir = $request->request->get('sSortDir_0') ? $request->request->get('sSortDir_0') : 'desc';
-
-        $roleCount = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder('IbtikarGlanceDashboardBundle:Role')
-                ->getQuery()->count();
-        $roles = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder('IbtikarGlanceDashboardBundle:Role');
-        if ($columnSort && $columnDir) {
-            $roles = $roles->sort($columnSort, $columnDir);
-        }
-        $roles = $roles->skip(($page-1)*$limit)->limit($limit)->getQuery()->execute();
-        $rolesObjects = array();
-
-
-
-        if ($this->listName) {
-            $listName = $this->listName;
-        } else {
-            $listName = 'ibtikar_glance_dashboard_role_list';
-        }
-
-        $selectedColumns = $this->getCurrentColumns($listName);
-
-
-
-
-        foreach ($roles as $role) {
-            $oneRole = array();
-            $oneRole['id'] = '<div class="form-group">
-                                    <label class="checkbox-inline">
-                                        <input type="checkbox" class="styled" data-id=' . $role->getId() . '>
-                                    </label>
-                              </div>';
-          foreach ($selectedColumns as  $value) {
-
-
-            $getfunction = "get" . ucfirst($value);
-                if ($value == 'createdAt') {
-                    $oneRole[$value] = $role->$getfunction()?$role->$getfunction()->format('Y-m-d'):null;
-                } else {
-                    $oneRole[$value] = $role->$getfunction();
-                }
-            }
-            $rolesObjects[] = $oneRole;
-        }
-        return new JsonResponse(array('data' => $rolesObjects, "draw" => (int)$sEcho, 'sEcho' => (int)$sEcho,
-            "recordsTotal" => $roleCount,
-            "recordsFiltered" => $roleCount));
     }
+
 }

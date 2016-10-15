@@ -25,3 +25,8 @@ services:
         tags:
             - { name: doctrine_mongodb.odm.event_subscriber }
         arguments: ["@service_container"]
+        
+    no_cache_respose_list:
+     class: Ibtikar\GlanceDashboardBundle\Service\RemoveListCache
+     tags:
+         - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }     
