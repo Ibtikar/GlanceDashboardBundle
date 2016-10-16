@@ -1,6 +1,7 @@
 # #############Labels############
 'Description': الوصف
 'Name': 'الاسم'
+'name': 'الاسم'
 'Add new role': 'إدخال دور جديد'
 'role create': 'إدخال دور'
 'VIEW': 'مشاهدة'
@@ -18,5 +19,14 @@
 'ROLE': 'دور'
 'JOB': 'وظيفه'
 'edit role': 'تعديل دور'
-
-
+'Description': الوصف
+'permissionscount': عدد الصلاحيات
+'Permissionscount': عدد الصلاحيات
+'createdAt': تاريخ الإنشاء
+'Created at': تاريخ الإنشاء
+'createdBy': قام بالإنشاء
+'updatedAt': تاريخ التحديث
+'Updated at': تاريخ التحديث
+'updatedBy': قام بالتحديث
+'List Role': قائمه الادوار
+role: دور

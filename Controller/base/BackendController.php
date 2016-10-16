@@ -146,24 +146,25 @@ class BackendController extends Controller {
 
         $pagination = $queryBuilder->skip(($pageNumber-1)*$limit)->limit($limit)->getQuery()->execute();
 
-        if ($this->listName) {
-            $changeListColumnType = '_' . $this->listStatus;
-        } else {
-            $changeListColumnType = '';
-        }
         $sublistName = $this->calledClassName;
         if ($this->sublistName) {
             $sublistName = $this->sublistName;
         }
-//        var_dump($this->listViewOptions->getFields());
-//        exit;
-
-        $prepareColumns=array(array('data'=>'id','orderable'=>false));
-        foreach($this->listViewOptions->getFields() as $name=>$value ){
-            $column=array('data'=>$name,'orderable'=>$value->isSortable);
-            $prepareColumns[]=$column;
-
+        $index = 0;
+        $prepareColumns = array();
+        if ($this->listViewOptions->getBulkActions()) {
+            $prepareColumns = array(array('data' => 'id', 'orderable' => false));
+            $index++;
+        }
+        foreach ($this->listViewOptions->getFields() as $name => $value) {
+            $column = array('data' => $name, 'orderable' => $value->isSortable);
+            $prepareColumns[] = $column;
+            if ($this->listViewOptions->getDefaultSortBy() == $name) {
+                $sortIndex = $index;
             }
+            $index++;
+        }
+
         $renderningParams = array(
             'sublistName' => $sublistName,
             'total' => $pagination->count(),
@@ -173,8 +174,8 @@ class BackendController extends Controller {
             'translationDomain' => $this->translationDomain,
             'listName' => $this->calledClassName,
             'list' => $this->listViewOptions,
+            'sort'=>json_encode(array($sortIndex,$this->listViewOptions->getDefaultSortOrder())),
             'columns'=> json_encode(array_values($prepareColumns)),
-            'changeListColumnType' => $changeListColumnType
         );
 
         return $renderningParams;
@@ -190,7 +191,7 @@ class BackendController extends Controller {
 
     private function prepareListParameters() {
         $this->listViewOptions->setListQueryBuilder($this->createQueryBuilder());
-        $this->listViewOptions->setDefaultSortBy("createdAt");
+        $this->listViewOptions->setDefaultSortBy("updatedAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
     }
 
@@ -304,7 +305,7 @@ class BackendController extends Controller {
         $dm = $this->get('doctrine_mongodb')->getManager();
 
         if ($this->listName) {
-            $staffListColumns = $dm->getRepository('IbtikarGlanceDashboardBundle:StaffListColumns')->findOneBy(array('staff.$id' => new \MongoId($this->getUser()->getId()), "listName" => $this->listName));
+            $staffListColumns = $dm->getRepository('IbtikarGlanceDashboardBundle:StaffListColumns')->findOneBy(array('staff.$id' => new \MongoId($this->getUser()->getId()), "listName" => 'ibtikar_glance_dashboard_'.$this->listName));
         } else {
             $staffListColumns = $dm->getRepository('IbtikarGlanceDashboardBundle:StaffListColumns')->findOneBy(array('staff.$id' => new \MongoId($this->getUser()->getId()), "listName" =>'ibtikar_glance_dashboard_'. strtolower($this->calledClassName) . "_" . $this->listViewOptions->getListType()));
         }
@@ -351,7 +352,7 @@ class BackendController extends Controller {
                 if ($this->listName) {
                     $staffListColumns->setListName('ibtikar_glance_dashboard_'.$this->listName);
                 } else {
-                    $staffListColumns->setListName(strtolower($this->calledClassName) . "_" . $this->listViewOptions->getListType());
+                    $staffListColumns->setListName('ibtikar_glance_dashboard_'.strtolower($this->calledClassName) . "_" . $this->listViewOptions->getListType());
                 }
                 $dm->persist($staffListColumns);
             }
@@ -380,12 +381,27 @@ class BackendController extends Controller {
 
 
             $dm->flush();
-            $prepareColumns = array(array('data'=>'id','orderable'=>false));
-            foreach ($this->listViewOptions->getFields() as $name => $value) {
-                $column = array('data' => $name, 'orderable' => $value->isSortable);
-                $prepareColumns[] = $column;
+            $sortIndex=null;
+            $index=0;
+            $prepareColumns = array();
+            if ($this->listViewOptions->getBulkActions()) {
+                $prepareColumns = array(array('data' => 'id', 'orderable' => false,'title'=>''));
+                $index++;
             }
-            return new JsonResponse(array('status' => 'success','column'=>$prepareColumns));
+            foreach ($this->listViewOptions->getFields() as $name => $value) {
+                $column = array('data' => $name, 'orderable' => $value->isSortable,'title'=>  $this->trans($name, array(), $this->translationDomain));
+                $prepareColumns[] = $column;
+                if ($this->listViewOptions->getDefaultSortBy() == $name) {
+                    $sortIndex = $index;
+                }
+                $index++;
+            }
+            if($sortIndex){
+                $sort= json_encode(array($sortIndex,  $this->listViewOptions->getDefaultSortOrder()));
+            }else{
+                $sort= null;
+            }
+            return new JsonResponse(array('status' => 'success','column'=>$prepareColumns,'sort'=>$sort));
         }
     }
 

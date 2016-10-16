@@ -29,3 +29,7 @@ ibtikar_glance_dashboard_role_check_field_unique:
 ibtikar_glance_dashboard_role_change_list_columns:
     path:  /change-list-columns
     defaults: { _controller: IbtikarGlanceDashboardBundle:Role:changeListColumns }
+
+ibtikar_glance_dashboard_role_permissions_show:
+    path:  /role-permissions-show
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Role:showRolePermission }

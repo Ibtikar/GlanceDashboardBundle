@@ -22,7 +22,7 @@ class RoleController extends BackendController {
 
     protected function configureListColumns() {
         $this->allListColumns = array(
-            "name" => array("tooltip"=>"PermissionsDisplayText"),
+            "name" => array("isClickable" => TRUE, 'class' => 'dev-role-getPermision'),
             "permissionscount" => array(),
             "createdAt" => array("type"=>"date"),
             "updatedAt" => array("type"=>"date")
@@ -38,9 +38,8 @@ class RoleController extends BackendController {
     protected function configureListParameters(Request $request) {
         $this->listViewOptions->setActions(array ());
         $this->listViewOptions->setBulkActions(array());
-//        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Role:list.html.twig");
+        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Role:list.html.twig");
     }
-
 
     /**
      * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
@@ -160,28 +159,41 @@ class RoleController extends BackendController {
         return array_keys($validArray);
     }
 
+    private function adminPermissions($permissions)
+    {
+        $permissionArray = array();
 
-    private function buildForm($role, $permissions) {
-        return $this->createFormBuilder($role, array('translation_domain' => $this->translationDomain,'attr'=>array('class'=>'dev-page-main-form dev-js-validation form-horizontal')))
-                        ->add('name', formType\TextType::class,
-                                array('required' => true,'attr' => array('data-rule-unique' => 'ibtikar_glance_dashboard_role_check_field_unique','data-msg-unique'=>  $this->trans('not valid'),'data-name'=>'name',
-                                    'data-rule-maxlength' => 150,
-                                    'data-rule-minlength' => 3,
-                                    'data-url'=>  $this->generateUrl('ibtikar_glance_dashboard_role_check_field_unique'),
-                                    'placeholder'=>'')))
-                        ->add('description',formType\TextareaType::class, array('required' => false, 'attr' => array( 'data-rule-maxlength' => 500)))
-                        ->add('permissions', formType\ChoiceType::class, array(
-                            'choices' => $permissions,
-                            'multiple' => true,
-                            'expanded' => true,
-                            'attr' => array(
-                                "data-msg-mincheck" => $this->get('translator')->trans('You must have at least 1 Permission', array(), $this->translationDomain),
-                                "data-rule-mincheck"=> "1",
-                                "data-error-after-selector"=>".dev-page-main-form .table-responsive"
-                            )
-                        ))
-                        ->add('save', formType\SubmitType::class)
-                        ->getForm();
+      foreach ($this->internalPermissions as $permission) {
+            unset($permissions[$permission]);
+        }
+        foreach ($permissions as $key=> $value) {
+             $permissionArray[] = str_replace("_", " ", strtolower(substr($key, 5)));
+
+        }
+        return $permissionArray;
+    }
+
+    private function buildForm($role, $permissions)
+    {
+        return $this->createFormBuilder($role, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
+                ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-rule-unique' => 'ibtikar_glance_dashboard_role_check_field_unique', 'data-msg-unique' => $this->trans('not valid'), 'data-name' => 'name',
+                        'data-rule-maxlength' => 150,
+                        'data-rule-minlength' => 3,
+                        'data-url' => $this->generateUrl('ibtikar_glance_dashboard_role_check_field_unique'),
+                        'placeholder' => '')))
+                ->add('description', formType\TextareaType::class, array('required' => false, 'attr' => array('data-rule-maxlength' => 500)))
+                ->add('permissions', formType\ChoiceType::class, array(
+                    'choices' => $permissions,
+                    'multiple' => true,
+                    'expanded' => true,
+                    'attr' => array(
+                        "data-msg-mincheck" => $this->get('translator')->trans('You must have at least 1 Permission', array(), $this->translationDomain),
+                        "data-rule-mincheck" => "1",
+                        "data-error-after-selector" => ".dev-page-main-form .table-responsive"
+                    )
+                ))
+                ->add('save', formType\SubmitType::class)
+                ->getForm();
     }
 
     /**
@@ -189,11 +201,12 @@ class RoleController extends BackendController {
      * @param Document $document
      * @return string
      */
-    protected function validateDelete(Document $document) {
+    protected function validateDelete(Document $document)
+    {
         $groups = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder('IbtikarBackendBundle:Group')
-                        ->field('roles')->equals($document->getId())
-                        ->field('rolescount')->equals(1)
-                        ->getQuery()->execute();
+                ->field('roles')->equals($document->getId())
+                ->field('rolescount')->equals(1)
+                ->getQuery()->execute();
         $groupNames = array();
         foreach ($groups as $group) {
             $groupNames[] = $group->__toString();
@@ -227,10 +240,8 @@ class RoleController extends BackendController {
         } else {
             $listName = 'ibtikar_glance_dashboard_role_list';
         }
-
+        $this->configureListColumns();
         $selectedColumns = $this->getCurrentColumns($listName);
-
-
 
 
         foreach ($roles as $role) {
@@ -240,22 +251,41 @@ class RoleController extends BackendController {
                                         <input type="checkbox" class="styled" data-id=' . $role->getId() . '>
                                     </label>
                               </div>';
-          foreach ($selectedColumns as  $value) {
-
-
-            $getfunction = "get" . ucfirst($value);
-                if ($value == 'createdAt') {
-                    $oneRole[$value] = $role->$getfunction()?$role->$getfunction()->format('Y-m-d'):null;
+            foreach ($selectedColumns as $value) {
+                $getfunction = "get" . ucfirst($value);
+                if ($value == 'name') {
+                    $oneRole[$value] = '<a class="dev-role-getPermision" href="javascript:void(0)" data-id="'.$role->getId().'">' . $role->$getfunction() . '</a>';
+                } elseif ($role->$getfunction() instanceof \DateTime) {
+                    $oneRole[$value] = $role->$getfunction() ? $role->$getfunction()->format('Y-m-d') : null;
                 } else {
                     $oneRole[$value] = $role->$getfunction();
                 }
             }
             $rolesObjects[] = $oneRole;
         }
-        return new JsonResponse(array('data' => $rolesObjects, "draw" => (int)$sEcho, 'sEcho' => (int)$sEcho,
+        return new JsonResponse(array('data' => $rolesObjects, "draw" => (int) $sEcho, 'sEcho' => (int) $sEcho,
             "recordsTotal" => $roleCount,
             "recordsFiltered" => $roleCount));
     }
 
+    public function showRolePermissionAction(Request $request){
 
+        $id= $request->get('id');
+
+        $role = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Role')->find($id);
+
+        if(!$role){
+
+        }
+//        var_dump($role->getName());
+//        exit;
+        if($role->getName()=='Admin'){
+        $allPermissions = $this->container->getParameter('permissions');
+        $permissions = $this->adminPermissions($allPermissions);
+        }else{
+            $permissions= $role->getPermissionsDisplayText();
+        }
+        return $this->render('IbtikarGlanceDashboardBundle:Role:rolePermision.html.twig', array("permisions" => $permissions, 'translationDomain' => $this->translationDomain));
+
+    }
 }

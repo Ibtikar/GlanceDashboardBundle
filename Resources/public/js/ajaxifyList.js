@@ -1,105 +1,98 @@
 var table;
-var back = false;
-
-function intializeTable() {
-
-    table = $('.datatable-column-search-inputs').DataTable({
-        "sPaginationType": "full_numbers",
-        "bLengthChange": true,
-        "iDisplayLength": limit,
-//        pageLength: 2,
-        iDisplayStart: start,
-        "destroy": true,
-        'sAjaxSource': ajaxData,
-        "bRetrieve": true,
-        "deferLoading": totalNumber,
-        "bJQueryUI": false,
-        "aLengthMenu": [2, 10, 20, 50],
-        "bServerSide": true,
-        "bPaginate": true,
-        "deferRender": true,
-        "initComplete": function (settings, json) {
-        },
-//        "fnPreDrawCallback": function (oSettings) {
-//            var pg_size_changed = oSettings._iDisplayLength != self.selectedPageLength;
-//            if (pg_size_changed) {
-//                oSettings._iDisplayStart = 0; // Reset and go back to the first page
-//            }
-//        },
-//        "fnDrawCallback": function (oSettings) {
-//            self.selectedPageLength = oSettings._iDisplayLength; //Storing this for use by fnPreDrawCallback
-//        },
-        'fnServerData': function (sSource, aoData, fnCallback)
-        {
-            var sorting = table.order();
-            var order = sorting[0];
-            var columndir = order[1];
-            var columnName = $(table.column(order[0]).header()).html().trim();
-            var page = parseInt(table.page(), 10) + parseInt(1, 10);
-            var url = ajaxData + '?page=' + page + '&sort=' + columnName + '&columnDir=' + columndir + '&limit=' + table.page.info().length;
-            if (!back) {
-                pushNewState(null, null, url);
-            } else {
-                url = window.location.href;
-            }
-            back = false;
-            aoData.push({"name": "from_date", "value": $("#from").val()},
-            {"name": "to_date", "value": $("#to").val()});
-            $.ajax
-                    ({
-                        'dataType': 'json',
-                        'url': url,
-                        beforeSend: function () {
-                            $('div.panel-flat').block({
-                                message: '<i class="icon-spinner2 spinner"></i>',
-                                overlayCSS: {
-                                    backgroundColor: '#fff',
-                                    opacity: 0.8,
-                                    cursor: 'wait',
-                                    'box-shadow': '0 0 0 1px #ddd'
-                                },
-                                css: {
-                                    border: 0,
-                                    padding: 0,
-                                    backgroundColor: 'none'
-                                }
-                            });
-                        },
-                        'success': function (json) {
-                            fnCallback(json)
-                            $('input[type=checkbox]').closest('td').addClass('text-center');
-                            setTimeout(function () {
-                                $('input').uniform();
-                                $('div.panel-flat').unblock();
+var pushState = true;
+var callBack=false;
+var dataTableDefault = {
+    "sPaginationType": "full_numbers",
+    "bLengthChange": true,
+    "iDisplayLength": limit,
+    "iDisplayStart": start,
+    "destroy": true,
+    'sAjaxSource': ajaxData,
+    "bRetrieve": true,
+    "bJQueryUI": false,
+    "aLengthMenu": [2, 10, 20, 50],
+    "bServerSide": true,
+    "bPaginate": true,
+    "deferRender": true,
+    "initComplete": function (settings, json) {
+    },
+    'fnServerData': function (sSource, aoData, fnCallback)
+    {
+         if (!callBack) {
+        var sorting = table.order();
+        var order = sorting[0][0];
+        var columndir = sorting[1][1];
+        var columnName = $(table.column(order).header()).attr('data-name').trim();
+        var page = parseInt(table.page(), 10) + parseInt(1, 10);
+        var url = ajaxData + '?page=' + page + '&sort=' + columnName + '&columnDir=' + columndir + '&limit=' + table.page.info().length;
+        if (pushState) {
+            pushNewState(null, null, url);
+        }
+         }
+        else {
+            url = window.location.href;
+        }
+        pushState = true;
+        callBack = false;
+        $.ajax
+                ({
+                    'dataType': 'json',
+                    'url': url,
+                    beforeSend: function () {
+                        $('div.panel-flat').block({
+                            message: '<i class="icon-spinner2 spinner"></i>',
+                            overlayCSS: {
+                                backgroundColor: '#fff',
+                                opacity: 0.8,
+                                cursor: 'wait',
+                                'box-shadow': '0 0 0 1px #ddd'
+                            },
+                            css: {
+                                border: 0,
+                                padding: 0,
+                                backgroundColor: 'none'
+                            }
+                        });
+                    },
+                    'success': function (json) {
+                        fnCallback(json)
+                        $('input[type=checkbox]').closest('td').addClass('text-center');
+                        setTimeout(function () {
+                            $('input').uniform();
+                            $('div.panel-flat').unblock();
 
 
-                            }, 200)
-                        }
-                    });
+                        }, 200)
+                    }
+                });
 
 
-        },
-        columns: columns
+    },
+    columns: columns
 
-        ,
-        dom: '<"datatable-scroll"t><"datatable-footer"lip>',
-        language: {
-            search: '<span>بحث:</span> _INPUT_',
-            lengthMenu: '_MENU_',
-            sLengthMenu: "اظهر _MENU_ ",
-            sInfo: " _START_ - _END_ من _TOTAL_ ",
-            sZeroRecords: "لا يوجد ما تبحث عنه",
-            sInfoEmpty: " 0 - 0 من 0 ",
-            paginate: {'first': 'الاول', 'last': 'الاخير', 'next': '&larr;', 'previous': '&rarr;'}
-        },
+    ,
+    dom: '<"datatable-scroll"t><"datatable-footer"lip>',
+    language: {
+        search: '<span>بحث:</span> _INPUT_',
+        lengthMenu: '_MENU_',
+        sLengthMenu: "اظهر _MENU_ ",
+        sInfo: " _START_ - _END_ من _TOTAL_ ",
+        sZeroRecords: "لا يوجد ما تبحث عنه",
+        sInfoEmpty: " 0 - 0 من 0 ",
+        paginate: {'first': 'الاول', 'last': 'الاخير', 'next': '&larr;', 'previous': '&rarr;'}
+    },
 //                                                            drawCallback: function () {
 //                                                                $(this).find('tbody tr').slice(-3).find('.dropdown, .btn-group').addClass('dropup');
 //                                                            },
 //                                                            preDrawCallback: function () {
 //                                                                $(this).find('tbody tr').slice(-3).find('.dropdown, .btn-group').removeClass('dropup');
 //                                                            },
-        "order": [[1, 'desc']],
-    })
+};
+
+function intializeTable() {
+
+
+    table = $('.datatable-column-search-inputs').DataTable($.extend({},dataTableDefault, { "deferLoading": totalNumber,"order": sort}));
 }
 
 
@@ -124,128 +117,52 @@ function saveListSelectedColumns(basicModal, url) {
         success: function (data) {
             // reload page
             basicModal.hide();
-            start= table.page.info().start;
-            console.log(data)
+//            start =
+//            console.log(data)
             table.clear()
             table.destroy();
 
-            columns1 = data.column;
-            back = false;
+           dataTableDefault.columns=data.column;
+           dataTableDefault.iDisplayStart=table.page.info().start;
+           dataTableDefault.deferLoading=null;
+           delete dataTableDefault.deferLoading;
 
-            var th = '<th class="text-center sorting_disabled" id="dev-checkbox"> <div class="form-group">'
-                    + '<label class="checkbox-inline"> <input type="checkbox" class="styled"  >'
-                    + ' </label>  </div>          </th>'
-            $.each(columns1, function (key, column) {
-                if (column.data != 'id') {
-                    th += '<th data-orderable=' + column.orderable + '>' + column.data + '</th>'
+
+            var th = ''
+            $.each(data.column, function (key, column) {
+                if (column.data == 'id') {
+                    th += '<th class="text-center sorting_disabled" id="dev-checkbox"> <div class="form-group">'
+                            + '<label class="checkbox-inline"> <input type="checkbox" class="styled"  >'
+                            + ' </label></div></th>';
+                } else
+                {
+                    th += '<th data-orderable=' + column.orderable + '>' + column.title + '</th>'
                 }
 
             })
-            console.log(th)
             callBack = true
-            table.
-                    $('.datatable-column-search-inputs thead tr').remove()
+            $('.datatable-column-search-inputs thead tr').remove()
             $('.datatable-column-search-inputs thead').html('<tr>' + th + '</tr>')
-            console.log($('.datatable-column-search-inputs thead').html())
-            table = $('.datatable-column-search-inputs').DataTable({
-                "columnDefs": [{
-                        "targets": 0,
-                        "orderable": false
-                    }],
-                "sPaginationType": "full_numbers",
-                "bLengthChange": true,
-                "iDisplayLength": limit,
-//        pageLength: 2,
-//                iDisplayStart: start,
-                "destroy": true,
-                'sAjaxSource': ajaxData,
-                "bRetrieve": true,
-                "deferLoading": totalNumber,
-                "bJQueryUI": false,
-                "aLengthMenu": [2, 10, 20, 50],
-                "bServerSide": true,
-                "bPaginate": true,
-                "deferRender": true,
-                "initComplete": function (settings, json) {
+            if(data.sort){
+                datatableSetting= $.extend({},dataTableDefault, {"order": data.sort, "initComplete": function (settings, json) {
 //                    $('#dev-checkbox').removeClass('sorting_asc').addClass('sorting_disabled')
                     $(".dataTables_length select").select2({
                         /* select2 options, as an example */
                         minimumResultsForSearch: -1,
                         width: 'auto'
                     });
-                },
-                'fnServerData': function (sSource, aoData, fnCallback)
-                {
-                    if (!callBack) {
-                        var sorting = table.order();
-                        var order = sorting[0];
-                        var columndir = order[1];
-                        var columnName = $(table.column(order[0]).header()).html().trim();
-                        var page = parseInt(table.page(), 10) + parseInt(1, 10);
-                        var url = ajaxData + '?page=' + page + '&sort=' + columnName + '&columnDir=' + columndir + '&limit=' + table.page.info().length;
-                        if (!back) {
-                            pushNewState(null, null, url);
-                        }
-                    } else {
-                        var url = window.location.href;
-
-                    }
-                    back = false;
-                    callBack = false;
-                    aoData.push({"name": "from_date", "value": $("#from").val()},
-                    {"name": "to_date", "value": $("#to").val()});
-                    $.ajax
-                            ({
-                                'dataType': 'json',
-                                'url': url,
-                                beforeSend: function () {
-                                    $('div.panel-flat').block({
-                                        message: '<i class="icon-spinner2 spinner"></i>',
-                                        overlayCSS: {
-                                            backgroundColor: '#fff',
-                                            opacity: 0.8,
-                                            cursor: 'wait',
-                                            'box-shadow': '0 0 0 1px #ddd'
-                                        },
-                                        css: {
-                                            border: 0,
-                                            padding: 0,
-                                            backgroundColor: 'none'
-                                        }
-                                    });
-                                },
-                                'success': function (json) {
-                                    fnCallback(json)
-                                    $('input[type=checkbox]').closest('td').addClass('text-center');
-                                    setTimeout(function () {
-                                        $('input').uniform();
-                                        $('.Roleselect').select2({
-                                            width: 100
-                                        });
-                                        $('div.panel-flat').unblock();
-
-
-                                    }, 200)
-                                }
-                            });
-
-
-                },
-                columns: columns1
-
-                ,
-                dom: '<"datatable-scroll"t><"datatable-footer"lip>',
-                language: {
-                    search: '<span>بحث:</span> _INPUT_',
-                    lengthMenu: '_MENU_',
-                    sLengthMenu: "اظهر _MENU_ ",
-                    sInfo: " _START_ - _END_ من _TOTAL_ ",
-                    sZeroRecords: "لا يوجد ما تبحث عنه",
-                    sInfoEmpty: " 0 - 0 من 0 ",
-                    paginate: {'first': 'الاول', 'last': 'الاخير', 'next': '&larr;', 'previous': '&rarr;'}
-                },
-                "order": [[1, 'desc']],
-            })
+                    }})
+            } else {
+                datatableSetting = $.extend({}, dataTableDefault, {"initComplete": function (settings, json) {
+//                    $('#dev-checkbox').removeClass('sorting_asc').addClass('sorting_disabled')
+                        $(".dataTables_length select").select2({
+                            /* select2 options, as an example */
+                            minimumResultsForSearch: -1,
+                            width: 'auto'
+                        });
+                    }});
+            }
+            table = $('.datatable-column-search-inputs').DataTable(datatableSetting)
 
 
 
@@ -267,6 +184,50 @@ function BaseList() {
         });
     }
 
+    this.showPermisionModal = function (clickedElement) {
+        var basicModal = new BasicModal();
+        oneParams = {id: clickedElement.attr("data-id")};
+
+//            $.ajax({
+//                url: showPermisionUrl,
+//                method: 'post',
+//                data: oneParams,
+//                success: function (data) {
+//                    console.log(data)
+//                    permision= data.permission;
+//                    $.each(permision,function(){
+//
+//                    })
+//                    closeDialog();
+//                    hideLoader();
+//                    switch (data.status) {
+//                        case 'success':
+//                        case 'failed-reload':
+//                            if (pageNum !== 1 && numOfRecords === 1) {
+//                                retunToPreviousPage(pageNum);
+//                            } else {
+//                                stateChangeHandler();
+//                            }
+//                            break;
+//                        case 'failed':
+//                            if ($('#leftSide').find('.alert-danger').length > 0) {
+//                                $('#leftSide').find('.alert-danger').remove();
+//                            }
+//                            $('#leftSide').prepend('<div class="alert alert-danger remove-5s"> <a aria-hidden="true" href="#" data-dismiss="alert" class="close">×</a>' + data.message + '</div>');
+//                            break;
+//                        case 'failedAlert':
+//                            showAlertBox(data.message);
+//                            break;
+//                    }
+//                }
+//            });
+        basicModal.show(showPermisionUrl+'?id='+clickedElement.attr("data-id"), function () {
+//            $(".dev-save-columns").click(function () {
+//                saveListSelectedColumns(basicModal, changeListColumnsUrl);
+//            })
+        });
+    }
+
 
     /* Binding events */
     var thisObject = this;
@@ -276,7 +237,9 @@ function BaseList() {
         thisObject.showColumnOptionsModal();
     });
 
-
+   $('div.panel-flat').on('click','.dev-role-getPermision',function(){
+    thisObject.showPermisionModal($(this))
+    })
 
 
 
