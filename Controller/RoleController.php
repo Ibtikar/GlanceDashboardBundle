@@ -20,6 +20,8 @@ class RoleController extends BackendController {
 
         );
 
+    protected $calledClassName = 'Role';
+
     protected function configureListColumns() {
         $this->allListColumns = array(
             "name" => array("isClickable" => TRUE, 'class' => 'dev-role-getPermision'),
@@ -36,8 +38,14 @@ class RoleController extends BackendController {
     }
 
     protected function configureListParameters(Request $request) {
-        $this->listViewOptions->setActions(array ());
+
+        if(!$this->listViewOptions){
+               $this->listViewOptions = $this->get("list_view");
+        }
+        $this->listViewOptions->setActions(array("Edit", "Delete"));
         $this->listViewOptions->setBulkActions(array());
+        $this->listViewOptions->setDefaultSortBy("updatedAt");
+        $this->listViewOptions->setDefaultSortOrder("desc");
         $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Role:list.html.twig");
     }
 
@@ -261,6 +269,19 @@ class RoleController extends BackendController {
                     $oneRole[$value] = $role->$getfunction();
                 }
             }
+            $this->configureListParameters( $request);
+            $security=$this->container->get('security.authorization_checker');
+            $actionTd='';
+            if(count($this->listViewOptions->getActions()) > 0){
+                foreach($this->listViewOptions->getActions() as $action){
+                    if($action=='Edit' && ($security->isGranted('ROLE_ADMIN')|| $security->isGranted('ROLE_'.$this->listName.'_EDIT'))){
+                        $actionTd.= '<a class="btn btn-defualt"  href = "'.$this->generateUrl('ibtikar_glance_dashboard_role_edit',array('id'=>$role->getId())).'" title="" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>';
+
+                    }
+                }
+
+            $oneRole['actions']=$actionTd;
+            }
             $rolesObjects[] = $oneRole;
         }
         return new JsonResponse(array('data' => $rolesObjects, "draw" => (int) $sEcho, 'sEcho' => (int) $sEcho,
@@ -287,5 +308,34 @@ class RoleController extends BackendController {
         }
         return $this->render('IbtikarGlanceDashboardBundle:Role:rolePermision.html.twig', array("permisions" => $permissions, 'translationDomain' => $this->translationDomain));
 
+    }
+
+    public function getColumnHeaderAndSort($request){
+
+        $this->configureListParameters( $request);
+        $sortIndex = null;
+        $index = 0;
+        $prepareColumns = array();
+        if ($this->listViewOptions->getBulkActions()) {
+            $prepareColumns = array(array('data' => 'id', 'orderable' => false, 'title' => ''));
+            $index++;
+        }
+        foreach ($this->listViewOptions->getFields() as $name => $value) {
+            $column = array('data' => $name, 'orderable' => $value->isSortable, 'title' => $this->trans($name, array(), $this->translationDomain),'name'=>$name);
+            $prepareColumns[] = $column;
+            if ($this->listViewOptions->getDefaultSortBy() == $name) {
+                $sortIndex = $index;
+            }
+            $index++;
+        }
+        if(count($this->listViewOptions->getActions()) > 0){
+            $prepareColumns[]=array('data' => 'actions', 'orderable' => FALSE,'name'=>'actions' ,'title'=> $this->trans('actions',array(),  $this->translationDomain));
+        }
+        if ($sortIndex) {
+            $sort = json_encode(array($sortIndex, $this->listViewOptions->getDefaultSortOrder()));
+        } else {
+            $sort = null;
+        }
+        return array('columnHeader'=>$prepareColumns,'sort'=>$sort);
     }
 }

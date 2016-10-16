@@ -20,9 +20,20 @@ var dataTableDefault = {
     {
          if (!callBack) {
         var sorting = table.order();
-        var order = sorting[0][0];
-        var columndir = sorting[1][1];
-        var columnName = $(table.column(order).header()).attr('data-name').trim();
+        console.log(sorting);
+        var order = sorting[0];
+
+        if($.isArray(order)){
+            var columndir = order[1];
+            var columnName = $(table.column(order[0]).header()).attr('data-name').trim();
+
+
+        }else{
+            var columndir = sorting[1];
+            var columnName = $(table.column(sorting[0]).header()).attr('data-name').trim();
+        }
+   console.log(columndir)
+   console.log(columnName)
         var page = parseInt(table.page(), 10) + parseInt(1, 10);
         var url = ajaxData + '?page=' + page + '&sort=' + columnName + '&columnDir=' + columndir + '&limit=' + table.page.info().length;
         if (pushState) {
@@ -136,7 +147,7 @@ function saveListSelectedColumns(basicModal, url) {
                             + ' </label></div></th>';
                 } else
                 {
-                    th += '<th data-orderable=' + column.orderable + '>' + column.title + '</th>'
+                    th += '<th data-orderable=' + column.orderable + ' data-name="'+column.name+'">' + column.title + '</th>'
                 }
 
             })
@@ -144,7 +155,7 @@ function saveListSelectedColumns(basicModal, url) {
             $('.datatable-column-search-inputs thead tr').remove()
             $('.datatable-column-search-inputs thead').html('<tr>' + th + '</tr>')
             if(data.sort){
-                datatableSetting= $.extend({},dataTableDefault, {"order": data.sort, "initComplete": function (settings, json) {
+                datatableSetting= $.extend({},dataTableDefault, {"order": JSON.parse(data.sort), "initComplete": function (settings, json) {
 //                    $('#dev-checkbox').removeClass('sorting_asc').addClass('sorting_disabled')
                     $(".dataTables_length select").select2({
                         /* select2 options, as an example */
@@ -186,45 +197,7 @@ function BaseList() {
 
     this.showPermisionModal = function (clickedElement) {
         var basicModal = new BasicModal();
-        oneParams = {id: clickedElement.attr("data-id")};
-
-//            $.ajax({
-//                url: showPermisionUrl,
-//                method: 'post',
-//                data: oneParams,
-//                success: function (data) {
-//                    console.log(data)
-//                    permision= data.permission;
-//                    $.each(permision,function(){
-//
-//                    })
-//                    closeDialog();
-//                    hideLoader();
-//                    switch (data.status) {
-//                        case 'success':
-//                        case 'failed-reload':
-//                            if (pageNum !== 1 && numOfRecords === 1) {
-//                                retunToPreviousPage(pageNum);
-//                            } else {
-//                                stateChangeHandler();
-//                            }
-//                            break;
-//                        case 'failed':
-//                            if ($('#leftSide').find('.alert-danger').length > 0) {
-//                                $('#leftSide').find('.alert-danger').remove();
-//                            }
-//                            $('#leftSide').prepend('<div class="alert alert-danger remove-5s"> <a aria-hidden="true" href="#" data-dismiss="alert" class="close">×</a>' + data.message + '</div>');
-//                            break;
-//                        case 'failedAlert':
-//                            showAlertBox(data.message);
-//                            break;
-//                    }
-//                }
-//            });
         basicModal.show(showPermisionUrl+'?id='+clickedElement.attr("data-id"), function () {
-//            $(".dev-save-columns").click(function () {
-//                saveListSelectedColumns(basicModal, changeListColumnsUrl);
-//            })
         });
     }
 

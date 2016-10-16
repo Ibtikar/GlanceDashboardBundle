@@ -259,25 +259,35 @@
                                                 {% endfor %}
 
                                                 {% if list.hasActionsColumn(listName)  %}
-                                                                                           <td class="text-center" style="white-space: nowrap;">
-                                                                                                <a class="btn btn-defualt" href="Role-add.php" data-popup="tooltip" title="تعديل" data-placement="bottom" ><i class="icon-pencil"></i></a>
+                                                    <td class="text-center" style="white-space: nowrap;">
+                                                        {#                                                     {% if  object.getNotModified() is not defined  or  object.getNotModified()== false %}#}
+                                                        {% for action in list.actions %}
+                                                            {% if action == "Edit" %}
+                                                                {% if is_granted('ROLE_' ~ listName|upper ~'_EDIT') or is_granted('ROLE_ADMIN') %}
 
-                                                                                                <a tabindex="0" class="btn btn-defualt" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="انت علي وشك حذف comments هل ترغب في حذفه  " data-html="true"
-                                                                                                   data-html="true" data-content="
-                                                                                                   <button type='button' class='btn btn-danger btn-block'>و ايقاف الموظفين الذين لا ينتمون الي مجموعة و دور اخر</button>
-                                                                                                   <button type='button' class='btn btn-danger btn-block'>و حذف الموظفين الذين لا ينتمون الي مجموعة و دور اخر</button>
-                                                                                                   "> <i class="icon-trash"></i></a>
+                                                                    <a class="btn btn-defualt"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}" title="{{ ('Edit ' ~  sublistName)|trans({},translationDomain)}}" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>
+                                                                    {% endif %}
+                                                            {#    {% elseif action == "Delete" %}
+                                                                    {% if is_granted('ROLE_' ~ listName|upper ~'_DELETE') or is_granted('ROLE_ADMIN')%}
+                                                                    <a tabindex="0" class="btn btn-defualt" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="انت علي وشك حذف comments هل ترغب في حذفه  " data-html="true"
+                                                                       data-html="true" data-content="
+                                                                       <button type='button' class='btn btn-danger btn-block'>و ايقاف الموظفين الذين لا ينتمون الي مجموعة و دور اخر</button>
+                                                                       <button type='button' class='btn btn-danger btn-block'>و حذف الموظفين الذين لا ينتمون الي مجموعة و دور اخر</button>
+                                                                       "> <i class="icon-trash"></i></a>
+                                                                {% endif %}#}
+                                                            {%endif%}
+                                                        {% endfor %}
+                                                                {#<a tabindex="0" class="btn btn-defualt" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="  هل ترغب في ايقاف الموظف  " data-html="true"
+                                                                   data-html="true" data-content="
+                                                                   <button type='button' class='btn btn-danger'>نعم</button>
+                                                                   <button type='button' class='btn btn-defualt'>الغاء</button>
+                                                                   "> <i class="icon-user-block"></i></a>#}
 
-                                                                                                <a tabindex="0" class="btn btn-defualt" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="  هل ترغب في ايقاف الموظف  " data-html="true"
-                                                                                                   data-html="true" data-content="
-                                                                                                   <button type='button' class='btn btn-danger'>نعم</button>
-                                                                                                   <button type='button' class='btn btn-defualt'>الغاء</button>
-                                                                                                   "> <i class="icon-user-block"></i></a>
 
 
-
-                                                                                            </td>
+                                                </td>
                                              {% endif  %}
+
                                             </tr>
 
 
