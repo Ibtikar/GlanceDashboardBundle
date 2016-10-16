@@ -40,31 +40,14 @@
                 </ul>
 
 
-            </div>         
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+            </div>
+
+
 {% endblock %}
 
 {% block modalFooter %}
     <button type="button" class="btn btn-link" data-dismiss="modal">الغاء</button>
-   
+
     <button type="button" class="btn btn-primary dev-save-columns">
         {{'Save'|trans}}
     </button>
@@ -78,6 +61,7 @@
     var toggleButtonColor = '#D6494C';
 
     $(document).ready(function(){
+        window.unblockPage();
     var buttons = document.querySelectorAll('.switchery-primary');
             for (var i = 0, buttonsLength = buttons.length; i < buttonsLength; i++) {
                 new Switchery(buttons[i], {color: toggleButtonColor});

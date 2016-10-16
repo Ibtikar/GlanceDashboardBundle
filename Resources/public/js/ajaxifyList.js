@@ -50,27 +50,14 @@ var dataTableDefault = {
                     'dataType': 'json',
                     'url': url,
                     beforeSend: function () {
-                        $('div.panel-flat').block({
-                            message: '<i class="icon-spinner2 spinner"></i>',
-                            overlayCSS: {
-                                backgroundColor: '#fff',
-                                opacity: 0.8,
-                                cursor: 'wait',
-                                'box-shadow': '0 0 0 1px #ddd'
-                            },
-                            css: {
-                                border: 0,
-                                padding: 0,
-                                backgroundColor: 'none'
-                            }
-                        });
+             blockPage();
                     },
                     'success': function (json) {
                         fnCallback(json)
                         $('input[type=checkbox]').closest('td').addClass('text-center');
                         setTimeout(function () {
                             $('input').uniform();
-                            $('div.panel-flat').unblock();
+                            unblockPage()
 
 
                         }, 200)
@@ -111,7 +98,26 @@ function pushNewState(data, title, url) {
     stateChanged = true;
     history.pushState(data, title, url);
 }
+function blockPage() {
+    $('div.panel-flat').block({
+        message: '<i class="icon-spinner2 spinner"></i>',
+        overlayCSS: {
+            backgroundColor: '#fff',
+            opacity: 0.8,
+            cursor: 'wait',
+            'box-shadow': '0 0 0 1px #ddd'
+        },
+        css: {
+            border: 0,
+            padding: 0,
+            backgroundColor: 'none'
+        }
+    });
+}
+function unblockPage() {
+    $('div.panel-flat').unblock();
 
+}
 
 
 function saveListSelectedColumns(basicModal, url) {
@@ -207,6 +213,7 @@ function BaseList() {
 
 
     $('div.panel-flat').on('click', '.dev-change-columns', function () {
+        blockPage();
         thisObject.showColumnOptionsModal();
     });
 

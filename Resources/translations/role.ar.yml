@@ -29,5 +29,35 @@
 'Updated at': تاريخ التحديث
 'updatedBy': قام بالتحديث
 'List Role': قائمه الادوار
+###################labels############################
 role: دور
 actions: العمليات
+'Edit Role': 'تعديل دور'
+
+
+################permission##########################
+Permision: الصلاحيات
+Staff view: مشاهده موظف
+Staff create: اخال موظف
+Staff edit: تعديل موظف
+Staff activatedeactivate: تفعيل ايقاف موظف
+Staff delete: حذف موظف
+Visitor view: مشاهده عضو
+Visitor edit: تعديل عضو
+Visitor create: ادخال عضو
+Visitor activatedeactivate: تفعيل ايقاف عضو
+Visitor delete: حذف عضو
+Role view: مشاهده دور
+Role create:  اخال دور
+Role edit: تعديل دور
+Role delete:  حذف دور
+Job create: اخال وظيفه
+Job edit: تعديل وظيفه
+Job delete: حذف وظيفه
+City view: مشاهده مدينه
+City viewone: تعديل مدينه
+City create: اخال مدينه
+City edit: تعديل مدينه
+City delete: حذف مدينه
+
+

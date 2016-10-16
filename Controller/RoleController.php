@@ -275,7 +275,7 @@ class RoleController extends BackendController {
             if(count($this->listViewOptions->getActions()) > 0){
                 foreach($this->listViewOptions->getActions() as $action){
                     if($action=='Edit' && ($security->isGranted('ROLE_ADMIN')|| $security->isGranted('ROLE_'.$this->listName.'_EDIT'))){
-                        $actionTd.= '<a class="btn btn-defualt"  href = "'.$this->generateUrl('ibtikar_glance_dashboard_role_edit',array('id'=>$role->getId())).'" title="" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>';
+                        $actionTd.= '<a class="btn btn-defualt"  href = "'.$this->generateUrl('ibtikar_glance_dashboard_role_edit',array('id'=>$role->getId())).'" title="'.$this->trans('Edit Role',array(),  $this->translationDomain).'" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>';
 
                     }
                 }
