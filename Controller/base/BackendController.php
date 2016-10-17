@@ -498,7 +498,8 @@ class BackendController extends Controller {
                 } elseif ($document->$getfunction() instanceof \DateTime) {
                     $oneDocument[$value] = $document->$getfunction() ? $document->$getfunction()->format('Y-m-d') : null;
                 } else {
-                    $oneDocument[$value] = $document->$getfunction();
+                    $fieldData=$document->$getfunction();
+                    $oneDocument[$value] = is_object($fieldData)?$fieldData->__toString():$fieldData;
                 }
             }
 
