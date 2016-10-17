@@ -224,70 +224,6 @@ class RoleController extends BackendController {
         }
     }
 
-   public function getListJsonData($request)
-    {
-        $page=($request->get('page')) ?$request->get('page'):1;
-        $columnSort=$request->get('sort')?$request->get('sort'):'createdAt';
-        $columnDir=$request->get('columnDir')?$request->get('columnDir'):'desc';
-        $limit=$request->get('limit')?$request->get('limit'):2;
-
-        $sEcho = $request->request->get('sEcho') ? $request->request->get('sEcho') : 0;
-        $roleCount = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder('IbtikarGlanceDashboardBundle:Role')
-                ->getQuery()->count();
-        $roles = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder('IbtikarGlanceDashboardBundle:Role');
-        if ($columnSort && $columnDir) {
-            $roles = $roles->sort($columnSort, $columnDir);
-        }
-        $roles = $roles->skip(($page-1)*$limit)->limit($limit)->getQuery()->execute();
-        $rolesObjects = array();
-
-
-
-        if ($this->listName) {
-            $listName = $this->listName;
-        } else {
-            $listName = 'ibtikar_glance_dashboard_role_list';
-        }
-        $this->configureListColumns();
-        $selectedColumns = $this->getCurrentColumns($listName);
-
-
-        foreach ($roles as $role) {
-            $oneRole = array();
-            $oneRole['id'] = '<div class="form-group">
-                                    <label class="checkbox-inline">
-                                        <input type="checkbox" class="styled" data-id=' . $role->getId() . '>
-                                    </label>
-                              </div>';
-            foreach ($selectedColumns as $value) {
-                $getfunction = "get" . ucfirst($value);
-                if ($value == 'name') {
-                    $oneRole[$value] = '<a class="dev-role-getPermision" href="javascript:void(0)" data-id="'.$role->getId().'">' . $role->$getfunction() . '</a>';
-                } elseif ($role->$getfunction() instanceof \DateTime) {
-                    $oneRole[$value] = $role->$getfunction() ? $role->$getfunction()->format('Y-m-d') : null;
-                } else {
-                    $oneRole[$value] = $role->$getfunction();
-                }
-            }
-            $this->configureListParameters( $request);
-            $security=$this->container->get('security.authorization_checker');
-            $actionTd='';
-            if(count($this->listViewOptions->getActions()) > 0){
-                foreach($this->listViewOptions->getActions() as $action){
-                    if($action=='Edit' && ($security->isGranted('ROLE_ADMIN')|| $security->isGranted('ROLE_'.$this->listName.'_EDIT'))){
-                        $actionTd.= '<a class="btn btn-defualt"  href = "'.$this->generateUrl('ibtikar_glance_dashboard_role_edit',array('id'=>$role->getId())).'" title="'.$this->trans('Edit Role',array(),  $this->translationDomain).'" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>';
-
-                    }
-                }
-
-            $oneRole['actions']=$actionTd;
-            }
-            $rolesObjects[] = $oneRole;
-        }
-        return new JsonResponse(array('data' => $rolesObjects, "draw" => (int) $sEcho, 'sEcho' => (int) $sEcho,
-            "recordsTotal" => $roleCount,
-            "recordsFiltered" => $roleCount));
-    }
 
     public function showRolePermissionAction(Request $request){
 
@@ -310,32 +246,4 @@ class RoleController extends BackendController {
 
     }
 
-    public function getColumnHeaderAndSort($request){
-
-        $this->configureListParameters( $request);
-        $sortIndex = null;
-        $index = 0;
-        $prepareColumns = array();
-        if ($this->listViewOptions->getBulkActions()) {
-            $prepareColumns = array(array('data' => 'id', 'orderable' => false, 'title' => ''));
-            $index++;
-        }
-        foreach ($this->listViewOptions->getFields() as $name => $value) {
-            $column = array('data' => $name, 'orderable' => $value->isSortable, 'title' => $this->trans($name, array(), $this->translationDomain),'name'=>$name);
-            $prepareColumns[] = $column;
-            if ($this->listViewOptions->getDefaultSortBy() == $name) {
-                $sortIndex = $index;
-            }
-            $index++;
-        }
-        if(count($this->listViewOptions->getActions()) > 0){
-            $prepareColumns[]=array('data' => 'actions', 'orderable' => FALSE,'name'=>'actions' ,'title'=> $this->trans('actions',array(),  $this->translationDomain));
-        }
-        if ($sortIndex) {
-            $sort = json_encode(array($sortIndex, $this->listViewOptions->getDefaultSortOrder()));
-        } else {
-            $sort = null;
-        }
-        return array('columnHeader'=>$prepareColumns,'sort'=>$sort);
-    }
 }

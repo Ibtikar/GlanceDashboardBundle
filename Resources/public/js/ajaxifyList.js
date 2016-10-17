@@ -10,7 +10,7 @@ var dataTableDefault = {
     'sAjaxSource': ajaxData,
     "bRetrieve": true,
     "bJQueryUI": false,
-    "aLengthMenu": [2, 10, 20, 50],
+    "aLengthMenu": [10, 20, 50],
     "bServerSide": true,
     "bPaginate": true,
     "deferRender": true,
@@ -20,7 +20,6 @@ var dataTableDefault = {
     {
          if (!callBack) {
         var sorting = table.order();
-        console.log(sorting);
         var order = sorting[0];
 
         if($.isArray(order)){
@@ -32,8 +31,6 @@ var dataTableDefault = {
             var columndir = sorting[1];
             var columnName = $(table.column(sorting[0]).header()).attr('data-name').trim();
         }
-   console.log(columndir)
-   console.log(columnName)
         var page = parseInt(table.page(), 10) + parseInt(1, 10);
         var url = ajaxData + '?page=' + page + '&sort=' + columnName + '&columnDir=' + columndir + '&limit=' + table.page.info().length;
         if (pushState) {
@@ -79,18 +76,24 @@ var dataTableDefault = {
         sInfoEmpty: " 0 - 0 من 0 ",
         paginate: {'first': 'الاول', 'last': 'الاخير', 'next': '&larr;', 'previous': '&rarr;'}
     },
-//                                                            drawCallback: function () {
-//                                                                $(this).find('tbody tr').slice(-3).find('.dropdown, .btn-group').addClass('dropup');
-//                                                            },
+    drawCallback: function () {
+        $('[data-popup="tooltip"]').tooltip();
+//        $(this).find('tbody tr').slice(-3).find('.dropdown, .btn-group').addClass('dropup');
+    },
 //                                                            preDrawCallback: function () {
 //                                                                $(this).find('tbody tr').slice(-3).find('.dropdown, .btn-group').removeClass('dropup');
 //                                                            },
 };
 
 function intializeTable() {
-
-
+if(sort){
     table = $('.datatable-column-search-inputs').DataTable($.extend({},dataTableDefault, { "deferLoading": totalNumber,"order": sort}));
+
+}else{
+    table = $('.datatable-column-search-inputs').DataTable($.extend({},dataTableDefault, { "deferLoading": totalNumber}));
+
+}
+
 }
 
 
@@ -132,15 +135,13 @@ function saveListSelectedColumns(basicModal, url) {
         method: 'POST',
         data: str,
         success: function (data) {
-            // reload page
             basicModal.hide();
-//            start =
-//            console.log(data)
             table.clear()
             table.destroy();
 
            dataTableDefault.columns=data.column;
            dataTableDefault.iDisplayStart=table.page.info().start;
+           dataTableDefault.iDisplayLength=table.page.info().length;
            dataTableDefault.deferLoading=null;
            delete dataTableDefault.deferLoading;
 
@@ -292,15 +293,15 @@ $(document).ready(function () {
 //        }
     });
 
-    var buttons = document.querySelectorAll('.switchery-primary');
-    for (var i = 0, buttonsLength = buttons.length; i < buttonsLength; i++) {
-        new Switchery(buttons[i], {color: toggleButtonColor});
-    }
-
-    // Select2 selects
-    $('.Roleselect').select2({
-        width: 100
-    });
+//    var buttons = document.querySelectorAll('.switchery-primary');
+//    for (var i = 0, buttonsLength = buttons.length; i < buttonsLength; i++) {
+//        new Switchery(buttons[i], {color: toggleButtonColor});
+//    }
+//
+//    // Select2 selects
+//    $('.Roleselect').select2({
+//        width: 100
+//    });
 
     $('#advanced-search-Btn').on('click', function () {
         if ($(".advanced-search").hasClass("searchhidden")) {

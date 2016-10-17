@@ -1,5 +1,5 @@
 parameters:
-    per_page_items: 50
+    per_page_items: 10
     autoCompelet_display_item: 5
 
 services:
@@ -25,8 +25,8 @@ services:
         tags:
             - { name: doctrine_mongodb.odm.event_subscriber }
         arguments: ["@service_container"]
-        
+
     no_cache_respose_list:
      class: Ibtikar\GlanceDashboardBundle\Service\RemoveListCache
      tags:
-         - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }     
+         - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }

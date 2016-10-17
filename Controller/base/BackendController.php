@@ -47,13 +47,14 @@ class BackendController extends Controller {
     }
 
     public function listAction(Request $request) {
-      if( $request->isXmlHttpRequest()){
-
-         return $this->getListJsonData($request);
-        }
         $this->listViewOptions = $this->get("list_view");
         $this->listViewOptions->setListType("list");
         $renderingParams = $this->doList($request);
+        if( $request->isXmlHttpRequest()){
+
+         return $this->getListJsonData($renderingParams);
+        }
+
         if ($this->listViewOptions->getTemplate()) {
             return $this->render($this->listViewOptions->getTemplate(), $renderingParams);
         } else {
@@ -124,19 +125,24 @@ class BackendController extends Controller {
         }
 
 
-
-        $sortBy = $this->listViewOptions->getDefaultSortBy();
-        $sortOrder = $this->listViewOptions->getDefaultSortOrder();
+        if (is_null($request->get('columnDir')) || !in_array($request->get('columnDir'), array('desc', 'asc'))) {
+            $sortOrder = $this->listViewOptions->getDefaultSortOrder();
+        }else{
+          $sortOrder=  $request->get('columnDir');
+        }
+        if (is_null($request->get('sort')) || !in_array($request->get('sort'), $selectedColumns)) {
+            $sortBy = $this->listViewOptions->getDefaultSortBy();
+        }else{
+           $sortBy =$request->get('sort');
+        }
 
         $queryBuilder = $this->listViewOptions->getListQueryBuilder();
 
-        if (is_null($request->get('sort')) || !in_array($request->get('sort'), $selectedColumns)) {
-            $queryBuilder = $queryBuilder->sort($sortBy, $sortOrder);
-        }
+        $queryBuilder = $queryBuilder->sort($sortBy, $sortOrder);
 
         $limit = $request->get('limit');
-        if (!$limit || !in_array($limit, array(2,10, 20, 50))) {
-            $limit =2;// $this->container->getParameter('per_page_items');
+        if (!$limit || !in_array($limit, array(10, 20, 50))) {
+            $limit = $this->container->getParameter('per_page_items');
         }
 
         $pageNumber = $request->query->get('page', 1);
@@ -152,20 +158,25 @@ class BackendController extends Controller {
         }
         $index = 0;
         $prepareColumns = array();
+        $sortIndex=null;
+        $columnArray=array();
         if (count($this->listViewOptions->getBulkActions()) > 0) {
             $prepareColumns = array(array('data' => 'id', 'orderable' => false));
+            $columnArray[]='id';
             $index++;
         }
         foreach ($this->listViewOptions->getFields() as $name => $value) {
             $column = array('data' => $name, 'orderable' => $value->isSortable,'data-name'=>$name,'title'=>  $this->trans($name,array(),  $this->translationDomain));
             $prepareColumns[] = $column;
-            if ($this->listViewOptions->getDefaultSortBy() == $name) {
+            $columnArray[]=$name;
+            if ($sortBy == $name) {
                 $sortIndex = $index;
             }
             $index++;
         }
         if(count($this->listViewOptions->getActions()) > 0){
             $prepareColumns[]=array('data' => 'actions', 'orderable' => FALSE);
+            $columnArray[]='actions';
         }
 
         $renderningParams = array(
@@ -178,9 +189,12 @@ class BackendController extends Controller {
             'listName' => $this->calledClassName,
             'prefixRoute' => 'ibtikar_glance_dashboard_'.$this->calledClassName,
             'list' => $this->listViewOptions,
-            'sort'=>json_encode(array($sortIndex,$this->listViewOptions->getDefaultSortOrder())),
             'columns'=> json_encode(array_values($prepareColumns)),
+            'columnArray'=> $columnArray ,
         );
+        if ($sortIndex === 0 || $sortIndex) {
+            $renderningParams['sort'] = json_encode(array($sortIndex, $sortOrder));
+        }
 
         return $renderningParams;
     }
@@ -449,12 +463,78 @@ class BackendController extends Controller {
         }
     }
 
-    public function getListJsonData($request) {
+    public function getListJsonData($renderingParams)
+    {
+        $documentObjects = array();
+        foreach ($renderingParams['pagination'] as $document) {
+            $oneDocument = array();
 
+            foreach ($renderingParams['columnArray'] as $value) {
+                if ($value == 'id') {
+                    $oneDocument['id'] = '<div class="form-group">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" class="styled" data-id=' . $document->getId() . '>
+                                    </label>
+                              </div>';
+                    continue;
+                }
+                if ($value == 'actions') {
+                    $security = $this->container->get('security.authorization_checker');
+                    $actionTd = '';
+                    if (count($this->listViewOptions->getActions()) > 0) {
+                        foreach ($this->listViewOptions->getActions() as $action) {
+                            if ($action == 'Edit' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . $this->listName . '_EDIT'))) {
+                                $actionTd.= '<a class="btn btn-defualt"  href = "' . $this->generateUrl('ibtikar_glance_dashboard_' . strtolower($this->calledClassName) . '_edit', array('id' => $document->getId())) . '" title="' . $this->trans('Edit Role', array(), $this->translationDomain) . '" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>';
+                            }
+                        }
+
+                        $oneDocument['actions'] = $actionTd;
+                        continue;
+                    }
+                }
+                $getfunction = "get" . ucfirst($value);
+                if ($value == 'name' && $document instanceof \Ibtikar\GlanceDashboardBundle\Document\Role) {
+                    $oneDocument[$value] = '<a class="dev-role-getPermision" href="javascript:void(0)" data-id="' . $document->getId() . '">' . $document->$getfunction() . '</a>';
+                } elseif ($document->$getfunction() instanceof \DateTime) {
+                    $oneDocument[$value] = $document->$getfunction() ? $document->$getfunction()->format('Y-m-d') : null;
+                } else {
+                    $oneDocument[$value] = $document->$getfunction();
+                }
+            }
+
+            $documentObjects[] = $oneDocument;
+        }
+        return new JsonResponse(array('data' => $documentObjects, "draw" => 0, 'sEcho' => 0,
+            "recordsTotal" => $renderingParams['total'],
+            "recordsFiltered" => $renderingParams['total']));
     }
 
-    public function getColumnHeaderAndSort($request){
-
+    public function getColumnHeaderAndSort($request)
+    {
+        $this->configureListParameters($request);
+        $sortIndex = null;
+        $index = 0;
+        $prepareColumns = array();
+        if ($this->listViewOptions->getBulkActions()) {
+            $prepareColumns = array(array('data' => 'id', 'orderable' => false, 'title' => ''));
+            $index++;
+        }
+        foreach ($this->listViewOptions->getFields() as $name => $value) {
+            $column = array('data' => $name, 'orderable' => $value->isSortable, 'title' => $this->trans($name, array(), $this->translationDomain), 'name' => $name);
+            $prepareColumns[] = $column;
+            if ($this->listViewOptions->getDefaultSortBy() == $name) {
+                $sortIndex = $index;
+            }
+            $index++;
+        }
+        if (count($this->listViewOptions->getActions()) > 0) {
+            $prepareColumns[] = array('data' => 'actions', 'orderable' => FALSE, 'name' => 'actions', 'title' => $this->trans('actions', array(), $this->translationDomain));
+        }
+        if ($sortIndex) {
+            $sort = json_encode(array($sortIndex, $this->listViewOptions->getDefaultSortOrder()));
+        } else {
+            $sort = null;
+        }
+        return array('columnHeader' => $prepareColumns, 'sort' => $sort);
     }
-
 }

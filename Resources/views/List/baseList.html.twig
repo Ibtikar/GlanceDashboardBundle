@@ -1,4 +1,4 @@
-{% extends app.request.xmlHttpRequest ? 'IbtikarBackendBundle::ajaxLayout.html.twig' : 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard.html.twig' %}
+{% extends 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard.html.twig' %}
 {% block header %}
     {{ include('IbtikarGlanceDashboardBundle::header.html.twig') }}
 {% endblock %}
@@ -328,7 +328,7 @@
                     var totalNumber = "{{total}}";
                     var limit ={{limit}} ;
                     var start ={{skip}} ;
-                    var sort ={{sort|raw}};
+                    var sort ={% if sort is defined %}{{sort|raw}}{% else %} null {%endif %};
                     var toggleButtonColor = '#D6494C';
 
                 </script>
