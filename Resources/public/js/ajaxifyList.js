@@ -293,6 +293,12 @@ $(document).ready(function () {
 //        }
     });
 
+    $('.panel [data-action=reload]').click(function (e) {
+        e.preventDefault();
+        table.ajax.reload(null, false)
+
+    });
+
 //    var buttons = document.querySelectorAll('.switchery-primary');
 //    for (var i = 0, buttonsLength = buttons.length; i < buttonsLength; i++) {
 //        new Switchery(buttons[i], {color: toggleButtonColor});
