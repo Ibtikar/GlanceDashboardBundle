@@ -483,7 +483,7 @@ class BackendController extends Controller {
                     $actionTd = '';
                     if (count($this->listViewOptions->getActions()) > 0) {
                         foreach ($this->listViewOptions->getActions() as $action) {
-                            if ($action == 'Edit' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . $this->listName . '_EDIT'))) {
+                            if ($action == 'Edit' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . $this->listName . '_EDIT'))&& !$document->getNotModified()) {
                                 $actionTd.= '<a class="btn btn-defualt"  href = "' . $this->generateUrl('ibtikar_glance_dashboard_' . strtolower($this->calledClassName) . '_edit', array('id' => $document->getId())) . '" title="' . $this->trans('Edit Role', array(), $this->translationDomain) . '" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>';
                             }
                         }
@@ -505,7 +505,7 @@ class BackendController extends Controller {
 
             $documentObjects[] = $oneDocument;
         }
-        return new JsonResponse(array('data' => $documentObjects, "draw" => 0, 'sEcho' => 0,
+        return new JsonResponse(array('status' => 'success','data' => $documentObjects, "draw" => 0, 'sEcho' => 0,
             "recordsTotal" => $renderingParams['total'],
             "recordsFiltered" => $renderingParams['total']));
     }

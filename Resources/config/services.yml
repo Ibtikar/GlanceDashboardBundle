@@ -30,3 +30,9 @@ services:
      class: Ibtikar\GlanceDashboardBundle\Service\RemoveListCache
      tags:
          - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+
+    ajax_listener:
+        class: Ibtikar\GlanceDashboardBundle\Listener\AjaxAuthenticationListener
+        tags:
+          - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 255 }
+        arguments: ["@router","@session","@translator"]

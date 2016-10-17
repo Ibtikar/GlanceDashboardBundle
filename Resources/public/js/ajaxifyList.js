@@ -335,3 +335,64 @@ $(document).ready(function () {
     });
 
 });
+jQuery(document).on('ajaxComplete', function (event, response) {
+    if (response) {
+        if(response.status === 0 && detectIE()) {
+            window.location.reload(true);
+        }
+        if (response.status === 404) {
+            window.location = notFoundUrl;
+        }
+        if (typeof response.responseJSON === 'object') {
+            if (typeof response.responseJSON.status !== 'undefined') {
+                handleAjaxResponse(response.responseJSON);
+            }
+        }
+    }
+});
+function handleAjaxResponse(responseJSON) {
+//    if (inIframe()) {
+//        switch (responseJSON.status) {
+//            case 'login':
+//                window.parent.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.parent.location.href);
+//                break;
+//            case 'denied':
+//                window.parent.location = accessDeniedUrl;
+//                break;
+//            case 'reload-page':
+//                window.location = window.location.pathname + '?iframe=true&redirectUrl=' + encodeURIComponent(window.parent.location.href);
+//                break;
+//            case 'redirect-parent':
+//                window.parent.location = responseJSON.url;
+//                break;
+//            case 'notification':
+//                if(typeof window.parent.angular != "undefined"){
+//                    showNotification(responseJSON.message, responseJSON.type);
+//                }
+//                break;
+//
+//        }
+//    } else {
+        switch (responseJSON.status) {
+            case 'login':
+                window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
+                break;
+            case 'denied':
+                window.location = accessDeniedUrl;
+                break;
+            case 'reload-page':
+                window.location.reload(true);
+                break;
+            case 'redirect':
+                window.location = responseJSON.url;
+                break;
+            case 'notification':
+                var hideAfterSeconds = null;
+                if (typeof responseJSON.hideAfterSeconds !== 'undefined') {
+                    hideAfterSeconds = responseJSON.hideAfterSeconds;
+                }
+                showNotification(responseJSON.message, responseJSON.type, hideAfterSeconds);
+                break;
+//        }
+    }
+}

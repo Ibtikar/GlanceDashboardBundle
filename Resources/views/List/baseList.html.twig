@@ -259,7 +259,7 @@
 
                                                 {% if list.hasActionsColumn(listName)  %}
                                                     <td class="text-center" style="white-space: nowrap;">
-                                                        {#                                                     {% if  object.getNotModified() is not defined  or  object.getNotModified()== false %}#}
+                                                        {% if  object.getNotModified() is not defined  or  object.getNotModified()== false %}
                                                         {% for action in list.actions %}
                                                             {% if action == "Edit" %}
                                                                 {% if is_granted('ROLE_' ~ listName|upper ~'_EDIT') or is_granted('ROLE_ADMIN') %}
@@ -283,7 +283,7 @@
                                                                    "> <i class="icon-user-block"></i></a>#}
 
 
-
+  {% endif  %}
                                                 </td>
                                              {% endif  %}
 
@@ -323,6 +323,8 @@
             {% block javascripts %}
                 {{ parent() }}
                 <script>
+                    var loginUrl="{{ path('ibtikar_glance_ums_staff_login')}}";
+                    var notFoundUrl="{{ path('ibtikar_glance_dashboard_not_found')}}";
                     var columns ={{ columns|raw}} ;
                     var totalNumber = "{{total}}";
                     var limit ={{limit}} ;
