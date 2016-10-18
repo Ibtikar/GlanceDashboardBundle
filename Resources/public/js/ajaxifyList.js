@@ -140,6 +140,10 @@ function saveListSelectedColumns(basicModal, url) {
         method: 'POST',
         data: str,
         success: function (data) {
+            if(data.status=='login'){
+                window.location.reload(true);
+
+            }else{
             basicModal.hide();
             table.clear()
             table.destroy();
@@ -187,7 +191,7 @@ function saveListSelectedColumns(basicModal, url) {
             }
             table = $('.datatable-column-search-inputs').DataTable(datatableSetting)
 
-
+            }
 
         }
     });
