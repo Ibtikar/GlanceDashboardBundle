@@ -16,23 +16,27 @@ class JobController extends BackendController {
     protected function configureListColumns() {
         $this->allListColumns = array(
             "title" => array(),
-            "title_en" => array(),
+            "titleEn" => array(),
             "staffMembersCount" => array('type' => 'number'),
-            "createdAt" => array("type"=>"date")
+            "createdAt" => array("type"=>"date"),
+            "updatedAt"=> array("type"=>"date")
         );
         $this->defaultListColumns = array(
             "title",
+            "titleEn",
             "staffMembersCount",
-            "createdAt"
+            "createdAt",
+            "updatedAt"
         );
     }
 
     protected function configureListParameters(Request $request) {
-        $this->listViewOptions->setDefaultSortBy("title");
-        $this->listViewOptions->setDefaultSortOrder("asc");
-
-        $this->listViewOptions->setActions(array ("Add","Edit","Delete"));
+        $this->listViewOptions->setDefaultSortBy("updatedAt");
+        $this->listViewOptions->setDefaultSortOrder("desc");
+        $this->listViewOptions->setActions(array ("Edit"));
         $this->listViewOptions->setBulkActions(array("Delete"));
+        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Job:list.html.twig");
+
     }
 
     /**
@@ -50,7 +54,7 @@ class JobController extends BackendController {
         $job = new Job();
         $form = $this->createFormBuilder($job, array('translation_domain' => $this->translationDomain,'attr'=>array('class'=>'dev-page-main-form dev-js-validation form-horizontal')))
                 ->add('title',formType\TextType::class, array('required' => true,'attr' => array('data-rule-maxlength' => 150,'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique','data-name'=>'title','data-msg-unique'=>  $this->trans('not valid'),'data-url'=>$this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
-                ->add('title_en',formType\TextType::class, array('required' => true,'attr' => array('data-rule-maxlength' => 150,'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique','data-name'=>'title_en','data-msg-unique'=>  $this->trans('not valid'),'data-url'=>$this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
+                ->add('titleEn',formType\TextType::class, array('required' => true,'attr' => array('data-rule-maxlength' => 150,'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique','data-name'=>'title_en','data-msg-unique'=>  $this->trans('not valid'),'data-url'=>$this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
                 ->add('save', formType\SubmitType::class)
                 ->getForm();
 
@@ -89,7 +93,7 @@ class JobController extends BackendController {
         }
         $form = $this->createFormBuilder($job, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
                 ->add('title', formType\TextType::class, array('required' => true, 'attr' => array( 'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique', 'data-name' => 'title', 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
-                ->add('title_en', formType\TextType::class, array('required' => true, 'attr' => array( 'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique', 'data-name' => 'title_en', 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
+                ->add('titleEn', formType\TextType::class, array('required' => true, 'attr' => array( 'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique', 'data-name' => 'title_en', 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
                 ->add('save', formType\SubmitType::class)
                 ->getForm();
 

@@ -1,7 +1,17 @@
 # #############Labels############
 'Title': 'الوظيفة بالعربية'
 'Title en': 'الوظيفة بالإنجليزية'
-'Choose Job': 'اختر الوظيفة'
+'title': 'الوظيفة بالعربية'
+'titleEn': 'الوظيفة بالإنجليزية'
+'createdAt': تاريخ الإنشاء
+'Created at': تاريخ الإنشاء
+'createdBy': قام بالإنشاء
+'updatedAt': تاريخ التحديث
+'Updated at': تاريخ التحديث
+'updatedBy': قام بالتحديث
+staffMembersCount: عدد الموظفين
+Staff members count: عدد الموظفين
+job: وظيفه
 
 # ############Messages############
 Delete One Title: 'حذف الوظيفة'

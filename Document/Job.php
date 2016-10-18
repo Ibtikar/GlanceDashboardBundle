@@ -16,7 +16,7 @@ use Ibtikar\GlanceDashboardBundle\Document\Document;
  * @MongoDBUnique(fields={"title_en"})
  * @MongoDB\Indexes({
  *   @MongoDB\Index(keys={"title"="asc"}),
- *   @MongoDB\Index(keys={"title_en"="asc"})
+ *   @MongoDB\Index(keys={"titleEn"="asc"})
  * })
  */
 class Job extends Document {
@@ -50,7 +50,7 @@ class Job extends Document {
      *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
      * )
      */
-    private $title_en;
+    private $titleEn;
 
     /**
      * @MongoDB\Increment
@@ -115,25 +115,7 @@ class Job extends Document {
         return $this->titleSingle;
     }
 
-    /**
-     * Set titleEn
-     *
-     * @param string $titleEn
-     * @return self
-     */
-    public function setTitleEn($titleEn) {
-        $this->title_en = $titleEn;
-        return $this;
-    }
 
-    /**
-     * Get titleEn
-     *
-     * @return string $titleEn
-     */
-    public function getTitleEn() {
-        return $this->title_en;
-    }
 
     /**
      * Get staffCount
@@ -190,4 +172,26 @@ class Job extends Document {
     }
 
 
+
+    /**
+     * Set titleEn
+     *
+     * @param string $titleEn
+     * @return self
+     */
+    public function setTitleEn($titleEn)
+    {
+        $this->titleEn = $titleEn;
+        return $this;
+    }
+
+    /**
+     * Get titleEn
+     *
+     * @return string $titleEn
+     */
+    public function getTitleEn()
+    {
+        return $this->titleEn;
+    }
 }
