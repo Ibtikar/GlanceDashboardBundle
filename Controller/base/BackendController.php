@@ -374,8 +374,12 @@ class BackendController extends Controller {
                 }
                 $dm->persist($staffListColumns);
             }
-            $selectedColumns = explode(",", $staffListColumns->getColumns());
-        foreach ($selectedColumns as $column) {
+            if ($staffListColumns && $staffListColumns->getColumns()) {
+                $selectedColumns = explode(",", $staffListColumns->getColumns());
+            } else {
+                $selectedColumns = $this->defaultListColumns;
+            }
+            foreach ($selectedColumns as $column) {
             // check if the column was removed from the main list columns
             if (isset($this->allListColumns[$column])) {
                 $fieldOptions = $this->allListColumns[$column];
