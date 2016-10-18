@@ -241,7 +241,7 @@ class RoleController extends BackendController {
         $permissions = $this->container->getParameter('permissions');
         $permissions = $this->customPermissionsArray($permissions);
 
-        return $this->render('IbtikarGlanceDashboardBundle:Role:rolePermision.html.twig', array('tabs'=> $this->tabs,"permisions" => $permissions,'permissionSelected'=>$permissionSelected,'translationDomain' => $this->translationDomain,'roleCount'=>count($permissionSelected),'admin'=>$admin));
+        return $this->render('IbtikarGlanceDashboardBundle:Role:rolePermision.html.twig', array('tabs'=> $this->tabs,"permisions" => $permissions,'permissionSelected'=>$permissionSelected,'translationDomain' => $this->translationDomain,'roleCount'=>$role->getPermissionscount(),'admin'=>$admin));
 
     }
 
