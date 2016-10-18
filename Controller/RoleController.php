@@ -230,19 +230,21 @@ class RoleController extends BackendController {
         $id= $request->get('id');
 
         $role = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Role')->find($id);
-
+        $permissionSelected=array();
         if(!$role){
 
         }
-//        var_dump($role->getName());
-//        exit;
+        $admin=FALSE;
         if($role->getName()=='Admin'){
-        $allPermissions = $this->container->getParameter('permissions');
-        $permissions = $this->adminPermissions($allPermissions);
+//        $permissionSelected = $this->adminPermissions($allPermissions);
+        $admin=true;
         }else{
-            $permissions= $role->getPermissionsDisplayText();
+            $permissionSelected= $role->getPermissions();
         }
-        return $this->render('IbtikarGlanceDashboardBundle:Role:rolePermision.html.twig', array("permisions" => $permissions, 'translationDomain' => $this->translationDomain));
+        $permissions = $this->container->getParameter('permissions');
+        $permissions = $this->customPermissionsArray($permissions);
+
+        return $this->render('IbtikarGlanceDashboardBundle:Role:rolePermision.html.twig', array('tabs'=> $this->tabs,"permisions" => $permissions,'permissionSelected'=>$permissionSelected,'translationDomain' => $this->translationDomain,'roleCount'=>count($permissionSelected),'admin'=>$admin));
 
     }
 
