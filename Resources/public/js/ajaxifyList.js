@@ -125,6 +125,11 @@ function unblockPage() {
 
 function saveListSelectedColumns(basicModal, url) {
     //modified to use this way instead of form serialize to fix this bug #3535:
+    if($('.dev-save-columns').attr('ajax-running')){
+        return;
+    }
+    $('.dev-save-columns').attr('ajax-running', true)
+    $('.dev-save-columns').append('<i class="icon-spinner6 spinner position-right"></i>');
     var str = "";
     $('.dev-columns-multi-select input:checked').each(function () {
         str += "columns[]=" + $(this).val() + "&";

@@ -39,9 +39,6 @@ class RoleController extends BackendController {
 
     protected function configureListParameters(Request $request) {
 
-        if(!$this->listViewOptions){
-               $this->listViewOptions = $this->get("list_view");
-        }
         $this->listViewOptions->setActions(array("Edit", "Delete"));
         $this->listViewOptions->setBulkActions(array());
         $this->listViewOptions->setDefaultSortBy("updatedAt");
