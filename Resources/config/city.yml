@@ -1,0 +1,36 @@
+ibtikar_glance_dashboard_backend_country_cities_options:
+    path:  /ajax/country-cities-options
+    defaults: { _controller: IbtikarGlanceDashboardBundle:City:countryCitiesOptions }
+
+ibtikar_glance_dashboard_city_create:
+    path:  /create
+    defaults: { _controller: IbtikarGlanceDashboardBundle:City:create }
+
+ibtikar_glance_dashboard_city_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:City:edit }
+
+ibtikar_glance_dashboard_city_delete:
+    path: /delete
+    defaults: { _controller: IbtikarGlanceDashboardBundle:City:delete }
+
+ibtikar_glance_dashboard_city_bulk_actions:
+    path: /bulk
+    defaults: { _controller: IbtikarGlanceDashboardBundle:City:bulk }
+
+ibtikar_glance_dashboard_city_list:
+    path:  /list
+    defaults: { _controller: IbtikarGlanceDashboardBundle:City:list }
+
+ibtikar_glance_dashboard_city_check_field_unique:
+    path: /checkfieldUnique
+    defaults: { _controller: IbtikarGlanceDashboardBundle:City:checkFieldUnique }
+
+ibtikar_glance_dashboard_city_change_list_columns:
+    path:  /change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:City:changeListColumns }
+
+ibtikar_glance_dashboard_city_dummy:
+    path:  /import
+    defaults: { _controller: IbtikarGlanceDashboardBundle:City:import }
+

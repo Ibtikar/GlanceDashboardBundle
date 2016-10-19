@@ -32,6 +32,11 @@
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/layout_sidebar_sticky_custom.js')}}"></script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/jquery.easing.min.js')}}"></script>
 
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/selects/select2.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_select2.js')}}"></script>
+    <script  type="text/javascript"  src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/utils.js')}}"></script>
+    <script  type="text/javascript"  src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/intlTelInput.min.js')}}"></script>
+
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/notifications/pnotify.min.js')}}"></script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_notifications_pnotify.js')}}"></script>
     <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/app.js') }}"></script>
@@ -47,13 +52,18 @@
 
     <script>
 
-        $(document).ready(function () {
-                $('.dev-form-reset-button').on('click', function () {
+    $(document).ready(function () {
+            $('.select').select2();
+            $('.dev-form-reset-button').on('click', function () {
+            $('input,textarea').each(function () {
+                unhighlightElement($(this))
 
-                $('input,textarea').each(function () {
-                    unhighlightElement($(this))
+            })
+           $('form').find("select").trigger("change");
+         })
+        $('body').on('ajaxCallback',function(){
+            $('.select').select2();
 
-                })
         })
     })
 

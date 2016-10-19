@@ -23,6 +23,7 @@ Delete Many confirmation Message: ' انت على وشك حذف عدد %s   وظ
 
 # ############Titles############
 'List Job': 'قائمة الوظائف'
+'list job': 'قائمة الوظائف'
 'Add new job': 'إدخال وظيفة جديدة'
 
 # ############Buttons############

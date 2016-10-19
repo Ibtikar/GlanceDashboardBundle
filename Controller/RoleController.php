@@ -53,11 +53,8 @@ class RoleController extends BackendController {
      * @return type
      */
     public function editAction(Request $request, $id) {
-        $breadCrumb= new \stdClass();
-        $breadCrumb->active=true;
-        $breadCrumb->link= $this->generateUrl('ibtikar_glance_dashboard_role_create');
-        $breadCrumb->linkType= 'add';
-        $breadCrumb->text= $this->trans('Add new role',array(),  $this->translationDomain);
+        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new role'), array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list role'));
+        $breadCrumbArray = $this->preparedMenu($menus);
 
         $loggedInUser = $this->getUser();
         if (!$loggedInUser) {
@@ -86,7 +83,7 @@ class RoleController extends BackendController {
         }
         return $this->render('IbtikarGlanceDashboardBundle:Role:create.html.twig', array(
                     'form' => $form->createView(),
-                    'breadcrumb'=>array($breadCrumb),
+                    'breadcrumb'=>$breadCrumbArray,
                     'title'=>$this->trans('edit role',array(),  $this->translationDomain),
                     'tabs'=> $this->tabs,
                     'permissionSelected'=>$permissionSelected,
@@ -96,11 +93,9 @@ class RoleController extends BackendController {
 
     public function createAction(Request $request) {
 
-        $breadCrumb= new \stdClass();
-        $breadCrumb->active=true;
-        $breadCrumb->link= $this->generateUrl('ibtikar_glance_dashboard_role_create');
-        $breadCrumb->linkType= 'add';
-        $breadCrumb->text= $this->trans('Add new role',array(),  $this->translationDomain);
+        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new role'), array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list role'));
+        $breadCrumbArray = $this->preparedMenu($menus);
+
 
         $permissions = $this->container->getParameter('permissions');
         $permissions = $this->customPermissionsArray($permissions);
@@ -126,7 +121,7 @@ class RoleController extends BackendController {
 
         return $this->render('IbtikarGlanceDashboardBundle:Role:create.html.twig', array(
                     'form' => $form->createView(),
-                    'breadcrumb'=>array($breadCrumb),
+                    'breadcrumb'=>$breadCrumbArray,
                     'title'=>$this->trans('Add new role',array(),  $this->translationDomain),
                     'tabs'=> $this->tabs,
                     'permissionSelected'=>$permissionSelected,

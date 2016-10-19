@@ -544,4 +544,18 @@ class BackendController extends Controller {
         }
         return array('columnHeader' => $prepareColumns, 'sort' => $sort);
     }
+
+    public function preparedMenu($menus)
+    {
+        $breadCrumbArray = array();
+        foreach ($menus as $menu) {
+            $breadCrumb = new \stdClass();
+            $breadCrumb->active = $menu['active'];
+            $breadCrumb->link = $this->generateUrl('ibtikar_glance_dashboard_'.  strtolower($this->calledClassName).'_' . $menu['type']);
+            $breadCrumb->linkType = $menu['linkType'];
+            $breadCrumb->text = $this->trans($menu['title'], array(), $this->translationDomain);
+            $breadCrumbArray[] = $breadCrumb;
+        }
+        return $breadCrumbArray;
+    }
 }

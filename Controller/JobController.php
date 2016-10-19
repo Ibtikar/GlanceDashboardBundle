@@ -44,11 +44,8 @@ class JobController extends BackendController {
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function createAction(Request $request) {
-        $breadCrumb= new \stdClass();
-        $breadCrumb->active=true;
-        $breadCrumb->link= $this->generateUrl('ibtikar_glance_dashboard_job_create');
-        $breadCrumb->linkType= 'add';
-        $breadCrumb->text= $this->trans('Add new job',array(),  $this->translationDomain);
+        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new job'), array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list job'));
+        $breadCrumbArray = $this->preparedMenu($menus);
         $dm = $this->get('doctrine_mongodb')->getManager();
 
         $job = new Job();
@@ -69,7 +66,7 @@ class JobController extends BackendController {
         }
         return $this->render('IbtikarGlanceDashboardBundle::formLayout.html.twig', array(
                     'form' => $form->createView(),
-                    'breadcrumb'=>array($breadCrumb),
+                    'breadcrumb'=>$breadCrumbArray,
                     'title'=>$this->trans('Add new job',array(),  $this->translationDomain),
                     'translationDomain' => $this->translationDomain
         ));
@@ -80,11 +77,8 @@ class JobController extends BackendController {
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function editAction(Request $request,$id) {
-        $breadCrumb = new \stdClass();
-        $breadCrumb->active = true;
-        $breadCrumb->link = $this->generateUrl('ibtikar_glance_dashboard_job_create');
-        $breadCrumb->linkType = 'add';
-        $breadCrumb->text = $this->trans('Add new job', array(), $this->translationDomain);
+        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new job'), array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list job'));
+        $breadCrumbArray = $this->preparedMenu($menus);
         $dm = $this->get('doctrine_mongodb')->getManager();
         //prepare form
         $job = $dm->getRepository('IbtikarGlanceDashboardBundle:Job')->find($id);
@@ -114,7 +108,7 @@ class JobController extends BackendController {
         //return template
         return $this->render('IbtikarGlanceDashboardBundle::formLayout.html.twig', array(
                     'form' => $form->createView(),
-                    'breadcrumb'=>array($breadCrumb),
+                    'breadcrumb'=>$breadCrumbArray,
                     'title'=>$this->trans('Edit Job',array(),  $this->translationDomain),
                     'translationDomain' => $this->translationDomain
         ));
