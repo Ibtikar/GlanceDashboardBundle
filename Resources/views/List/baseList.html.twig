@@ -194,10 +194,10 @@
 
                                     <tr>
                                         {% if list.hasBulkActions(listName) %}
-                                            <th class="text-center">
+                                            <th class="text-center" data-orderable="false" data-bSortable="false" data-searchable="false">
                                     <div class="form-group">
                                         <label class="checkbox-inline">
-                                            <input type="checkbox" class="styled">
+                                            <input type="checkbox" class="styled dev-checkbox-all">
                                         </label>
                                     </div>
                                 </th>
@@ -227,7 +227,7 @@
                                                 <td class="text-center">
                                                     <div class="form-group">
                                                         <label class="checkbox-inline">
-                                                            <input type="checkbox" class="styled" data-id="{{object.id}}" >
+                                                            <input type="checkbox" class="styled dev-checkbox" data-id="{{object.id}}" >
                                                         </label>
                                                     </div>
 

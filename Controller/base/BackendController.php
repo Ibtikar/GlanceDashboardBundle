@@ -477,7 +477,7 @@ class BackendController extends Controller {
                 if ($value == 'id') {
                     $oneDocument['id'] = '<div class="form-group">
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" class="styled" data-id=' . $document->getId() . '>
+                                        <input type="checkbox" class="styled dev-checkbox" data-id=' . $document->getId() . '>
                                     </label>
                               </div>';
                     continue;
@@ -488,7 +488,7 @@ class BackendController extends Controller {
                     if (count($this->listViewOptions->getActions()) > 0) {
                         foreach ($this->listViewOptions->getActions() as $action) {
                             if ($action == 'Edit' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . $this->listName . '_EDIT'))&& !$document->getNotModified()) {
-                                $actionTd.= '<a class="btn btn-defualt"  href = "' . $this->generateUrl('ibtikar_glance_dashboard_' . strtolower($this->calledClassName) . '_edit', array('id' => $document->getId())) . '" title="' . $this->trans('Edit Role', array(), $this->translationDomain) . '" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>';
+                                $actionTd.= '<a class="btn btn-defualt"  href = "' . $this->generateUrl('ibtikar_glance_dashboard_' . strtolower($this->calledClassName) . '_edit', array('id' => $document->getId())) . '" title="' . $this->trans('Edit '. ucfirst($this->calledClassName), array(), $this->translationDomain) . '" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>';
                             }
                         }
 
@@ -521,11 +521,13 @@ class BackendController extends Controller {
         $index = 0;
         $prepareColumns = array();
         if ($this->listViewOptions->getBulkActions()) {
-            $prepareColumns = array(array('data' => 'id', 'orderable' => false, 'title' => ''));
+            $prepareColumns = array(array('data' => 'id', 'name'=>'id','orderable' => false,'class'=>'text-center', 'title' => '<div class="form-group">'
+                            . '<label class="checkbox-inline"> <input type="checkbox" class="styled dev-checkbox-all"  >'
+                            . ' </label></div>'));
             $index++;
         }
         foreach ($this->listViewOptions->getFields() as $name => $value) {
-            $column = array('data' => $name, 'orderable' => $value->isSortable, 'title' => $this->trans($name, array(), $this->translationDomain), 'name' => $name);
+            $column = array('data' => $name, 'orderable' => $value->isSortable,'class'=>'', 'title' => $this->trans($name, array(), $this->translationDomain), 'name' => $name);
             $prepareColumns[] = $column;
             if ($this->listViewOptions->getDefaultSortBy() == $name) {
                 $sortIndex = $index;

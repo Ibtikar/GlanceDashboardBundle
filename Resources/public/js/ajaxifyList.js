@@ -1,6 +1,7 @@
 var table;
 var pushState = true;
 var callBack=false;
+var checkbox=false;
 var dataTableDefault = {
     "sPaginationType": "full_numbers",
     "bLengthChange": true,
@@ -15,6 +16,13 @@ var dataTableDefault = {
     "bPaginate": true,
     "deferRender": true,
     "initComplete": function (settings, json) {
+    },
+    "preDrawCallback": function (settings) {
+        if (checkbox) {
+            checkbox = false;
+            return false;
+
+        }
     },
     'fnServerData': function (sSource, aoData, fnCallback)
     {
@@ -78,11 +86,13 @@ var dataTableDefault = {
     },
     drawCallback: function () {
         $('[data-popup="tooltip"]').tooltip();
+        if ($('.datatable-column-search-inputs input.dev-checkbox').length == $('.datatable-column-search-inputs input:checked.dev-checkbox').length && $('.datatable-column-search-inputs input:checked.dev-checkbox').length!=0) {
+            $('.dev-checkbox-all').prop('checked', true).uniform('refresh');
+        } else {
+            $('.dev-checkbox-all').prop('checked', false).uniform('refresh');
+        }
 //        $(this).find('tbody tr').slice(-3).find('.dropdown, .btn-group').addClass('dropup');
     },
-//                                                            preDrawCallback: function () {
-//                                                                $(this).find('tbody tr').slice(-3).find('.dropdown, .btn-group').removeClass('dropup');
-//                                                            },
 };
 
 function intializeTable() {
@@ -157,14 +167,12 @@ function saveListSelectedColumns(basicModal, url) {
 
             var th = ''
             $.each(data.column, function (key, column) {
-                if (column.data == 'id') {
-                    th += '<th class="text-center sorting_disabled" id="dev-checkbox"> <div class="form-group">'
-                            + '<label class="checkbox-inline"> <input type="checkbox" class="styled"  >'
-                            + ' </label></div></th>';
-                } else
-                {
-                    th += '<th data-orderable=' + column.orderable + ' data-name="'+column.name+'">' + column.title + '</th>'
-                }
+//                if (column.data == 'id') {
+//                    th += '<th class="text-center sorting_disabled" id="dev-checkbox"> </th>';
+//                } else
+//                {
+                    th += '<th class="'+column.class+'" data-orderable=' + column.orderable + ' data-name="'+column.name+'">' + column.title + '</th>'
+//                }
 
             })
             callBack = true
@@ -288,7 +296,6 @@ function BasicModal() {
     }
 }
 $(document).ready(function () {
-//    pushNewState(null, null, window.location.href);
 
     $('.select').select2();
 
@@ -302,21 +309,30 @@ $(document).ready(function () {
 //        }
     });
 
+    $('div.panel-flat').on('click','.dev-checkbox-all',function (e) {
+        if ($(this).is(':checked')) {
+            $('.datatable-column-search-inputs').find('input.dev-checkbox').prop('checked', true).uniform('refresh');
+        } else {
+            $('.datatable-column-search-inputs').find('input.dev-checkbox').prop('checked', false).uniform('refresh');
+
+        }
+        checkbox=true;
+    });
+
+    $('div.panel-flat').on('click', '.dev-checkbox', function (e) {
+        if ( $('.datatable-column-search-inputs input:checked.dev-checkbox').length!=0 && $('.datatable-column-search-inputs input.dev-checkbox').length == $('.datatable-column-search-inputs input:checked.dev-checkbox').length ) {
+            $('.dev-checkbox-all').prop('checked', true).uniform('refresh');
+        } else {
+            $('.dev-checkbox-all').prop('checked', false).uniform('refresh');
+        }
+    });
+
     $('.panel [data-action=reload]').click(function (e) {
         e.preventDefault();
         table.ajax.reload(null, false)
 
     });
 
-//    var buttons = document.querySelectorAll('.switchery-primary');
-//    for (var i = 0, buttonsLength = buttons.length; i < buttonsLength; i++) {
-//        new Switchery(buttons[i], {color: toggleButtonColor});
-//    }
-//
-//    // Select2 selects
-//    $('.Roleselect').select2({
-//        width: 100
-//    });
 
     $('#advanced-search-Btn').on('click', function () {
         if ($(".advanced-search").hasClass("searchhidden")) {
@@ -360,28 +376,7 @@ jQuery(document).on('ajaxComplete', function (event, response) {
     }
 });
 function handleAjaxResponse(responseJSON) {
-//    if (inIframe()) {
-//        switch (responseJSON.status) {
-//            case 'login':
-//                window.parent.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.parent.location.href);
-//                break;
-//            case 'denied':
-//                window.parent.location = accessDeniedUrl;
-//                break;
-//            case 'reload-page':
-//                window.location = window.location.pathname + '?iframe=true&redirectUrl=' + encodeURIComponent(window.parent.location.href);
-//                break;
-//            case 'redirect-parent':
-//                window.parent.location = responseJSON.url;
-//                break;
-//            case 'notification':
-//                if(typeof window.parent.angular != "undefined"){
-//                    showNotification(responseJSON.message, responseJSON.type);
-//                }
-//                break;
-//
-//        }
-//    } else {
+
         switch (responseJSON.status) {
             case 'login':
                 window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
@@ -402,6 +397,5 @@ function handleAjaxResponse(responseJSON) {
                 }
                 showNotification(responseJSON.message, responseJSON.type, hideAfterSeconds);
                 break;
-//        }
     }
 }
