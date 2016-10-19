@@ -13,7 +13,7 @@ use Ibtikar\GlanceDashboardBundle\Document\Document;
 /**
  * @MongoDB\Document(repositoryClass="Ibtikar\GlanceDashboardBundle\Document\JobRepository")
  * @MongoDBUnique(fields={"title"})
- * @MongoDBUnique(fields={"title_en"})
+ * @MongoDBUnique(fields={"titleEn"})
  * @MongoDB\Indexes({
  *   @MongoDB\Index(keys={"title"="asc"}),
  *   @MongoDB\Index(keys={"titleEn"="asc"})
