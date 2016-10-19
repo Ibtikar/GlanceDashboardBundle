@@ -47,7 +47,7 @@
                         <!-- view roles -->
                         <div class="panel panel-flat">
                             <div class="panel-heading">
-                                <h5 class="panel-title">  الادوار </h5>
+                                <h5 class="panel-title">    {{ list.listType == 'trash' ? 'View deleted items'|trans : ('List '~ listName)|trans({}, translationDomain)}} </h5>
                                 <div class="heading-elements">
                                     {% block statistic %}
                                     <span class="label bg-number heading-text">28 دور</span>

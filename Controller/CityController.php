@@ -21,14 +21,16 @@ class CityController extends BackendController {
             "name" => array(),
             "nameEn" => array(),
             "country" => array('isSortable' => false),
-            "usersCount" => array('type' => 'number'),
+            "staffMembersCount" => array('type' => 'number'),
             "createdAt" => array("type"=>"date")
         );
         $this->defaultListColumns = array(
             "name",
             "country",
             "usersCount",
-            "createdAt"
+            "createdAt",
+            "updatedAt"
+
         );
     }
 
@@ -36,8 +38,8 @@ class CityController extends BackendController {
 
         $dm = $this->get('doctrine_mongodb')->getManager();
 
-        $this->listViewOptions->setDefaultSortBy("name");
-        $this->listViewOptions->setDefaultSortOrder("asc");
+        $this->listViewOptions->setDefaultSortBy("updatedAt");
+        $this->listViewOptions->setDefaultSortOrder("desc");
 
         $queryBuilder = $this->createQueryBuilder();
         if($request->get('countryCode')) {
@@ -45,7 +47,7 @@ class CityController extends BackendController {
         }
         $this->listViewOptions->setListQueryBuilder($queryBuilder);
 
-        $this->listViewOptions->setActions(array ("Add","Edit","Search", 'ViewOne', 'Delete', 'ViewPlaces','AddPlaces','ManageOne'));
+        $this->listViewOptions->setActions(array ("Edit"));
         $this->listViewOptions->setBulkActions(array('Delete'));
         $this->listViewOptions->setRestorable(FALSE);
         $this->listViewOptions->setTemplate("IbtikarBackendBundle:City:list.html.twig");
