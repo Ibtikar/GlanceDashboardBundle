@@ -16,8 +16,6 @@
 {% endblock %}
 {% block javascripts %}
     <script>
-        var ajaxData = '{{path("ibtikar_glance_dashboard_role_list")}}';
-        var changeListColumnsUrl = "{{path('ibtikar_glance_dashboard_role_change_list_columns')}}";
         var showPermisionUrl= "{{path('ibtikar_glance_dashboard_role_permissions_show')}}";
     </script>
     {{ parent() }}

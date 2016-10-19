@@ -22,12 +22,13 @@ class CityController extends BackendController {
             "nameEn" => array(),
             "country" => array('isSortable' => false),
             "staffMembersCount" => array('type' => 'number'),
-            "createdAt" => array("type"=>"date")
+            "createdAt" => array("type"=>"date"),
+            "updatedAt" => array("type"=>"date")
         );
         $this->defaultListColumns = array(
             "name",
             "country",
-            "usersCount",
+            "staffMembersCount",
             "createdAt",
             "updatedAt"
 
@@ -47,16 +48,16 @@ class CityController extends BackendController {
         }
         $this->listViewOptions->setListQueryBuilder($queryBuilder);
 
-        $this->listViewOptions->setActions(array ("Edit"));
+        $this->listViewOptions->setActions(array("Edit"));
         $this->listViewOptions->setBulkActions(array('Delete'));
-        $this->listViewOptions->setRestorable(FALSE);
-        $this->listViewOptions->setTemplate("IbtikarBackendBundle:City:list.html.twig");
+//        $this->listViewOptions->setRestorable(FALSE);
+        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:City:list.html.twig");
     }
 
     protected function doList(Request $request) {
         $renderingParams = parent::doList($request);
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $countries = $dm->getRepository('GlanceDashboardBundle:Country')->findCountrySorted()->getQuery()->execute();
+        $countries = $dm->getRepository('IbtikarGlanceDashboardBundle:Country')->findCountrySorted()->getQuery()->execute();
 
         $renderingParams['countries'] = $countries;
         $renderingParams['country_selected'] = $request->get('countryCode');
@@ -128,7 +129,7 @@ class CityController extends BackendController {
         $countryAttr = array('data-country' => true, 'class' => 'dev-country select');
         $selectedCountryId = $request->get('selectedCountryId');
         if ($selectedCountryId) {
-            $country = $dm->getRepository('IbtikarBackendBundle:Country')->find($selectedCountryId);
+            $country = $dm->getRepository('IbtikarGlanceDashboardBundle:Country')->find($selectedCountryId);
             if ($country) {
                 $city->setCountry($country);
                 $countryAttr['readonly'] = true;
@@ -167,41 +168,48 @@ class CityController extends BackendController {
 
 
 
-    public function editAction(Request $request, $id) {
-        //build breadcrumb
-        $breadcrumbs = $this->get("white_october_breadcrumbs");
-        $breadcrumbs->addItem('backend-home', $this->generateUrl('backend_home'));
-        $breadcrumbs->addItem('List City', $this->generateUrl('city_list'));
-        $breadcrumbs->addItem('Edit City', $this->generateUrl('city_edit', array('id' => $id)));
+    public function editAction(Request $request, $id)
+    {
+        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new city'), array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list city'));
+        $breadCrumbArray = $this->preparedMenu($menus);
 
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $city = $dm->getRepository('IbtikarBackendBundle:City')->find($id);
-        if(!$city) {
+        $city = $dm->getRepository('IbtikarGlanceDashboardBundle:City')->find($id);
+        if (!$city) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
-        $form = $this->createForm(new CityType(), $city, array('translation_domain' => $this->translationDomain));
+        $countryAttr = array('data-country' => true, 'class' => 'dev-country select');
+
+        $form = $this->createFormBuilder($city, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
+            ->add('name', formType\TextType::class, array('attr' => array('data-rule-unique' => 'ibtikar_glance_dashboard_city_check_field_unique', 'data-name' => 'name', 'data-rule-minlength' => 3, 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_city_check_field_unique'))))
+            ->add('nameEn', formType\TextType::class, array('attr' => array('data-rule-unique' => 'ibtikar_glance_dashboard_city_check_field_unique', 'data-name' => 'nameEn', 'data-rule-minlength' => 3, 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_city_check_field_unique'))))
+            ->add('country', \Doctrine\Bundle\MongoDBBundle\Form\Type\DocumentType::class, array('class' => 'IbtikarGlanceDashboardBundle:Country', 'query_builder' => function(DocumentRepository $repo) {
+
+                    return $repo->findCountrySorted();
+                }, 'choice_label' => 'countryName', 'required' => true, 'attr' => $countryAttr))
+            ->add('save', formType\SubmitType::class)
+            ->getForm();
 
         if ($request->getMethod() === 'POST') {
 
             $form->handleRequest($request);
 
             if ($form->isValid()) {
-                $formData = $request->get('city_type');
-                $media = json_decode($formData['media'], true);
                 $dm->flush();
-                $this->updateGallary($city, $media, 'image');
-                $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('done sucessfully'));
-                if ($formData['submitButton'] == 'add_save') {
-                    return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('place_create', array('cityId' => $city->getId()))));
-                } else {
-                    return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('city_list'), array(), true));
-                }
+                $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
+//                if ($formData['submitButton'] == 'add_save') {
+//                    return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('place_create', array('cityId' => $city->getId()))));
+//                } else {
+//                    return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('city_list'), array(), true));
+//                }
             }
         }
 
-        return $this->render('IbtikarBackendBundle:City:edit.html.twig', array(
-                    'form' => $form->createView(),
-                    'translationDomain' => $this->translationDomain
+        return $this->render('IbtikarGlanceDashboardBundle::formLayout.html.twig', array(
+                'breadcrumb' => $breadCrumbArray,
+                'title' => $this->trans('edit city', array(), $this->translationDomain),
+                'form' => $form->createView(),
+                'translationDomain' => $this->translationDomain
         ));
     }
 

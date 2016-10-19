@@ -44,7 +44,7 @@ class Country extends Document {
      */
     private $specialCountrySort = 0;
 
-    public function getPath() {
+    public function __toString() {
         return (string) $this->countryName;
     }
 

@@ -1,8 +1,19 @@
 # #############Labels############
 'Name': 'الاسم بالعربية'
+'NameEn': 'الاسم بالإنجليزية'
+'name': 'الاسم بالعربية'
+'nameEn': 'الاسم بالإنجليزية'
 'Name en': 'الاسم بالإنجليزية'
 'Country': 'البلد'
-'Users count': 'عدد الموظفين و  الأعضاء'
+'country': 'البلد'
+'staffMembersCount': 'عدد الموظفين و  الأعضاء'
+'Staff members count': 'عدد الموظفين و  الأعضاء'
+'createdAt': تاريخ الإنشاء
+'Created at': تاريخ الإنشاء
+'createdBy': قام بالإنشاء
+'updatedAt': تاريخ التحديث
+'Updated at': تاريخ التحديث
+'city': مدينه
 
 # ############Messages############
 'Delete One Confirmation Message': 'انت على وشك حذف المدينه %s.. هل ترغب بحذفها؟'
@@ -13,9 +24,9 @@
 
 # ############Titles############
 'List City': 'قائمة المدن'
+'list city': 'قائمة المدن'
 'Add new city': 'إدخال مدينه جديدة'
-'View City': 'عرض المدينة'
-'Slug': 'اسم الرابط'
+edit city: تعديل مدينه
 
 # ############Buttons############
 'View One City': 'عرض المدينة'

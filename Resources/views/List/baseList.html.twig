@@ -50,9 +50,8 @@
                                 <h5 class="panel-title">    {{ list.listType == 'trash' ? 'View deleted items'|trans : ('List '~ listName)|trans({}, translationDomain)}} </h5>
                                 <div class="heading-elements">
                                     {% block statistic %}
-                                    <span class="label bg-number heading-text">28 دور</span>
-                                    <span class="label bg-number heading-text">12338 فعال</span>
-                                    <span class="label bg-number heading-text">8973 غير فعال</span>
+                                     <span class="label bg-number heading-text">{{total}} {% trans from translationDomain %}listName{% endtrans %}</span>
+
                                     {% endblock %}
 
 
@@ -64,7 +63,7 @@
                             </div>
                             <div class="actions">
 
-{% block actions %}
+            {% block actions %}
 
                                 <button id="pnotify-stack-custom-top" class="btn btn-default btn-sm" type="button"> Alert</button>
 
@@ -188,12 +187,11 @@
 
                             </div>
 
-
                             <table class="table table-hover table-striped datatable-column-search-inputs" width="100%">
                                 <thead>
 
                                     <tr>
-                                        {% if list.hasBulkActions(listName) %}
+                                        {% if list.getBulkActions()|length > 0 %}
                                             <th class="text-center" data-orderable="false" data-bSortable="false" data-searchable="false">
                                     <div class="form-group">
                                         <label class="checkbox-inline">
@@ -203,15 +201,13 @@
                                 </th>
                             {% endif %}
                             {% for field in list.fields %}
-                                {% if field.isSortable %}
                                     <th class="" data-name="{{ field.title }}">
-
                                             {{ field.title|trans({}, translationDomain) }}
 
                                     </th>
-                                {% endif%}
                             {% endfor %}
-                                {% if list.hasActionsColumn(listName)  %}
+
+                                {% if list.getActions()|length > 0  %}
 
                                     <th  class="text-center">العمليات</th>
                                 {%endif %}
@@ -222,7 +218,7 @@
                                     <tbody>
                                         {% for object in pagination %}
                                             <tr>
-                                            {% if list.hasBulkActions(listName) %}
+                                                {% if list.getBulkActions()|length > 0 %}
 
                                                 <td class="text-center">
                                                     <div class="form-group">
@@ -248,7 +244,9 @@
                                                                 </a>
                                                             {%else%}
                                                                 {# added to fix the sorting for fields with underscore #}
-                                                                {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}}
+                                                            {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}}
+
+
                                                             {% endif %}
 
                                                         </td>
@@ -257,7 +255,7 @@
 
                                                 {% endfor %}
 
-                                                {% if list.hasActionsColumn(listName)  %}
+                                                {% if list.getActions()|length > 0  %}
                                                     <td class="text-center" style="white-space: nowrap;">
                                                         {% if  object.getNotModified() is not defined  or  object.getNotModified()== false %}
                                                         {% for action in list.actions %}
@@ -331,6 +329,8 @@
                     var start ={{skip}} ;
                     var sort ={% if sort is defined %}{{sort|raw}}{% else %} null {%endif %};
                     var toggleButtonColor = '#D6494C';
+                    var ajaxData = '{{path("ibtikar_glance_dashboard_"~listName|lower~"_list")}}';
+                    var changeListColumnsUrl = "{{path('ibtikar_glance_dashboard_'~listName|lower~'_change_list_columns')}}";
 
                 </script>
                 <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/app.js') }}"></script>
