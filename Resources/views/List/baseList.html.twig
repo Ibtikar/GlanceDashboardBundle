@@ -192,7 +192,7 @@
 
                                     <tr>
                                         {% if list.getBulkActions()|length > 0 %}
-                                            <th class="text-center" data-orderable="false" data-bSortable="false" data-searchable="false">
+                                            <th class="text-center" data-orderable="false" data-bSortable="false" data-searchable="false" data-name="id">
                                     <div class="form-group">
                                         <label class="checkbox-inline">
                                             <input type="checkbox" class="styled dev-checkbox-all">
@@ -333,7 +333,6 @@
                     var changeListColumnsUrl = "{{path('ibtikar_glance_dashboard_'~listName|lower~'_change_list_columns')}}";
 
                 </script>
-                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/app.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/loaders/blockui.min.js')}}"></script>
                 <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/nicescroll.min.js')}}"></script>
                 <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/drilldown.js')}}"></script>
@@ -350,6 +349,8 @@
                 <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/selects/select2.min.js')}}"></script>
                 <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/datatables_api.js')}}"></script>
                 <script src="{{ asset('bundles/ibtikarglancedashboard/js/ajaxifyList.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/app.js') }}"></script>
+
 
 
                 <!-- modals files -->
