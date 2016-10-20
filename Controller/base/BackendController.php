@@ -52,7 +52,7 @@ class BackendController extends Controller {
         $renderingParams = $this->doList($request);
         if( $request->isXmlHttpRequest()){
 
-         return $this->getListJsonData($renderingParams);
+         return $this->getListJsonData($request,$renderingParams);
         }
 
         if ($this->listViewOptions->getTemplate()) {
@@ -405,7 +405,7 @@ class BackendController extends Controller {
             $dm->flush();
             $columnHeader=$this->getColumnHeaderAndSort($request);
 
-            return new JsonResponse(array('status' => 'success','column'=>$columnHeader['columnHeader'],'sort'=>$columnHeader['sort']));
+            return new JsonResponse(array('status' => 'success','columns'=>$columnHeader['columnHeader'],'sort'=>$columnHeader['sort']));
         }
     }
 
@@ -467,7 +467,7 @@ class BackendController extends Controller {
         }
     }
 
-    public function getListJsonData($renderingParams)
+    public function getListJsonData($request,$renderingParams)
     {
         $documentObjects = array();
         foreach ($renderingParams['pagination'] as $document) {
@@ -509,7 +509,8 @@ class BackendController extends Controller {
 
             $documentObjects[] = $oneDocument;
         }
-        return new JsonResponse(array('status' => 'success','data' => $documentObjects, "draw" => 0, 'sEcho' => 0,
+        $rowsHeader=$this->getColumnHeaderAndSort($request);
+        return new JsonResponse(array('status' => 'success','data' => $documentObjects, "draw" => 0, 'sEcho' => 0,'columns'=>$rowsHeader['columnHeader'],
             "recordsTotal" => $renderingParams['total'],
             "recordsFiltered" => $renderingParams['total']));
     }
