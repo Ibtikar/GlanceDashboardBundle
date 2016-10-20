@@ -7,7 +7,7 @@ var submitButtonConfirmFunction;
 
 
 
-var stack_custom_top = {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 1};
+var stack_bottom_right = {"dir1": "up", "dir2": "left", "firstpos1": 25, "firstpos2": 25};
 
 
 /**
@@ -35,9 +35,9 @@ function submitAjaxForm() {
             history: {
                 history: false
             },
-            width: "100%",
+//            width: "100%",
             cornerclass: "no-border-radius",
-            stack: stack_custom_top,
+            stack: stack_bottom_right,
             before_open: function(PNotify) {
                 progressStatus = PNotify.get().find("div.progress-bar");
                 progressStatus.width(cur_value + "%").attr("aria-valuenow", cur_value).find("span").html(cur_value + "%");

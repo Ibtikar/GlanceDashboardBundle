@@ -85,7 +85,10 @@ var dataTableDefault = {
         paginate: {'first': 'الاول', 'last': 'الاخير', 'next': '&larr;', 'previous': '&rarr;'}
     },
     drawCallback: function () {
-        $('[data-popup="tooltip"]').tooltip();
+            $('[data-popup="tooltip"]').tooltip({
+                        trigger: 'hover'
+            });
+         $('.dev-checkbox-all').closest('th').removeClass('sorting_asc').addClass('sorting_disabled')
         if ($('.datatable-column-search-inputs input.dev-checkbox').length == $('.datatable-column-search-inputs input:checked.dev-checkbox').length && $('.datatable-column-search-inputs input:checked.dev-checkbox').length!=0) {
             $('.dev-checkbox-all').prop('checked', true).uniform('refresh');
         } else {
@@ -180,7 +183,7 @@ function saveListSelectedColumns(basicModal, url) {
             $('.datatable-column-search-inputs thead').html('<tr>' + th + '</tr>')
             if(data.sort){
                 datatableSetting= $.extend({},dataTableDefault, {"order": JSON.parse(data.sort), "initComplete": function (settings, json) {
-//                    $('#dev-checkbox').removeClass('sorting_asc').addClass('sorting_disabled')
+                    $('.dev-checkbox-all').removeClass('sorting_asc').addClass('sorting_disabled')
                     $(".dataTables_length select").select2({
                         /* select2 options, as an example */
                         minimumResultsForSearch: -1,
@@ -231,6 +234,7 @@ function BaseList() {
 
 
     $('div.panel-flat').on('click', '.dev-change-columns', function () {
+        $('[data-popup="tooltip"]').tooltip("hide");
         blockPage();
         thisObject.showColumnOptionsModal();
     });
