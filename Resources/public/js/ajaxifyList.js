@@ -1,7 +1,6 @@
 var table;
-var pushState = true;
-var callBack=false;
-var checkbox=false;
+var callBack = false;
+var checkbox = false;
 var dataTableDefault = {
     "sPaginationType": "full_numbers",
     "bLengthChange": true,
@@ -35,39 +34,42 @@ var dataTableDefault = {
             var columnName = $(table.column(order[0]).header()).attr('data-name').trim();
 
 
-        }else{
-            var columndir = sorting[1];
-            var columnName = $(table.column(sorting[0]).header()).attr('data-name').trim();
-        }
-        var page = parseInt(table.page(), 10) + parseInt(1, 10);
-        var url = ajaxData + '?page=' + page + '&sort=' + columnName + '&columnDir=' + columndir + '&limit=' + table.page.info().length;
-        if (pushState) {
-            pushNewState(null, null, url);
-        }
-         }
-        else {
-            url = window.location.href;
-        }
-        pushState = true;
-        callBack = false;
-        $.ajax
-                ({
-                    'dataType': 'json',
-                    'url': url,
-                    beforeSend: function () {
-             blockPage();
-                    },
-                    'success': function (json) {
-                        fnCallback(json)
-                        $('input[type=checkbox]').closest('td').addClass('text-center');
-                        setTimeout(function () {
-                            $('input').uniform();
-                            unblockPage()
+                } else {
+                    var columndir = sorting[1];
+                    var columnName = $(table.column(sorting[0]).header()).attr('data-name').trim();
+                }
+                var page = parseInt(table.page(), 10) + parseInt(1, 10);
+                var url = ajaxData + '?page=' + page + '&sort=' + columnName + '&columnDir=' + columndir + '&limit=' + table.page.info().length;
+                pushNewState(null, null, url);
+            }
+            else {
+                url = window.location.href;
+            }
+            callBack = false;
+            $.ajax
+                    ({
+                        'dataType': 'json',
+                        'url': url,
+                        beforeSend: function () {
+                            blockPage();
+                        },
+                        'success': function (json) {
+                            if (json.columns.length == columns.length) {
+                                fnCallback(json)
+                                $('input[type=checkbox]').closest('td').addClass('text-center');
+                                setTimeout(function () {
+                                    $('input').uniform();
+                                    unblockPage()
 
 
-                        }, 200)
-                    }
-                });
+                                }, 200)
+                            } else {
+                                reIntaializeTable(json);
+                            }
+
+                        }
+                    });
+
 
 
     },
@@ -85,11 +87,11 @@ var dataTableDefault = {
         paginate: {'first': 'الاول', 'last': 'الاخير', 'next': '&larr;', 'previous': '&rarr;'}
     },
     drawCallback: function () {
-            $('[data-popup="tooltip"]').tooltip({
-                        trigger: 'hover'
-            });
-         $('.dev-checkbox-all').closest('th').removeClass('sorting_asc').addClass('sorting_disabled')
-        if ($('.datatable-column-search-inputs input.dev-checkbox').length == $('.datatable-column-search-inputs input:checked.dev-checkbox').length && $('.datatable-column-search-inputs input:checked.dev-checkbox').length!=0) {
+        $('[data-popup="tooltip"]').tooltip({
+            trigger: 'hover'
+        });
+        $('.dev-checkbox-all').closest('th').removeClass('sorting_asc').addClass('sorting_disabled')
+        if ($('.datatable-column-search-inputs input.dev-checkbox').length == $('.datatable-column-search-inputs input:checked.dev-checkbox').length && $('.datatable-column-search-inputs input:checked.dev-checkbox').length != 0) {
             $('.dev-checkbox-all').prop('checked', true).uniform('refresh');
         } else {
             $('.dev-checkbox-all').prop('checked', false).uniform('refresh');
@@ -105,8 +107,50 @@ if(sort){
 }else{
     table = $('.datatable-column-search-inputs').DataTable($.extend({},dataTableDefault, { "deferLoading": totalNumber}));
 
+    }
+
 }
 
+function reIntaializeTable(data) {
+    table.clear();
+    table.destroy();
+    dataTableDefault.columns = data.columns;
+    columns = data.columns;
+    dataTableDefault.iDisplayStart = table.page.info().start;
+    dataTableDefault.iDisplayLength = table.page.info().length;
+
+    callBack = true
+    var th = ''
+    $.each(data.columns, function (key, column) {
+//                if (column.data == 'id') {
+//                    th += '<th class="text-center sorting_disabled" id="dev-checkbox"> </th>';
+//                } else
+//                {
+        th += '<th class="' + column.class + '" data-orderable=' + column.orderable + ' data-name="' + column.name + '">' + column.title + '</th>'
+//                }
+
+    })
+    $('.datatable-column-search-inputs thead tr').remove()
+    $('.datatable-column-search-inputs thead').html('<tr>' + th + '</tr>')
+    if (data.sort) {
+        datatableSetting = $.extend({}, dataTableDefault, {"order": JSON.parse(data.sort), "initComplete": function (settings, json) {
+                $('.dev-checkbox-all').removeClass('sorting_asc').addClass('sorting_disabled')
+                $(".dataTables_length select").select2({
+                    /* select2 options, as an example */
+                    minimumResultsForSearch: -1,
+                    width: 'auto'
+                });
+            }})
+    } else {
+        datatableSetting = $.extend({}, dataTableDefault, {"initComplete": function (settings, json) {
+                $(".dataTables_length select").select2({
+                    /* select2 options, as an example */
+                    minimumResultsForSearch: -1,
+                    width: 'auto'
+                });
+            }});
+    }
+    table = $('.datatable-column-search-inputs').DataTable(datatableSetting)
 }
 
 
@@ -156,54 +200,10 @@ function saveListSelectedColumns(basicModal, url) {
             if(data.status=='login'){
                 window.location.reload(true);
 
-            }else{
-            basicModal.hide();
-            table.clear()
-            table.destroy();
-
-           dataTableDefault.columns=data.column;
-           dataTableDefault.iDisplayStart=table.page.info().start;
-           dataTableDefault.iDisplayLength=table.page.info().length;
-           dataTableDefault.deferLoading=null;
-           delete dataTableDefault.deferLoading;
-
-
-            var th = ''
-            $.each(data.column, function (key, column) {
-//                if (column.data == 'id') {
-//                    th += '<th class="text-center sorting_disabled" id="dev-checkbox"> </th>';
-//                } else
-//                {
-                    th += '<th class="'+column.class+'" data-orderable=' + column.orderable + ' data-name="'+column.name+'">' + column.title + '</th>'
-//                }
-
-            })
-            callBack = true
-            $('.datatable-column-search-inputs thead tr').remove()
-            $('.datatable-column-search-inputs thead').html('<tr>' + th + '</tr>')
-            if(data.sort){
-                datatableSetting= $.extend({},dataTableDefault, {"order": JSON.parse(data.sort), "initComplete": function (settings, json) {
-                    $('.dev-checkbox-all').removeClass('sorting_asc').addClass('sorting_disabled')
-                    $(".dataTables_length select").select2({
-                        /* select2 options, as an example */
-                        minimumResultsForSearch: -1,
-                        width: 'auto'
-                    });
-                    }})
             } else {
-                datatableSetting = $.extend({}, dataTableDefault, {"initComplete": function (settings, json) {
-//                    $('#dev-checkbox').removeClass('sorting_asc').addClass('sorting_disabled')
-                        $(".dataTables_length select").select2({
-                            /* select2 options, as an example */
-                            minimumResultsForSearch: -1,
-                            width: 'auto'
-                        });
-                    }});
+                basicModal.hide();
+                reIntaializeTable(data);
             }
-            table = $('.datatable-column-search-inputs').DataTable(datatableSetting)
-
-            }
-
         }
     });
 }
