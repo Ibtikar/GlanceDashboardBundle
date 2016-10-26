@@ -50,8 +50,8 @@ class JobController extends BackendController {
 
         $job = new Job();
         $form = $this->createFormBuilder($job, array('translation_domain' => $this->translationDomain,'attr'=>array('class'=>'dev-page-main-form dev-js-validation form-horizontal')))
-                ->add('title',formType\TextType::class, array('required' => true,'attr' => array('data-rule-maxlength' => 150,'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique','data-name'=>'title','data-msg-unique'=>  $this->trans('not valid'),'data-url'=>$this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
-                ->add('titleEn',formType\TextType::class, array('required' => true,'attr' => array('data-rule-maxlength' => 150,'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique','data-name'=>'titleEn','data-msg-unique'=>  $this->trans('not valid'),'data-url'=>$this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
+                ->add('title',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique','data-name'=>'title','data-msg-unique'=>  $this->trans('not valid'),'data-url'=>$this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
+                ->add('titleEn',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique','data-name'=>'titleEn','data-msg-unique'=>  $this->trans('not valid'),'data-url'=>$this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
                 ->add('save', formType\SubmitType::class)
                 ->getForm();
 
@@ -86,8 +86,8 @@ class JobController extends BackendController {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
         $form = $this->createFormBuilder($job, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
-                ->add('title', formType\TextType::class, array('required' => true, 'attr' => array( 'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique', 'data-name' => 'title', 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
-                ->add('titleEn', formType\TextType::class, array('required' => true, 'attr' => array( 'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique', 'data-name' => 'titleEn', 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
+                ->add('title', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element'=>true, 'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique', 'data-name' => 'title', 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
+                ->add('titleEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element'=>true, 'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique', 'data-name' => 'titleEn', 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
                 ->add('save', formType\SubmitType::class)
                 ->getForm();
 

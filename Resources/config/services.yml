@@ -36,3 +36,14 @@ services:
         tags:
           - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 255 }
         arguments: ["@router","@session","@translator"]
+
+    validator.international.phone:
+        class: Ibtikar\GlanceDashboardBundle\Validator\InternationalPhoneValidator
+        tags:
+            - { name: validator.constraint_validator, alias: international-phone }
+
+    backend.form.type.phone:
+        class: Ibtikar\GlanceDashboardBundle\Form\Type\PhoneType
+        tags:
+            - { name: form.type, alias: phone }
+#

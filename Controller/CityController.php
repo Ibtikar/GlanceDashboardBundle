@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 use Symfony\Component\Form\Extension\Core\Type as formType;
+use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\Locale\Locale;
 
@@ -108,7 +109,7 @@ class CityController extends BackendController {
         $responseContent = '';
         if ($countryCode) {
             $translator = $this->get('translator');
-            $cities = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarBackendBundle:City')->findBy(array('country' => $countryCode), array('usersCount' => 'DESC', 'name' => 'ASC'));
+            $cities = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:City')->findBy(array('country' => $countryCode), array('name' => 'ASC'));
             $responseContent='<option value="">' . $translator->trans('Choose City', array(), $this->translationDomain) . '</option>';
             if ($search) {
                 $responseContent = '<option value="">' . $translator->trans('All') . '</option>';
@@ -136,8 +137,8 @@ class CityController extends BackendController {
             }
         }
         $form = $this->createFormBuilder($city, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
-            ->add('name', formType\TextType::class, array('attr' => array('data-rule-unique' => 'ibtikar_glance_dashboard_city_check_field_unique', 'data-name' => 'name', 'data-rule-minlength' => 3, 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_city_check_field_unique'))))
-            ->add('nameEn', formType\TextType::class, array('attr' => array('data-rule-unique' => 'ibtikar_glance_dashboard_city_check_field_unique', 'data-name' => 'nameEn', 'data-rule-minlength' => 3, 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_city_check_field_unique'))))
+            ->add('name', formType\TextType::class, array('attr' => array('data-validate-element'=>true,'data-rule-unique' => 'ibtikar_glance_dashboard_city_check_field_unique', 'data-name' => 'name', 'data-rule-minlength' => 3, 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_city_check_field_unique'))))
+            ->add('nameEn', formType\TextType::class, array('attr' => array('data-validate-element'=>true,'data-rule-unique' => 'ibtikar_glance_dashboard_city_check_field_unique', 'data-name' => 'nameEn', 'data-rule-minlength' => 3, 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_city_check_field_unique'))))
             ->add('country', \Doctrine\Bundle\MongoDBBundle\Form\Type\DocumentType::class, array('class' => 'IbtikarGlanceDashboardBundle:Country', 'query_builder' => function(DocumentRepository $repo) {
 
                     return $repo->findCountrySorted();
@@ -181,8 +182,8 @@ class CityController extends BackendController {
         $countryAttr = array('data-country' => true, 'class' => 'dev-country select');
 
         $form = $this->createFormBuilder($city, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
-            ->add('name', formType\TextType::class, array('attr' => array('data-rule-unique' => 'ibtikar_glance_dashboard_city_check_field_unique', 'data-name' => 'name', 'data-rule-minlength' => 3, 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_city_check_field_unique'))))
-            ->add('nameEn', formType\TextType::class, array('attr' => array('data-rule-unique' => 'ibtikar_glance_dashboard_city_check_field_unique', 'data-name' => 'nameEn', 'data-rule-minlength' => 3, 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_city_check_field_unique'))))
+            ->add('name', formType\TextType::class, array('attr' => array('data-validate-element'=>true,'data-rule-unique' => 'ibtikar_glance_dashboard_city_check_field_unique', 'data-name' => 'name', 'data-rule-minlength' => 3, 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_city_check_field_unique'))))
+            ->add('nameEn', formType\TextType::class, array('attr' => array('data-validate-element'=>true,'data-rule-unique' => 'ibtikar_glance_dashboard_city_check_field_unique', 'data-name' => 'nameEn', 'data-rule-minlength' => 3, 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_city_check_field_unique'))))
             ->add('country', \Doctrine\Bundle\MongoDBBundle\Form\Type\DocumentType::class, array('class' => 'IbtikarGlanceDashboardBundle:Country', 'query_builder' => function(DocumentRepository $repo) {
 
                     return $repo->findCountrySorted();

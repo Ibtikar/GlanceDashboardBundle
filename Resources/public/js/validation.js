@@ -1,3 +1,26 @@
+$.validator.addMethod('mobile', function (value, element) {
+    if (this.optional(element) || $(element).is(':focus')) {
+        return true;
+    }
+    var $element = $(element);
+    if ($.trim($element.val())) {
+    if ($element.intlTelInput("isValidNumber")) {
+     return true;
+    } else {
+
+      return false;
+    }
+  }
+//    $element.attr('data-remove-color', 'false');
+//    var phoneText = formatPhoneText($element);
+//    var countryElement = $element.parent().find('select.dev-phone-country-select');
+//    var phoneCountry = countryForE164Number(phoneText);
+//    if (phoneCountry.toUpperCase() !== countryElement.val().toUpperCase()) {
+//        $element.attr('data-remove-color', 'false');
+//        return false;
+//    }
+//    return isValidNumber(phoneText, countryElement.val());
+}, 'phone must be in the right format');
 $.validator.addMethod('email', function(value, element) {
 //    return this.optional(element) || /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value);
     $(element).attr('data-remove-color', 'false');
@@ -28,21 +51,24 @@ $.validator.addMethod('staffUsername', function (value, element) {
     }
 }, $.validator.format('not valid'));
 
-$.validator.addMethod('slug', function (value, element) {
-    //remove tachkil
-    value = value.replace(/[\u0617-\u061A\u064B-\u0652]/g,"");
-    $(element).val(value);
-    var unicodeWord = "^[a-zA-Z\u0600-\u06ff\-]{0,}$";
-    var match = value.match(unicodeWord);
-    if (match == null) {
-        return false;
-    }
-    else
-    {
+$.validator.addMethod('filesize', function (value, element, param) {
+    // param = size (bytes)
+    // element = element to validate (<input>)
+    // value = value of the element (file name)
+
+    return this.optional(element) || (element.files[0].size <= (param * 1024 * 1024));
+}, $.validator.format('file must be less than {0} mb'));
+
+$.validator.addMethod('dimensions', function (value, element, param) {
+ 
+    var width = $(element).attr('data-image-width');
+    var height = $(element).attr('data-image-height');
+    if (width && height) {
+        return this.optional(element) || (width >= param && height >= param)
+    } else {
         return true;
     }
-}, $.validator.format('not valid'));
-
+}, 'image dimensions must be greater than 200*200');
 
 
 
@@ -142,7 +168,7 @@ function unhighlightElement(element, removeUniqueMessageOnly) {
  * @param object element
  */
 function markElementAsValid(element) {
-
+//console.log('valid')
     if ($(element).hasClass('dev-datetimepicker')) {
        $(element).closest('.form-group').removeClass('has-error').find('.help-block').remove();
        }
@@ -409,6 +435,11 @@ function initFormValidation(form_selector) {
                 }
                 var errorAfterSelector = $(element).attr('data-error-after-selector');
                 if (errorAfterSelector) {
+                    if (errorAfterSelector == '.select2-container') {
+                        $(element).siblings(errorAfterSelector).after(error);
+                        return;
+
+                    }
                     $(element).closest(errorAfterSelector).after(error);
                     return;
                 }
@@ -477,7 +508,7 @@ jQuery(document).ready(function ($) {
         });
     });
 
-    $(document).on("select2-close", "form.dev-js-validation select", function () {
+    $(document).on("select2:close", "form.dev-js-validation select", function () {
         $(this).valid();
     });
 

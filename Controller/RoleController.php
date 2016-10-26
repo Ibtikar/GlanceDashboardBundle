@@ -176,12 +176,12 @@ class RoleController extends BackendController {
     private function buildForm($role, $permissions)
     {
         return $this->createFormBuilder($role, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
-                ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-rule-unique' => 'ibtikar_glance_dashboard_role_check_field_unique', 'data-msg-unique' => $this->trans('not valid'), 'data-name' => 'name',
+                ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element'=>true,'data-rule-unique' => 'ibtikar_glance_dashboard_role_check_field_unique', 'data-msg-unique' => $this->trans('not valid'), 'data-name' => 'name',
                         'data-rule-maxlength' => 150,
                         'data-rule-minlength' => 3,
                         'data-url' => $this->generateUrl('ibtikar_glance_dashboard_role_check_field_unique'),
                         'placeholder' => '')))
-                ->add('description', formType\TextareaType::class, array('required' => false, 'attr' => array('data-rule-maxlength' => 500)))
+                ->add('description', formType\TextareaType::class, array('required' => false, 'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 500)))
                 ->add('permissions', formType\ChoiceType::class, array(
                     'choices' => $permissions,
                     'multiple' => true,

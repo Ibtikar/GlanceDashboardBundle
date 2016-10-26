@@ -1,4 +1,9 @@
 {% extends app.request.xmlHttpRequest ? 'IbtikarGlanceDashboardBundle::ajaxLayout.html.twig' : app.request.get('iframe') == 'true' ? 'IbtikarGlanceDashboardBundle::iframeFormLayout.html.twig' : 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard_form.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/css/intlTelInput.css')}}">
+
+    {% endblock %}
 {% block header %}
     {{ include('IbtikarGlanceDashboardBundle::header.html.twig') }}
 {% endblock %}
@@ -33,9 +38,14 @@
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/jquery.easing.min.js')}}"></script>
 
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/selects/select2.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/selects/select2_ar.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/libraries/jquery_ui/interactions.min.js')}}"></script>
+
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_select2.js')}}"></script>
+    <script  type="text/javascript"  src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/intlTelInput.js')}}"></script>
     <script  type="text/javascript"  src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/utils.js')}}"></script>
-    <script  type="text/javascript"  src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/intlTelInput.min.js')}}"></script>
+
+
 
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/notifications/pnotify.min.js')}}"></script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_notifications_pnotify.js')}}"></script>
@@ -50,10 +60,11 @@
     <script src="{{ asset('bundles/ibtikarglancedashboard/js/backend.js') }}"></script>
 
 
+
     <script>
 
     $(document).ready(function () {
-            $('.select').select2();
+            $('.select').select2({ "language": "ar"});
             $('.dev-form-reset-button').on('click', function () {
             $('input,textarea').each(function () {
                 unhighlightElement($(this))
@@ -62,7 +73,7 @@
            $('form').find("select").trigger("change");
          })
         $('body').on('ajaxCallback',function(){
-            $('.select').select2();
+            $('.select').select2({ "language": "ar"});
 
         })
     })
