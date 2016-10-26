@@ -267,9 +267,13 @@ function checkUniqueValidation(element) {
         $this.removeAttr('data-unique-valid');
         var $loader = $this.closest('.form-group').find('.dev-inputLoader').show();
         var validatedValue = $this.val();
+        var data={fieldName: $this.attr('data-name'), fieldValue: $this.val(), id: requestId};
+        if($this.attr('data-name')=='mobile'){
+           $.extend(data,{'countryCode':$($this.attr('data-country-code')).intlTelInput("getSelectedCountryData").iso2})
+        }
         $.ajax({
             url: $this.attr('data-url'),
-            data: {fieldName: $this.attr('data-name'), fieldValue: $this.val(), id: requestId},
+            data: data,
             success: function (data) {
                 if ($this.closest('form').attr('ajax-running') === 'true') {
                     return;
