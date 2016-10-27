@@ -60,7 +60,7 @@ $.validator.addMethod('filesize', function (value, element, param) {
 }, $.validator.format('file must be less than {0} mb'));
 
 $.validator.addMethod('dimensions', function (value, element, param) {
- 
+
     var width = $(element).attr('data-image-width');
     var height = $(element).attr('data-image-height');
     if (width && height) {

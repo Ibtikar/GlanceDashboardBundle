@@ -21,14 +21,10 @@ class PhoneType extends AbstractType {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
-
-        $builder
+            $builder
                 ->add('phone', \Symfony\Component\Form\Extension\Core\Type\TextType::class,
-                        array('attr'=>array('data-rule-mobile'=>TRUE,'data-msg-mobile'=>'test',
+                        array('attr'=>array('data-rule-mobile'=>TRUE,'data-msg-mobile'=>$options['attr']['data-error-message'],
                             'data-error-after-selector'=>'.intl-tel-input',
-                            'data-name'=>'mobile',
-                            'data-country-code'=>"#staff_mobile_phone",
-                            'data-rule-unique' => 'ibtikar_glance_ums_staff_check_field_unique',
                             'data-url' => $this->container->get('router')->generate('ibtikar_glance_ums_staff_check_field_unique'))))
                 ->add("countryCode",  \Symfony\Component\Form\Extension\Core\Type\HiddenType::class, array('attr' => array('parent-class'=>'hidden'),'required'=>FALSE));
     }
