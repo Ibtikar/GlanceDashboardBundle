@@ -1,498 +1,524 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ar">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
-         <style>
-.ExternalClass .ecxReadMsgBody, .ExternalClass {
-width:100%;
-background-color:#ffffff;
-}
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
-line-height:100%;
-}
+        <title> {{projectName}} </title>
 
-.ExternalClass table td {
-border-collapse:collapse;
-}
+        <style type="text/css">
 
-.ExternalClass img {
-border:0;
-}
+            /* Client-specific Styles */
+            div, p, a, li, td { -webkit-text-size-adjust:none; }
+            #outlook a {padding:0;} /* Force Outlook to provide a "view in browser" menu link. */
+            html{width: 100%; }
+            body{direction: rtl;width:100% !important;background:#eeeeee ; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; margin:0; padding:0;}
+            /* Prevent Webkit and Windows Mobile platforms from changing default font sizes, while not breaking desktop design. */
+            .ExternalClass {width:100%;} /* Force Hotmail to display emails at full width */
+            .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {line-height: 100%;} /* Force Hotmail to display normal line spacing. */
+            #backgroundTable {margin:0; padding:0; width:100% !important; line-height: 100% !important;}
+            img {outline:none; text-decoration:none;border:none; -ms-interpolation-mode: bicubic;}
+            a img {border:none;}
+            .image_fix {display:block;}
+            p {margin: 0px 0px !important;}
+            table td {border-collapse: collapse;}
+            table { border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; }
+            a {color: #33b9ff;text-decoration: none;text-decoration:none;}
+            /*STYLES*/
+            table[class=full] { width: 100%; clear: both; }
+            /*IPAD STYLES*/
+            @media only screen and (max-width: 640px) {
 
-.ExternalClass html {
-width:100%;
-height:100%;
-}
+                a[href^="tel"], a[href^="sms"] {
+                    text-decoration: none;
+                    color: #33b9ff; /* or whatever your want */
+                    pointer-events: none;
+                    cursor: default;
+                }
+                .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
+                    text-decoration: default;
+                    color: #33b9ff !important;
+                    pointer-events: auto;
+                    cursor: default;
+                }
+                table[class=devicewidth] {width: 440px!important;text-align:center!important;}
+                table[class=devicewidthinner] {width: 420px!important;text-align:center!important;}
+                img[class=banner] {width: 484px!important;height:86px!important;}
 
-.ExternalClass a {
-color:#5b5b5b;
-text-decoration:none;
-}
+                img[class=happy] {width: 280px!important;height:186px!important;}
+                img[class=intro] {width: 420px!important;height:150px!important;}
+                img[class=col2img] {width: 440px!important;height:220px!important;}
 
-.ExternalClass a:link {
-color:#5b5b5b;
-text-decoration:none;
-}
 
-.ExternalClass a:hover {
-color:#5b5b5b !important;
-}
+            }
 
-.ExternalClass div, .ExternalClass p, .ExternalClass a, .ExternalClass li, .ExternalClass td {
-}
 
-.ExternalClass table[class="ecxfullWidth"] {
-width:100% !important;
-}
 
-@media only screen and (min-width: 600px) {
-.ExternalClass img[class="ecxImageResize"] {
-width:100% !important;
-}
-.ExternalClass img[class="ecxImageResize20"] {
-width:100% !important;
-height:20px !important;
-}
-.ExternalClass img[class="ecxImageResize560"] {
-width:560px !important;
-}
-.ExternalClass img[class="ecxImageResize270"] {
-width:270px !important;
-}
-.ExternalClass img[class="ecxImageResize171"] {
-width:171px !important;
-}
-.ExternalClass img[class="ecxImageResize175"] {
-width:175px !important;
-}
-.ExternalClass {
-width:auto !important;
-}
-}
+            /*IPHONE STYLES*/
+            @media only screen and (max-width: 480px) {
+                a[href^="tel"], a[href^="sms"] {
+                    text-decoration: none;
+                    color: #33b9ff; /* or whatever your want */
+                    pointer-events: none;
+                    cursor: default;
+                }
+                .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
+                    text-decoration: default;
+                    color: #33b9ff !important;
+                    pointer-events: auto;
+                    cursor: default;
+                }
+                table[class=devicewidth] {width: 280px!important;text-align:center!important;}
+                table[class=devicewidthinner] {width: 260px!important;text-align:center!important;}
+                img[class=happy] {width: 150px!important;height:140px!important;}
+                img[class=intro] {width: 260px!important;height:93px!important;}
+                img[class=banner] {width: 310px!important;height:55px!important;}
+                img[class=laptop] {width: 200px!important;height:114px!important;}
+                img[class=col2img] {width: 280px!important;height:140px!important;}
 
-@media only screen and (max-width: 599px) {
-.ExternalClass {
-width:auto !important;
-}
-.ExternalClass table[class="ecxfullWidth"] {
-width:100% !important;
-}
-.ExternalClass table[class="ecxMobileScale"] {
-width:100% !important;
-padding-left:20px !important;
-padding-right:20px !important;
-}
-.ExternalClass table[class="ecxMobileScale2"] {
-width:100% !important;
-padding-left:0px !important;
-padding-right:0px !important;
-}
-.ExternalClass span[class="ecxMobileErase"] {
-width:0;
-display:none !important;
-}
-.ExternalClass td[class="ecxMobileErase"] {
-width:0;
-display:none !important;
-}
-.ExternalClass table[class="ecxMobileErase"] {
-width:0;
-display:none !important;
-}
-.ExternalClass img[class="ecxImageResize"] {
-width:100% !important;
-}
-.ExternalClass img[class="ecxImageResize20"] {
-width:100% !important;
-height:20px !important;
-}
-.ExternalClass img[class="ecxImageResize560"] {
-width:100% !important;
-}
-.ExternalClass img[class="ecxImageResize270"] {
-width:100% !important;
-}
-.ExternalClass img[class="ecxImageResize171"] {
-width:100% !important;
-}
-.ExternalClass img[class="ecxImageResize175"] {
-width:175px !important;
-}
-.ExternalClass table[class="ecxHeaderModule"] {
-width:100% !important;
-text-align:center !important;
-}
-.ExternalClass td[class="ecxHeaderModule"] {
-width:280px !important;
-text-align:center !important;
-}
-.ExternalClass img[class="ecxHeaderModule"] {
-display:block !important;
-}
-.ExternalClass table[class="ecxFooterModule"] {
-width:100% !important;
-text-align:center !important;
-}
-.ExternalClass table[class="ecxFooterModule2"] {
-width:100% !important;
-text-align:center !important;
-}
-.ExternalClass td[class="ecxFooterModule2"] {
-width:280px !important;
-text-align:center !important;
-}
-.ExternalClass img[class="ecxFooterModule2"] {
-display:block !important;
-}
-.ExternalClass table[class="ecxmiResizeText"] {
-width:60% !important;
-padding-left:20px !important;
-padding-right:20px !important;
-}
-.ExternalClass td[class="ecxmiResizeText"] {
-width:60% !important;
-padding-left:20px !important;
-padding-right:20px !important;
-}
-.ExternalClass table[class="ecxmiResizeTable"] {
-width:175px !important;
-}
-.ExternalClass table[class="ecxmiResizeText2"] {
-width:60% !important;
-padding-right:20px !important;
-}
-.ExternalClass td[class="ecxmiResizeText2"] {
-width:60% !important;
-padding-right:20px !important;
-}
-.ExternalClass table[class="ecxTwoColumns1"] {
-width:43% !important;
-}
-.ExternalClass table[class="ecxTwoColumns2"] {
-width:43% !important;
-}
-.ExternalClass table[class="ecxThreeColumns"] {
-width:27% !important;
-}
-.ExternalClass table[class="ecxThreeColumns2"] {
-width:27% !important;
-}
-.ExternalClass table[class="ecxCalendarModule"] {
-width:79% !important;
-}
-}
 
-@media only screen and (max-width: 480px) {
-.ExternalClass {
-width:auto !important;
-}
-.ExternalClass table[class="ecxfullWidth"] {
-width:100% !important;
-}
-.ExternalClass table[class="ecxMobileScale"] {
-width:100% !important;
-padding-left:20px !important;
-padding-right:20px !important;
-}
-.ExternalClass span[class="ecxMobileErase"] {
-width:0;
-display:none !important;
-}
-.ExternalClass td[class="ecxMobileErase"] {
-width:0;
-display:none !important;
-}
-.ExternalClass table[class="ecxMobileErase"] {
-width:0;
-display:none !important;
-}
-.ExternalClass img[class="ecxImageResize"] {
-width:100% !important;
-}
-.ExternalClass img[class="ecxImageResize20"] {
-width:100% !important;
-height:20px !important;
-}
-.ExternalClass img[class="ecxImageResize560"] {
-width:100% !important;
-}
-.ExternalClass img[class="ecxImageResize270"] {
-width:100% !important;
-}
-.ExternalClass img[class="ecxImageResize171"] {
-width:100% !important;
-}
-.ExternalClass img[class="ecxImageResize175"] {
-width:100% !important;
-height:auto !important;
-text-align:center !important;
-}
-.ExternalClass table[class="ecxHeaderModule"] {
-width:100% !important;
-text-align:center !important;
-}
-.ExternalClass td[class="ecxHeaderModule"] {
-width:280px !important;
-text-align:center !important;
-}
-.ExternalClass img[class="ecxHeaderModule"] {
-display:block !important;
-}
-.ExternalClass table[class="ecxFooterModule"] {
-width:100% !important;
-text-align:center !important;
-}
-.ExternalClass table[class="ecxFooterModule2"] {
-width:100% !important;
-text-align:center !important;
-}
-.ExternalClass td[class="ecxFooterModule2"] {
-width:280px !important;
-text-align:center !important;
-}
-.ExternalClass img[class="ecxFooterModule2"] {
-display:block !important;
-}
-.ExternalClass table[class="ecxmiResizeText"] {
-width:100% !important;
-text-align:center !important;
-padding:0px !important;
-padding-top:10px !important;
-}
-.ExternalClass td[class="ecxmiResizeText"] {
-width:100% !important;
-padding:0px !important;
-}
-.ExternalClass table[class="ecxmiResizeTable"] {
-width:100% !important;
-}
-.ExternalClass table[class="ecxmiResizeText2"] {
-width:100% !important;
-text-align:center !important;
-padding:0px !important;
-padding-top:20px !important;
-}
-.ExternalClass td[class="ecxmiResizeText2"] {
-width:100% !important;
-padding:0px !important;
-}
-.ExternalClass table[class="ecxTwoColumns1"] {
-width:100% !important;
-}
-.ExternalClass table[class="ecxTwoColumns2"] {
-width:100% !important;
-}
-.ExternalClass table[class="ecxThreeColumns"] {
-width:100% !important;
-}
-.ExternalClass table[class="ecxThreeColumns2"] {
-width:100% !important;
-}
-.ExternalClass table[class="ecxCalendarModule"] {
-width:100% !important;
-}
-}
-</style>
+            }
+
+
+        </style>
     </head>
+    <body >
 
-    <body style="width:100% !important; min-width: 239px !important; color:#868686; background:#ffffff; font-family: Helvetica,sans-serif; font-size:14px; line-height:140%; margin:0; padding:0;">
+<!--        <table width="100%" bgcolor="#eeeeee" cellpadding="0" cellspacing="0" border="0" id="backgroundTable" st-sortable="preheader"  >
+            <tbody>
+                <tr>
+                    <td>
+                        <table width="600" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
+                            <tbody>
+                                <tr>
+                                    <td width="100%">
+                                        <table width="600" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
+                                            <tbody>
 
-
-        <!-- * ************************************************************************************************************************************ * -->
-
-
-        <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" style="font-size: 0; table-layout:fixed; line-height: 0;border-collapse: collapse;">
-            <tr>
-                <td width="100%" height="1" bgcolor="#e5e7eb" align="center" style="background: #e5e7eb;font-size: 0;line-height: 0;border-collapse: collapse;">&nbsp;
-                    <table style="table-layout:fixed;" width="600" border="0" cellpadding="0" cellspacing="0" align="center" style="font-size: 0;line-height: 0;border-collapse: collapse;" class="MobileScale2">
-                        <tr><td align="center" width="600" height="1" bgcolor="#e5e7eb" align="center" style="background: #e5e7eb;font-size: 0;line-height: 0;border-collapse: collapse;" class="MobileScale2">&nbsp;</td></tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td width="100%" height="20" bgcolor="#f5f5f5" align="center" style="background: #f5f5f5;font-size: 0;line-height: 0;border-collapse: collapse;">&nbsp;
-                    <table style="table-layout:fixed;" width="600" border="0" cellpadding="0" cellspacing="0" align="center" style="font-size: 0;line-height: 0;border-collapse: collapse;" class="MobileScale2">
-                        <tr><td align="center" width="600" height="20" bgcolor="#f5f5f5" style="background: #f5f5f5;font-size: 0;line-height: 0;border-collapse: collapse;" class="MobileScale2">&nbsp;</td></tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-
-        <table style="table-layout:fixed;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
-            <tr><td align="center" width="100%" valign="top" bgcolor="#f5f5f5" style="background: #f5f5f5;"><table border="0" cellpadding="0" cellspacing="0" align="center"><tr><td width="600" bgcolor="#f8f8f8" style="background: #f8f8f8;">
-                                <!-- Image Section -->
-                                <table style="table-layout:fixed;" width="600" border="0" cellpadding="0" cellspacing="0" align="center" class="MobileScale2">
-                                    <tr>
-                                        <td align="center" height="1" width="100%" bgcolor="#f0f0f0" class="MobileScale2" style="background: #f0f0f0;font-size: 0;line-height: 0;border-collapse: collapse;">&nbsp;</td>
-                                    </tr>
-                                </table>
-                                <!-- End of Image Section -->
-                            </td></tr></table></td></tr>
-        </table>
-
-
-
-
-        <table style="table-layout:fixed;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center" style="font-size: 0;line-height: 0;border-collapse: collapse;">
-            <tr>
-                <td align="center" width="100%" height="1" bgcolor="#f0f0f0" style="background: #f0f0f0;font-size: 0;line-height: 0;border-collapse: collapse;">&nbsp;
-                    <table style="table-layout:fixed;" width="600" border="0" cellpadding="0" cellspacing="0" align="center" style="font-size: 0;line-height: 0;border-collapse: collapse;" class="MobileScale2">
-                        <tr><td align="center" width="600" height="1" bgcolor="#e5e7eb" style="background: #e5e7eb;font-size: 0;line-height: 0;border-collapse: collapse;" class="MobileScale2">&nbsp;</td></tr>
-                    </table>
-                </td>
-            </tr>
-
-        </table>
-
-
-
-
-        <table style="table-layout:fixed;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
-            <tr><td align="center" width="100%" valign="top" bgcolor="#ffffff" style="background: #ffffff"><table border="0" cellpadding="0" cellspacing="0" align="center"><tr><td width="600" bgcolor="#f8f8f8" style="background: #f8f8f8">
-                                <!-- Image Section -->
-                                <table style="table-layout:fixed;" width="600" border="0" cellpadding="0" cellspacing="0" align="center" class="MobileScale2">
-                                    <tr>
-                                        <td align="center" height="1" width="100%" bgcolor="#f0f0f0" style="background: #f0f0f0;font-size: 0;line-height: 0;border-collapse: collapse;"  class="MobileScale2" >&nbsp;</td>
-
-                                    </tr>
-                                </table>
-                                <!-- End of Image Section -->
-                            </td></tr></table></td></tr>
-        </table>
-        <!-- * End of Header Module * -->
-        <!-- * ************************************************************************************************************************************ * -->
-
-
-
-        <!-- * ************************************************************************************************************************************ * -->
-        <!-- * Image 560 + Text Module * -->
-        <table style="table-layout:fixed;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center" style="font-size: 0;line-height: 0;border-collapse: collapse;">
-            <tr>
-                <td align="center" width="100%" height="30" bgcolor="#ffffff" style="background: #ffffff;font-size: 0;line-height: 0;border-collapse: collapse;">&nbsp;
-                    <table style="table-layout:fixed;" width="600" border="0" cellpadding="0" cellspacing="0" align="center" style="font-size: 0;line-height: 0;border-collapse: collapse;" class="MobileScale2">
-                        <tr><td align="center" width="600" height="30" bgcolor="#ffffff" style="background: #ffffff; font-size: 0;line-height: 0;border-collapse: collapse;" class="MobileScale2">&nbsp;</td></tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-
-        <table style="table-layout:fixed;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
-            <tr><td align="center" width="100%" valign="top" bgcolor="#ffffff" style="background: #ffffff;"><table border="0" cellpadding="0" cellspacing="0" align="center"><tr><td width="600" bgcolor="#f8f8f8" style="background: #f8f8f8">
-                                <!-- Image Section -->
-                                <table style="table-layout:fixed;" width="600" border="0" cellpadding="0" cellspacing="0" align="center" class="MobileScale2">
-                                    <tr>
-                                        <td align="center" height="1" width="100%" bgcolor="#f0f0f0"  class="MobileScale2" style="background: #f0f0f0;font-size: 0;line-height: 0;border-collapse: collapse;">&nbsp;</td>
-
-                                    </tr>
-                                </table>
-                                <!-- End of Image Section -->
-                            </td></tr></table></td></tr>
-        </table>
-
-        <table style="table-layout:fixed;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
-            <tr>
-                <td align="center" width="100%" valign="top" bgcolor="#ffffff" style="background: #ffffff;">
-                    <table  width="598" style="table-layout:fixed;" border="0" cellpadding="0" cellspacing="0" align="center">
-                        <tr>
-                            <td align="center" width="598" bgcolor="#ffffff" style="background: #ffffff;border-left:1px solid #e5e7eb; border-right:1px solid #e5e7eb;">
-
-                                <table style="table-layout:fixed;" width="560" border="0" cellpadding="0" cellspacing="0" align="center" class="MobileScale">
-                                    <tr>
-                                        <td align="center" width="100%">
-
-                                            <!-- Text Section -->
-                                            <table style="table-layout:fixed;" border="0" cellpadding="0" cellspacing="0" align="center">
-                                                                            <tr><td width="100%" height="15" style="font-size: 15;line-height: 0;border-collapse: collapse;">&nbsp;</td></tr>
                                                 <tr>
-                                                    <td align="center" width="100%">
+                                                    <td width="100%" height="10"></td>
+                                                </tr>
 
-                                                        <!-- Image Section -->
-                                         {#               <table style="table-layout:fixed;" width="560" border="0" cellpadding="0" cellspacing="0" align="center" class="MobileScale2">
-                                                            <tr>
-                                                                <td align="center" width="100%" align="center" valign="top">
-                                                                    <a href="{{url('home_page')}}" target="_blank" style="text-decoration: none; color: #868686;">
-                                                                        <img src="{{ base_http_url ~ baseImages['image-560x220.jpg']~'?version='~ assets_version  }}" width="560" align="middle" alt="سبق" border="0" class="ImageResize560" style="display: block; border-radius: 0px;" />
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                        </table>#}
-                                                        <!-- End of Image Section -->
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>-->
 
+
+        <!-- Start of header -->
+        <table width="100%" bgcolor="#eeeeee" cellpadding="0" cellspacing="0" border="0" id="backgroundTable" st-sortable="header">
+            <tbody>
+                <tr>
+                    <td>
+                        <table width="600" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
+                            <tbody>
+                                <tr>
+                                    <td width="100%">
+                                        <table width="600"  cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <!-- logo -->
+                                                        <table  width="600" align="left" border="0" cellpadding="0" cellspacing="0" class="devicewidth">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td width="600" height="100" align="center">
+                                                                        <div class="imgpop">
+                                                                            <a target="_blank" href="javascript:void(0);">
+                                                                                <img src="{{ base_http_url ~'/email-images/'~dashboardTheme~'/logo.png'}}" alt="" border="0" width="200" height="161" style="display:block; border:none; outline:none; text-decoration:none;"/>
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <!-- end of logo -->
                                                     </td>
                                                 </tr>
-                                                <tr><td align="center" width="100%" height="15" style="font-size: 15;line-height: 0;border-collapse: collapse;">&nbsp;</td></tr>
-                                                <tr>
-                                                    <td align="center" width="100%" style="font-size:20px;direction: rtl; color: #585858; text-align:right;font-family: Helvetica, Arial, sans-serif; line-height: 30px;">
-                                                        <a target="_blank" style="text-decoration: none; color: #585858;">
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- End of Header -->
 
-                                                            مرحباً..
+
+
+        <!-- Start of seperator -->
+        <table width="100%" bgcolor="#eeeeee" cellpadding="0" cellspacing="0" border="0" id="backgroundTable" st-sortable="seperator">
+            <tbody>
+                <tr>
+                    <td>
+                        <table width="600" align="center" cellspacing="0" cellpadding="0" border="0" class="devicewidth" bgcolor="{{ themeColor }}">
+                            <tbody>
+                                <tr>
+                                    <td align="center" height="4" style="font-size:1px; line-height:1px;">&nbsp;</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- End of seperator -->
+
+
+        <!-- start of Full text -->
+        <table width="100%" bgcolor="#eeeeee" cellpadding="0" cellspacing="0" border="0" id="backgroundTable" st-sortable="full-text">
+            <tbody>
+                <tr>
+                    <td>
+                        <table width="600" bgcolor="#fcfcfc"  cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
+                            <tbody>
+                                <tr>
+                                    <td width="100%">
+                                        <table width="600" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
+                                            <tbody>
+                                                <!-- Spacing -->
+                                                <tr>
+                                                    <td height="20" style="font-size:1px; line-height:1px; mso-line-height-rule: exactly;">&nbsp;</td>
+                                                </tr>
+                                                <!-- Spacing -->
+                                                <tr>
+                                                    <td>
+                                                        <table width="560" align="center" cellpadding="0" cellspacing="0" border="0" class="devicewidthinner">
+                                                            <tbody>
+                                                                <!-- Title -->
+                                                                <tr>
+                                                                    <td style="font-family: Helvetica, arial, sans-serif; font-size: 24px; color: #282828; text-align:right; line-height: 36px;">
+ مرحباً..
                                                               %fullname%
-                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                                <!-- End of Title -->
+                                                                <tr>
+
+    <td style="font-family: Helvetica, arial, sans-serif; font-size: 18px; color: #282828; text-align:right; line-height: 36px;">
+%smallMessage%
+    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
                                                     </td>
                                                 </tr>
-                                                <tr><td align="center" width="100%" height="15" style="font-size: 15;line-height: 0;border-collapse: collapse;">&nbsp;</td></tr>
-                        
+                                                <!-- Spacing -->
+                                                <tr>
+                                                    <td height="20" style="font-size:1px; line-height:1px; mso-line-height-rule: exactly;">&nbsp;</td>
+                                                </tr>
+                                                <!-- Spacing -->
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- End of Full Text -->
 
 
-                                            </table>
-                                            <!-- End of Text Section -->
 
-                                        </td>
-                                    </tr>
-                                </table>
 
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#eeeeee" st-sortable="banner" id="backgroundTable">
+            <tbody>
+                <tr>
+                    <td align="center">
+                        <table width="600" cellspacing="0" cellpadding="0" border="0" bgcolor="#fcfcfc" align="center" class="devicewidth">
+                            <tbody>
+
+                                <tr>
+                                    <td width="100%" align="center">
+                                        <table width="600" cellspacing="0" cellpadding="0" border="0" align="center" class="devicewidth">
+                                            <tbody>
+                                                <tr>
+                                                    <!-- start of image -->
+                                                    <td align="center">
+                                                        <!-- logo -->
+                                                        <table width="600" cellspacing="0" cellpadding="0" border="0" bgcolor="#FCFCFC" align="left" class="devicewidth">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td width="600" height="60" align="center">
+                                                                        <div class="imgpop">
+                                                                            <a href="http://land.ly/" target="_blank">
+                                                                                <img width="560" border="0" height="200" style="margin: 0 auto;display:block; border:none; outline:none; text-decoration:none;" alt="" src="{{ base_http_url ~'/email-images/'~dashboardTheme~'/banner.png'}}" class="intro">
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <!-- end of logo -->
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <!-- end of image -->
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
         </table>
 
-        <table style="table-layout:fixed;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
-            <tr><td align="center" width="100%" valign="top" bgcolor="#ffffff" style="background: #ffffff;"><table border="0" cellpadding="0" cellspacing="0" align="center"><tr><td width="600" bgcolor="#f8f8f8" style="background: #f8f8f8">
-                                <!-- Image Section -->
-                                <table style="table-layout:fixed;" width="600" border="0" cellpadding="0" cellspacing="0" align="center" class="MobileScale2">
-                                    <tr>
-                                        <td align="center" height="1" width="100%" bgcolor="#f0f0f0"  class="MobileScale2" style="background: #f0f0f0;font-size: 0;line-height: 0;border-collapse: collapse;">&nbsp;</td>
 
-                                    </tr>
-                                </table>
-                                <!-- End of Image Section -->
-                            </td></tr></table></td></tr>
+
+        <!-- start of Full text -->
+        <table width="100%" bgcolor="#eeeeee" cellpadding="0" cellspacing="0" border="0" id="backgroundTable" st-sortable="full-text" >
+            <tbody>
+                <tr>
+                    <td>
+                        <table width="600" bgcolor="#fcfcfc"  cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
+                            <tbody>
+                                <tr>
+                                    <td width="100%">
+                                        <table width="600" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
+                                            <tbody>
+                                                <!-- Spacing -->
+                                                <tr>
+                                                    <td height="40" style="font-size:1px; line-height:1px; mso-line-height-rule: exactly;">&nbsp;</td>
+                                                </tr>
+                                                <!-- Spacing -->
+                                                <tr>
+                                                    <td>
+                                                        <table width="560" align="center" cellpadding="0" cellspacing="0" border="0" class="devicewidthinner">
+                                                            <tbody>
+                                                                <!-- content -->
+                                                                <tr>
+                                                                    <td style="font-family: Helvetica, arial, sans-serif; font-size: 14px; color: #889098; text-align:center; line-height: 24px;">
+                                                                     %message%
+                                                                    </td>
+                                                                </tr>
+                                                                <!-- End of content -->
+                                                                <!-- Spacing -->
+                                                                <tr>
+                                                                    <td width="100%" height="15" style="font-size:1px; line-height:1px; mso-line-height-rule: exactly;">&nbsp;</td>
+                                                                </tr>
+                                                                <!-- Spacing -->
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <!-- Spacing -->
+                                                <tr>
+                                                    <td height="20" style="font-size:1px; line-height:1px; mso-line-height-rule: exactly;">&nbsp;</td>
+                                                </tr>
+                                                <!-- Spacing -->
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
         </table>
-        <!-- * End of Image 560 + Text Module * -->
-        <!-- * ************************************************************************************************************************************ * -->
+        <!-- End of Full Text -->
 
 
 
-        <!-- * ************************************************************************************************************************************ * -->
-        <!-- * Only Text Module * -->
-        <table style="table-layout:fixed;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center" style="font-size: 0;line-height: 0;border-collapse: collapse;">
-            <tr>
-                <td align="center" width="100%" height="30" bgcolor="#ffffff" style="background: #ffffff;font-size: 0;line-height: 0;border-collapse: collapse;">&nbsp;
-                    <table style="table-layout:fixed;" width="600" border="0" cellpadding="0" cellspacing="0" align="center" style="font-size: 0;line-height: 0;border-collapse: collapse;" class="MobileScale2">
-                        <tr><td align="center" width="600" height="30" bgcolor="#ffffff" style="background: #ffffff;font-size: 0;line-height: 0;border-collapse: collapse;" class="MobileScale2">&nbsp;</td></tr>
-                    </table>
-                </td>
-            </tr>
+        <!-- Start of Right Image -->
+        <table width="100%"  bgcolor="#eeeeee" cellpadding="0" cellspacing="0" border="0" id="backgroundTable" st-sortable="right-image">
+            <tbody>
+                <tr>
+                    <td>
+                        <table width="600" bgcolor="#f4f4f4" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
+                            <tbody>
+                                <tr>
+                                    <td width="100%">
+                                        <table width="600" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth" style="border:1px solid #eee;">
+                                            <tbody>
+                                                        %extra_content%
+
+
+
+
+
+
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
         </table>
+        <!-- End of Right Image -->
 
-        <table style="table-layout:fixed;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
-            <tr><td align="center" width="100%" valign="top" bgcolor="#ffffff" style="background: #ffffff;"><table border="0" cellpadding="0" cellspacing="0" align="center"><tr><td width="600" bgcolor="#f8f8f8" style="background: #f8f8f8">
-                                <!-- Image Section -->
-                                <table style="table-layout:fixed;" width="600" border="0" cellpadding="0" cellspacing="0" align="center" class="MobileScale2">
-                                    <tr>
-                                        <td align="center" height="1" width="100%" bgcolor="#f0f0f0" class="MobileScale2" style="background: #f0f0f0;font-size: 0;line-height: 0;border-collapse: collapse;">&nbsp;</td>
 
-                                    </tr>
-                                </table>
-                                <!-- End of Image Section -->
-                            </td></tr></table></td></tr>
+        <!-- Start of seperator -->
+        <table width="100%" bgcolor="#eeeeee" cellpadding="0" cellspacing="0" border="0" id="backgroundTable" st-sortable="seperator">
+            <tbody>
+                <tr>
+                    <td>
+                        <table width="600" bgcolor="#fcfcfc" align="center" cellspacing="0" cellpadding="0" border="0" class="devicewidth">
+                            <tbody>
+                                <tr>
+                                    <td align="center" height="30" style="font-size:1px; line-height:1px;">&nbsp;</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
         </table>
-        %extra_content%
+        <!-- End of seperator -->
+
+        <!-- Start of seperator -->
+        <table width="100%"  bgcolor="#eeeeee" cellpadding="0" cellspacing="0" border="0" id="backgroundTable" st-sortable="seperator">
+            <tbody>
+                <tr>
+                    <td>
+                        <table width="600" align="center" cellspacing="0" cellpadding="0" border="0" class="devicewidth">
+                            <tbody>
+                                <tr>
+                                    <td align="center" height="20" style="font-size:1px; line-height:1px;">&nbsp;</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- End of seperator -->
+        <!-- Start of footer -->
+        <table width="100%" bgcolor="#eeeeee" cellpadding="0" cellspacing="0" border="0" id="backgroundTable" st-sortable="footer">
+            <tbody>
+                <tr>
+                    <td>
+                        <table width="600"  cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
+                            <tbody>
+                                <tr>
+                                    <td width="100%">
+                                        <table  width="600" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
+                                            <tbody>
+                                                <!-- Spacing -->
+                                                <tr>
+                                                    <td height="10" style="font-size:1px; line-height:1px; mso-line-height-rule: exactly;">&nbsp;</td>
+                                                </tr>
+                                                <!-- Spacing -->
+                                                <tr>
+                                                    <td>
+                                                        <!-- Social icons -->
+                                                        <table  width="200" align="center" border="0" cellpadding="0" cellspacing="0" class="devicewidth">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td width="28" height="32" align="center">
+                                                                        <div class="imgpop">
+                                                                            <a target="_blank" href="javascript:void(0);">
+                                                                                <img src="{{ base_http_url ~  baseImages['facebook.png']}}" alt="" border="0" width="28" height="32" style="display:block; border:none; outline:none; text-decoration:none;" >
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+
+                                                                    <td width="28" height="32" align="center">
+                                                                        <div class="imgpop">
+                                                                            <a target="_blank" href="https://www.youtube.com/channel/UCviegwTV6ozfJXRepEdgQzQ">
+                                                                                <img src="{{ base_http_url ~  baseImages['google.png']}}" alt="" border="0"  width="28" height="32" style="display:block; border:none; outline:none; text-decoration:none;"/>
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+
+                                                                    <td  width="28" height="32"  align="center">
+                                                                        <div class="imgpop">
+                                                                            <a target="_blank" href="javascript:void(0);">
+                                                                                <img src="{{ base_http_url ~  baseImages['twitter.png']}}" alt="" border="0"  width="28" height="32" style="display:block; border:none; outline:none; text-decoration:none;"/>
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+
+                                                                    <td  width="28" height="32" align="center">
+                                                                        <div class="imgpop">
+                                                                            <a target="_blank" href="javascript:void(0);">
+                                                                                <img src="{{ base_http_url ~  baseImages['linkedin.png']}}" alt="" border="0"  width="28" height="32" style="display:block; border:none; outline:none; text-decoration:none;"/>
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+
+                                                                    <td  width="28" height="32" align="center">
+                                                                        <div class="imgpop">
+                                                                            <a target="_blank" href="javascript:void(0);">
+                                                                                <img src="{{ base_http_url ~ baseImages['youtube.png']}}" alt="" border="0"  width="28" height="32" style="display:block; border:none; outline:none; text-decoration:none;"/>
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <!-- end of Social icons -->
+                                                    </td>
+                                                </tr>
+                                                <!-- Spacing -->
+                                                <tr>
+                                                    <td height="10" style="font-size:1px; line-height:1px; mso-line-height-rule: exactly;">&nbsp;</td>
+                                                </tr>
+                                                <!-- Spacing -->
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- End of footer -->
+        <!-- Start of Postfooter -->
+        <table width="100%"  bgcolor="#eeeeee"  cellpadding="0" cellspacing="0" border="0" id="backgroundTable" st-sortable="postfooter" >
+            <tbody>
+                <tr>
+                    <td>
+                        <table width="600" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
+                            <tbody>
+                                <!-- Spacing -->
+                                <tr>
+                                    <td width="100%" height="20"></td>
+                                </tr>
+                                <!-- Spacing -->
+                                <tr>
+                                    <td align="center" valign="middle" style="font-family: Helvetica, arial, sans-serif; font-size: 13px;color: #282828" st-content="preheader">
+                                        Copyrights <a href="#" style="text-decoration: none; color:{{ themeColor }}">{{projectName}} </a>
+                                    </td>
+                                </tr>
+                                                                <!-- Spacing -->
+                                <tr>
+                                    <td width="100%" height="20"></td>
+                                </tr>
 
 
+                                <!-- Spacing -->
+                                <tr>
+                                    <td width="100%" height="20"></td>
+                                </tr>
+                                <!-- Spacing -->
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- End of postfooter -->
     </body>
 </html>

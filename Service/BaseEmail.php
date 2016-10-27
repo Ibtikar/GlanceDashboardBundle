@@ -18,28 +18,13 @@ class BaseEmail {
         $this->templating = $templating;
         // set the template images correct path
         $images = array(
-            'logo-header.jpg',
-            'social-twitter.jpg',
-            'social-facebook.jpg',
-            'social-telegram.jpg',
-            'social-skype.jpg',
-            'social-linked.jpg',
-            'social-yahoo.jpg',
-            'social-google.jpg',
-            'social-instagram.jpg',
-            'social-youtube.jpg',
-            'icon-mail.jpg',
-            'image-560x220.jpg',
-            'tw.jpg',
-            'linkedin.jpg',
-            'fb.jpg',
-            'google.jpg',
-            'facebook.jpg',
-            'twitter.jpg',
-            'youtube.jpg',
-            'instagram.jpg',
-            'yahoo.jpg',
-            'ibtikar.jpg'
+            'logo.png',
+            'twitter.png',
+            'facebook.png',
+            'linkedin.png',
+            'google.png',
+            'youtube.png',
+
         );
         foreach ($images as $image) {
 //            $path = __DIR__ . '/../../../../web/email-images/' . $image;
