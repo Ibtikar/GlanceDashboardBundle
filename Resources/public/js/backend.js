@@ -7,7 +7,7 @@ var submitButtonConfirmFunction;
 
 
 
-var stack_bottom_right = {"dir1": "up", "dir2": "left", "firstpos1": 25, "firstpos2": 25};
+var stack_bottom_right = {"dir1": "up", "dir2": "left", "firstpos1": 60, "firstpos2": 0};
 
 
 /**
