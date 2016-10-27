@@ -23,6 +23,11 @@ class NotFoundExceptionListener {
                 $event->setResponse($response);
             }
         }
+        if ($event->getException() instanceof \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException) {
+                $response = $this->templating->renderResponse('IbtikarGlanceDashboardBundle:Exception:denied.html.twig');
+                $event->setResponse($response);
+
+        }
     }
 
 }

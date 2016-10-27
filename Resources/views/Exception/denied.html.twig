@@ -1,0 +1,61 @@
+{% extends location is defined and app.environment == 'dev' ? 'IbtikarGlanceDashboardBundle::twigLayout.html.twig' : 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard.html.twig' %}
+{% block title %}
+ عفوا !! ليس لديك صلاحية لمشاهدة هذه الصفحة 
+{% endblock %}
+{% block header %}
+{% endblock %}
+{% block navbar %}
+{% endblock %}
+{% block side_menu %}
+{% endblock %}
+
+{% block body %}
+
+<div class="page-container">
+
+    <!-- Page content -->
+    <div class="page-content">
+
+			<!-- Main content -->
+			<div class="content-wrapper">
+
+				<!-- Error title -->
+				<div class="text-center content-group">
+					<h1 class="error-title">403</h1>
+					<h5> عفوا !! ليس لديك صلاحية لمشاهدة هذه الصفحة  </h5>
+				</div>
+				<!-- /error title -->
+
+
+				<!-- Error content -->
+                                		<div class="row">
+					<div class="col-lg-4 col-lg-offset-4 col-sm-6 col-sm-offset-3">
+						<form action="#" class="main-search">
+						{#	<div class="input-group content-group">
+								<input type="text" class="form-control input-lg" placeholder="بحث">
+
+								<div class="input-group-btn">
+									<button type="submit" class="btn bg-primary btn-icon btn-lg"><i class="icon-search4"></i></button>
+								</div>
+							</div>#}
+
+							<div class="row">
+								<div class="col-sm-12">
+									<a href="#" class="btn btn-primary btn-block content-group"><i class="icon-circle-left2 position-left"></i> العودة للرئيسية  </a>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- /error wrapper -->
+
+			</div>
+			<!-- /main content -->
+
+
+    </div>
+    <!-- /page content -->
+
+</div>
+{% endblock %}
