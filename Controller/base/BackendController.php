@@ -160,7 +160,7 @@ class BackendController extends Controller {
         $prepareColumns = array();
         $sortIndex=null;
         $columnArray=array();
-        if (count($this->listViewOptions->getBulkActions()) > 0) {
+        if ($this->listViewOptions->hasBulkActions($this->calledClassName)) {
             $prepareColumns = array(array('data' => 'id', 'orderable' => false));
             $columnArray[]='id';
             $index++;
@@ -174,7 +174,7 @@ class BackendController extends Controller {
             }
             $index++;
         }
-        if(count($this->listViewOptions->getActions()) > 0){
+        if($this->listViewOptions->hasActionsColumn($this->calledClassName)){
             $prepareColumns[]=array('data' => 'actions', 'orderable' => FALSE);
             $columnArray[]='actions';
         }
@@ -485,10 +485,11 @@ class BackendController extends Controller {
                 if ($value == 'actions') {
                     $security = $this->container->get('security.authorization_checker');
                     $actionTd = '';
-                    if (count($this->listViewOptions->getActions()) > 0) {
+
+                    if ($this->listViewOptions->hasActionsColumn($this->calledClassName)) {
                         foreach ($this->listViewOptions->getActions() as $action) {
-                            if ($action == 'Edit' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . $this->listName . '_EDIT'))&& !$document->getNotModified()) {
-                                $actionTd.= '<a class="btn btn-defualt"  href = "' . $this->generateUrl('ibtikar_glance_dashboard_' . strtolower($this->calledClassName) . '_edit', array('id' => $document->getId())) . '" title="' . $this->trans('Edit '. ucfirst($this->calledClassName), array(), $this->translationDomain) . '" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>';
+                            if ($action == 'Edit' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_EDIT')) && !$document->getNotModified()) {
+                                $actionTd.= '<a class="btn btn-defualt"  href = "' . $this->generateUrl('ibtikar_glance_dashboard_' . strtolower($this->calledClassName) . '_edit', array('id' => $document->getId())) . '" title="' . $this->trans('Edit ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>';
                             }
                         }
 
@@ -521,7 +522,7 @@ class BackendController extends Controller {
         $sortIndex = null;
         $index = 0;
         $prepareColumns = array();
-        if ($this->listViewOptions->getBulkActions()) {
+        if ($this->listViewOptions->hasBulkActions($this->calledClassName)) {
             $prepareColumns = array(array('data' => 'id', 'name'=>'id','orderable' => false,'class'=>'text-center', 'title' => '<div class="form-group">'
                             . '<label class="checkbox-inline"> <input type="checkbox" class="styled dev-checkbox-all"  >'
                             . ' </label></div>'));
@@ -535,7 +536,7 @@ class BackendController extends Controller {
             }
             $index++;
         }
-        if (count($this->listViewOptions->getActions()) > 0) {
+        if ($this->listViewOptions->hasActionsColumn($this->calledClassName)) {
             $prepareColumns[] = array('data' => 'actions', 'orderable' => FALSE, 'name' => 'actions', 'title' => $this->trans('actions'));
         }
         if ($sortIndex) {
