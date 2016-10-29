@@ -147,6 +147,17 @@
               $(element).closest('.tab-pane').find('.dev-count').html($(element).closest('.tab-pane').find('input:checked.dev-checkbox').length);
 
         }
+        function refreshCheckBoxes(){
+                 $('tr').each(function() {
+                  if($(this).find('input.dev-checkbox').length==$(this).find('input:checked.dev-checkbox').length){
+                       $(this).find('.selectAllRow').prop('checked',true).uniform('refresh');
+                    if($(this).closest('.tab-pane').find('.selectAllRow').length== $(this).closest('.tab-pane').find('.selectAllRow:checked').length){
+                     $(this).closest('.tab-pane').find('.dev-check-all').prop('checked',true).uniform('refresh');
+                    }
+                    }
+
+                });
+        }
         function checkAllModuleBox(element){
            if(element.is(":checked")){
                 $(element).closest('.tab-pane').find('.styled').prop('checked',true).uniform('refresh');
@@ -183,6 +194,7 @@
               refreshCount($(this))
 
             });
+            refreshCheckBoxes();
 
             $('.selectAllRow,.dev-check-all').change(function(){
                 validateElement($('.dev-checkbox:first'))
@@ -216,6 +228,8 @@
                  refreshCount($(this))
 
                 });
+                refreshCheckBoxes();
+           
                 $('.selectAllRow,.dev-check-all').change(function(){
                 validateElement($('.dev-checkbox'))
                 })
@@ -230,6 +244,8 @@
 
             });
         })
+            refreshCheckBoxes();
+
         })
         })
 
