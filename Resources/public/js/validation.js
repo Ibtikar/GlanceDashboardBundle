@@ -3,7 +3,8 @@ $.validator.addMethod('mobile', function (value, element) {
         return true;
     }
     var $element = $(element);
-    if ($.trim($element.val())) {
+    var elementValue=$element.intlTelInput("getNumber", intlTelInputUtils.numberFormat.NATIONAL);
+    if ($.trim(elementValue.replace('+'+$element.intlTelInput("getSelectedCountryData").dialCode),'')!='' && $.trim(elementValue.replace('+'+$element.intlTelInput("getSelectedCountryData").dialCode),'') !='undefined' ) {
     if ($element.intlTelInput("isValidNumber")) {
      return true;
     } else {
@@ -11,6 +12,7 @@ $.validator.addMethod('mobile', function (value, element) {
       return false;
     }
   }
+  return true;
 //    $element.attr('data-remove-color', 'false');
 //    var phoneText = formatPhoneText($element);
 //    var countryElement = $element.parent().find('select.dev-phone-country-select');
