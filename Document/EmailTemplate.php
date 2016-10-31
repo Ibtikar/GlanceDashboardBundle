@@ -44,12 +44,25 @@ class EmailTemplate extends Document {
      * @MongoDB\String
      */
     private $emailDataRecord;
+
+    /**
+     * @MongoDB\String
+     */
+    private $smallMessage = '';
+
+    /**
+     * @MongoDB\String
+     */
+    private $extraInfo;
+
+
     /**
      * Get id
      *
      * @return id $id
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
@@ -59,7 +72,8 @@ class EmailTemplate extends Document {
      * @param string $template
      * @return self
      */
-    public function setTemplate($template) {
+    public function setTemplate($template)
+    {
         $this->template = $template;
         return $this;
     }
@@ -69,7 +83,8 @@ class EmailTemplate extends Document {
      *
      * @return string $template
      */
-    public function getTemplate() {
+    public function getTemplate()
+    {
         return $this->template;
     }
 
@@ -79,7 +94,8 @@ class EmailTemplate extends Document {
      * @param string $name
      * @return self
      */
-    public function setName($name) {
+    public function setName($name)
+    {
         $this->name = $name;
         return $this;
     }
@@ -89,7 +105,8 @@ class EmailTemplate extends Document {
      *
      * @return string $name
      */
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
@@ -99,7 +116,8 @@ class EmailTemplate extends Document {
      * @param string $subject
      * @return self
      */
-    public function setSubject($subject) {
+    public function setSubject($subject)
+    {
         $this->subject = $subject;
         return $this;
     }
@@ -109,7 +127,8 @@ class EmailTemplate extends Document {
      *
      * @return string $subject
      */
-    public function getSubject() {
+    public function getSubject()
+    {
         return $this->subject;
     }
 
@@ -119,7 +138,8 @@ class EmailTemplate extends Document {
      * @param string $message
      * @return self
      */
-    public function setMessage($message) {
+    public function setMessage($message)
+    {
         $this->message = $message;
         return $this;
     }
@@ -129,10 +149,10 @@ class EmailTemplate extends Document {
      *
      * @return string $message
      */
-    public function getMessage() {
+    public function getMessage()
+    {
         return $this->message;
     }
-
 
     /**
      * Set emailDataRecord
@@ -154,5 +174,49 @@ class EmailTemplate extends Document {
     public function getEmailDataRecord()
     {
         return $this->emailDataRecord;
+    }
+
+    /**
+     * Set smallMessage
+     *
+     * @param string $smallMessage
+     * @return self
+     */
+    public function setSmallMessage($smallMessage)
+    {
+        $this->smallMessage = $smallMessage;
+        return $this;
+    }
+
+    /**
+     * Get smallMessage
+     *
+     * @return string $smallMessage
+     */
+    public function getSmallMessage()
+    {
+        return $this->smallMessage;
+    }
+
+    /**
+     * Set extraInfo
+     *
+     * @param string $extraInfo
+     * @return self
+     */
+    public function setExtraInfo($extraInfo)
+    {
+        $this->extraInfo = $extraInfo;
+        return $this;
+    }
+
+    /**
+     * Get extraInfo
+     *
+     * @return string $extraInfo
+     */
+    public function getExtraInfo()
+    {
+        return $this->extraInfo;
     }
 }
