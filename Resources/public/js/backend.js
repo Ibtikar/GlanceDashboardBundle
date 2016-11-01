@@ -81,7 +81,7 @@ function submitAjaxForm() {
         },
         complete: function(jqxhr) {
             if (jqxhr.status === 403) {
-                window.location = accessDeniedUrl;
+                window.location.reload();
             }
             var IS_JSON = true;
             try{
