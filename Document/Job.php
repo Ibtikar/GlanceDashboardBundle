@@ -21,6 +21,7 @@ use Ibtikar\GlanceDashboardBundle\Document\Document;
  */
 class Job extends Document {
 
+    static public $systemEnglishJobTitles = array();
 
     /**
      * @MongoDB\Id

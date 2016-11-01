@@ -11,6 +11,10 @@
 {% block title %}
     {{ list.listType == 'trash' ? 'View deleted items'|trans : ('List '~ listName)|trans({}, translationDomain)}}
 {% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/ibtikarglancedashboard/css/jquery.powertip.min.css')}}">
+{% endblock %}
 
 {% block body %}
     <div class="content-wrapper">
@@ -57,10 +61,36 @@
                                     </ul>
                                 </div>
                             </div>
+                        <form method="post" action="{{ list.hasBulkActions(listName) ? path('ibtikar_glance_dashboard_'~listName|lower ~ '_bulk_actions') : '' }}" class="dev-bulk-actions-form">
                             <div class="actions">
 
             {% block actions %}
+                    <a data-placement="bottom" title="" data-popup="tooltip"  data-toggle="modal"  href="javascript:void(0)" class="btn btn-default btn-sm dev-change-columns" type="button" data-original-title="خانات الجدول"><i class="icon-table2 "></i> <span class="hidden-sm"> </span></a>
+                    {% if list.hasBulkActions(listName) %}
+                        <input type="hidden" id="dev-bulk-action" name="bulk-action" value=""/>
+                        <span class="dev-bulk-action-container" data-list-name="{{listName|lower}}" data-href="{{ list.hasBulkActions(listName) ? path('ibtikar_glance_dashboard_'~listName|lower ~ '_bulk_actions') : '' }}" style="display: none;">
+                            {% for action in list.bulkActions %}
+                                    {% if action == "Delete" and (is_granted('ROLE_'~listName|upper~'_DELETE') or is_granted('ROLE_ADMIN')) %}
+                                        <a data-action="{{action}}" {{popover_factory({
+question : "You are about to delete (%count%) (%type%), Are you sure?",
+replaceAttr : true,
+buttons : [
+            {
+                text : "Yes",
+                class : "dev-bulk-delete-btn dev-bulk-action-btn btn-danger"
+            },
+            {
+                text : "Cancel",
+                class : "btn-defualt"
+            }
+        ]
+})|replace({'%type%': (listName~"s")|lower|trans})|raw}} class="btn btn-default btn-sm" data-placement="bottom"> <i class="icon-trash"></i> <span class="hidden-sm position-right">{{ 'delete'|trans }} {{ (listName~"s")|trans }}</span></a>
+                                    {% endif %}
+                            {% endfor %}
+                        </span>
+                    {% endif %}
 
+{#
                                 <button id="pnotify-stack-custom-top" class="btn btn-default btn-sm" type="button"> Alert</button>
 
                                 <a data-original-title="بحث" data-placement="bottom" title="" data-popup="tooltip" id="advanced-search-Btn" class="btn btn-default btn-sm"><i class="icon-zoomin3"></i></a>
@@ -178,7 +208,7 @@
                                             <button id="advanced-search-more" type="button" class="btn btn-default  btn-lg">بحث مفصل</button>
                                         </div>
                                     </div>
-                                </div>
+                                </div>#}
         {% endblock %}
 
                             </div>
@@ -191,7 +221,7 @@
                                             <th class="text-center" data-orderable="false" data-bSortable="false" data-searchable="false" data-name="id">
                                     <div class="form-group">
                                         <label class="checkbox-inline">
-                                            <input type="checkbox" class="styled dev-checkbox-all">
+                                            <input type="checkbox" class="styled dev-checkbox dev-checkbox-all">
                                         </label>
                                     </div>
                                 </th>
@@ -212,14 +242,16 @@
 
                                     </thead>
                                     <tbody>
+                                        {% set deleteAttrs = popover_factory(deletePopoverConfig is defined?deletePopoverConfig:[]) %}
+
                                         {% for object in pagination %}
                                             <tr>
                                                 {% if list.hasBulkActions(listName) %}
 
-                                                <td class="text-center">
+                                                <td class="text-center" data-id="{{ object.id }}">
                                                     <div class="form-group">
                                                         <label class="checkbox-inline">
-                                                            <input type="checkbox" class="styled dev-checkbox" data-id="{{object.id}}" >
+                                                            <input type="checkbox" name="ids[]" class="styled dev-checkbox" value="{{object.id}}" >
                                                         </label>
                                                     </div>
 
@@ -254,22 +286,18 @@
                                                 {% if list.hasActionsColumn(listName) %}
                                                     <td class="text-center" style="white-space: nowrap;">
                                                         {% if  object.getNotModified() is not defined  or  object.getNotModified()== false %}
-                                                        {% for action in list.actions %}
-                                                            {% if action == "Edit" %}
-                                                                {% if is_granted('ROLE_' ~ listName|upper ~'_EDIT') or is_granted('ROLE_ADMIN') %}
+                                                            {% for action in list.actions %}
+                                                                {% if action == "Edit" %}
+                                                                    {% if is_granted('ROLE_' ~ listName|upper ~'_EDIT') or is_granted('ROLE_ADMIN') %}
 
-                                                                    <a class="btn btn-defualt"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}" title="{{ ('Edit ' ~  sublistName)|trans({},translationDomain)}}" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>
-                                                                    {% endif %}
-                                                            {#    {% elseif action == "Delete" %}
-                                                                    {% if is_granted('ROLE_' ~ listName|upper ~'_DELETE') or is_granted('ROLE_ADMIN')%}
-                                                                    <a tabindex="0" class="btn btn-defualt" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="انت علي وشك حذف comments هل ترغب في حذفه  " data-html="true"
-                                                                       data-html="true" data-content="
-                                                                       <button type='button' class='btn btn-danger btn-block'>و ايقاف الموظفين الذين لا ينتمون الي مجموعة و دور اخر</button>
-                                                                       <button type='button' class='btn btn-danger btn-block'>و حذف الموظفين الذين لا ينتمون الي مجموعة و دور اخر</button>
-                                                                       "> <i class="icon-trash"></i></a>
-                                                                {% endif %}#}
-                                                            {%endif%}
-                                                        {% endfor %}
+                                                                        <a class="btn btn-defualt"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}" title="{{ ('Edit ' ~  sublistName)|trans({},translationDomain)}}" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>
+                                                                        {% endif %}
+                                                                    {% elseif action == "Delete" %}
+                                                                        {% if is_granted('ROLE_' ~ listName|upper ~'_DELETE') or is_granted('ROLE_ADMIN')%}
+                                                                            <a class="btn btn-defualt" data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" {{ deleteAttrs|replace({'%title%': object})|raw }}><i class="icon-trash"></i></a>
+                                                                        {% endif %}
+                                                                    {%endif%}
+                                                                {% endfor %}
                                                                 {#<a tabindex="0" class="btn btn-defualt" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="  هل ترغب في ايقاف الموظف  " data-html="true"
                                                                    data-html="true" data-content="
                                                                    <button type='button' class='btn btn-danger'>نعم</button>
@@ -277,9 +305,9 @@
                                                                    "> <i class="icon-user-block"></i></a>#}
 
 
-  {% endif  %}
-                                                </td>
-                                             {% endif  %}
+                                                        {% endif  %}
+                                                    </td>
+                                                {% endif  %}
 
                                             </tr>
 
@@ -293,7 +321,8 @@
 
 
                                 </table>
-                            </div>
+                        </form>
+                        </div>
                             <!-- /scrollable datatable -->
 
 
@@ -346,11 +375,13 @@
                 <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/tables/datatables/datatables.min.js')}}"></script>
                 <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/selects/select2.min.js')}}"></script>
                 <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/datatables_api.js')}}"></script>
+                <script src="{{ asset('bundles/ibtikarglancedashboard/js/jquery.powertip.min.js') }}"></script>
                 <script src="{{ asset('bundles/ibtikarglancedashboard/js/ajaxifyList.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_modals.js')}}"></script>
 
                 <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/dragula.min.js')}}"></script>
                 <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/extension_dnd.js')}}"></script>
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/notifications/pnotify.min.js')}}"></script>
 
 
                 <!-- modals files -->

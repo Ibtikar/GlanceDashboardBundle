@@ -46,6 +46,29 @@ class RoleController extends BackendController {
         $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Role:list.html.twig");
     }
 
+    protected function doList(Request $request) {
+        $configParams = parent::doList($request);
+        $configParams['deletePopoverConfig'] = array(
+            "question" => "You are about to remove that role",
+            "buttons" => array(
+                [
+                    "text" => "Remove that role and the users assgined to it",
+                    "class" => "btn-block btn-danger",
+                    "callback" => "callUrl",
+                    "callback-param" => [
+                        "data-href"
+                    ]
+                ],
+                [
+                    "text" => "Remove that role and deactivate the users assgined to it",
+                    "class" => "btn-block btn-danger",
+                ],
+            ),
+            "translationDomain" => $this->translationDomain
+        );
+        return $configParams;
+    }
+
     /**
      * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -197,23 +220,11 @@ class RoleController extends BackendController {
     }
 
     /**
-     * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
      * @param Document $document
      * @return string
      */
-    protected function validateDelete(Document $document)
-    {
-        $groups = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder('IbtikarBackendBundle:Group')
-                ->field('roles')->equals($document->getId())
-                ->field('rolescount')->equals(1)
-                ->getQuery()->execute();
-        $groupNames = array();
-        foreach ($groups as $group) {
-            $groupNames[] = $group->__toString();
-        }
-        if (count($groupNames) > 0) {
-            return $this->trans(str_replace('%s', implode(',', $groupNames), $this->trans("can't delete this role because groups %s contain only this role")));
-        }
+    protected function validateDelete($document) {
+
     }
 
 

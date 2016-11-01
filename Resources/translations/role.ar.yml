@@ -33,7 +33,10 @@
 ###################labels############################
 role: دور
 'Edit Role': 'تعديل دور'
-
+'Delete Role': 'حذف دور'
+'You are about to remove that role': 'أنت على وشك حذف دور هل تريد'
+'Remove that role and the users assgined to it': 'حذف الدور والمستخدمين الذين ينتمون إلى هذا الدور فقط'
+'Remove that role and deactivate the users assgined to it': 'حذف الدور وإيقاف المستخدمين الذين ينتمون إلى هذا الدور فقط'
 
 ################permission##########################
 Permision: الصلاحيات

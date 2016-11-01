@@ -33,7 +33,7 @@ class JobController extends BackendController {
     protected function configureListParameters(Request $request) {
         $this->listViewOptions->setDefaultSortBy("updatedAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
-        $this->listViewOptions->setActions(array ("Edit"));
+        $this->listViewOptions->setActions(array ("Edit","Delete"));
         $this->listViewOptions->setBulkActions(array("Delete"));
         $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Job:list.html.twig");
 
@@ -115,7 +115,7 @@ class JobController extends BackendController {
     }
 
     /**
-     * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
+     * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
      * @param Document $document
      * @return string
      */
@@ -124,7 +124,7 @@ class JobController extends BackendController {
             return $this->get('translator')->trans('failed operation');
         }
         if ($document->getStaffMembersCount() > 0) {
-            return $this->trans('Cant deleted,it contain staff members');
+            return $this->trans('Cant deleted,it contain staff members',array(),$this->translationDomain);
         }
     }
 

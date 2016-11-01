@@ -6,6 +6,10 @@ ibtikar_glance_dashboard_job_edit:
     path:  /edit/{id}
     defaults: { _controller: IbtikarGlanceDashboardBundle:Job:edit}
 
+ibtikar_glance_dashboard_job_delete:
+    path:  /delete/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Job:delete }
+
 ibtikar_glance_dashboard_job_list:
     path: /list
     defaults: { _controller: IbtikarGlanceDashboardBundle:Job:list }

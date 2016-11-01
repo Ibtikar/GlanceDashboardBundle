@@ -37,6 +37,20 @@ services:
           - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 255 }
         arguments: ["@router","@session","@translator"]
 
+    app.twig.popover_factory_extension:
+        class: Ibtikar\GlanceDashboardBundle\Service\PopoverFactoryExtension
+        arguments: ["@translator"]
+        tags:
+            - { name: twig.extension }
+
+#    translator:
+#        class: Ibtikar\GlanceDashboardBundle\Translation\FallbackTranslator
+#
+#    app.decorating_translator:
+#        class: Ibtikar\GlanceDashboardBundle\Translation\FallbackTranslator
+#        decorates: translator
+#        arguments: ['@app.decorating_translator.inner']
+#        public:    false
     validator.international.phone:
         class: Ibtikar\GlanceDashboardBundle\Validator\InternationalPhoneValidator
         tags:

@@ -4,6 +4,7 @@ namespace Ibtikar\GlanceDashboardBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Ibtikar\GlanceUMSBundle\Document\User;
 
 /**
  * @MongoDB\InheritanceType("COLLECTION_PER_CLASS")
@@ -52,16 +53,16 @@ class Document {
      */
     private $notModified=false;
 
-//
-//    public function delete(DocumentManager $dm, User $user = null) {
-//        if ($user) {
-//            $this->deletedBy = $user;
-//        }
-//        $this->deletedAt = new \DateTime();
-//        $this->deleted = true;
-//        $this->removeDocumentReferences($dm, $user);
-//        $this->updateReferencesCounts(-1);
-//    }
+
+    public function delete(DocumentManager $dm, User $user = null) {
+        if ($user) {
+            $this->deletedBy = $user;
+        }
+        $this->deletedAt = new \DateTime();
+        $this->deleted = true;
+        $this->removeDocumentReferences($dm, $user);
+        $this->updateReferencesCounts(-1);
+    }
 
     /**
      * @author Maisara Khedr <maisara@ibtikar.net.sa>

@@ -1,9 +1,5 @@
 {% extends  'IbtikarGlanceDashboardBundle:List:baseList.html.twig' %}
 
-{% block actions %}
-    <a data-placement="bottom" title="" data-popup="tooltip"  data-toggle="modal"  href="javascript:void(0)" class="btn btn-default btn-sm dev-change-columns" type="button" data-original-title="خانات الجدول"><i class="icon-table2 "></i> <span class="hidden-sm"> </span></a>
-
-{% endblock %}
 
 {% block statistic %}
     <span class="label bg-number heading-text">{{total}} {% trans from translationDomain %}role{% endtrans %}</span>

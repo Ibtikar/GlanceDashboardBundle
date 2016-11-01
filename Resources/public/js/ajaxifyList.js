@@ -94,6 +94,10 @@ var dataTableDefault = {
         $('[data-popup="tooltip"]').tooltip({
             trigger: 'hover'
         });
+        $('[data-popup="popover"]').popover({
+            delay:{ "hide": 500 }
+        });
+
         $('.dev-checkbox-all').closest('th').removeClass('sorting_asc').addClass('sorting_disabled')
         if ($('.datatable-column-search-inputs input.dev-checkbox').length == $('.datatable-column-search-inputs input:checked.dev-checkbox').length && $('.datatable-column-search-inputs input:checked.dev-checkbox').length != 0) {
             $('.dev-checkbox-all').prop('checked', true).uniform('refresh');
@@ -251,6 +255,44 @@ function BaseList() {
 
 }
 
+/**
+ *
+ * @author Gehad Mohamed
+ * @param text title
+ * @param text text
+ * @param [success,info,error] type
+ * @returns {undefined}
+ */
+function showNotificationMsg(title,text,type) {
+
+    var notificationIcons = {
+        success : {
+            icon : "icon-checkmark3",
+            class : "bg-primary"
+        },
+        info : {
+            icon : "icon-info22",
+            class : "bg-info"
+        },
+        error : {
+            icon : "icon-blocked",
+            class : "bg-danger"
+        }
+
+    };
+
+    type = (typeof type == "undefined"?"success":type);
+
+    new PNotify({
+        title: title,
+        text: text,
+        icon: notificationIcons[type]['icon'],
+        addclass: notificationIcons[type]['class'],
+        type:type,
+        stack: {"dir1": "up", "dir2": "left", "firstpos1": 60, "firstpos2": 0}
+    });
+}
+
 function BasicModal() {
     var thisObject = this;
     this.hideCallback;
@@ -303,6 +345,91 @@ function BasicModal() {
         thisObject.hideCallback = callback;
     }
 }
+
+function getQueryVariable(variable) {
+
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i = 0; i < vars.length; i++) {
+
+        var pair = vars[i].split("=");
+
+        if (pair[0] == variable) {
+
+            return pair[1];
+        }
+    }
+
+}
+
+function bulkFunction() {
+    $('tr[data-id]').each(function () {
+        $(this).removeClass('success').removeClass('danger').find('td:last').html('');
+    });
+
+    var $form = $('.dev-bulk-actions-form');
+    var formData = $form.serializeArray();
+
+    var numOfRecords = $('tr[data-id]').length;
+    var numOfCheckedRecord = $('tbody .dev-checkbox:checked').length;
+    var pageNum = getQueryVariable('page');
+    blockPage();
+    $.ajax({
+        url: $form.attr('action'),
+        data: formData,
+        type: $form.attr('method'),
+        complete: function () {
+
+        },
+        success: function (data) {
+
+            var status = "success";
+
+            if(data.status != "success"){
+                status = "error";
+            }
+            showNotificationMsg(data.message,"",status);
+
+            unblockPage();
+
+            if (data.status === 'success') {
+                table.ajax.reload(function (){
+                    for (message in data.errors) {
+                        for (index in data.errors[message]) {
+                            var $tr = $('input[value="' + data.errors[message][index] + '"]').parents('tr');
+                            if ($tr.length !== 0) {
+                                $(".dev-list-table").removeClass("dev-hide-errors");
+                                $tr.find('input[type="checkbox"]').prop('checked',true).uniform('refresh');
+                                $tr.addClass('danger').attr('title',message);
+                                $tr.powerTip({followMouse: true});
+                                showBulkActionSelect();
+                            }
+                        }
+                    }
+
+                }, false);
+            }
+        }
+    });
+}
+
+
+/**
+ * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
+ */
+function showBulkActionSelect() {
+    var checkedElm = $('tbody .dev-checkbox:checked');
+    var checkedElmCount = checkedElm.length;
+    if (checkedElmCount > 0) {
+        $('[data-replace-title]').each(function(){
+            $(this).attr('data-original-title',$(this).attr('data-replace-title').replace('%count%',checkedElmCount));
+        });
+        $('.dev-bulk-action-container').show();
+    } else {
+        $('.dev-bulk-action-container').hide();
+    }
+}
+
 $(document).ready(function () {
 
     $('.select').select2();
@@ -337,7 +464,9 @@ $(document).ready(function () {
 
     $('.panel [data-action=reload]').click(function (e) {
         e.preventDefault();
-        table.ajax.reload(null, false)
+        table.ajax.reload(function (){
+                    showBulkActionSelect();
+                }, false)
 
     });
 
@@ -367,6 +496,43 @@ $(document).ready(function () {
         }
     });
 
+    $('.content-wrapper').on('click','.dev-bulk-action-btn',function(e){
+        console.log($(this)[0],$(this).parents('.popover')[0],$(this).parents('.popover').prev()[0],$(this).parents('.popover').prev().data('action'));
+        var action = $(this).parents('.popover').prev().data('action');
+        if(action){
+            $('#dev-bulk-action').val(action);
+        }else{
+            throw "Missing data-action attribute can't be found in action button";
+        }
+        bulkFunction();
+    });
+
+    $('.dataTables_wrapper').on('click','.dev-delete-btn',function(e){
+        $.ajax
+        ({
+            'dataType': 'json',
+            'url': $(this).parents('[role="tooltip"]').prev().data('href'),
+            beforeSend: function () {
+                blockPage();
+            },
+            'success': function (json) {
+                        var status = "success";
+
+                if(json.status != "success"){
+                    status = "error";
+                }
+                showNotificationMsg(json.message,"",status);
+                unblockPage();
+                $('.dev-bulk-action-container').hide();
+                table.ajax.reload(function (){
+                    showBulkActionSelect();
+                }, false);
+            }
+        });
+    });
+
+    $('.content-wrapper').on('change', '.dev-checkbox', showBulkActionSelect);
+    showBulkActionSelect();
 });
 jQuery(document).on('ajaxComplete', function (event, response) {
     if (response) {
