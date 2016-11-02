@@ -1,0 +1,832 @@
+{% extends 'IbtikarGlanceDashboardBundle::formLayout.html.twig' %}
+
+
+
+{% block form_container %}
+
+
+
+                                    {{ form_start(form)}}
+
+                                  
+
+                                   
+
+                                               <div class="tabbable">
+                                            <ul class="nav nav-tabs nav-tabs-highlight">
+                                                <li class="active"><a href="#arabic" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}" alt="arabic" width="30" height="20"/></a></li>
+                                                <li><a href="#english" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}" alt="english" width="30" height="20"/></a></li>
+                                            </ul>
+
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="arabic">
+
+
+                                                     {{ form_row(form.name) }}
+
+
+
+                                                   {{ form_row(form.description) }}
+
+
+
+                                                </div><!-- arabic end -->
+
+                                                <div class="tab-pane" id="english">
+
+
+                                                      {{ form_row(form.nameEn) }}
+
+
+
+                                                   {{ form_row(form.descriptionEn) }}
+
+
+                                                </div><!-- english end -->
+
+                                            </div>
+                                        </div>
+                                  
+
+                                        <hr>
+
+                                        <div class="row">
+
+
+                                            <div class="col-md-12">   
+
+                                                <h5>ادخل
+                                                    الصور المطلوبة
+                                                </h5>
+
+
+
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered">
+
+                                                        <tbody>
+                                                            <tr>
+                                                                <td style="width: 150px">
+
+                                                                    <div class="thumbnail">
+                                                                        <div class="thumb thumb-slide">
+                                                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
+                                                                            <div class="caption">
+                                                                                <span>
+                                                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </td>
+                                                                <td class="thumbnail-caption">
+                                                                    <h4>  صورة المنتج</h4>
+                                                                    <div class="row">
+                                                                    <div class="col-lg-12">
+                                                            <input class="form-control" placeholder="ادخل اسم  المنتج" type="text">
+                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                    <span class="help-block"> PNG · 1.44 KB · 30 × 30 Added Oct 25, 2016 5:26 am by ola hamdy </span>
+                                                                </td>
+                                                                <td style="width: 300px">
+                                                                    <a class="btn btn-defualt upload-image-modal-open"  > رفع الصورة</a>
+                                                                    <a class="btn btn-defualt" data-toggle="modal" data-target="#GoogleImportImg-modal" > صور جوجل</a>
+
+                                                                    <a class="btn btn-defualt"  >  <i class="icon-crop"></i> </a>
+                                                                    <a class="btn btn-defualt"  > <i class="icon-trash"></i></a>
+
+
+                                                                </td>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="width: 150px">
+                                                                    <div class="thumbnail">
+                                                                        <div class="thumb thumb-slide">
+                                                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/product.png')}}" alt="">
+                                                                            <div class="caption">
+                                                                                <span>
+                                                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/product.png')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </td>
+                                                                <td class="thumbnail-caption">
+                                                                    <h4>  صورة الغلاف</h4>
+                                                                                                                                        <div class="row">
+                                                                    <div class="col-lg-12">
+                                                            <input class="form-control" placeholder="ادخل اسم الغلاف" type="text">
+                                                        </div>
+                                                                    </div>
+                                                                    <span class="help-block"> PNG · 1.44 KB · 30 × 30 Added Oct 25, 2016 5:26 am by ola hamdy </span>
+                                                                </td>
+                                                                <td style="width: 300px">
+                                                                    <a class="btn btn-defualt upload-image-modal-open"  > رفع الصورة</a>
+                                                                    <a class="btn btn-defualt" data-toggle="modal" data-target="#GoogleImportImg-modal" > صور جوجل</a>
+
+                                                                    <a class="btn btn-defualt"  >  <i class="icon-crop"></i> </a>
+                                                                    <a class="btn btn-defualt"  > <i class="icon-trash"></i></a>
+
+
+                                                                </td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                        {{ form_end(form) }}              
+
+
+{% endblock %}
+{% block form_buttons %}
+                    <div class="row actionButtons">
+                    <div class="col-xs-12">
+                        <button class="btn btn-primary  dev-form-submit-btn" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
+                        <a class="btn btn-primary" href="Subproduct-add.php">حفظ و اضافة منتج فرعي<i class="icon-plus2 position-right"></i></a>
+
+                        <button class="btn btn-defualt dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
+                    
+                    
+                    
+                    </div>
+                </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    <!-- uploadImg modal -->
+<div id="uploadImg" class="modal fade">
+    <div class="modal-dialog  modal-full">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h6 class="modal-title"> الصورة
+                </h6>
+            </div>
+
+            <div class="modal-body">
+
+                <div id="image-cropper-modal">
+                    <!-- This is where the preview image is displayed -->
+                    <div class="cropit-preview"></div>
+
+                    <!-- This range input controls zoom -->
+
+
+                    <div class="controls-wrapper">
+                        <div class="rotation-btns">
+                            <span class="icon-rotate-cw2 rotate-ccw-btn"></span>
+                            <span class="icon-rotate-ccw2 rotate-cw-btn"></span>
+                        </div>
+
+
+                        <!-- You can add additional elements here, e.g. the image icons -->
+                        <div class="slider-wrapper">
+                            <span class="icon icon-image2 smallIcon"></span>
+                            <input type="range" min="0" max="50" value="5" step="5" class="cropit-image-zoom-input" />
+                            <span class="icon icon-image2 bigIcon"></span>
+                        </div>
+                    </div><!-- controls-wrapper -->
+
+                    <!-- This is where user selects new image -->
+                    <input type="file" class="cropit-image-input" />
+
+                    <!-- The cropit- classes above are needed
+                         so cropit can identify these elements -->
+                </div>
+
+            </div>
+
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-link"><i class="icon-checkmark4 text-success"></i></button>
+                <button type="button" class="btn btn-link" data-dismiss="modal"><i class="icon-cross2 text-danger-400"></i></button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /uploadImg modal -->
+
+
+
+<!-- Primary modal -->
+<div id="GoogleImportImg-modal" class="modal fade">
+    <div class="modal-dialog  modal-full">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h6 class="modal-title"> الصورة
+                </h6>
+            </div>
+
+            <div class="modal-body googleResults">
+
+
+                <!-- Main content -->
+                <div class="content-wrapper">
+
+                    <!-- Search field -->
+                    <div class="panel panel-flat">
+                        <div class="panel-heading">
+                            <h5 class="panel-title">نتائج بحث جوجل </h5>
+                        </div>
+
+                        <div class="panel-body">
+                                <div class="input-group content-group">
+                                    <div class="has-feedback has-feedback-left">
+                                        <input type="text" id="searchbox" class="form-control input-xlg" placeholder="بحث جوجل">
+                                        <div class="form-control-feedback">
+                                            <i class="icon-search4 text-muted text-size-base"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group-btn">
+                                        <button id="search-img-btn" type="button" class="btn btn-primary btn-xlg">بحث</button>
+                                    </div>
+                                </div>
+
+                        </div>
+                    </div>
+                    <!-- /search field -->
+
+
+
+                    <!-- Search results -->
+                    <div class="content-group ">
+                        <p class="text-muted text-size-small content-group"> اكثر من ٢٠٠٠ صورة</p>
+
+                        <div class="search-results-list googlesearchResult">
+                            <div class="row" id="dev-google">
+                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" checked="checked">
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" >
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" >
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" >
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" >
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                                                
+                                                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" >
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div><!-- row end -->
+
+                              <div class="row">
+                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" checked="checked">
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" >
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" >
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" >
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" >
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                                                
+                                                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" >
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div><!-- row end -->
+
+                            
+                            
+                                                        <div class="row">
+                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" checked="checked">
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" >
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" >
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" >
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" >
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                                                
+                                                                <div class="col-lg-2 col-sm-4">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img src="assets/images/placeholder.jpg" alt="">
+                                        </div>
+
+                                        <div class="caption">
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="stacked-radio-left" class="styled" >
+                                                    Selected styled
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div><!-- row end -->
+
+                                                    <div class="dropdown-content-footer">
+                            <a href="#" data-popup="tooltip" title="All Results"><i class="icon-menu display-block"></i>
+                            </a>
+                            <div class="moreNotifications">
+                                <i class="icon-spinner6 spinner display-block"></i>
+                            </div>
+                        </div>
+                            
+                        </div>
+
+
+
+
+
+                    </div>
+                    <!-- /search results -->
+
+                </div>
+                <!-- /main content -->
+
+
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-dismiss="modal">الغاء</button>
+                <button type="button" class="btn btn-primary">ادخال</button>
+            </div>
+        </div>
+    </div>
+</div>
+    {{ parent() }}
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
+
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/media/fancybox.min.js')}}"></script>
+
+<script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_thumbnails.js')}}"></script>
+
+
+<!-- Plugin file uploaded JS -->
+<script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/bootstrap-fileupload.js')}}"></script>
+        <script src="https://apis.google.com/js/client.js?onload=initgapi"></script>
+
+
+<script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/jquery.cropit.js')}}"></script>
+    
+    <script>
+        var cropperPluginInitialized = false;
+    $(function() {
+
+
+
+
+        $('.upload-image-modal-open').on('click', function() {
+            $('#uploadImg .cropit-image-input').click();
+            if (cropperPluginInitialized) {
+                return;
+            }
+            $('#image-cropper-modal').cropit({imageBackground: true,
+                imageBackgroundBorderWidth: 30});
+
+            // Handle rotation
+            $('.rotate-cw-btn').click(function() {
+                $('#image-cropper-modal').cropit('rotateCW');
+            });
+            $('.rotate-ccw-btn').click(function() {
+                $('#image-cropper-modal').cropit('rotateCCW');
+            });
+
+
+            $('#uploadImg .cropit-image-input').change(function() {
+                $('#uploadImg').modal('show');
+            });
+            cropperPluginInitialized = true;
+        });
+
+        $('.image-editor').cropit({
+            imageState: {
+                src: 'assets/images/cover.jpg'
+            }
+        });
+
+
+    });
+    $(document).ready(function(){
+        gapi.load('client', function() { 
+        console.log('gapi.client loaded.');
+        gapi.client.setApiKey('AIzaSyC8AmPicmxUoxY1x1QlHvmucd9DdhGVEek');
+        gapi.client.load('customsearch', 'v1',function(){});
+        });
+      
+    
+    
+           $(document).on('click', '#search-img-btn', function() {
+        sendRequestToGoogleImageApi();
+    });
+    })
+        var googleStartIndex = 1;
+        var googleImageResult;
+        var googleSearch;
+        var googleStopSearch=1;
+                
+    function makeRequest(q, googleStart) {
+// request limit is 100 queries per day which is very low rate
+// more information can be found here : https://console.developers.google.com/project/138808141819/apiui/apiview/customsearch?tabId=quotas
+    if (googleStartIndex != 0 && googleStartIndex != 101 && googleStopSearch) {
+        q = ((typeof q == "undefined" || q == null) ? googleSearch : q);
+        var request = gapi.client.search.cse.list({
+            'q': q,
+            'cx': '000005614798088592640:jwarqnfwxtg', //https://www.google.com/cse/all -> create search engin and edit it to accept images -> set Restrict Pages using Schema.org Types to [ImageObject]
+            'searchType': 'image',
+            'fileType': 'jpg,png,gif',
+            'num': 10, // max 10 items per page
+            'filter': 0,
+            'start': googleStartIndex
+        }
+        );
+        request.then(function(response) {
+            imageSearch = response;
+            appendResults(response);
+            // addPaginationLinks();
+        }, function(reason) {
+            googleStopSearch = 0;
+            if ($('.dev-google-result input[type="checkbox"]').length == 0) {
+                $('#googlesearchResult').hide();
+            }
+            if ($('#tab2').find('.alert-danger').length == 0) {
+                $('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#" aria-hidden="true">×</a>'+messages.googleError+'</div>').insertAfter('#google-hr');
+            }
+        }
+        );
+    }
+}
+
+function appendResults(response) {
+    var pageNo = googleStartIndex;
+    if (typeof imageSearch.result.queries.nextPage !== "undefined") {
+        googleStartIndex = imageSearch.result.queries.nextPage[0].startIndex;
+    } else {
+        googleStartIndex = 0;
+    }
+
+    if (typeof imageSearch.result.items !== "undefined") {
+        $('#googlesearchResult').show();
+        var results = imageSearch.result.items;
+        var imgContainer = '';
+        for (var i = 0; i < results.length; i++) {
+            var result = results[i];
+            var disabled = '';
+            var image_link = (result.link).split("?");
+            if (result.image.height < 200 || result.image.width < 200 || result.image.byteSize > 4194304) {
+// || checkExtensionValid(image_link[0])
+                disabled = "disabled";
+
+            }
+           
+            imgContainer = '<div class="col-lg-2 col-sm-4"><div class="thumbnail"> <div class="thumb">'+
+                                            '<img src="' + result.link + '" alt="' + result.title + '"></div>'+
+
+                                        '<div class="caption"><div class="radio"><label><input type="radio" name="stacked-radio-left" class="styled"data-url="' + result.link + '" ' + disabled + ' >'
+        +'                                                </label> </div> </div> </div> </div>'
+            $('#dev-google').append(imgContainer);
+        }
+{#        checkGoogleHeight();#}
+    }
+    else {
+
+        if (pageNo == 1) {
+//append error
+            $('#googlesearchResult').hide();
+            $('#google-no-result').show();
+        }
+
+    }
+}
+    
+    function sendRequestToGoogleImageApi() {
+    if ($('#searchbox').val().trim() != "") {
+        $('#google-no-result').hide();
+        $('#dev-google').html('');
+        if ($('#choose-error').length > 0) {
+            $('#choose-error').remove();
+        }
+        googleStartIndex = 1;
+        googleSearch = $('#searchbox').val().trim();
+      {#  if ($("#google-field").hasClass('has-error')) {
+            $('#error').remove();
+            $("#google-field").removeClass('has-error');
+        }#}
+        if (googleStopSearch) {
+            makeRequest(googleSearch, googleStartIndex);
+        } else {
+            $('#googlesearchResult').hide();
+        }
+
+    } else {
+        $('#google-no-result').hide();
+        $('#dev-google').html('');
+        $('#googlesearchResult').hide();
+        if ($('#choose-error').length > 0) {
+            $('#choose-error').remove();
+        }
+        if ($("#google-field").hasClass('has-error')) {
+            $('#error').remove();
+            $("#google-field").removeClass('has-error');
+        }
+        $("#google-field").addClass('has-error');
+        $("#google-field").append('<div class="help-block help-error" id="error">'+messages.NotBlank+'</div>')
+    }
+}
+
+
+
+    </script>
+
+{% endblock %}
