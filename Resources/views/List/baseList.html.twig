@@ -26,7 +26,7 @@
 
                 <div class="heading-btn-group">
                     {% block breadCrumb %}
-                        <a class="btn btn-link btn-float has-text" href="Role-add.php"><i class="icon-add"></i><span>اضف دور</span></a>
+                        <a class="btn btn-link btn-float has-text" href="Role-add.php"><i class="icon-add"></i><span>إدخال دور</span></a>
                         <a class="btn btn-link btn-float has-text activeLink" href="Role-view.php"><i class="icon-table2"></i> <span>مشاهدة الادوار</span></a>
                     {% endblock %}
                 </div>
@@ -270,6 +270,16 @@
                                                                     {% if not loop.first %},{% endif %}
                                                                   {{ element }}
                                                             {% endfor %}
+                                                        </td>
+                                                    {% elseif field.propertyName == "username"  %}
+                                                        <td>
+                                                            <div class="media-left media-middle">
+                                                    <a href="javascript:void(0)"><img src="{{ asset( attribute(object, 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg')) }}" class="img-circle img-lg" alt=""></a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">   {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}} </a>
+                                                </div>
+
                                                         </td>
                                                     {% else %}
                                                         <td >

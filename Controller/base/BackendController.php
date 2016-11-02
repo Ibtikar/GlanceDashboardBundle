@@ -502,20 +502,27 @@ class BackendController extends Controller {
                 $getfunction = "get" . ucfirst($value);
                 if ($value == 'name' && $document instanceof \Ibtikar\GlanceDashboardBundle\Document\Role) {
                     $oneDocument[$value] = '<a class="dev-role-getPermision" href="javascript:void(0)" data-id="' . $document->getId() . '">' . $document->$getfunction() . '</a>';
-                }
-                elseif ($document->$getfunction() instanceof \DateTime) {
+                } elseif ($value == 'username') {
+                    $image = $document->getWebPath();
+                    if (!$image) {
+                        $image = 'bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg';
+                    }
+                    $oneDocument[$value] = '<div class="media-left media-middle"><a href="javascript:void(0)">'
+                        . '<img src="/' . $image . '" class="img-circle img-lg" alt=""></a></div>
+                                                <div class="media-body">
+                                                    <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">  ' . $document->$getfunction() . ' </a>
+                                                </div>';
+                } elseif ($document->$getfunction() instanceof \DateTime) {
                     $oneDocument[$value] = $document->$getfunction() ? $document->$getfunction()->format('Y-m-d') : null;
-                }
-                elseif (is_array($document->$getfunction())|| $document->$getfunction() instanceof \Traversable) {
-                    $elementsArray=array();
+                } elseif (is_array($document->$getfunction()) || $document->$getfunction() instanceof \Traversable) {
+                    $elementsArray = array();
                     foreach ($document->$getfunction() as $element) {
-                      $elementsArray[]=  is_object($element)?$element->__toString():$element;
+                        $elementsArray[] = is_object($element) ? $element->__toString() : $element;
                     }
                     $oneDocument[$value] = implode(',', $elementsArray);
-                }
-                else {
-                    $fieldData=$document->$getfunction();
-                    $oneDocument[$value] = is_object($fieldData)?$fieldData->__toString():$fieldData;
+                } else {
+                    $fieldData = $document->$getfunction();
+                    $oneDocument[$value] = is_object($fieldData) ? $fieldData->__toString() : $fieldData;
                 }
             }
 
