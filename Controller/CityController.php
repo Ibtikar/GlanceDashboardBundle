@@ -34,6 +34,8 @@ class CityController extends BackendController {
             "updatedAt"
 
         );
+    $this->listViewOptions->setBundlePrefix("ibtikar_glance_dashboard_");
+
     }
 
     protected function configureListParameters(Request $request) {

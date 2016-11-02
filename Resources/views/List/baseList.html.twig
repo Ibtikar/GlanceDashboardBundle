@@ -72,22 +72,22 @@
                             {% for action in list.bulkActions %}
                                     {% if action == "Delete" and (is_granted('ROLE_'~listName|upper~'_DELETE') or is_granted('ROLE_ADMIN')) %}
                                         <a data-action="{{action}}" {{popover_factory({
-question : "You are about to delete (%count%) (%type%), Are you sure?",
-replaceAttr : true,
-buttons : [
-            {
-                text : "Yes",
-                class : "dev-bulk-delete-btn dev-bulk-action-btn btn-danger"
-            },
-            {
-                text : "Cancel",
-                class : "btn-defualt"
-            }
-        ]
-})|replace({'%type%': (listName~"s")|lower|trans})|raw}} class="btn btn-default btn-sm" data-placement="bottom"> <i class="icon-trash"></i> <span class="hidden-sm position-right">{{ 'delete'|trans }} {{ (listName~"s")|trans }}</span></a>
-                                    {% endif %}
+                                            question : "You are about to delete (%count%) (%type%), Are you sure?",
+                                            replaceAttr : true,
+                                            buttons : [
+                                                        {
+                                                            text : "Yes",
+                                                            class : "dev-bulk-delete-btn dev-bulk-action-btn btn-danger"
+                                                        },
+                                                        {
+                                                            text : "Cancel",
+                                                            class : "btn-defualt"
+                                                        }
+                                                    ]
+                                            })|replace({'%type%': (listName~"s")|lower|trans})|raw}} class="btn btn-default btn-sm" data-placement="bottom"> <i class="icon-trash"></i> <span class="hidden-sm position-right">{{ 'delete'|trans }} {{ (listName~"s")|trans }}</span></a>
+                                                                                {% endif %}
                             {% endfor %}
-                        </span>
+                    </span>
                     {% endif %}
 
 {#
@@ -263,6 +263,13 @@ buttons : [
                                                         <td class="{{field.class}}" {% if field.isClickable %} style="cursor:pointer" onclick="window.location = '{{field.isClickable|replace({'--id--':object.document.id})}}'" {% endif %}>
 
                                                             {{ attribute(object, field.propertyName) is empty ? "" : attribute(object, field.propertyName)|date('Y-m-d') }}
+                                                        </td>
+                                                    {% elseif field.type == "many"  %}
+                                                        <td>
+                                                           {% for element in attribute(object, field.propertyName|humanize|title|replace({' ':''})) %}
+                                                                    {% if not loop.first %},{% endif %}
+                                                                  {{ element }}
+                                                            {% endfor %}
                                                         </td>
                                                     {% else %}
                                                         <td >

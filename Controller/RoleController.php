@@ -35,6 +35,8 @@ class RoleController extends BackendController {
             "createdAt",
             'updatedAt'
         );
+        $this->listViewOptions->setBundlePrefix("ibtikar_glance_dashboard_");
+
     }
 
     protected function configureListParameters(Request $request) {

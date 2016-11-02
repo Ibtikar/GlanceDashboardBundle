@@ -322,11 +322,10 @@ class BackendController extends Controller {
         }
 
         $dm = $this->get('doctrine_mongodb')->getManager();
-
         if ($this->listName) {
-            $staffListColumns = $dm->getRepository('IbtikarGlanceDashboardBundle:StaffListColumns')->findOneBy(array('staff.$id' => new \MongoId($this->getUser()->getId()), "listName" => 'ibtikar_glance_dashboard_'.$this->listName));
+            $staffListColumns = $dm->getRepository('IbtikarGlanceDashboardBundle:StaffListColumns')->findOneBy(array('staff.$id' => new \MongoId($this->getUser()->getId()), "listName" => $this->listViewOptions->getBundlePrefix().$this->listName));
         } else {
-            $staffListColumns = $dm->getRepository('IbtikarGlanceDashboardBundle:StaffListColumns')->findOneBy(array('staff.$id' => new \MongoId($this->getUser()->getId()), "listName" =>'ibtikar_glance_dashboard_'. strtolower($this->calledClassName) . "_" . $this->listViewOptions->getListType()));
+            $staffListColumns = $dm->getRepository('IbtikarGlanceDashboardBundle:StaffListColumns')->findOneBy(array('staff.$id' => new \MongoId($this->getUser()->getId()), "listName" =>  $this->listViewOptions->getBundlePrefix(). strtolower($this->calledClassName) . "_" . $this->listViewOptions->getListType()));
         }
         if ($request->getMethod() === 'GET') {
             if ($staffListColumns && $staffListColumns->getColumns()) {
@@ -503,9 +502,18 @@ class BackendController extends Controller {
                 $getfunction = "get" . ucfirst($value);
                 if ($value == 'name' && $document instanceof \Ibtikar\GlanceDashboardBundle\Document\Role) {
                     $oneDocument[$value] = '<a class="dev-role-getPermision" href="javascript:void(0)" data-id="' . $document->getId() . '">' . $document->$getfunction() . '</a>';
-                } elseif ($document->$getfunction() instanceof \DateTime) {
+                }
+                elseif ($document->$getfunction() instanceof \DateTime) {
                     $oneDocument[$value] = $document->$getfunction() ? $document->$getfunction()->format('Y-m-d') : null;
-                } else {
+                }
+                elseif (is_array($document->$getfunction())|| $document->$getfunction() instanceof \Traversable) {
+                    $elementsArray=array();
+                    foreach ($document->$getfunction() as $element) {
+                      $elementsArray[]=  is_object($element)?$element->__toString():$element;
+                    }
+                    $oneDocument[$value] = implode(',', $elementsArray);
+                }
+                else {
                     $fieldData=$document->$getfunction();
                     $oneDocument[$value] = is_object($fieldData)?$fieldData->__toString():$fieldData;
                 }
