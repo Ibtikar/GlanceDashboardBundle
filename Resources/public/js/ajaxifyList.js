@@ -52,10 +52,6 @@ var dataTableDefault = {
                         'url': url,
                         beforeSend: function () {
                             blockPage();
-                    }, complete: function (jqxhr) {
-                        if (jqxhr.status === 403) {
-                            window.location.reload();
-                        }
                     },
                         'success': function (json) {
                             if (json.columns.length == columns.length) {
@@ -542,9 +538,9 @@ jQuery(document).on('ajaxComplete', function (event, response) {
         if (response.status === 404) {
             window.location = notFoundUrl;
         }
-        if (response.status === 403) {
-            window.location.reload();
-        }
+//        if (response.status === 403) {
+//            window.location.reload();
+//        }
         if (typeof response.responseJSON === 'object') {
             if (typeof response.responseJSON.status !== 'undefined') {
                 handleAjaxResponse(response.responseJSON);
