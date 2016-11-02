@@ -268,7 +268,7 @@ function showNotificationMsg(title,text,type) {
     var notificationIcons = {
         success : {
             icon : "icon-checkmark3",
-            class : "bg-primary"
+            class : "bg-success"
         },
         info : {
             icon : "icon-info22",

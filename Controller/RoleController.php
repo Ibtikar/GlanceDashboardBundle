@@ -53,7 +53,7 @@ class RoleController extends BackendController {
             "buttons" => array(
                 [
                     "text" => "Remove that role and the users assgined to it",
-                    "class" => "btn-block btn-danger",
+                    "class" => "dev-delete-btn btn-block btn-danger",
                     "callback" => "callUrl",
                     "callback-param" => [
                         "data-href"
@@ -61,7 +61,7 @@ class RoleController extends BackendController {
                 ],
                 [
                     "text" => "Remove that role and deactivate the users assgined to it",
-                    "class" => "btn-block btn-danger",
+                    "class" => "dev-delete-btn btn-block btn-danger",
                 ],
             ),
             "translationDomain" => $this->translationDomain
