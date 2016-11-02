@@ -97,7 +97,7 @@ class BackendController extends Controller {
         if ($this->listName) {
             $listName = $this->listName;
         } else {
-            $listName = 'ibtikar_glance_dashboard_'.strtolower($this->calledClassName) . '_' . $this->listViewOptions->getListType();
+            $listName = $this->listViewOptions->getBundlePrefix().strtolower($this->calledClassName) . '_' . $this->listViewOptions->getListType();
         }
 
         $selectedColumns = $this->getCurrentColumns($listName);
@@ -187,7 +187,7 @@ class BackendController extends Controller {
             'pagination' => $pagination,
             'translationDomain' => $this->translationDomain,
             'listName' => $this->calledClassName,
-            'prefixRoute' => 'ibtikar_glance_dashboard_'.$this->calledClassName,
+            'prefixRoute' => $this->listViewOptions->getBundlePrefix().$this->calledClassName,
             'list' => $this->listViewOptions,
             'columns'=> json_encode(array_values($prepareColumns)),
             'columnArray'=> $columnArray ,
@@ -211,6 +211,7 @@ class BackendController extends Controller {
         $this->listViewOptions->setListQueryBuilder($this->createQueryBuilder());
         $this->listViewOptions->setDefaultSortBy("updatedAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
+        $this->listViewOptions->setBundlePrefix("ibtikar_glance_dashboard_");
     }
 
     protected function createQueryBuilder($documentBundle = "IbtikarGlanceDashboardBundle") {
@@ -368,9 +369,9 @@ class BackendController extends Controller {
                 $staffListColumns->setColumns($columsString);
                 $staffListColumns->setStaff($this->getUser());
                 if ($this->listName) {
-                    $staffListColumns->setListName('ibtikar_glance_dashboard_'.$this->listName);
+                    $staffListColumns->setListName($this->listViewOptions->getBundlePrefix().$this->listName);
                 } else {
-                    $staffListColumns->setListName('ibtikar_glance_dashboard_'.strtolower($this->calledClassName) . "_" . $this->listViewOptions->getListType());
+                    $staffListColumns->setListName($this->listViewOptions->getBundlePrefix().strtolower($this->calledClassName) . "_" . $this->listViewOptions->getListType());
                 }
                 $dm->persist($staffListColumns);
             }
@@ -489,9 +490,9 @@ class BackendController extends Controller {
                     if ($this->listViewOptions->hasActionsColumn($this->calledClassName)) {
                         foreach ($this->listViewOptions->getActions() as $action) {
                             if ($action == 'Edit' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_EDIT'))&& !$document->getNotModified()) {
-                                $actionTd.= '<a class="btn btn-defualt"  href = "' . $this->generateUrl('ibtikar_glance_dashboard_' . strtolower($this->calledClassName) . '_edit', array('id' => $document->getId())) . '" title="' . $this->trans('Edit '. ucfirst($this->calledClassName), array(), $this->translationDomain) . '" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>';
+                                $actionTd.= '<a class="btn btn-defualt"  href = "' . $this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_edit', array('id' => $document->getId())) . '" title="' . $this->trans('Edit '. ucfirst($this->calledClassName), array(), $this->translationDomain) . '" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>';
                             }elseif($action == 'Delete' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_DELETE')) && !$document->getNotModified()){
-                                $actionTd.= '<a class="btn btn-defualt"  data-href = "' . $this->generateUrl('ibtikar_glance_dashboard_' . strtolower($this->calledClassName) . '_delete', array('id' => $document->getId())) . '" ' . str_replace('%title%', $document, $this->get('app.twig.popover_factory_extension')->popoverFactory(isset($renderingParams['deletePopoverConfig'])?$renderingParams['deletePopoverConfig']:[])) . '" ><i class="icon-trash"></i></a>';
+                                $actionTd.= '<a class="btn btn-defualt"  data-href = "' . $this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_delete', array('id' => $document->getId())) . '" ' . str_replace('%title%', $document, $this->get('app.twig.popover_factory_extension')->popoverFactory(isset($renderingParams['deletePopoverConfig'])?$renderingParams['deletePopoverConfig']:[])) . '" ><i class="icon-trash"></i></a>';
                             }
                         }
 

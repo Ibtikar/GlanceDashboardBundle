@@ -61,14 +61,14 @@
                                     </ul>
                                 </div>
                             </div>
-                        <form method="post" action="{{ list.hasBulkActions(listName) ? path('ibtikar_glance_dashboard_'~listName|lower ~ '_bulk_actions') : '' }}" class="dev-bulk-actions-form">
+                        <form method="post" action="{{ list.hasBulkActions(listName) ? path(prefixRoute|lower ~ '_bulk_actions') : '' }}" class="dev-bulk-actions-form">
                             <div class="actions">
 
             {% block actions %}
                     <a data-placement="bottom" title="" data-popup="tooltip"  data-toggle="modal"  href="javascript:void(0)" class="btn btn-default btn-sm dev-change-columns" type="button" data-original-title="خانات الجدول"><i class="icon-table2 "></i> <span class="hidden-sm"> </span></a>
                     {% if list.hasBulkActions(listName) %}
                         <input type="hidden" id="dev-bulk-action" name="bulk-action" value=""/>
-                        <span class="dev-bulk-action-container" data-list-name="{{listName|lower}}" data-href="{{ list.hasBulkActions(listName) ? path('ibtikar_glance_dashboard_'~listName|lower ~ '_bulk_actions') : '' }}" style="display: none;">
+                        <span class="dev-bulk-action-container" data-list-name="{{listName|lower}}" data-href="{{ list.hasBulkActions(listName) ? path(prefixRoute|lower ~ '_bulk_actions') : '' }}" style="display: none;">
                             {% for action in list.bulkActions %}
                                     {% if action == "Delete" and (is_granted('ROLE_'~listName|upper~'_DELETE') or is_granted('ROLE_ADMIN')) %}
                                         <a data-action="{{action}}" {{popover_factory({
@@ -354,8 +354,8 @@ buttons : [
                     var start ={{skip}} ;
                     var sort ={% if sort is defined %}{{sort|raw}}{% else %} null {%endif %};
                     var toggleButtonColor = '#D6494C';
-                    var ajaxData = '{{path("ibtikar_glance_dashboard_"~listName|lower~"_list")}}';
-                    var changeListColumnsUrl = "{{path('ibtikar_glance_dashboard_'~listName|lower~'_change_list_columns')}}";
+                    var ajaxData = '{{path(prefixRoute|lower~"_list")}}';
+                    var changeListColumnsUrl = "{{path(prefixRoute|lower~'_change_list_columns')}}";
 
                 </script>
                 <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/app.js') }}"></script>

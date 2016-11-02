@@ -18,6 +18,7 @@ class ListView {
     private $listType;
     private $defaultSortBy;
     private $defaultSortOrder;
+    private $bundlePrefix;
     private $listQueryBuilder;
     private $breadcrumbs;
     private $template;
@@ -180,6 +181,15 @@ class ListView {
 
     public function getTemplate() {
         return $this->template;
+    }
+
+    public function setBundlePrefix($prefix='ibtikar_glance_dashboard_') {
+        $this->bundlePrefix = $prefix;
+        return $this;
+    }
+
+    public function getBundlePrefix() {
+        return $this->bundlePrefix;
     }
 
     public function setTemplate($template) {
