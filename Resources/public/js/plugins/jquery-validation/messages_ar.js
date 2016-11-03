@@ -13,7 +13,7 @@
      * Locale: AR (Arabic; العربية)
      */
     $.extend($.validator.messages, {
-        required: 'يجب إدخال القيمة',
+        required: 'الرجاء إدخال قيمة‎',
         remote: "يرجى تصحيح هذا الحقل للمتابعة",
         email: 'يجب ان يكون الإيميل بهذه الصيغة: "email@domain.com"',
         url: "رجاء إدخال عنوان موقع إلكتروني صحيح",

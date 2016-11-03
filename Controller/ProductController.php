@@ -11,7 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type as formType;
 
 class ProductController extends BackendController {
 
-    protected $translationDomain = 'job';
+    protected $translationDomain = 'product';
 
     protected function configureListColumns() {
         $this->allListColumns = array(
@@ -54,11 +54,11 @@ class ProductController extends BackendController {
 
         $job = new Product();
         $form = $this->createFormBuilder($job, array('translation_domain' => $this->translationDomain,'attr'=>array('class'=>'dev-page-main-form dev-js-validation form-horizontal')))
-                ->add('name',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150)))
-                ->add('nameEn',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150)))
+                ->add('name',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
+                ->add('nameEn',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
                 ->add('save', formType\SubmitType::class)
-                ->add('description',  formType\TextareaType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000)))
-                ->add('descriptionEn',formType\TextareaType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000)))
+                ->add('description',  formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
+                ->add('descriptionEn',formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
                 ->add('save', formType\SubmitType::class)
                 ->getForm();
 

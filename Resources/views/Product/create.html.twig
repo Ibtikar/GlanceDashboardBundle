@@ -8,9 +8,9 @@
 
                                     {{ form_start(form)}}
 
-                                  
 
-                                   
+
+
 
                                                <div class="tabbable">
                                             <ul class="nav nav-tabs nav-tabs-highlight">
@@ -46,14 +46,14 @@
 
                                             </div>
                                         </div>
-                                  
+
 
                                         <hr>
 
                                         <div class="row">
 
 
-                                            <div class="col-md-12">   
+                                            <div class="col-md-12">
 
                                                 <h5>ادخل
                                                     الصور المطلوبة
@@ -87,7 +87,7 @@
                                                             <input class="form-control" placeholder="ادخل اسم  المنتج" type="text">
                                                         </div>
                                                                     </div>
-                                                                    
+
                                                                     <span class="help-block"> PNG · 1.44 KB · 30 × 30 Added Oct 25, 2016 5:26 am by ola hamdy </span>
                                                                 </td>
                                                                 <td style="width: 300px">
@@ -141,8 +141,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
-                        {{ form_end(form) }}              
+
+                        {{ form_end(form) }}
 
 
 {% endblock %}
@@ -153,9 +153,9 @@
                         <a class="btn btn-primary" href="Subproduct-add.php">حفظ و اضافة منتج فرعي<i class="icon-plus2 position-right"></i></a>
 
                         <button class="btn btn-defualt dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
-                    
-                    
-                    
+
+
+
                     </div>
                 </div>
 {% endblock %}
@@ -338,7 +338,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                                                 <div class="col-lg-2 col-sm-4">
                                     <div class="thumbnail">
                                         <div class="thumb">
@@ -356,8 +356,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                                                
+
+
                                                                 <div class="col-lg-2 col-sm-4">
                                     <div class="thumbnail">
                                         <div class="thumb">
@@ -375,7 +375,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </div><!-- row end -->
 
                               <div class="row">
@@ -452,7 +452,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                                                 <div class="col-lg-2 col-sm-4">
                                     <div class="thumbnail">
                                         <div class="thumb">
@@ -470,8 +470,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                                                
+
+
                                                                 <div class="col-lg-2 col-sm-4">
                                     <div class="thumbnail">
                                         <div class="thumb">
@@ -489,11 +489,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </div><!-- row end -->
 
-                            
-                            
+
+
                                                         <div class="row">
                                 <div class="col-lg-2 col-sm-4">
                                     <div class="thumbnail">
@@ -568,7 +568,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                                                 <div class="col-lg-2 col-sm-4">
                                     <div class="thumbnail">
                                         <div class="thumb">
@@ -586,8 +586,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                                                
+
+
                                                                 <div class="col-lg-2 col-sm-4">
                                     <div class="thumbnail">
                                         <div class="thumb">
@@ -605,7 +605,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </div><!-- row end -->
 
                                                     <div class="dropdown-content-footer">
@@ -615,7 +615,7 @@
                                 <i class="icon-spinner6 spinner display-block"></i>
                             </div>
                         </div>
-                            
+
                         </div>
 
 
@@ -659,7 +659,7 @@
 
 
 <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/jquery.cropit.js')}}"></script>
-    
+
     <script>
         var cropperPluginInitialized = false;
     $(function() {
@@ -668,6 +668,11 @@
 
 
         $('.upload-image-modal-open').on('click', function() {
+
+
+
+
+
             $('#uploadImg .cropit-image-input').click();
             if (cropperPluginInitialized) {
                 return;
@@ -687,8 +692,38 @@
             $('#uploadImg .cropit-image-input').change(function() {
                 $('#uploadImg').modal('show');
             });
-            cropperPluginInitialized = true;
-        });
+        {#    $('#uploadImg .cropit-image-input').change(function() {
+                  #}var url  = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':'null','collectionType':'Product'})}}";
+    {#              setTimeout(function(){
+                                var image_file = $('#image-cropper-modal').cropit('export')
+
+             var formData = new FormData();
+             formData.append("media_type[file]", image_file);
+
+             $.ajax({
+               url: url,
+               type: 'POST',
+               data: formData,
+               async: false,
+               cache: false,
+               contentType: false,
+               processData: false,
+               success: function (status) {
+                console.log(status)
+               }
+             });
+
+
+
+                  },100)#}
+
+
+              {#  $('#uploadImg').modal('show');
+                  image= $('#image-cropper-modal').cropit('export')
+                console.log(image)
+{#            });#}
+{#            cropperPluginInitialized = true;#}
+{#        });#}
 
         $('.image-editor').cropit({
             imageState: {
@@ -699,23 +734,25 @@
 
     });
     $(document).ready(function(){
-        gapi.load('client', function() { 
+        gapi.load('client', function() {
         console.log('gapi.client loaded.');
         gapi.client.setApiKey('AIzaSyC8AmPicmxUoxY1x1QlHvmucd9DdhGVEek');
         gapi.client.load('customsearch', 'v1',function(){});
         });
-      
-    
-    
+
+
+        $("form.form-horizontal").data("validator").settings.ignore = ".dev-ignore-validation";
+
            $(document).on('click', '#search-img-btn', function() {
         sendRequestToGoogleImageApi();
     });
     })
+
         var googleStartIndex = 1;
         var googleImageResult;
         var googleSearch;
         var googleStopSearch=1;
-                
+
     function makeRequest(q, googleStart) {
 // request limit is 100 queries per day which is very low rate
 // more information can be found here : https://console.developers.google.com/project/138808141819/apiui/apiview/customsearch?tabId=quotas
@@ -769,7 +806,7 @@ function appendResults(response) {
                 disabled = "disabled";
 
             }
-           
+
             imgContainer = '<div class="col-lg-2 col-sm-4"><div class="thumbnail"> <div class="thumb">'+
                                             '<img src="' + result.link + '" alt="' + result.title + '"></div>'+
 
@@ -789,7 +826,7 @@ function appendResults(response) {
 
     }
 }
-    
+
     function sendRequestToGoogleImageApi() {
     if ($('#searchbox').val().trim() != "") {
         $('#google-no-result').hide();

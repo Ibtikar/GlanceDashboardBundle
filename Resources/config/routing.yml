@@ -18,8 +18,12 @@ ibtikar_glance_dashboard_job:
 ibtikar_glance_dashboard_city:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/city.yml"
     prefix:   /city
-    
+
 ibtikar_glance_dashboard_product:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/product.yml"
     prefix:   /product
+
+ibtikar_glance_dashboard_media:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/media.yml"
+    prefix:   /
 
