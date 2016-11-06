@@ -3,5 +3,5 @@
 'successfully %action% %success-count% %item-translation% from %ids-count%.': 'لقد تم %action% %success-count% %item-translation% من أصل %ids-count% %item-translation% '
 'delete': 'حذف'
 job: وظيفة
-'jobs': 'عنوين وظيفية'
-'Jobs': 'العنوين الوظيفية'
+'jobs': 'عناوين وظيفية'
+'Jobs': 'العناوين الوظيفية'

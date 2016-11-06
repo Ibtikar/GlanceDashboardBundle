@@ -285,6 +285,9 @@ function showNotificationMsg(title,text,type) {
         icon: notificationIcons[type]['icon'],
         addclass: notificationIcons[type]['class'],
         type:type,
+        buttons: {
+            sticker: false
+        },
         stack: {"dir1": "up", "dir2": "left", "firstpos1": 60, "firstpos2": 0}
     });
 }
@@ -493,7 +496,6 @@ $(document).ready(function () {
     });
 
     $('.content-wrapper').on('click','.dev-bulk-action-btn',function(e){
-        console.log($(this)[0],$(this).parents('.popover')[0],$(this).parents('.popover').prev()[0],$(this).parents('.popover').prev().data('action'));
         var action = $(this).parents('.popover').prev().data('action');
         if(action){
             $('#dev-bulk-action').val(action);

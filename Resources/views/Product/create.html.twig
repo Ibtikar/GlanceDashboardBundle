@@ -9,10 +9,88 @@
                                     {{ form_start(form)}}
 
 
+                                    <div class="row">
 
 
+                                            <div class="col-md-12">
 
-                                               <div class="tabbable">
+                                                <h5>ادخل
+                                                    الصور المطلوبة
+                                                </h5>
+
+
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered">
+
+                                                        <tbody>
+                                                            <tr>
+                                                                <td style="width: 150px">
+
+                                                                    <div class="thumbnail">
+                                                                        <div class="thumb thumb-slide">
+                                                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
+                                                                            <div class="caption">
+                                                                                <span>
+                                                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </td>
+                                                                <td class="thumbnail-caption">
+                                                                    <h4>  صورة المنتج</h4>
+                                                                    <ul class="text-grey-300">
+                                                                        <li> المقاس : 200 X 200</li>
+                                                                        <li> الحجم : 300 MB</li>
+                                                                    </ul>
+                                                                </td>
+                                                                <td style="width: 300px">
+                                                                    <a class="btn btn-defualt upload-image-modal-open"  > رفع الصورة</a>
+                                                                    <a class="btn btn-defualt"  >  <i class="icon-crop"></i> </a>
+                                                                    <a class="btn btn-defualt"  > <i class="icon-trash"></i></a>
+
+
+                                                                </td>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="width: 150px">
+                                                                    <div class="thumbnail">
+                                                                        <div class="thumb thumb-slide">
+                                                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
+                                                                            <div class="caption">
+                                                                                <span>
+                                                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </td>
+                                                                <td class="thumbnail-caption">
+                                                                    <h4>  صورة الغلاف</h4>
+                                                                    <span class="help-block"> PNG · 1.44 KB · 30 × 30 Added Oct 25, 2016 5:26 am by ola hamdy </span>
+                                                                </td>
+                                                                <td style="width: 300px">
+                                                                    <a class="btn btn-defualt upload-image-modal-open"  > رفع الصورة</a>
+                                                                    <a class="btn btn-defualt"  >  <i class="icon-crop"></i> </a>
+                                                                    <a class="btn btn-defualt"  > <i class="icon-trash"></i></a>
+
+
+                                                                </td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <hr>
+                                            <div class="tabbable">
                                             <ul class="nav nav-tabs nav-tabs-highlight">
                                                 <li class="active"><a href="#arabic" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}" alt="arabic" width="30" height="20"/></a></li>
                                                 <li><a href="#english" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}" alt="english" width="30" height="20"/></a></li>
@@ -47,100 +125,6 @@
                                             </div>
                                         </div>
 
-
-                                        <hr>
-
-                                        <div class="row">
-
-
-                                            <div class="col-md-12">
-
-                                                <h5>ادخل
-                                                    الصور المطلوبة
-                                                </h5>
-
-
-
-                                                <div class="table-responsive">
-                                                    <table class="table table-bordered">
-
-                                                        <tbody>
-                                                            <tr>
-                                                                <td style="width: 150px">
-
-                                                                    <div class="thumbnail">
-                                                                        <div class="thumb thumb-slide">
-                                                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
-                                                                            <div class="caption">
-                                                                                <span>
-                                                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-
-                                                                    </div>
-                                                                </td>
-                                                                <td class="thumbnail-caption">
-                                                                    <h4>  صورة المنتج</h4>
-                                                                    <div class="row">
-                                                                    <div class="col-lg-12">
-                                                            <input class="form-control" placeholder="ادخل اسم  المنتج" type="text">
-                                                        </div>
-                                                                    </div>
-
-                                                                    <span class="help-block"> PNG · 1.44 KB · 30 × 30 Added Oct 25, 2016 5:26 am by ola hamdy </span>
-                                                                </td>
-                                                                <td style="width: 300px">
-                                                                    <a class="btn btn-defualt upload-image-modal-open"  > رفع الصورة</a>
-                                                                    <a class="btn btn-defualt" data-toggle="modal" data-target="#GoogleImportImg-modal" > صور جوجل</a>
-
-                                                                    <a class="btn btn-defualt"  >  <i class="icon-crop"></i> </a>
-                                                                    <a class="btn btn-defualt"  > <i class="icon-trash"></i></a>
-
-
-                                                                </td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="width: 150px">
-                                                                    <div class="thumbnail">
-                                                                        <div class="thumb thumb-slide">
-                                                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/product.png')}}" alt="">
-                                                                            <div class="caption">
-                                                                                <span>
-                                                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/product.png')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                </td>
-                                                                <td class="thumbnail-caption">
-                                                                    <h4>  صورة الغلاف</h4>
-                                                                                                                                        <div class="row">
-                                                                    <div class="col-lg-12">
-                                                            <input class="form-control" placeholder="ادخل اسم الغلاف" type="text">
-                                                        </div>
-                                                                    </div>
-                                                                    <span class="help-block"> PNG · 1.44 KB · 30 × 30 Added Oct 25, 2016 5:26 am by ola hamdy </span>
-                                                                </td>
-                                                                <td style="width: 300px">
-                                                                    <a class="btn btn-defualt upload-image-modal-open"  > رفع الصورة</a>
-                                                                    <a class="btn btn-defualt" data-toggle="modal" data-target="#GoogleImportImg-modal" > صور جوجل</a>
-
-                                                                    <a class="btn btn-defualt"  >  <i class="icon-crop"></i> </a>
-                                                                    <a class="btn btn-defualt"  > <i class="icon-trash"></i></a>
-
-
-                                                                </td>
-                                                            </tr>
-
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
 
                         {{ form_end(form) }}
 

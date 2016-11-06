@@ -21,7 +21,7 @@ class Document {
     /**
      * @MongoDB\Date
      */
-    private $updatedAt;
+    public $updatedAt;
 
     /**
      * @MongoDB\Date
@@ -36,7 +36,7 @@ class Document {
     /**
      * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\User")
      */
-    private $updatedBy;
+    public $updatedBy;
 
     /**
      * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\User")
@@ -60,8 +60,8 @@ class Document {
         }
         $this->deletedAt = new \DateTime();
         $this->deleted = true;
-//        $this->removeDocumentReferences($dm, $user);
-//        $this->updateReferencesCounts(-1);
+        $this->removeDocumentReferences($dm, $user);
+        $this->updateReferencesCounts(-1);
     }
 
     /**
@@ -132,9 +132,9 @@ class Document {
                 if (!$referenceFound) {
                     continue;
                 }
-                if ($user) {
-                    $queryBuilder->field('updatedBy')->set($user);
-                }
+//                if ($user) {
+//                    $queryBuilder->field('updatedBy')->set($user);
+//                }
                 $queryBuilder
                         ->field('updatedAt')->set(new \DateTime())
                         ->getQuery()

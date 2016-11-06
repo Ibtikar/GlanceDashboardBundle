@@ -84,7 +84,7 @@
                                                             class : "btn-defualt"
                                                         }
                                                     ]
-                                            })|replace({'%type%': (listName~"s")|lower|trans})|raw}} class="btn btn-default btn-sm" data-placement="bottom"> <i class="icon-trash"></i> <span class="hidden-sm position-right">{{ 'delete'|trans }} {{ (listName~"s")|trans }}</span></a>
+                                            })|replace({'%type%': (oneItem~"s")|lower|trans})|raw}} class="btn btn-default btn-sm" data-placement="bottom"> <i class="icon-trash"></i> <span class="hidden-sm position-right">{{ 'delete'|trans }} {{ ((oneItem|capitalize)~"s")|trans }}</span></a>
                                                                                 {% endif %}
                             {% endfor %}
                     </span>

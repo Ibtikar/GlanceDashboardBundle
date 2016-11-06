@@ -19,6 +19,7 @@ class BackendController extends Controller {
     protected $sublistName;
     protected $listName;
     protected $calledClassName = '';
+    protected $calledClassBundleName = '';
     protected $roomType = '';
     public $oneItem = '';
 
@@ -39,7 +40,9 @@ class BackendController extends Controller {
         if ($this->calledClassName == '') {
             $calledClassPath = get_called_class();
             $calledClassName = substr($calledClassPath, strrpos($calledClassPath, "Controller\\") + strlen("Controller\\"));
+            $calledClassBundleName = substr($calledClassPath,0,strrpos($calledClassPath, "Controller\\"));
             $this->calledClassName = substr($calledClassName, 0, strlen($calledClassName) - strlen("Controller"));
+            $this->calledClassBundleName = str_replace('\\', '',$calledClassBundleName);
         }
         if (!$this->translationDomain) {
             $this->translationDomain = strtolower($this->calledClassName);
@@ -191,6 +194,7 @@ class BackendController extends Controller {
             'list' => $this->listViewOptions,
             'columns'=> json_encode(array_values($prepareColumns)),
             'columnArray'=> $columnArray ,
+            'oneItem'=> $this->oneItem != ""?strtolower($this->oneItem):$this->calledClassName,
         );
         if ($sortIndex === 0 || $sortIndex) {
             $renderningParams['sort'] = json_encode(array($sortIndex, $sortOrder));
@@ -286,7 +290,7 @@ class BackendController extends Controller {
 
     protected function getObjectShortName() {
 
-        return 'IbtikarGlanceDashboardBundle:' . $this->calledClassName;
+        return $this->calledClassBundleName . ':' . $this->calledClassName;
     }
 
     public function trans($string, $param = array(), $translationDomain = 'messages') {
@@ -599,8 +603,8 @@ class BackendController extends Controller {
         $dm = $this->get('doctrine_mongodb')->getManager();
         $document = $dm->getRepository($this->getObjectShortName())->find($id);
 
-        if ($document && $document->getDeleted()) {
-            $document = null;
+        if (!$document || $document->getDeleted()) {
+            return $this->getFailedResponse();
         }
 
         $errorMessage = $this->validateDelete($document);
@@ -646,7 +650,7 @@ class BackendController extends Controller {
         $dm = $this->get('doctrine_mongodb')->getManager();
         $documents = $dm->getRepository($this->getObjectShortName())->findBy(array('id' => array('$in' => array_values($ids))));
         $translator = $this->get('translator');
-        $message = str_replace(array('%action%', '%item-translation%', '%ids-count%'), array($translator->trans($bulkAction), $this->trans(strtolower($this->calledClassName)), count($ids)), $translator->trans('successfully %action% %success-count% %item-translation% from %ids-count%.'));
+        $message = str_replace(array('%action%', '%item-translation%', '%ids-count%'), array($translator->trans($bulkAction), $this->trans(strtolower($this->oneItem != ""?$this->oneItem:$this->calledClassName)), count($ids)), $translator->trans('successfully %action% %success-count% %item-translation% from %ids-count%.'));
         $foundDocumentsIds = array();
         foreach ($documents as $document) {
             $foundDocumentsIds [] = $document->getId();
@@ -669,10 +673,8 @@ class BackendController extends Controller {
             case 'Delete':
                 $addActionTodo = FALSE;
                 ;
-                $permission = ($this->roomType == "Comments") ? 'ROLE_ROOM_COMMENT_' . strtoupper($this->roomIndex) . '_DELETE' : 'ROLE_' . strtoupper($this->calledClassName) . '_DELETE';
-                if ($this->roomType == 'Comments') {
-                    $message = str_replace(array('%action%', '%item-translation%', '%ids-count%'), array($translator->trans($bulkAction), $this->trans('comment'), count($ids)), $translator->trans('successfully %action% %success-count% %item-translation% from %ids-count%.'));
-                }
+                $permission = 'ROLE_' . strtoupper($this->calledClassName) . '_DELETE';
+
                 if (!$securityContext->isGranted($permission) && !$securityContext->isGranted('ROLE_ADMIN')) {
                     $this->get('session')->getFlashBag()->add('error', $translator->trans('You are not authorized to do this action any more'));
                     return new JsonResponse(array('status' => 'reload-page'), 403);
@@ -683,7 +685,6 @@ class BackendController extends Controller {
                     'likes' => array()
                 );
 
-                $likesiIncrement = array();
 
                 foreach ($documents as $document) {
                     $errorMessage = $this->validateDelete($document);
@@ -697,119 +698,11 @@ class BackendController extends Controller {
                     }
                     if ($document->getDeleted())
                         continue;
-                    try {
-                        // in case of bulk delete from any material room
-                        if (strtoupper($this->calledClassName) == 'COMICS' || strpos(strtoupper($this->calledClassName), 'OOM_')) {
-                            if (in_array($document->getStatus(), array('published', 'unpublished'))) {
-                                $addActionTodo = TRUE;
-                            }
-
-                            $bulkQueries['readLater'][] = new \MongoId($document->getId());
-                        }
-
-
-                        if (strtoupper($this->calledClassName) == 'COMICS' || strtoupper($this->calledClassName) == 'IMAGE' || strtoupper($this->calledClassName) == 'VIDEO' || strtoupper($this->calledClassName) == 'ALBUM'||strpos(strtoupper($this->calledClassName), 'OOM_')) {
-
-                            $count_like = 1;
-                            $bulkQueries['user'] = array();
-                            $documentslikeList = $dm->getRepository('IbtikarUserBundle:UserDocumentLike')->getDocumentLike($document->getId());
-                            foreach ($documentslikeList as $documentlikeList) {
-                                // $user = $this->get('get_user_information')->getFullname($documentlikeList->getUser()->getId(), TRUE);
-                                // $user->setLikesCount($user->getLikesCount() - 1);
-                                $userID = $documentlikeList->getUser()->getId();
-                                if (array_key_exists($userID, $bulkQueries['user'])) {
-                                    $bulkQueries['user'][$userID] = $count_like + 1;
-                                } else {
-                                    $bulkQueries['user'][$userID] = $count_like;
-                                }
-                            }
-
-                            $bulkQueries['likes'][] = new \MongoId($document->getId());
-//                            $this->container->get('comment_operations')->deletecommentsOfDocument($document);
-                            if (in_array($document->getStatus(), array('published', 'unpublished'))) {
-                                $this->get('comics_operations')->hideFrontEndUrl($document);
-                            }
-                        }
-                        if (strpos($this->calledClassName, 'Comments') !== false) {
-                            $isSupervisor = ($securityContext->isGranted('ROLE_ROOM_COMMENT_' . strtoupper($this->roomIndex) . '_SUPERVISOR') || $securityContext->isGranted('ROLE_ADMIN')) ? true : false;
-                            if (!$isSupervisor && $this->roomName !== 'InProgressComments' && !in_array($document->getCategory()->getId(), $this->getUser()->getAllCommentsCategoryPermissions())) {
-                                $data['errors'][$this->trans('failed operation')] [] = $document->getId();
-                                continue;
-                            }
-                            if (!$isSupervisor && $document->getForwardedTo()) {
-                                $data['errors'][$this->trans('failed operation')] [] = $document->getId();
-                                continue;
-                            }
-                            $isValid = $this->get('comment_operations')->deleteComment($document, $this->roomIndex);
-                            if ($isValid) {
-                                $successIds [] = $document->getId();
-                            }
-                        } else if (strpos($this->calledClassName, 'Room') !== false && strpos($this->calledClassName, 'Event') == FALSE && strpos($this->calledClassName, 'Messages') == FALSE) {
-                            $isValid = $this->get('material_operations')->delete($document, $document->getRoom(), $request->get('reason'), $request->get('otherReason'));
-                            if ($isValid['status'] == 'success') {
-                                $successIds [] = $document->getId();
-                            }
-                        } else {
-                            if (strtoupper($this->calledClassName) == 'COMICS' && $document->getStatus() == 'published') {
-                                $cachedLocation = array();
-                                foreach ($document->getPublishLocations() as $location) {
-                                    if (strpos(strtolower($location->getSection()), 'gallery') && !strpos(strtolower($location->getSection()), 'home')) {
-                                        $cachedLocation[] = $this->generateUrl('gallery_by_section_json', array('section' => $location->getSection()));
-                                    }
-                                }
-                                $this->get('cache_operations')->deleteMulti($cachedLocation);
-                            }
-                            $document->delete($dm, $this->getUser(), $this->container, $request->get('deleteOption'));
-                            if (method_exists($document, 'getSlug') && $document->getSlug()) {
-                                $this->get('cache_operations')->invalidateDocumentTag($document->getSlug(), 'view');
-                            }
-                            if (strtoupper($this->calledClassName) == 'POLL') {
-                                $document->setAutoPublishDate(NULL);
-                            }
-                            if ($this->calledClassName == 'Place') {
-                                $city = $document->getCity();
-                                $city->setPlacesCount($city->getPlacesCount() - 1);
-                            }
-
-                            $dm->flush();
-                            $successIds [] = $document->getId();
-                            $successIdsObject [] = new \MongoId($document->getId());
-                        }
-                    } catch (\Exception $e) {
-                        $data['errors'][$translator->trans('failed operation')] [] = $document->getId();
-                    }
                 }
                 $userPacked = array();
                 $usersIds = array();
                 if (count($successIds) > 0) {
-
-                    if ((strtoupper($this->calledClassName) == 'COMICS' || strpos(strtoupper($this->calledClassName), 'OOM_')) && $addActionTodo) {
-                       if(strtoupper($this->calledClassName) == 'COMICS' ){
-                        $actionToDoAfterDeleteDocument = new ActionsAfterDeleteDocument();
-                        $actionToDoAfterDeleteDocument->setParams($successIds);
-                        $actionToDoAfterDeleteDocument->setStatus('new');
-                        $actionToDoAfterDeleteDocument->setType('Comics');
-                        $dm->persist($actionToDoAfterDeleteDocument);
-                        $dm->flush();
-                       }
-
-                        $dm->createQueryBuilder('IbtikarUserBundle:UserDocumentReadLater')->remove()->field('document.$id')->in($bulkQueries['readLater'])->getQuery()->execute();
-                        foreach ($bulkQueries['user'] as $keyID => $value) {
-                            if (!isset($userPacked[$value])) {
-                                $userPacked[$value] = array($keyID);
-                                continue;
-                            }
-                            $userPacked[$value][] = $keyID;
-                        }
-                        foreach ($userPacked as $keyLikes => $value) {
-
-                            $usersIds = $value;
-                            $dm->createQueryBuilder('IbtikarUserBundle:User')->update()->
-                                    field('_id')->in($usersIds)->field('likesCount')->inc(-$keyLikes)->multiple(true)->getQuery()->execute();
-                        }
-                        $dm->createQueryBuilder('IbtikarUserBundle:UserDocumentLike')->remove()->field('document.$id')->in($bulkQueries['likes'])->getQuery()->execute();
-                    }
-
+                    $this->postDelete($successIds);
                 }
                 break;
             }
@@ -819,4 +712,14 @@ class BackendController extends Controller {
         return new JsonResponse($data);
     }
 
+    
+/**
+ * method to perform action after successful delete
+ *
+ * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
+ * @param mixed $ids can be a single  string (id) or successful (id)s array
+ */
+    protected function postDelete($ids) {
+
+    }
 }
