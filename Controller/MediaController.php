@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Ibtikar\GlanceDashboardBundle\Document\Media;
 use Symfony\Component\HttpFoundation\File\File;
+use Ibtikar\GlanceDashboardBundle\Form\Type\MediaType;
 
 class MediaController extends BackendController {
 
@@ -334,7 +335,7 @@ class MediaController extends BackendController {
 
 
         $validationGroup= array($type);
-        $form = $this->createForm(new \Ibtikar\GlanceDashboardBundle\Form\Type\MediaType(), $media, array(
+        $form = $this->createForm(MediaType::class, $media, array(
             'translation_domain' => $this->translationDomain,
             'validation_groups' => $validationGroup
         ));
