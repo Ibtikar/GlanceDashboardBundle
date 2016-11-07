@@ -337,19 +337,41 @@ class MediaController extends BackendController {
         $validationGroup= array($type);
         $form = $this->createForm(MediaType::class, $media, array(
             'translation_domain' => $this->translationDomain,
-            'validation_groups' => $validationGroup
+            'validation_groups' => $validationGroup,
+            'csrf_protection' => false
         ));
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
+                $imageType = $request->get('imageType');
+                if ($imageType) {
+
+                    switch ($imageType) {
+                        case 'profile':
+                            $media->setProfilePhoto(TRUE);
+                            break;
+                        case 'coverPhoto':
+                            $media->setCoverPhoto(TRUE);
+                    }
+                }
                 $dm = $this->get('doctrine_mongodb')->getManager();
+                $tempPath = $media->getTempPath();
+                $media->setTempPath('');
                 $dm->persist($media);
                 $dm->flush();
-//                if ($type == 'image') {
-//                    $this->container->get('image_operations')->autoRotate($media->getAbsolutePath());
-//                }
-                return $this->getNotificationResponse($this->trans('Uploaded sucessfully.'), $this->getMediaDataArray($media, $documentId, $collectionType));
+
+
+
+
+                return new JsonResponse(array('status' => 'success'));
+            } else {
+
+                $tempPath = $media->getTempPath();
             }
+        }
+        if ($tempPath) {
+            $fileSystem = new \Symfony\Component\Filesystem\Filesystem();
+            $fileSystem->remove($media->getTempPath());
         }
         $error = $this->trans('failed operation');
         foreach ($form->getErrors() as $errorObject) {

@@ -222,17 +222,50 @@
 <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/jquery.cropit.js')}}"></script>
 
     <script>
+        function showNotificationMsg(title,text,type) {
+
+    var notificationIcons = {
+        success : {
+            icon : "icon-checkmark3",
+            class : "bg-success"
+        },
+        info : {
+            icon : "icon-info22",
+            class : "bg-info"
+        },
+        error : {
+            icon : "icon-blocked",
+            class : "bg-danger"
+        }
+
+    };
+
+    type = (typeof type == "undefined"?"success":type);
+
+    new PNotify({
+        title: title,
+        text: text,
+        icon: notificationIcons[type]['icon'],
+        addclass: notificationIcons[type]['class'],
+        type:type,
+        buttons: {
+            sticker: false
+        },
+        stack: {"dir1": "up", "dir2": "left", "firstpos1": 60, "firstpos2": 0}
+    });
+}
 
     var cropperPluginInitialized = false;
     var url  = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':'null','collectionType':'Product'})}}";
       var element;
-    $(function() {
-
+      var name;
+       $(document).ready(function(){
 
 
 
         $('.upload-image-modal-open').on('click', function() {
-         element =$(this).attr('data-name');
+         name =$(this).attr('data-name');
+         element=$(this);
             $('#uploadImg .cropit-image-input').click();
             if (cropperPluginInitialized) {
                 return;
@@ -250,7 +283,7 @@
 
 
             $('#uploadImg .cropit-image-input').change(function() {
-                $('#uploadImg').modal('show');
+
             });
             cropperPluginInitialized = true;
         });
@@ -262,30 +295,68 @@
         });
 
 
-    });
-    $(document).ready(function(){
+
+
+
+
+
+
+        $('#image-cropper-modal').cropit({onImageLoaded:function(){
+                var element=$('#uploadImg .cropit-image-input')
+            var value = element.val(),
+                    file = value.toLowerCase(),
+                    extension = file.substring(file.lastIndexOf('.') + 1);
+                    console.log(extension)
+
+                if ($.inArray(extension, ['jpeg','jpg','png']) == -1) {
+                    console.log('f')
+                                 showNotificationMsg('error',"",'error');
+
+                } else if(element.attr('data-size') > (2 * 1024 * 1024)) {
+                                        console.log('2')
+
+                                 showNotificationMsg('error1',"",'error');
+
+                }else if($('#image-cropper-modal').cropit('previewSize').width < 200 ||  $('#image-cropper-modal').cropit('previewSize').heigth <200){
+                                                            console.log('3')
+
+                                                     showNotificationMsg('error2',"",'error');
+
+                }else{
+                   $('#uploadImg').modal('show');
+                }
+
+        },onImageError:function(){
+                 showNotificationMsg('error3',"",'error');
+        }
+
+        })
         $(document).on('click','.dev-submit-image',function(){
             var imageFile = $('#image-cropper-modal').cropit('export')
-            console.log($('input[type=file]')[0].files[0])
+          {#  console.log($('input[type=file]')[0].files[0])
             console.log(imageFile)
-
+#}
              var formData = new FormData();
              formData.append("media[file]", imageFile);
 
              $.ajax({
-               url: url,
+               url: url+'?imageType='+name,
                type: 'POST',
                data: formData,
                async: false,
                cache: false,
                contentType: false,
                processData: false,
-               success: function (status) {
-                console.log(status)
+               success: function (data) {
+               if(data.status=='success'){
+                element.closest('tr').find('img').attr('src',$('#image-cropper-modal').cropit('export'));
+                element.closest('tr').find('.caption a').attr('href',$('#image-cropper-modal').cropit('export'))
+                $('#uploadImg').modal('hide');
                }
-             });
+             }
 
         })
+    })
     })
 
 
