@@ -54,6 +54,10 @@ class Media extends Document {
      * @MongoDB\String
      */
     private $path;
+    /**
+     * @MongoDB\String
+     */
+    private $tempPath;
 
     /**
      * @MongoDB\Int
@@ -466,6 +470,27 @@ class Media extends Document {
         return $this->fileType;
     }
 
+    /**
+     * Set path
+     *
+     * @param string $path
+     * @return self
+     */
+    public function setTempPath($tempPath)
+    {
+        $this->tempPath = $tempPath;
+        return $this;
+    }
+
+    /**
+     * Get path
+     *
+     * @return string $path
+     */
+    public function getTempPath()
+    {
+        return $this->tempPath;
+    }
     /**
      * Set path
      *

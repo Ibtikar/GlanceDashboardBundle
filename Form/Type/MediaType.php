@@ -11,12 +11,15 @@ use Symfony\Component\Form\CallbackTransformer;
 class MediaType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder->add('file', \Symfony\Component\Form\Extension\Core\Type\FileType::class, array('error_bubbling' => true))->addModelTransformer(new CallbackTransformer(
+        $builder->add('file', \Symfony\Component\Form\Extension\Core\Type\FileType::class, array('error_bubbling' => true))
+        ->addModelTransformer(new CallbackTransformer(
             function ($file) {
             // transform the array to a string
             return $file;
-        }, function ($file) {
-            $fileData=explode('base64,', $file);
+        }, function ($media) {
+            $fileData=$media->getFile();
+
+            $fileData=explode('base64,', $fileData);
             $imageString = base64_decode($fileData[1]);
             $fileSystem = new \Symfony\Component\Filesystem\Filesystem();
             if ($imageString) {
@@ -32,23 +35,23 @@ class MediaType extends AbstractType {
                     $uploadPath = "$uploadDirectory$imageRandomName.$imageExtension";
                     $fileSystem->rename($uploadDirectory . $imageRandomName, $uploadPath);
                     $imageRandomName = "$imageRandomName.$imageExtension";
+                    $tempUrlPath = $uploadPath;
+
                     $uploadedFile = new \Symfony\Component\HttpFoundation\File\UploadedFile($uploadPath, $imageRandomName, null, null, 0, true);
-                    return $uploadedFile;
+                    $media->setFile($uploadedFile);
+                    $media->setTempPath($tempUrlPath);
+
+                    return $media;
                 }
             }
-            return $file;
+            return $media;
         }
         ));
+
     }
 
     public function getName() {
         return 'media_type';
-    }
-
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
-        $resolver->setDefaults(array(
-            'csrf_protection' => false,
-        ));
     }
 
 }
