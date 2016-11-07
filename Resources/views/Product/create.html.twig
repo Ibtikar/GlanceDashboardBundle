@@ -270,7 +270,7 @@
             console.log(imageFile)
 
              var formData = new FormData();
-             formData.append("file", imageFile);
+             formData.append("media[file]", imageFile);
 
              $.ajax({
                url: url,
