@@ -671,8 +671,7 @@ class BackendController extends Controller {
 
         switch ($bulkAction) {
             case 'Delete':
-                $addActionTodo = FALSE;
-                ;
+
                 $permission = 'ROLE_' . strtoupper($this->calledClassName) . '_DELETE';
 
                 if (!$securityContext->isGranted($permission) && !$securityContext->isGranted('ROLE_ADMIN')) {
@@ -684,7 +683,6 @@ class BackendController extends Controller {
                     'readLater' => array(),
                     'likes' => array()
                 );
-
 
                 foreach ($documents as $document) {
                     $errorMessage = $this->validateDelete($document);
@@ -698,6 +696,17 @@ class BackendController extends Controller {
                     }
                     if ($document->getDeleted())
                         continue;
+                    try {
+
+                            $document->delete($dm, $this->getUser(), $this->container, $request->get('deleteOption'));
+
+                            $dm->flush();
+
+                            $successIds [] = $document->getId();
+
+                    } catch (\Exception $e) {
+                        $data['errors'][$translator->trans('failed operation')] [] = $document->getId();
+                    }
                 }
                 $userPacked = array();
                 $usersIds = array();
@@ -712,7 +721,7 @@ class BackendController extends Controller {
         return new JsonResponse($data);
     }
 
-    
+
 /**
  * method to perform action after successful delete
  *
