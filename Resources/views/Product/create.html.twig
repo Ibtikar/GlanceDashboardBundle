@@ -271,6 +271,7 @@
                 return;
             }
             $('#image-cropper-modal').cropit({imageBackground: true,
+                smallImage:'stretch',
                 imageBackgroundBorderWidth: 30});
 
             // Handle rotation
@@ -288,7 +289,7 @@
             cropperPluginInitialized = true;
         });
 
-        $('.image-editor').cropit({
+        $('.image-editor').cropit({  smallImage:'allow',
             imageState: {
                 src: 'assets/images/cover.jpg'
             }
@@ -301,26 +302,22 @@
 
 
 
-        $('#image-cropper-modal').cropit({onImageLoaded:function(){
+        $('#image-cropper-modal').cropit({ smallImage:'allow',onImageLoaded:function(){
                 var element=$('#uploadImg .cropit-image-input')
             var value = element.val(),
                     file = value.toLowerCase(),
                     extension = file.substring(file.lastIndexOf('.') + 1);
-                    console.log(extension)
 
                 if ($.inArray(extension, ['jpeg','jpg','png']) == -1) {
-                    console.log('f')
-                                 showNotificationMsg('error',"",'error');
+                    showNotificationMsg('error',"",'error');
 
                 } else if(element.attr('data-size') > (2 * 1024 * 1024)) {
-                                        console.log('2')
 
-                                 showNotificationMsg('error1',"",'error');
+                    showNotificationMsg('error1',"",'error');
 
-                }else if($('#image-cropper-modal').cropit('previewSize').width < 200 ||  $('#image-cropper-modal').cropit('previewSize').heigth <200){
-                                                            console.log('3')
+                }else if($('#image-cropper-modal').cropit('imageSize').width < 200 ||  $('#image-cropper-modal').cropit('imageSize').heigth <200){
 
-                                                     showNotificationMsg('error2',"",'error');
+                    showNotificationMsg('error2',"",'error');
 
                 }else{
                    $('#uploadImg').modal('show');
