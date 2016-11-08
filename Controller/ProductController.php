@@ -51,31 +51,87 @@ class ProductController extends BackendController {
             );
         $breadCrumbArray = $this->preparedMenu($menus);
         $dm = $this->get('doctrine_mongodb')->getManager();
+        $profileImage=NULL;
+        $coverImage=NULL;
+        $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
+                'type' => 'image',
+                'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                'product' => null,
+                'collectionType' => 'Product'
+            ));
+         foreach ($images as $image){
+                    if($image->getCoverPhoto()){
+                       $coverImage= $image;
+                        continue;
 
-        $job = new Product();
-        $form = $this->createFormBuilder($job, array('translation_domain' => $this->translationDomain,'attr'=>array('class'=>'dev-page-main-form dev-js-validation form-horizontal')))
+                }
+                if($image->getProfilePhoto()){
+                       $profileImage= $image;
+                        continue;
+
+                }
+                }
+        $product = new Product();
+        $form = $this->createFormBuilder($product, array('translation_domain' => $this->translationDomain,'attr'=>array('class'=>'dev-page-main-form dev-js-validation form-horizontal')))
                 ->add('name',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
                 ->add('nameEn',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
                 ->add('save', formType\SubmitType::class)
                 ->add('description',  formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
                 ->add('descriptionEn',formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
+//                ->add('images',formType\TextareaType::class, array('required' => FALSE,'mapped'=>FALSE,'attr' => array('parent-class'=>'hide')))
                 ->add('save', formType\SubmitType::class)
                 ->getForm();
 
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $dm->persist($job);
+                $dm->persist($product);
+                $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
+                    'type' => 'image',
+                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                    'product' => null,
+                    'collectionType' => 'Product'
+                ));
+                if (count($images) > 0) {
+
+                    $firstImg = $images[0];
+
+                    $this->oldDir = $firstImg->getUploadRootDir();
+                    $newDir = substr($this->oldDir, 0, strrpos($this->oldDir, "/")) . "/" . $product->getId();
+                    if (!file_exists($newDir)) {
+                        @mkdir($newDir);
+                    }
+                }
+                foreach ($images as $image) {
+                    $oldFilePath = $this->oldDir . "/" . $image->getPath();
+                    $newFilePath = $newDir . "/" . $image->getPath();
+                    @rename($oldFilePath, $newFilePath);
+                    if ($image->getCoverPhoto()) {
+                        $product->setCoverPhoto($image);
+                        $image->setProduct($product);
+                        continue;
+                    }
+                    if ($image->getProfilePhoto()) {
+                        $product->setProfilePhoto($image);
+                        $image->setProduct($product);
+                        continue;
+                    }
+                }
+
                 $dm->flush();
+
                 $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
                 return $this->redirect($request->getUri());
             }
         }
+
         return $this->render('IbtikarGlanceDashboardBundle:Product:create.html.twig', array(
-                    'form' => $form->createView(),
-                    'breadcrumb'=>$breadCrumbArray,
-                    'title'=>$this->trans('Add new Product',array(),  $this->translationDomain),
-                    'translationDomain' => $this->translationDomain
+                'form' => $form->createView(),
+                'breadcrumb' => $breadCrumbArray,
+                'profileImage' => $profileImage,
+                'coverImage' => $coverImage,
+                'title' => $this->trans('Add new Product', array(), $this->translationDomain),
+                'translationDomain' => $this->translationDomain
         ));
     }
 

@@ -5,17 +5,12 @@ ibtikar_glance_dashboard_media_upload:
         type:  file|image
 
 ibtikar_glance_dashboard_media_crop:
-    path:  /crop
+    path:  /crop/{id}
     defaults: { _controller: IbtikarGlanceDashboardBundle:Media:crop }
 
-material_upload_imageUrl:
-    path:  /upload_imageUrl
-    defaults: { _controller: IbtikarGlanceDashboardBundle:Media:upload_imageUrl }
-ibtikar_glance_dashboard_media_bulk_actions:
-    path: /{type}/bulk/{documentId}/{collectionType}
-    defaults: { _controller: IbtikarGlanceDashboardBundle:Media:bulk ,documentId: ~, collectionType: ~ }
-    requirements:
-        type:  file|image
+ibtikar_glance_dashboard_media_delete:
+    path:  /delete/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Media:deleteFile }
 
 ibtikar_glance_dashboard_media_user_files:
     path:  /user-files/{type}/{documentId}/{collectionType}
@@ -23,11 +18,17 @@ ibtikar_glance_dashboard_media_user_files:
     requirements:
         type:  file|image
 
-ibtikar_glance_dashboard_media_delete:
-    path:  /delete/{id}
-    defaults: { _controller: IbtikarGlanceDashboardBundle:Media:deleteFile }
-
-google_upload_image:
-    path:  /upload-image-from-google/{documentId}/{collectionType}
-    defaults: { _controller: IbtikarGlanceDashboardBundle:Media:uploadImageFromGoogle ,documentId: ~, collectionType: ~ }
+#material_upload_imageUrl:
+#    path:  /upload_imageUrl
+#    defaults: { _controller: IbtikarGlanceDashboardBundle:Media:upload_imageUrl }
+#ibtikar_glance_dashboard_media_bulk_actions:
+#    path: /{type}/bulk/{documentId}/{collectionType}
+#    defaults: { _controller: IbtikarGlanceDashboardBundle:Media:bulk ,documentId: ~, collectionType: ~ }
+#    requirements:
+#        type:  file|image
+#
+#
+#google_upload_image:
+#    path:  /upload-image-from-google/{documentId}/{collectionType}
+#    defaults: { _controller: IbtikarGlanceDashboardBundle:Media:uploadImageFromGoogle ,documentId: ~, collectionType: ~ }
 

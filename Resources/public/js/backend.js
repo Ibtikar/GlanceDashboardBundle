@@ -202,9 +202,7 @@ jQuery(document).ready(function($) {
             $('[data-remove-color]').removeAttr('data-remove-color');
             $('form.dev-page-main-form').attr('data-form-valid', 'false');
             $('body').trigger('postInvalidAjaxCallback');
-            if(typeof $('#news-accordion').val() !== 'undefined'){
-              $('body').trigger('openAccordion');
-            }
+            $('body').trigger('openTab');
 //            scrollToFirstNotification();
         }
     };

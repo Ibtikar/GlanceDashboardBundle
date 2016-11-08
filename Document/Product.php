@@ -72,17 +72,18 @@ class Product extends Document {
      */
     private $descriptionEn;
 
-        /**
-     * @MongoDB\String
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Media", simple=true)
      */
     private $coverPhoto;
 
-        /**
-     * @MongoDB\String
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Media", simple=true)
      */
     private $profilePhoto;
 
-    public function __toString() {
+    public function __toString()
+    {
         return (string) $this->name;
     }
 
@@ -185,13 +186,14 @@ class Product extends Document {
         return $this->descriptionEn;
     }
 
+
     /**
      * Set coverPhoto
      *
-     * @param string $coverPhoto
+     * @param Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto
      * @return self
      */
-    public function setCoverPhoto($coverPhoto)
+    public function setCoverPhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto)
     {
         $this->coverPhoto = $coverPhoto;
         return $this;
@@ -200,7 +202,7 @@ class Product extends Document {
     /**
      * Get coverPhoto
      *
-     * @return string $coverPhoto
+     * @return Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto
      */
     public function getCoverPhoto()
     {
@@ -210,10 +212,10 @@ class Product extends Document {
     /**
      * Set profilePhoto
      *
-     * @param string $profilePhoto
+     * @param Ibtikar\GlanceDashboardBundle\Document\Media $profilePhoto
      * @return self
      */
-    public function setProfilePhoto($profilePhoto)
+    public function setProfilePhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $profilePhoto)
     {
         $this->profilePhoto = $profilePhoto;
         return $this;
@@ -222,7 +224,7 @@ class Product extends Document {
     /**
      * Get profilePhoto
      *
-     * @return string $profilePhoto
+     * @return Ibtikar\GlanceDashboardBundle\Document\Media $profilePhoto
      */
     public function getProfilePhoto()
     {

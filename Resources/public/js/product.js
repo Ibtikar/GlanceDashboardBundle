@@ -1,0 +1,280 @@
+function showNotificationMsg(title, text, type) {
+
+    var notificationIcons = {
+        success: {
+            icon: "icon-checkmark3",
+            class: "bg-success"
+        },
+        info: {
+            icon: "icon-info22",
+            class: "bg-info"
+        },
+        error: {
+            icon: "icon-blocked",
+            class: "bg-danger"
+        }
+
+    };
+
+    type = (typeof type == "undefined" ? "success" : type);
+
+    new PNotify({
+        title: title,
+        text: text,
+        icon: notificationIcons[type]['icon'],
+        addclass: notificationIcons[type]['class'],
+        type: type,
+        buttons: {
+            sticker: false
+        },
+        stack: {"dir1": "up", "dir2": "left", "firstpos1": 60, "firstpos2": 0}
+    });
+}
+
+
+function refreshImages(){
+    $.ajax({
+            url: $(this).attr('data-url') + '?imageType=' + name,
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data.coverPhoto) {
+                    var media = data.coverPhoto;
+                    var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
+                            .replace(/%image-id%/g, media.id)
+                            .replace(/%name%/g, name)
+                            .replace(/%image-delete-url%/g, media.deleteUrl)
+                            .replace(/%uploadButton%/g, '')
+                            .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
+                            .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
+                    $('#dev-coverPhoto').closest('tr').replaceWith(temepelate);
+                    $('[data-popup="popover"]').popover();
+
+
+                    // Tooltip
+                    $('[data-popup="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    });
+
+                }else{
+                     var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
+                                    .replace(/%image-id%/g, '')
+                                    .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, closestTr))
+                                    .replace(/%cropButton%/g, '')
+                                    .replace(/%deleteButton%/g, '');
+                             $('#dev-coverPhoto').replaceWith(temepelate);
+                }
+                if (data.profilePhoto) {
+                    var media = data.profilePhoto;
+                    var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
+                            .replace(/%image-id%/g, media.id)
+                            .replace(/%name%/g, name)
+                            .replace(/%image-delete-url%/g, media.deleteUrl)
+                            .replace(/%uploadButton%/g, '')
+                            .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
+                            .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
+                    $('#dev-profile').closest('tr').replaceWith(temepelate);
+                    $('[data-popup="popover"]').popover();
+
+
+                    // Tooltip
+                    $('[data-popup="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    });
+
+                }else{
+                     var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
+                                    .replace(/%image-id%/g, '')
+                                    .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, closestTr))
+                                    .replace(/%cropButton%/g, '')
+                                    .replace(/%deleteButton%/g, '');
+                             $('#dev-profile').replaceWith(temepelate);
+                }
+            }
+
+        })
+}
+$(document).ready(function () {
+
+    $("form.form-horizontal").data("validator").settings.ignore = [];
+
+
+    $(document).on('click','.upload-image-modal-open',function () {
+        name = $(this).closest('td').attr('data-name');
+        element = $(this);
+        type = 'upload';
+        $('#uploadImg .cropit-image-input').click();
+        if (cropperPluginInitialized) {
+            return;
+        }
+        $('#image-cropper-modal').cropit({imageBackground: true,
+            smallImage: 'allow',
+            imageBackgroundBorderWidth: 30});
+
+        // Handle rotation
+        $('.rotate-cw-btn').click(function () {
+            $('#image-cropper-modal').cropit('rotateCW');
+        });
+        $('.rotate-ccw-btn').click(function () {
+            $('#image-cropper-modal').cropit('rotateCCW');
+        });
+
+
+        $('#uploadImg .cropit-image-input').change(function () {
+
+        });
+        cropperPluginInitialized = true;
+    });
+
+    $('.image-editor').cropit({smallImage: 'allow',
+        imageState: {
+            src: 'assets/images/cover.jpg'
+        }
+    });
+
+
+
+
+
+
+
+
+    $('#image-cropper-modal').cropit({smallImage: 'allow', onImageLoaded: function () {
+            if (type == 'upload') {
+                $('.dev-submit-image').attr('data-url', uploadUrl)
+                $('.dev-submit-image').attr('data-id', '')
+            } else if (type == 'crop') {
+                $('.dev-submit-image').attr('data-url', element.attr('data-crop-url'))
+                $('.dev-submit-image').attr('data-id', element.attr('id'))
+
+            }
+            var elementObject = $('#uploadImg .cropit-image-input');
+            if (elementObject.val()) {
+
+                var value = elementObject.val(),
+                        file = value.toLowerCase(),
+                        extension = file.substring(file.lastIndexOf('.') + 1);
+
+                if ($.inArray(extension, ['jpeg', 'jpg', 'png']) == -1) {
+                    showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
+
+                } else if (elementObject.attr('data-size') > (2 * 1024 * 1024)) {
+
+                    showNotificationMsg(imageErrorMessages.sizeError, "", 'error');
+
+                } else if ($('#image-cropper-modal').cropit('imageSize').width < 200 || $('#image-cropper-modal').cropit('imageSize').heigth < 200) {
+
+                    showNotificationMsg(imageErrorMessages.imageDimension, "", 'error');
+
+                } else {
+
+                    $('#uploadImg').modal('show');
+                }
+            }
+
+        }, onImageError: function () {
+            showNotificationMsg(imageErrorMessages.generalError, "", 'error');
+        }
+
+    })
+    $(document).on('click', '.dev-submit-image', function () {
+        var imageFile = $('#image-cropper-modal').cropit('export')
+        var formData = new FormData();
+        formData.append("media[file]", imageFile);
+
+        $.ajax({
+            url: $(this).attr('data-url') + '?imageType=' + name,
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data.status == 'success') {
+                    var media = data.media;
+                    var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
+                            .replace(/%image-id%/g, media.id)
+                            .replace(/%name%/g, name)
+                            .replace(/%image-delete-url%/g, media.deleteUrl)
+                            .replace(/%uploadButton%/g, '')
+                            .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
+                            .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
+                    element.closest('tr').replaceWith(temepelate);
+                    showNotificationMsg(data.message, "", data.status);
+                    $('#uploadImg').modal('hide');
+                    $('[data-popup="popover"]').popover();
+
+
+                    // Tooltip
+                    $('[data-popup="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    });
+
+                }else{
+                    showNotificationMsg(imageErrorMessages.generalError, "", 'error');
+                    refreshImages();
+                }
+            }
+
+        })
+    })
+
+    $(document).on('click', '.dev-delete-btn', function (e) {
+        var $this = $(this);
+        var closestTr = $this.parents('[role="tooltip"]').prev().closest('tr');
+
+        $.ajax
+                ({
+                    'dataType': 'json',
+                    'url': $this.parents('[role="tooltip"]').prev().data('href'),
+                    'success': function (data) {
+                        if (data.status == 'success') {
+                            var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
+                                    .replace(/%image-id%/g, '')
+                                    .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, closestTr))
+                                    .replace(/%cropButton%/g, '')
+                                    .replace(/%deleteButton%/g, '');
+                            closestTr.replaceWith(temepelate);
+                            showNotificationMsg(data.message, "", data.status);
+
+                        }else{
+                            showNotificationMsg(imageErrorMessages.generalError, "", 'error');
+                            refreshImages();
+                        }
+                    }
+                });
+    })
+    $(document).on('click', '.dev-crop-images', function () {
+        type = 'crop';
+        name = $(this).closest('td').attr('data-name');
+        element = $(this);
+        var imageSrc = $(this).closest('tr').find('img:first').attr('src')
+        $('#image-cropper-modal').cropit('imageSrc', imageSrc);
+        $('#image-cropper-modal').cropit('minZoom', 'fit');
+        $('#image-cropper-modal').cropit({imageBackground: true,
+            smallImage: 'allow',
+            imageBackgroundBorderWidth: 30});
+
+        // Handle rotation
+        $('.rotate-cw-btn').click(function () {
+            $('#image-cropper-modal').cropit('rotateCW');
+        });
+        $('.rotate-ccw-btn').click(function () {
+            $('#image-cropper-modal').cropit('rotateCCW');
+        });
+        $('#uploadImg').modal('show');
+
+    })
+
+    $(document).on('openTab', function () {
+        if($('.help-block:eq(0)').closest('.tab-pane').length > 0){
+        $('a[href="#'+$('.help-block:eq(0)').closest('.tab-pane').attr('id')+'"').click();
+    }
+    });
+
+})

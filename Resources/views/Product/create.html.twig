@@ -6,199 +6,277 @@
 
 
 
-                                    {{ form_start(form)}}
+    {{ form_start(form)}}
 
 
-                                    <div class="row">
+
+    <div class="row">
+  {% set deleteAttrs = popover_factory(deletePopoverConfig is defined?deletePopoverConfig:[]) %}
+
+        <div class="col-md-12">
+
+            <h5>ادخل
+                الصور المطلوبة
+            </h5>
 
 
-                                            <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered">
 
-                                                <h5>ادخل
-                                                    الصور المطلوبة
-                                                </h5>
+                    <tbody>
+                        <tr id="dev-profile">
+                            <td style="width: 150px">
 
+                                <div class="thumbnail">
+                                    <div class="thumb thumb-slide">
 
-                                                <div class="table-responsive">
-                                                    <table class="table table-bordered">
+                                        {% if profileImage is not empty %}
+                                            <img src="{{ asset(profileImage.getWebPath())}}" alt="">
 
-                                                        <tbody>
-                                                            <tr>
-                                                                <td style="width: 150px">
+                                        {% else %}
+                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
 
-                                                                    <div class="thumbnail">
-                                                                        <div class="thumb thumb-slide">
-                                                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
-                                                                            <div class="caption">
-                                                                                <span>
-                                                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
+                                        {% endif %}
+                                        <div class="caption">
+                                            <span>
+                                                {% if profileImage is not empty %}
+                                                    <a href="{{ asset(profileImage.getWebPath())}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
 
-                                                                    </div>
-                                                                </td>
-                                                                <td class="thumbnail-caption">
-                                                                    <h4>  صورة المنتج</h4>
-                                                                    <ul class="text-grey-300">
-                                                                        <li> المقاس : 200 X 200</li>
-                                                                        <li> الحجم : 300 MB</li>
-                                                                    </ul>
-                                                                </td>
-                                                                <td style="width: 300px">
-                                                                    <a class="btn btn-defualt upload-image-modal-open" data-name="profile" > رفع الصورة</a>
-                                                                    <a class="btn btn-defualt"  >  <i class="icon-crop"></i> </a>
-                                                                    <a class="btn btn-defualt"  > <i class="icon-trash"></i></a>
+                                                {% else %}
+                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
 
-
-                                                                </td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="width: 150px">
-                                                                    <div class="thumbnail">
-                                                                        <div class="thumb thumb-slide">
-                                                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
-                                                                            <div class="caption">
-                                                                                <span>
-                                                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                </td>
-                                                                <td class="thumbnail-caption">
-                                                                    <h4>  صورة الغلاف</h4>
-                                                                    <span class="help-block"> PNG · 1.44 KB · 30 × 30 Added Oct 25, 2016 5:26 am by ola hamdy </span>
-                                                                </td>
-                                                                <td style="width: 300px">
-                                                                    <a class="btn btn-defualt upload-image-modal-open" data-name="coverPhoto" > رفع الصورة</a>
-                                                                    <a class="btn btn-defualt"  >  <i class="icon-crop"></i> </a>
-                                                                    <a class="btn btn-defualt"  > <i class="icon-trash"></i></a>
-
-
-                                                                </td>
-                                                            </tr>
-
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
+                                                {% endif %}
+                                            </span>
                                         </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td class="thumbnail-caption">
+                                <h4>  صورة المنتج</h4>
+                                <ul class="text-grey-300">
+                                    <li> يجب الا يزيد حجم الصوره عن 2 ميجا</li>
+                                    <li> يجب الا تقل ابعاد الصورة عن 200*200 </li>
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                                </ul>
+                            </td>
+                            <td style="width: 300px" data-name="profile">
+                                {% if profileImage is empty %}
+                                    <a class="btn btn-defualt upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
+                                {% endif %}
+                                <a class="btn btn-defualt dev-crop-images"   {% if profileImage is empty %}style="display: none"{%else%} data-image-id="{{ profileImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':profileImage.id})}}"{%endif%}   >  <i class="icon-crop"></i> </a>
+                                <a class="btn btn-defualt dev-trash-image" {% if profileImage is empty %}style="display: none" {%else%}  data-image-id="{{ profileImage.id }}"  data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': profileImage.id}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%} > <i class="icon-trash"></i></a>
 
 
-                                        <hr>
-                                            <div class="tabbable">
-                                            <ul class="nav nav-tabs nav-tabs-highlight">
-                                                <li class="active"><a href="#arabic" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}" alt="arabic" width="30" height="20"/></a></li>
-                                                <li><a href="#english" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}" alt="english" width="30" height="20"/></a></li>
-                                            </ul>
+                            </td>
 
-                                            <div class="tab-content">
-                                                <div class="tab-pane active" id="arabic">
+                        </tr>
 
+                        <tr id="dev-coverPhoto">
+                            <td style="width: 150px">
+                                <div class="thumbnail">
+                                    <div class="thumb thumb-slide">
+                                        {% if coverImage is not empty %}
+                                            <img src="{{ asset(coverImage.getWebPath())}}" alt="">
+                                        {% else %}
+                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
 
-                                                     {{ form_row(form.name) }}
+                                        {% endif %}
+                                        <div class="caption">
+                                            <span>
+                                                {% if coverImage is not empty %}
+                                                    <a href="{{ asset(coverImage.getWebPath())}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
 
+                                                {% else %}
+                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
 
-
-                                                   {{ form_row(form.description) }}
-
-
-
-                                                </div><!-- arabic end -->
-
-                                                <div class="tab-pane" id="english">
-
-
-                                                      {{ form_row(form.nameEn) }}
-
-
-
-                                                   {{ form_row(form.descriptionEn) }}
-
-
-                                                </div><!-- english end -->
-
-                                            </div>
+                                                {% endif %}                                                                                </span>
                                         </div>
+                                    </div>
+
+                                </div>
+
+                            </td>
+                            <td class="thumbnail-caption">
+                                <h4>  صورة الغلاف</h4>
+                                <ul class="text-grey-300">
+                                    <li> يجب الا يزيد حجم الصوره عن 2 ميجا</li>
+                                    <li> يجب الا تقل ابعاد الصورة عن 200*200 </li>
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                                </ul>
+                            </td>
+                            <td style="width: 300px" data-name="coverPhoto">
+                                {% if coverImage is empty %}
+                                <a class="btn btn-defualt upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
+                                 {% endif %}
+                                 <a class="btn btn-defualt  dev-crop-images"   {% if coverImage is empty %}style="display: none"{%else %} data-image-id="{{ coverImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':coverImage.id})}}"{%endif%}  >  <i class="icon-crop"></i> </a>
+                                <a class="btn btn-defualt dev-trash-image" {% if coverImage is empty %}style="display: none" {%else %} data-image-id="{{ coverImage.id }}"   data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': coverImage.id}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%}> <i class="icon-trash"></i></a>
 
 
-                        {{ form_end(form) }}
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <hr>
+    <div class="tabbable">
+        <ul class="nav nav-tabs nav-tabs-highlight">
+            <li class="active"><a href="#arabic" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}" alt="arabic" width="30" height="20"/></a></li>
+            <li><a href="#english" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}" alt="english" width="30" height="20"/></a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="arabic">
+
+
+                {{ form_row(form.name) }}
+
+
+
+                {{ form_row(form.description) }}
+
+{#                {{ form_row(form.images) }}#}
+
+            </div><!-- arabic end -->
+
+            <div class="tab-pane" id="english">
+
+
+                {{ form_row(form.nameEn) }}
+
+
+
+                {{ form_row(form.descriptionEn) }}
+
+
+            </div><!-- english end -->
+
+        </div>
+    </div>
+
+
+    {{ form_end(form) }}
 
 
 {% endblock %}
 {% block form_buttons %}
-                    <div class="row actionButtons">
-                    <div class="col-xs-12">
-                        <button class="btn btn-primary  dev-form-submit-btn" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
-                        <a class="btn btn-primary" href="Subproduct-add.php">حفظ و اضافة منتج فرعي<i class="icon-plus2 position-right"></i></a>
+    <div class="row actionButtons">
+        <div class="col-xs-12">
+            <button class="btn btn-primary  dev-form-submit-btn" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
+            <a class="btn btn-primary" href="Subproduct-add.php">حفظ و اضافة منتج فرعي<i class="icon-plus2 position-right"></i></a>
 
-                        <button class="btn btn-defualt dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
+            <button class="btn btn-defualt dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
 
 
 
-                    </div>
-                </div>
+        </div>
+    </div>
 {% endblock %}
 
 
 {% block javascripts %}
     <!-- uploadImg modal -->
-<div id="uploadImg" class="modal fade">
-    <div class="modal-dialog  modal-full">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h6 class="modal-title"> الصورة
-                </h6>
-            </div>
-
-            <div class="modal-body">
-
-                <div id="image-cropper-modal">
-                    <!-- This is where the preview image is displayed -->
-                    <div class="cropit-preview"></div>
-
-                    <!-- This range input controls zoom -->
-
-
-                    <div class="controls-wrapper">
-                        <div class="rotation-btns">
-                            <span class="icon-rotate-cw2 rotate-ccw-btn"></span>
-                            <span class="icon-rotate-ccw2 rotate-cw-btn"></span>
-                        </div>
-
-
-                        <!-- You can add additional elements here, e.g. the image icons -->
-                        <div class="slider-wrapper">
-                            <span class="icon icon-image2 smallIcon"></span>
-                            <input type="range" min="0" max="50" value="5" step="5" class="cropit-image-zoom-input" />
-                            <span class="icon icon-image2 bigIcon"></span>
-                        </div>
-                    </div><!-- controls-wrapper -->
-
-                    <!-- This is where user selects new image -->
-                    <input type="file" class="cropit-image-input" />
-
-                    <!-- The cropit- classes above are needed
-                         so cropit can identify these elements -->
+    <div id="uploadImg" class="modal fade">
+        <div class="modal-dialog  modal-full">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h6 class="modal-title"> الصورة
+                    </h6>
                 </div>
 
-            </div>
+                <div class="modal-body">
 
-            <div class="modal-footer text-center">
-                <button type="button" class="btn btn-link dev-submit-image"><i class="icon-checkmark4 text-success"></i></button>
-                <button type="button" class="btn btn-link" data-dismiss="modal"><i class="icon-cross2 text-danger-400"></i></button>
+                    <div id="image-cropper-modal">
+                        <!-- This is where the preview image is displayed -->
+                        <div class="cropit-preview"></div>
 
+                        <!-- This range input controls zoom -->
+
+
+                        <div class="controls-wrapper">
+                            <div class="rotation-btns">
+                                <span class="icon-rotate-cw2 rotate-ccw-btn"></span>
+                                <span class="icon-rotate-ccw2 rotate-cw-btn"></span>
+                            </div>
+
+
+                            <!-- You can add additional elements here, e.g. the image icons -->
+                            <div class="slider-wrapper">
+                                <span class="icon icon-image2 smallIcon"></span>
+                                <input type="range" min="0" max="50" value="5" step="5" class="cropit-image-zoom-input" />
+                                <span class="icon icon-image2 bigIcon"></span>
+                            </div>
+                        </div><!-- controls-wrapper -->
+
+                        <!-- This is where user selects new image -->
+                        <input type="file" class="cropit-image-input" />
+
+                        <!-- The cropit- classes above are needed
+                             so cropit can identify these elements -->
+                    </div>
+
+                </div>
+
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-link dev-submit-image" data-url="" data-id=""><i class="icon-checkmark4 text-success"></i></button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal"><i class="icon-cross2 text-danger-400"></i></button>
+
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- /uploadImg modal -->
+    <!-- /uploadImg modal -->
 
+ {% set imageTempelate %}
+            <tr id="dev-%name%">
+                            <td style="width: 150px">
+
+                                <div class="thumbnail">
+                                    <div class="thumb thumb-slide">
+                                            <img src="%image-url%" alt="">
+                                        <div class="caption">
+                                            <span>
+                                            <a href="%image-url%" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td class="thumbnail-caption">
+                                <h4>  صورة المنتج</h4>
+                                <ul class="text-grey-300">
+                                    <li> يجب الا يزيد حجم الصوره عن 2 ميجا</li>
+                                    <li> يجب الا تقل ابعاد الصورة عن 200*200 </li>
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                                </ul>
+                            </td>
+                            <td style="width: 300px" data-name="%name%">
+                                %uploadButton%
+                                %cropButton%
+                                %deleteButton%
+
+
+                            </td>
+
+                        </tr>
+
+    {% endset %}
+     {% set uploadButton %}
+        <a class="btn btn-defualt upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
+     {% endset %}
+     {% set cropButton %}
+        <a class="btn btn-defualt dev-crop-images"    data-image-id="%image-id%" data-crop-url="%crop-url%">  <i class="icon-crop"></i> </a>
+     {% endset %}
+     {% set deleteButton %}
+         <a class="btn btn-defualt dev-trash-image" data-image-id="%image-id%"  data-href = "%image-delete-url%"  %pop-block%> <i class="icon-trash"></i></a>
+         {% endset %}
 
 
     {{ parent() }}
@@ -211,154 +289,35 @@
 
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/media/fancybox.min.js')}}"></script>
 
-<script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_thumbnails.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_thumbnails.js')}}"></script>
 
 
-<!-- Plugin file uploaded JS -->
-<script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/bootstrap-fileupload.js')}}"></script>
-        <script src="https://apis.google.com/js/client.js?onload=initgapi"></script>
+    <!-- Plugin file uploaded JS -->
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/bootstrap-fileupload.js')}}"></script>
 
 
-<script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/jquery.cropit.js')}}"></script>
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/jquery.cropit.js')}}"></script>
 
     <script>
-        function showNotificationMsg(title,text,type) {
 
-    var notificationIcons = {
-        success : {
-            icon : "icon-checkmark3",
-            class : "bg-success"
-        },
-        info : {
-            icon : "icon-info22",
-            class : "bg-info"
-        },
-        error : {
-            icon : "icon-blocked",
-            class : "bg-danger"
+        var imageTempelate = '{{ imageTempelate|escape('js') }}';
+        var cropButton = '{{ cropButton|escape('js') }}';
+        var deleteButton = '{{ deleteButton|escape('js') }}';
+        var uploadButton = '{{ uploadButton|escape('js') }}';
+        var cropperPluginInitialized = false;
+        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':'null','collectionType':'Product'})}}";
+        var refreshImages = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'image','documentId':'null','collectionType':'Product'})}}";
+        var element;
+        var name;
+        var type;
+        var imageErrorMessages={
+            'imageExtension': '{% trans from 'validators'%}picture not correct.{%endtrans%}',
+            'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 200*200{%endtrans%}',
+            'sizeError': '{% trans from 'validators'%}File size must be less than 2mb{%endtrans%}',
+            'generalError': '{% trans %}failed operation{%endtrans%}',
         }
-
-    };
-
-    type = (typeof type == "undefined"?"success":type);
-
-    new PNotify({
-        title: title,
-        text: text,
-        icon: notificationIcons[type]['icon'],
-        addclass: notificationIcons[type]['class'],
-        type:type,
-        buttons: {
-            sticker: false
-        },
-        stack: {"dir1": "up", "dir2": "left", "firstpos1": 60, "firstpos2": 0}
-    });
-}
-
-    var cropperPluginInitialized = false;
-    var url  = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':'null','collectionType':'Product'})}}";
-      var element;
-      var name;
-       $(document).ready(function(){
-
-
-
-        $('.upload-image-modal-open').on('click', function() {
-         name =$(this).attr('data-name');
-         element=$(this);
-            $('#uploadImg .cropit-image-input').click();
-            if (cropperPluginInitialized) {
-                return;
-            }
-            $('#image-cropper-modal').cropit({imageBackground: true,
-                smallImage:'stretch',
-                imageBackgroundBorderWidth: 30});
-
-            // Handle rotation
-            $('.rotate-cw-btn').click(function() {
-                $('#image-cropper-modal').cropit('rotateCW');
-            });
-            $('.rotate-ccw-btn').click(function() {
-                $('#image-cropper-modal').cropit('rotateCCW');
-            });
-
-
-            $('#uploadImg .cropit-image-input').change(function() {
-
-            });
-            cropperPluginInitialized = true;
-        });
-
-        $('.image-editor').cropit({  smallImage:'allow',
-            imageState: {
-                src: 'assets/images/cover.jpg'
-            }
-        });
-
-
-
-
-
-
-
-
-        $('#image-cropper-modal').cropit({ smallImage:'allow',onImageLoaded:function(){
-                var element=$('#uploadImg .cropit-image-input')
-            var value = element.val(),
-                    file = value.toLowerCase(),
-                    extension = file.substring(file.lastIndexOf('.') + 1);
-
-                if ($.inArray(extension, ['jpeg','jpg','png']) == -1) {
-                    showNotificationMsg('error',"",'error');
-
-                } else if(element.attr('data-size') > (2 * 1024 * 1024)) {
-
-                    showNotificationMsg('error1',"",'error');
-
-                }else if($('#image-cropper-modal').cropit('imageSize').width < 200 ||  $('#image-cropper-modal').cropit('imageSize').heigth <200){
-
-                    showNotificationMsg('error2',"",'error');
-
-                }else{
-                   $('#uploadImg').modal('show');
-                }
-
-        },onImageError:function(){
-                 showNotificationMsg('error3',"",'error');
-        }
-
-        })
-        $(document).on('click','.dev-submit-image',function(){
-            var imageFile = $('#image-cropper-modal').cropit('export')
-          {#  console.log($('input[type=file]')[0].files[0])
-            console.log(imageFile)
-#}
-             var formData = new FormData();
-             formData.append("media[file]", imageFile);
-
-             $.ajax({
-               url: url+'?imageType='+name,
-               type: 'POST',
-               data: formData,
-               async: false,
-               cache: false,
-               contentType: false,
-               processData: false,
-               success: function (data) {
-               if(data.status=='success'){
-                element.closest('tr').find('img').attr('src',$('#image-cropper-modal').cropit('export'));
-                element.closest('tr').find('.caption a').attr('href',$('#image-cropper-modal').cropit('export'))
-                $('#uploadImg').modal('hide');
-               }
-             }
-
-        })
-    })
-    })
-
-
-
 
     </script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/product.js') }}"></script>
 
 {% endblock %}

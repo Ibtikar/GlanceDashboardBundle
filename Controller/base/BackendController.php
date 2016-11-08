@@ -264,7 +264,7 @@ class BackendController extends Controller {
         if (!$message && $type === 'error') {
             $message = $this->trans('failed operation');
         }
-        return new JsonResponse(array('status' => 'notification', 'type' => $type, 'message' => $message, 'data' => $data, 'hideAfterSeconds' => $hideAfterSeconds));
+        return new JsonResponse(array('status' => 'success', 'type' => $type, 'message' => $message, 'data' => $data, 'hideAfterSeconds' => $hideAfterSeconds));
     }
 
     protected function getFailedResponse($status = 'failed') {
