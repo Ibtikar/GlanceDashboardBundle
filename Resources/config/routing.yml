@@ -7,11 +7,6 @@ ibtikar_glance_dashboard_not_found:
     path:  /not-found
     defaults: { _controller: IbtikarGlanceDashboardBundle:base\Backend:backendNotFound }
 
-ibtikar_glance_dashboard_role:
-    resource: "@IbtikarGlanceDashboardBundle/Resources/config/role.yml"
-    prefix:   /role
-
-
 
 ibtikar_glance_dashboard_product:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/product.yml"
