@@ -21,10 +21,10 @@
 
 
                                 {% if is_granted('ROLE_JOB_VIEW') or is_granted('ROLE_ADMIN')%}
-                                <li><a href="{{ path('ibtikar_glance_dashboard_job_list') }}" {% if 'job' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans %}Jobs{% endtrans %}</a></li>
+                                <li><a href="{{ path('ibtikar_glance_ums_job_list') }}" {% if 'job' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans %}Jobs{% endtrans %}</a></li>
                                 {% endif %}
                                 {% if is_granted('ROLE_CITY_VIEW') or is_granted('ROLE_ADMIN')%}
-                                <li><a href="{{ path('ibtikar_glance_dashboard_city_list') }}" {% if 'city' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans %}Cities{% endtrans %}</a></li>
+                                <li><a href="{{ path('ibtikar_glance_ums_city_list') }}" {% if 'city' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans %}Cities{% endtrans %}</a></li>
                                 {% endif %}
                                 {% if is_granted('ROLE_STAFF_VIEW') or is_granted('ROLE_ADMIN')%}
                                 <li><a href="{{ path('ibtikar_glance_ums_staff_list') }}" {% if 'staff' in app.request.attributes.get('_route') and app.request.attributes.get('id') != app.user.id %}class="subActive"{% endif %}><i class="icon-file-css"></i> {% trans %}List Staff{% endtrans %}</a></li>

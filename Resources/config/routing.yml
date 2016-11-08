@@ -11,13 +11,7 @@ ibtikar_glance_dashboard_role:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/role.yml"
     prefix:   /role
 
-ibtikar_glance_dashboard_job:
-    resource: "@IbtikarGlanceDashboardBundle/Resources/config/job.yml"
-    prefix:   /job
 
-ibtikar_glance_dashboard_city:
-    resource: "@IbtikarGlanceDashboardBundle/Resources/config/city.yml"
-    prefix:   /city
 
 ibtikar_glance_dashboard_product:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/product.yml"
