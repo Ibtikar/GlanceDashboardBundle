@@ -504,7 +504,7 @@ class BackendController extends Controller {
                     }
                 }
                 $getfunction = "get" . ucfirst($value);
-                if ($value == 'name' && $document instanceof \Ibtikar\GlanceDashboardBundle\Document\Role) {
+                if ($value == 'name' && $document instanceof \Ibtikar\GlanceUMSBundle\Document\Role) {
                     $oneDocument[$value] = '<a class="dev-role-getPermision" href="javascript:void(0)" data-id="' . $document->getId() . '">' . $document->$getfunction() . '</a>';
                 } elseif ($value == 'username') {
                     $image = $document->getWebPath();
