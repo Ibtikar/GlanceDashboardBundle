@@ -104,6 +104,23 @@ function refreshImages(){
 
         })
 }
+
+function tdLoadingToggle(elm){
+    var loaderDiv = '<div class=" btn dev-spinner-container" disabled=""><i class="spinner icon-spinner"></i></div>';
+    if(!$(elm).is('td')){
+        elm = $(elm).parent('td');
+    }
+    if($(elm).length > 0) {
+       if($(elm).find('.dev-spinner-container').length > 0){
+           $(elm).find('.dev-spinner-container').remove();
+           $(elm).children().show();
+       }else{
+           $(elm).children().hide();
+           $(elm).append(loaderDiv);
+       }
+    }
+}
+
 $(document).ready(function () {
 
     $("form.form-horizontal").data("validator").settings.ignore = [];
@@ -199,12 +216,13 @@ $(document).ready(function () {
         var imageFile = $('#image-cropper-modal').cropit('export')
         var formData = new FormData();
         formData.append("media[file]", imageFile);
-
+        $('.dev-crop-spinner').show();
+        $('.dev-submit-image').hide();
         $.ajax({
             url: $(this).attr('data-url') + '?imageType=' + name,
             type: 'POST',
             data: formData,
-            async: false,
+//            async: false,
             cache: false,
             contentType: false,
             processData: false,
@@ -238,15 +256,18 @@ $(document).ready(function () {
                     showNotificationMsg(imageErrorMessages.generalError, "", 'error');
                     refreshImages();
                 }
+                $('.dev-crop-spinner').hide();
+                $('.dev-submit-image').show();
             }
 
-        })
-    })
+        });
+    });
 
     $(document).on('click', '.dev-delete-btn', function (e) {
         var $this = $(this);
         var closestTr = $this.parents('[role="tooltip"]').prev().closest('tr');
-
+        var closestTd = $this.parents('[role="tooltip"]').prev().closest('td');
+        tdLoadingToggle(closestTd);
         $.ajax
                 ({
                     'dataType': 'json',
@@ -270,6 +291,7 @@ $(document).ready(function () {
                             showNotificationMsg(imageErrorMessages.generalError, "", 'error');
                             refreshImages();
                         }
+                        tdLoadingToggle(closestTd);
                     }
                 });
     })
