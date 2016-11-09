@@ -32,7 +32,7 @@ class PopoverFactoryExtension extends \Twig_Extension
                     "class" => "btn-defualt",
                 ],
             ),
-            "translationDomain" => null
+            "translationDomain" => null,
         );
 
     }
