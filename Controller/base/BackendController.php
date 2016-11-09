@@ -506,7 +506,8 @@ class BackendController extends Controller {
                 $getfunction = "get" . ucfirst($value);
                 if ($value == 'name' && $document instanceof \Ibtikar\GlanceUMSBundle\Document\Role) {
                     $oneDocument[$value] = '<a class="dev-role-getPermision" href="javascript:void(0)" data-id="' . $document->getId() . '">' . $document->$getfunction() . '</a>';
-                } elseif ($value == 'username') {
+                }
+                elseif ($value == 'username') {
                     $image = $document->getWebPath();
                     if (!$image) {
                         $image = 'bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg';
@@ -516,6 +517,16 @@ class BackendController extends Controller {
                                                 <div class="media-body">
                                                     <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">  ' . $document->$getfunction() . ' </a>
                                                 </div>';
+                }
+                elseif ($value == 'profilePhoto') {
+                    $image = $document->getProfilePhoto();
+                    if (!$image) {
+                        $image = 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg';
+                    } else {
+                        $image = $image->getWebPath();
+                    }
+                    $oneDocument[$value] = '<div class="media-left media-middle"><a href="javascript:void(0)">'
+                        . '<img src="/' . $image . '" class="img-lg" alt=""></a></div>';
                 } elseif ($document->$getfunction() instanceof \DateTime) {
                     $oneDocument[$value] = $document->$getfunction() ? $document->$getfunction()->format('Y-m-d') : null;
                 } elseif (is_array($document->$getfunction()) || $document->$getfunction() instanceof \Traversable) {

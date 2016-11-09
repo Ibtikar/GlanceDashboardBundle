@@ -11,16 +11,25 @@
 'Updated at': تاريخ التحديث
 'Description': 'الوصف بالعربية'
 'Description en': 'الوصف بالإنجليزية'
+'description': 'الوصف بالعربية'
+'descriptionEn': 'الوصف بالإنجليزية'
 'image': 'الصوره'
-'coverPhoto': 'الغلاف'
-'profilePhoto': 'المنتج'
-
+'coverPhoto': 'صورة الغلاف'
+'profilePhoto': 'صورة المنتج'
+'Profile photo': 'صورة المنتج'
+'Products': 'المنتجات'
+'product': 'منتج'
+'Subproduct no': 'عدد المنتجات الفرعيه'
+'subproduct no': 'عدد المنتجات الفرعيه'
+'subproductNo': 'عدد المنتجات الفرعيه'
 
 # ############Messages############
 
 
 # ############Titles############
 Add new Product: 'إدخال منتج جديد'
+'Edit Product': 'تعديل منتج'
+'List Product': 'قائمه المنتجات'
 
 # ############Buttons############
 

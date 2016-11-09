@@ -271,6 +271,12 @@
                                                                   {{ element }}
                                                             {% endfor %}
                                                         </td>
+                                                    {% elseif field.type == "refereceImage"  %}
+                                                        <td>
+                                                            <div class="media-left media-middle">
+                                                                <a href="javascript:void(0)"><img src="{{ asset( attribute(attribute(object, field.propertyName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}" class="img-lg" alt=""></a>
+                                                            </div>
+                                                        </td>
                                                     {% elseif field.propertyName == "username"  %}
                                                         <td>
                                                             <div class="media-left media-middle">

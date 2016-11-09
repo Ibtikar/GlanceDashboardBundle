@@ -15,17 +15,23 @@ class ProductController extends BackendController {
 
     protected function configureListColumns() {
         $this->allListColumns = array(
-            "title" => array(),
-            "titleEn" => array(),
-            "staffMembersCount" => array('type' => 'number'),
+            "name" => array(),
+            "nameEn" => array(),
+            "description" => array(),
+            "descriptionEn" => array(),
+            "profilePhoto" => array("type"=>"refereceImage",'isSortable'=>FALSE),
+            "subproductNo" => array('type' => 'number'),
             "createdAt" => array("type"=>"date"),
             "updatedAt"=> array("type"=>"date")
         );
         $this->defaultListColumns = array(
-            "title",
-            "titleEn",
-            "staffMembersCount",
-            "createdAt",
+            "name",
+            "nameEn",
+            "description",
+            "descriptionEn",
+            'profilePhoto',
+            'subproductNo',
+            'createdAt',
             "updatedAt"
         );
         $this->listViewOptions->setBundlePrefix("ibtikar_glance_dashboard_");

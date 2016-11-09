@@ -82,6 +82,16 @@ class Product extends Document {
      */
     private $profilePhoto;
 
+    /**
+     * @MongoDB\Increment
+     */
+    private $subproductNo = 0;
+
+    /**
+     * @MongoDB\Date
+     */
+    protected $editAt;
+
     public function __toString()
     {
         return (string) $this->name;
@@ -229,5 +239,49 @@ class Product extends Document {
     public function getProfilePhoto()
     {
         return $this->profilePhoto;
+    }
+
+    /**
+     * Set subproductNo
+     *
+     * @param increment $subproductNo
+     * @return self
+     */
+    public function setSubproductNo($subproductNo)
+    {
+        $this->subproductNo = $subproductNo;
+        return $this;
+    }
+
+    /**
+     * Get subproductNo
+     *
+     * @return increment $subproductNo
+     */
+    public function getSubproductNo()
+    {
+        return $this->subproductNo;
+    }
+
+    /**
+     * Set editAt
+     *
+     * @param date $editAt
+     * @return self
+     */
+    public function setEditAt($editAt)
+    {
+        $this->editAt = $editAt;
+        return $this;
+    }
+
+    /**
+     * Get editAt
+     *
+     * @return date $editAt
+     */
+    public function getEditAt()
+    {
+        return $this->editAt;
     }
 }
