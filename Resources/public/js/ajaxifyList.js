@@ -534,9 +534,9 @@ $(document).ready(function () {
 });
 jQuery(document).on('ajaxComplete', function (event, response) {
     if (response) {
-        if(response.status === 0 && detectIE()) {
-            window.location.reload(true);
-        }
+//        if(response.status === 0 && detectIE()) {
+//            window.location.reload(true);
+//        }
         if (response.status === 404) {
             window.location = notFoundUrl;
         }

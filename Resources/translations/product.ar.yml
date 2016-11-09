@@ -9,9 +9,11 @@
 'createdBy': قام بالإنشاء
 'updatedAt': تاريخ التحديث
 'Updated at': تاريخ التحديث
-'Description': 'الوصف'
+'Description': 'الوصف بالعربية'
 'Description en': 'الوصف بالإنجليزية'
-
+'image': 'الصوره'
+'coverPhoto': 'الغلاف'
+'profilePhoto': 'المنتج'
 
 
 # ############Messages############

@@ -130,6 +130,7 @@ class ProductController extends BackendController {
                 'breadcrumb' => $breadCrumbArray,
                 'profileImage' => $profileImage,
                 'coverImage' => $coverImage,
+                'deletePopoverConfig'=>array("question" => "You are about to delete %title%,Are you sure?"),
                 'title' => $this->trans('Add new Product', array(), $this->translationDomain),
                 'translationDomain' => $this->translationDomain
         ));

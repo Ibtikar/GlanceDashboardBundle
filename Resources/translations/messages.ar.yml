@@ -1,4 +1,5 @@
 'You are about to delete (%title%),Are you sure?' : 'انت على وشك حذف (%title%)، هل تريد إتمام الحذف؟'
+'You are about to delete %title%,Are you sure?' : 'انت على وشك حذف %title%، هل تريد إتمام الحذف؟'
 'You are about to delete (%count%) (%type%), Are you sure?': 'أنت على وشك حذف (%count%) %type%، هل تريد إتمام العملية؟'
 'successfully %action% %success-count% %item-translation% from %ids-count%.': 'لقد تم %action% %success-count% %item-translation% من أصل %ids-count% %item-translation% '
 'delete': 'حذف'
@@ -6,3 +7,4 @@ job: وظيفة
 'jobs': 'عناوين وظيفية'
 'Jobs': 'العناوين الوظيفية'
 'upload successfuly': 'تم الرفع بنجاح'
+'image': 'الصوره'

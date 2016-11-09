@@ -24,7 +24,7 @@
                 <table class="table table-bordered">
 
                     <tbody>
-                        <tr id="dev-profile">
+                        <tr id="dev-profilePhoto">
                             <td style="width: 150px">
 
                                 <div class="thumbnail">
@@ -60,7 +60,7 @@
                                     <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
                                 </ul>
                             </td>
-                            <td style="width: 300px" data-name="profile">
+                            <td style="width: 300px" data-name="profilePhoto">
                                 {% if profileImage is empty %}
                                     <a class="btn btn-defualt upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
                                 {% endif %}
@@ -250,7 +250,7 @@
                                 </div>
                             </td>
                             <td class="thumbnail-caption">
-                                <h4>  صورة المنتج</h4>
+                                <h4>  صورة %arabicName%</h4>
                                 <ul class="text-grey-300">
                                     <li> يجب الا يزيد حجم الصوره عن 2 ميجا</li>
                                     <li> يجب الا تقل ابعاد الصورة عن 200*200 </li>
@@ -306,7 +306,7 @@
         var uploadButton = '{{ uploadButton|escape('js') }}';
         var cropperPluginInitialized = false;
         var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':'null','collectionType':'Product'})}}";
-        var refreshImages = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'image','documentId':'null','collectionType':'Product'})}}";
+        var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'image','documentId':'null','collectionType':'Product'})}}";
         var element;
         var name;
         var type;
@@ -315,6 +315,8 @@
             'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 200*200{%endtrans%}',
             'sizeError': '{% trans from 'validators'%}File size must be less than 2mb{%endtrans%}',
             'generalError': '{% trans %}failed operation{%endtrans%}',
+            'coverPhoto': '{% trans from translationDomain %}coverPhoto{%endtrans%}',
+            'profilePhoto': '{% trans from translationDomain %}profilePhoto{%endtrans%}',
         }
 
     </script>

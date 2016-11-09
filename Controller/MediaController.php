@@ -34,16 +34,51 @@ class MediaController extends BackendController
      */
     public function uploadAction(Request $request, $type, $documentId = NULL, $collectionType = 'Product')
     {
-        $media = new Media();
-        $media->setType($type);
-        $media->setCollectionType($collectionType);
+        $loggedInUser = $this->getUser();
+        if (!$loggedInUser) {
+            return new JsonResponse(array('status' => 'login'));
+        }
+        $imageType = $request->get('imageType');
+
+        if ($imageType) {
+            switch ($imageType) {
+                case 'profilePhoto':
+                    $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                        'type' => $type,
+                        'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                        'product' => null,
+                        'collectionType' => $collectionType,
+                        'ProfilePhoto' => TRUE
+                    ));
+                    break;
+                case 'coverPhoto':
+                    $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                        'type' => $type,
+                        'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                        'product' => null,
+                        'collectionType' => $collectionType,
+                        'coverPhoto' => TRUE
+                    ));
+                    break;
+            }
+            if ($document) {
+                return new JsonResponse(array('status' => 'reload'));
+            }
+        }
+
+
         if ($documentId && $documentId != 'null') {
 
+        } else {
+            $media = new Media();
+            $media->setType($type);
+            $media->setCollectionType($collectionType);
         }
+
         $media->setCreatedBy($this->getUser());
 
 
-        $validationGroup = array($type);
+        $validationGroup = array($collectionType);
         $form = $this->createForm(MediaType::class, $media, array(
             'translation_domain' => $this->translationDomain,
             'validation_groups' => $validationGroup,
@@ -52,11 +87,10 @@ class MediaController extends BackendController
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $imageType = $request->get('imageType');
                 if ($imageType) {
 
                     switch ($imageType) {
-                        case 'profile':
+                        case 'profilePhoto':
                             $media->setProfilePhoto(TRUE);
                             break;
                         case 'coverPhoto':
@@ -96,12 +130,16 @@ class MediaController extends BackendController
             'id' => $media->getId(),
             'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_delete', array('id' => $media->getId())),
             'cropUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_crop', array('id' => $media->getId())),
-            'pop' => str_replace('%title%', $this->trans('image', array(), $this->translationDomain), $this->get('app.twig.popover_factory_extension')->popoverFactory([]))
+            'pop' => str_replace('%title%', $this->trans('image', array(), $this->translationDomain), $this->get('app.twig.popover_factory_extension')->popoverFactory(array("question" => "You are about to delete %title%,Are you sure?")))
         );
     }
 
     public function cropAction(Request $request, $id)
     {
+        $loggedInUser = $this->getUser();
+        if (!$loggedInUser) {
+            return new JsonResponse(array('status' => 'login'));
+        }
 
         $media = $request->get('media');
         if (isset($media['file']) && $media['file']) {
@@ -112,7 +150,7 @@ class MediaController extends BackendController
                 $dm = $this->get('doctrine_mongodb')->getManager();
                 $media = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->find($id);
                 if (!$media) {
-                    return new JsonResponse('status', 'refresh');
+                    return new JsonResponse(array('status', 'reload'));
                 }
                 $imageRandomName = uniqid();
                 $uploadDirectory = $media->getUploadRootDir() . '/temp/';
@@ -148,6 +186,10 @@ class MediaController extends BackendController
      */
     public function deleteFileAction(Request $request, $id)
     {
+        $loggedInUser = $this->getUser();
+        if (!$loggedInUser) {
+            return new JsonResponse(array('status' => 'login'));
+        }
         $dm = $this->get('doctrine_mongodb')->getManager();
         /* @var $document Media */
         $document = $dm->getRepository($this->getObjectShortName())->find($id);
@@ -177,6 +219,11 @@ class MediaController extends BackendController
      */
     public function userFilesAction($type, $documentId = NULL, $collectionType = 'Material')
     {
+
+        $loggedInUser = $this->getUser();
+        if (!$loggedInUser) {
+            return new JsonResponse(array('status' => 'login'));
+        }
         if ($documentId && $documentId != 'null') {
 
         } else {

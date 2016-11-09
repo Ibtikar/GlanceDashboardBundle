@@ -34,19 +34,17 @@ function showNotificationMsg(title, text, type) {
 
 function refreshImages(){
     $.ajax({
-            url: $(this).attr('data-url') + '?imageType=' + name,
-            type: 'POST',
-            data: formData,
-            async: false,
-            cache: false,
-            contentType: false,
-            processData: false,
+            url:refreshImagesUrl,
             success: function (data) {
+                if(data.status=='login'){
+                            window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
+                }else{
                 if (data.coverPhoto) {
                     var media = data.coverPhoto;
                     var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
                             .replace(/%image-id%/g, media.id)
-                            .replace(/%name%/g, name)
+                            .replace(/%name%/g, 'coverPhoto')
+                            .replace(/%arabicName%/g, imageErrorMessages.coverPhoto)
                             .replace(/%image-delete-url%/g, media.deleteUrl)
                             .replace(/%uploadButton%/g, '')
                             .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
@@ -63,7 +61,9 @@ function refreshImages(){
                 }else{
                      var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
                                     .replace(/%image-id%/g, '')
-                                    .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, closestTr))
+                                    .replace(/%name%/g, 'coverPhoto')
+                                    .replace(/%arabicName%/g, imageErrorMessages.coverPhoto)
+                                    .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, 'coverPhoto'))
                                     .replace(/%cropButton%/g, '')
                                     .replace(/%deleteButton%/g, '');
                              $('#dev-coverPhoto').replaceWith(temepelate);
@@ -72,12 +72,14 @@ function refreshImages(){
                     var media = data.profilePhoto;
                     var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
                             .replace(/%image-id%/g, media.id)
-                            .replace(/%name%/g, name)
+                            .replace(/%name%/g, 'profilePhoto')
+                            .replace(/%arabicName%/g, imageErrorMessages.profilePhoto)
+
                             .replace(/%image-delete-url%/g, media.deleteUrl)
                             .replace(/%uploadButton%/g, '')
                             .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
                             .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
-                    $('#dev-profile').closest('tr').replaceWith(temepelate);
+                    $('#dev-profilePhoto').closest('tr').replaceWith(temepelate);
                     $('[data-popup="popover"]').popover();
 
 
@@ -89,12 +91,16 @@ function refreshImages(){
                 }else{
                      var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
                                     .replace(/%image-id%/g, '')
-                                    .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, closestTr))
+                                    .replace(/%name%/g, 'profilePhoto')
+                                    .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, 'profilePhoto'))
+                                    .replace(/%arabicName%/g, imageErrorMessages.profilePhoto)
                                     .replace(/%cropButton%/g, '')
                                     .replace(/%deleteButton%/g, '');
-                             $('#dev-profile').replaceWith(temepelate);
+                             $('#dev-profilePhoto').replaceWith(temepelate);
                 }
             }
+        }
+
 
         })
 }
@@ -104,6 +110,9 @@ $(document).ready(function () {
 
 
     $(document).on('click','.upload-image-modal-open',function () {
+        $('input.cropit-image-input').val('');
+        $('.cropit-preview').removeClass('cropit-image-loaded');
+        $('.cropit-preview-image').attr('src','');
         name = $(this).closest('td').attr('data-name');
         element = $(this);
         type = 'upload';
@@ -132,7 +141,7 @@ $(document).ready(function () {
 
     $('.image-editor').cropit({smallImage: 'allow',
         imageState: {
-            src: 'assets/images/cover.jpg'
+            src: '/images/cover.jpg'
         }
     });
 
@@ -177,6 +186,11 @@ $(document).ready(function () {
             }
 
         }, onImageError: function () {
+            $('#uploadImg').modal('hide');
+            showNotificationMsg(imageErrorMessages.generalError, "", 'error');
+        },
+        onFileReaderError: function(){
+            $('#uploadImg').modal('hide');
             showNotificationMsg(imageErrorMessages.generalError, "", 'error');
         }
 
@@ -195,12 +209,16 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (data) {
-                if (data.status == 'success') {
+                if(data.status=='login'){
+                            window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
+                }
+                else if (data.status == 'success') {
                     var media = data.media;
                     var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
                             .replace(/%image-id%/g, media.id)
                             .replace(/%name%/g, name)
                             .replace(/%image-delete-url%/g, media.deleteUrl)
+                            .replace(/%arabicName%/g, imageErrorMessages[name])
                             .replace(/%uploadButton%/g, '')
                             .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
                             .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
@@ -216,6 +234,7 @@ $(document).ready(function () {
                     });
 
                 }else{
+                    $('#uploadImg').modal('hide');
                     showNotificationMsg(imageErrorMessages.generalError, "", 'error');
                     refreshImages();
                 }
@@ -233,10 +252,15 @@ $(document).ready(function () {
                     'dataType': 'json',
                     'url': $this.parents('[role="tooltip"]').prev().data('href'),
                     'success': function (data) {
-                        if (data.status == 'success') {
+                        if(data.status=='login'){
+                            window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
+                        }
+                        else if (data.type == 'success') {
                             var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
                                     .replace(/%image-id%/g, '')
-                                    .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, closestTr))
+                                    .replace(/%name%/g, (closestTr.attr('id')).replace(/dev-/g,''))
+                                    .replace(/%arabicName%/g, imageErrorMessages[(closestTr.attr('id')).replace(/dev-/g,'')])
+                                    .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, (closestTr.attr('id')).replace(/dev-/g,'')))
                                     .replace(/%cropButton%/g, '')
                                     .replace(/%deleteButton%/g, '');
                             closestTr.replaceWith(temepelate);
@@ -255,7 +279,7 @@ $(document).ready(function () {
         element = $(this);
         var imageSrc = $(this).closest('tr').find('img:first').attr('src')
         $('#image-cropper-modal').cropit('imageSrc', imageSrc);
-        $('#image-cropper-modal').cropit('minZoom', 'fit');
+//        $('#image-cropper-modal').cropit('minZoom', 'fit');
         $('#image-cropper-modal').cropit({imageBackground: true,
             smallImage: 'allow',
             imageBackgroundBorderWidth: 30});
