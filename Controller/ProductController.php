@@ -46,7 +46,7 @@ class ProductController extends BackendController {
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function createAction(Request $request) {
-        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new product'),
+        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Product'),
 //            array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list job')
             );
         $breadCrumbArray = $this->preparedMenu($menus);
