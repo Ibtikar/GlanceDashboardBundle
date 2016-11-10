@@ -64,8 +64,8 @@
                                 {% if profileImage is empty %}
                                     <a class="btn btn-defualt upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
                                 {% endif %}
-                                <a class="btn btn-defualt dev-crop-images"   {% if profileImage is empty %}style="display: none"{%else%} data-image-id="{{ profileImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':profileImage.id})}}"{%endif%}   >  <i class="icon-crop"></i> </a>
-                                <a class="btn btn-defualt dev-trash-image" {% if profileImage is empty %}style="display: none" {%else%}  data-image-id="{{ profileImage.id }}"  data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': profileImage.id}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%} > <i class="icon-trash"></i></a>
+                                <a class="btn btn-defualt dev-crop-images"   {% if profileImage is empty %}style="display: none"{%else%} data-image-id="{{ profileImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':profileImage.id,'collectionType':'Product'})}}"{%endif%}   >  <i class="icon-crop"></i> </a>
+                                <a class="btn btn-defualt dev-trash-image" {% if profileImage is empty %}style="display: none" {%else%}  data-image-id="{{ profileImage.id }}"  data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': profileImage.id,'collectionType':'Product'}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%} > <i class="icon-trash"></i></a>
 
 
                             </td>
@@ -109,8 +109,8 @@
                                 {% if coverImage is empty %}
                                 <a class="btn btn-defualt upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
                                  {% endif %}
-                                 <a class="btn btn-defualt  dev-crop-images"   {% if coverImage is empty %}style="display: none"{%else %} data-image-id="{{ coverImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':coverImage.id})}}"{%endif%}  >  <i class="icon-crop"></i> </a>
-                                <a class="btn btn-defualt dev-trash-image" {% if coverImage is empty %}style="display: none" {%else %} data-image-id="{{ coverImage.id }}"   data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': coverImage.id}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%}> <i class="icon-trash"></i></a>
+                                 <a class="btn btn-defualt  dev-crop-images"   {% if coverImage is empty %}style="display: none"{%else %} data-image-id="{{ coverImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':coverImage.id,'collectionType':'Product'})}}"{%endif%}  >  <i class="icon-crop"></i> </a>
+                                <a class="btn btn-defualt dev-trash-image" {% if coverImage is empty %}style="display: none" {%else %} data-image-id="{{ coverImage.id }}"   data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': coverImage.id,'collectionType':'Product'}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%}> <i class="icon-trash"></i></a>
 
 
                             </td>

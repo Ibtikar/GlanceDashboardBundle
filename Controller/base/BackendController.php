@@ -238,17 +238,19 @@ class BackendController extends Controller {
         return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl($route)), 302);
     }
 
-    public function getLoginResponse() {
-        if ($this->getRequest()->isXmlHttpRequest()) {
+    public function getLoginResponse()
+    {
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        if ($request->isXmlHttpRequest()) {
             return new JsonResponse(array('status' => 'login'), 401);
         }
-        $request = $this->getRequest();
         $request->getSession()->set('redirectUrl', $request->getRequestUri());
         return $this->redirect($this->generateUrl('login'));
     }
 
     public function getAccessDeniedResponse() {
-        if ($this->getRequest()->isXmlHttpRequest()) {
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        if ($request->isXmlHttpRequest()) {
             return new JsonResponse(array('status' => 'denied'), 403);
         }
         $this->createAccessDeniedExceptionForUser();

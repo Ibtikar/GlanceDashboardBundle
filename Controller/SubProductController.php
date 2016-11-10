@@ -70,7 +70,7 @@ class SubProductController extends BackendController {
 
                 }
                 }
-
+        $product='';
         if($request->get('productId')){
             $product = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($request->get('productId'));
         }

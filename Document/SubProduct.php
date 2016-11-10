@@ -94,6 +94,12 @@ class SubProduct extends Document {
     }
 
 
+    public function updateReferencesCounts($value) {
+        $product = $this->getProduct();
+        if ($product) {
+            $product->setSubproductNo($product->getSubproductNo() + $value);
+        }
+    }
 
     /**
      * Get id

@@ -203,7 +203,7 @@ class Product extends Document {
      * @param Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto
      * @return self
      */
-    public function setCoverPhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto)
+    public function setCoverPhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto =NULL)
     {
         $this->coverPhoto = $coverPhoto;
         return $this;
@@ -225,7 +225,7 @@ class Product extends Document {
      * @param Ibtikar\GlanceDashboardBundle\Document\Media $profilePhoto
      * @return self
      */
-    public function setProfilePhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $profilePhoto)
+    public function setProfilePhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $profilePhoto=NULL)
     {
         $this->profilePhoto = $profilePhoto;
         return $this;
