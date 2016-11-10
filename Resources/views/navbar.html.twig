@@ -37,6 +37,19 @@
                         </ul>
                     </li>
 
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-make-group position-left"></i> {% trans from 'role' %}content{% endtrans%}<span class="caret"></span>
+                        </a>
+
+                        <ul class="dropdown-menu width-250">
+                                {% if is_granted('ROLE_PRODUCT_VIEW') or is_granted('ROLE_ADMIN')%}
+                                <li><a href="{{ path('ibtikar_glance_dashboard_product_list') }}" {% if 'product' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans %}products{% endtrans %}</a></li>
+                                {% endif %}
+
+                        </ul>
+                    </li>
+
 
                 </ul>
 
