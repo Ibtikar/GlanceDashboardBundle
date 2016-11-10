@@ -182,6 +182,7 @@ class ProductController extends BackendController {
             $form->handleRequest($request);
 
             if ($form->isValid()) {
+                $formData = $request->get('form');
                 $dm->flush();
 
                 $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
