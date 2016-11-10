@@ -61,7 +61,6 @@ class SubProduct extends Document {
     private $description;
 
     /**
-     * @Assert\NotBlank
      * @MongoDB\String
      * @Assert\Length(
      *      min = 5,
