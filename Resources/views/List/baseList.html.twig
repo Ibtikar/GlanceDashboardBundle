@@ -213,6 +213,19 @@
 
                             </div>
 
+                            <div style="margin-top: 15px;">
+                                <div class="col-md-12">
+                                     {% for flashMessageType, flashMessageArray in app.session.flashBag.all %}
+                                         {% for flashMessage in flashMessageArray %}
+                                     <div class="alert {{ flashMessageType == 'error' ? 'alert-danger' : flashMessageType == 'success' ? 'alert-success' : 'alert-info' }} no-border">
+                                         <button data-dismiss="alert" class="close" type="button"><span>×</span><span class="sr-only">{% trans %}Close{% endtrans %}</span></button>{{ flashMessage }}
+                                     </div>
+                                         {% endfor %}
+                                     {% endfor %}
+
+                                 </div>
+                            </div>
+
                             <table class="table table-hover table-striped datatable-column-search-inputs" width="100%">
                                 <thead>
 

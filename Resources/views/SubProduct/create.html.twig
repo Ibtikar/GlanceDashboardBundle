@@ -53,9 +53,9 @@
                                 </div>
                             </td>
                             <td class="thumbnail-caption">
-                                <h4>  صورة المنتج</h4>
+                                <h4>صوره المنتج الفرعى</h4>
                                 <ul class="text-grey-300">
-                                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                                    <li> يجب الا يزيد حجم الصوره عن 2 ميجا</li>
                                     <li> يجب الا تقل ابعاد الصورة عن 200*200 </li>
                                     <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
                                 </ul>
@@ -72,49 +72,7 @@
 
                         </tr>
 
-                        <tr id="dev-coverPhoto">
-                            <td style="width: 150px">
-                                <div class="thumbnail">
-                                    <div class="thumb thumb-slide">
-                                        {% if coverImage is not empty %}
-                                            <img src="{{ asset(coverImage.getWebPath())}}" alt="">
-                                        {% else %}
-                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
 
-                                        {% endif %}
-                                        <div class="caption">
-                                            <span>
-                                                {% if coverImage is not empty %}
-                                                    <a href="{{ asset(coverImage.getWebPath())}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
-
-                                                {% else %}
-                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
-
-                                                {% endif %}                                                                                </span>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </td>
-                            <td class="thumbnail-caption">
-                                <h4>  صورة الغلاف</h4>
-                                <ul class="text-grey-300">
-                                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
-                                    <li> يجب الا تقل ابعاد الصورة عن 200*200 </li>
-                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
-                                </ul>
-                            </td>
-                            <td style="width: 300px" data-name="coverPhoto">
-                                {% if coverImage is empty %}
-                                <a class="btn btn-defualt upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
-                                 {% endif %}
-                                 <a class="btn btn-defualt  dev-crop-images"   {% if coverImage is empty %}style="display: none"{%else %} data-image-id="{{ coverImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':coverImage.id})}}"{%endif%}  >  <i class="icon-crop"></i> </a>
-                                <a class="btn btn-defualt dev-trash-image" {% if coverImage is empty %}style="display: none" {%else %} data-image-id="{{ coverImage.id }}"   data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': coverImage.id}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%}> <i class="icon-trash"></i></a>
-
-
-                            </td>
-                        </tr>
 
                     </tbody>
                 </table>
@@ -154,11 +112,14 @@
                 {{ form_row(form.descriptionEn) }}
 
 
+
             </div><!-- english end -->
 
         </div>
     </div>
-    {{form_row(form.submitButton)}}
+                <hr/>
+  {{ form_row(form.product) }}
+
     {{ form_end(form) }}
 
 
@@ -166,9 +127,7 @@
 {% block form_buttons %}
     <div class="row actionButtons">
         <div class="col-xs-12">
-            <button class="btn btn-primary  dev-form-submit-btn dev-save" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
-            <button  class="btn btn-primary dev-form-submit-btn dev-save-add" type="button">حفظ و اضافة منتج فرعي<i class="icon-plus2 position-right"></i></button>
-
+            <button class="btn btn-primary  dev-form-submit-btn" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
             <button class="btn btn-defualt dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
 
 
@@ -179,6 +138,7 @@
 
 
 {% block javascripts %}
+     {{ parent() }}
     <!-- uploadImg modal -->
     <div id="uploadImg" class="modal fade">
         <div class="modal-dialog  modal-full">
@@ -251,7 +211,7 @@
                             <td class="thumbnail-caption">
                                 <h4>   %arabicName%</h4>
                                 <ul class="text-grey-300">
-                                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                                    <li> يجب الا يزيد حجم الصوره عن 2 ميجا</li>
                                     <li> يجب الا تقل ابعاد الصورة عن 200*200 </li>
                                     <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
                                 </ul>
@@ -278,7 +238,7 @@
          {% endset %}
 
 
-    {{ parent() }}
+
 
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
@@ -304,8 +264,8 @@
         var deleteButton = '{{ deleteButton|escape('js') }}';
         var uploadButton = '{{ uploadButton|escape('js') }}';
         var cropperPluginInitialized = false;
-        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':'null','collectionType':'Product'})}}";
-        var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'image','documentId':'null','collectionType':'Product'})}}";
+        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':'null','collectionType':'SubProduct'})}}";
+        var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'image','documentId':'null','collectionType':'SubProduct'})}}";
         var element;
         var name;
         var type;
@@ -314,26 +274,11 @@
             'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 200*200{%endtrans%}',
             'sizeError': '{% trans from 'validators'%}File size must be less than 2mb{%endtrans%}',
             'generalError': '{% trans %}failed operation{%endtrans%}',
-            'coverPhoto': '{% trans from translationDomain %}coverPhoto{%endtrans%}',
-            'profilePhoto': '{% trans from translationDomain %}profilePhoto{%endtrans%}',
+            'profilePhoto': '{% trans from translationDomain %}sub profilePhoto{%endtrans%}',
         }
 
     </script>
     <script src="{{ asset('bundles/ibtikarglancedashboard/js/product.js') }}"></script>
 
-    <script>
-        $(document).ready(function(){
-            $('body').on('preAjaxCallback', function(e) {
-              var button= $(document.activeElement)
-               if(button.hasClass('dev-save-add')){
-                    $('#form_submitButton').val('add_save');
-               } else {
-                    $('#form_submitButton').val('save');
-               }
-
-
-            });
-        })
-    </script>
 
 {% endblock %}

@@ -4,14 +4,14 @@ namespace Ibtikar\GlanceDashboardBundle\Controller;
 
 use Ibtikar\GlanceDashboardBundle\Controller\base\BackendController;
 use Ibtikar\GlanceDashboardBundle\Document\Document;
-use Ibtikar\GlanceDashboardBundle\Document\Product;
+use Ibtikar\GlanceDashboardBundle\Document\SubProduct;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type as formType;
 
-class ProductController extends BackendController {
+class SubProductController extends BackendController {
 
-    protected $translationDomain = 'product';
+    protected $translationDomain = 'subproduct';
 
     protected function configureListColumns() {
         $this->allListColumns = array(
@@ -20,7 +20,6 @@ class ProductController extends BackendController {
             "description" => array(),
             "descriptionEn" => array(),
             "profilePhoto" => array("type"=>"refereceImage",'isSortable'=>FALSE),
-            "subproductNo" => array('type' => 'number'),
             "createdAt" => array("type"=>"date"),
             "updatedAt"=> array("type"=>"date")
         );
@@ -30,7 +29,6 @@ class ProductController extends BackendController {
             "description",
             "descriptionEn",
             'profilePhoto',
-            'subproductNo',
             'createdAt',
             "updatedAt"
         );
@@ -43,7 +41,7 @@ class ProductController extends BackendController {
         $this->listViewOptions->setDefaultSortOrder("desc");
         $this->listViewOptions->setActions(array ("Edit","Delete"));
         $this->listViewOptions->setBulkActions(array("Delete"));
-        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Product:list.html.twig");
+        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:SubProduct:list.html.twig");
 
     }
 
@@ -52,8 +50,8 @@ class ProductController extends BackendController {
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function createAction(Request $request) {
-        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Product'),
-            array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list Product')
+        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new subProduct'),
+//            array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list job')
             );
         $breadCrumbArray = $this->preparedMenu($menus);
         $dm = $this->get('doctrine_mongodb')->getManager();
@@ -62,50 +60,46 @@ class ProductController extends BackendController {
         $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
                 'type' => 'image',
                 'createdBy.$id' => new \MongoId($this->getUser()->getId()),
-                'product' => null,
                 'subproduct' => null,
-                'collectionType' => 'Product'
+                'product' => null,
+                'collectionType' => 'SubProduct'
             ));
          foreach ($images as $image){
-                    if($image->getCoverPhoto()){
-                       $coverImage= $image;
-                        continue;
-
-                }
-                if($image->getProfilePhoto()){
+                   if($image->getProfilePhoto()){
                        $profileImage= $image;
                         continue;
 
                 }
                 }
-        $product = new Product();
-        $form = $this->createFormBuilder($product, array('translation_domain' => $this->translationDomain,'attr'=>array('class'=>'dev-page-main-form dev-js-validation form-horizontal')))
+        $subProduct = new SubProduct();
+        $form = $this->createFormBuilder($subProduct, array('translation_domain' => $this->translationDomain,'attr'=>array('class'=>'dev-page-main-form dev-js-validation form-horizontal')))
                 ->add('name',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
                 ->add('nameEn',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
+                ->add('product', \Doctrine\Bundle\MongoDBBundle\Form\Type\DocumentType::class,array('required' => TRUE,
+                'class' => 'IbtikarGlanceDashboardBundle:Product', 'placeholder' => $this->trans('Choose product',array(),'subproduct'),
+                'attr' => array('class' => 'select', 'data-error-after-selector' => '.select2-container')
+        ))
                 ->add('description',  formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
                 ->add('descriptionEn',formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
-                ->add('submitButton', formType\HiddenType::class, array('required' => FALSE, "mapped" => false))
                 ->add('save', formType\SubmitType::class)
                 ->getForm();
 
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $formData = $request->get('form');
-
-                $dm->persist($product);
+                $dm->persist($subProduct);
                 $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
                     'type' => 'image',
                     'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                     'product' => null,
-                    'collectionType' => 'Product'
+                    'collectionType' => 'SubProduct'
                 ));
                 if (count($images) > 0) {
 
                     $firstImg = $images[0];
 
                     $this->oldDir = $firstImg->getUploadRootDir();
-                    $newDir = substr($this->oldDir, 0, strrpos($this->oldDir, "/")) . "/" . $product->getId();
+                    $newDir = substr($this->oldDir, 0, strrpos($this->oldDir, "/")) . "/" . $subProduct->getId();
                     if (!file_exists($newDir)) {
                         @mkdir($newDir);
                     }
@@ -114,36 +108,26 @@ class ProductController extends BackendController {
                     $oldFilePath = $this->oldDir . "/" . $image->getPath();
                     $newFilePath = $newDir . "/" . $image->getPath();
                     @rename($oldFilePath, $newFilePath);
-                    if ($image->getCoverPhoto()) {
-                        $product->setCoverPhoto($image);
-                        $image->setProduct($product);
-                        continue;
-                    }
                     if ($image->getProfilePhoto()) {
-                        $product->setProfilePhoto($image);
-                        $image->setProduct($product);
+                        $subProduct->setProfilePhoto($image);
+                        $image->setSubproduct($subProduct);
                         continue;
                     }
                 }
 
                 $dm->flush();
 
-            $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
-                if ($formData['submitButton'] == 'add_save') {
-                    return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_subproduct_create', array('productId' => $product->getId()))));
-                } else {
-                    return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_product_list'), array(), true));
-                }
+                $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
+                return $this->redirect($request->getUri());
             }
         }
 
-        return $this->render('IbtikarGlanceDashboardBundle:Product:create.html.twig', array(
+        return $this->render('IbtikarGlanceDashboardBundle:SubProduct:create.html.twig', array(
                 'form' => $form->createView(),
                 'breadcrumb' => $breadCrumbArray,
                 'profileImage' => $profileImage,
-                'coverImage' => $coverImage,
                 'deletePopoverConfig'=>array("question" => "You are about to delete %title%,Are you sure?"),
-                'title' => $this->trans('Add new Product', array(), $this->translationDomain),
+                'title' => $this->trans('Add new subProduct', array(), $this->translationDomain),
                 'translationDomain' => $this->translationDomain
         ));
     }

@@ -47,6 +47,7 @@ class MediaController extends BackendController
                         'type' => $type,
                         'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                         'product' => null,
+                        'subproduct' => null,
                         'collectionType' => $collectionType,
                         'ProfilePhoto' => TRUE
                     ));
@@ -56,6 +57,7 @@ class MediaController extends BackendController
                         'type' => $type,
                         'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                         'product' => null,
+                        'subproduct' => null,
                         'collectionType' => $collectionType,
                         'coverPhoto' => TRUE
                     ));
@@ -231,6 +233,7 @@ class MediaController extends BackendController
                 'type' => $type,
                 'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                 'product' => null,
+                'subproduct' => null,
                 'collectionType' => $collectionType
             ));
         }

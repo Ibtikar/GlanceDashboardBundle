@@ -137,22 +137,7 @@ $(document).ready(function () {
         if (cropperPluginInitialized) {
             return;
         }
-        $('#image-cropper-modal').cropit({imageBackground: true,
-            smallImage: 'allow',
-            imageBackgroundBorderWidth: 30});
 
-        // Handle rotation
-        $('.rotate-cw-btn').click(function () {
-            $('#image-cropper-modal').cropit('rotateCW');
-        });
-        $('.rotate-ccw-btn').click(function () {
-            $('#image-cropper-modal').cropit('rotateCCW');
-        });
-
-
-        $('#uploadImg .cropit-image-input').change(function () {
-
-        });
         cropperPluginInitialized = true;
     });
 
@@ -164,12 +149,11 @@ $(document).ready(function () {
 
 
 
-
-
-
-
-
-    $('#image-cropper-modal').cropit({smallImage: 'allow', onImageLoaded: function () {
+    $('#image-cropper-modal').cropit({
+        smallImage: 'allow',
+        imageBackground: true,
+        imageBackgroundBorderWidth: 30,
+        onImageLoaded: function () {
             if (type == 'upload') {
                 $('.dev-submit-image').attr('data-url', uploadUrl)
                 $('.dev-submit-image').attr('data-id', '')
@@ -188,7 +172,7 @@ $(document).ready(function () {
                 if ($.inArray(extension, ['jpeg', 'jpg', 'png']) == -1) {
                     showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
 
-                } else if (elementObject.attr('data-size') > (2 * 1024 * 1024)) {
+                } else if (elementObject.attr('data-size') > (4 * 1024 * 1024)) {
 
                     showNotificationMsg(imageErrorMessages.sizeError, "", 'error');
 
@@ -302,25 +286,27 @@ $(document).ready(function () {
         var imageSrc = $(this).closest('tr').find('img:first').attr('src')
         $('#image-cropper-modal').cropit('imageSrc', imageSrc);
 //        $('#image-cropper-modal').cropit('minZoom', 'fit');
-        $('#image-cropper-modal').cropit({imageBackground: true,
-            smallImage: 'allow',
-            imageBackgroundBorderWidth: 30});
 
-        // Handle rotation
-        $('.rotate-cw-btn').click(function () {
-            $('#image-cropper-modal').cropit('rotateCW');
-        });
-        $('.rotate-ccw-btn').click(function () {
-            $('#image-cropper-modal').cropit('rotateCCW');
-        });
+
         $('#uploadImg').modal('show');
 
     })
+    // Handle rotation
+    $(document).on('click','.rotate-cw-btn',function () {
+        $('#image-cropper-modal').cropit('rotateCW');
+    });
+    $(document).on('click','.rotate-ccw-btn',function () {
+        $('#image-cropper-modal').cropit('rotateCCW');
+    });
 
     $(document).on('openTab', function () {
         if($('.help-block:eq(0)').closest('.tab-pane').length > 0){
         $('a[href="#'+$('.help-block:eq(0)').closest('.tab-pane').attr('id')+'"').click();
     }
     });
+
+    $(document).on('onFailSubmitForm', function () {
+        refreshImages();
+    })
 
 })
