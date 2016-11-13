@@ -627,9 +627,11 @@ class BackendController extends Controller {
         }
 
         try {
+            $id = $document->getId();
             $document->delete($dm, $this->getUser());
 //            $dm->remove($document);
             $dm->flush();
+            $this->postDelete($id);
         } catch (\Exception $e) {
             return $this->getFailedResponse();
         }
