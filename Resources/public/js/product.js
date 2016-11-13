@@ -193,11 +193,11 @@ $(document).ready(function () {
 
         }, onImageError: function () {
             $('#uploadImg').modal('hide');
-            showNotificationMsg(imageErrorMessages.generalError, "", 'error');
+            showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
         },
         onFileReaderError: function(){
             $('#uploadImg').modal('hide');
-            showNotificationMsg(imageErrorMessages.generalError, "", 'error');
+            showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
         }
 
     })
