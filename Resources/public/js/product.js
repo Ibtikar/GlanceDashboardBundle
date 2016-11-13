@@ -285,15 +285,20 @@ $(document).ready(function () {
                 });
     })
     $(document).on('click', '.dev-crop-images', function () {
-        type = 'crop';
+//        type = 'crop';
+//        name = $(this).closest('td').attr('data-name');
+//        element = $(this);
+//        var imageSrc = $(this).closest('tr').find('img:first').attr('src')
+//        $('#image-cropper-modal').cropit('imageSrc', imageSrc);
+
+        $('input.cropit-image-input').val('');
+        $('.cropit-preview').removeClass('cropit-image-loaded');
+        $('.cropit-preview-image').attr('src','');
         name = $(this).closest('td').attr('data-name');
         element = $(this);
-        var imageSrc = $(this).closest('tr').find('img:first').attr('src')
-        $('#image-cropper-modal').cropit('imageSrc', imageSrc);
-//        $('#image-cropper-modal').cropit('minZoom', 'fit');
-
-
-        $('#uploadImg').modal('show');
+        type = 'crop';
+        $('#uploadImg .cropit-image-input').click();
+//        $('#uploadImg').modal('show');
 
     })
     // Handle rotation
