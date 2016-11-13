@@ -19,20 +19,17 @@
 'Profile photo': 'صورة المنتج'
 'Products': 'المنتجات'
 'products': 'المنتجات'
-'product': 'منتج'
-'Subproduct no': 'عدد المنتجات الفرعيه'
-'subproduct no': 'عدد المنتجات الفرعيه'
-'subproductNo': 'عدد المنتجات الفرعيه'
+'Product': 'المنتج'
+'Choose product': 'اختر المنتج'
+'sub profilePhoto': 'صوره المنتج الفرعى'
 
 # ############Messages############
 'Cant deleted,it contain subproduct': '!ﻻ يمكن حذف المنتج  ﻷنها تحتوى على منتجات فرعية، هل تريد حذف المنتج والمنتجات الفرعية '
 
 # ############Titles############
-Add new Product: 'إدخال منتج جديد'
+Add new subProduct: 'إدخال منتج فرعى جديد'
 'Edit Product': 'تعديل منتج'
-'edit Product': 'تعديل منتج'
 'List Product': 'قائمه المنتجات'
-'list Product': 'قائمه المنتجات'
 
 # ############Buttons############
 

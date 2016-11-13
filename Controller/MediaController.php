@@ -34,49 +34,67 @@ class MediaController extends BackendController
      */
     public function uploadAction(Request $request, $type, $documentId = NULL, $collectionType = 'Product')
     {
-        $loggedInUser = $this->getUser();
-        if (!$loggedInUser) {
-            return new JsonResponse(array('status' => 'login'));
+        if (!$this->getUser()) {
+
+            return $this->getLoginResponse();
         }
         $imageType = $request->get('imageType');
+        $fieldUpdate='';
 
-        if ($imageType) {
-            switch ($imageType) {
-                case 'profilePhoto':
-                    $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
-                        'type' => $type,
-                        'createdBy.$id' => new \MongoId($this->getUser()->getId()),
-                        'product' => null,
-                        'collectionType' => $collectionType,
-                        'ProfilePhoto' => TRUE
-                    ));
-                    break;
-                case 'coverPhoto':
-                    $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
-                        'type' => $type,
-                        'createdBy.$id' => new \MongoId($this->getUser()->getId()),
-                        'product' => null,
-                        'collectionType' => $collectionType,
-                        'coverPhoto' => TRUE
-                    ));
-                    break;
-            }
-            if ($document) {
-                return new JsonResponse(array('status' => 'reload'));
-            }
-        }
-
+        $dm = $this->get('doctrine_mongodb')->getManager();
 
         if ($documentId && $documentId != 'null') {
-
+            if ($collectionType === 'Product') {
+                $document = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($documentId);
+                if (!$document) {
+                    throw $this->createNotFoundException($this->trans('Wrong id'));
+                }
+                $response = $this->getInvalidResponseForProduct($documentId, $imageType,'upload');
+                if ($response) {
+                    return $response;
+                }
+                $fieldUpdate='Product';
+            }
         } else {
-            $media = new Media();
-            $media->setType($type);
-            $media->setCollectionType($collectionType);
+            if ($imageType) {
+                switch ($imageType) {
+                    case 'profilePhoto':
+                        $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                            'type' => $type,
+                            'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                            'product' => null,
+                            'subproduct' => null,
+                            'collectionType' => $collectionType,
+                            'ProfilePhoto' => TRUE
+                        ));
+                        break;
+                    case 'coverPhoto':
+                        $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                            'type' => $type,
+                            'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                            'product' => null,
+                            'subproduct' => null,
+                            'collectionType' => $collectionType,
+                            'coverPhoto' => TRUE
+                        ));
+                        break;
+                }
+                if ($document) {
+                    return new JsonResponse(array('status' => 'reload'));
+                }
+            }
+
+
         }
+        $media = new Media();
+        $media->setType($type);
+        $media->setCollectionType($collectionType);
 
         $media->setCreatedBy($this->getUser());
-
+        if ($documentId && $documentId != 'null' && $fieldUpdate) {
+            $functionName = "set$fieldUpdate";
+            $media->$functionName($document);
+        }
 
         $validationGroup = array($collectionType);
         $form = $this->createForm(MediaType::class, $media, array(
@@ -88,16 +106,23 @@ class MediaController extends BackendController
             $form->handleRequest($request);
             if ($form->isValid()) {
                 if ($imageType) {
-
                     switch ($imageType) {
                         case 'profilePhoto':
                             $media->setProfilePhoto(TRUE);
+                            if ($documentId && $documentId != 'null') {
+                                $functionName = "get$fieldUpdate";
+                                $media->$functionName()->setProfilePhoto($media);
+                            }
+
                             break;
                         case 'coverPhoto':
                             $media->setCoverPhoto(TRUE);
+                            if ($documentId && $documentId != 'null') {
+                                $functionName = "get$fieldUpdate";
+                                $media->$functionName()->setCoverPhoto($media);
+                            }
                     }
                 }
-                $dm = $this->get('doctrine_mongodb')->getManager();
                 $tempPath = $media->getTempPath();
                 $media->setTempPath('');
                 $dm->persist($media);
@@ -105,7 +130,7 @@ class MediaController extends BackendController
 
 
 
-                return new JsonResponse(array('status' => 'success', 'media' => $this->prepareMedia($media), 'message' => $this->trans('upload successfuly')));
+                return new JsonResponse(array('status' => 'success', 'media' => $this->prepareMedia($media,$collectionType), 'message' => $this->trans('upload successfuly')));
             } else {
 
                 $tempPath = $media->getTempPath();
@@ -123,27 +148,26 @@ class MediaController extends BackendController
         return new JsonResponse(array('error' => $error), 400);
     }
 
-    private function prepareMedia($media)
+    private function prepareMedia($media,$collectionType)
     {
         return array(
             'imageUrl' => $media->getWebPath(),
             'id' => $media->getId(),
-            'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_delete', array('id' => $media->getId())),
-            'cropUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_crop', array('id' => $media->getId())),
+            'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_delete', array('id' => $media->getId(),'collectionType'=>$collectionType)),
+            'cropUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_crop', array('id' => $media->getId(),'collectionType'=>$collectionType)),
             'pop' => str_replace('%title%', $this->trans('image', array(), $this->translationDomain), $this->get('app.twig.popover_factory_extension')->popoverFactory(array("question" => "You are about to delete %title%,Are you sure?")))
         );
     }
 
-    public function cropAction(Request $request, $id)
+    public function cropAction(Request $request, $id,$collectionType)
     {
-        $loggedInUser = $this->getUser();
-        if (!$loggedInUser) {
-            return new JsonResponse(array('status' => 'login'));
+        if (!$this->getUser()) {
+            return $this->getLoginResponse();
         }
 
-        $media = $request->get('media');
-        if (isset($media['file']) && $media['file']) {
-            $fileData = explode('base64,', $media['file']);
+        $fileMedia = $request->get('media');
+        if (isset($fileMedia['file']) && $fileMedia['file']) {
+            $fileData = explode('base64,', $fileMedia['file']);
             $imageString = base64_decode($fileData[1]);
             $fileSystem = new \Symfony\Component\Filesystem\Filesystem();
             if ($imageString) {
@@ -151,6 +175,12 @@ class MediaController extends BackendController
                 $media = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->find($id);
                 if (!$media) {
                     return new JsonResponse(array('status', 'reload'));
+                }
+                if ($media->getProduct()) {
+                    $reponse = $this->getInvalidResponseForProduct($media->getProduct()->getId(), '', 'crop');
+                    if ($reponse) {
+                        return $reponse;
+                    }
                 }
                 $imageRandomName = uniqid();
                 $uploadDirectory = $media->getUploadRootDir() . '/temp/';
@@ -172,7 +202,7 @@ class MediaController extends BackendController
                         $fileSystem = new \Symfony\Component\Filesystem\Filesystem();
                         $fileSystem->remove($tempUrlPath);
                     }
-                    return new JsonResponse(array('status' => 'success', 'media' => $this->prepareMedia($media), 'message' => $this->trans('done sucessfully')));
+                    return new JsonResponse(array('status' => 'success', 'media' => $this->prepareMedia($media,$collectionType), 'message' => $this->trans('done sucessfully')));
                 }
             }
         }
@@ -184,11 +214,10 @@ class MediaController extends BackendController
      * @param type $id
      * @return type
      */
-    public function deleteFileAction(Request $request, $id)
+    public function deleteFileAction(Request $request, $id,$collectionType)
     {
-        $loggedInUser = $this->getUser();
-        if (!$loggedInUser) {
-            return new JsonResponse(array('status' => 'login'));
+        if (!$this->getUser()) {
+            return $this->getLoginResponse();
         }
         $dm = $this->get('doctrine_mongodb')->getManager();
         /* @var $document Media */
@@ -198,10 +227,20 @@ class MediaController extends BackendController
             return $this->getNotificationResponse(null, array('deleted' => true), 'error');
         }
 
-        $documentId = $request->get('documentId');
-        if ($documentId && $documentId != 'null') {
-            $collectionType = $request->get('collectionType');
 
+        if ($collectionType === 'Product' && $document->getProduct()) {
+            $reponse = $this->getInvalidResponseForProduct($document->getProduct()->getId(), '', 'delete');
+            if ($reponse) {
+                return $reponse;
+            }
+            if ($document->getProduct()) {
+                if ($document->getCoverPhoto()) {
+                    $document->getProduct()->setCoverPhoto(NULL);
+                }
+                if ($document->getProfilePhoto()) {
+                    $document->getProduct()->setProfilePhoto(NULL);
+                }
+            }
         }
         $dm->remove($document);
         try {
@@ -217,62 +256,116 @@ class MediaController extends BackendController
      * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
      * @param string $type
      */
-    public function userFilesAction($type, $documentId = NULL, $collectionType = 'Material')
+    public function userFilesAction($type, $documentId = NULL, $collectionType = 'Product')
     {
 
-        $loggedInUser = $this->getUser();
-        if (!$loggedInUser) {
-            return new JsonResponse(array('status' => 'login'));
+        if (!$this->getUser()) {
+            return $this->getLoginResponse();
         }
         if ($documentId && $documentId != 'null') {
-
+            if ($collectionType === 'Product') {
+                $reponse = $this->getInvalidResponseForProduct(new \MongoId($documentId), '', 'list');
+                if ($reponse) {
+                    return $reponse;
+                }
+            $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                'type' => $type,
+                'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                'product' => new \MongoId($documentId),
+                'subproduct' => null,
+                'collectionType' => $collectionType
+            ));
+            }
         } else {
             $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
                 'type' => $type,
                 'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                 'product' => null,
+                'subproduct' => null,
                 'collectionType' => $collectionType
             ));
         }
 
         $files = array();
-        $coverPhoto='';
-        $profilePhoto='';
+        $coverPhoto = '';
+        $profilePhoto = '';
 
         /* @var $document Media */
         foreach ($documents as $document) {
-            if($document->getCoverPhoto()){
-                $coverPhoto= $this->prepareMedia($document);
+            if ($document->getCoverPhoto()) {
+                $coverPhoto = $this->prepareMedia($document,$collectionType);
                 continue;
             }
-            if($document->getProfilePhoto()){
-                $profilePhoto=$this->prepareMedia($document);
+            if ($document->getProfilePhoto()) {
+                $profilePhoto = $this->prepareMedia($document,$collectionType);
                 continue;
             }
             $files [] = $this->getMediaDataArray($document, $documentId, $collectionType);
         }
 
-        return new JsonResponse(array('images'=>$files,'coverPhoto'=>$coverPhoto,'profilePhoto'=>$profilePhoto));
+        return new JsonResponse(array('images' => $files, 'coverPhoto' => $coverPhoto, 'profilePhoto' => $profilePhoto));
     }
 
     /**
-     * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
+     * @author Ola <ola.ali@ibtikar.net.sa>
      * @param Media $media
-     * @param string|null $documentId
-     * @param string|null $collectionType
-     * @return array
+     * @param type $documentId
+     * @param type $collectionType
+     * @return type
      */
     private function getMediaDataArray(Media $media, $documentId = null, $collectionType = null)
     {
 
         $data = array(
-           'imageUrl' => $media->getWebPath(),
+            'imageUrl' => $media->getWebPath(),
             'id' => $media->getId(),
             'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_delete', array('id' => $media->getId())),
             'cropUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_crop', array('id' => $media->getId())),
             'pop' => str_replace('%title%', $this->trans('image', array(), $this->translationDomain), $this->get('app.twig.popover_factory_extension')->popoverFactory([]))
         );
         return $data;
+    }
+
+    /**
+     * @author Ola <ola.ali@ibtikar.net.sa>
+     * @param type $id
+     * @param type $type
+     * @return type
+     * @throws type
+     */
+    public function getInvalidResponseForProduct($documentId, $imageType = '',$type='upload')
+    {
+        $securityContext = $this->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_PRODUCT_EDIT') && !$securityContext->isGranted('ROLE_ADMIN')) {
+            return $this->getAccessDeniedResponse();
+        }
+        if ($imageType) {
+            switch ($imageType) {
+                case 'profilePhoto':
+                    $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                        'type' => 'image',
+                        'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                        'product' => new \MongoId($documentId),
+                        'subproduct' => null,
+                        'collectionType' => 'Product',
+                        'ProfilePhoto' => TRUE
+                    ));
+                    break;
+                case 'coverPhoto':
+                    $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                        'type' => 'image',
+                        'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                        'product' => null,
+                        'product' => new \MongoId($documentId),
+                        'collectionType' => 'Product',
+                        'coverPhoto' => TRUE
+                    ));
+                    break;
+            }
+            if ($document && $type=='upload') {
+                return new JsonResponse(array('status' => 'reload'));
+            }
+        }
     }
 
     /**

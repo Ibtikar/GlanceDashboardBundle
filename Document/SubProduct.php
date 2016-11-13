@@ -18,7 +18,7 @@ use Ibtikar\GlanceDashboardBundle\Document\Document;
  *   @MongoDB\Index(keys={"nameEn"="asc"})
  * })
  */
-class Product extends Document {
+class SubProduct extends Document {
 
     /**
      * @MongoDB\Id
@@ -29,7 +29,7 @@ class Product extends Document {
      * @Assert\NotBlank
      * @MongoDB\String
      * @Assert\Length(
-     *      min = 3,
+     *      min = 2,
      *      minMessage = "Your name must be at least {{ limit }} characters long",
      *      max = 150,
      *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
@@ -41,7 +41,7 @@ class Product extends Document {
      * @Assert\NotBlank
      * @MongoDB\String
      * @Assert\Length(
-     *      min = 3,
+     *      min = 2,
      *      minMessage = "Your name must be at least {{ limit }} characters long",
      *      max = 150,
      *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
@@ -52,7 +52,7 @@ class Product extends Document {
     /**
      * @MongoDB\String
      * @Assert\Length(
-     *      min = 10,
+     *      min = 5,
      *      minMessage = "Your name must be at least {{ limit }} characters long",
      *      max = 1000,
      *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
@@ -63,7 +63,7 @@ class Product extends Document {
     /**
      * @MongoDB\String
      * @Assert\Length(
-     *      min = 10,
+     *      min = 5,
      *      minMessage = "Your name must be at least {{ limit }} characters long",
      *      max = 1000,
      *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
@@ -74,17 +74,13 @@ class Product extends Document {
     /**
      * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Media", simple=true)
      */
-    private $coverPhoto;
-
-    /**
-     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Media", simple=true)
-     */
     private $profilePhoto;
 
     /**
-     * @MongoDB\Increment
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Product", simple=true)
      */
-    private $subproductNo = 0;
+    private $product;
+
 
     /**
      * @MongoDB\Date
@@ -96,16 +92,23 @@ class Product extends Document {
         return (string) $this->name;
     }
 
+
+    public function updateReferencesCounts($value) {
+        $product = $this->getProduct();
+        if ($product) {
+            $product->setSubproductNo($product->getSubproductNo() + $value);
+        }
+    }
+
     /**
      * Get id
      *
      * @return id $id
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
-
-
 
     /**
      * Set name
@@ -195,36 +198,13 @@ class Product extends Document {
         return $this->descriptionEn;
     }
 
-
-    /**
-     * Set coverPhoto
-     *
-     * @param Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto
-     * @return self
-     */
-    public function setCoverPhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto =NULL)
-    {
-        $this->coverPhoto = $coverPhoto;
-        return $this;
-    }
-
-    /**
-     * Get coverPhoto
-     *
-     * @return Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto
-     */
-    public function getCoverPhoto()
-    {
-        return $this->coverPhoto;
-    }
-
     /**
      * Set profilePhoto
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Media $profilePhoto
      * @return self
      */
-    public function setProfilePhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $profilePhoto=NULL)
+    public function setProfilePhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $profilePhoto)
     {
         $this->profilePhoto = $profilePhoto;
         return $this;
@@ -241,25 +221,25 @@ class Product extends Document {
     }
 
     /**
-     * Set subproductNo
+     * Set product
      *
-     * @param increment $subproductNo
+     * @param Ibtikar\GlanceDashboardBundle\Document\Product $product
      * @return self
      */
-    public function setSubproductNo($subproductNo)
+    public function setProduct(\Ibtikar\GlanceDashboardBundle\Document\Product $product)
     {
-        $this->subproductNo = $subproductNo;
+        $this->product = $product;
         return $this;
     }
 
     /**
-     * Get subproductNo
+     * Get product
      *
-     * @return increment $subproductNo
+     * @return Ibtikar\GlanceDashboardBundle\Document\Product $product
      */
-    public function getSubproductNo()
+    public function getProduct()
     {
-        return $this->subproductNo;
+        return $this->product;
     }
 
     /**

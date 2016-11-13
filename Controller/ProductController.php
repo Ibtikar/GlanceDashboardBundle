@@ -15,17 +15,23 @@ class ProductController extends BackendController {
 
     protected function configureListColumns() {
         $this->allListColumns = array(
-            "title" => array(),
-            "titleEn" => array(),
-            "staffMembersCount" => array('type' => 'number'),
+            "name" => array(),
+            "nameEn" => array(),
+            "description" => array(),
+            "descriptionEn" => array(),
+            "profilePhoto" => array("type"=>"refereceImage",'isSortable'=>FALSE),
+            "subproductNo" => array('type' => 'number'),
             "createdAt" => array("type"=>"date"),
             "updatedAt"=> array("type"=>"date")
         );
         $this->defaultListColumns = array(
-            "title",
-            "titleEn",
-            "staffMembersCount",
-            "createdAt",
+            "name",
+            "nameEn",
+            "description",
+            "descriptionEn",
+            'profilePhoto',
+            'subproductNo',
+            'createdAt',
             "updatedAt"
         );
         $this->listViewOptions->setBundlePrefix("ibtikar_glance_dashboard_");
@@ -47,7 +53,7 @@ class ProductController extends BackendController {
      */
     public function createAction(Request $request) {
         $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Product'),
-//            array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list job')
+            array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list Product')
             );
         $breadCrumbArray = $this->preparedMenu($menus);
         $dm = $this->get('doctrine_mongodb')->getManager();
@@ -57,6 +63,7 @@ class ProductController extends BackendController {
                 'type' => 'image',
                 'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                 'product' => null,
+                'subproduct' => null,
                 'collectionType' => 'Product'
             ));
          foreach ($images as $image){
@@ -75,16 +82,17 @@ class ProductController extends BackendController {
         $form = $this->createFormBuilder($product, array('translation_domain' => $this->translationDomain,'attr'=>array('class'=>'dev-page-main-form dev-js-validation form-horizontal')))
                 ->add('name',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
                 ->add('nameEn',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
-                ->add('save', formType\SubmitType::class)
                 ->add('description',  formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
                 ->add('descriptionEn',formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
-//                ->add('images',formType\TextareaType::class, array('required' => FALSE,'mapped'=>FALSE,'attr' => array('parent-class'=>'hide')))
+                ->add('submitButton', formType\HiddenType::class, array('required' => FALSE, "mapped" => false))
                 ->add('save', formType\SubmitType::class)
                 ->getForm();
 
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
+                $formData = $request->get('form');
+
                 $dm->persist($product);
                 $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
                     'type' => 'image',
@@ -120,8 +128,12 @@ class ProductController extends BackendController {
 
                 $dm->flush();
 
-                $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
-                return $this->redirect($request->getUri());
+            $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
+                if ($formData['submitButton'] == 'add_save') {
+                    return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_subproduct_create', array('productId' => $product->getId()))));
+                } else {
+                    return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_product_list'), array(), true));
+                }
             }
         }
 
@@ -141,17 +153,25 @@ class ProductController extends BackendController {
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function editAction(Request $request,$id) {
-        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new job'), array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list job'));
+        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Product'),
+            array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list Product')
+            );
         $breadCrumbArray = $this->preparedMenu($menus);
         $dm = $this->get('doctrine_mongodb')->getManager();
-        //prepare form
-        $job = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($id);
-        if (!$job) {
+
+        $product = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($id);
+        if (!$product) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
-        $form = $this->createFormBuilder($job, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
-                ->add('title', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element'=>true, 'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique', 'data-name' => 'title', 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
-                ->add('titleEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element'=>true, 'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique', 'data-name' => 'titleEn', 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
+        $profileImage=$product->getProfilePhoto();
+        $coverImage=$product->getCoverPhoto();
+
+       $form = $this->createFormBuilder($product, array('translation_domain' => $this->translationDomain,'attr'=>array('class'=>'dev-page-main-form dev-js-validation form-horizontal')))
+                ->add('name',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
+                ->add('nameEn',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
+                ->add('description',  formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
+                ->add('descriptionEn',formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
+                ->add('submitButton', formType\HiddenType::class, array('required' => FALSE, "mapped" => false))
                 ->add('save', formType\SubmitType::class)
                 ->getForm();
 
@@ -162,19 +182,27 @@ class ProductController extends BackendController {
             $form->handleRequest($request);
 
             if ($form->isValid()) {
+                $formData = $request->get('form');
                 $dm->flush();
-                $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
 
-                return $this->redirect($request->getUri());
+                $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
+                if ($formData['submitButton'] == 'add_save') {
+                    return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_subproduct_create', array('productId' => $product->getId()))));
+                } else {
+                    return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_product_list'), array(), true));
+                }
             }
         }
 
-        //return template
-        return $this->render('IbtikarGlanceDashboardBundle::formLayout.html.twig', array(
-                    'form' => $form->createView(),
-                    'breadcrumb'=>$breadCrumbArray,
-                    'title'=>$this->trans('Edit Product',array(),  $this->translationDomain),
-                    'translationDomain' => $this->translationDomain
+
+        return $this->render('IbtikarGlanceDashboardBundle:Product:edit.html.twig', array(
+                'form' => $form->createView(),
+                'breadcrumb' => $breadCrumbArray,
+                'profileImage' => $profileImage,
+                'coverImage' => $coverImage,
+                'deletePopoverConfig'=>array("question" => "You are about to delete %title%,Are you sure?"),
+                'title' => $this->trans('edit Product', array(), $this->translationDomain),
+                'translationDomain' => $this->translationDomain
         ));
     }
 
@@ -184,11 +212,8 @@ class ProductController extends BackendController {
      * @return string
      */
     protected function validateDelete(Document $document) {
-        if(in_array($document->getTitleEn(), Job::$systemEnglishProductTitles)) {
-            return $this->get('translator')->trans('failed operation');
-        }
-        if ($document->getStaffMembersCount() > 0) {
-            return $this->trans('Cant deleted,it contain staff members',array(),$this->translationDomain);
+         if ($document->getSubproductNo() > 0) {
+            return $this->trans('Cant deleted,it contain subproduct',array(),$this->translationDomain);
         }
     }
 

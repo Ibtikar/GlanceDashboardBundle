@@ -200,7 +200,7 @@
 
                     <li class="dropdown dropdown-user">
                         <a class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
+                            <img src="{{ asset(app.user.getWebpath()|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}" alt="">
                             <span> {{ app.user }}</span>
                             <i class="caret"></i>
                         </a>

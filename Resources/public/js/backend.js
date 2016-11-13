@@ -7,7 +7,7 @@ var submitButtonConfirmFunction;
 
 
 
-var stack_bottom_right = {"dir1": "up", "dir2": "left", "firstpos1": 60, "firstpos2": 0};
+var stack_bottom_right = {"dir1": "down", "dir2": "right", "firstpos1": 0, "firstpos2": 0};
 
 
 /**
@@ -224,6 +224,47 @@ jQuery(document).ready(function($) {
 
     }
     });
+
+jQuery(document).on('ajaxComplete', function (event, response) {
+    if (response) {
+//        if(response.status === 0 && detectIE()) {
+//            window.location.reload(true);
+//        }
+//        if (response.status === 404) {
+//            window.location = notFoundUrl;
+//        }
+        if (typeof response.responseJSON === 'object') {
+            if (typeof response.responseJSON.status !== 'undefined') {
+                handleAjaxResponse(response.responseJSON);
+            }
+        }
+    }
+});
+
+function handleAjaxResponse(responseJSON) {
+
+        switch (responseJSON.status) {
+            case 'login':
+                window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
+                break;
+            case 'denied':
+                window.location = accessDeniedUrl;
+                break;
+            case 'reload-page':
+                window.location.reload(true);
+                break;
+            case 'redirect':
+                window.location = responseJSON.url;
+                break;
+            case 'notification':
+                var hideAfterSeconds = null;
+                if (typeof responseJSON.hideAfterSeconds !== 'undefined') {
+                    hideAfterSeconds = responseJSON.hideAfterSeconds;
+                }
+                showNotification(responseJSON.message, responseJSON.type, hideAfterSeconds);
+                break;
+        }
+}
 
 
 });

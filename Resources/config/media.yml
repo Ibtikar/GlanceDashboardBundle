@@ -5,11 +5,11 @@ ibtikar_glance_dashboard_media_upload:
         type:  file|image
 
 ibtikar_glance_dashboard_media_crop:
-    path:  /crop/{id}
+    path:  /crop/{id}/{collectionType}
     defaults: { _controller: IbtikarGlanceDashboardBundle:Media:crop }
 
 ibtikar_glance_dashboard_media_delete:
-    path:  /delete/{id}
+    path:  /delete/{id}/{collectionType}
     defaults: { _controller: IbtikarGlanceDashboardBundle:Media:deleteFile }
 
 ibtikar_glance_dashboard_media_user_files:

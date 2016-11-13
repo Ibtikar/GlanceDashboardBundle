@@ -32,6 +32,11 @@ class Media extends Document {
      */
     private $product;
 
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\SubProduct", simple=true)
+     * @KeepReference
+     */
+    private $subproduct;
 
 
     /**
@@ -97,7 +102,7 @@ class Media extends Document {
      * @Assert\File(maxSize="1835008", maxSizeMessage="File size must be less than 1mb", mimeTypes={"application/pdf", "application/vnd.ms-office", "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/excel", "application/x-excel", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword", "application/zip", "application/x-zip", "application/x-zip-compressed"}, mimeTypesMessage="file not correct.", groups={"contactMessageFile"})
      * @Assert\Image(maxSize="1835008", maxSizeMessage="Image size must be less than 1mb", minWidth=200, minHeight=200, minWidthMessage="Image dimension must be more than 200*200", minHeightMessage="Image dimension must be more than 200*200", mimeTypes={"image/jpeg", "image/pjpeg", "image/png", "image/gif"}, mimeTypesMessage="picture extension not correct.", groups={"contactMessageImage"})
      * @Assert\File(maxSize="4194304", maxSizeMessage="File size must be less than 4mb", mimeTypes={"application/pdf", "application/vnd.ms-office", "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/excel", "application/x-excel", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword", "application/zip", "application/x-zip", "application/x-zip-compressed"}, mimeTypesMessage="file not correct.", groups={"file"})
-     * @Assert\Image(maxSize="2097152", maxSizeMessage="Image size must be less than 2mb", minWidth=200, minHeight=200, minWidthMessage="Image dimension must be more than 200*200", minHeightMessage="Image dimension must be more than 200*200", mimeTypes={"image/jpeg", "image/pjpeg", "image/png"}, mimeTypesMessage="picture extension not correct.", groups={"product"})
+     * @Assert\Image(maxSize="4194304", maxSizeMessage="Image size must be less than 4mb", minWidth=200, minHeight=200, minWidthMessage="Image dimension must be more than 200*200", minHeightMessage="Image dimension must be more than 200*200", mimeTypes={"image/jpeg", "image/pjpeg", "image/png"}, mimeTypesMessage="picture extension not correct.", groups={"product"})
      * @ImageValid(groups={"image","contactMessageImage"})
      * @ImageExtensionValid(groups={"image", "contactMessageImage"})
      * @FileExtensionValid(extensions={"doc", "docx", "xls", "xlsx", "pdf", "zip"}, groups={"file","contactMessageFile"})
@@ -264,6 +269,8 @@ class Media extends Document {
         $uploadDirectory = 'uploads';
         if ($this->getProduct()) {
             $uploadDirectory .= '/product-file/' . $this->getProduct()->getId();
+        } else if ($this->getProduct()) {
+            $uploadDirectory .= '/subproduct-file/' . $this->getProduct()->getId();
         } else {
             if (!$this->getCreatedBy()) {
                 throw new \Exception('Please set the created by user.');
@@ -621,5 +628,27 @@ class Media extends Document {
     public function getProfilePhoto()
     {
         return $this->ProfilePhoto;
+    }
+
+    /**
+     * Set subproduct
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\SubProduct $subproduct
+     * @return self
+     */
+    public function setSubproduct(\Ibtikar\GlanceDashboardBundle\Document\SubProduct $subproduct)
+    {
+        $this->subproduct = $subproduct;
+        return $this;
+    }
+
+    /**
+     * Get subproduct
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\SubProduct $subproduct
+     */
+    public function getSubproduct()
+    {
+        return $this->subproduct;
     }
 }

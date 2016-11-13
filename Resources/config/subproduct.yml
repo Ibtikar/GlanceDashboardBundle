@@ -1,0 +1,31 @@
+ibtikar_glance_dashboard_subproduct_create:
+    path:  /create
+    defaults: { _controller: IbtikarGlanceDashboardBundle:SubProduct:create }
+
+ibtikar_glance_dashboard_subproduct_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:SubProduct:edit}
+
+ibtikar_glance_dashboard_subproduct_delete:
+    path:  /delete/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:SubProduct:delete }
+
+ibtikar_glance_dashboard_subproduct_list:
+    path: /list
+    defaults: { _controller: IbtikarGlanceDashboardBundle:SubProduct:list }
+
+ibtikar_glance_dashboard_subproduct_delete:
+    path: /delete
+    defaults: { _controller: IbtikarGlanceDashboardBundle:SubProduct:delete}
+
+ibtikar_glance_dashboard_subproduct_bulk_actions:
+    path: /bulk
+    defaults: { _controller: IbtikarGlanceDashboardBundle:SubProduct:bulk}
+
+ibtikar_glance_dashboard_subproduct_check_field_unique:
+    path: /checkfieldUnique
+    defaults: { _controller: IbtikarGlanceDashboardBundle:SubProduct:checkFieldUnique }
+
+ibtikar_glance_dashboard_subproduct_change_list_columns:
+    path:  /change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:SubProduct:changeListColumns }
