@@ -10,7 +10,7 @@
 #}
 
 
-
+   {% if is_granted('ROLE_JOB_VIEW') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CITY_VIEW') or is_granted('ROLE_STAFF_VIEW') or  is_granted('ROLE_ROLE_VIEW') %}
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="icon-make-group position-left"></i> إدارة المستخدمين <span class="caret"></span>
@@ -36,7 +36,8 @@
 
                         </ul>
                     </li>
-
+    {% endif %}
+         {% if is_granted('ROLE_PRODUCT_VIEW') or is_granted('ROLE_ADMIN')%}
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="icon-make-group position-left"></i> {% trans from 'role' %}content{% endtrans%}<span class="caret"></span>
@@ -52,7 +53,7 @@
 
                         </ul>
                     </li>
-
+     {% endif %}
 
                 </ul>
 
