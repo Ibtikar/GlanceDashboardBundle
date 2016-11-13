@@ -44,7 +44,17 @@ class MediaController extends BackendController
         $dm = $this->get('doctrine_mongodb')->getManager();
 
         if ($documentId && $documentId != 'null') {
-            if ($collectionType === 'Product') {
+            if ($collectionType === 'SubProduct') {
+                $document = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($documentId);
+                if (!$document) {
+                    throw $this->createNotFoundException($this->trans('Wrong id'));
+                }
+                $response = $this->getInvalidResponseForProduct($documentId, $imageType,'upload');
+                if ($response) {
+                    return $response;
+                }
+                $fieldUpdate='Product';
+            }elseif ($collectionType === 'Product') {
                 $document = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($documentId);
                 if (!$document) {
                     throw $this->createNotFoundException($this->trans('Wrong id'));
@@ -55,6 +65,7 @@ class MediaController extends BackendController
                 }
                 $fieldUpdate='Product';
             }
+
         } else {
             if ($imageType) {
                 switch ($imageType) {

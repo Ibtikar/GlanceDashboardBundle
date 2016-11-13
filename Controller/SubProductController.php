@@ -144,20 +144,27 @@ class SubProductController extends BackendController {
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function editAction(Request $request,$id) {
-        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new job'), array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list job'));
+        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new subProduct'),
+//            array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list job')
+            );
         $breadCrumbArray = $this->preparedMenu($menus);
         $dm = $this->get('doctrine_mongodb')->getManager();
         //prepare form
-        $job = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($id);
-        if (!$job) {
+        $subproduct = $dm->getRepository('IbtikarGlanceDashboardBundle:SubProduct')->find($id);
+        if (!$subproduct) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
-        $form = $this->createFormBuilder($job, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
-                ->add('title', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element'=>true, 'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique', 'data-name' => 'title', 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
-                ->add('titleEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element'=>true, 'data-rule-unique' => 'ibtikar_glance_dashboard_job_check_field_unique', 'data-name' => 'titleEn', 'data-msg-unique' => $this->trans('not valid'), 'data-rule-maxlength' => 150, 'data-url' => $this->generateUrl('ibtikar_glance_dashboard_job_check_field_unique'))))
-                ->add('save', formType\SubmitType::class)
-                ->getForm();
-
+        $form = $this->createFormBuilder($subproduct, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
+            ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 2)))
+            ->add('nameEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 2)))
+//                ->add('product', \Doctrine\Bundle\MongoDBBundle\Form\Type\DocumentType::class,array('required' => TRUE,
+//                'class' => 'IbtikarGlanceDashboardBundle:Product', 'placeholder' => $this->trans('Choose product',array(),'subproduct'),
+//                'attr' => array('class' => 'select', 'data-error-after-selector' => '.select2-container')
+//        ))
+            ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 5)))
+            ->add('descriptionEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 5)))
+            ->add('save', formType\SubmitType::class)
+            ->getForm();
 
         //handle form submission
         if ($request->getMethod() === 'POST') {
@@ -172,12 +179,13 @@ class SubProductController extends BackendController {
             }
         }
 
-        //return template
-        return $this->render('IbtikarGlanceDashboardBundle::formLayout.html.twig', array(
-                    'form' => $form->createView(),
-                    'breadcrumb'=>$breadCrumbArray,
-                    'title'=>$this->trans('Edit Product',array(),  $this->translationDomain),
-                    'translationDomain' => $this->translationDomain
+        return $this->render('IbtikarGlanceDashboardBundle:SubProduct:edit.html.twig', array(
+                'form' => $form->createView(),
+                'breadcrumb' => $breadCrumbArray,
+                'profileImage' => $subproduct->getProfilePhoto(),
+                'deletePopoverConfig'=>array("question" => "You are about to delete %title%,Are you sure?"),
+                'title' => $this->trans('edit subProduct', array(), $this->translationDomain),
+                'translationDomain' => $this->translationDomain
         ));
     }
 

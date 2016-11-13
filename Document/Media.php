@@ -269,8 +269,8 @@ class Media extends Document {
         $uploadDirectory = 'uploads';
         if ($this->getProduct()) {
             $uploadDirectory .= '/product-file/' . $this->getProduct()->getId();
-        } else if ($this->getProduct()) {
-            $uploadDirectory .= '/subproduct-file/' . $this->getProduct()->getId();
+        } else if ($this->getSubproduct()) {
+            $uploadDirectory .= '/subproduct-file/' . $this->getSubproduct()->getId();
         } else {
             if (!$this->getCreatedBy()) {
                 throw new \Exception('Please set the created by user.');
