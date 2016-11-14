@@ -47,6 +47,15 @@ class ProductController extends BackendController {
 
     }
 
+    protected function doList(Request $request) {
+        $configParams = parent::doList($request);
+        $configParams['deleteMsgConditionAttr'] = 'subproductNo';
+        $configParams['conditionalDeletePopoverConfig'] = array(
+            "question" => "Cant deleted,it contain subproduct",
+            "translationDomain" => $this->translationDomain
+        );
+        return $configParams;
+    }
     /**
      * @author Ola <ola.ali@ibtikar.net.sa>
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -206,15 +215,19 @@ class ProductController extends BackendController {
         ));
     }
 
-    /**
-     * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
-     * @param Document $document
-     * @return string
-     */
-    protected function validateDelete(Document $document) {
-         if ($document->getSubproductNo() > 0) {
-            return $this->trans('Cant deleted,it contain subproduct',array(),$this->translationDomain);
-        }
-    }
 
+    protected function postDelete($ids) {
+
+        if(!is_array($ids)){
+            $ids = array($ids);
+        }
+
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $subProducts = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Subproduct')
+                ->remove()
+                ->field('product')->in($ids)
+                ->getQuery()
+                ->execute();
+    }
 }

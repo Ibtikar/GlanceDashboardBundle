@@ -53,9 +53,8 @@ class PopoverFactoryExtension extends \Twig_Extension
         $popOverAttrs = 'role="button" tabindex="0" data-toggle="popover" data-popup="popover" data-trigger="focus" data-html="true" data-content="';
 
         foreach ($popoverConfig['buttons'] as $button){
-            $popOverAttrs .= '<button type=\'button\' class=\'btn '. (isset($button['class'])?$button['class']:"") .'\'>' .$this->translator->trans(isset($button['text'])?$button['text']:"",array(),$popoverConfig["translationDomain"]). '</button>';
+            $popOverAttrs .= '<button type=\'button\' class=\'btn '. (isset($button['class'])?$button['class']:"") .'\'>' .$this->translator->trans(isset($button['text'])?$button['text']:"",array(),in_array($button['text'],['Yes','Cancel']) ?null:$popoverConfig["translationDomain"]). '</button>';
         }
-
         $popOverAttrs .= ($popoverConfig['replaceAttr']?'" data-replace-title="'.$this->translator->trans($popoverConfig["question"],array(),$popoverConfig["translationDomain"]):"").'" data-original-title="'.$this->translator->trans($popoverConfig["question"],array(),$popoverConfig["translationDomain"]).'"';
 
         return $popOverAttrs;

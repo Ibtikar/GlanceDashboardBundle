@@ -88,7 +88,8 @@ class Document {
             'Ibtikar\VisitorBundle\Document\Social\LinkedIn',
             'Ibtikar\VisitorBundle\Document\Social\Twitter',
             'Ibtikar\VisitorBundle\Document\Social\Yahoo',
-            'Ibtikar\BackendBundle\Document\Phone'
+            'Ibtikar\BackendBundle\Document\Phone',
+            'Ibtikar\GlanceDashboardBundle\Document\SubProduct'
         );
         $collectionsClasses = array();
         $mappedDocumentsClasses = $dm->getConfiguration()->getMetadataDriverImpl()->getAllClassNames();

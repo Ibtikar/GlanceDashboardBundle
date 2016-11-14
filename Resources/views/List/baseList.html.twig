@@ -256,6 +256,7 @@
                                     </thead>
                                     <tbody>
                                         {% set deleteAttrs = popover_factory(deletePopoverConfig is defined?deletePopoverConfig:[]) %}
+                                        {% set conditionalDeleteAttrs = popover_factory(conditionalDeletePopoverConfig is defined?conditionalDeletePopoverConfig:[]) %}
 
                                         {% for object in pagination %}
                                             <tr>
@@ -330,7 +331,7 @@
                                                                         {% endif %}
                                                                     {% elseif action == "Delete" %}
                                                                         {% if is_granted('ROLE_' ~ listName|upper ~'_DELETE') or is_granted('ROLE_ADMIN')%}
-                                                                            <a class="btn btn-defualt" data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" {{ deleteAttrs|replace({'%title%': object})|raw }}><i class="icon-trash"></i></a>
+                                                                            <a class="btn btn-defualt" data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-trash"></i></a>
                                                                         {% endif %}
                                                                     {%endif%}
                                                                 {% endfor %}

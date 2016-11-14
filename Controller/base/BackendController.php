@@ -737,13 +737,18 @@ class BackendController extends Controller {
     }
 
 
-/**
- * method to perform action after successful delete
- *
- * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
- * @param mixed $ids can be a single  string (id) or successful (id)s array
- */
-    protected function postDelete($ids) {
+    /**
+     * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
+     * @param Document $document
+     * @return string
+     */
+    protected function validateDelete(Document $document){}
 
-    }
+    /**
+     * method to perform action after successful delete
+     *
+     * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
+     * @param mixed $ids can be a single  string (id) or successful (id)s array
+     */
+    protected function postDelete($ids){}
 }
