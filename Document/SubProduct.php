@@ -204,7 +204,7 @@ class SubProduct extends Document {
      * @param Ibtikar\GlanceDashboardBundle\Document\Media $profilePhoto
      * @return self
      */
-    public function setProfilePhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $profilePhoto)
+    public function setProfilePhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $profilePhoto =NULL)
     {
         $this->profilePhoto = $profilePhoto;
         return $this;

@@ -64,7 +64,7 @@
                                 {% if profileImage is empty %}
                                     <a class="btn btn-defualt upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
                                 {% endif %}
-                                <a class="btn btn-defualt dev-crop-images"   {% if profileImage is empty %}style="display: none"{%else%} data-image-id="{{ profileImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':profileImage.id,'collectionType':'SubProduct'})}}"{%endif%}   >  <i class="icon-crop"></i> </a>
+                                <a class="btn btn-defualt dev-crop-images"   {% if profileImage is empty %}style="display: none"{%else%} data-image-id="{{ profileImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':profileImage.id,'collectionType':'SubProduct'})}}"{%endif%}   >  رفع الصورة </a>
                                 <a class="btn btn-defualt dev-trash-image" {% if profileImage is empty %}style="display: none" {%else%}  data-image-id="{{ profileImage.id }}"  data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': profileImage.id,'collectionType':'SubProduct'}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%} > <i class="icon-trash"></i></a>
 
 
@@ -117,7 +117,7 @@
 
         </div>
     </div>
-                <hr/>
+{#                <hr/>#}
 {#  {{ form_row(form.product) }}#}
 
     {{ form_end(form) }}
@@ -231,7 +231,7 @@
         <a class="btn btn-defualt upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
      {% endset %}
      {% set cropButton %}
-        <a class="btn btn-defualt dev-crop-images"    data-image-id="%image-id%" data-crop-url="%crop-url%">  <i class="icon-crop"></i> </a>
+        <a class="btn btn-defualt dev-crop-images"    data-image-id="%image-id%" data-crop-url="%crop-url%">  رفع الصورة </a>
      {% endset %}
      {% set deleteButton %}
          <a class="btn btn-defualt dev-trash-image" data-image-id="%image-id%"  data-href = "%image-delete-url%"  %pop-block%> <i class="icon-trash"></i></a>

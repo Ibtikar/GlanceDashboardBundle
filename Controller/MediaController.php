@@ -45,11 +45,11 @@ class MediaController extends BackendController
 
         if ($documentId && $documentId != 'null') {
             if ($collectionType === 'SubProduct') {
-                $document = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($documentId);
+                $document = $dm->getRepository('IbtikarGlanceDashboardBundle:SubProduct')->find($documentId);
                 if (!$document) {
                     throw $this->createNotFoundException($this->trans('Wrong id'));
                 }
-                $response = $this->getInvalidResponseForProduct($documentId, $imageType,'upload');
+                $response = $this->getInvalidResponseForSubProduct($documentId, $imageType,'upload');
                 if ($response) {
                     return $response;
                 }
@@ -193,6 +193,14 @@ class MediaController extends BackendController
                         return $reponse;
                     }
                 }
+
+                if ($media->getSubproduct()) {
+                    $reponse = $this->getInvalidResponseForSubProduct($media->getSubproduct()->getId(), '', 'crop');
+                    if ($reponse) {
+                        return $reponse;
+                    }
+                }
+
                 $imageRandomName = uniqid();
                 $uploadDirectory = $media->getUploadRootDir() . '/temp/';
                 $fileSystem->mkdir($uploadDirectory, 0755);
@@ -253,6 +261,18 @@ class MediaController extends BackendController
                 }
             }
         }
+        if ($collectionType === 'SubProduct' && $document->getSubproduct()) {
+            $reponse = $this->getInvalidResponseForSubProduct($document->getSubproduct()->getId(), '', 'delete');
+            if ($reponse) {
+                return $reponse;
+            }
+            if ($document->getSubproduct()) {
+
+                if ($document->getProfilePhoto()) {
+                    $document->getSubproduct()->setProfilePhoto(NULL);
+                }
+            }
+        }
         $dm->remove($document);
         try {
             $dm->flush();
@@ -284,6 +304,19 @@ class MediaController extends BackendController
                 'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                 'product' => new \MongoId($documentId),
                 'subproduct' => null,
+                'collectionType' => $collectionType
+            ));
+            }
+            if ($collectionType === 'SubProduct') {
+                $reponse = $this->getInvalidResponseForSubProduct(new \MongoId($documentId), '', 'list');
+                if ($reponse) {
+                    return $reponse;
+                }
+            $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                'type' => $type,
+                'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                'subproduct' => new \MongoId($documentId),
+                'product' => null,
                 'collectionType' => $collectionType
             ));
             }
@@ -372,6 +405,32 @@ class MediaController extends BackendController
                         'coverPhoto' => TRUE
                     ));
                     break;
+            }
+            if ($document && $type=='upload') {
+                return new JsonResponse(array('status' => 'reload'));
+            }
+        }
+    }
+
+    public function getInvalidResponseForSubProduct($documentId, $imageType = '',$type='upload')
+    {
+        $securityContext = $this->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_SUBPRODUCT_EDIT') && !$securityContext->isGranted('ROLE_ADMIN')) {
+            return $this->getAccessDeniedResponse();
+        }
+        if ($imageType) {
+            switch ($imageType) {
+                case 'profilePhoto':
+                    $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                        'type' => 'image',
+                        'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                        'subproduct' => new \MongoId($documentId),
+                        'product' => null,
+                        'collectionType' => 'SubProduct',
+                        'ProfilePhoto' => TRUE
+                    ));
+                    break;
+
             }
             if ($document && $type=='upload') {
                 return new JsonResponse(array('status' => 'reload'));
