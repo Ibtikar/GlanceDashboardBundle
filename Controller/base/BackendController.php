@@ -588,7 +588,11 @@ class BackendController extends Controller {
         foreach ($menus as $menu) {
             $breadCrumb = new \stdClass();
             $breadCrumb->active = $menu['active'];
-            $breadCrumb->link = $this->generateUrl($bundle.  strtolower($this->calledClassName).'_' . $menu['type']);
+            if (isset($menu['link'])) {
+                $breadCrumb->link = $menu['link'];
+            } else {
+                $breadCrumb->link = $this->generateUrl($bundle . strtolower($this->calledClassName) . '_' . $menu['type']);
+            }
             $breadCrumb->linkType = $menu['linkType'];
             $breadCrumb->text = $this->trans($menu['title'], array(), $this->translationDomain);
             $breadCrumbArray[] = $breadCrumb;
