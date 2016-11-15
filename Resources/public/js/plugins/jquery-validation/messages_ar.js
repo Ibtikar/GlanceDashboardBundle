@@ -24,7 +24,7 @@
         creditcard: "رجاء إدخال رقم بطاقة ائتمان صحيح",
         equalTo: "رجاء إدخال نفس القيمة",
         extension: "رجاء إدخال ملف بامتداد موافق عليه",
-        maxlength: $.validator.format("عذراَ! الحد الأقصى هو {0} حرف"),
+        maxlength: $.validator.format("الحد الأقصى لعدد الحروف هو {0}"),
         minlength: $.validator.format('يجب أن تكون عدد الحروف {0} أو أكثر'),
         rangelength: $.validator.format("عدد الحروف يجب أن يكون بين {0} و {1}"),
         range: $.validator.format("رجاء إدخال عدد قيمته بين {0} و {1}"),
