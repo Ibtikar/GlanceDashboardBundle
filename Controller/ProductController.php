@@ -27,8 +27,8 @@ class ProductController extends BackendController {
         $this->defaultListColumns = array(
             "name",
             "nameEn",
-            "description",
-            "descriptionEn",
+//            "description",
+//            "descriptionEn",
             'profilePhoto',
             'subproductNo',
             'createdAt',
