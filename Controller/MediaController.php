@@ -53,7 +53,7 @@ class MediaController extends BackendController
                 if ($response) {
                     return $response;
                 }
-                $fieldUpdate='Product';
+                $fieldUpdate='Subproduct';
             }elseif ($collectionType === 'Product') {
                 $document = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($documentId);
                 if (!$document) {

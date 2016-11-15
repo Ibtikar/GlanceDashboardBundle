@@ -264,8 +264,8 @@
         var deleteButton = '{{ deleteButton|escape('js') }}';
         var uploadButton = '{{ uploadButton|escape('js') }}';
         var cropperPluginInitialized = false;
-        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':'null','collectionType':'SubProduct'})}}";
-        var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'image','documentId':'null','collectionType':'SubProduct'})}}";
+        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':app.request.get('id'),'collectionType':'SubProduct'})}}";
+        var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'image','documentId':app.request.get('id'),'collectionType':'SubProduct'})}}";
         var element;
         var name;
         var type;

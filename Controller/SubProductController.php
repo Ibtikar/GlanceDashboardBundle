@@ -99,6 +99,7 @@ class SubProductController extends BackendController {
                     'type' => 'image',
                     'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                     'product' => null,
+                    'subproduct' => null,
                     'collectionType' => 'SubProduct'
                 ));
                 if (count($images) > 0) {
