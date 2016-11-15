@@ -309,7 +309,11 @@
                                                                 </a>
                                                             {%else%}
                                                                 {# added to fix the sorting for fields with underscore #}
-                                                            {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}}
+                                                                {% if attribute(object, field.propertyName|humanize|title|replace({' ':''}))|length > 150 %}
+                                                                    {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))|slice(0, 150)~'..' }}
+                                                                {% else %}
+                                                                    {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}}
+                                                                {% endif %}
 
 
                                                             {% endif %}

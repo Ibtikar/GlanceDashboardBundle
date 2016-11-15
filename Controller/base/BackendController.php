@@ -539,7 +539,7 @@ class BackendController extends Controller {
                     $oneDocument[$value] = implode(',', $elementsArray);
                 } else {
                     $fieldData = $document->$getfunction();
-                    $oneDocument[$value] = is_object($fieldData) ? $fieldData->__toString() : $fieldData;
+                    $oneDocument[$value] = is_object($fieldData) ? $fieldData->__toString() : $this->getShortDescriptionString($fieldData);
                 }
             }
 
@@ -736,6 +736,13 @@ class BackendController extends Controller {
         return new JsonResponse($data);
     }
 
+    public function getShortDescriptionString($content, $length = 150) {
+        $shortDescription = trim(html_entity_decode(strip_tags($content)));
+        if (strlen($shortDescription) > $length) {
+            $shortDescription = mb_substr($shortDescription, 0, $length, 'utf-8').'..';
+        }
+        return $shortDescription;
+    }
 
     /**
      * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
