@@ -71,11 +71,17 @@ class Category extends Document {
      */
     private $parent;
 
+
+    /**
+     * @MongoDB\Int
+     */
+    private $order ;
+
     public function __toString() {
         return (string) $this->name;
     }
 
-   
+
 
 
     /**
@@ -196,5 +202,27 @@ class Category extends Document {
     public function getParent()
     {
         return $this->parent;
+    }
+
+    /**
+     * Set order
+     *
+     * @param int $order
+     * @return self
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+        return $this;
+    }
+
+    /**
+     * Get order
+     *
+     * @return int $order
+     */
+    public function getOrder()
+    {
+        return $this->order;
     }
 }

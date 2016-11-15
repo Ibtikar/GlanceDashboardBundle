@@ -21,6 +21,7 @@ class LoadCategoryData extends AbstractFixture implements FixtureInterface, Orde
         $category->setSlug('الوصفات');
         $category->setSlugEn('Recipes');
         $category->setParent(null);
+        $category->setOrder(1);
         $category->setNotModified(TRUE);
         $manager->persist($category);
 
@@ -30,6 +31,7 @@ class LoadCategoryData extends AbstractFixture implements FixtureInterface, Orde
         $category1->setSlug('منتجات-قودي	');
         $category1->setSlugEn('Products');
         $category1->setParent(null);
+        $category1->setOrder(2);
         $category1->setNotModified(TRUE);
 
         $manager->persist($category1);
@@ -40,6 +42,7 @@ class LoadCategoryData extends AbstractFixture implements FixtureInterface, Orde
         $category2->setSlug('المجلة');
         $category2->setSlugEn('Magazine');
         $category2->setParent(null);
+        $category2->setOrder(3);
         $category2->setNotModified(TRUE);
 
         $manager->persist($category2);
@@ -52,7 +55,7 @@ class LoadCategoryData extends AbstractFixture implements FixtureInterface, Orde
         $category3->setSlug('الأكاديمية-الإلكترونية');
         $category3->setSlugEn('Online-Academy');
         $category3->setNotModified(TRUE);
-
+        $category3->setOrder(4);
         $category3->setParent(null);
         $manager->persist($category3);
 
@@ -64,6 +67,7 @@ class LoadCategoryData extends AbstractFixture implements FixtureInterface, Orde
         $category4->setSlug('المدونة');
         $category4->setSlugEn('Blog');
         $category4->setParent(null);
+        $category4->setOrder(5);
         $manager->persist($category4);
 
         $category5 = new Category();
@@ -73,6 +77,7 @@ class LoadCategoryData extends AbstractFixture implements FixtureInterface, Orde
         $category5->setSlugEn('Stars');
         $category5->setNotModified(TRUE);
         $category5->setParent(null);
+        $category5->setOrder(6);
         $manager->persist($category5);
 
         $category6 = new Category();
@@ -82,6 +87,7 @@ class LoadCategoryData extends AbstractFixture implements FixtureInterface, Orde
         $category6->setNotModified(TRUE);
         $category6->setSlugEn('Contact-us');
         $category6->setParent(null);
+        $category6->setOrder(7);
         $manager->persist($category6);
 
 

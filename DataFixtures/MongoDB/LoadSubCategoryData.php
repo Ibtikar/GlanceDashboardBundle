@@ -20,6 +20,7 @@ class LoadSubCategoryData extends AbstractFixture implements FixtureInterface, O
       $subCategory->setSlug('مطبخ-الطوارئ');
       $subCategory->setSlugEn('Kitchen-911');
       $subCategory->setNotModified(TRUE);
+      $subCategory->setOrder(1);
       $subCategory->setParent($this->getReference("المدونة"));
       $manager->persist($subCategory);
 
@@ -29,6 +30,7 @@ class LoadSubCategoryData extends AbstractFixture implements FixtureInterface, O
       $subCategory1->setSlug('نصائح');
       $subCategory1->setSlugEn('Tips');
       $subCategory1->setNotModified(TRUE);
+      $subCategory1->setOrder(2);
       $subCategory1->setParent($this->getReference("المدونة"));
       $manager->persist($subCategory1);
 
@@ -38,6 +40,7 @@ class LoadSubCategoryData extends AbstractFixture implements FixtureInterface, O
       $subCategory2->setSlug('مقالات');
       $subCategory2->setSlugEn('Articles');
       $subCategory2->setNotModified(TRUE);
+      $subCategory2->setOrder(3);
       $subCategory2->setParent($this->getReference("المدونة"));
       $manager->persist($subCategory2);
 
