@@ -1,0 +1,7 @@
+ibtikar_glance_dashboard_category_list:
+    path: /list
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Category:list }
+
+ibtikar_glance_dashboard_category_sort:
+    path:  /sort
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Category:sort }

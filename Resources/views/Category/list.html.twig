@@ -1,0 +1,276 @@
+{% extends 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard.html.twig' %}
+{% block header %}
+    {{ include('IbtikarGlanceDashboardBundle::header.html.twig') }}
+{% endblock %}
+{% block navbar %}
+    {{ include('IbtikarGlanceDashboardBundle::navbar.html.twig') }}
+{% endblock %}
+{% block side_menu %}
+    {{ include('IbtikarGlanceDashboardBundle::sidebar.html.twig') }}
+{% endblock %}
+{% block title %}
+    {{ list.listType == 'trash' ? 'View deleted items'|trans : ('List '~ listName)|trans({}, translationDomain)}}
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/ibtikarglancedashboard/css/jquery.powertip.min.css')}}">
+{% endblock %}
+
+{% block body %}
+    <div class="content-wrapper">
+
+
+        <!-- Basic button -->
+        <div class="content-group">
+            <div class="heading-elemnts">
+
+                <div class="heading-btn-group">
+                    {% block breadCrumb %}
+                        <a class="btn btn-link btn-float has-text" href="Role-add.php"><i class="icon-add"></i><span>إدخال دور</span></a>
+                        <a class="btn btn-link btn-float has-text activeLink" href="Role-view.php"><i class="icon-table2"></i> <span>مشاهدة الادوار</span></a>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+        <!-- /basic button -->
+
+
+
+        <!-- Dashboard content -->
+        <div class="row">
+            <div class="col-lg-12">
+
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- view roles -->
+                        <div class="panel panel-flat">
+                            <div class="panel-heading">
+                                <h5 class="panel-title">    {{ list.listType == 'trash' ? 'View deleted items'|trans : ('List '~ listName)|trans({}, translationDomain)}} </h5>
+                                <div class="heading-elements">
+                                    {% block statistic %}
+                                     <span class="label bg-number heading-text">{{total}} {% trans from translationDomain %}listName{% endtrans %}</span>
+
+                                    {% endblock %}
+
+
+                                    <ul class="icons-list">
+                                        <li><a data-action="collapse"></a></li>
+                                        <li><a data-action="reload"></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        <form method="post" action="{{ list.hasBulkActions(listName) ? path(prefixRoute|lower ~ '_bulk_actions') : '' }}" class="dev-bulk-actions-form">
+
+                            <div style="margin-top: 15px;">
+                                <div class="col-md-12">
+                                     {% for flashMessageType, flashMessageArray in app.session.flashBag.all %}
+                                         {% for flashMessage in flashMessageArray %}
+                                     <div class="alert {{ flashMessageType == 'error' ? 'alert-danger' : flashMessageType == 'success' ? 'alert-success' : 'alert-info' }} no-border">
+                                         <button data-dismiss="alert" class="close" type="button"><span>×</span><span class="sr-only">{% trans %}Close{% endtrans %}</span></button>{{ flashMessage }}
+                                     </div>
+                                         {% endfor %}
+                                     {% endfor %}
+
+                                 </div>
+                            </div>
+
+                            <table class="table table-hover datatable-row-full">
+                                <thead>
+
+                                    <tr>
+
+
+                                    {% for field in list.fields %}
+                                          {% if field.propertyName == "order" %}
+                                          <th><i class="icon icon-sort"></i></th>
+                                          {% else %}
+                                            <th class="" data-name="{{ field.title }}">
+                                                    {{ field.title|trans({}, translationDomain) }}
+
+                                            </th>
+                                            {% endif%}
+                                    {% endfor %}
+
+
+                                    </tr>
+
+
+                                    </thead>
+                                    <tbody>
+                                        {% set deleteAttrs = popover_factory(deletePopoverConfig is defined?deletePopoverConfig:[]) %}
+                                        {% set conditionalDeleteAttrs = popover_factory(conditionalDeletePopoverConfig is defined?conditionalDeletePopoverConfig:[]) %}
+
+                                        {% for object in pagination %}
+                                            <tr id="{{object.id}}">
+                                                {% for field in list.fields %}
+                                                    {% if field.propertyName == "order" %}
+                                                        <td>
+                                                            <span class="icon icon-move"></span>
+                                                            {{ attribute(object, field.propertyName) }}
+
+                                                        </td>
+
+                                                    {% elseif field.type == "date" %}
+                                                        <td class="{{field.class}}" {% if field.isClickable %} style="cursor:pointer" onclick="window.location = '{{field.isClickable|replace({'--id--':object.document.id})}}'" {% endif %}>
+
+                                                            {{ attribute(object, field.propertyName) is empty ? "" : attribute(object, field.propertyName)|date('Y-m-d') }}
+                                                        </td>
+                                                    {% elseif field.type == "many"  %}
+                                                        <td>
+                                                           {% for element in attribute(object, field.propertyName|humanize|title|replace({' ':''})) %}
+                                                                    {% if not loop.first %},{% endif %}
+                                                                  {{ element }}
+                                                            {% endfor %}
+                                                        </td>
+                                                    {% elseif field.type == "refereceImage"  %}
+                                                        <td>
+                                                            <div class="media-left media-middle">
+                                                                <a href="javascript:void(0)"><img src="{{ asset( attribute(attribute(object, field.propertyName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}" class="img-lg" alt=""></a>
+                                                            </div>
+                                                        </td>
+                                                    {% elseif field.propertyName == "username"  %}
+                                                        <td>
+                                                            <div class="media-left media-middle">
+                                                    <a href="javascript:void(0)"><img src="{{ asset( attribute(object, 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg')) }}" class="img-circle img-lg" alt=""></a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">   {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}} </a>
+                                                </div>
+
+                                                        </td>
+                                                    {% else %}
+                                                        <td >
+                                                            {% if field.isClickable %}
+                                                                <a href="javascript:void(0)" class="{{field.class}}" data-id="{{object.id}}">
+                                                                {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}}
+                                                                </a>
+                                                            {%else%}
+                                                                {# added to fix the sorting for fields with underscore #}
+                                                                {% if attribute(object, field.propertyName|humanize|title|replace({' ':''}))|length > 150 %}
+                                                                    {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))|slice(0, 150)~'..' }}
+                                                                {% else %}
+                                                                    {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}}
+                                                                {% endif %}
+
+
+                                                            {% endif %}
+
+                                                        </td>
+                                                    {% endif %}
+
+
+                                                {% endfor %}
+
+
+
+                                            </tr>
+
+
+                                        {% endfor %}
+
+
+
+
+                                    </tbody>
+
+
+                                </table>
+                        </form>
+                        </div>
+                            <!-- /scrollable datatable -->
+
+
+
+                        </div>
+
+                    </div>
+
+
+
+                </div><!-- col-lg-9 tabs -->
+
+
+            </div>
+            <!-- /dashboard content -->
+
+        </div>
+                <div class="row actionButtons">
+                    <div class="col-xs-12">
+                        <button class="btn btn-primary btn-lg dev-form-save-button" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
+{#                        <button class="btn btn-defualt btn-lg dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>#}
+                    </div>
+                </div>
+
+        {% endblock %}
+
+
+            {% block javascripts %}
+                {{ parent() }}
+                <script>
+                    var loginUrl="{{ path('ibtikar_glance_ums_staff_login')}}";
+                    var notFoundUrl="{{ path('ibtikar_glance_dashboard_not_found')}}";
+                    var columns ={{ columns|raw}} ;
+                    var totalNumber = "{{total}}";
+                    var limit ={{limit}} ;
+                    var start ={{skip}} ;
+                    var sort ={% if sort is defined %}{{sort|raw}}{% else %} null {%endif %};
+                    var toggleButtonColor = '#D6494C';
+                    var ajaxData = '{{path(prefixRoute|lower~"_list")}}';
+
+                </script>
+
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/layout_sidebar_sticky_custom.js')}}"></script>
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/uniform.min.js')}}"></script>
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
+
+
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
+                <!-- datatable files -->
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/tables/datatables/datatables.min.js')}}"></script>
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/selects/select2.min.js')}}"></script>
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/datatables_api.js')}}"></script>
+                <script src="{{ asset('bundles/ibtikarglancedashboard/js/jquery.powertip.min.js') }}"></script>
+                <script src="{{ asset('bundles/ibtikarglancedashboard/js/ajaxifyList.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_modals.js')}}"></script>
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/tables/datatables/extensions/row_reorder.min.js')}}"></script>
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/tables/datatables/extensions/responsive.min.js')}}"></script>
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/datatables_extension_row_reorder.js')}}"></script>
+
+
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/dragula.min.js')}}"></script>
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/extension_dnd.js')}}"></script>
+                <script>
+                    var buttons = document.querySelectorAll('.switchery-primary');
+                    for (var i = 0, buttonsLength = buttons.length; i < buttonsLength; i++) {
+                        new Switchery(buttons[i], {color: toggleButtonColor });
+                    }
+                </script>
+
+                <script>
+                intializeTable();
+                var list = new BaseList();
+                var sort=[];
+                $(document).ready(function(){
+                    $(document).on('click','.dev-form-save-button',function(){
+                        $('tbody tr').each(function(index,value){
+                 sort.push($(value).attr('id'))
+
+                    })
+                        $.ajax({
+        url: "{{ path('ibtikar_glance_dashboard_category_sort') }}",
+        method: 'POST',
+        data: {'sort': sort},
+        success: function (data) {
+                   showNotificationMsg(data.message,"",data.status);
+
+    }
+})
+                })
+            })
+                </script>
+
+
+            {% endblock %}
