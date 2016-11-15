@@ -230,9 +230,9 @@ jQuery(document).on('ajaxComplete', function (event, response) {
 //        if(response.status === 0 && detectIE()) {
 //            window.location.reload(true);
 //        }
-//        if (response.status === 404) {
-//            window.location = notFoundUrl;
-//        }
+        if (response.status === 404) {
+            window.location = notFoundUrl;
+        }
         if (typeof response.responseJSON === 'object') {
             if (typeof response.responseJSON.status !== 'undefined') {
                 handleAjaxResponse(response.responseJSON);
