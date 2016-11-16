@@ -173,11 +173,13 @@
     <script>
         var loginUrl = "{{ path('ibtikar_glance_ums_staff_login')}}";
         var notFoundUrl = "{{ path('ibtikar_glance_dashboard_not_found')}}";
-                var columns ={{ columns|raw}} ;
-                var totalNumber = "{{total}}";
-                var limit ={{limit}} ;
-                var start ={{skip}} ;
-                var sort ={% if sort is defined %}{{sort|raw}}{% else %} null{%endif %};
+        var accessDeniedUrl = '{{ path('access_denied') }}';
+
+        var columns ={{ columns|raw}} ;
+        var totalNumber = "{{total}}";
+        var limit ={{limit}} ;
+        var start ={{skip}} ;
+        var sort ={% if sort is defined %}{{sort|raw}}{% else %} null{%endif %};
         var toggleButtonColor = '#D6494C';
         var ajaxData = '{{path(prefixRoute|lower~"_list")}}';
 

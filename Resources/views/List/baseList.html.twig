@@ -389,6 +389,8 @@
                 <script>
                     var loginUrl="{{ path('ibtikar_glance_ums_staff_login')}}";
                     var notFoundUrl="{{ path('ibtikar_glance_dashboard_not_found')}}";
+                    var accessDeniedUrl = '{{ path('access_denied') }}';
+
                     var columns ={{ columns|raw}} ;
                     var totalNumber = "{{total}}";
                     var limit ={{limit}} ;
