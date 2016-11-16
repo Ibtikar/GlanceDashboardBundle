@@ -23,6 +23,9 @@
 'Subproduct no': 'عدد المنتجات الفرعيه'
 'subproduct no': 'عدد المنتجات الفرعيه'
 'subproductNo': 'عدد المنتجات الفرعيه'
+Created by:  قام بالإنشاء
+Updated by: 'قام بالتحديث'
+updatedBy: 'قام بالتحديث'
 
 # ############Messages############
 'Cant deleted,it contain subproduct': '!ﻻ يمكن حذف المنتج  ﻷنها تحتوى على منتجات فرعية، هل تريد حذف المنتج والمنتجات الفرعية '

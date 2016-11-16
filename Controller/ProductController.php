@@ -17,12 +17,13 @@ class ProductController extends BackendController {
         $this->allListColumns = array(
             "name" => array(),
             "nameEn" => array(),
-            "description" => array(),
-            "descriptionEn" => array(),
             "profilePhoto" => array("type"=>"refereceImage",'isSortable'=>FALSE),
             "subproductNo" => array('type' => 'number'),
             "createdAt" => array("type"=>"date"),
-            "updatedAt"=> array("type"=>"date")
+            "updatedAt"=> array("type"=>"date"),
+            "createdBy" => array("isSortable" => false),
+            "updatedBy" => array("isSortable" => false)
+
         );
         $this->defaultListColumns = array(
             "name",
