@@ -34,17 +34,25 @@ var dataTableDefault = {
             var columnName = $(table.column(order[0]).header()).attr('data-name').trim();
 
 
-                } else {
-                    var columndir = sorting[1];
-                    var columnName = $(table.column(sorting[0]).header()).attr('data-name').trim();
-                }
-                var page = parseInt(table.page(), 10) + parseInt(1, 10);
-                var url = ajaxData + '?page=' + page + '&sort=' + columnName + '&columnDir=' + columndir + '&limit=' + table.page.info().length;
-                pushNewState(null, null, url);
+            } else {
+                var columndir = sorting[1];
+                var columnName = $(table.column(sorting[0]).header()).attr('data-name').trim();
             }
-            else {
+            var page = parseInt(table.page(), 10) + parseInt(1, 10);
+            var url = ajaxData + '?page=' + page + '&sort=' + columnName + '&columnDir=' + columndir + '&limit=' + table.page.info().length;
+            if (typeof parameterNotRemoved != 'undefined') {
+                url += '&' + parameterNotRemoved;
+            }
+            pushNewState(null, null, url);
+        }
+        else {
+            if (typeof parameterNotRemoved != 'undefined') {
+                url += window.location.href + '?' + parameterNotRemoved;
+            } else {
                 url = window.location.href;
+
             }
+        }
             callBack = false;
             $.ajax
                     ({

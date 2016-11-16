@@ -17,32 +17,56 @@ class SubProductController extends BackendController {
         $this->allListColumns = array(
             "name" => array(),
             "nameEn" => array(),
-            "description" => array(),
-            "descriptionEn" => array(),
+//            "description" => array(),
+//            "descriptionEn" => array(),
             "profilePhoto" => array("type"=>"refereceImage",'isSortable'=>FALSE),
-            "createdAt" => array("type"=>"date"),
-            "updatedAt"=> array("type"=>"date")
+//            "createdAt" => array("type"=>"date"),
+//            "updatedAt"=> array("type"=>"date")
         );
         $this->defaultListColumns = array(
             "name",
             "nameEn",
-            "description",
-            "descriptionEn",
+//            "description",
+//            "descriptionEn",
             'profilePhoto',
-            'createdAt',
-            "updatedAt"
+//            'createdAt',
+//            "updatedAt"
         );
         $this->listViewOptions->setBundlePrefix("ibtikar_glance_dashboard_");
 
     }
 
     protected function configureListParameters(Request $request) {
+          $id = $request->get('id');
+        if (!$id) {
+            throw $this->createNotFoundException();
+        }
+
+        $queryBuilder = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder("IbtikarGlanceDashboardBundle:SubProduct")->field('parent')->equals(new \MongoId($id))
+                        ->field('deleted')->equals(false);
         $this->listViewOptions->setDefaultSortBy("updatedAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
         $this->listViewOptions->setActions(array ("Edit","Delete"));
         $this->listViewOptions->setBulkActions(array("Delete"));
-        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:SubProduct:list.html.twig");
+        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Product:view.html.twig");
 
+    }
+
+    protected function doList(Request $request) {
+        $renderingParams = parent::doList($request);
+        $id = $request->get('id');
+        if (!$id) {
+            throw $this->createNotFoundException($this->trans('Wrong id'));
+        }
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $product = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->findOneById($id);
+        if (!$product) {
+            throw $this->createNotFoundException($this->trans('Wrong id'));
+        }
+
+        $renderingParams['product']= $product;
+
+        return $renderingParams;
     }
 
     /**

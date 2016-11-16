@@ -1,0 +1,210 @@
+{% extends  'IbtikarGlanceDashboardBundle:List:baseList.html.twig' %}
+
+
+{% block statistic %}
+    <span class="label bg-number heading-text">{{total}} {% trans from translationDomain %}subproduct{% endtrans %}</span>
+{% endblock %}
+
+{% block breadCrumb %}
+                    <a class="btn btn-link btn-float has-text" href="{{path('ibtikar_glance_dashboard_product_create')}}"><i class="icon-add"></i><span>إدخال منتج</span></a>
+                    <a class="btn btn-link btn-float has-text activeLink" href="javascript:void(0)"><i class="icon-table2"></i> <span>قائمه المنتجات</span></a>
+
+{% endblock %}
+
+                {% block statisctic %}
+                                        <div class="row">
+
+                        <div class="col-lg-12">
+
+
+                                    <form class="form-horizontal">
+                                        <!-- Navigation -->
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h5 class="panel-title">بيانات </h5>
+                                            </div>
+
+                                            <div class="panel-body">
+
+
+
+
+
+
+                                        <div class="tabbable">
+                                            <ul class="nav nav-tabs nav-tabs-highlight">
+                                                <li class="active"><a href="#arabic" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}" alt="arabic" width="30" height="20"/></a></li>
+                                                <li><a href="#english" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}" alt="english" width="30" height="20"/></a></li>
+                                            </ul>
+
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="arabic">
+
+
+                                                    <div class="form-group has-feedback">
+                                                        <label class="control-label col-lg-2">   {% trans from translationDomain%}name{%endtrans%} </label>
+                                                        <div class="control-label col-lg-10">
+                                                       {{ product.name}}
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-lg-2">{% trans from translationDomain%}description{%endtrans%} </label>
+                                                        <div class="control-label col-lg-10">
+                                                      {{ product.description}}
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div><!-- arabic end -->
+
+                                                <div class="tab-pane" id="english">
+
+
+                                                    <div class="form-group has-feedback">
+                                                        <label class="control-label col-lg-2">{% trans from translationDomain%}nameEn{%endtrans%}</label>
+                                                        <div class="control-label col-lg-10">
+                                                          {{ product.nameEn}}
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-lg-2">{% trans from translationDomain%}descriptionEn{%endtrans%}</label>
+                                                        <div class="control-label col-lg-10">
+                                                        {{ product.descriptionEn}}
+                                                        </div>
+                                                    </div>
+
+
+                                                </div><!-- english end -->
+
+                                            </div>
+                                        </div>
+
+
+                                                                                                            <hr>
+
+                                        <div class="row">
+
+
+                                            <div class="col-md-12">
+
+                                                <h5>
+                                                    الصور
+                                                </h5>
+
+
+
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered">
+
+                                                        <tbody>
+                                                               <tr id="dev-profilePhoto">
+                            <td style="width: 150px">
+
+                                <div class="thumbnail">
+                                    <div class="thumb thumb-slide">
+                                    {% set profileImage= product.getProfilePhoto() %}
+                                        {% if profileImage is not empty %}
+                                            <img src="{{ asset(profileImage.getWebPath())}}" alt="">
+
+                                        {% else %}
+                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
+
+                                        {% endif %}
+                                        <div class="caption">
+                                            <span>
+                                                {% if profileImage is not empty %}
+                                                    <a href="{{ asset(profileImage.getWebPath())}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% else %}
+                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td class="thumbnail-caption">
+                                <h4>  صورة المنتج</h4>
+                                <ul class="text-grey-300">
+                                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                                    <li> يجب الا تقل ابعاد الصورة عن 200*200 </li>
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                                </ul>
+                            </td>
+
+
+                        </tr>
+
+                        <tr id="dev-coverPhoto">
+                            <td style="width: 150px">
+                                <div class="thumbnail">
+                                    <div class="thumb thumb-slide">
+                                            {% set coverImage= product.getCoverPhoto() %}
+
+                                        {% if coverImage is not empty %}
+                                            <img src="{{ asset(coverImage.getWebPath())}}" alt="">
+                                        {% else %}
+                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
+
+                                        {% endif %}
+                                        <div class="caption">
+                                            <span>
+                                                {% if coverImage is not empty %}
+                                                    <a href="{{ asset(coverImage.getWebPath())}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% else %}
+                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% endif %}                                                                                </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </td>
+                            <td class="thumbnail-caption">
+                                <h4>  صورة الغلاف</h4>
+                                <ul class="text-grey-300">
+                                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                                    <li> يجب الا تقل ابعاد الصورة عن 200*200 </li>
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                                </ul>
+                            </td>
+
+                        </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+                                            </div><!-- panel-body end -->
+                                        </div><!-- panel end -->
+                                    </form>
+
+
+
+                        </div><!-- col-lg-12 -->
+                    </div><!-- row end -->
+
+                    {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var parameterNotRemoved= 'id='+'{{app.request.get('id')}}'
+    </script>
+
+{% endblock %}
