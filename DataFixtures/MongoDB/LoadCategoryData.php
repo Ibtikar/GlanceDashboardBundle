@@ -65,6 +65,7 @@ class LoadCategoryData extends AbstractFixture implements FixtureInterface, Orde
         $category4->setName('المدونة');
         $category4->setNameEn('Blog');
         $category4->setSlug('المدونة');
+        $category4->setSubcategoryNo(3);
         $category4->setSlugEn('Blog');
         $category4->setParent(null);
         $category4->setOrder(5);

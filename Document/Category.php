@@ -77,6 +77,13 @@ class Category extends Document {
      */
     private $order ;
 
+    /**
+     * @MongoDB\Int
+     */
+    private $subcategoryNo=0 ;
+
+
+
     public function __toString() {
         return (string) $this->name;
     }
@@ -224,5 +231,27 @@ class Category extends Document {
     public function getOrder()
     {
         return $this->order;
+    }
+
+    /**
+     * Set subcategoryNo
+     *
+     * @param int $subcategoryNo
+     * @return self
+     */
+    public function setSubcategoryNo($subcategoryNo)
+    {
+        $this->subcategoryNo = $subcategoryNo;
+        return $this;
+    }
+
+    /**
+     * Get subcategoryNo
+     *
+     * @return int $subcategoryNo
+     */
+    public function getSubcategoryNo()
+    {
+        return $this->subcategoryNo;
     }
 }

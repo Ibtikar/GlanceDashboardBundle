@@ -5,3 +5,11 @@ ibtikar_glance_dashboard_category_list:
 ibtikar_glance_dashboard_category_sort:
     path:  /sort
     defaults: { _controller: IbtikarGlanceDashboardBundle:Category:sort }
+
+ibtikar_glance_dashboard_subcategory_sort:
+    path:  /sort
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Category:sortSubCategory }
+
+ibtikar_glance_dashboard_subcategory_show:
+    path:  /sub-category-show
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Category:showSubcategory }

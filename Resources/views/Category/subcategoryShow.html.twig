@@ -1,0 +1,66 @@
+{% extends 'IbtikarGlanceDashboardBundle::baseModal.html.twig' %}
+
+{% block modalHeader %}
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 class="modal-title">{{'Change Columns List'|trans}}</h3>
+{% endblock %}
+
+{% block modalBody %}
+
+    <div class="modal-body">
+
+
+                <ul class="dropdown-menu dropdown-menu-sortable dev-columns-multi-select" style="display: block; position: static; width: 100%; margin-top: 0; float: none;">
+   {% for subcategory in subcategories%}
+                    <li>
+                        <div class="media-left media-middle">
+                            <i class="icon icon-move dragula-handle"></i>
+                        </div>
+
+
+                        <div class="media-body">
+                            <div class="media-heading">
+                                {{subcategory.name|humanize|trans({},translationDomain)}}
+                                <input type="hidden" class="switchery switchery-primary"  value="{{subcategory.id}}" >
+
+                            </div>
+                        </div>
+
+
+
+                    </li>
+
+                {% endfor %}
+
+                </ul>
+
+
+            </div>
+
+
+{% endblock %}
+
+{% block modalFooter %}
+    <button type="button" class="btn btn-link" data-dismiss="modal">الغاء</button>
+
+    <button type="button" class="btn btn-primary dev-save-subcategory">
+        {{'Save'|trans}}
+    </button>
+{% endblock %}
+{% block javascript %}
+     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_modals.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/dragula.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/extension_dnd.js')}}"></script>
+<script>
+    var toggleButtonColor = '#D6494C';
+
+    $(document).ready(function(){
+        window.unblockPage();
+    var buttons = document.querySelectorAll('.switchery-primary');
+            for (var i = 0, buttonsLength = buttons.length; i < buttonsLength; i++) {
+                new Switchery(buttons[i], {color: toggleButtonColor});
+            }
+
+    });
+</script>
+{% endblock %}
