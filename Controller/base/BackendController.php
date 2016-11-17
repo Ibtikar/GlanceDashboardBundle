@@ -178,7 +178,7 @@ class BackendController extends Controller {
             $index++;
         }
         if($this->listViewOptions->hasActionsColumn($this->calledClassName)){
-            $prepareColumns[]=array('data' => 'actions', 'orderable' => FALSE);
+            $prepareColumns[]=array('data' => 'actions', 'orderable' => FALSE,'class'=> "text-center");
             $columnArray[]='actions';
         }
 

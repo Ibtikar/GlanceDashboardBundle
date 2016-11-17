@@ -328,7 +328,7 @@
                                                 {% endfor %}
 
                                                 {% if list.hasActionsColumn(listName) %}
-                                                    <td class="text-center" style="white-space: nowrap;">
+                                                    <td  style="white-space: nowrap;">
                                                         {% if  object.getNotModified() is not defined  or  object.getNotModified()== false %}
                                                             {% for action in list.actions %}
                                                                 {% if action == "Edit" %}
