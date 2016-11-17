@@ -310,6 +310,7 @@ $(document).ready(function () {
     });
 
     $(document).on('openTab', function () {
+        $("form.form-horizontal").data("validator").settings.ignore = [];
         if($('.help-block:eq(0)').closest('.tab-pane').length > 0){
         $('a[href="#'+$('.help-block:eq(0)').closest('.tab-pane').attr('id')+'"').click();
     }
