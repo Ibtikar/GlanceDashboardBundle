@@ -23,7 +23,9 @@
 'Choose product': 'اختر المنتج'
 'sub profilePhoto': 'صوره المنتج الفرعى'
 'edit subProduct': 'تعديل منتج فرعى'
-
+'Edit SubProduct': 'تعديل منتج فرعى'
+'List SubProduct': 'قائمه المنتجات الفرعيه'
+'subproduct': 'منتج فرعى'
 # ############Messages############
 
 # ############Titles############

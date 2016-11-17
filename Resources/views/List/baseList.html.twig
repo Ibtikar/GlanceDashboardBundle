@@ -338,15 +338,24 @@
                                                                         {% endif %}
                                                                     {% elseif action == "Delete" %}
                                                                         {% if is_granted('ROLE_' ~ listName|upper ~'_DELETE') or is_granted('ROLE_ADMIN')%}
-                                                                            <a class="btn btn-defualt" data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-trash"></i></a>
+                                                                        <a class="btn btn-defualt" data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-trash"></i></a>
                                                                         {% endif %}
-                                                                    {%endif%}
-                                                                {% endfor %}
-                                                                {#<a tabindex="0" class="btn btn-defualt" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="  هل ترغب في ايقاف الموظف  " data-html="true"
-                                                                   data-html="true" data-content="
-                                                                   <button type='button' class='btn btn-danger'>نعم</button>
-                                                                   <button type='button' class='btn btn-defualt'>الغاء</button>
-                                                                   "> <i class="icon-user-block"></i></a>#}
+                                                                    {% elseif action == "ViewOne" %}
+
+                                                                    {% if is_granted('ROLE_' ~ listName|upper ~'_VIEWONE') or is_granted('ROLE_ADMIN')  %}
+
+                                                                        <a href="{{ path(prefixRoute|lower~'_view', {'id': object.id}) }}" class="btn btn-defualt" title="{{('View One ' ~  listName|capitalize)|trans({},translationDomain)}}" data-popup="tooltip"  data-placement="bottom">
+                                                                            <i class="icon-eye"></i>
+                                                                        </a>
+                                                                    {% endif %}
+                                                                {%endif%}
+
+                                                            {% endfor %}
+                                                            {#<a tabindex="0" class="btn btn-defualt" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="  هل ترغب في ايقاف الموظف  " data-html="true"
+                                                               data-html="true" data-content="
+                                                               <button type='button' class='btn btn-danger'>نعم</button>
+                                                               <button type='button' class='btn btn-defualt'>الغاء</button>
+                                                               "> <i class="icon-user-block"></i></a>#}
 
 
                                                         {% endif  %}

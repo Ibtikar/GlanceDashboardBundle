@@ -42,7 +42,7 @@ class ProductController extends BackendController {
     protected function configureListParameters(Request $request) {
         $this->listViewOptions->setDefaultSortBy("updatedAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
-        $this->listViewOptions->setActions(array ("Edit","Delete"));
+        $this->listViewOptions->setActions(array ("Edit","Delete","ViewOne"));
         $this->listViewOptions->setBulkActions(array("Delete"));
         $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Product:list.html.twig");
 
