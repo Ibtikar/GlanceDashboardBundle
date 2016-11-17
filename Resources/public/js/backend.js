@@ -98,6 +98,7 @@ function submitAjaxForm() {
                     loader.remove();
                 } else {
                     $('body').trigger('onFailSubmitForm');
+                    $('body').trigger('openTab');
                     loader.remove();
                 }
             }

@@ -11,8 +11,6 @@ use Ibtikar\GlanceDashboardBundle\Document\Document;
 
 /**
  * @MongoDB\Document
- * @MongoDBUnique(fields={"name"})
- * @MongoDBUnique(fields={"nameEn"})
  * @MongoDB\Indexes({
  *   @MongoDB\Index(keys={"name"="asc"}),
  *   @MongoDB\Index(keys={"nameEn"="asc"})
