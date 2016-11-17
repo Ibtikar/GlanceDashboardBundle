@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type as formType;
 class SubProductController extends BackendController {
 
     protected $translationDomain = 'subproduct';
+    public $oneItem = 'subproduct';
 
     protected function configureListColumns() {
         $this->allListColumns = array(
@@ -214,15 +215,5 @@ class SubProductController extends BackendController {
         ));
     }
 
-    /**
-     * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
-     * @param Document $document
-     * @return string
-     */
-    protected function validateDelete(Document $document) {
-         if ($document->getSubproductNo() > 0) {
-            return $this->trans('Cant deleted,it contain subproduct',array(),$this->translationDomain);
-        }
-    }
 
 }
