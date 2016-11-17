@@ -282,6 +282,13 @@
                 ]
             });
             $(document).on('click', '.dev-form-save-button', function () {
+                 if ($('.dev-form-save-button').attr('ajax-running')) {
+                return;
+            }
+            $('.dev-form-save-button').attr('ajax-running', true)
+            $('.dev-form-save-button .icon-checkmark4').remove();
+
+            $('.dev-form-save-button').append('<i class="icon-spinner6 spinner position-right"></i>');
                 sort = [];
                 $('tbody tr').each(function (index, value) {
                     sort.push($(value).attr('id'))
@@ -292,6 +299,9 @@
                     method: 'POST',
                     data: {'sort': sort},
                     success: function (data) {
+                        $('.dev-form-save-button .icon-spinner6').remove();
+                        $('.dev-form-save-button').append('<i class="icon-checkmark4 position-right"></i>');
+                        $('.dev-form-save-button').removeAttr('ajax-running')
                         showNotificationMsg(data.message, "", data.status);
 
                     }
