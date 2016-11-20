@@ -651,4 +651,8 @@ class Media extends Document {
     {
         return $this->subproduct;
     }
+
+    public function __toString() {
+        return $this->getWebPath();
+    }
 }

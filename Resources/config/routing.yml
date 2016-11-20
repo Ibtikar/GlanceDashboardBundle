@@ -24,3 +24,7 @@ ibtikar_glance_dashboard_media:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/media.yml"
     prefix:   /
 
+ibtikar_glance_dashboard_recipe:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/recipe.yml"
+    prefix:   /recipe
+

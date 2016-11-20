@@ -23,6 +23,15 @@ $.validator.addMethod('mobile', function (value, element) {
 //    }
 //    return isValidNumber(phoneText, countryElement.val());
 }, 'phone must be in the right format');
+
+$.validator.addMethod('ckmin', function (value, element, param) {
+    if(CKEDITOR && CKEDITOR.instances[$(element).attr('id')]){
+        var editorContent = CKEDITOR.instances[$(element).attr('id')].document.getBody().getText();
+        return editorContent.length >= param;
+    }
+    return true;
+});
+
 $.validator.addMethod('email', function(value, element) {
 //    return this.optional(element) || /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value);
     $(element).attr('data-remove-color', 'false');
@@ -360,7 +369,7 @@ function initFormValidation(form_selector) {
         form_selector = 'form.dev-page-main-form,form.dev-js-validation';
     }
     $(form_selector).each(function () {
-        var ignoredElementsSelector = ':reset,:hidden:not(#keycode),.select-input,input.contact_subject_dev,.dev-ignore-validation';
+        var ignoredElementsSelector = ':reset,:hidden:not(#keycode,textarea[id^="recipe_"]),.select-input,input.contact_subject_dev,.dev-ignore-validation';
         var $form = $(this);
         var $resetButtons = $form.find(':reset');
         $resetButtons.each(function() {
@@ -441,7 +450,7 @@ function initFormValidation(form_selector) {
                 }
                 var errorAfterSelector = $(element).attr('data-error-after-selector');
                 if (errorAfterSelector) {
-                    if (errorAfterSelector == '.select2-container') {
+                    if (errorAfterSelector == '.select2-container' || errorAfterSelector == '.dev-after-element') {
                         $(element).siblings(errorAfterSelector).after(error);
                         return;
 
