@@ -1,0 +1,8 @@
+{% extends 'IbtikarGlanceDashboardBundle:List:recipeList.html.twig' %}
+
+{% block tabs %}
+
+    <li   {% if 'room_news_list_new' in app.request.attributes.get('_route') %} class="active"    {% endif %}><a data-href="{{ path(prefixRoute|lower~'_list_new_recipe') }}" data-toggle="tab"><span class="badge badge-primary position-left">78</span> Open</a></li>
+    <li {% if 'room_news_list_assigned_' in app.request.attributes.get('_route') %} class="active"    {% endif %}><a data-href="{{ path(prefixRoute|lower~'_list_assigned_recipe') }}" data-toggle="tab"> <span class="badge badge-primary position-left">23</span> Close </a></li>
+
+{% endblock %}

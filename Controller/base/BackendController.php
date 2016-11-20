@@ -98,7 +98,7 @@ class BackendController extends Controller {
         }
 
         if ($this->listName) {
-            $listName = $this->listName;
+            $listName = $this->listViewOptions->getBundlePrefix().$this->listName;
         } else {
             $listName = $this->listViewOptions->getBundlePrefix().strtolower($this->calledClassName) . '_' . $this->listViewOptions->getListType();
         }
@@ -181,6 +181,11 @@ class BackendController extends Controller {
             $prepareColumns[]=array('data' => 'actions', 'orderable' => FALSE,'class'=> "text-center");
             $columnArray[]='actions';
         }
+        if ($this->listName) {
+            $changeListColumnType = '_' . $this->listStatus;
+        } else {
+            $changeListColumnType = '';
+        }
 
         $renderningParams = array(
             'sublistName' => $sublistName,
@@ -195,6 +200,8 @@ class BackendController extends Controller {
             'columns'=> json_encode(array_values($prepareColumns)),
             'columnArray'=> $columnArray ,
             'oneItem'=> $this->oneItem != ""?strtolower($this->oneItem):$this->calledClassName,
+            'changeListColumnType' => $changeListColumnType
+
         );
         if ($sortIndex === 0 || $sortIndex) {
             $renderningParams['sort'] = json_encode(array($sortIndex, $sortOrder));

@@ -209,13 +209,13 @@ function saveListSelectedColumns(basicModal, url) {
         method: 'POST',
         data: str,
         success: function (data) {
-            console.log('hnaa')
+//            console.log('hnaa')
             if(data.status=='login'){
                 window.location.reload(true);
 
             } else {
                 basicModal.hide();
-                console.log('reinaialize')
+//                console.log('reinaialize')
                 reIntaializeTable(data);
             }
         }

@@ -185,6 +185,11 @@ class Recipe extends Document {
      */
     private $products;
 
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\Country", simple=true)
+     */
+    protected $country;
+
     public function __construct()
     {
         $this->tag = new \Doctrine\Common\Collections\ArrayCollection();
@@ -680,5 +685,27 @@ class Recipe extends Document {
     public function getKeyIngredient()
     {
         return $this->keyIngredient;
+    }
+
+    /**
+     * Set country
+     *
+     * @param Ibtikar\GlanceUMSBundle\Document\Country $country
+     * @return self
+     */
+    public function setCountry(\Ibtikar\GlanceUMSBundle\Document\Country $country)
+    {
+        $this->country = $country;
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return Ibtikar\GlanceUMSBundle\Document\Country $country
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 }
