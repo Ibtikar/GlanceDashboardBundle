@@ -25,13 +25,16 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
+        var G_API_KEY = "AIzaSyDDQ69XA7TFEzlKEYPggM_a0SMhKf4To38";
         var availableMessage = '{% trans %}valid{% endtrans %}';
         var unAvailableMessage = '{% trans %}not valid{% endtrans %}';
         var requestId = '{{ app.request.get('id') }}';
         var accessDeniedUrl = '{{ path('access_denied') }}';
         var notFoundUrl="{{ path('ibtikar_glance_dashboard_not_found')}}";
-
-                </script>
+        var messages = {
+            NotBlank: '{% trans from 'validators' %}This value should not be blank.{% endtrans %}'
+        };
+    </script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/uniform.min.js')}}"></script>
 {#    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/loaders/blockui.min.js')}}"></script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/nicescroll.min.js')}}"></script>
@@ -42,8 +45,11 @@
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/selects/select2.min.js')}}"></script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/selects/select2_ar.js')}}"></script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/libraries/jquery_ui/interactions.min.js')}}"></script>
-
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/libraries/jquery_ui/widgets.min.js')}}"></script>
+    <!-- touchspin for time -->
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/inputs/touchspin.min.js')}}"></script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_select2.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/tags/tokenfield.min.js')}}"></script>
     <script  type="text/javascript"  src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/intlTelInput.js')}}"></script>
     <script  type="text/javascript"  src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/utils.js')}}"></script>
 
@@ -65,8 +71,42 @@
 
     <script>
     var loginUrl="{{ path('ibtikar_glance_ums_staff_login')}}";
-    $(document).ready(function () {
+
+    function formPluginsInit(){
             $('.select').select2({ "language": "ar"});
+            $(".select-with-thumb").select2({
+                templateResult: addUserPic,
+                templateSelection: addUserPic
+            });
+
+            $('[id$="Time"],[id$="Count"]').TouchSpin({
+                min: 0,
+                max: 1000,
+                verticalbuttons: true,
+                verticalupclass: 'icon-plus2',
+                verticaldownclass: 'icon-minus2'
+            });
+            $("[type='radio']").uniform({
+                radioClass: 'choice'
+            });
+    }
+
+    function addUserPic(opt) {
+        if (!opt.id) {
+            return opt.text;
+        }
+        var optimage = $(opt.element).data('image');
+        if (!optimage) {
+            return opt.text;
+        } else {
+            var $opt = $(
+                    '<span class="userName"><img src="' + optimage + '" class="userPic" /> ' + $(opt.element).text() + '</span>'
+                    );
+            return $opt;
+        }
+    }
+    $(document).ready(function () {
+            formPluginsInit();
             $('.dev-form-reset-button').on('click', function () {
             $('input,textarea').each(function () {
                 unhighlightElement($(this))
@@ -75,9 +115,16 @@
            $('form').find("select").trigger("change");
          })
         $('body').on('ajaxCallback',function(){
-            $('.select').select2({ "language": "ar"});
-
+            formPluginsInit();
         })
+        if(typeof CKEDITOR != "undefined"){
+            CKEDITOR.on( 'instanceReady', function(evt,ss,w) {
+                evt.editor.on('change', function(evt) {
+                    evt.editor.updateElement();
+                    $(evt.sender.element.$).valid();
+                });
+            });
+        }
     })
 
 

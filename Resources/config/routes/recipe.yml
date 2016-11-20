@@ -1,0 +1,35 @@
+ibtikar_glance_dashboard_recipe_create:
+    path:  /create
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:create }
+
+ibtikar_glance_dashboard_recipe_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:edit}
+
+ibtikar_glance_dashboard_recipe_delete:
+    path:  /delete/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:delete }
+
+ibtikar_glance_dashboard_recipe_list:
+    path: /list
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:list }
+
+ibtikar_glance_dashboard_recipe_delete:
+    path: /delete
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:delete}
+
+ibtikar_glance_dashboard_recipe_bulk_actions:
+    path: /bulk
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:bulk}
+
+ibtikar_glance_dashboard_recipe_check_field_unique:
+    path: /checkfieldUnique
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:checkFieldUnique }
+
+ibtikar_glance_dashboard_recipe_change_list_columns:
+    path:  /change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:changeListColumns }
+
+get_tags:
+    path: /get-tags
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:getTags }
