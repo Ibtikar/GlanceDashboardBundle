@@ -75,10 +75,7 @@ class SubProductController extends BackendController {
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function createAction(Request $request) {
-        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new subProduct'),
-//            array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list job')
-            );
-        $breadCrumbArray = $this->preparedMenu($menus);
+
         $dm = $this->get('doctrine_mongodb')->getManager();
         $profileImage=NULL;
         $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
@@ -102,6 +99,10 @@ class SubProductController extends BackendController {
         if(!$product){
             throw $this->createNotFoundException();
         }
+        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new subProduct','link'=>  $this->generateUrl('ibtikar_glance_dashboard_subproduct_create',array('productId'=>$product->getId())))
+//            array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list job')
+            );
+        $breadCrumbArray = $this->preparedMenu($menus);
         $subProduct = new SubProduct();
         $form = $this->createFormBuilder($subProduct, array('translation_domain' => $this->translationDomain,'attr'=>array('class'=>'dev-page-main-form dev-js-validation form-horizontal')))
                 ->add('name',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 2)))
