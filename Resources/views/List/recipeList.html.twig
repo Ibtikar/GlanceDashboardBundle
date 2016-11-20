@@ -466,11 +466,6 @@
                 var start ={{skip}} ;
                 var sort ={% if sort is defined %}{{sort|raw}}{% else %} null{%endif %};
         var toggleButtonColor = '#D6494C';
-        {% if 'room_news_list' in app.request.attributes.get('_route') %}
-            var ajaxData = '{{ path(prefixRoute|lower~'_list_new_recipe') }}';
-            var changeListColumnsUrl = "{{path(prefixRoute|lower~changeListColumnType~'_change_list_columns')}}";
-        {% endif %}
-
 
     </script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/layout_sidebar_sticky_custom.js')}}"></script>
