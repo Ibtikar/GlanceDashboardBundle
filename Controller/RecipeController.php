@@ -18,12 +18,7 @@ class RecipeController extends BackendController
     protected $listStatus;
     protected $sublistName = 'New';
 
-    public function __construct()
-    {
-        parent::__construct();
-        $calledClassName = explode('\\', $this->calledClassName);
-        $this->calledClassName = 'recipe' . strtolower($calledClassName[1]);
-    }
+  
 
     protected function configureListColumns()
     {

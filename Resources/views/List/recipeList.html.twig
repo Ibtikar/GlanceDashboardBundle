@@ -26,9 +26,9 @@
 
                 <div class="heading-btn-group">
                     {% block breadCrumb %}
-                        <a class="btn btn-link btn-float has-text" href="Role-add.php"><i class="icon-add"></i><span>إدخال دور</span></a>
-                        <a class="btn btn-link btn-float has-text activeLink" href="Role-view.php"><i class="icon-table2"></i> <span>مشاهدة الادوار</span></a>
-                    {% endblock %}
+                        <a class="btn btn-link btn-float has-text" href="{{ path('ibtikar_glance_dashboard_recipe_create')}}"><i class="icon-add"></i><span>إدخال وصفه</span></a>
+{#                        <a class="btn btn-link btn-float has-text activeLink" href="Role-view.php"><i class="icon-table2"></i> <span>مشاهدة الادوار</span></a>
+#}                    {% endblock %}
                 </div>
             </div>
         </div>
@@ -40,9 +40,7 @@
         <div class="row">
             <div class="col-lg-12">
 
-                {% block statisctic %}
 
-                {% endblock %}
 
 
                 <div class="row">
@@ -50,13 +48,13 @@
                         <!-- view roles -->
                         <div class="panel panel-flat">
                             <div class="panel-heading">
-                                <h5 class="panel-title"> Pending requests </h5>
+                                <h5 class="panel-title">{{  ('List '~ listName)|trans({}, translationDomain)}}</h5>
                                 <div class="heading-elements">
                                     {% block statistic %}
-                                        <span class="label heading-text label-flat border-grey text-grey-600">28 closed</span>
+                                       {# <span class="label heading-text label-flat border-grey text-grey-600">28 closed</span>
                                         <span class="label heading-text label-flat border-success text-success-600">12338 Approved</span>
                                         <span class="label heading-text label-flat border-danger text-danger-600">8973 Rejected</span>
-                                        <span class="label heading-text label-flat border-primary text-primary-600">8973 Pending</span>
+                                        <span class="label heading-text label-flat border-primary text-primary-600">8973 Pending</span>#}
                                     {% endblock %}
                                     <ul class="icons-list">
                                         <li><a data-action="collapse"></a></li>
@@ -240,7 +238,7 @@
 
                                                                         {% elseif action == "Assign" %}
                                                                             {% if is_granted('ROLE_' ~ listName|upper ~'_ASSIGN') or is_granted('ROLE_ADMIN')%}
-                                                                                <a href="javascript:void(0);"  title="{% trans %}AssignToMe{% endtrans %}"   class="btn btn-defualt" data-popup="tooltip"  data-placement="bottom"  data-id="{{ object.getId() }}"  >
+                                                                                <a href="javascript:void(0);"  title="{% trans from translationDomain %}AssignToMe{% endtrans %}"   class="btn btn-defualt" data-popup="tooltip"  data-placement="bottom"  data-id="{{ object.getId() }}"  >
                                                                                     <i class="icon-user"></i>
                                                                                 </a>
                                                                             {% endif %}
