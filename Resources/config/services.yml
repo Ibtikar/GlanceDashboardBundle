@@ -20,6 +20,10 @@ services:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException}
         arguments: [ "@templating" ]
 
+    recipe_operations:
+        class: Ibtikar\GlanceDashboardBundle\Service\RecipeOperations
+        arguments: [ "@service_container" ]
+
     update_actions_users:
         class: Ibtikar\GlanceDashboardBundle\Service\UpdateActionsUsers
         tags:

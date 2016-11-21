@@ -27,61 +27,61 @@
                 <div class="heading-btn-group">
                     {% block breadCrumb %}
                         <a class="btn btn-link btn-float has-text" href="{{ path('ibtikar_glance_dashboard_recipe_create')}}"><i class="icon-add"></i><span>إدخال وصفه</span></a>
-{#                        <a class="btn btn-link btn-float has-text activeLink" href="Role-view.php"><i class="icon-table2"></i> <span>مشاهدة الادوار</span></a>
-#}                    {% endblock %}
+                                {#                        <a class="btn btn-link btn-float has-text activeLink" href="Role-view.php"><i class="icon-table2"></i> <span>مشاهدة الادوار</span></a>
+                                #}                    {% endblock %}
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- /basic button -->
+            <!-- /basic button -->
 
 
 
-        <!-- Dashboard content -->
-        <div class="row">
-            <div class="col-lg-12">
+            <!-- Dashboard content -->
+            <div class="row">
+                <div class="col-lg-12">
 
 
 
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <!-- view roles -->
-                        <div class="panel panel-flat">
-                            <div class="panel-heading">
-                                <h5 class="panel-title">{{  ('List '~ listName)|trans({}, translationDomain)}}</h5>
-                                <div class="heading-elements">
-                                    {% block statistic %}
-                                       {# <span class="label heading-text label-flat border-grey text-grey-600">28 closed</span>
-                                        <span class="label heading-text label-flat border-success text-success-600">12338 Approved</span>
-                                        <span class="label heading-text label-flat border-danger text-danger-600">8973 Rejected</span>
-                                        <span class="label heading-text label-flat border-primary text-primary-600">8973 Pending</span>#}
-                                    {% endblock %}
-                                    <ul class="icons-list">
-                                        <li><a data-action="collapse"></a></li>
-                                        <li><a data-action="reload"></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="tabbable">
-                                    <ul class="nav nav-tabs nav-tabs-highlight">
-                                        {% block tabs %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- view roles -->
+                            <div class="panel panel-flat">
+                                <div class="panel-heading">
+                                    <h5 class="panel-title">{{  ('List '~ listName)|trans({}, translationDomain)}}</h5>
+                                    <div class="heading-elements">
+                                        {% block statistic %}
+                                            {# <span class="label heading-text label-flat border-grey text-grey-600">28 closed</span>
+                                             <span class="label heading-text label-flat border-success text-success-600">12338 Approved</span>
+                                             <span class="label heading-text label-flat border-danger text-danger-600">8973 Rejected</span>
+                                             <span class="label heading-text label-flat border-primary text-primary-600">8973 Pending</span>#}
                                         {% endblock %}
-                                    </ul>
+                                        <ul class="icons-list">
+                                            <li><a data-action="collapse"></a></li>
+                                            <li><a data-action="reload"></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="tabbable">
+                                        <ul class="nav nav-tabs nav-tabs-highlight">
+                                            {% block tabs %}
+                                            {% endblock %}
+                                        </ul>
 
-                                    <div class="tab-content">
-                                        <div class="tab-pane active" id="open">
-                                            <form method="post" action="{{ list.hasBulkActions(listName) ? path(prefixRoute|lower ~ '_bulk_actions') : '' }}" class="dev-bulk-actions-form">
-                                                <div class="actions">
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="open">
+                                                <form method="post" action="{{ list.hasBulkActions(listName) ? path(prefixRoute|lower ~ '_bulk_actions') : '' }}" class="dev-bulk-actions-form">
+                                                    <div class="actions">
 
-                                                    {% block actions %}
-                                                        <a data-placement="bottom" title="" data-popup="tooltip"  data-toggle="modal"  href="javascript:void(0)" class="btn btn-default btn-sm dev-change-columns" type="button" data-original-title="خانات الجدول"><i class="icon-table2 "></i> <span class="hidden-sm"> </span></a>
-                                                        {% if list.hasBulkActions(listName) %}
-                                                            <input type="hidden" id="dev-bulk-action" name="bulk-action" value=""/>
-                                                            <span class="dev-bulk-action-container" data-list-name="{{listName|lower}}" data-href="{{ list.hasBulkActions(listName) ? path(prefixRoute|lower ~ '_bulk_actions') : '' }}" style="display: none;">
-                                                                {% for action in list.bulkActions %}
-                                                                    {% if action == "Delete" and (is_granted('ROLE_'~listName|upper~'_DELETE') or is_granted('ROLE_ADMIN')) %}
-                                                                        <a data-action="{{action}}" {{popover_factory({
+                                                        {% block actions %}
+                                                            <a data-placement="bottom" title="" data-popup="tooltip"  data-toggle="modal"  href="javascript:void(0)" class="btn btn-default btn-sm dev-change-columns" type="button" data-original-title="خانات الجدول"><i class="icon-table2 "></i> <span class="hidden-sm"> </span></a>
+                                                            {% if list.hasBulkActions(listName) %}
+                                                                <input type="hidden" id="dev-bulk-action" name="bulk-action" value=""/>
+                                                                <span class="dev-bulk-action-container" data-list-name="{{listName|lower}}" data-href="{{ list.hasBulkActions(listName) ? path(prefixRoute|lower ~ '_bulk_actions') : '' }}" style="display: none;">
+                                                                    {% for action in list.bulkActions %}
+                                                                        {% if action == "Delete" and (is_granted('ROLE_'~listName|upper~'_DELETE') or is_granted('ROLE_ADMIN')) %}
+                                                                            <a data-action="{{action}}" {{popover_factory({
                                             question : "You are about to delete (%count%) (%type%), Are you sure?",
                                             replaceAttr : true,
                                             buttons : [
@@ -95,308 +95,345 @@
                                                         }
                                                     ]
                                             })|replace({'%type%': (oneItem~"s")|lower|trans})|raw}} class="btn btn-default btn-sm" data-placement="bottom"> <i class="icon-trash"></i> <span class="hidden-sm position-right">{{ 'delete'|trans }} {{ ((oneItem|capitalize)~"s")|trans }}</span></a>
-                                                                    {% endif %}
-                                                                {% endfor %}
-                                                            </span>
-                                                        {% endif %}
-
-
-                                                    {% endblock %}
-                                            </form>
-                                        </div>
-
-                                        <div style="margin-top: 15px;">
-                                            <div class="col-md-12">
-                                                {% for flashMessageType, flashMessageArray in app.session.flashBag.all %}
-                                                    {% for flashMessage in flashMessageArray %}
-                                                        <div class="alert {{ flashMessageType == 'error' ? 'alert-danger' : flashMessageType == 'success' ? 'alert-success' : 'alert-info' }} no-border">
-                                                            <button data-dismiss="alert" class="close" type="button"><span>×</span><span class="sr-only">{% trans %}Close{% endtrans %}</span></button>{{ flashMessage }}
-                                                        </div>
-                                                    {% endfor %}
-                                                {% endfor %}
-
-                                            </div>
-                                        </div>
-
-
-                                        <table class="table table-hover table-striped datatable-column-search-inputs" width="100%">
-                                            <thead>
-
-                                                <tr>
-                                                    {% if list.hasBulkActions(listName) %}
-                                                        <th class="text-center" data-orderable="false" data-bSortable="false" data-searchable="false" data-name="id">
-                                                <div class="form-group">
-                                                    <label class="checkbox-inline">
-                                                        <input type="checkbox" class="styled dev-checkbox dev-checkbox-all">
-                                                    </label>
-                                                </div>
-                                                </th>
-                                            {% endif %}
-                                            {% for field in list.fields %}
-                                                <th class="" data-name="{{ field.title }}">
-                                                    {{ field.title|trans({}, translationDomain) }}
-
-                                                </th>
-                                            {% endfor %}
-
-                                            {% if list.hasActionsColumn(listName) %}
-
-                                                <th  class="text-center">العمليات</th>
-                                                {%endif %}
-                                            </tr>
-
-
-                                            </thead>
-                                            <tbody>
-                                                {% set deleteAttrs = popover_factory(deletePopoverConfig is defined?deletePopoverConfig:[]) %}
-                                                {% set conditionalDeleteAttrs = popover_factory(conditionalDeletePopoverConfig is defined?conditionalDeletePopoverConfig:[]) %}
-
-                                                {% for object in pagination %}
-                                                    <tr>
-                                                        {% if list.hasBulkActions(listName) %}
-
-                                                            <td class="text-center" data-id="{{ object.id }}">
-                                                                <div class="form-group">
-                                                                    <label class="checkbox-inline">
-                                                                        <input type="checkbox" name="ids[]" class="styled dev-checkbox" value="{{object.id}}" >
-                                                                    </label>
-                                                                </div>
-
-
-                                                            </td>
-                                                        {% endif %}
-                                                        {% for field in list.fields %}
-                                                            {% if field.type == "date" %}
-                                                                <td class="{{field.class}}" {% if field.isClickable %} style="cursor:pointer" onclick="window.location = '{{field.isClickable|replace({'--id--':object.document.id})}}'" {% endif %}>
-
-                                                                    {{ attribute(object, field.propertyName) is empty ? "" : attribute(object, field.propertyName)|date('Y-m-d') }}
-                                                                </td>
-                                                            {% elseif field.type == "many"  %}
-                                                                <td>
-                                                                    {% for element in attribute(object, field.propertyName|humanize|title|replace({' ':''})) %}
-                                                                        {% if not loop.first %},{% endif %}
-                                                                        {{ element }}
+                                                                        {% endif %}
                                                                     {% endfor %}
-                                                                </td>
-                                                            {% elseif field.type == "refereceImage"  %}
-                                                                <td>
-                                                                    <div class="media-left media-middle">
-                                                                        <a href="javascript:void(0)"><img src="{{ asset( attribute(attribute(object, field.propertyName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}" class="img-lg" alt=""></a>
-                                                                    </div>
-                                                                </td>
-                                                            {% elseif field.propertyName == "username"  %}
-                                                                <td>
-                                                                    <div class="media-left media-middle">
-                                                                        <a href="javascript:void(0)"><img src="{{ asset( attribute(object, 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg')) }}" class="img-circle img-lg" alt=""></a>
-                                                                    </div>
-                                                                    <div class="media-body">
-                                                                        <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">   {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}} </a>
-                                                                    </div>
-
-                                                                </td>
-                                                            {% else %}
-                                                                <td >
-                                                                    {% if field.isClickable %}
-                                                                        <a href="javascript:void(0)" class="{{field.class}}" data-id="{{object.id}}">
-                                                                            {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}}
-                                                                        </a>
-                                                                    {%else%}
-                                                                        {# added to fix the sorting for fields with underscore #}
-
-                                                                        {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}}
-
-
-                                                                    {% endif %}
-
-                                                                </td>
+                                                                </span>
                                                             {% endif %}
 
 
-                                                        {% endfor %}
+                                                        {% endblock %}
+                                                </form>
+                                            </div>
 
-                                                        {% if list.hasActionsColumn(listName) %}
-                                                            <td  style="white-space: nowrap;">
-                                                                {% if  object.getNotModified() is not defined  or  object.getNotModified()== false %}
-                                                                    {% for action in list.actions %}
-                                                                        {% if action == "Edit" %}
-                                                                            {% if is_granted('ROLE_' ~ listName|upper ~'_EDIT') or is_granted('ROLE_ADMIN') %}
-
-                                                                                <a class="btn btn-defualt"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}" title="{{ ('Edit ' ~  listName|capitalize)|trans({},translationDomain)}}" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>
-                                                                                {% endif %}
-                                                                            {% elseif action == "Delete" %}
-                                                                                {% if is_granted('ROLE_' ~ listName|upper ~'_DELETE') or is_granted('ROLE_ADMIN')%}
-                                                                                <a class="btn btn-defualt" data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-trash"></i></a>
-                                                                                {% endif %}
-                                                                            {% elseif action == "ViewOne" %}
-
-                                                                            {% if is_granted('ROLE_' ~ listName|upper ~'_VIEWONE') or is_granted('ROLE_ADMIN')  %}
-
-                                                                                <a href="{{ path(prefixRoute|lower~'_view', {'id': object.id}) }}" class="btn btn-defualt" title="{{('View One ' ~  listName|capitalize)|trans({},translationDomain)}}" data-popup="tooltip"  data-placement="bottom">
-                                                                                    <i class="icon-eye"></i>
-                                                                                </a>
-                                                                            {% endif %}
-
-                                                                        {% elseif action == "Assign" %}
-                                                                            {% if is_granted('ROLE_' ~ listName|upper ~'_ASSIGN') or is_granted('ROLE_ADMIN')%}
-                                                                                <a href="javascript:void(0);"  title="{% trans from translationDomain %}AssignToMe{% endtrans %}"   class="btn btn-defualt" data-popup="tooltip"  data-placement="bottom"  data-id="{{ object.getId() }}"  >
-                                                                                    <i class="icon-user"></i>
-                                                                                </a>
-                                                                            {% endif %}
-
-
-                                                                        {% elseif action == "Publish" %}
-
-
-                                                                            {% if is_granted('ROLE_' ~ listName|upper ~'_PUBLISH') or is_granted('ROLE_ADMIN')%}
-                                                                                {% if 'publish' not in object.getStatus()%}
-                                                                                    <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-action="publish"
-                                                                                            class="btn btn-defualt" data-popup="tooltip"  data-placement="bottom"  {% if object.getStatus() is defined %}data-status="{{object.getStatus()}}"{%endif%} title="{{('publish ' ~  listName|capitalize)|trans({},translationDomain)}}">
-                                                                                        <i class="icon-checkmark-circle"></i>
-                                                                                    </button>
-                                                                                {% endif %}
-                                                                            {% endif %}
-
-
-
-                                                                        {% elseif action == "AutoPublish" %}
-
-                                                                            {% if is_granted('ROLE_' ~ listName|upper ~'_AUTOPUBLISH') or is_granted('ROLE_ADMIN')  %}
-                                                                                {% if  'publish' not in object.getStatus() %}
-                                                                                    <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-action="autopublish"
-                                                                                            class="btn btn-defualt" data-popup="tooltip"  data-placement="bottom"  {% if object.getStatus() is defined %}data-status="{{object.getStatus()}}"{%endif%} title="{{('autopublish ' ~  listName|capitalize)|trans({},translationDomain)}}">
-                                                                                        <i class="icon-checkmark3"></i>
-                                                                                    </button>
-                                                                                {% endif %}
-                                                                            {% endif %}
-                                                                            {% endif %}
-
-
-                                                                            {% endfor %}
-                                                                                {% endif  %}
-                                                                                </td>
-                                                                                {% endif  %}
-
-                                                                                </tr>
-
-
-                                                                                {% endfor %}
-
-
-
-
-                                                                                </tbody>
-
-
-                                                                            </table>
-
-                                                                        </div><!-- tab 1 -->
-
-                                                                        <div class="tab-pane" id="close">
-
-
-
-
-
-
-
-
-
-                                                                        </div><!-- tab 2 -->
-
-
-                                                                        <div class="tab-pane" id="edit">
-
-
-
-
-
-
-
-                                                                        </div><!-- tab 3 -->
-
-
-
-                                                                        <div class="tab-pane" id="delete">
-
-
-
-
-
-
-
-
-                                                                        </div><!-- tab 4 -->
-
-
-
-                                                                    </div>
-                                                                </div>
+                                            <div style="margin-top: 15px;">
+                                                <div class="col-md-12">
+                                                    {% for flashMessageType, flashMessageArray in app.session.flashBag.all %}
+                                                        {% for flashMessage in flashMessageArray %}
+                                                            <div class="alert {{ flashMessageType == 'error' ? 'alert-danger' : flashMessageType == 'success' ? 'alert-success' : 'alert-info' }} no-border">
+                                                                <button data-dismiss="alert" class="close" type="button"><span>×</span><span class="sr-only">{% trans %}Close{% endtrans %}</span></button>{{ flashMessage }}
                                                             </div>
-
-                                                        </div>
-                                                        <!-- /scrollable datatable -->
-
-
-
-                                                    </div>
+                                                        {% endfor %}
+                                                    {% endfor %}
 
                                                 </div>
+                                            </div>
+
+
+                                            <table class="table table-hover table-striped datatable-column-search-inputs" width="100%">
+                                                <thead>
+
+                                                    <tr>
+                                                        {% if list.hasBulkActions(listName) %}
+                                                            <th class="text-center" data-orderable="false" data-bSortable="false" data-searchable="false" data-name="id">
+                                                    <div class="form-group">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" class="styled dev-checkbox dev-checkbox-all">
+                                                        </label>
+                                                    </div>
+                                                    </th>
+                                                {% endif %}
+                                                {% for field in list.fields %}
+                                                    <th class="" data-name="{{ field.title }}">
+                                                        {{ field.title|trans({}, translationDomain) }}
+
+                                                    </th>
+                                                {% endfor %}
+
+                                                {% if list.hasActionsColumn(listName) %}
+
+                                                    <th  class="text-center">العمليات</th>
+                                                    {%endif %}
+                                                </tr>
+
+
+                                                </thead>
+                                                <tbody>
+                                                    {% set deleteAttrs = popover_factory(deletePopoverConfig is defined?deletePopoverConfig:[]) %}
+                                                    {% set conditionalDeleteAttrs = popover_factory(conditionalDeletePopoverConfig is defined?conditionalDeletePopoverConfig:[]) %}
+
+                                                    {% for object in pagination %}
+                                                        <tr>
+                                                            {% if list.hasBulkActions(listName) %}
+
+                                                                <td class="text-center" data-id="{{ object.id }}">
+                                                                    <div class="form-group">
+                                                                        <label class="checkbox-inline">
+                                                                            <input type="checkbox" name="ids[]" class="styled dev-checkbox" value="{{object.id}}" >
+                                                                        </label>
+                                                                    </div>
+
+
+                                                                </td>
+                                                            {% endif %}
+                                                            {% for field in list.fields %}
+                                                                {% if field.type == "date" %}
+                                                                    <td class="{{field.class}}" {% if field.isClickable %} style="cursor:pointer" onclick="window.location = '{{field.isClickable|replace({'--id--':object.document.id})}}'" {% endif %}>
+
+                                                                        {{ attribute(object, field.propertyName) is empty ? "" : attribute(object, field.propertyName)|date('Y-m-d') }}
+                                                                    </td>
+                                                                {% elseif field.type == "many"  %}
+                                                                    <td>
+                                                                        {% for element in attribute(object, field.propertyName|humanize|title|replace({' ':''})) %}
+                                                                            {% if not loop.first %},{% endif %}
+                                                                            {{ element }}
+                                                                        {% endfor %}
+                                                                    </td>
+                                                                {% elseif field.type == "refereceImage"  %}
+                                                                    <td>
+                                                                        <div class="media-left media-middle">
+                                                                            <a href="javascript:void(0)"><img src="{{ asset( attribute(attribute(object, field.propertyName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}" class="img-lg" alt=""></a>
+                                                                        </div>
+                                                                    </td>
+                                                                {% elseif field.propertyName == "username"  %}
+                                                                    <td>
+                                                                        <div class="media-left media-middle">
+                                                                            <a href="javascript:void(0)"><img src="{{ asset( attribute(object, 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg')) }}" class="img-circle img-lg" alt=""></a>
+                                                                        </div>
+                                                                        <div class="media-body">
+                                                                            <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">   {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}} </a>
+                                                                        </div>
+
+                                                                    </td>
+                                                                {% else %}
+                                                                    <td >
+                                                                        {% if field.isClickable %}
+                                                                            <a href="javascript:void(0)" class="{{field.class}}" data-id="{{object.id}}">
+                                                                                {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}}
+                                                                            </a>
+                                                                        {%else%}
+                                                                            {# added to fix the sorting for fields with underscore #}
+
+                                                                            {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}}
+
+
+                                                                        {% endif %}
+
+                                                                    </td>
+                                                                {% endif %}
+
+
+                                                            {% endfor %}
+
+                                                            {% if list.hasActionsColumn(listName) %}
+                                                                <td  style="white-space: nowrap;">
+                                                                    {% if  object.getNotModified() is not defined  or  object.getNotModified()== false %}
+                                                                        {% for action in list.actions %}
+                                                                            {% if action == "Edit" %}
+                                                                                {% if is_granted('ROLE_' ~ listName|upper ~'_EDIT') or is_granted('ROLE_ADMIN') %}
+
+                                                                                    <a class="btn btn-defualt"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}" title="{{ ('Edit ' ~  listName|capitalize)|trans({},translationDomain)}}" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>
+                                                                                    {% endif %}
+                                                                                {% elseif action == "Delete" %}
+                                                                                    {% if is_granted('ROLE_' ~ listName|upper ~'_DELETE') or is_granted('ROLE_ADMIN')%}
+                                                                                    <a class="btn btn-defualt" data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-trash"></i></a>
+                                                                                    {% endif %}
+                                                                                {% elseif action == "ViewOne" %}
+
+                                                                                {% if is_granted('ROLE_' ~ listName|upper ~'_VIEWONE') or is_granted('ROLE_ADMIN')  %}
+
+                                                                                    <a href="{{ path(prefixRoute|lower~'_view', {'id': object.id}) }}" class="btn btn-defualt" title="{{('View One ' ~  listName|capitalize)|trans({},translationDomain)}}" data-popup="tooltip"  data-placement="bottom">
+                                                                                        <i class="icon-eye"></i>
+                                                                                    </a>
+                                                                                {% endif %}
+
+                                                                            {% elseif action == "Assign" %}
+                                                                                {% if is_granted('ROLE_' ~ listName|upper ~'_ASSIGN') or is_granted('ROLE_ADMIN')%}
+                                                                                    <a href="javascript:void(0);"  title="{% trans from translationDomain %}AssignToMe{% endtrans %}"   class="btn btn-defualt dev-assign-to-me" data-popup="tooltip"  data-placement="bottom"  data-id="{{ object.getId() }}" data-url="{{ path(prefixRoute|lower ~'_assign_to_me')}}"  >
+                                                                                        <i class="icon-user"></i>
+                                                                                    </a>
+                                                                                {% endif %}
+
+
+                                                                            {% elseif action == "Publish" %}
+
+
+                                                                                {% if is_granted('ROLE_' ~ listName|upper ~'_PUBLISH') or is_granted('ROLE_ADMIN')%}
+                                                                                    {% if 'publish' not in object.getStatus()%}
+                                                                                        <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-action="publish"
+                                                                                                class="btn btn-defualt" data-popup="tooltip"  data-placement="bottom"  {% if object.getStatus() is defined %}data-status="{{object.getStatus()}}"{%endif%} title="{{('publish ' ~  listName|capitalize)|trans({},translationDomain)}}">
+                                                                                            <i class="icon-checkmark-circle"></i>
+                                                                                        </button>
+                                                                                    {% endif %}
+                                                                                {% endif %}
 
 
 
-                                            </div><!-- col-lg-9 tabs -->
+                                                                            {% elseif action == "AutoPublish" %}
+
+                                                                                {% if is_granted('ROLE_' ~ listName|upper ~'_AUTOPUBLISH') or is_granted('ROLE_ADMIN')  %}
+                                                                                    {% if  'publish' not in object.getStatus() %}
+                                                                                        <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-action="autopublish"
+                                                                                                class="btn btn-defualt" data-popup="tooltip"  data-placement="bottom"  {% if object.getStatus() is defined %}data-status="{{object.getStatus()}}"{%endif%} title="{{('autopublish ' ~  listName|capitalize)|trans({},translationDomain)}}">
+                                                                                            <i class="icon-checkmark3"></i>
+                                                                                        </button>
+                                                                                    {% endif %}
+                                                                                {% endif %}
+                                                                            {% endif %}
 
 
-                                        </div>
-                                        <!-- /dashboard content -->
+                                                                        {% endfor %}
+                                                                    {% endif  %}
+                                                                </td>
+                                                            {% endif  %}
+
+                                                        </tr>
+
+
+                                                    {% endfor %}
+
+
+
+
+                                                </tbody>
+
+
+                                            </table>
+
+                                        </div><!-- tab 1 -->
+
+                                        <div class="tab-pane" id="close">
+
+
+
+
+
+
+
+
+
+                                        </div><!-- tab 2 -->
+
+
+                                        <div class="tab-pane" id="edit">
+
+
+
+
+
+
+
+                                        </div><!-- tab 3 -->
+
+
+
+                                        <div class="tab-pane" id="delete">
+
+
+
+
+
+
+
+
+                                        </div><!-- tab 4 -->
+
+
 
                                     </div>
+                                </div>
+                            </div>
 
-                                    {% endblock %}
-
-                                        {% block javascripts %}
-                                            {{ parent() }}
-                                            <script>
-        var loginUrl = "{{ path('ibtikar_glance_ums_staff_login')}}";
-        var notFoundUrl = "{{ path('ibtikar_glance_dashboard_not_found')}}";
-        var accessDeniedUrl = '{{ path('access_denied') }}';
-
-        var columns ={{ columns|raw}} ;
-                var totalNumber = "{{total}}";
-                var limit ={{limit}} ;
-                var start ={{skip}} ;
-                var sort ={% if sort is defined %}{{sort|raw}}{% else %} null{%endif %};
-        var toggleButtonColor = '#D6494C';
-
-                                            </script>
-                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/layout_sidebar_sticky_custom.js')}}"></script>
-                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/uniform.min.js')}}"></script>
-                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
-                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
-                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
-                                            <!-- datatable files -->
-                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/tables/datatables/datatables.min.js')}}"></script>
-                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/selects/select2.min.js')}}"></script>
-                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/datatables_api.js')}}"></script>
-                                            <script src="{{ asset('bundles/ibtikarglancedashboard/js/jquery.powertip.min.js') }}"></script>
-                                            <script src="{{ asset('bundles/ibtikarglancedashboard/js/ajaxifyList.js') }}"></script>
-                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_modals.js')}}"></script>
-
-                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/dragula.min.js')}}"></script>
-                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/extension_dnd.js')}}"></script>
-
-                                            <script>
-                                                intializeTable();
-                                                var list = new BaseList();
-                                                $(document).ready(function () {
-                                                    $('a[data-toggle="tab"]').on('click', function (e) {
-                                                        blockPage();
-                                                        window.location.href = $(this).attr('data-href');
-
-                                                    });
-                                                })
-
-                                            </script>
+                        </div>
+                        <!-- /scrollable datatable -->
 
 
-                                        {% endblock %}
+
+                    </div>
+
+                </div>
+
+
+
+            </div><!-- col-lg-9 tabs -->
+
+
+        </div>
+        <!-- /dashboard content -->
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+                                                var loginUrl = "{{ path('ibtikar_glance_ums_staff_login')}}";
+                                                var notFoundUrl = "{{ path('ibtikar_glance_dashboard_not_found')}}";
+                                                var accessDeniedUrl = '{{ path('access_denied') }}';
+
+                                                var columns ={{ columns|raw}} ;
+                                                        var totalNumber = "{{total}}";
+                                                        var limit ={{limit}} ;
+                                                        var start ={{skip}} ;
+                                                        var sort ={% if sort is defined %}{{sort|raw}}{% else %} null{%endif %};
+                                                var toggleButtonColor = '#D6494C';
+
+    </script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/layout_sidebar_sticky_custom.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/uniform.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
+    <!-- datatable files -->
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/tables/datatables/datatables.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/selects/select2.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/datatables_api.js')}}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/jquery.powertip.min.js') }}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/ajaxifyList.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_modals.js')}}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/dragula.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/extension_dnd.js')}}"></script>
+
+    <script>
+        intializeTable();
+        var list = new BaseList();
+        var assign=true;
+        $(document).ready(function () {
+            $('a[data-toggle="tab"]').on('click', function (e) {
+                blockPage();
+                window.location.href = $(this).attr('data-href');
+
+            });
+
+            $(document).on('click', '.dev-assign-to-me', function (e) {
+                e.preventDefault();
+                assignToMe($(this));
+            });
+        })
+
+        function  assignToMe(clickedElement) {
+            var Params = {recipeId: clickedElement.attr("data-id")};
+            if (assign) {
+                assign = false;
+                $.ajax({
+                    url: clickedElement.attr("data-url"),
+                    data: Params,
+                    method: 'post',
+                    success: function (data) {
+                        assign = true;
+                        switch (data.status) {
+                            case 'failedAlert':
+                            case 'failed':
+                                showNotificationMsg(data.message, "", 'error');
+                                break;
+
+                            case 'success':
+                                showNotificationMsg(data.message, "", 'success');
+                                break;
+                        }
+                        table.ajax.reload(function () {
+
+                        }, false)
+
+                    }
+
+                });
+            }
+
+        }
+
+    </script>
+
+
+{% endblock %}

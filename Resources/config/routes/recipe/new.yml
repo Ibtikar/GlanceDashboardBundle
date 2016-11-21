@@ -38,10 +38,6 @@ ibtikar_glance_dashboard_recipenew_list_assigned_recipe_change_list_columns:
     path:  /assigned-recipe-change-list-columns
     defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:changeListAssignedRecipeColumns }
 
-ibtikar_glance_dashboard_recipenew_assign:
-    path:  /assign
-    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:assign }
-
 ibtikar_glance_dashboard_recipenew_assign_to_me:
     path:  /assign-to-me
     defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:assignToMe }

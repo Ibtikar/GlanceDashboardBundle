@@ -32,11 +32,11 @@ class NewController extends RecipeController
 
         $renderingParams['newRecipeCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                 ->field('status')->equals('new')
-                ->field('assignedTo')->equals(null)
+                ->field('assignedTo')->exists(FALSE)
                 ->field('deleted')->equals(false)
                 ->getQuery()->execute()->count();
         $renderingParams['assignedRecipeCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
-                ->field('assignedTo')->equals(new \MongoId($this->getUser()->getId()))
+                ->field('assignedTo.$id')->equals(new \MongoId($this->getUser()->getId()))
                 ->field('deleted')->equals(false)
                 ->getQuery()->execute()->count();
         return $renderingParams;

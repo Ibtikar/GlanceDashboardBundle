@@ -196,7 +196,7 @@ class Recipe extends Document {
     private $status = 'new';
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\Staff", simple=true)
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\Staff")
      */
     private $assignedTo;
 
@@ -746,13 +746,15 @@ class Recipe extends Document {
         return $this->status;
     }
 
+  
+
     /**
      * Set assignedTo
      *
      * @param Ibtikar\GlanceUMSBundle\Document\Staff $assignedTo
      * @return self
      */
-    public function setAssignedTo(\Ibtikar\GlanceUMSBundle\Document\Staff $assignedTo=NULL)
+    public function setAssignedTo(\Ibtikar\GlanceUMSBundle\Document\Staff $assignedTo)
     {
         $this->assignedTo = $assignedTo;
         return $this;
