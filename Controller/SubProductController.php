@@ -43,7 +43,7 @@ class SubProductController extends BackendController {
             throw $this->createNotFoundException();
         }
 
-        $queryBuilder = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder("IbtikarGlanceDashboardBundle:SubProduct")->field('parent')->equals(new \MongoId($id))
+        $queryBuilder = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder("IbtikarGlanceDashboardBundle:SubProduct")->field('product')->equals(new \MongoId($id))
                         ->field('deleted')->equals(false);
         $this->listViewOptions->setDefaultSortBy("updatedAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
