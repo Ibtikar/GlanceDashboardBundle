@@ -49,6 +49,8 @@ class SubProductController extends BackendController {
         $this->listViewOptions->setDefaultSortOrder("desc");
         $this->listViewOptions->setActions(array ("Edit","Delete"));
         $this->listViewOptions->setBulkActions(array("Delete"));
+        $this->listViewOptions->setListQueryBuilder($queryBuilder);
+
         $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Product:view.html.twig");
 
     }
