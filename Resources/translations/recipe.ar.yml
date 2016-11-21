@@ -44,8 +44,15 @@
 # ############Titles############
 Add new Recipe: 'إدخال وصفة جديد'
 'list Recipe': 'قائمه الوصفات'
+'recipes new': 'وصفات جديده'
+'recipes assigned to me': 'وصفات مسنده الى'
 
 # ############Buttons############
+AssignToMe: 'اسناد لي'
+View One Recipenew: 'مشاهده وصفه'
+Edit Recipenew: 'تعديل وصفه'
+publish Recipenew: 'نشر وصفه'
+autopublish Recipenew: 'النشر التلقائى'
 
 
 # #############General############

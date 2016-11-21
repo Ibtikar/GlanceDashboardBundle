@@ -1,0 +1,25 @@
+{% extends 'IbtikarGlanceDashboardBundle:List:recipeList.html.twig' %}
+
+{% block tabs %}
+
+    <li   {% if 'recipenew_list_new' in app.request.attributes.get('_route') %} class="active"    {% endif %}><a data-href="{{ path(prefixRoute|lower~'_list_new_recipe') }}" data-toggle="tab"><span class="badge badge-primary position-left">78</span> {% trans from translationDomain %}recipes new{% endtrans%}</a></li>
+    <li {% if 'recipenew_list_assigned_' in app.request.attributes.get('_route') %} class="active"    {% endif %}><a data-href="{{ path(prefixRoute|lower~'_list_assigned_recipe') }}" data-toggle="tab"> <span class="badge badge-primary position-left">23</span> {% trans from translationDomain %}recipes assigned to me{% endtrans%} </a></li>
+
+{% endblock %}
+
+{% block javascripts %}
+        <script>
+        {% if 'recipenew_list_new' in app.request.attributes.get('_route') %}
+            var ajaxData = '{{ path(prefixRoute|lower~'_list_new_recipe') }}';
+            var changeListColumnsUrl = "{{path(prefixRoute|lower~changeListColumnType~'_change_list_columns')}}";
+        {% endif %}
+
+        {% if 'recipenew_list_assigned_' in app.request.attributes.get('_route') %}
+            var ajaxData = '{{ path(prefixRoute|lower~'_list_assigned_recipe') }}';
+            var changeListColumnsUrl = "{{path(prefixRoute|lower~changeListColumnType~'_change_list_columns')}}";
+        {% endif %}
+    </script>
+    {{ parent() }}
+
+{% endblock %}
+

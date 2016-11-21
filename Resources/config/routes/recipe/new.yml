@@ -1,0 +1,50 @@
+ibtikar_glance_dashboard_recipenew_list_new_recipe:
+    path:  /list-new-recipe
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:listNewRecipe }
+
+
+
+ibtikar_glance_dashboard_recipenew_view:
+    path:  /view/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:view }
+
+ibtikar_glance_dashboard_recipenew_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:edit }
+
+ibtikar_glance_dashboard_recipenew_publish:
+    path:  /publish
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:publish }
+
+
+ibtikar_glance_dashboard_recipenew_bulk_actions:
+    path:  /bulk
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:bulk }
+
+ibtikar_glance_dashboard_recipenew_delete:
+    path:  /delete
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:delete }
+
+ibtikar_glance_dashboard_recipenew_list_assigned_recipe:
+    path:  /list-assigned-recipe
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:listAssignedRecipe }
+
+
+ibtikar_glance_dashboard_recipenew_list_new_recipe_change_list_columns:
+    path:  /new-recipe-change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:changeListNewRecipeColumns }
+
+ibtikar_glance_dashboard_recipenew_list_assigned_recipe_change_list_columns:
+    path:  /assigned-recipe-change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:changeListAssignedRecipeColumns }
+
+ibtikar_glance_dashboard_recipenew_assign:
+    path:  /assign
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:assign }
+
+ibtikar_glance_dashboard_recipenew_assign_to_me:
+    path:  /assign-to-me
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:assignToMe }
+
+
+

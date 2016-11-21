@@ -190,11 +190,26 @@ class Recipe extends Document {
      */
     protected $country;
 
+    /**
+     * @MongoDB\String
+     */
+    private $status = 'new';
+
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\Staff", simple=true)
+     */
+    private $assignedTo;
+
     public function __construct()
     {
         $this->tag = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tagEn = new \Doctrine\Common\Collections\ArrayCollection();
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return (string) $this->title;
     }
 
     /**
@@ -707,5 +722,49 @@ class Recipe extends Document {
     public function getCountry()
     {
         return $this->country;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     * @return self
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string $status
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set assignedTo
+     *
+     * @param Ibtikar\GlanceUMSBundle\Document\Staff $assignedTo
+     * @return self
+     */
+    public function setAssignedTo(\Ibtikar\GlanceUMSBundle\Document\Staff $assignedTo=NULL)
+    {
+        $this->assignedTo = $assignedTo;
+        return $this;
+    }
+
+    /**
+     * Get assignedTo
+     *
+     * @return Ibtikar\GlanceUMSBundle\Document\Staff $assignedTo
+     */
+    public function getAssignedTo()
+    {
+        return $this->assignedTo;
     }
 }

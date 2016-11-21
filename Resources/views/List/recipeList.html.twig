@@ -68,13 +68,7 @@
                                 <div class="tabbable">
                                     <ul class="nav nav-tabs nav-tabs-highlight">
                                         {% block tabs %}
-                                            {% if 'room_news_list' in app.request.attributes.get('_route') %}
-                                                <li class="active"><a href="{{ path(prefixRoute|lower~'_list_new_recipe') }}" data-toggle="tab"><span class="badge badge-primary position-left">78</span> Open</a></li>
-                                                {% endif %}
-                                            <li><a href="#close" data-toggle="tab"> <span class="badge badge-primary position-left">23</span> Close </a></li>
-                                            <li><a href="#edit" data-toggle="tab"><span class="badge badge-primary position-left">7</span> Edit</a></li>
-                                            <li><a href="#delete" data-toggle="tab"> <span class="badge badge-primary position-left">34</span> Delete </a></li>
-                                            {% endblock %}
+                                        {% endblock %}
                                     </ul>
 
                                     <div class="tab-content">
@@ -108,125 +102,7 @@
                                                             </span>
                                                         {% endif %}
 
-                                                        {#
-                                                                                        <button id="pnotify-stack-custom-top" class="btn btn-default btn-sm" type="button"> Alert</button>
 
-                                                                                        <a data-original-title="بحث" data-placement="bottom" title="" data-popup="tooltip" id="advanced-search-Btn" class="btn btn-default btn-sm"><i class="icon-zoomin3"></i></a>
-
-                                                                                        <a data-content="
-                                                                                           &lt;button type='button' class='btn btn-danger'&gt;نعم&lt;/button&gt;
-                                                                                           &lt;button type='button' class='btn btn-defualt'&gt;الغاء&lt;/button&gt;
-                                                                                           " data-html="true" title="" data-trigger="focus" data-popup="popover" data-placement="bottom" data-toggle="popover" role="button" class="btn btn-default btn-sm" tabindex="0" data-original-title="انت على وشك حذف (@عنوان)، هل تريد إتمام الحذف؟"> <i class="icon-trash"></i> <span class="hidden-sm position-right">مسح الادوار</span></a>
-
-                                                                                        <a data-placement="bottom" title="" data-popup="tooltip"  data-toggle="modal"  href="javascript:void(0)" class="btn btn-default btn-sm dev-change-columns" type="button" data-original-title="خانات الجدول"><i class="icon-table2 "></i> <span class="hidden-sm"> </span></a>
-                                                                                        <a data-placement="bottom" title="" data-popup="tooltip" class="btn btn-default btn-sm" data-original-title="تصدير"><i class="icon-database-export"></i> <span class="hidden-sm"></span></a>
-                                                                                        <a data-placement="bottom" title="" data-popup="tooltip" class="btn btn-default btn-sm" data-original-title="عرض السجلات المحذوفة "><i class="icon-eye-blocked"></i> <span class="hidden-sm"></span></a>
-
-
-                                                                                        <select class="Roleselect select2-hidden-accessible" tabindex="-1" aria-hidden="true">
-                                                                                            <option>الكل</option>
-                                                                                            <option>فعال</option>
-                                                                                            <option>غير فعال</option>
-                                                                                        </select><span class="select2 select2-container select2-container--default" dir="rtl" style="width: 100px;"><span class="selection"><span aria-expanded="false" aria-haspopup="true" role="combobox" class="select2-selection select2-selection--single" tabindex="0" aria-labelledby="select2-bcvk-container"><span class="select2-selection__rendered" id="select2-bcvk-container" title="الكل">الكل</span><span role="presentation" class="select2-selection__arrow"><b role="presentation"></b></span></span></span><span aria-hidden="true" class="dropdown-wrapper"></span></span>
-
-
-
-
-                                                                                        <div class="advanced-search searchhidden">
-                                                                                            <div class="row">
-                                                                                                <div class="col-md-3">
-                                                                                                    <div class="form-group">
-                                                                                                        <label>الاسم</label>
-                                                                                                        <input type="text" class="form-control">
-                                                                                                    </div>
-                                                                                                </div>
-
-                                                                                                <div class="col-md-3">
-                                                                                                    <div class="form-group">
-                                                                                                        <label>الموظف</label>
-                                                                                                        <input type="text" class="form-control">
-                                                                                                    </div>
-                                                                                                </div>
-
-                                                                                                <div class="col-md-3">
-                                                                                                    <div class="form-group">
-                                                                                                        <label>البريد</label>
-                                                                                                        <input type="text" class="form-control">
-                                                                                                    </div>
-                                                                                                </div>
-
-                                                                                                <div class="col-md-3">
-                                                                                                    <div class="form-group">
-                                                                                                        <label>المجموعة</label>
-                                                                                                        <select class="select select2-hidden-accessible" tabindex="-1" aria-hidden="true">
-
-                                                                                                            <option value="HI">role 2</option>
-                                                                                                            <option value="CA">role 3</option>
-                                                                                                            <option value="NV">role 4</option>
-                                                                                                            <option value="WA">role 5</option>
-                                                                                                            <option value="AZ">role 6</option>
-                                                                                                            <option value="CO">role 7</option>
-                                                                                                            <option value="ID">role 8 </option>
-
-                                                                                                        </select><span class="select2 select2-container select2-container--default" dir="rtl" style="width: 100%;"><span class="selection"><span aria-expanded="false" aria-haspopup="true" role="combobox" class="select2-selection select2-selection--single" tabindex="0" aria-labelledby="select2-gcce-container"><span class="select2-selection__rendered" id="select2-gcce-container" title="role 2">role 2</span><span role="presentation" class="select2-selection__arrow"><b role="presentation"></b></span></span></span><span aria-hidden="true" class="dropdown-wrapper"></span></span>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div><!-- row end -->
-
-
-
-                                                                                            <div style="display: none;" class="row advanced-search-more">
-
-                                                                                                <div class="col-md-3">
-                                                                                                    <div class="form-group">
-                                                                                                        <label>	عدد الصلحيات</label>
-                                                                                                        <input type="text" class="form-control">
-                                                                                                    </div>
-                                                                                                </div>
-
-                                                                                                <div class="col-md-3">
-                                                                                                    <div class="form-group">
-                                                                                                        <label>المجموعة</label>
-                                                                                                        <input type="text" class="form-control">
-                                                                                                    </div>
-                                                                                                </div>
-
-                                                                                                <div class="col-md-3">
-                                                                                                    <div class="form-group">
-                                                                                                        <label>البريد</label>
-                                                                                                        <input type="text" class="form-control">
-                                                                                                    </div>
-                                                                                                </div>
-
-                                                                                                <div class="col-md-3">
-                                                                                                    <div class="form-group">
-                                                                                                        <label>المجموعة</label>
-                                                                                                        <select class="select select2-hidden-accessible" tabindex="-1" aria-hidden="true">
-
-                                                                                                            <option value="HI">role 2</option>
-                                                                                                            <option value="CA">role 3</option>
-                                                                                                            <option value="NV">role 4</option>
-                                                                                                            <option value="WA">role 5</option>
-                                                                                                            <option value="AZ">role 6</option>
-                                                                                                            <option value="CO">role 7</option>
-                                                                                                            <option value="ID">role 8 </option>
-
-                                                                                                        </select><span class="select2 select2-container select2-container--default" dir="rtl" style="width: 100%;"><span class="selection"><span aria-expanded="false" aria-haspopup="true" role="combobox" class="select2-selection select2-selection--single" tabindex="0" aria-labelledby="select2-ymlg-container"><span class="select2-selection__rendered" id="select2-ymlg-container" title="role 2">role 2</span><span role="presentation" class="select2-selection__arrow"><b role="presentation"></b></span></span></span><span aria-hidden="true" class="dropdown-wrapper"></span></span>
-                                                                                                    </div>
-
-                                                                                                </div><!-- row end -->
-
-                                                                                            </div>
-
-                                                                                            <div class="row">
-                                                                                                <div class="col-xs-12">
-
-
-                                                                                                    <button type="button" id="pnotify-progress" class="btn btn-primary btn-lg">بحث</button>
-                                                                                                    <button id="advanced-search-more" type="button" class="btn btn-default  btn-lg">بحث مفصل</button>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>#}
                                                     {% endblock %}
                                             </form>
                                         </div>
@@ -347,7 +223,7 @@
                                                                         {% if action == "Edit" %}
                                                                             {% if is_granted('ROLE_' ~ listName|upper ~'_EDIT') or is_granted('ROLE_ADMIN') %}
 
-                                                                                <a class="btn btn-defualt"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}" title="{{ ('Edit ' ~  sublistName)|trans({},translationDomain)}}" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>
+                                                                                <a class="btn btn-defualt"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}" title="{{ ('Edit ' ~  listName|capitalize)|trans({},translationDomain)}}" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>
                                                                                 {% endif %}
                                                                             {% elseif action == "Delete" %}
                                                                                 {% if is_granted('ROLE_' ~ listName|upper ~'_DELETE') or is_granted('ROLE_ADMIN')%}
@@ -361,101 +237,128 @@
                                                                                     <i class="icon-eye"></i>
                                                                                 </a>
                                                                             {% endif %}
-                                                                        {%endif%}
 
-                                                                    {% endfor %}
-                                                                    {#<a tabindex="0" class="btn btn-defualt" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="  هل ترغب في ايقاف الموظف  " data-html="true"
-                                                                       data-html="true" data-content="
-                                                                       <button type='button' class='btn btn-danger'>نعم</button>
-                                                                       <button type='button' class='btn btn-defualt'>الغاء</button>
-                                                                       "> <i class="icon-user-block"></i></a>#}
-
-
-                                                                {% endif  %}
-                                                            </td>
-                                                        {% endif  %}
-
-                                                    </tr>
+                                                                        {% elseif action == "Assign" %}
+                                                                            {% if is_granted('ROLE_' ~ listName|upper ~'_ASSIGN') or is_granted('ROLE_ADMIN')%}
+                                                                                <a href="javascript:void(0);"  title="{% trans %}AssignToMe{% endtrans %}"   class="btn btn-defualt" data-popup="tooltip"  data-placement="bottom"  data-id="{{ object.getId() }}"  >
+                                                                                    <i class="icon-user"></i>
+                                                                                </a>
+                                                                            {% endif %}
 
 
-                                                {% endfor %}
+                                                                        {% elseif action == "Publish" %}
 
 
-
-
-                                            </tbody>
-
-
-                                        </table>
-
-                                    </div><!-- tab 1 -->
-
-                                    <div class="tab-pane" id="close">
+                                                                            {% if is_granted('ROLE_' ~ listName|upper ~'_PUBLISH') or is_granted('ROLE_ADMIN')%}
+                                                                                {% if 'publish' not in object.getStatus()%}
+                                                                                    <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-action="publish"
+                                                                                            class="btn btn-defualt" data-popup="tooltip"  data-placement="bottom"  {% if object.getStatus() is defined %}data-status="{{object.getStatus()}}"{%endif%} title="{{('publish ' ~  listName|capitalize)|trans({},translationDomain)}}">
+                                                                                        <i class="icon-checkmark-circle"></i>
+                                                                                    </button>
+                                                                                {% endif %}
+                                                                            {% endif %}
 
 
 
+                                                                        {% elseif action == "AutoPublish" %}
+
+                                                                            {% if is_granted('ROLE_' ~ listName|upper ~'_AUTOPUBLISH') or is_granted('ROLE_ADMIN')  %}
+                                                                                {% if  'publish' not in object.getStatus() %}
+                                                                                    <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-action="autopublish"
+                                                                                            class="btn btn-defualt" data-popup="tooltip"  data-placement="bottom"  {% if object.getStatus() is defined %}data-status="{{object.getStatus()}}"{%endif%} title="{{('autopublish ' ~  listName|capitalize)|trans({},translationDomain)}}">
+                                                                                        <i class="icon-checkmark3"></i>
+                                                                                    </button>
+                                                                                {% endif %}
+                                                                            {% endif %}
+                                                                            {% endif %}
 
 
+                                                                            {% endfor %}
+                                                                                {% endif  %}
+                                                                                </td>
+                                                                                {% endif  %}
+
+                                                                                </tr>
 
 
-
-
-                                    </div><!-- tab 2 -->
-
-
-                                    <div class="tab-pane" id="edit">
-
-
-
-
-
-
-
-                                    </div><!-- tab 3 -->
-
-
-
-                                    <div class="tab-pane" id="delete">
+                                                                                {% endfor %}
 
 
 
 
+                                                                                </tbody>
+
+
+                                                                            </table>
+
+                                                                        </div><!-- tab 1 -->
+
+                                                                        <div class="tab-pane" id="close">
 
 
 
 
-                                    </div><!-- tab 4 -->
 
 
 
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- /scrollable datatable -->
 
 
+                                                                        </div><!-- tab 2 -->
 
-                </div>
 
-            </div>
+                                                                        <div class="tab-pane" id="edit">
 
 
 
-        </div><!-- col-lg-9 tabs -->
 
 
-    </div>
-    <!-- /dashboard content -->
 
-</div>
 
-{% endblock %}
+                                                                        </div><!-- tab 3 -->
 
-{% block javascripts %}
-    {{ parent() }}
-    <script>
+
+
+                                                                        <div class="tab-pane" id="delete">
+
+
+
+
+
+
+
+
+                                                                        </div><!-- tab 4 -->
+
+
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <!-- /scrollable datatable -->
+
+
+
+                                                    </div>
+
+                                                </div>
+
+
+
+                                            </div><!-- col-lg-9 tabs -->
+
+
+                                        </div>
+                                        <!-- /dashboard content -->
+
+                                    </div>
+
+                                    {% endblock %}
+
+                                        {% block javascripts %}
+                                            {{ parent() }}
+                                            <script>
         var loginUrl = "{{ path('ibtikar_glance_ums_staff_login')}}";
         var notFoundUrl = "{{ path('ibtikar_glance_dashboard_not_found')}}";
         var accessDeniedUrl = '{{ path('access_denied') }}';
@@ -467,35 +370,35 @@
                 var sort ={% if sort is defined %}{{sort|raw}}{% else %} null{%endif %};
         var toggleButtonColor = '#D6494C';
 
-    </script>
-    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/layout_sidebar_sticky_custom.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/uniform.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
-    <!-- datatable files -->
-    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/tables/datatables/datatables.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/selects/select2.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/datatables_api.js')}}"></script>
-    <script src="{{ asset('bundles/ibtikarglancedashboard/js/jquery.powertip.min.js') }}"></script>
-    <script src="{{ asset('bundles/ibtikarglancedashboard/js/ajaxifyList.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_modals.js')}}"></script>
+                                            </script>
+                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/layout_sidebar_sticky_custom.js')}}"></script>
+                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/uniform.min.js')}}"></script>
+                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
+                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
+                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
+                                            <!-- datatable files -->
+                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/tables/datatables/datatables.min.js')}}"></script>
+                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/selects/select2.min.js')}}"></script>
+                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/datatables_api.js')}}"></script>
+                                            <script src="{{ asset('bundles/ibtikarglancedashboard/js/jquery.powertip.min.js') }}"></script>
+                                            <script src="{{ asset('bundles/ibtikarglancedashboard/js/ajaxifyList.js') }}"></script>
+                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_modals.js')}}"></script>
 
-    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/dragula.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/extension_dnd.js')}}"></script>
+                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/dragula.min.js')}}"></script>
+                                            <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/extension_dnd.js')}}"></script>
 
-    <script>
-            intializeTable();
-            var list = new BaseList();
-            $(document).ready(function () {
-                $('a[data-toggle="tab"]').on('click', function (e) {
-                    blockPage();
-                    window.location.href = $(this).attr('data-href');
+                                            <script>
+                                                intializeTable();
+                                                var list = new BaseList();
+                                                $(document).ready(function () {
+                                                    $('a[data-toggle="tab"]').on('click', function (e) {
+                                                        blockPage();
+                                                        window.location.href = $(this).attr('data-href');
 
-                });
-            })
+                                                    });
+                                                })
 
-    </script>
+                                            </script>
 
 
-{% endblock %}
+                                        {% endblock %}

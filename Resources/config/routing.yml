@@ -30,8 +30,8 @@ ibtikar_glance_dashboard_recipe:
 
 
 ibtikar_glance_dashboard_recipe_news:
-    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/rooms/news.yml"
-    prefix:   /news-room
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/recipe/new.yml"
+    prefix:   /recipe-new
 
 
 
