@@ -374,6 +374,7 @@
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/datatables_api.js')}}"></script>
     <script src="{{ asset('bundles/ibtikarglancedashboard/js/jquery.powertip.min.js') }}"></script>
     <script src="{{ asset('bundles/ibtikarglancedashboard/js/ajaxifyList.js') }}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/recipeActions.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_modals.js')}}"></script>
 
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/dragula.min.js')}}"></script>
@@ -382,50 +383,6 @@
     <script>
         intializeTable();
         var list = new BaseList();
-        var assign=true;
-        $(document).ready(function () {
-            $('a[data-toggle="tab"]').on('click', function (e) {
-                blockPage();
-                window.location.href = $(this).attr('data-href');
-
-            });
-
-            $(document).on('click', '.dev-assign-to-me', function (e) {
-                e.preventDefault();
-                assignToMe($(this));
-            });
-        })
-
-        function  assignToMe(clickedElement) {
-            var Params = {recipeId: clickedElement.attr("data-id")};
-            if (assign) {
-                assign = false;
-                $.ajax({
-                    url: clickedElement.attr("data-url"),
-                    data: Params,
-                    method: 'post',
-                    success: function (data) {
-                        assign = true;
-                        switch (data.status) {
-                            case 'failedAlert':
-                            case 'failed':
-                                showNotificationMsg(data.message, "", 'error');
-                                break;
-
-                            case 'success':
-                                showNotificationMsg(data.message, "", 'success');
-                                break;
-                        }
-                        table.ajax.reload(function () {
-
-                        }, false)
-
-                    }
-
-                });
-            }
-
-        }
 
     </script>
 

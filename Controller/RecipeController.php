@@ -124,20 +124,33 @@ class RecipeController extends BackendController
 
     public function assignToMeAction(Request $request)
     {
+        if (!$this->getUser()) {
+            return $this->getLoginResponse();
+        }
+        $securityContext = $this->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_ASSIGN') && !$securityContext->isGranted('ROLE_ADMIN')) {
+            $result = array('status' => 'reload-table','message'=>$this->trans('You are not authorized to do this action any more'));
+            return new JsonResponse($result);
+        }
         $recipeId = $request->get('recipeId');
         $status = $this->get('recipe_operations')->assignToMe($recipeId);
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $newRecipeCount = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                ->field('status')->equals('new')
+                ->field('assignedTo')->exists(FALSE)
+                ->field('deleted')->equals(false)
+                ->getQuery()->execute()->count();
+        $assignedRecipeCount = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                ->field('assignedTo.$id')->equals(new \MongoId($this->getUser()->getId()))
+                ->field('deleted')->equals(false)
+                ->getQuery()->execute()->count();
         if ($status == RecipeOperations::$TIME_OUT) {
-
-//            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('failed operation'));
-
-            return new JsonResponse(array('status' => 'failed', 'message' => $this->get('translator')->trans('failed operation')));
+         return new JsonResponse(array('status' => 'error', 'message' => $this->get('translator')->trans('failed operation'),'newRecipe'=>$newRecipeCount,'assignedRecipe'=>$assignedRecipeCount));
         } elseif ($status == RecipeOperations::$ASSIGN_TO_OTHER_USER) {
-//        $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('failed operation'));
-            return new JsonResponse(array('status' => 'failedAlert', 'message' => $this->get('translator')->trans('sorry this recipe assign to other user')));
+            return new JsonResponse(array('status' => 'error', 'message' => $this->get('translator')->trans('sorry this recipe assign to other user',array(),  $this->translationDomain),'newRecipe'=>$newRecipeCount,'assignedRecipe'=>$assignedRecipeCount));
         } elseif ($status == RecipeOperations::$ASSIGN_TO_ME) {
             $successMessage = $this->get('translator')->trans('done sucessfully');
-//            $this->get('session')->getFlashBag()->add('success', $successMessage);
-            return new JsonResponse(array('status' => 'success', 'message' => $successMessage));
+            return new JsonResponse(array('status' => 'success', 'message' => $successMessage,'newRecipe'=>$newRecipeCount,'assignedRecipe'=>$assignedRecipeCount));
         }
     }
 
