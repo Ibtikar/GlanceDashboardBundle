@@ -33,5 +33,8 @@ ibtikar_glance_dashboard_recipe_news:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/recipe/new.yml"
     prefix:   /recipe-new
 
+ibtikar_glance_dashboard_recipe_deleted:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/recipe/deleted.yml"
+    prefix:   /recipe-deleted
 
 

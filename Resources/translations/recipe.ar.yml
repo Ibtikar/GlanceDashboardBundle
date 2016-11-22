@@ -47,29 +47,38 @@
 'Country': 'البلد'
 'country': 'البلد'
 'createdBy': قام بالإنشاء
-Created by:  قام بالإنشاء
-category: 'التصنيف'
-Category: 'التصنيف'
+'Created by':  قام بالإنشاء
+'category': 'التصنيف'
+'Category': 'التصنيف'
 'updatedAt': تاريخ التحديث
 'Updated at': تاريخ التحديث
+'Deleted at': تاريخ الحذف
+'deletedAt': تاريخ الحذف
 
 # ############Messages############
 sorry this recipe assign to other user: عذراً، هذه الوصفه  مسنده الى موظف اخر.
 
 # ############Titles############
-Add new Recipe: 'إدخال وصفة جديد'
+'Add new Recipe': 'إدخال وصفة جديد'
 'list Recipe': 'قائمه الوصفات'
 'recipes new': 'وصفات جديده'
 'recipes assigned to me': 'وصفات مسنده الى'
-List recipenew: 'قائمه الوصفات الجديده'
+'List recipenew': 'قائمه الوصفات الجديده'
+'List recipedeleted': قائمه الوصفات المحذوفه
+'recipes deleted': وصفات محذوفه
 
 # ############Buttons############
-AssignToMe: 'اسناد لي'
-View One Recipenew: 'مشاهده وصفه'
-Edit Recipenew: 'تعديل وصفه'
-publish Recipenew: 'نشر وصفه'
-autopublish Recipenew: 'النشر التلقائى'
-Delete Recipenew: حذف وصفه
+'AssignToMe': 'اسناد لي'
+'View One Recipenew': 'مشاهده وصفه'
+'View One Recipedeleted': حذف وصفه
+'Edit recipenew': 'تعديل وصفه'
+'publish Recipenew': 'نشر وصفه'
+'autopublish Recipenew': 'النشر التلقائى'
+'Edit recipedeleted': 'تعديل وصفه'
+'publish Recipedeleted': 'نشر وصفه'
+'autopublish Recipedeleted': 'النشر التلقائى'
+'Delete recipenew': حذف وصفه
+
 
 
 # #############General############

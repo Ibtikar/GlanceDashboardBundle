@@ -1,0 +1,42 @@
+ibtikar_glance_dashboard_recipedeleted_list_deleted_recipe:
+    path:  /list-deleted-recipe
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Deleted:listDeletedRecipe }
+
+
+
+ibtikar_glance_dashboard_recipedeleted_view:
+    path:  /view/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Deleted:view }
+
+ibtikar_glance_dashboard_recipedeleted_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Deleted:edit }
+
+ibtikar_glance_dashboard_recipedeleted_publish:
+    path:  /publish
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Deleted:publish }
+
+
+ibtikar_glance_dashboard_recipedeleted_bulk_actions:
+    path:  /bulk
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Deleted:bulk }
+
+ibtikar_glance_dashboard_recipedeleted_list_assigned_recipe:
+    path:  /list-assigned-recipe
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Deleted:listAssignedRecipe }
+
+
+ibtikar_glance_dashboard_recipedeleted_list_deleted_recipe_change_list_columns:
+    path:  /deleted-recipe-change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Deleted:changeListDeletedRecipeColumns }
+
+ibtikar_glance_dashboard_recipedeleted_list_assigned_recipe_change_list_columns:
+    path:  /assigned-recipe-change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Deleted:changeListAssignedRecipeColumns }
+
+ibtikar_glance_dashboard_recipedeleted_assign_to_me:
+    path:  /assign-to-me
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Deleted:assignToMe }
+
+
+

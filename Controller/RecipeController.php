@@ -45,16 +45,28 @@ class RecipeController extends BackendController
         $dm = $this->get('doctrine_mongodb')->getManager();
         if ($this->listStatus == 'list_new_recipe') {
             $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
-                            ->field('status')->equals('new')
-                            ->field('assignedTo')->exists(FALSE)
+                    ->field('status')->equals('new')
+                    ->field('assignedTo')->exists(FALSE)
                     ->field('deleted')->equals(false);
             $this->listViewOptions->setActions(array('Assign', 'ViewOne'));
         } else if ($this->listStatus == 'list_assigned_recipe') {
             $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                     ->field('assignedTo.$id')->equals(new \MongoId($this->getUser()->getId()))
+                    ->field('status')->equals($this->recipeStatus)
                     ->field('deleted')->equals(false);
-            $this->listViewOptions->setActions(array('Edit', 'Delete', 'Publish', "AutoPublish", 'ViewOne'));
-            $this->listViewOptions->setBulkActions(array("Delete"));
+            if ($this->recipeStatus != 'deleted') {
+                $this->listViewOptions->setActions(array('Edit', 'Delete', 'Publish', "AutoPublish", 'ViewOne'));
+                $this->listViewOptions->setBulkActions(array("Delete"));
+            } else {
+                $this->listViewOptions->setActions(array('Edit', 'Publish', "AutoPublish", 'ViewOne'));
+                $this->listViewOptions->setBulkActions(array());
+            }
+        } else if ($this->listStatus == 'list_deleted_recipe') {
+            $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('status')->equals($this->recipeStatus)
+                    ->field('assignedTo')->equals(null)
+                    ->field('deleted')->equals(false);
+            $this->listViewOptions->setActions(array('Assign', 'ViewOne'));
         } else if ($this->listStatus == 'list_autopublish_recipe') {
             $queryBuilder = $this->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                     ->field('status')->equals('autopublish')
@@ -80,6 +92,15 @@ class RecipeController extends BackendController
         return parent::listAction($request);
     }
 
+    public function listDeletedRecipeAction(Request $request)
+    {
+        $this->listStatus = 'list_deleted_recipe';
+        $this->listName = 'recipe' . $this->recipeStatus . '_' . $this->listStatus;
+
+
+        return parent::listAction($request);
+    }
+
     public function listAssignedRecipeAction(Request $request)
     {
         $this->listStatus = 'list_assigned_recipe';
@@ -97,6 +118,12 @@ class RecipeController extends BackendController
     public function changeListNewRecipeColumnsAction(Request $request)
     {
         $this->listStatus = 'list_new_recipe';
+        $this->listName = 'recipe' . $this->recipeStatus . '_' . $this->listStatus;
+        return parent::changeListColumnsAction($request);
+    }
+    public function changeListDeletedRecipeColumnsAction(Request $request)
+    {
+        $this->listStatus = 'list_deleted_recipe';
         $this->listName = 'recipe' . $this->recipeStatus . '_' . $this->listStatus;
         return parent::changeListColumnsAction($request);
     }
@@ -133,14 +160,15 @@ class RecipeController extends BackendController
             return new JsonResponse($result);
         }
         $recipeId = $request->get('recipeId');
-        $status = $this->get('recipe_operations')->assignToMe($recipeId);
+        $status = $this->get('recipe_operations')->assignToMe($recipeId,  $this->recipeStatus);
         $dm = $this->get('doctrine_mongodb')->getManager();
         $newRecipeCount = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
-                ->field('status')->equals('new')
+                ->field('status')->equals($this->recipeStatus)
                 ->field('assignedTo')->exists(FALSE)
                 ->field('deleted')->equals(false)
                 ->getQuery()->execute()->count();
         $assignedRecipeCount = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                ->field('status')->equals($this->recipeStatus)
                 ->field('assignedTo.$id')->equals(new \MongoId($this->getUser()->getId()))
                 ->field('deleted')->equals(false)
                 ->getQuery()->execute()->count();

@@ -20,16 +20,18 @@ class RecipeOperations
     /**
      *
      */
-    public function assignToMe($recipe)
+    public function assignToMe($recipe, $status)
     {
         $recipe = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                 ->field('id')->equals($recipe)
                 ->field('deleted')->equals(false)
                 ->getQuery()->getSingleResult();
         $token = $this->container->get('security.token_storage')->getToken();
-
+        if (!$recipe) {
+            return self::$TIME_OUT;
+        }
         if ($recipe->getAssignedTo() != NULL) {
-            if ($recipe->getAssignedTo()->getId() === $token->getUser()->getId()) {
+            if ($recipe->getAssignedTo()->getId() === $token->getUser()->getId() || $recipe->getStatus() != $status) {
                 return self::$TIME_OUT;
             } else {
                 return self::$ASSIGN_TO_OTHER_USER;
