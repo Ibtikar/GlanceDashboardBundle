@@ -141,7 +141,7 @@
 
                                                 {% if list.hasActionsColumn(listName) %}
 
-                                                    <th  class="text-center">العمليات</th>
+                                                    <th  class="">العمليات</th>
                                                     {%endif %}
                                                 </tr>
 
@@ -221,25 +221,25 @@
                                                                             {% if action == "Edit" %}
                                                                                 {% if is_granted('ROLE_' ~ listName|upper ~'_EDIT') or is_granted('ROLE_ADMIN') %}
 
-                                                                                    <a class="btn btn-defualt"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}" title="{{ ('Edit ' ~  listName|capitalize)|trans({},translationDomain)}}" data-popup="tooltip"  data-placement="bottom" ><i class="icon-pencil"></i></a>
+                                                                                    <a class="btn btn-defualt"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}"  ><i class="icon-pencil" data-popup="tooltip"  data-placement="right" title="{{ ('Edit ' ~  sublistName)|trans({},translationDomain)}}"></i></a>
                                                                                     {% endif %}
                                                                                 {% elseif action == "Delete" %}
                                                                                     {% if is_granted('ROLE_' ~ listName|upper ~'_DELETE') or is_granted('ROLE_ADMIN')%}
-                                                                                    <a class="btn btn-defualt" data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-trash"></i></a>
+                                                                                    <a class="btn btn-defualt"  data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-trash" data-popup="tooltip" title="{{ ('Delete ' ~  sublistName)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
                                                                                     {% endif %}
                                                                                 {% elseif action == "ViewOne" %}
 
                                                                                 {% if is_granted('ROLE_' ~ listName|upper ~'_VIEWONE') or is_granted('ROLE_ADMIN')  %}
 
-                                                                                    <a href="{{ path(prefixRoute|lower~'_view', {'id': object.id}) }}" class="btn btn-defualt" title="{{('View One ' ~  listName|capitalize)|trans({},translationDomain)}}" data-popup="tooltip"  data-placement="bottom">
-                                                                                        <i class="icon-eye"></i>
+                                                                                    <a href="{{ path(prefixRoute|lower~'_view', {'id': object.id}) }}" class="btn btn-defualt">
+                                                                                        <i class="icon-eye" data-popup="tooltip"  data-placement="right" title="{{('View One ' ~  listName|capitalize)|trans({},translationDomain)}}" ></i>
                                                                                     </a>
                                                                                 {% endif %}
 
                                                                             {% elseif action == "Assign" %}
                                                                                 {% if is_granted('ROLE_' ~ listName|upper ~'_ASSIGN') or is_granted('ROLE_ADMIN')%}
-                                                                                    <a href="javascript:void(0);"  title="{% trans from translationDomain %}AssignToMe{% endtrans %}"   class="btn btn-defualt dev-assign-to-me" data-popup="tooltip"  data-placement="bottom"  data-id="{{ object.getId() }}" data-url="{{ path(prefixRoute|lower ~'_assign_to_me')}}"  >
-                                                                                        <i class="icon-user"></i>
+                                                                                    <a href="javascript:void(0);"   class="btn btn-defualt dev-assign-to-me"   data-id="{{ object.getId() }}" data-url="{{ path(prefixRoute|lower ~'_assign_to_me')}}"  >
+                                                                                        <i class="icon-user" data-popup="tooltip"  data-placement="right" title="{% trans from translationDomain %}AssignToMe{% endtrans %}"  ></i>
                                                                                     </a>
                                                                                 {% endif %}
 

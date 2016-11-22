@@ -167,7 +167,9 @@
     <div class="row actionButtons">
         <div class="col-xs-12">
             <button class="btn btn-primary  dev-form-submit-btn dev-save" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
+              {% if app.user  and is_granted('ROLE_SUBPRODUCT_CREATE') %}
             <button  class="btn btn-primary dev-form-submit-btn dev-save-add" type="button">حفظ و اضافة منتج فرعي<i class="icon-plus2 position-right"></i></button>
+            {% endif %}
 
             <button class="btn btn-defualt dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
 
