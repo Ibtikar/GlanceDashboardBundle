@@ -573,7 +573,7 @@ class BackendController extends Controller {
         $index = 0;
         $prepareColumns = array();
         if ($this->listViewOptions->hasBulkActions($this->calledClassName)) {
-            $prepareColumns = array(array('data' => 'id', 'name'=>'id','orderable' => false,'class'=>'text-center', 'title' => '<div class="form-group">'
+            $prepareColumns = array(array('data' => 'id', 'name'=>'id','orderable' => false,'class'=>'', 'title' => '<div class="form-group">'
                             . '<label class="checkbox-inline"> <input type="checkbox" class="styled dev-checkbox-all"  >'
                             . ' </label></div>'));
             $index++;

@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Ibtikar\GlanceDashboardBundle\Form\Type\RecipeType;
 use Ibtikar\GlanceDashboardBundle\Document\Recipe;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Ibtikar\GlanceDashboardBundle\Document\Tag;
+use Ibtikar\GlanceDashboardBundle\Service\RecipeOperations;
 
 class RecipeController extends BackendController
 {
@@ -25,13 +25,13 @@ class RecipeController extends BackendController
             "title" => array("searchFieldType" => "input"),
             "titleEn" => array("type" => "translated"),
             "country" => array("isSortable" => false),
-//            "city" => array("isSortable" => false),
+            "createdBy" => array("isSortable" => false),
             "createdAt" => array("type" => "date"),
+            "updatedAt" => array("type" => "date"),
             "chef" => array("isSortable" => false),
         );
         $this->defaultListColumns = array(
             "title",
-            "titleEn",
             "createdAt",
             "chef",
         );

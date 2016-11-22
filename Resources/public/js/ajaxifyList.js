@@ -64,7 +64,7 @@ var dataTableDefault = {
                         'success': function (json) {
                             if (json.columns.length == columns.length) {
                                 fnCallback(json)
-                                $('input[type=checkbox]').closest('td').addClass('text-center');
+//                                $('input[type=checkbox]').closest('td').addClass('text-center');
                                 setTimeout(function () {
                                     $('input').uniform();
                                     unblockPage()

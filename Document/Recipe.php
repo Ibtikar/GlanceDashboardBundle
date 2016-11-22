@@ -746,7 +746,7 @@ class Recipe extends Document {
         return $this->status;
     }
 
-  
+
 
     /**
      * Set assignedTo
