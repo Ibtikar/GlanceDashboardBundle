@@ -155,7 +155,7 @@ class RecipeController extends BackendController
         $recipe = new Recipe();
         $dm = $this->get('doctrine_mongodb')->getManager();
 
-        $form = $this->createForm("Ibtikar\GlanceDashboardBundle\Form\Type\RecipeType", $recipe, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
+        $form = $this->createForm(RecipeType::class, $recipe, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
 
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);

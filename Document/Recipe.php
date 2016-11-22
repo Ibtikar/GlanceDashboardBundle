@@ -20,30 +20,30 @@ class Recipe extends Document {
     );
 
     public static $courseMap = array(
-        0 => 'Salad',
-        1 => 'Soup',
-        3 => 'Sandwich',
-        4 => 'Side Dish',
-        5 => 'Main Courses',
-        6 => 'Pastry',
-        7 => 'Dessert',
-        8 => 'Coffee Desserts',
-        9 => 'Drink',
+      'Salad' => 'Salad',
+      'Soup' => 'Soup',
+      'Sandwich' => 'Sandwich',
+      'Side Dish' => 'Side Dish',
+      'Main Courses' => 'Main Courses',
+      'Pastry' => 'Pastry',
+      'Dessert' => 'Dessert',
+      'Coffee Desserts' => 'Coffee Desserts',
+      'Drink' => 'Drink'
     );
 
     public static $keyIngredientMap = array(
-        0 => 'Minced',
-        1 => 'Beef',
-        2 => 'Lamb',
-        3 => 'Chicken',
-        4 => 'Seafood',
-        5 => 'Vegetable'
+         'Minced' => 'Minced',
+         'Beef' => 'Beef',
+         'Lamb' => 'Lamb',
+         'Chicken' => 'Chicken',
+         'Seafood' => 'Seafood',
+         'Vegetable' => 'Vegetable'
     );
 
     public static $mealMap = array(
-        0 => 'Breakfast',
-        1 => 'Lunch',
-        2 => 'Dinner'
+        'Breakfast' => 'Breakfast',
+        'Lunch' => 'Lunch',
+        'Dinner' => 'Dinner'
     );
 
     /**
