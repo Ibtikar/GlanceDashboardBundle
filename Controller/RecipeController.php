@@ -8,6 +8,8 @@ use Ibtikar\GlanceDashboardBundle\Form\Type\RecipeType;
 use Ibtikar\GlanceDashboardBundle\Document\Recipe;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Ibtikar\GlanceDashboardBundle\Service\RecipeOperations;
+use Ibtikar\GlanceDashboardBundle\Document\Tag;
+
 
 class RecipeController extends BackendController
 {
