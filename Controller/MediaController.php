@@ -221,7 +221,7 @@ class MediaController extends BackendController
                         $fileSystem = new \Symfony\Component\Filesystem\Filesystem();
                         $fileSystem->remove($tempUrlPath);
                     }
-                    return new JsonResponse(array('status' => 'success', 'media' => $this->prepareMedia($media,$collectionType), 'message' => $this->trans('done sucessfully')));
+                    return new JsonResponse(array('status' => 'success', 'media' => $this->prepareMedia($media,$collectionType), 'message' => $this->trans('upload successfuly')));
                 }
             }
         }
