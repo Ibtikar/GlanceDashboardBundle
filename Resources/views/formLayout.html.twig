@@ -78,6 +78,8 @@
                 templateResult: addUserPic,
                 templateSelection: addUserPic
             });
+            
+            $('select:not(".select2-hidden-accessible")').select2({ "language": "ar"});
 
             $('[id$="Time"],[id$="Count"]').TouchSpin({
                 min: 0,
