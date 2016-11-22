@@ -116,11 +116,13 @@
             })
            $('form').find("select").trigger("change");
          })
-        $(".alert.alert-success").fadeTo(5000, 500).slideUp(500, function(){
-         $(".alert.alert-success").slideUp(500);
-        });
+
         $('body').on('ajaxCallback',function(){
             formPluginsInit();
+            $(".alert.alert-success").fadeTo(5000, 500).slideUp(500, function(){
+                 $(".alert.alert-success").slideUp(500);
+             });
+
         })
         if(typeof CKEDITOR != "undefined"){
             CKEDITOR.on( 'instanceReady', function(evt,ss,w) {
