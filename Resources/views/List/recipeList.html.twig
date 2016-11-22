@@ -221,11 +221,11 @@
                                                                             {% if action == "Edit" %}
                                                                                 {% if is_granted('ROLE_' ~ listName|upper ~'_EDIT') or is_granted('ROLE_ADMIN') %}
 
-                                                                                    <a class="btn btn-defualt"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}"  ><i class="icon-pencil" data-popup="tooltip"  data-placement="right" title="{{ ('Edit ' ~  sublistName)|trans({},translationDomain)}}"></i></a>
+                                                                                    <a class="btn btn-defualt"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}"  ><i class="icon-pencil" data-popup="tooltip"  data-placement="right" title="{{ ('Edit ' ~  listName)|trans({},translationDomain)}}"></i></a>
                                                                                     {% endif %}
                                                                                 {% elseif action == "Delete" %}
                                                                                     {% if is_granted('ROLE_' ~ listName|upper ~'_DELETE') or is_granted('ROLE_ADMIN')%}
-                                                                                    <a class="btn btn-defualt"  data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-trash" data-popup="tooltip" title="{{ ('Delete ' ~  sublistName)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
+                                                                                    <a class="btn btn-defualt"  data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-trash" data-popup="tooltip" title="{{ ('Delete ' ~  listName)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
                                                                                     {% endif %}
                                                                                 {% elseif action == "ViewOne" %}
 
@@ -249,16 +249,10 @@
 
                                                                                 {% if is_granted('ROLE_' ~ listName|upper ~'_PUBLISH') or is_granted('ROLE_ADMIN')%}
                                                                                     {% if 'publish' not in object.getStatus()%}
-                                                                                        <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-action="publish"
-                                                                                                class="btn btn-defualt" data-popup="tooltip"  data-placement="bottom"  {% if object.getStatus() is defined %}data-status="{{object.getStatus()}}"{%endif%} title="{{('publish ' ~  listName|capitalize)|trans({},translationDomain)}}">
-                                                                                            <i class="icon-checkmark-circle"></i>
-                                                                                        </button>
+                                                                                        <a href="javascript:void(0)" data-toggle="modal"  class="btn btn-defualt dev-publish-recipe" data-id="{{ object.getId() }}"><i class="icon-share" data-placement="right"  data-popup="tooltip" title="{{('publish ' ~  listName|capitalize)|trans({},translationDomain)}}"></i></a>
                                                                                     {% endif %}
                                                                                 {% endif %}
-
-
-
-                                                                            {% elseif action == "AutoPublish" %}
+                              {#                                              {% elseif action == "AutoPublish" %}
 
                                                                                 {% if is_granted('ROLE_' ~ listName|upper ~'_AUTOPUBLISH') or is_granted('ROLE_ADMIN')  %}
                                                                                     {% if  'publish' not in object.getStatus() %}
@@ -267,7 +261,7 @@
                                                                                             <i class="icon-checkmark3"></i>
                                                                                         </button>
                                                                                     {% endif %}
-                                                                                {% endif %}
+                                                                                {% endif %}#}
                                                                             {% endif %}
 
 

@@ -78,7 +78,7 @@
                 templateResult: addUserPic,
                 templateSelection: addUserPic
             });
-            
+
             $('select:not(".select2-hidden-accessible")').select2({ "language": "ar"});
 
             $('[id$="Time"],[id$="Count"]').TouchSpin({
@@ -116,6 +116,9 @@
             })
            $('form').find("select").trigger("change");
          })
+        $(".alert.alert-success").fadeTo(5000, 500).slideUp(500, function(){
+         $(".alert.alert-success").slideUp(500);
+        });
         $('body').on('ajaxCallback',function(){
             formPluginsInit();
         })

@@ -440,6 +440,9 @@ function showBulkActionSelect() {
 }
 
 $(document).ready(function () {
+    $(".alert.alert-success").fadeTo(5000, 500).slideUp(500, function () {
+        $(".alert.alert-success").slideUp(500);
+    });
 
     $('.select').select2();
 
