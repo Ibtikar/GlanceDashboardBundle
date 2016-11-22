@@ -126,7 +126,7 @@ class RecipeController extends BackendController
         $status = $this->get('recipe_operations')->assignToMe($recipeId);
         if ($status == RecipeOperations::$TIME_OUT) {
 
-            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('failed operation'));
+//            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('failed operation'));
 
             return new JsonResponse(array('status' => 'failed', 'message' => $this->get('translator')->trans('failed operation')));
         } elseif ($status == RecipeOperations::$ASSIGN_TO_OTHER_USER) {
@@ -134,7 +134,7 @@ class RecipeController extends BackendController
             return new JsonResponse(array('status' => 'failedAlert', 'message' => $this->get('translator')->trans('sorry this recipe assign to other user')));
         } elseif ($status == RecipeOperations::$ASSIGN_TO_ME) {
             $successMessage = $this->get('translator')->trans('done sucessfully');
-            $this->get('session')->getFlashBag()->add('success', $successMessage);
+//            $this->get('session')->getFlashBag()->add('success', $successMessage);
             return new JsonResponse(array('status' => 'success', 'message' => $successMessage));
         }
     }
