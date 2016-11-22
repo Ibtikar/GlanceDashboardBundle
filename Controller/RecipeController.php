@@ -182,6 +182,33 @@ class RecipeController extends BackendController
         }
     }
 
+
+    public function publishAction(Request $request) {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $securityContext = $this->get('security.authorization_checker');
+
+        if ($request->getMethod() === 'GET') {
+            $id = $request->get('id');
+            if (!$id) {
+                return $this->getFailedResponse();
+            }
+
+            $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($id);
+            if (!$recipe)
+                throw $this->createNotFoundException($this->trans('Wrong id'));
+            return $this->render('IbtikarGlanceDashboardBundle:Recipe:publishModal.html.twig', array(
+
+            ));
+        } else if ($request->getMethod() === 'POST') {
+            $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($request->get('recipeId'));
+            if (!$recipe)
+                throw $this->createNotFoundException($this->trans('Wrong id'));
+
+            return new JsonResponse($publishResult);
+        }
+    }
+
+
     /**
      * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
      * @param \Symfony\Component\HttpFoundation\Request $request

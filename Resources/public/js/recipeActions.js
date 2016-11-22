@@ -12,7 +12,23 @@ $(document).ready(function () {
         blockPage();
         assignToMe($(this));
     });
+
+    $('div.panel-flat').on('click', '.dev-publish-recipe', function () {
+        $('[data-popup="tooltip"]').tooltip("hide");
+        blockPage();
+        showPublishModal($(this));
+    });
 })
+
+
+ function  showPublishModal(element) {
+        var basicModal = new BasicModal();
+            basicModal.show(publisUrl+'?id='+element.attr('data-id'), function () {
+            $(".dev-save-columns").click(function () {
+                saveListSelectedColumns(basicModal, changeListColumnsUrl);
+            })
+        });
+    }
 
 function  assignToMe(clickedElement) {
     var Params = {recipeId: clickedElement.attr("data-id")};

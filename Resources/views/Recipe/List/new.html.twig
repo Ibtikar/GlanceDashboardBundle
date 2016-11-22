@@ -18,6 +18,7 @@
             var ajaxData = '{{ path(prefixRoute|lower~'_list_assigned_recipe') }}';
             var changeListColumnsUrl = "{{path(prefixRoute|lower~changeListColumnType~'_change_list_columns')}}";
         {% endif %}
+        var publisUrl="{{ path('ibtikar_glance_dashboard_recipedeleted_publish')}}";
     </script>
     {{ parent() }}
 
