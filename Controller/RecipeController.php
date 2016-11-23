@@ -183,9 +183,11 @@ class RecipeController extends BackendController
     }
 
 
-    public function publishAction(Request $request) {
+    public function publishAction(Request $request)
+    {
         $dm = $this->get('doctrine_mongodb')->getManager();
         $securityContext = $this->get('security.authorization_checker');
+        $publishOperations = $this->get('recipe_operations');
 
         if ($request->getMethod() === 'GET') {
             $id = $request->get('id');
@@ -203,19 +205,19 @@ class RecipeController extends BackendController
                 $currentPublishedLocations[] = $location->getSection();
             }
 
-            $publishOperations = $this->get('recipe_operations');
+
 
 
             $allowedLocations = $publishOperations->getAllowedLocations($recipe);
 
             foreach ($allowedLocations as $location) {
 
-             $locations[]=$location;
+                $locations[] = $location;
             }
 
             $autoPublishDate = '';
 
-            if($recipe->getAutoPublishDate()) {
+            if ($recipe->getAutoPublishDate()) {
                 $autoPublishDate = $recipe->getAutoPublishDate()->format('Y-m-d H:i A');
             }
 
@@ -224,16 +226,78 @@ class RecipeController extends BackendController
                     'translationDomain' => $this->translationDomain,
                     'locations' => $locations,
                     'currentLocations' => $currentPublishedLocations,
+                    'document' => $recipe
             ));
         } else if ($request->getMethod() === 'POST') {
+
             $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($request->get('recipeId'));
-            if (!$recipe)
-                throw $this->createNotFoundException($this->trans('Wrong id'));
+            if (!$recipe) {
+                $result = array('status' => 'reload-table', 'message' => $this->trans('not done'));
+                return new JsonResponse($result);
+            }
+            $locations = $request->get('locations', array());
+            if (!empty($locations)) {
+                $locations = $dm->getRepository('IbtikarGlanceDashboardBundle:Location')->findBy(array('id' => array('$in' => $request->get('publishLocation'))));
+            }
+
+            $recipeStatus = $recipe->getStatus();
+
+            switch ($recipeStatus) {
+                case 'new':
+                    if ($request->get('publishNow')) {
+                        $publishResult = $publishOperations->publish($recipe, $locations);
+                    } else if ($request->get('autoPublishDate', '')) {
+                        $autoPublishDateString = $request->get('autoPublishDate', '');
+                        if (strlen(trim($autoPublishDateString)) > 0) {
+                            try {
+                                $autoPublishDate = new \DateTime($autoPublishDateString);
+                            } catch (\Exception $e) {
+                                $autoPublishDate = null;
+                            }
+                        }
+                        $publishResult = $publishOperations->autoPublish($recipe, $locations, $autoPublishDate);
+                    }
+                    break;
+                case 'publish':
+                    $publishResult = $publishOperations->managePublishControl($recipe, $locations);
+                    break;
+                case 'deleted':
+                    if ($request->get('publishNow')) {
+                        $publishResult = $publishOperations->publish($recipe, $locations, TRUE);
+                    } else if ($request->get('autoPublishDate', '')) {
+                        $autoPublishDateString = $request->get('autoPublishDate', '');
+                        if (strlen(trim($autoPublishDateString)) > 0) {
+                            try {
+                                $autoPublishDate = new \DateTime($autoPublishDateString);
+                            } catch (\Exception $e) {
+                                $autoPublishDate = null;
+                            }
+                        }
+                        $publishResult = $publishOperations->autoPublish($recipe, $locations, $autoPublishDate);
+                    }
+                    break;
+                case 'autopublish':
+                    if ($request->get('publishNow')) {
+                        $publishResult = $publishOperations->publish($recipe, $locations);
+                    } else if ($request->get('autoPublishDate', '')) {
+                        $autoPublishDateString = $request->get('autoPublishDate', '');
+                        if (strlen(trim($autoPublishDateString)) > 0) {
+                            try {
+                                $autoPublishDate = new \DateTime($autoPublishDateString);
+                            } catch (\Exception $e) {
+                                $autoPublishDate = null;
+                            }
+                        }
+                        $publishResult = $publishOperations->manageAutoPublishControl($recipe, $locations, $autoPublishDate);
+                    }
+                    break;
+            }
+
+
 
             return new JsonResponse($publishResult);
         }
     }
-
 
     /**
      * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>

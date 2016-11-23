@@ -25,8 +25,8 @@ $(document).ready(function () {
         var basicModal = new BasicModal();
             basicModal.show(publisUrl+'?id='+element.attr('data-id'), function () {
             unblockPage();
-            $(".dev-save-columns").click(function () {
-                saveListSelectedColumns(basicModal, changeListColumnsUrl);
+            $(".dev-save-publish-location").click(function () {
+                savepublishLocation(basicModal, publisUrl);
             })
         });
     }
@@ -56,4 +56,37 @@ function  assignToMe(clickedElement) {
         });
     }
 
+}
+
+function savepublishLocation(basicModal, url) {
+    //modified to use this way instead of form serialize to fix this bug #3535:
+    if($('.dev-save-publish-location').attr('ajax-running')){
+        return;
+    }
+    $('.dev-save-publish-location').attr('ajax-running', true)
+    $('.dev-save-publish-location').append('<i class="icon-spinner6 spinner position-right"></i>');
+
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: $('#dev-publish-modal').serialize(),
+        success: function (data) {
+//            console.log('hnaa')
+            if(data.status=='login'){
+                window.location.reload(true);
+
+            } else {
+                basicModal.hide();
+                table.ajax.reload(function () {
+                    if (data.status != 'reload-table') {
+                        showNotificationMsg(data.message, "", data.status);
+                        $('.dev-new-recipe').html(data.newRecipe);
+                        $('.dev-new-assign-recipe').html(data.assignedRecipe);
+                    } else {
+                        showNotificationMsg(data.message, "", 'error');
+                    }
+                }, false)
+            }
+        }
+    });
 }
