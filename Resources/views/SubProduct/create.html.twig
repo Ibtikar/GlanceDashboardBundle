@@ -276,6 +276,11 @@
             'generalError': '{% trans %}failed operation{%endtrans%}',
             'profilePhoto': '{% trans from translationDomain %}sub profilePhoto{%endtrans%}',
         }
+        $(document).ready(function(){
+                $(".alert.alert-success").fadeTo(5000, 500).slideUp(500, function () {
+                $(".alert.alert-success").slideUp(500);
+            });
+        })
 
     </script>
     <script src="{{ asset('bundles/ibtikarglancedashboard/js/product.js') }}"></script>
