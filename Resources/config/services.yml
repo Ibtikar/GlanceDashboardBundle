@@ -40,6 +40,9 @@ services:
         tags:
           - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 255 }
         arguments: ["@router","@session","@translator"]
+    publish_operations:
+        class: Ibtikar\GlanceDashboardBundle\Service\PublishOperations
+        arguments: [ "@doctrine_mongodb" ]
 
     app.twig.popover_factory_extension:
         class: Ibtikar\GlanceDashboardBundle\Service\PopoverFactoryExtension

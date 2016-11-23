@@ -1,8 +1,10 @@
 <?php
 
 namespace Ibtikar\GlanceDashboardBundle\Service;
+use Ibtikar\GlanceDashboardBundle\Service\PublishOperations;
 
-class RecipeOperations
+
+class RecipeOperations extends PublishOperations
 {
 
     static $TIME_OUT = "time out";
@@ -49,5 +51,10 @@ class RecipeOperations
     {
         $recipe->setAssignedTo($user);
         $this->dm->flush();
+    }
+
+    public function setType(\Ibtikar\GlanceDashboardBundle\Document\Publishable $document)
+    {
+
     }
 }

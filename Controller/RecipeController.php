@@ -196,8 +196,34 @@ class RecipeController extends BackendController
             $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($id);
             if (!$recipe)
                 throw $this->createNotFoundException($this->trans('Wrong id'));
-            return $this->render('IbtikarGlanceDashboardBundle:Recipe:publishModal.html.twig', array(
 
+            $currentPublishedLocations = array();
+            $locations = array();
+            foreach ($recipe->getPublishLocations() as $location) {
+                $currentPublishedLocations[] = $location->getSection();
+            }
+
+            $publishOperations = $this->get('recipe_operations');
+
+
+            $allowedLocations = $publishOperations->getAllowedLocations($recipe);
+
+            foreach ($allowedLocations as $location) {
+
+             $locations[]=$location;
+            }
+
+            $autoPublishDate = '';
+
+            if($recipe->getAutoPublishDate()) {
+                $autoPublishDate = $recipe->getAutoPublishDate()->format('Y-m-d H:i A');
+            }
+
+            return $this->render('IbtikarGlanceDashboardBundle:Recipe:publishModal.html.twig', array(
+                    'autoPublishDate' => $autoPublishDate,
+                    'translationDomain' => $this->translationDomain,
+                    'locations' => $locations,
+                    'currentLocations' => $currentPublishedLocations,
             ));
         } else if ($request->getMethod() === 'POST') {
             $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($request->get('recipeId'));

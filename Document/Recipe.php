@@ -7,11 +7,12 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\ExecutionContextInterface;
 use Ibtikar\GlanceDashboardBundle\Document\Document;
+use Ibtikar\GlanceDashboardBundle\Document\Publishable;
 /**
  * @MongoDB\hasLifeCycleCallbacks
  * @MongoDB\Document
  */
-class Recipe extends Document {
+class Recipe  extends Publishable {
 
     public static $difficultyMap = array(
         0 => 'easy',
@@ -200,6 +201,21 @@ class Recipe extends Document {
      */
     private $assignedTo;
 
+    /**
+     * @MongoDB\String
+     */
+    private $type = 'recipe';
+
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Media", simple=true)
+     */
+    private $coverPhoto;
+
+    /**
+     * @MongoDB\Date
+     */
+    private $autoPublishDate;
+
     public function __construct()
     {
         $this->tag = new \Doctrine\Common\Collections\ArrayCollection();
@@ -210,6 +226,11 @@ class Recipe extends Document {
     public function __toString()
     {
         return (string) $this->title;
+    }
+
+    public function getDefaultCoverPhoto()
+    {
+        return $this->coverPhoto;
     }
 
     /**
@@ -768,5 +789,81 @@ class Recipe extends Document {
     public function getAssignedTo()
     {
         return $this->assignedTo;
+    }
+
+    public function getDocumentTranslation()
+    {
+
+    }
+
+    public function getSlug()
+    {
+
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return self
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string $type
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set coverPhoto
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto
+     * @return self
+     */
+    public function setCoverPhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto)
+    {
+        $this->coverPhoto = $coverPhoto;
+        return $this;
+    }
+
+    /**
+     * Get coverPhoto
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto
+     */
+    public function getCoverPhoto()
+    {
+        return $this->coverPhoto;
+    }
+
+    /**
+     * Set autoPublishDate
+     *
+     * @param date $autoPublishDate
+     * @return self
+     */
+    public function setAutoPublishDate($autoPublishDate)
+    {
+        $this->autoPublishDate = $autoPublishDate;
+        return $this;
+    }
+
+    /**
+     * Get autoPublishDate
+     *
+     * @return date $autoPublishDate
+     */
+    public function getAutoPublishDate()
+    {
+        return $this->autoPublishDate;
     }
 }

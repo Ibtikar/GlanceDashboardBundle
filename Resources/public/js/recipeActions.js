@@ -24,6 +24,7 @@ $(document).ready(function () {
  function  showPublishModal(element) {
         var basicModal = new BasicModal();
             basicModal.show(publisUrl+'?id='+element.attr('data-id'), function () {
+            unblockPage();
             $(".dev-save-columns").click(function () {
                 saveListSelectedColumns(basicModal, changeListColumnsUrl);
             })
