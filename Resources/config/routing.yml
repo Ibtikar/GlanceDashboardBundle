@@ -37,4 +37,12 @@ ibtikar_glance_dashboard_recipe_deleted:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/recipe/deleted.yml"
     prefix:   /recipe-deleted
 
+ibtikar_glance_dashboard_recipe_publish:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/recipe/publish.yml"
+    prefix:   /recipe-publish
+
+ibtikar_glance_dashboard_recipe_autopublish:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/recipe/autopublish.yml"
+    prefix:   /recipe-autopublish
+
 

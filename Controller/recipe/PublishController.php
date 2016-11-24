@@ -6,7 +6,7 @@ use Ibtikar\GlanceDashboardBundle\Controller\RecipeController;
 use Symfony\Component\HttpFoundation\Request;
 use Ibtikar\GlanceDashboardBundle\Document\Recipe;
 
-class NewController extends RecipeController
+class PublishController extends RecipeController
 {
 
     public function __construct()
@@ -14,7 +14,7 @@ class NewController extends RecipeController
         parent::__construct();
         $calledClassName = explode('\\', $this->calledClassName);
         $this->calledClassName = 'recipe' . strtolower($calledClassName[1]);
-        $this->recipeStatus = Recipe::$statuses['new'];
+        $this->recipeStatus = Recipe::$statuses['publish'];
     }
 
     protected function configureListParameters(Request $request)
@@ -24,6 +24,7 @@ class NewController extends RecipeController
         $this->listViewOptions->setDefaultSortOrder("desc");
 //        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Recipe\List:new.html.twig");
     }
+
 
 
 

@@ -44,8 +44,11 @@ function  assignToMe(clickedElement) {
                 table.ajax.reload(function () {
                     if (data.status != 'reload-table') {
                         showNotificationMsg(data.message, "", data.status);
-                        $('.dev-new-recipe').html(data.newRecipe);
-                        $('.dev-new-assign-recipe').html(data.assignedRecipe);
+                        $('.dev-new-recipe').html(data.newRecipeCount);
+                        $('.dev-new-assign-recipe').html(data.assignedRecipeCount);
+                        $('.dev-autopublish-recipe').html(data.autopublishRecipeCount);
+                        $('.dev-published-recipe').html(data.publishRecipeCount);
+                        $('.dev-deleted-recipe').html(data.deletedRecipeCount);
                     } else {
                         showNotificationMsg(data.message, "", 'error');
                     }
@@ -80,8 +83,11 @@ function savepublishLocation(basicModal, url) {
                 table.ajax.reload(function () {
                     if (data.status != 'reload-table') {
                         showNotificationMsg(data.message, "", data.status);
-                        $('.dev-new-recipe').html(data.newRecipe);
-                        $('.dev-new-assign-recipe').html(data.assignedRecipe);
+                        $('.dev-new-recipe').html(data.newRecipeCount);
+                        $('.dev-new-assign-recipe').html(data.assignedRecipeCount);
+                        $('.dev-autopublish-recipe').html(data.autopublishRecipeCount);
+                        $('.dev-published-recipe').html(data.publishRecipeCount);
+                        $('.dev-deleted-recipe').html(data.deletedRecipeCount);
                     } else {
                         showNotificationMsg(data.message, "", 'error');
                     }

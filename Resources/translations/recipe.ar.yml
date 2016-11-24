@@ -71,13 +71,23 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 'AssignToMe': 'اسناد لي'
 'View One Recipenew': 'مشاهده وصفه'
 'View One Recipedeleted': حذف وصفه
+'View One Recipepublish': حذف وصفه
 'Edit recipenew': 'تعديل وصفه'
+'Edit recipepublish': 'تعديل وصفه'
 'publish Recipenew': 'نشر وصفه'
 'autopublish Recipenew': 'النشر التلقائى'
 'Edit recipedeleted': 'تعديل وصفه'
 'publish Recipedeleted': 'نشر وصفه'
+'publish Recipepublish': 'نشر وصفه'
 'autopublish Recipedeleted': 'النشر التلقائى'
 'Delete recipenew': حذف وصفه
+'Delete recipepublish': حذف وصفه
+'Delete recipedeleted': حذف وصفه
+'List Recipe': 'الوصفات'
+'new': 'جديده'
+'deleted': 'محذوفه'
+'publish': 'منشوره'
+'autopublish': 'نشر تلقائى'
 
 
 

@@ -53,13 +53,7 @@
                                 {% if is_granted('ROLE_CATEGORY_VIEW') or is_granted('ROLE_ADMIN')%}
                                 <li><a href="{{ path('ibtikar_glance_dashboard_category_list') }}" {% if 'category' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'category'%}List Category{% endtrans %}</a></li>
                                 {% endif %}
-                                {% if is_granted('ROLE_RECIPENEW_VIEW') or is_granted('ROLE_ADMIN')%}
-                                <li><a href="{{ path('ibtikar_glance_dashboard_recipenew_list_new_recipe') }}" {% if 'list_new_recipe' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'recipe'%}List recipenew{% endtrans %}</a></li>
-                                {% endif %}
-                                {% if is_granted('ROLE_RECIPEDELETED_VIEW') or is_granted('ROLE_ADMIN')%}
-                                <li><a href="{{ path('ibtikar_glance_dashboard_recipedeleted_list_deleted_recipe') }}" {% if 'list_deleted_recipe' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'recipe'%}List recipedeleted{% endtrans %}</a></li>
-                                {% endif %}
-
+                                <li><a href="{{ path('ibtikar_glance_dashboard_recipedeleted_list_assigned_recipe') }}" {% if 'recipe' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'recipe'%}List Recipe{% endtrans %}</a></li>
                         </ul>
                     </li>
      {% endif %}
