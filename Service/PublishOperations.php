@@ -2,14 +2,15 @@
 
 namespace Ibtikar\GlanceDashboardBundle\Service;
 
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Ibtikar\GlanceDashboardBundle\Document\PublishLocation;
 use Ibtikar\GlanceDashboardBundle\Document\Publishable;
 use Ibtikar\GlanceUMSBundle\Document\Staff;
-use Ibtikar\AppBundle\Service\Redirect;
+use Ibtikar\GlanceDashboardBundle\Service\Redirect;
+use Ibtikar\GlanceDashboardBundle\Document\Recipe;
 
 /**
  * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
@@ -25,6 +26,7 @@ abstract class PublishOperations
 
     /** @var Redirect $redirect */
     protected $redirect;
+    protected $translator;
 
     /** @var UrlGeneratorInterface $router */
     protected $router;
@@ -36,12 +38,13 @@ abstract class PublishOperations
      * @param Redirect $redirect
      * @param UrlGeneratorInterface $router
      */
-    public function __construct(SecurityContextInterface $securityContext, ManagerRegistry $mr, Redirect $redirect, UrlGeneratorInterface $router)
+    public function __construct($securityContext, ManagerRegistry $mr, Redirect $redirect, UrlGeneratorInterface $router, $translator)
     {
         $this->dm = $mr->getManager();
         $this->securityContext = $securityContext;
         $this->redirect = $redirect;
         $this->router = $router;
+        $this->translator = $translator;
     }
 
     abstract function setType(Publishable $document);
@@ -83,7 +86,7 @@ abstract class PublishOperations
     public function getFrontEndUrl(Publishable $document)
     {
         // only routes used in onKernelRequest function in Redirect listener is allowed
-        return $this->router->generate('app_view', array('slug' => $document->getSlug()));
+//        return $this->router->generate('app_view', array('slug' => $document->getSlug()));
     }
 
     /**
@@ -92,12 +95,12 @@ abstract class PublishOperations
      */
     public function hideFrontEndUrl(Publishable $document)
     {
-        $slug = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Slug')->findOneBy(array('referenceId' => $document->getId()));
-        if ($slug) {
-            $slug->setPublish(false);
-            $this->dm->flush($slug);
-        }
-        $this->redirect->addTemporaryRedirect($this->getFrontEndUrl($document), null, TRUE);
+//        $slug = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Slug')->findOneBy(array('referenceId' => $document->getId()));
+//        if ($slug) {
+//            $slug->setPublish(false);
+//            $this->dm->flush($slug);
+//        }
+//        $this->redirect->addTemporaryRedirect($this->getFrontEndUrl($document), null, TRUE);
     }
 
     /**
@@ -106,12 +109,12 @@ abstract class PublishOperations
      */
     public function showFrontEndUrl(Publishable $document)
     {
-        $slug = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Slug')->findOneBy(array('referenceId' => $document->getId()));
-        if ($slug) {
-            $slug->setPublish(true);
-            $this->dm->flush($slug);
-        }
-        $this->redirect->removeRedirect($this->getFrontEndUrl($document));
+//        $slug = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Slug')->findOneBy(array('referenceId' => $document->getId()));
+//        if ($slug) {
+//            $slug->setPublish(true);
+//            $this->dm->flush($slug);
+//        }
+//        $this->redirect->removeRedirect($this->getFrontEndUrl($document));
     }
 
     /**
@@ -136,10 +139,10 @@ abstract class PublishOperations
                 return array("status" => "error", "message" => "wronge locations");
         }
 
-        if (php_sapi_name() !== 'cli') {
-            // merge selected locations by user with the default publishing locations
-            $locations = array_merge($locations, $this->getAllowedLocations($document, false)->toArray());
-        }
+//        if (php_sapi_name() !== 'cli') {
+//            // merge selected locations by user with the default publishing locations
+//            $locations = array_merge($locations, $this->getAllowedLocations($document, false)->toArray());
+//        }
         $user = null;
         if (php_sapi_name() === 'cli') {
             $user = $document->getPublishedBy();
@@ -156,6 +159,8 @@ abstract class PublishOperations
             $document->setPublishedAt(new \DateTime());
         }
         $document->setPublishedBy($user);
+        $document->setStatus(Recipe::$statuses['publish']);
+
 
         if (!$rePublish) {
             $this->showFrontEndUrl($document);
@@ -168,6 +173,7 @@ abstract class PublishOperations
         }
 
         $this->dm->flush();
+        return array("status" => 'success', "message" => $this->translator->trans('done sucessfully'));
     }
 
     /**
@@ -278,7 +284,7 @@ abstract class PublishOperations
         }
 
         // merge selected locations by user with the default publishing locations
-        $locations = array_merge($locations, $this->getAllowedLocations($document, false)->toArray());
+//        $locations = array_merge($locations, $this->getAllowedLocations($document, false)->toArray());
 
         foreach ($locations as $location) {
             $this->addPublishLocation($document, $location->getPublishedLocationObject($this->getUser(), $autoPublishDate));
@@ -287,9 +293,11 @@ abstract class PublishOperations
         $document->setPublishedBy($this->getUser());
 
         $document->setAutoPublishDate($autoPublishDate);
+        $document->setStatus(Recipe::$statuses['autopublish']);
 
 
         $this->dm->flush();
+        return array("status" => 'success', "message" => $this->translator->trans('done sucessfully'));
     }
 
     /**
@@ -342,7 +350,7 @@ abstract class PublishOperations
 
         $this->dm->flush();
 
-        return array("status" => 'success', "message" => 'true');
+        return array("status" => 'success', "message" => $this->translator->trans('done sucessfully'));
     }
 
     /**
@@ -399,7 +407,7 @@ abstract class PublishOperations
 
         $this->dm->flush();
 
-        return array("status" => 'success', "message" => 'true');
+        return array("status" => 'success', "message" => $this->translator->trans('done sucessfully'));
     }
 
     protected function validateToPublish(Publishable $document, array $locations)

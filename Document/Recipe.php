@@ -47,6 +47,13 @@ class Recipe  extends Publishable {
         'Dinner' => 'Dinner'
     );
 
+    public static $statuses = array(
+        "new" => "new",
+        "deleted" => "deleted",
+        "publish" => "publish",
+        "autopublish" => "autopublish"
+    );
+
     /**
      * @MongoDB\Id
      */

@@ -13,7 +13,7 @@ ibtikar_glance_dashboard_recipedeleted_edit:
     defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Deleted:edit }
 
 ibtikar_glance_dashboard_recipedeleted_publish:
-    path:  /publish
+    path:  /ajax/publish
     defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Deleted:publish }
 
 
@@ -35,7 +35,7 @@ ibtikar_glance_dashboard_recipedeleted_list_assigned_recipe_change_list_columns:
     defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Deleted:changeListAssignedRecipeColumns }
 
 ibtikar_glance_dashboard_recipedeleted_assign_to_me:
-    path:  /assign-to-me
+    path:  /ajax/assign-to-me
     defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Deleted:assignToMe }
 
 

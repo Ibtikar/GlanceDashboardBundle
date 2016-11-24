@@ -14,8 +14,7 @@ class DeletedController extends RecipeController
         parent::__construct();
         $calledClassName = explode('\\', $this->calledClassName);
         $this->calledClassName = 'recipe' . strtolower($calledClassName[1]);
-        $this->recipeStatus = 'deleted';
-
+        $this->recipeStatus = Recipe::$statuses['deleted'];
     }
 
 
@@ -50,15 +49,19 @@ class DeletedController extends RecipeController
     {
 
         $renderingParams = parent::doList($request);
-        $dm = $this->get('doctrine_mongodb')->getManager();
+        return $this->getTabCount($renderingParams);
+    }
 
+    public function getTabCount($renderingParams = array())
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
         $renderingParams['newRecipeCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
-                ->field('status')->equals('deleted')
+                ->field('status')->equals($this->recipeStatus)
                 ->field('assignedTo')->exists(FALSE)
                 ->field('deleted')->equals(false)
                 ->getQuery()->execute()->count();
         $renderingParams['assignedRecipeCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
-                 ->field('status')->equals('deleted')
+                ->field('status')->equals($this->recipeStatus)
                 ->field('assignedTo.$id')->equals(new \MongoId($this->getUser()->getId()))
                 ->field('deleted')->equals(false)
                 ->getQuery()->execute()->count();

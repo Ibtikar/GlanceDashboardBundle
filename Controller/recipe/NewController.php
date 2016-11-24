@@ -14,6 +14,7 @@ class NewController extends RecipeController
         parent::__construct();
         $calledClassName = explode('\\', $this->calledClassName);
         $this->calledClassName = 'recipe' . strtolower($calledClassName[1]);
+        $this->recipeStatus = Recipe::$statuses['new'];
     }
 
     protected function configureListParameters(Request $request)
@@ -26,16 +27,21 @@ class NewController extends RecipeController
 
     protected function doList(Request $request)
     {
-
         $renderingParams = parent::doList($request);
+        return $this->getTabCount($renderingParams);
+    }
+
+    public function getTabCount($renderingParams = array())
+    {
         $dm = $this->get('doctrine_mongodb')->getManager();
 
         $renderingParams['newRecipeCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
-                ->field('status')->equals('new')
+                ->field('status')->equals($this->recipeStatus)
                 ->field('assignedTo')->exists(FALSE)
                 ->field('deleted')->equals(false)
                 ->getQuery()->execute()->count();
         $renderingParams['assignedRecipeCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                ->field('status')->equals($this->recipeStatus)
                 ->field('assignedTo.$id')->equals(new \MongoId($this->getUser()->getId()))
                 ->field('deleted')->equals(false)
                 ->getQuery()->execute()->count();

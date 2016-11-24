@@ -44,6 +44,12 @@ services:
         class: Ibtikar\GlanceDashboardBundle\Service\PublishOperations
         arguments: [ "@doctrine_mongodb" ]
 
+    redirect:
+        class: Ibtikar\GlanceDashboardBundle\Service\Redirect
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+        arguments: [ "@service_container" ,"%httpProtocol%://%site_domain%/"  ]
+
     app.twig.popover_factory_extension:
         class: Ibtikar\GlanceDashboardBundle\Service\PopoverFactoryExtension
         arguments: ["@translator"]

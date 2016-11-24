@@ -45,7 +45,7 @@ class RecipeController extends BackendController
         $dm = $this->get('doctrine_mongodb')->getManager();
         if ($this->listStatus == 'list_new_recipe') {
             $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
-                    ->field('status')->equals('new')
+                    ->field('status')->equals(Recipe::$statuses['new'])
                     ->field('assignedTo')->exists(FALSE)
                     ->field('deleted')->equals(false);
             $this->listViewOptions->setActions(array('Assign', 'ViewOne'));
@@ -69,7 +69,7 @@ class RecipeController extends BackendController
             $this->listViewOptions->setActions(array('Assign', 'ViewOne'));
         } else if ($this->listStatus == 'list_autopublish_recipe') {
             $queryBuilder = $this->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
-                    ->field('status')->equals('autopublish')
+                    ->field('status')->equals(Recipe::$statuses['autopublish'])
                     ->field('assignedTo')->equals(null)
                     ->field('deleted')->equals(false);
             $this->listViewOptions->setActions(array('Edit', 'Delete', 'Publish', "AutoPublish", 'ViewOne'));
@@ -188,6 +188,10 @@ class RecipeController extends BackendController
         $dm = $this->get('doctrine_mongodb')->getManager();
         $securityContext = $this->get('security.authorization_checker');
         $publishOperations = $this->get('recipe_operations');
+        if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_PUBLISH') && !$securityContext->isGranted('ROLE_ADMIN')) {
+            $result = array('status' => 'reload-table','message'=>$this->trans('You are not authorized to do this action any more'));
+            return new JsonResponse($result);
+        }
 
         if ($request->getMethod() === 'GET') {
             $id = $request->get('id');
@@ -214,12 +218,12 @@ class RecipeController extends BackendController
 
                 $locations[] = $location;
             }
-
             $autoPublishDate = '';
 
             if ($recipe->getAutoPublishDate()) {
-                $autoPublishDate = $recipe->getAutoPublishDate()->format('Y-m-d H:i A');
+                $autoPublishDate = $recipe->getAutoPublishDate()->format('m/d/Y H:i A');
             }
+
 
             return $this->render('IbtikarGlanceDashboardBundle:Recipe:publishModal.html.twig', array(
                     'autoPublishDate' => $autoPublishDate,
@@ -241,6 +245,12 @@ class RecipeController extends BackendController
             }
 
             $recipeStatus = $recipe->getStatus();
+            $status = $request->get('status');
+            if ($status != $recipeStatus) {
+                $result = array('status' => 'reload-table', 'message' => $this->trans('not done'));
+                return new JsonResponse($result);
+            }
+
 
             switch ($recipeStatus) {
                 case 'new':
@@ -295,8 +305,13 @@ class RecipeController extends BackendController
 
 
 
-            return new JsonResponse($publishResult);
+            return new JsonResponse(array_merge($publishResult, $this->getTabCount()));
         }
+    }
+
+    public function getTabCount($renderingParams = array())
+    {
+
     }
 
     /**

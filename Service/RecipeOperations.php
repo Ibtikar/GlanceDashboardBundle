@@ -13,10 +13,9 @@ class RecipeOperations extends PublishOperations
     protected $container;
     protected $dm;
 
-    public function __construct($container)
-    {
+      public function __construct($container) {
+        parent::__construct($container->get('security.token_storage'), $container->get('doctrine_mongodb'), $container->get('redirect'), $container->get('router'),$container->get('translator'));
         $this->container = $container;
-        $this->dm = $container->get('doctrine_mongodb')->getManager();
     }
 
     /**

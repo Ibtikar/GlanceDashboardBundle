@@ -13,7 +13,7 @@ ibtikar_glance_dashboard_recipenew_edit:
     defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:edit }
 
 ibtikar_glance_dashboard_recipenew_publish:
-    path:  /publish
+    path:  /ajax/publish
     defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:publish }
 
 
@@ -39,7 +39,7 @@ ibtikar_glance_dashboard_recipenew_list_assigned_recipe_change_list_columns:
     defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:changeListAssignedRecipeColumns }
 
 ibtikar_glance_dashboard_recipenew_assign_to_me:
-    path:  /assign-to-me
+    path:  /ajax/assign-to-me
     defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:assignToMe }
 
 
