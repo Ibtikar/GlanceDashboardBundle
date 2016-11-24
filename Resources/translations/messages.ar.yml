@@ -16,3 +16,5 @@ job: وظيفة
 'image': 'الصوره'
 subcategories: 'التصنيفات الفرعيه'
 You are not authorized to do this action any more: 'عذرا لم يعد لديك صلاحيه لاتمام هذه العمليه'
+#'Please specify a publish date after today':'لا يمكن إختيار وقت منتهِ '
+#recipe will be published at %datetime%: ''

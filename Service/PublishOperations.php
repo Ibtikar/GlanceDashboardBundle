@@ -297,7 +297,7 @@ abstract class PublishOperations
 
 
         $this->dm->flush();
-        return array("status" => 'success', "message" => $this->translator->trans('done sucessfully'));
+        return array("status" => 'success', "message" => $this->translator->trans('recipe will be published at %datetime%',array('%datetime%' => $document->getAutoPublishDate()->format('Y-m-d h:i A'))));
     }
 
     /**
@@ -407,7 +407,7 @@ abstract class PublishOperations
 
         $this->dm->flush();
 
-        return array("status" => 'success', "message" => $this->translator->trans('done sucessfully'));
+        return array("status" => 'success', "message" => $this->translator->trans('recipe will be published at %datetime%',array('%datetime%' => $document->getAutoPublishDate()->format('Y-m-d h:i A'))));
     }
 
     protected function validateToPublish(Publishable $document, array $locations)
