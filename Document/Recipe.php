@@ -169,17 +169,17 @@ class Recipe  extends Publishable {
     private $difficulty;
 
     /**
-     * @MongoDB\String
+     * @MongoDB\Hash
      */
     private $course;
 
     /**
-     * @MongoDB\String
+     * @MongoDB\Hash
      */
     private $meal;
 
     /**
-     * @MongoDB\String
+     * @MongoDB\Hash
      */
     private $keyIngredient;
 
