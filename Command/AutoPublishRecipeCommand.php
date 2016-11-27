@@ -5,6 +5,7 @@ namespace Ibtikar\GlanceDashboardBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AutoPublishRecipeCommand extends ContainerAwareCommand
 {
@@ -62,7 +63,7 @@ class AutoPublishRecipeCommand extends ContainerAwareCommand
                 '%color%',
                 ), array(
                 $recipe->getPublishedBy()->__toString(),
-                $this->getContainer()->get('router')->generate('ibtikar_glance_dashboard_recipe_create', array(), \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL),
+                $this->getContainer()->get('router')->generate('ibtikar_glance_dashboard_recipe_create', array(), UrlGeneratorInterface::ABSOLUTE_URL),
                 $recipe->getTitle(),
                 $recipe->getTitle(),
                 $emailTemplate->getMessage(),
