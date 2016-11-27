@@ -36,6 +36,8 @@ function  showPublishModal(element) {
                     savepublishLocation(basicModal, publisUrl);
                 }
 
+            } else {
+                savepublishLocation(basicModal, publisUrl);
             }
 
         })
