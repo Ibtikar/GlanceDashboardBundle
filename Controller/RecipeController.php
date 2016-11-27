@@ -337,6 +337,7 @@ class RecipeController extends BackendController
                 ->getQuery()->execute()->count();
         $renderingParams['assignedRecipeCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                 ->field('assignedTo.$id')->equals(new \MongoId($this->getUser()->getId()))
+                ->field('status')->equals(Recipe::$statuses['new'])
                 ->field('deleted')->equals(false)
                 ->getQuery()->execute()->count();
         return $renderingParams;

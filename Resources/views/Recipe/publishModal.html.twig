@@ -2,12 +2,11 @@
 
 {% block modalHeader %}
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3 class="modal-title">{{'publish reciope'|trans}}</h3>
+    <h3 class="modal-title">{% if document.status=='publish'%}{{'republish recipe'|trans({},translationDomain)}}{% else %}{{'publish recipe'|trans({},translationDomain)}}{% endif%}</h3>
 {% endblock %}
 
 {% block modalBody %}
 
-    <div class="modal-body">
         <form method="post" id="dev-publish-modal">
             <div class="row">
                 <div class="col-lg-12">
@@ -59,7 +58,6 @@
             <input type="hidden" name="status" value="{{document.status}}"/>
         </form>
 
-    </div>
 
 
 {% endblock %}
@@ -81,14 +79,16 @@
     <script>
         var toggleButtonColor = '#D6494C';
         var dateToday = new Date();
+        var recipeStatus= "{{document.status}}";
         $(document).ready(function () {
+
 
             $('input').uniform();
             $('#datetimepicker1').datetimepicker({minDate: dateToday});
 
             $(document).on('click', '#publishNow', function () {
                 if ($(this).prop('checked')) {
-                    $('.open-datetimepicker').val('');
+                    $('.open-datetimepicker').val("{{ autoPublishDate }}");
                     $('#datetimepicker1').data("DateTimePicker").disable();
 
                 } else {

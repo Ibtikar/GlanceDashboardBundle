@@ -77,37 +77,41 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 
 # ############Buttons############
 'AssignToMe': 'اسناد لي'
-'View One Recipenew': 'مشاهده وصفه'
-'View One Recipedeleted': 'مشاهده وصفه'
-'View One Recipepublish': 'مشاهده وصفه'
-'View One Recipeautopublish': 'مشاهده وصفه'
-'View One recipeautopublish': 'مشاهده وصفه'
-'Edit recipenew': 'تعديل وصفه'
-'Edit Recipenew': 'تعديل وصفه'
-'Edit recipepublish': 'تعديل وصفه'
-'Edit Recipepublish': 'تعديل وصفه'
-'Edit recipeautopublish': 'تعديل وصفه'
-'Edit Recipeautopublish': 'تعديل وصفه'
-'publish Recipenew': 'نشر وصفه'
-'autopublish Recipenew': 'النشر التلقائى'
-'Edit recipedeleted': 'تعديل وصفه'
-'publish Recipedeleted': 'نشر وصفه'
-'publish Recipeautopublish': 'نشر وصفه'
-'publish recipeautopublish': 'نشر وصفه'
-'publish Recipepublish': 'التحكم فى نشر الوصفه'
-'autopublish Recipedeleted': 'النشر التلقائى'
-'Delete recipenew': حذف وصفه
-'Delete Recipenew': حذف وصفه
-'Delete recipepublish': حذف وصفه
-'Delete Recipepublish': حذف وصفه
-'Delete recipedeleted': حذف وصفه
-'Delete recipeautopublish': حذف وصفه
-'Delete Recipeautopublish': حذف وصفه
+'View One Recipenew': 'مشاهده'
+'View One Recipedeleted': 'مشاهده'
+'View One Recipepublish': 'مشاهده'
+'View One Recipeautopublish': 'مشاهده'
+'View One recipeautopublish': 'مشاهده'
+'Edit recipenew': 'تعديل'
+'Edit Recipenew': 'تعديل'
+'Edit recipepublish': 'تعديل'
+'Edit Recipepublish': 'تعديل'
+'Edit recipeautopublish': 'تعديل'
+'Edit Recipeautopublish': 'تعديل'
+'publish Recipenew': 'نشر'
+'autopublish Recipenew': 'المجدولة'
+'Edit recipedeleted': 'تعديل'
+'publish Recipedeleted': 'نشر'
+'publish Recipeautopublish': 'نشر'
+'publish recipeautopublish': 'نشر'
+'publish Recipepublish': 'إعادة نشر‎'
+'autopublish Recipedeleted': 'إعادة نشر‎'
+'Delete recipenew': حذف
+'Delete Recipenew': حذف
+'Delete recipepublish': حذف
+'Delete Recipepublish': حذف
+'Delete recipedeleted': حذف
+'Delete recipeautopublish': حذف
+'Delete Recipeautopublish': حذف
 'List Recipe': 'الوصفات'
 'new': 'جديده'
 'deleted': 'محذوفه'
 'publish': 'منشوره'
-'autopublish': 'نشر تلقائى'
+'autopublish': 'مجدوله'
+'you must change time': 'يجب تحديد وقت النشر أولاً'
+'republish recipe': 'اعاده نشر'
+'publish recipe': 'نشر'
+
 
 
 

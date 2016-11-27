@@ -21,15 +21,26 @@ $(document).ready(function () {
 })
 
 
- function  showPublishModal(element) {
-        var basicModal = new BasicModal();
-            basicModal.show(publisUrl+'?id='+element.attr('data-id'), function () {
-            unblockPage();
-            $(".dev-save-publish-location").click(function () {
-                savepublishLocation(basicModal, publisUrl);
-            })
-        });
-    }
+function  showPublishModal(element) {
+    var basicModal = new BasicModal();
+    basicModal.show(publisUrl + '?id=' + element.attr('data-id'), function () {
+        unblockPage();
+        $(".dev-save-publish-location").click(function () {
+            if (recipeStatus != "published") {
+                if ($('.open-datetimepicker').val() == '' && $('#publishNow').prop('checked') == false) {
+                    $('#dev-publish-modal').find('.alert.alert-danger').remove();
+                    $('#dev-publish-modal').prepend('<div class="alert alert-danger no-border"><button data-dismiss="alert" class="close" type="button">' +
+                            '<span>×</span><span class="sr-only">Close</span></button>' + publishErrorMessage
+                            + '</div>');
+                } else {
+                    savepublishLocation(basicModal, publisUrl);
+                }
+
+            }
+
+        })
+    });
+}
 
 function  assignToMe(clickedElement) {
     var Params = {recipeId: clickedElement.attr("data-id")};
