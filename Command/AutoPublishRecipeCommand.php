@@ -62,7 +62,7 @@ class AutoPublishRecipeCommand extends ContainerAwareCommand
                 '%color%',
                 ), array(
                 $recipe->getPublishedBy()->__toString(),
-                $this->getContainer()->get('router')->generate('ibtikar_glance_dashboard_recipe_create', array(), true),
+                $this->getContainer()->get('router')->generate('ibtikar_glance_dashboard_recipe_create', array(), \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL),
                 $recipe->getTitle(),
                 $recipe->getTitle(),
                 $emailTemplate->getMessage(),
