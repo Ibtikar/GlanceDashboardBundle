@@ -88,10 +88,11 @@
 
             $(document).on('click', '#publishNow', function () {
                 if ($(this).prop('checked')) {
-                    $('.open-datetimepicker').val("{{ autoPublishDate }}");
+                    $('.open-datetimepicker').val("");
                     $('#datetimepicker1').data("DateTimePicker").disable();
 
                 } else {
+                    $('.open-datetimepicker').val("{{ autoPublishDate }}");
                     $('#datetimepicker1').data("DateTimePicker").enable();
 
                 }

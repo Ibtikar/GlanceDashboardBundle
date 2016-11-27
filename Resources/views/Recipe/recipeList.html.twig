@@ -388,7 +388,7 @@
 
         {% if '_recipenew_list_assigned_recipe' in app.request.attributes.get('_route') %}
             var ajaxData = '{{ path('ibtikar_glance_dashboard_recipenew_list_assigned_recipe') }}';
-            var changeListColumnsUrl = "{{path('ibtikar_glance_dashboard_recipenew_list_new_recipe_change_list_columns')}}";
+            var changeListColumnsUrl = "{{path('ibtikar_glance_dashboard_recipenew_list_assigned_recipe_change_list_columns')}}";
         {% endif %}
         {% if 'recipenew_list_new' not in app.request.attributes.get('_route') %}
         var publisUrl="{{ path(prefixRoute|lower~'_publish')}}";

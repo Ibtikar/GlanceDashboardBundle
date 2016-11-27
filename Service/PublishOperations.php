@@ -420,7 +420,7 @@ abstract class PublishOperations
     protected function readyLocationVacancy(PublishLocation $location, $maxNumberInLocation)
     {
         $documents = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
-                ->field('status')->equals('published')
+                ->field('status')->equals('publish')
                 ->field('publishLocations.section')->equals($location->getSection())
                 ->field('publishLocations.page')->equals($location->getPage())
                 ->getQuery()->execute();

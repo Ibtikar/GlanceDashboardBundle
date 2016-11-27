@@ -245,7 +245,7 @@ class RecipeController extends BackendController
                 $result = array('status' => 'reload-table', 'message' => $this->trans('not done'));
                 return new JsonResponse($result);
             }
-            $locations = $request->get('locations', array());
+            $locations = $request->get('publishLocation', array());
             if (!empty($locations)) {
                 $locations = $dm->getRepository('IbtikarGlanceDashboardBundle:Location')->findBy(array('id' => array('$in' => $request->get('publishLocation'))));
             }

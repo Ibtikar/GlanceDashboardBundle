@@ -551,6 +551,10 @@ class BackendController extends Controller {
                 } elseif (is_array($document->$getfunction()) || $document->$getfunction() instanceof \Traversable) {
                     $elementsArray = array();
                     foreach ($document->$getfunction() as $element) {
+                        if ($value == 'course') {
+                            $elementsArray[] = is_object($element) ? $element->__toString() : $this->trans($element, array(), $this->translationDomain);
+                            continue;
+                        }
                         $elementsArray[] = is_object($element) ? $element->__toString() : $element;
                     }
                     $oneDocument[$value] = implode(',', $elementsArray);
