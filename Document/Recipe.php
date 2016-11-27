@@ -782,7 +782,7 @@ class Recipe  extends Publishable {
      * @param Ibtikar\GlanceUMSBundle\Document\Staff $assignedTo
      * @return self
      */
-    public function setAssignedTo(\Ibtikar\GlanceUMSBundle\Document\Staff $assignedTo)
+    public function setAssignedTo(\Ibtikar\GlanceUMSBundle\Document\Staff $assignedTo =NULL)
     {
         $this->assignedTo = $assignedTo;
         return $this;

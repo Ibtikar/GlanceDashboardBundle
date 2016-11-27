@@ -44,16 +44,24 @@
 'Dinner': '‫عشاء‬'
 'createdAt': تاريخ الإنشاء
 'Created at': تاريخ الإنشاء
+'publishedAt': 'تاريخ النشر'
+'Published at': 'تاريخ النشر'
 'Country': 'البلد'
 'country': 'البلد'
 'createdBy': قام بالإنشاء
 'Created by':  قام بالإنشاء
+'Deleted by': قام بالحذف
+'deletedBy': قام بالحذف
+'Published by': 'قام بالنشر'
+'publishedBy': 'قام بالنشر'
 'category': 'التصنيف'
 'Category': 'التصنيف'
 'updatedAt': تاريخ التحديث
 'Updated at': تاريخ التحديث
 'Deleted at': تاريخ الحذف
 'deletedAt': تاريخ الحذف
+'autoPublishDate': 'تاريخ النشر التلقائى'
+'Auto publish date': 'تاريخ النشر التلقائى'
 
 # ############Messages############
 sorry this recipe assign to other user: عذراً، هذه الوصفه  مسنده الى موظف اخر.
@@ -62,7 +70,7 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 'Add new Recipe': 'إدخال وصفة جديد'
 'list Recipe': 'قائمه الوصفات'
 'recipes new': 'وصفات جديده'
-'recipes assigned to me': 'وصفات مسنده الى'
+'recipes assigned to me': 'مسندة إلي'
 'List recipenew': 'قائمه الوصفات الجديده'
 'List recipedeleted': قائمه الوصفات المحذوفه
 'recipes deleted': وصفات محذوفه
@@ -70,19 +78,31 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 # ############Buttons############
 'AssignToMe': 'اسناد لي'
 'View One Recipenew': 'مشاهده وصفه'
-'View One Recipedeleted': حذف وصفه
-'View One Recipepublish': حذف وصفه
+'View One Recipedeleted': 'مشاهده وصفه'
+'View One Recipepublish': 'مشاهده وصفه'
+'View One Recipeautopublish': 'مشاهده وصفه'
+'View One recipeautopublish': 'مشاهده وصفه'
 'Edit recipenew': 'تعديل وصفه'
+'Edit Recipenew': 'تعديل وصفه'
 'Edit recipepublish': 'تعديل وصفه'
+'Edit Recipepublish': 'تعديل وصفه'
+'Edit recipeautopublish': 'تعديل وصفه'
+'Edit Recipeautopublish': 'تعديل وصفه'
 'publish Recipenew': 'نشر وصفه'
 'autopublish Recipenew': 'النشر التلقائى'
 'Edit recipedeleted': 'تعديل وصفه'
 'publish Recipedeleted': 'نشر وصفه'
-'publish Recipepublish': 'نشر وصفه'
+'publish Recipeautopublish': 'نشر وصفه'
+'publish recipeautopublish': 'نشر وصفه'
+'publish Recipepublish': 'التحكم فى نشر الوصفه'
 'autopublish Recipedeleted': 'النشر التلقائى'
 'Delete recipenew': حذف وصفه
+'Delete Recipenew': حذف وصفه
 'Delete recipepublish': حذف وصفه
+'Delete Recipepublish': حذف وصفه
 'Delete recipedeleted': حذف وصفه
+'Delete recipeautopublish': حذف وصفه
+'Delete Recipeautopublish': حذف وصفه
 'List Recipe': 'الوصفات'
 'new': 'جديده'
 'deleted': 'محذوفه'

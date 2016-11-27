@@ -71,7 +71,7 @@
                                             <li   {% if 'recipepublish_list_publish' in app.request.attributes.get('_route') %} class="active"    {% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_recipepublish_list_publish_recipe') }}" data-toggle="tab"><span class="badge badge-primary position-left dev-published-recipe">{{ publishRecipeCount }}</span> {% trans from translationDomain %}publish{% endtrans%}</a></li>
                                             <li   {% if 'recipeautopublish_list_autopublish' in app.request.attributes.get('_route') %} class="active"    {% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_recipeautopublish_list_autopublish_recipe') }}" data-toggle="tab"><span class="badge badge-primary position-left dev-autopublish-recipe">{{ autopublishRecipeCount}}</span> {% trans from translationDomain %}autopublish{% endtrans%}</a></li>
 
-                                            <li {% if 'recipedeleted_list_assigned_' in app.request.attributes.get('_route') %} class="active"    {% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_recipedeleted_list_assigned_recipe') }}" data-toggle="tab"> <span class="badge badge-primary position-left dev-new-assign-recipe">{{assignedRecipeCount}}</span> {% trans from translationDomain %}recipes assigned to me{% endtrans%} </a></li>
+                                            <li {% if 'recipenew_list_assigned_' in app.request.attributes.get('_route') %} class="active"    {% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_recipenew_list_assigned_recipe') }}" data-toggle="tab"> <span class="badge badge-primary position-left dev-new-assign-recipe">{{assignedRecipeCount}}</span> {% trans from translationDomain %}recipes assigned to me{% endtrans%} </a></li>
 
                                             {% endblock %}
                                         </ul>
@@ -231,10 +231,8 @@
                                                                                     <a class="btn btn-defualt"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}"  ><i class="icon-pencil" data-popup="tooltip"  data-placement="right" title="{{ ('Edit ' ~  listName)|trans({},translationDomain)}}"></i></a>
                                                                                     {% endif %}
                                                                                 {% elseif action == "Delete" %}
-                                                                                {% if object.status !='deleted'%}
                                                                                     {% if  (is_granted('ROLE_RECIPE' ~ object.status|upper ~'_DELETE') or is_granted('ROLE_ADMIN')) %}
                                                                                     <a class="btn btn-defualt"  data-href = "{{ path('ibtikar_glance_dashboard_recipe'~object.status~ '_delete', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-trash" data-popup="tooltip" title="{{ ('Delete ' ~  listName)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
-                                                                                    {% endif %}
                                                                                 {% endif %}
                                                                                 {% elseif action == "ViewOne" %}
 
@@ -386,9 +384,9 @@
             var changeListColumnsUrl = "{{path(prefixRoute|lower~changeListColumnType~'_change_list_columns')}}";
         {% endif %}
 
-        {% if 'recipedeleted_list_assigned_recipe' in app.request.attributes.get('_route') %}
-            var ajaxData = '{{ path('ibtikar_glance_dashboard_recipedeleted_list_assigned_recipe') }}';
-            var changeListColumnsUrl = "{{path('ibtikar_glance_dashboard_recipedeleted_list_assigned_recipe_change_list_columns')}}";
+        {% if '_recipenew_list_assigned_recipe' in app.request.attributes.get('_route') %}
+            var ajaxData = '{{ path('ibtikar_glance_dashboard_recipenew_list_assigned_recipe') }}';
+            var changeListColumnsUrl = "{{path('ibtikar_glance_dashboard_recipenew_list_new_recipe_change_list_columns')}}";
         {% endif %}
         {% if 'recipenew_list_new' not in app.request.attributes.get('_route') %}
         var publisUrl="{{ path(prefixRoute|lower~'_publish')}}";

@@ -294,8 +294,7 @@ abstract class PublishOperations
 
         $document->setAutoPublishDate($autoPublishDate);
         $document->setStatus(Recipe::$statuses['autopublish']);
-
-
+        $document->setAssignedTo(null);
         $this->dm->flush();
         return array("status" => 'success', "message" => $this->translator->trans('recipe will be published at %datetime%',array('%datetime%' => $document->getAutoPublishDate()->format('Y-m-d h:i A'))));
     }
@@ -403,6 +402,8 @@ abstract class PublishOperations
             $this->addPublishLocation($document, $location->getPublishedLocationObject($this->getUser(), $autoPublishDate));
         }
 
+        $document->setAssignedTo(null);
+        $document->setPublishedBy($this->getUser());
         $document->setAutoPublishDate($autoPublishDate);
 
         $this->dm->flush();

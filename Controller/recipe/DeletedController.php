@@ -25,8 +25,10 @@ class DeletedController extends RecipeController
             "titleEn" => array("type" => "translated"),
             "country" => array("isSortable" => false),
             "createdBy" => array("isSortable" => false),
+            "deletedBy" => array("isSortable" => false),
             "createdAt" => array("type" => "date"),
             "deletedAt" => array("type" => "date"),
+            "updatedAt" => array("type" => "date"),
             "chef" => array("isSortable" => false),
         );
         $this->defaultListColumns = array(
