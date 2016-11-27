@@ -52,6 +52,7 @@ class RecipeController extends BackendController
         } else if ($this->listStatus == 'list_assigned_recipe') {
             $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                     ->field('assignedTo.$id')->equals(new \MongoId($this->getUser()->getId()))
+                    ->field('status')->equals(Recipe::$statuses['new'])
                     ->field('deleted')->equals(false);
             $this->listViewOptions->setActions(array('Edit', 'Delete', 'Publish', 'ViewOne'));
             $this->listViewOptions->setBulkActions(array("Delete"));

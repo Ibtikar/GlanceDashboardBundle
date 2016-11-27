@@ -160,6 +160,7 @@ abstract class PublishOperations
         }
         $document->setPublishedBy($user);
         $document->setStatus(Recipe::$statuses['publish']);
+        $document->setAssignedTo(null);
 
 
         if (!$rePublish) {
