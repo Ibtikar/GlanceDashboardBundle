@@ -94,9 +94,7 @@ function savepublishLocation(basicModal, url) {
                     $('.dev-save-publish-location').find('.icon-spinner6.spinner.position-right').remove();
                     $('.dev-save-publish-location').removeAttr('ajax-running');
                     $('#dev-publish-modal').find('.alert.alert-danger').remove();
-                    $('#dev-publish-modal').prepend('<div class="alert alert-danger no-border"><button data-dismiss="alert" class="close" type="button">' +
-                            '<span>×</span><span class="sr-only">Close</span></button>' + data.message
-                            + '</div>');
+                    $('#dev-publish-modal').prepend('<div class="alert alert-danger no-border"><button data-dismiss="alert" class="close" type="button">' + '<span>×</span><span class="sr-only">Close</span></button>' + data.message + '</div>');
                 } else {
                     basicModal.hide();
                     table.ajax.reload(function () {

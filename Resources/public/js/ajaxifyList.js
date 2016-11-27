@@ -314,8 +314,14 @@ function BasicModal() {
             method: 'GET',
             data: params,
             success: function (data) {
+                if (data.status == 'reload-table') {
+                    $('#modal_theme_primary').modal('hide');
+                    table.ajax.reload(function () {
+                        showNotificationMsg(data.message, "", 'error');
+                    }, false)
+                }
                 if (data.status == 'failed-reload') {
-                    thisObject.hide();
+                    $('#modal_theme_primary').modal('hide');
                     var numOfRecords = $('tr[data-id]').length;
                     var pageNum = getQueryVariable('page');
                     if (pageNum !== 1 && numOfRecords === 1) {
