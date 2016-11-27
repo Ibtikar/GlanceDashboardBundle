@@ -31,7 +31,7 @@
                     <label class="control-label col-lg-12">وقت النشر</label>
                     <div class="col-lg-12">
                         <div class='input-group date' id='datetimepicker1'>
-                            <input type='text' class="form-control open-datetimepicker" name="autoPublishDate" value="{{autoPublishDate}}" {% if document.status=='publish'%}disable{%endif %}/>
+                            <input type='text' class="form-control open-datetimepicker" name="autoPublishDate" value="{{autoPublishDate}}" {% if document.status=='publish'%}disabled{%endif %}/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -47,7 +47,7 @@
                 <div class="col-lg-12">
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" class="styled" name="publishNow" id="publishNow"  {% if document.status=='publish'%}disable{%endif %}>
+                            <input type="checkbox" class="styled" name="publishNow" id="publishNow"  {% if document.status=='publish'%}disabled{%endif %}>
                             نشر الان
                         </label>
                     </div>
