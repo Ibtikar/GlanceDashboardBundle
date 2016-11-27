@@ -166,12 +166,12 @@ abstract class PublishOperations
         if (!$rePublish) {
             $this->showFrontEndUrl($document);
         }
-        if (php_sapi_name() !== 'cli') {
+//        if (php_sapi_name() !== 'cli') {
             if ($document instanceof \Ibtikar\GlanceDashboardBundle\Document\Recipe && $document->getStatus() == 'autopublish') {
                 $document->setAutoPublishDate(null);
                 $document->setAssignedTo(null);
             }
-        }
+//        }
 
         $this->dm->flush();
         return array("status" => 'success', "message" => $this->translator->trans('done sucessfully'));
