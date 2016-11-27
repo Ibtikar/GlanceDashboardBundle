@@ -22,6 +22,7 @@ class AutopublishController extends RecipeController
         $this->allListColumns = array(
             "title" => array("searchFieldType" => "input"),
             "titleEn" => array("type" => "translated"),
+            "course" => array("isSortable"=>false,"searchFieldType"=>"select",'type'=>'many'),
             "country" => array("isSortable" => false),
             "createdBy" => array("isSortable" => false),
             "publishedBy" => array("isSortable" => false),

@@ -27,6 +27,7 @@ class PublishController extends RecipeController
             "publishedBy" => array("isSortable" => false),
             "createdAt" => array("type" => "date"),
             "publishedAt" => array("type" => "date"),
+            "course" => array("isSortable"=>false,"searchFieldType"=>"select",'type'=>'many'),
             "updatedAt" => array("type" => "date"),
             "chef" => array("isSortable" => false),
         );

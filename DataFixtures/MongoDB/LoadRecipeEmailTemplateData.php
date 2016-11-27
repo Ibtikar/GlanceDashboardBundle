@@ -16,7 +16,7 @@ class LoadRecipeEmailTemplateData implements FixtureInterface
 
         $autoPublishRecipe = new EmailTemplate();
         $autoPublishRecipe->setName('auto publish recipe');
-        $autoPublishRecipe->setSubject('النشرالتلقائي %shortTitle%  ');
+        $autoPublishRecipe->setSubject('النشرالتلقائي لـ (%shortTitle%)');
         $autoPublishRecipe->setMessage('');
         $autoPublishRecipe->setExtraInfo('<tr>
                                                                     <td style="font-family: Helvetica, arial, sans-serif; font-size: 14px; color: #889098; text-align:right; line-height: 24px;font-weight: bold;direction:rtl;">

@@ -182,7 +182,7 @@
                                                                     <td>
                                                                         {% for element in attribute(object, field.propertyName|humanize|title|replace({' ':''})) %}
                                                                             {% if not loop.first %},{% endif %}
-                                                                            {{ element }}
+                                                                            {{ element|trans({},translationDomain) }}
                                                                         {% endfor %}
                                                                     </td>
                                                                 {% elseif field.type == "refereceImage"  %}

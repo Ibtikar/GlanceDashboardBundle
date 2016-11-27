@@ -25,6 +25,7 @@ class DeletedController extends RecipeController
             "titleEn" => array("type" => "translated"),
             "country" => array("isSortable" => false),
             "createdBy" => array("isSortable" => false),
+            "course" => array("isSortable"=>false,"searchFieldType"=>"select",'type'=>'many'),
             "deletedBy" => array("isSortable" => false),
             "createdAt" => array("type" => "date"),
             "deletedAt" => array("type" => "date"),

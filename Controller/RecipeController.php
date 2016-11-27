@@ -30,6 +30,7 @@ class RecipeController extends BackendController
             "createdBy" => array("isSortable" => false),
             "createdAt" => array("type" => "date"),
             "updatedAt" => array("type" => "date"),
+            "course" => array("isSortable"=>false,"searchFieldType"=>"select",'type'=>'many'),
             "chef" => array("isSortable" => false),
         );
         $this->defaultListColumns = array(
