@@ -179,9 +179,9 @@ class RecipeController extends BackendController
         $dm = $this->get('doctrine_mongodb')->getManager();
 
         if ($status == RecipeOperations::$TIME_OUT) {
-         return new JsonResponse(array('status' => 'error', 'message' => $this->get('translator')->trans('failed operation'),$this->getTabCount()));
+         return new JsonResponse(array_merge(array('status' => 'error', 'message' => $this->get('translator')->trans('failed operation')),$this->getTabCount()));
         } elseif ($status == RecipeOperations::$ASSIGN_TO_OTHER_USER) {
-            return new JsonResponse(array('status' => 'error', 'message' => $this->get('translator')->trans('sorry this recipe assign to other user',array(),  $this->translationDomain),$this->getTabCount()));
+            return new JsonResponse(array_merge(array('status' => 'error', 'message' => $this->get('translator')->trans('sorry this recipe assign to other user',array(),  $this->translationDomain)),$this->getTabCount()));
         } elseif ($status == RecipeOperations::$ASSIGN_TO_ME) {
             $successMessage = $this->get('translator')->trans('done sucessfully');
             return new JsonResponse(array_merge(array('status' => 'success', 'message' => $successMessage),  $this->getTabCount()));
