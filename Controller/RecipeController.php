@@ -179,9 +179,9 @@ class RecipeController extends BackendController
         $dm = $this->get('doctrine_mongodb')->getManager();
 
         if ($status == RecipeOperations::$TIME_OUT) {
-         return new JsonResponse(array('status' => 'error', 'message' => $this->get('translator')->trans('failed operation'),'newRecipe'=>$newRecipeCount,'assignedRecipe'=>$assignedRecipeCount));
+         return new JsonResponse(array('status' => 'error', 'message' => $this->get('translator')->trans('failed operation'),$this->getTabCount()));
         } elseif ($status == RecipeOperations::$ASSIGN_TO_OTHER_USER) {
-            return new JsonResponse(array('status' => 'error', 'message' => $this->get('translator')->trans('sorry this recipe assign to other user',array(),  $this->translationDomain),'newRecipe'=>$newRecipeCount,'assignedRecipe'=>$assignedRecipeCount));
+            return new JsonResponse(array('status' => 'error', 'message' => $this->get('translator')->trans('sorry this recipe assign to other user',array(),  $this->translationDomain),$this->getTabCount()));
         } elseif ($status == RecipeOperations::$ASSIGN_TO_ME) {
             $successMessage = $this->get('translator')->trans('done sucessfully');
             return new JsonResponse(array_merge(array('status' => 'success', 'message' => $successMessage),  $this->getTabCount()));
@@ -444,7 +444,7 @@ class RecipeController extends BackendController
         if (!$this->getUser()) {
             return $this->getLoginResponse();
         }
-        $securityContext = $this->get('security.context');
+        $securityContext = $this->get('security.authorization_checker');
 
         if (!$securityContext->isGranted('ROLE_ADMIN') && !$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_DELETE')) {
             $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
@@ -463,19 +463,27 @@ class RecipeController extends BackendController
             if ($this->calledClassName != 'recipepublish') {
                 if ($id) {
                     $msg = str_replace('%title%', $recipe->getTitle(), $this->trans('delete single recipe %title%', array(), $this->translationDomain));
+                    $url=  $this->generateUrl('ibtikar_glance_dashboard_'.strtolower($this->calledClassName).'_delete',array('id'=>$id));
                 } else {
                     $msg = str_replace('%no%',$request->get('count') , $this->trans('delete multiple recipe %no%', array(), $this->translationDomain));
+                    $url=  $this->generateUrl('ibtikar_glance_dashboard_'.strtolower($this->calledClassName).'_bulk_actions');
+
                 }
             } else {
                 if ($id) {
                    $msg = str_replace('%title%', $recipe->getTitle(), $this->trans('delete single publish recipe %title%', array(), $this->translationDomain));
+                   $url=  $this->generateUrl('ibtikar_glance_dashboard_'.strtolower($this->calledClassName).'_delete',array('id'=>$id));
+
                 } else {
                     $msg =  str_replace('%no%', $request->get('count'), $this->trans('delete multiple publish recipe %no%', array(), $this->translationDomain));
+                    $url=  $this->generateUrl('ibtikar_glance_dashboard_'.strtolower($this->calledClassName).'_bulk_actions');
+
                 }
             }
             return $this->render('IbtikarGlanceDashboardBundle:Recipe:deleteModal.html.twig', array(
-                        'translationDomain' => $this->translationDomain,
-                        'msg' => $msg,
+                    'translationDomain' => $this->translationDomain,
+                    'url' => $url,
+                    'msg' => $msg,
             ));
         } else if ($request->getMethod() === 'POST') {
             $recipe = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
@@ -485,11 +493,8 @@ class RecipeController extends BackendController
 
             $forwardResult = $this->get('recipe_operations')->delete($recipe, $request->get('reason'));
 
-            if ($forwardResult["status"] == 'success') {
-                $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('done sucessfully'));
-            }
 
-            return new JsonResponse(array('status' => $forwardResult["status"], 'message' => $forwardResult["message"]));
+            return new JsonResponse(array_merge(array('status' => $forwardResult["status"], 'message' => $forwardResult["message"]),$this->getTabCount()));
         }
     }
 }
