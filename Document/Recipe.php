@@ -223,6 +223,12 @@ class Recipe  extends Publishable {
      */
     private $autoPublishDate;
 
+
+    /**
+     * @MongoDB\String
+     */
+    private $reason ;
+
     public function __construct()
     {
         $this->tag = new \Doctrine\Common\Collections\ArrayCollection();
@@ -872,5 +878,27 @@ class Recipe  extends Publishable {
     public function getAutoPublishDate()
     {
         return $this->autoPublishDate;
+    }
+
+    /**
+     * Set reason
+     *
+     * @param string $reason
+     * @return self
+     */
+    public function setReason($reason)
+    {
+        $this->reason = $reason;
+        return $this;
+    }
+
+    /**
+     * Get reason
+     *
+     * @return string $reason
+     */
+    public function getReason()
+    {
+        return $this->reason;
     }
 }

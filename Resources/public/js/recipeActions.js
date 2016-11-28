@@ -38,18 +38,21 @@ function showDeleteModal(clickedElement) {
 
     var basicModal = new BasicModal();
     basicModal.show(clickedElement.attr('data-href'), function () {
-
+        unblockPage()
         $(".dev-save-delete-recipe").click(function () {
-            if ($('#dev-delete-modal').valid()) {
-                var Params = {id: clickedElement.attr("data-id"),'reason': $('#dev-delete-reason').val()};
-                if (assign) {
-                    assign = false;
+            if ($.trim($('#dev-delete-reason').val())) {
+                if ($('.dev-save-delete-recipe').attr('ajax-running')) {
+                    return;
+                }
+                $('.dev-save-delete-recipe').attr('ajax-running', true)
+                $('.dev-save-delete-recipe').append('<i class="icon-spinner6 spinner position-right"></i>');
+                var Params = {id: clickedElement.attr("data-id"), 'reason': $('#dev-delete-reason').val()};
                     $.ajax({
-                        url: clickedElement.attr("data-url"),
+                        url: $(this).attr("data-url"),
                         data: Params,
                         method: 'post',
                         success: function (data) {
-                            assign = true;
+                            basicModal.hide()
                             table.ajax.reload(function () {
                                 if (data.status != 'reload-table') {
                                     showNotificationMsg(data.message, "", data.status);
@@ -66,20 +69,19 @@ function showDeleteModal(clickedElement) {
                         }
 
                     });
-                }
             } else {
+                console.log('error')
                 $('.error').addClass('help-block');
                 $('.error').parent().parent('.form-group').addClass('has-error');
             }
         });
     });
-    basicModal.hide()
 }
     function showBulkDeleteModal (clickedElementIfNotBulk) {
 
 
         var basicModal = new BasicModal();
-        basicModal.show(deleteUrl + 'no=' + $('tbody .dev-checkbox:checked').length, function () {
+        basicModal.show(deleteUrl + '?count=' + $('tbody .dev-checkbox:checked').length, function () {
 
 //            $(".dev-delete-button").click(function () {
 //                if ($('#dev-delete-select').valid()) {

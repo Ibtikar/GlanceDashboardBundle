@@ -449,7 +449,7 @@ abstract class PublishOperations
 
     public function delete($recipe,$fromRoomName,$reason=NULL) {
 
-        $userFrom = $this->container->get('security.context')->getToken()->getUser();
+        $userFrom = $this->container->get('security.token_storage')->getToken()->getUser();
 
         $isValid = $this->validateDelete($recipe);
 
@@ -471,5 +471,8 @@ abstract class PublishOperations
             $this->dm->flush();
         }
         return $isValid;
+    }
+
+    public function validateDelete($recipe) {
     }
 }
