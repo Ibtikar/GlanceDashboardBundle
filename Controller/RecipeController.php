@@ -497,4 +497,78 @@ class RecipeController extends BackendController
             return new JsonResponse(array_merge(array('status' => $forwardResult["status"], 'message' => $forwardResult["message"]),$this->getTabCount()));
         }
     }
+
+
+    public function bulkAction(Request $request)
+    {
+        $securityContext = $this->get('security.authorization_checker');
+        if (!$this->getUser()) {
+            return $this->getLoginResponse();
+        }
+        $ids = array_diff($request->get('ids', array()), array(""));
+        if (empty($ids)) {
+            return $this->getFailedResponse();
+        }
+        $bulkAction = $request->get('bulk-action');
+
+        if (!$bulkAction) {
+            return $this->getFailedResponse();
+        }
+
+        $successIds = array();
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $documents = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findBy(array('id' => array('$in' => array_values($ids))));
+        $translator = $this->get('translator');
+        $message = str_replace(array('%action%', '%item-translation%', '%ids-count%'), array($translator->trans($bulkAction), $this->trans(strtolower($this->oneItem != "" ? $this->oneItem : $this->calledClassName)), count($ids)), $translator->trans('successfully %action% %success-count% %item-translation% from %ids-count%.'));
+        $foundDocumentsIds = array();
+        foreach ($documents as $document) {
+            $foundDocumentsIds [] = $document->getId();
+        }
+        $deletedIds = array_diff($ids, $foundDocumentsIds);
+        $data = array(
+            'status' => 'success',
+            'message' => '',
+            'bulk-action' => $bulkAction,
+            'success' => &$successIds,
+            'errors' => array()
+        );
+        $data['errors'][$translator->trans('Already deleted.')] = $deletedIds;
+        if (count($deletedIds) === count($ids)) {
+            $data['message'] = str_replace('%success-count%', 0, $message);
+            return new JsonResponse($data);
+        }
+
+        switch ($bulkAction) {
+            case 'Delete':
+                $permission = 'ROLE_' . strtoupper($this->calledClassName) . '_DELETE';
+
+                if (!$securityContext->isGranted($permission) && !$securityContext->isGranted('ROLE_ADMIN')) {
+                    $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
+                    return new JsonResponse($result);
+                }
+                foreach ($documents as $document) {
+                    $errorMessage = $this->validateDelete($document);
+                    if ($document->getNotModified()) {
+                        $data['errors'][$translator->trans('failed operation')] [] = $document->getId();
+                        continue;
+                    }
+                    if ($errorMessage) {
+                        $data['errors'][$errorMessage] [] = $document->getId();
+                        continue;
+                    }
+
+                    try {
+                        $forwardResult = $this->get('recipe_operations')->delete($recipe, $request->get('reason'));
+                        $dm->flush();
+                        $successIds [] = $document->getId();
+                    } catch (\Exception $e) {
+                        $data['errors'][$translator->trans('failed operation')] [] = $document->getId();
+                    }
+                }
+
+                break;
+        }
+        $data['message'] = str_replace('%success-count%', count($successIds), $message);
+        return new JsonResponse(array_merge($data, $this->getTabCount()));
+    }
 }
