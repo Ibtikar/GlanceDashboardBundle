@@ -102,7 +102,7 @@ var dataTableDefault = {
             delay:{ "hide": 500 }
         });
 
-        if (!sort) {
+        if (!columns[0].orderable) {
             $('th:first').removeClass('sorting_asc').addClass('sorting_disabled')
         }
         if ($('.datatable-column-search-inputs input.dev-checkbox').length == $('.datatable-column-search-inputs input:checked.dev-checkbox').length && $('.datatable-column-search-inputs input:checked.dev-checkbox').length != 0) {
