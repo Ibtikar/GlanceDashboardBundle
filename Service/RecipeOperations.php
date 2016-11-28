@@ -56,4 +56,13 @@ class RecipeOperations extends PublishOperations
     {
 
     }
+
+    private function validateDelete($recipe) {
+        $translator = $this->container->get('translator');
+        //invalid material OR user who wants to forward is not the material owner
+        if ($recipe->getStatus()=='deleted') {
+            return array("status"=>"error","message"=>$translator->trans('failed operation'));
+        }
+        return array("status"=>'success',"message"=>'true');
+    }
 }

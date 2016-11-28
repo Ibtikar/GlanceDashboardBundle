@@ -88,20 +88,7 @@
                                                                 <span class="dev-bulk-action-container" data-list-name="{{listName|lower}}" data-href="{{ list.hasBulkActions(listName) ? path(prefixRoute|lower ~ '_bulk_actions') : '' }}" style="display: none;">
                                                                     {% for action in list.bulkActions %}
                                                                         {% if action == "Delete"  and (is_granted('ROLE_'~listName|upper~'_DELETE') or is_granted('ROLE_ADMIN')) %}
-                                                                            <a data-action="{{action}}" {{popover_factory({
-                                            question : "You are about to delete (%count%) (%type%), Are you sure?",
-                                            replaceAttr : true,
-                                            buttons : [
-                                                        {
-                                                            text : "Yes",
-                                                            class : "dev-bulk-delete-btn dev-bulk-action-btn btn-danger"
-                                                        },
-                                                        {
-                                                            text : "Cancel",
-                                                            class : "btn-defualt"
-                                                        }
-                                                    ]
-                                            })|replace({'%type%': (oneItem~"s")|lower|trans})|raw}} class="btn btn-default btn-sm" data-placement="bottom"> <i class="icon-trash"></i> <span class="hidden-sm position-right">{{ 'delete'|trans }} {{ ((oneItem|capitalize)~"s")|trans }}</span></a>
+                                                                            <a data-action="{{action}}"  class="btn btn-default btn-sm dev-delete-bulk-recipe" data-placement="bottom"> <i class="icon-trash"></i> <span class="hidden-sm position-right">{{ 'delete'|trans }} {{ ((oneItem|capitalize)~"s")|trans }}</span></a>
                                                                         {% endif %}
                                                                     {% endfor %}
                                                                 </span>
@@ -232,7 +219,7 @@
                                                                                     {% endif %}
                                                                                 {% elseif action == "Delete" %}
                                                                                     {% if  (is_granted('ROLE_RECIPE' ~ object.status|upper ~'_DELETE') or is_granted('ROLE_ADMIN')) %}
-                                                                                    <a class="btn btn-defualt"  data-href = "{{ path('ibtikar_glance_dashboard_recipe'~object.status~ '_delete', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-trash" data-popup="tooltip" title="{{ ('Delete ' ~  listName)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
+                                                                                    <a class="btn btn-defualt dev-delete-single-recipe"  data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" data-id="{{ object.id }}" ><i class="icon-trash" data-popup="tooltip" title="{{ ('Delete ' ~  listName)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
                                                                                 {% endif %}
                                                                                 {% elseif action == "ViewOne" %}
 
@@ -392,6 +379,9 @@
         {% endif %}
         {% if 'recipenew_list_new' not in app.request.attributes.get('_route') %}
         var publisUrl="{{ path(prefixRoute|lower~'_publish')}}";
+        {% endif %}
+        {% if 'recipedeleted_list_deleted' not in app.request.attributes.get('_route') %}
+          var deleteUrl=" {{ path(prefixRoute|lower ~'_delete')}}";
         {% endif %}
 
     </script>

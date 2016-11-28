@@ -18,7 +18,112 @@ $(document).ready(function () {
         blockPage();
         showPublishModal($(this));
     });
+
+    $('div.panel-flat').on('click', '.dev-delete-bulk-recipe', function () {
+        $('[data-popup="tooltip"]').tooltip("hide");
+        blockPage();
+        showBulkDeleteModal($(this));
+    });
+
+    $('div.panel-flat').on('click', '.dev-delete-single-recipe', function () {
+        $('[data-popup="tooltip"]').tooltip("hide");
+        blockPage();
+        showDeleteModal($(this));
+    });
 })
+
+
+function showDeleteModal(clickedElement) {
+
+
+    var basicModal = new BasicModal();
+    basicModal.show(clickedElement.attr('data-href'), function () {
+
+        $(".dev-save-delete-recipe").click(function () {
+            if ($('#dev-delete-modal').valid()) {
+                var Params = {id: clickedElement.attr("data-id"),'reason': $('#dev-delete-reason').val()};
+                if (assign) {
+                    assign = false;
+                    $.ajax({
+                        url: clickedElement.attr("data-url"),
+                        data: Params,
+                        method: 'post',
+                        success: function (data) {
+                            assign = true;
+                            table.ajax.reload(function () {
+                                if (data.status != 'reload-table') {
+                                    showNotificationMsg(data.message, "", data.status);
+                                    $('.dev-new-recipe').html(data.newRecipeCount);
+                                    $('.dev-new-assign-recipe').html(data.assignedRecipeCount);
+                                    $('.dev-autopublish-recipe').html(data.autopublishRecipeCount);
+                                    $('.dev-published-recipe').html(data.publishRecipeCount);
+                                    $('.dev-deleted-recipe').html(data.deletedRecipeCount);
+                                } else {
+                                    showNotificationMsg(data.message, "", 'error');
+                                }
+                            }, false)
+
+                        }
+
+                    });
+                }
+            } else {
+                $('.error').addClass('help-block');
+                $('.error').parent().parent('.form-group').addClass('has-error');
+            }
+        });
+    });
+    basicModal.hide()
+}
+    function showBulkDeleteModal (clickedElementIfNotBulk) {
+
+
+        var basicModal = new BasicModal();
+        basicModal.show(deleteUrl + 'no=' + $('tbody .dev-checkbox:checked').length, function () {
+
+//            $(".dev-delete-button").click(function () {
+//                if ($('#dev-delete-select').valid()) {
+//                    if (clickedElementIfNotBulk) {
+//                        thisObject.deleteMaterial(clickedElementIfNotBulk, basicModal);
+//                    } else {
+//                        var selectedItemsNumber = $('tbody .dev-list-check:checked').length;
+//                        var deleteAttrs = {
+//                            reason: $('#dev-delete-select').val()
+//                        };
+//
+//                        if ($('#dev-delete-reason').val().trim() != "") {
+//                            deleteAttrs.otherReason = $('#dev-delete-reason').val();
+//                        }
+//
+//                        var confirmationMessage = "";
+//                        if (typeof clickedElementIfNotBulk == "undefined") {
+//                            if($('.dev-material-delete-action').attr('data-status')){
+//                                if($('.dev-material-delete-action').attr('data-status')  =='new'){
+//
+//                                    confirmationMessage = roomMessages['deleteMultiConfirmMessage'];
+//                                }else{
+//                                    confirmationMessage = roomMessages['deleteMultiConfirmMessageAutoPublish'];
+//                                }
+//                            }
+//                            else{
+//                                confirmationMessage = roomMessages['deleteMultiConfirmMessage'];
+//                            }
+//                        }
+//
+//                        showConfirmationBox(confirmationMessage.replace('%number%', selectedItemsNumber),
+//                                function () {
+//                                    bulkFunction("", deleteAttrs, basicModal);
+//                                }, roomMessages['deleteConfirmTitle']);
+//                    }
+//                } else {
+//                    $('.error').addClass('help-block');
+//                    $('.error').parent().parent('.form-group').addClass('has-error');
+//                }
+//            });
+        });
+        basicModal.hide()
+    }
+
 
 
 function  showPublishModal(element) {

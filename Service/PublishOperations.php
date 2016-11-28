@@ -445,4 +445,31 @@ abstract class PublishOperations
             $this->unpublishFromLocation($oldestDocument, $oldestLocation, TRUE, FALSE);
         }
     }
+
+
+    public function delete($recipe,$fromRoomName,$reason=NULL) {
+
+        $userFrom = $this->container->get('security.context')->getToken()->getUser();
+
+        $isValid = $this->validateDelete($recipe);
+
+        if ($isValid['status'] == 'success') {
+
+            if ($recipe->getStatus() == 'published' || $recipe->getStatus() == 'autopublish') {
+                $this->container->get('recipe_operations')->unpublish($recipe);
+            }
+            $recipe
+                ->setStatus('deleted')
+                ->setDeletedAt(new \DateTime())
+                ->setDeletedBy($userFrom)
+                ->setAssignedTo(NULL)
+                ->setReason($reason['reason']);
+            if ($recipe->getStatus() == 'published') {
+                $this->container->get('redirect')->removeRedirect($this->getFrontEndUrl($recipe));
+                $this->hideFrontEndUrl($recipe);
+            }
+            $this->dm->flush();
+        }
+        return $isValid;
+    }
 }

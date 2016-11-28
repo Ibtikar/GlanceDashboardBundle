@@ -191,6 +191,9 @@ class RecipeController extends BackendController
 
     public function publishAction(Request $request)
     {
+        if (!$this->getUser()) {
+            return $this->getLoginResponse();
+        }
         $dm = $this->get('doctrine_mongodb')->getManager();
         $securityContext = $this->get('security.authorization_checker');
         $publishOperations = $this->get('recipe_operations');
@@ -434,5 +437,59 @@ class RecipeController extends BackendController
             $responseContent[] = $tag->getName();
         }
         return new JsonResponse($responseContent);
+    }
+
+    public function deleteAction(Request $request)
+    {
+        if (!$this->getUser()) {
+            return $this->getLoginResponse();
+        }
+        $securityContext = $this->get('security.context');
+
+        if (!$securityContext->isGranted('ROLE_ADMIN') && !$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_DELETE')) {
+            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
+            return new JsonResponse($result);
+        }
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        if ($request->getMethod() === 'GET') {
+            $id = $request->get('id', '');
+            if ($id) {
+                $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($id);
+                if (!$recipe) {
+                    $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
+                    return new JsonResponse($result);
+                }
+            }
+            if ($this->calledClassName != 'recipepublish') {
+                if ($id) {
+                    $msg = str_replace('%title%', $recipe->getTitle(), $this->trans('delete single recipe %title%', array(), $this->translationDomain));
+                } else {
+                    $msg = str_replace('%no%',$request->get('count') , $this->trans('delete multiple recipe %no%', array(), $this->translationDomain));
+                }
+            } else {
+                if ($id) {
+                   $msg = str_replace('%title%', $recipe->getTitle(), $this->trans('delete single publish recipe %title%', array(), $this->translationDomain));
+                } else {
+                    $msg =  str_replace('%no%', $request->get('count'), $this->trans('delete multiple publish recipe %no%', array(), $this->translationDomain));
+                }
+            }
+            return $this->render('IbtikarGlanceDashboardBundle:Recipe:deleteModal.html.twig', array(
+                        'translationDomain' => $this->translationDomain,
+                        'msg' => $msg,
+            ));
+        } else if ($request->getMethod() === 'POST') {
+            $recipe = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('id')->equals($request->get('id'))
+                    ->field('deleted')->equals(false)
+                    ->getQuery()->getSingleResult();
+
+            $forwardResult = $this->get('recipe_operations')->delete($recipe, $request->get('reason'));
+
+            if ($forwardResult["status"] == 'success') {
+                $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('done sucessfully'));
+            }
+
+            return new JsonResponse(array('status' => $forwardResult["status"], 'message' => $forwardResult["message"]));
+        }
     }
 }
