@@ -102,7 +102,9 @@ var dataTableDefault = {
             delay:{ "hide": 500 }
         });
 
-        $('.dev-checkbox-all').closest('th').removeClass('sorting_asc').addClass('sorting_disabled')
+        if (!sort) {
+            $('th:first').removeClass('sorting_asc').addClass('sorting_disabled')
+        }
         if ($('.datatable-column-search-inputs input.dev-checkbox').length == $('.datatable-column-search-inputs input:checked.dev-checkbox').length && $('.datatable-column-search-inputs input:checked.dev-checkbox').length != 0) {
             $('.dev-checkbox-all').prop('checked', true).uniform('refresh');
         } else {
