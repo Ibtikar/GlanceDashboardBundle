@@ -117,6 +117,8 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 'delete multiple recipe %no%': 'أنت على وشك حذف (%no%) وصفات، هل تريد إتمام العملية؟'
 'delete multiple publish recipe %no%': 'انت على وشك حذف "%no%" وصفات منشورة على الموقع بعنوان  ... هل تريد اﻷستمرار و حذف هذه الوصفة من الموقع؟'
 'delete recipe': 'حذف'
+'you must write delete reason': 'الرجاء ادخال سبب الحذف'
+'already deleted': 'عذراً، هذه الوصفة محذوفه مسبقاً'
 
 
 
