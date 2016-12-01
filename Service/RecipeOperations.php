@@ -61,7 +61,7 @@ class RecipeOperations extends PublishOperations
         $translator = $this->container->get('translator');
         //invalid material OR user who wants to forward is not the material owner
         if ($recipe->getStatus()=='deleted') {
-            return array("status"=>"error","message"=>$translator->trans('failed operation'));
+            return array("status"=>"error","message"=>$this->translator->trans('already deleted',array(),'recipe'));
         }
         return array("status"=>'success',"message" => $this->translator->trans('done sucessfully'));
     }

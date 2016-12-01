@@ -70,9 +70,11 @@ function showDeleteModal(clickedElement) {
 
                 });
             } else {
-                console.log('error')
-                $('.error').addClass('help-block');
-                $('.error').parent().parent('.form-group').addClass('has-error');
+                $('#dev-delete-modal').find('.alert.alert-danger').remove();
+                $('#dev-delete-modal').prepend('<div class="alert alert-danger no-border"><button data-dismiss="alert" class="close" type="button">' +
+                        '<span>×</span><span class="sr-only">Close</span></button>' + deleteErrorMessage
+                        + '</div>');
+
             }
         });
     });
@@ -95,9 +97,11 @@ function showBulkDeleteModal(clickedElementIfNotBulk) {
                 recipeBulkFunction();
 
             } else {
-                console.log('error')
-                $('.error').addClass('help-block');
-                $('.error').parent().parent('.form-group').addClass('has-error');
+                $('#dev-delete-modal').find('.alert.alert-danger').remove();
+                $('#dev-delete-modal').prepend('<div class="alert alert-danger no-border"><button data-dismiss="alert" class="close" type="button">' +
+                        '<span>×</span><span class="sr-only">Close</span></button>' + deleteErrorMessage
+                        + '</div>');
+
             }
         });
     });
