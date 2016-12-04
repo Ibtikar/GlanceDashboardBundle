@@ -227,7 +227,12 @@ class Recipe  extends Publishable {
     /**
      * @MongoDB\String
      */
-    private $reason ;
+    private $reason;
+
+    /**
+     * @MongoDB\Date
+     */
+    private $dailysolutionDate;
 
     public function __construct()
     {
@@ -900,5 +905,27 @@ class Recipe  extends Publishable {
     public function getReason()
     {
         return $this->reason;
+    }
+
+    /**
+     * Set dailysolutionDate
+     *
+     * @param date $dailysolutionDate
+     * @return self
+     */
+    public function setDailysolutionDate($dailysolutionDate)
+    {
+        $this->dailysolutionDate = $dailysolutionDate;
+        return $this;
+    }
+
+    /**
+     * Get dailysolutionDate
+     *
+     * @return date $dailysolutionDate
+     */
+    public function getDailysolutionDate()
+    {
+        return $this->dailysolutionDate;
     }
 }

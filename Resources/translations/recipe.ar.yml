@@ -120,6 +120,7 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 'delete recipe': 'حذف'
 'you must write delete reason': 'الرجاء ادخال سبب الحذف'
 'already deleted': 'عذراً، هذه الوصفة محذوفه مسبقاً'
+'recipe': 'الوصفه'
 
 
 

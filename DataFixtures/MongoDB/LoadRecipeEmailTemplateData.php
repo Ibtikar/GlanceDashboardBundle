@@ -20,7 +20,7 @@ class LoadRecipeEmailTemplateData implements FixtureInterface
         $autoPublishRecipe->setMessage('');
         $autoPublishRecipe->setExtraInfo('<tr>
                                                                     <td style="font-family: Helvetica, arial, sans-serif; font-size: 14px; color: #889098; text-align:right; line-height: 24px;font-weight: bold;direction:rtl;">
-نود أن نخبرك بأنه تم نشر الوصفة تلقائيا في الوقت الذي تمت تحديده من قبلكم مسبقاً (%time%) (%date%)
+نود أن نخبرك بأنه تم نشر %type% تلقائيا في الوقت الذي تمت تحديده من قبلكم مسبقاً (%time%) (%date%)
                                                                     </td>
                                                                 </tr>');
 
