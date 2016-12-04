@@ -75,6 +75,7 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 'List recipenew': 'الوصفات الجديده'
 'List recipedeleted':  الوصفات المحذوفه
 'recipes deleted': وصفات محذوفه
+'List content': 'محتوى'
 
 # ############Buttons############
 'AssignToMe': 'اسناد لي'
@@ -104,7 +105,7 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 'Delete recipedeleted': حذف
 'Delete recipeautopublish': حذف
 'Delete Recipeautopublish': حذف
-'List Recipe': 'الوصفات'
+'List Recipe': 'المحتوى'
 'new': 'جديده'
 'deleted': 'محذوفه'
 'publish': 'منشوره'

@@ -48,7 +48,7 @@
                             <!-- view roles -->
                             <div class="panel panel-flat">
                                 <div class="panel-heading">
-                                    <h5 class="panel-title">{{  ('List Recipe')|trans({}, translationDomain)}}</h5>
+                                    <h5 class="panel-title">{{  ('List content')|trans({}, translationDomain)}}</h5>
                                     <div class="heading-elements">
                                         {% block statistic %}
                                             {# <span class="label heading-text label-flat border-grey text-grey-600">28 closed</span>
@@ -76,7 +76,7 @@
                                                     {% if is_granted('ROLE_RECIPEPUBLISH_VIEW') or is_granted('ROLE_ADMIN') %}
 
                                                     <li   {% if 'recipepublish_list_publish' in app.request.attributes.get('_route') %} class="active"    {% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_recipepublish_list_publish_recipe') }}" data-toggle="tab"><span class="badge badge-primary position-left dev-published-recipe">{{ publishRecipeCount }}</span> {% trans from translationDomain %}publish{% endtrans%}</a></li>
-                                                    {% endif %}               
+                                                    {% endif %}
                                                     {% if is_granted('ROLE_RECIPEAUTOPUBLISH_VIEW') or is_granted('ROLE_ADMIN') %}
 
                                                     <li   {% if 'recipeautopublish_list_autopublish' in app.request.attributes.get('_route') %} class="active"    {% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_recipeautopublish_list_autopublish_recipe') }}" data-toggle="tab"><span class="badge badge-primary position-left dev-autopublish-recipe">{{ autopublishRecipeCount}}</span> {% trans from translationDomain %}autopublish{% endtrans%}</a></li>
