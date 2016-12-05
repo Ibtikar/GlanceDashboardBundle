@@ -389,7 +389,7 @@ function bulkFunction() {
     var $form = $('.dev-bulk-actions-form');
     var formData = $form.serializeArray();
 
-    var numOfRecords = $('tr[data-id]').length;
+    var numOfRecords = $('tbody .dev-checkbox').length;
     var numOfCheckedRecord = $('tbody .dev-checkbox:checked').length;
     var pageNum = getQueryVariable('page');
     blockPage();
@@ -411,7 +411,10 @@ function bulkFunction() {
 
             unblockPage();
 
-            if (data.status === 'success') {
+            if (data.status == 'success') {
+                if (((data.success).length == numOfCheckedRecord || (data.success).length == 0) && pageNum != 1 && numOfRecords === numOfCheckedRecord) {
+                    table.page(parseInt(table.page(), 10) - parseInt(1, 10));
+                } 
                 table.ajax.reload(function (){
                     for (message in data.errors) {
                         for (index in data.errors[message]) {
@@ -421,10 +424,11 @@ function bulkFunction() {
                                 $tr.find('input[type="checkbox"]').prop('checked',true).uniform('refresh');
                                 $tr.addClass('danger').attr('title',message);
                                 $tr.powerTip({followMouse: true});
-                                showBulkActionSelect();
+                               
                             }
                         }
                     }
+                    showBulkActionSelect();
 
                 }, false);
             }
