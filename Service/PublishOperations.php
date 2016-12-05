@@ -152,12 +152,10 @@ abstract class PublishOperations
 
         foreach ($locations as $location) {
             if (!$rePublish || $location->getIsSelectable()) {
-                $this->publishInLocation($document, $location->getPublishedLocationObject($user), $location->getMaxNumberOfMaterials());
+                 $this->publishInLocation($document, $location->getPublishedLocationObject($user), $location->getMaxNumberOfMaterials());
             }
         }
-        if (!$rePublish) {
-            $document->setPublishedAt(new \DateTime());
-        }
+        $document->setPublishedAt(new \DateTime());
         $document->setPublishedBy($user);
         $document->setStatus(Recipe::$statuses['publish']);
         $document->setAssignedTo(null);
@@ -211,6 +209,9 @@ abstract class PublishOperations
         }
         if (php_sapi_name() !== 'cli') {
             $document->addPublishLocation($location);
+        }
+        if ($location->getSection() == 'Daily-solution') {
+            $document->setDailysolutionDate($location->getPublishedAt());
         }
     }
 

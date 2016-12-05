@@ -10,7 +10,7 @@ use Ibtikar\GlanceDashboardBundle\Document\Document;
 use Ibtikar\GlanceDashboardBundle\Document\Publishable;
 /**
  * @MongoDB\hasLifeCycleCallbacks
- * @MongoDB\Document
+ * @MongoDB\Document(repositoryClass="Ibtikar\GlanceDashboardBundle\Document\RecipeRepository")
  */
 class Recipe  extends Publishable {
 
@@ -233,6 +233,31 @@ class Recipe  extends Publishable {
      * @MongoDB\Date
      */
     private $dailysolutionDate;
+
+    /**
+     * @MongoDB\Increment
+     */
+    private $noOfViews = 0;
+
+    /**
+     * @MongoDB\String
+     * @Assert\Regex(pattern="/^[a-zA-Z\x{0600}-\x{06ff}\-]+$/u", message="only characters and dashes allowed", groups={"Default"})
+     * @Assert\Length(
+     *      max = 125,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $slug;
+
+    /**
+     * @MongoDB\String
+     * @Assert\Regex(pattern="/^[a-zA-Z\x{0600}-\x{06ff}\-]+$/u", message="only characters and dashes allowed", groups={"Default"})
+     * @Assert\Length(
+     *      max = 125,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $slugEn;
 
     public function __construct()
     {
@@ -927,5 +952,61 @@ class Recipe  extends Publishable {
     public function getDailysolutionDate()
     {
         return $this->dailysolutionDate;
+    }
+
+    /**
+     * Set noOfViews
+     *
+     * @param increment $noOfViews
+     * @return self
+     */
+    public function setNoOfViews($noOfViews)
+    {
+        $this->noOfViews = $noOfViews;
+        return $this;
+    }
+
+    /**
+     * Get noOfViews
+     *
+     * @return increment $noOfViews
+     */
+    public function getNoOfViews()
+    {
+        return $this->noOfViews;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return self
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
+    /**
+     * Set slugEn
+     *
+     * @param string $slugEn
+     * @return self
+     */
+    public function setSlugEn($slugEn)
+    {
+        $this->slugEn = $slugEn;
+        return $this;
+    }
+
+    /**
+     * Get slugEn
+     *
+     * @return string $slugEn
+     */
+    public function getSlugEn()
+    {
+        return $this->slugEn;
     }
 }
