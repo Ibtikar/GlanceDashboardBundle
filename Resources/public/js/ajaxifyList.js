@@ -17,11 +17,11 @@ var dataTableDefault = {
     "initComplete": function (settings, json) {
     },
     "preDrawCallback": function (settings) {
-        if (checkbox) {
-            checkbox = false;
-            return false;
-
-        }
+//        if (checkbox) {
+//            checkbox = false;
+//            return false;
+//
+//        }
     },
     'fnServerData': function (sSource, aoData, fnCallback)
     {
@@ -148,7 +148,9 @@ function reIntaializeTable(data) {
     $('.datatable-column-search-inputs thead').html('<tr>' + th + '</tr>')
     if (data.sort) {
         datatableSetting = $.extend({}, dataTableDefault, {"order": JSON.parse(data.sort), "initComplete": function (settings, json) {
-                $('.dev-checkbox-all').removeClass('sorting_asc').addClass('sorting_disabled')
+                if (!columns[0].orderable) {
+                    $('th:first').removeClass('sorting_asc').addClass('sorting_disabled')
+                }
                 $(".dataTables_length select").select2({
                     /* select2 options, as an example */
                     minimumResultsForSearch: -1,
