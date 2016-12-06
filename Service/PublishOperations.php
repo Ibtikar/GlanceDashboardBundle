@@ -152,25 +152,24 @@ abstract class PublishOperations
 
         foreach ($locations as $location) {
             if (!$rePublish || $location->getIsSelectable()) {
-                $this->publishInLocation($document, $location->getPublishedLocationObject($user), $location->getMaxNumberOfMaterials());
+                 $this->publishInLocation($document, $location->getPublishedLocationObject($user), $location->getMaxNumberOfMaterials());
             }
         }
-        if (!$rePublish) {
-            $document->setPublishedAt(new \DateTime());
-        }
+        $document->setPublishedAt(new \DateTime());
         $document->setPublishedBy($user);
         $document->setStatus(Recipe::$statuses['publish']);
+        $document->setAssignedTo(null);
 
 
         if (!$rePublish) {
             $this->showFrontEndUrl($document);
         }
-        if (php_sapi_name() !== 'cli') {
+//        if (php_sapi_name() !== 'cli') {
             if ($document instanceof \Ibtikar\GlanceDashboardBundle\Document\Recipe && $document->getStatus() == 'autopublish') {
                 $document->setAutoPublishDate(null);
                 $document->setAssignedTo(null);
             }
-        }
+//        }
 
         $this->dm->flush();
         return array("status" => 'success', "message" => $this->translator->trans('done sucessfully'));
@@ -210,6 +209,9 @@ abstract class PublishOperations
         }
         if (php_sapi_name() !== 'cli') {
             $document->addPublishLocation($location);
+        }
+        if ($location->getSection() == 'Daily-solution') {
+            $document->setDailysolutionDate($location->getPublishedAt());
         }
     }
 
@@ -294,8 +296,7 @@ abstract class PublishOperations
 
         $document->setAutoPublishDate($autoPublishDate);
         $document->setStatus(Recipe::$statuses['autopublish']);
-
-
+        $document->setAssignedTo(null);
         $this->dm->flush();
         return array("status" => 'success', "message" => $this->translator->trans('recipe will be published at %datetime%',array('%datetime%' => $document->getAutoPublishDate()->format('Y-m-d h:i A'))));
     }
@@ -403,6 +404,8 @@ abstract class PublishOperations
             $this->addPublishLocation($document, $location->getPublishedLocationObject($this->getUser(), $autoPublishDate));
         }
 
+        $document->setAssignedTo(null);
+        $document->setPublishedBy($this->getUser());
         $document->setAutoPublishDate($autoPublishDate);
 
         $this->dm->flush();
@@ -418,7 +421,7 @@ abstract class PublishOperations
     protected function readyLocationVacancy(PublishLocation $location, $maxNumberInLocation)
     {
         $documents = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
-                ->field('status')->equals('published')
+                ->field('status')->equals('publish')
                 ->field('publishLocations.section')->equals($location->getSection())
                 ->field('publishLocations.page')->equals($location->getPage())
                 ->getQuery()->execute();
@@ -442,5 +445,35 @@ abstract class PublishOperations
 
             $this->unpublishFromLocation($oldestDocument, $oldestLocation, TRUE, FALSE);
         }
+    }
+
+
+    public function delete($recipe,$fromRoomName,$reason=NULL) {
+
+        $userFrom = $this->container->get('security.token_storage')->getToken()->getUser();
+
+        $isValid = $this->validateDelete($recipe);
+
+        if ($isValid['status'] == 'success') {
+
+            if ($recipe->getStatus() == 'published' || $recipe->getStatus() == 'autopublish') {
+                $this->container->get('recipe_operations')->unpublish($recipe);
+            }
+            $recipe
+                ->setStatus('deleted')
+                ->setDeletedAt(new \DateTime())
+                ->setDeletedBy($userFrom)
+                ->setAssignedTo(NULL)
+                ->setReason($reason['reason']);
+            if ($recipe->getStatus() == 'published') {
+                $this->container->get('redirect')->removeRedirect($this->getFrontEndUrl($recipe));
+                $this->hideFrontEndUrl($recipe);
+            }
+            $this->dm->flush();
+        }
+        return $isValid;
+    }
+
+    public function validateDelete($recipe) {
     }
 }

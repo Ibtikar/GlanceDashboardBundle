@@ -3,9 +3,12 @@ parameters:
     autoCompelet_display_item: 5
 
 services:
-#    ibtikar_glance_dashboard.example:
-#        class: Ibtikar\GlanceDashboardBundle\Example
-#        arguments: ["@service_id", "plain_value", %parameter%]
+    
+    request_set_language:
+        class: Ibtikar\GlanceDashboardBundle\Listener\LanguageChangeListener
+        arguments: [ "%accepted_locales%", "%locale%" ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: changeRequestLocale, priority: 17 }
     list_view:
         class: Ibtikar\GlanceDashboardBundle\Service\ListView
         arguments: ["@service_container" ]

@@ -21,7 +21,7 @@
 
 
                                 {% if is_granted('ROLE_JOB_VIEW') or is_granted('ROLE_ADMIN')%}
-                                <li><a href="{{ path('ibtikar_glance_ums_job_list') }}" {% if 'job' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans %}Jobs{% endtrans %}</a></li>
+                                <li><a href="{{ path('ibtikar_glance_ums_job_list') }}" {% if 'job' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans %}list Jobs{% endtrans %}</a></li>
                                 {% endif %}
                                 {% if is_granted('ROLE_CITY_VIEW') or is_granted('ROLE_ADMIN')%}
                                 <li><a href="{{ path('ibtikar_glance_ums_city_list') }}" {% if 'city' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans %}Cities{% endtrans %}</a></li>
@@ -37,30 +37,30 @@
                         </ul>
                     </li>
     {% endif %}
-         {% if is_granted('ROLE_PRODUCT_VIEW') or is_granted('ROLE_CATEGORY_VIEW') or  is_granted('ROLE_ADMIN')%}
+         {% if is_granted('ROLE_PRODUCT_VIEW') or is_granted('ROLE_CATEGORY_VIEW') or is_granted('ROLE_RECIPENEW_VIEW') or is_granted('ROLE_RECIPEDELETED_VIEW') or is_granted('ROLE_RECIPEAUTOPUBLISH_VIEW') or is_granted('ROLE_RECIPEPUBLISH_VIEW') or is_granted('ROLE_ADMIN')%}
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="icon-make-group position-left"></i> {% trans from 'role' %}content{% endtrans%}<span class="caret"></span>
                         </a>
 
-                        <ul class="dropdown-menu width-250">
-
-
+                            <ul class="dropdown-menu width-250">
 
                                 {% if is_granted('ROLE_PRODUCT_VIEW') or is_granted('ROLE_ADMIN')%}
-                                <li><a href="{{ path('ibtikar_glance_dashboard_product_list') }}" {% if 'product' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'product'%}List Product{% endtrans %}</a></li>
+                                    <li><a href="{{ path('ibtikar_glance_dashboard_product_list') }}" {% if 'product' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'product'%}List Product{% endtrans %}</a></li>
                                 {% endif %}
                                 {% if is_granted('ROLE_CATEGORY_VIEW') or is_granted('ROLE_ADMIN')%}
                                 <li><a href="{{ path('ibtikar_glance_dashboard_category_list') }}" {% if 'category' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'category'%}List Category{% endtrans %}</a></li>
                                 {% endif %}
                                 {% if is_granted('ROLE_RECIPENEW_VIEW') or is_granted('ROLE_ADMIN')%}
-                                <li><a href="{{ path('ibtikar_glance_dashboard_recipenew_list_new_recipe') }}" {% if 'list_new_recipe' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'recipe'%}List recipenew{% endtrans %}</a></li>
+                                <li><a href="{{ path('ibtikar_glance_dashboard_recipenew_list_new_recipe') }}" {% if 'recipe' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'recipe'%}List Recipe{% endtrans %}</a></li>
+                                {% elseif is_granted('ROLE_RECIPEDELETED_VIEW') or is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path('ibtikar_glance_dashboard_recipedeleted_list_deleted_recipe') }}" {% if 'recipe' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'recipe'%}List Recipe{% endtrans %}</a></li>
+                                {% elseif is_granted('ROLE_RECIPEAUTOPUBLISH_VIEW') or is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path('ibtikar_glance_dashboard_recipeautopublish_list_autopublish_recipe') }}" {% if 'recipe' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'recipe'%}List Recipe{% endtrans %}</a></li>
+                                {% elseif is_granted('ROLE_RECIPEPUBLISH_VIEW') or is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path('ibtikar_glance_dashboard_recipepublish_list_publish_recipe') }}" {% if 'recipe' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'recipe'%}List Recipe{% endtrans %}</a></li>
                                 {% endif %}
-                                {% if is_granted('ROLE_RECIPEDELETED_VIEW') or is_granted('ROLE_ADMIN')%}
-                                <li><a href="{{ path('ibtikar_glance_dashboard_recipedeleted_list_deleted_recipe') }}" {% if 'list_deleted_recipe' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'recipe'%}List recipedeleted{% endtrans %}</a></li>
-                                {% endif %}
-
-                        </ul>
+                            </ul>
                     </li>
      {% endif %}
 

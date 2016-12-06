@@ -323,19 +323,6 @@
     </script>
     <script src="{{ asset('bundles/ibtikarglancedashboard/js/product.js') }}"></script>
 
-    <script>
-        $(document).ready(function(){
-            $('body').on('preAjaxCallback', function(e) {
-              var button= $(document.activeElement)
-               if(button.hasClass('dev-save-add')){
-                    $('#form_submitButton').val('add_save');
-               } else {
-                    $('#form_submitButton').val('save');
-               }
 
-
-            });
-        })
-    </script>
 
 {% endblock %}

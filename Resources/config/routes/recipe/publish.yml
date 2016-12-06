@@ -1,0 +1,37 @@
+ibtikar_glance_dashboard_recipepublish_list_publish_recipe:
+    path:  /list-publish-recipe
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Publish:listPublishRecipe }
+
+
+
+ibtikar_glance_dashboard_recipepublish_view:
+    path:  /view/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Publish:view }
+
+ibtikar_glance_dashboard_recipepublish_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Publish:edit }
+
+ibtikar_glance_dashboard_recipepublish_publish:
+    path:  /ajax/publish
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Publish:publish }
+
+
+ibtikar_glance_dashboard_recipepublish_bulk_actions:
+    path:  /bulk
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Publish:bulk }
+
+ibtikar_glance_dashboard_recipepublish_delete:
+    path:  /delete
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Publish:delete }
+
+ibtikar_glance_dashboard_recipepublish_list_publish_recipe_change_list_columns:
+    path:  /publish-recipe-change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Publish:changeListPublishRecipeColumns }
+
+
+
+
+
+
+

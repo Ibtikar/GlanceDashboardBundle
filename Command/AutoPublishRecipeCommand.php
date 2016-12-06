@@ -5,6 +5,7 @@ namespace Ibtikar\GlanceDashboardBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AutoPublishRecipeCommand extends ContainerAwareCommand
 {
@@ -60,9 +61,10 @@ class AutoPublishRecipeCommand extends ContainerAwareCommand
                 '%smallMessage%',
                 '%extraInfo%',
                 '%color%',
+                    '%type%',
                 ), array(
                 $recipe->getPublishedBy()->__toString(),
-                $this->getContainer()->get('router')->generate('ibtikar_glance_dashboard_recipe_create', array(), true),
+                $this->getContainer()->get('router')->generate('ibtikar_glance_dashboard_recipe_create', array(), TRUE),
                 $recipe->getTitle(),
                 $recipe->getTitle(),
                 $emailTemplate->getMessage(),
@@ -71,7 +73,8 @@ class AutoPublishRecipeCommand extends ContainerAwareCommand
                 $recipe->getPublishedAt()->format('h:i a'),
                 $recipe->getPublishedAt()->format('d/m/Y'),
                 $emailTemplate->getSmallMessage(), str_replace(array('%date%', '%time%'), array($recipe->getPublishedAt()->format('d/m/Y'), $recipe->getPublishedAt()->format('h:i a')), $emailTemplate->getExtraInfo()),
-                $this->getContainer()->getParameter('themeColor')
+                $this->getContainer()->getParameter('themeColor'),
+                $this->getContainer()->get('translator')->trans($recipe->getType(),array(),'recipe')
                 ), str_replace('%extra_content%', $emailTemplate->getTemplate(), $this->getContainer()->get('base_email')->getBaseRender($recipe->getPublishedBy()->getPersonTitle()))
             );
             $subject = str_replace('%shortTitle%', mb_substr($recipe->getTitle(), 0, 10, 'utf-8'), $emailTemplate->getSubject());

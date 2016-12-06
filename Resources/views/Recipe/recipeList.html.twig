@@ -9,7 +9,7 @@
     {{ include('IbtikarGlanceDashboardBundle::sidebar.html.twig') }}
 {% endblock %}
 {% block title %}
-    {{ list.listType == 'trash' ? 'View deleted items'|trans : ('List '~ listName)|trans({}, translationDomain)}}
+    {{ ('List Recipe')|trans({}, translationDomain)}}
 {% endblock %}
 {% block stylesheets %}
     {{ parent() }}
@@ -48,7 +48,7 @@
                             <!-- view roles -->
                             <div class="panel panel-flat">
                                 <div class="panel-heading">
-                                    <h5 class="panel-title">{{  ('List '~ listName)|trans({}, translationDomain)}}</h5>
+                                    <h5 class="panel-title">{{  ('List content')|trans({}, translationDomain)}}</h5>
                                     <div class="heading-elements">
                                         {% block statistic %}
                                             {# <span class="label heading-text label-flat border-grey text-grey-600">28 closed</span>
@@ -66,7 +66,26 @@
                                     <div class="tabbable">
                                         <ul class="nav nav-tabs nav-tabs-highlight">
                                             {% block tabs %}
-                                            {% endblock %}
+                                                {% if is_granted('ROLE_RECIPENEW_VIEW') or is_granted('ROLE_ADMIN')%}
+                                                    <li   {% if 'recipenew_list_new' in app.request.attributes.get('_route') %} class="active"    {% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_recipenew_list_new_recipe') }}" data-toggle="tab"><span class="badge badge-primary position-left dev-new-recipe">{{ newRecipeCount}}</span> {% trans from translationDomain %}new{% endtrans%}</a></li>
+                                                    {% endif %}
+                                                    {% if is_granted('ROLE_RECIPEDELETED_VIEW') or is_granted('ROLE_ADMIN') %}
+
+                                                    <li   {% if 'recipedeleted_list_deleted' in app.request.attributes.get('_route') %} class="active"    {% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_recipedeleted_list_deleted_recipe') }}" data-toggle="tab"><span class="badge badge-primary position-left dev-deleted-recipe">{{ deletedRecipeCount}}</span> {% trans from translationDomain %}deleted{% endtrans%}</a></li>
+                                                    {%  endif %}
+                                                    {% if is_granted('ROLE_RECIPEPUBLISH_VIEW') or is_granted('ROLE_ADMIN') %}
+
+                                                    <li   {% if 'recipepublish_list_publish' in app.request.attributes.get('_route') %} class="active"    {% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_recipepublish_list_publish_recipe') }}" data-toggle="tab"><span class="badge badge-primary position-left dev-published-recipe">{{ publishRecipeCount }}</span> {% trans from translationDomain %}publish{% endtrans%}</a></li>
+                                                    {% endif %}
+                                                    {% if is_granted('ROLE_RECIPEAUTOPUBLISH_VIEW') or is_granted('ROLE_ADMIN') %}
+
+                                                    <li   {% if 'recipeautopublish_list_autopublish' in app.request.attributes.get('_route') %} class="active"    {% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_recipeautopublish_list_autopublish_recipe') }}" data-toggle="tab"><span class="badge badge-primary position-left dev-autopublish-recipe">{{ autopublishRecipeCount}}</span> {% trans from translationDomain %}autopublish{% endtrans%}</a></li>
+                                                    {% endif %}
+                                                    {% if is_granted('ROLE_RECIPENEW_VIEW') or is_granted('ROLE_ADMIN')%}
+
+                                                    <li {% if 'recipenew_list_assigned_' in app.request.attributes.get('_route') %} class="active"    {% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_recipenew_list_assigned_recipe') }}" data-toggle="tab"> <span class="badge badge-primary position-left dev-new-assign-recipe">{{assignedRecipeCount}}</span> {% trans from translationDomain %}recipes assigned to me{% endtrans%} </a></li>
+                                                    {% endif %}
+                                                {% endblock %}
                                         </ul>
 
                                         <div class="tab-content">
@@ -80,21 +99,8 @@
                                                                 <input type="hidden" id="dev-bulk-action" name="bulk-action" value=""/>
                                                                 <span class="dev-bulk-action-container" data-list-name="{{listName|lower}}" data-href="{{ list.hasBulkActions(listName) ? path(prefixRoute|lower ~ '_bulk_actions') : '' }}" style="display: none;">
                                                                     {% for action in list.bulkActions %}
-                                                                        {% if action == "Delete" and (is_granted('ROLE_'~listName|upper~'_DELETE') or is_granted('ROLE_ADMIN')) %}
-                                                                            <a data-action="{{action}}" {{popover_factory({
-                                            question : "You are about to delete (%count%) (%type%), Are you sure?",
-                                            replaceAttr : true,
-                                            buttons : [
-                                                        {
-                                                            text : "Yes",
-                                                            class : "dev-bulk-delete-btn dev-bulk-action-btn btn-danger"
-                                                        },
-                                                        {
-                                                            text : "Cancel",
-                                                            class : "btn-defualt"
-                                                        }
-                                                    ]
-                                            })|replace({'%type%': (oneItem~"s")|lower|trans})|raw}} class="btn btn-default btn-sm" data-placement="bottom"> <i class="icon-trash"></i> <span class="hidden-sm position-right">{{ 'delete'|trans }} {{ ((oneItem|capitalize)~"s")|trans }}</span></a>
+                                                                        {% if action == "Delete"  and (is_granted('ROLE_'~listName|upper~'_DELETE') or is_granted('ROLE_ADMIN')) %}
+                                                                            <a data-action="{{action}}"  class="btn btn-default btn-sm dev-delete-bulk-recipe" data-placement="bottom"> <i class="icon-trash"></i> <span class="hidden-sm position-right">{{ 'delete'|trans }} {{ ((oneItem|capitalize)~"s")|trans }}</span></a>
                                                                         {% endif %}
                                                                     {% endfor %}
                                                                 </span>
@@ -102,7 +108,7 @@
 
 
                                                         {% endblock %}
-                                                </form>
+
                                             </div>
 
                                             <div style="margin-top: 15px;">
@@ -175,7 +181,7 @@
                                                                     <td>
                                                                         {% for element in attribute(object, field.propertyName|humanize|title|replace({' ':''})) %}
                                                                             {% if not loop.first %},{% endif %}
-                                                                            {{ element }}
+                                                                            {{ element|trans({},translationDomain) }}
                                                                         {% endfor %}
                                                                     </td>
                                                                 {% elseif field.type == "refereceImage"  %}
@@ -224,9 +230,9 @@
                                                                                     <a class="btn btn-defualt"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}"  ><i class="icon-pencil" data-popup="tooltip"  data-placement="right" title="{{ ('Edit ' ~  listName)|trans({},translationDomain)}}"></i></a>
                                                                                     {% endif %}
                                                                                 {% elseif action == "Delete" %}
-                                                                                    {% if is_granted('ROLE_' ~ listName|upper ~'_DELETE') or is_granted('ROLE_ADMIN')%}
-                                                                                    <a class="btn btn-defualt"  data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-trash" data-popup="tooltip" title="{{ ('Delete ' ~  listName)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
-                                                                                    {% endif %}
+                                                                                    {% if  (is_granted('ROLE_RECIPE' ~ object.status|upper ~'_DELETE') or is_granted('ROLE_ADMIN')) %}
+                                                                                    <a class="btn btn-defualt dev-delete-single-recipe"  data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" data-id="{{ object.id }}" ><i class="icon-trash" data-popup="tooltip" title="{{ ('Delete ' ~  listName)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
+                                                                                {% endif %}
                                                                                 {% elseif action == "ViewOne" %}
 
                                                                                 {% if is_granted('ROLE_' ~ listName|upper ~'_VIEWONE') or is_granted('ROLE_ADMIN')  %}
@@ -248,9 +254,7 @@
 
 
                                                                                 {% if is_granted('ROLE_' ~ listName|upper ~'_PUBLISH') or is_granted('ROLE_ADMIN')%}
-                                                                                    {% if 'publish' not in object.getStatus()%}
                                                                                         <a href="javascript:void(0)" data-toggle="modal"  class="btn btn-defualt dev-publish-recipe" data-id="{{ object.getId() }}"><i class="icon-share" data-placement="right"  data-popup="tooltip" title="{{('publish ' ~  listName|capitalize)|trans({},translationDomain)}}"></i></a>
-                                                                                    {% endif %}
                                                                                 {% endif %}
                               {#                                              {% elseif action == "AutoPublish" %}
 
@@ -282,6 +286,7 @@
 
 
                                             </table>
+                                                       </form>
 
                                         </div><!-- tab 1 -->
 
@@ -351,16 +356,47 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-                                                var loginUrl = "{{ path('ibtikar_glance_ums_staff_login')}}";
-                                                var notFoundUrl = "{{ path('ibtikar_glance_dashboard_not_found')}}";
-                                                var accessDeniedUrl = '{{ path('access_denied') }}';
+        var loginUrl = "{{ path('ibtikar_glance_ums_staff_login')}}";
+        var notFoundUrl = "{{ path('ibtikar_glance_dashboard_not_found')}}";
+        var accessDeniedUrl = '{{ path('access_denied') }}';
 
-                                                var columns ={{ columns|raw}} ;
-                                                        var totalNumber = "{{total}}";
-                                                        var limit ={{limit}} ;
-                                                        var start ={{skip}} ;
-                                                        var sort ={% if sort is defined %}{{sort|raw}}{% else %} null{%endif %};
-                                                var toggleButtonColor = '#D6494C';
+        var publishErrorMessage= "{% trans from translationDomain%}you must change time{% endtrans %}"
+        var deleteErrorMessage= "{% trans from translationDomain%}you must write delete reason{% endtrans %}"
+
+        var columns ={{ columns|raw}} ;
+                var totalNumber = "{{total}}";
+                var limit ={{limit}} ;
+                var start ={{skip}} ;
+                var sort ={% if sort is defined %}{{sort|raw}}{% else %} null{%endif %};
+        var toggleButtonColor = '#D6494C';
+        {% if 'recipedeleted_list_deleted' in app.request.attributes.get('_route') %}
+            var ajaxData = '{{ path(prefixRoute|lower~'_list_deleted_recipe') }}';
+            var changeListColumnsUrl = "{{path(prefixRoute|lower~changeListColumnType~'_change_list_columns')}}";
+        {% endif %}
+        {% if 'recipenew_list_new' in app.request.attributes.get('_route') %}
+            var ajaxData = '{{ path(prefixRoute|lower~'_list_new_recipe') }}';
+            var changeListColumnsUrl = "{{path(prefixRoute|lower~changeListColumnType~'_change_list_columns')}}";
+        {% endif %}
+
+        {% if 'recipepublish_list_publish' in app.request.attributes.get('_route') %}
+            var ajaxData = '{{ path(prefixRoute|lower~'_list_publish_recipe') }}';
+            var changeListColumnsUrl = "{{path(prefixRoute|lower~changeListColumnType~'_change_list_columns')}}";
+        {% endif %}
+        {% if 'recipeautopublish_list_autopublish' in app.request.attributes.get('_route') %}
+            var ajaxData = '{{ path(prefixRoute|lower~'_list_autopublish_recipe') }}';
+            var changeListColumnsUrl = "{{path(prefixRoute|lower~changeListColumnType~'_change_list_columns')}}";
+        {% endif %}
+
+        {% if '_recipenew_list_assigned_recipe' in app.request.attributes.get('_route') %}
+            var ajaxData = '{{ path('ibtikar_glance_dashboard_recipenew_list_assigned_recipe') }}';
+            var changeListColumnsUrl = "{{path('ibtikar_glance_dashboard_recipenew_list_assigned_recipe_change_list_columns')}}";
+        {% endif %}
+        {% if 'recipenew_list_new' not in app.request.attributes.get('_route') %}
+        var publisUrl="{{ path(prefixRoute|lower~'_publish')}}";
+        {% endif %}
+        {% if 'recipedeleted_list_deleted' not in app.request.attributes.get('_route') %}
+          var deleteUrl=" {{ path(prefixRoute|lower ~'_delete')}}";
+        {% endif %}
 
     </script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/layout_sidebar_sticky_custom.js')}}"></script>

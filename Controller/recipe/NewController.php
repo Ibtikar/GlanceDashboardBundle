@@ -22,29 +22,9 @@ class NewController extends RecipeController
         parent::configureListParameters($request);
         $this->listViewOptions->setDefaultSortBy("createdAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
-        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Recipe\List:new.html.twig");
+//        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Recipe\List:new.html.twig");
     }
 
-    protected function doList(Request $request)
-    {
-        $renderingParams = parent::doList($request);
-        return $this->getTabCount($renderingParams);
-    }
 
-    public function getTabCount($renderingParams = array())
-    {
-        $dm = $this->get('doctrine_mongodb')->getManager();
 
-        $renderingParams['newRecipeCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
-                ->field('status')->equals($this->recipeStatus)
-                ->field('assignedTo')->exists(FALSE)
-                ->field('deleted')->equals(false)
-                ->getQuery()->execute()->count();
-        $renderingParams['assignedRecipeCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
-                ->field('status')->equals($this->recipeStatus)
-                ->field('assignedTo.$id')->equals(new \MongoId($this->getUser()->getId()))
-                ->field('deleted')->equals(false)
-                ->getQuery()->execute()->count();
-        return $renderingParams;
-    }
 }

@@ -17,11 +17,11 @@ var dataTableDefault = {
     "initComplete": function (settings, json) {
     },
     "preDrawCallback": function (settings) {
-        if (checkbox) {
-            checkbox = false;
-            return false;
-
-        }
+//        if (checkbox) {
+//            checkbox = false;
+//            return false;
+//
+//        }
     },
     'fnServerData': function (sSource, aoData, fnCallback)
     {
@@ -102,7 +102,9 @@ var dataTableDefault = {
             delay:{ "hide": 500 }
         });
 
-        $('.dev-checkbox-all').closest('th').removeClass('sorting_asc').addClass('sorting_disabled')
+        if (!columns[0].orderable) {
+            $('th:first').removeClass('sorting_asc').addClass('sorting_disabled')
+        }
         if ($('.datatable-column-search-inputs input.dev-checkbox').length == $('.datatable-column-search-inputs input:checked.dev-checkbox').length && $('.datatable-column-search-inputs input:checked.dev-checkbox').length != 0) {
             $('.dev-checkbox-all').prop('checked', true).uniform('refresh');
         } else {
@@ -146,7 +148,9 @@ function reIntaializeTable(data) {
     $('.datatable-column-search-inputs thead').html('<tr>' + th + '</tr>')
     if (data.sort) {
         datatableSetting = $.extend({}, dataTableDefault, {"order": JSON.parse(data.sort), "initComplete": function (settings, json) {
-                $('.dev-checkbox-all').removeClass('sorting_asc').addClass('sorting_disabled')
+                if (!columns[0].orderable) {
+                    $('th:first').removeClass('sorting_asc').addClass('sorting_disabled')
+                }
                 $(".dataTables_length select").select2({
                     /* select2 options, as an example */
                     minimumResultsForSearch: -1,
@@ -314,8 +318,14 @@ function BasicModal() {
             method: 'GET',
             data: params,
             success: function (data) {
+                if (data.status == 'reload-table') {
+                    $('#modal_theme_primary').modal('hide');
+                    table.ajax.reload(function () {
+                        showNotificationMsg(data.message, "", 'error');
+                    }, false)
+                }
                 if (data.status == 'failed-reload') {
-                    thisObject.hide();
+                    $('#modal_theme_primary').modal('hide');
                     var numOfRecords = $('tr[data-id]').length;
                     var pageNum = getQueryVariable('page');
                     if (pageNum !== 1 && numOfRecords === 1) {
@@ -379,7 +389,7 @@ function bulkFunction() {
     var $form = $('.dev-bulk-actions-form');
     var formData = $form.serializeArray();
 
-    var numOfRecords = $('tr[data-id]').length;
+    var numOfRecords = $('tbody .dev-checkbox').length;
     var numOfCheckedRecord = $('tbody .dev-checkbox:checked').length;
     var pageNum = getQueryVariable('page');
     blockPage();
@@ -401,7 +411,10 @@ function bulkFunction() {
 
             unblockPage();
 
-            if (data.status === 'success') {
+            if (data.status == 'success') {
+                if (((data.success).length == numOfCheckedRecord || (data.success).length == 0) && pageNum != 1 && numOfRecords === numOfCheckedRecord) {
+                    table.page(parseInt(table.page(), 10) - parseInt(1, 10));
+                } 
                 table.ajax.reload(function (){
                     for (message in data.errors) {
                         for (index in data.errors[message]) {
@@ -411,10 +424,11 @@ function bulkFunction() {
                                 $tr.find('input[type="checkbox"]').prop('checked',true).uniform('refresh');
                                 $tr.addClass('danger').attr('title',message);
                                 $tr.powerTip({followMouse: true});
-                                showBulkActionSelect();
+                               
                             }
                         }
                     }
+                    showBulkActionSelect();
 
                 }, false);
             }

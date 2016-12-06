@@ -19,6 +19,7 @@
 'Serving count': 'تكفي'
 'Products': 'المنتجات'
 'Course': '‫الطبق‬ ‫حسب‬'
+'course': '‫الطبق‬ ‫حسب‬'
 'Meal': '‫الوجبة‬ ‫حسب‬'
 'Key ingredient': '‫المكونات‬ ‫حسب‬'
 'easy': 'سهلة'
@@ -44,16 +45,24 @@
 'Dinner': '‫عشاء‬'
 'createdAt': تاريخ الإنشاء
 'Created at': تاريخ الإنشاء
+'publishedAt': 'تاريخ النشر'
+'Published at': 'تاريخ النشر'
 'Country': 'البلد'
 'country': 'البلد'
 'createdBy': قام بالإنشاء
 'Created by':  قام بالإنشاء
+'Deleted by': قام بالحذف
+'deletedBy': قام بالحذف
+'Published by': 'قام بالنشر'
+'publishedBy': 'قام بالنشر'
 'category': 'التصنيف'
 'Category': 'التصنيف'
 'updatedAt': تاريخ التحديث
 'Updated at': تاريخ التحديث
 'Deleted at': تاريخ الحذف
 'deletedAt': تاريخ الحذف
+'autoPublishDate': 'تاريخ النشر التلقائى'
+'Auto publish date': 'تاريخ النشر التلقائى'
 
 # ############Messages############
 sorry this recipe assign to other user: عذراً، هذه الوصفه  مسنده الى موظف اخر.
@@ -62,22 +71,57 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 'Add new Recipe': 'إدخال وصفة جديد'
 'list Recipe': 'قائمه الوصفات'
 'recipes new': 'وصفات جديده'
-'recipes assigned to me': 'وصفات مسنده الى'
-'List recipenew': 'قائمه الوصفات الجديده'
-'List recipedeleted': قائمه الوصفات المحذوفه
+'recipes assigned to me': 'مسندة إلي'
+'List recipenew': 'الوصفات الجديده'
+'List recipedeleted':  الوصفات المحذوفه
 'recipes deleted': وصفات محذوفه
+'List content': 'محتوى'
 
 # ############Buttons############
 'AssignToMe': 'اسناد لي'
-'View One Recipenew': 'مشاهده وصفه'
-'View One Recipedeleted': حذف وصفه
-'Edit recipenew': 'تعديل وصفه'
-'publish Recipenew': 'نشر وصفه'
-'autopublish Recipenew': 'النشر التلقائى'
-'Edit recipedeleted': 'تعديل وصفه'
-'publish Recipedeleted': 'نشر وصفه'
-'autopublish Recipedeleted': 'النشر التلقائى'
-'Delete recipenew': حذف وصفه
+'View One Recipenew': 'مشاهده'
+'View One Recipedeleted': 'مشاهده'
+'View One Recipepublish': 'مشاهده'
+'View One Recipeautopublish': 'مشاهده'
+'View One recipeautopublish': 'مشاهده'
+'Edit recipenew': 'تعديل'
+'Edit Recipenew': 'تعديل'
+'Edit recipepublish': 'تعديل'
+'Edit Recipepublish': 'تعديل'
+'Edit recipeautopublish': 'تعديل'
+'Edit Recipeautopublish': 'تعديل'
+'publish Recipenew': 'نشر'
+'autopublish Recipenew': 'المجدولة'
+'Edit recipedeleted': 'تعديل'
+'publish Recipedeleted': 'نشر'
+'publish Recipeautopublish': 'نشر'
+'publish recipeautopublish': 'نشر'
+'publish Recipepublish': 'إعادة نشر‎'
+'autopublish Recipedeleted': 'إعادة نشر‎'
+'Delete recipenew': حذف
+'Delete Recipenew': حذف
+'Delete recipepublish': حذف
+'Delete Recipepublish': حذف
+'Delete recipedeleted': حذف
+'Delete recipeautopublish': حذف
+'Delete Recipeautopublish': حذف
+'List Recipe': 'المحتوى'
+'new': 'جديده'
+'deleted': 'محذوفه'
+'publish': 'منشوره'
+'autopublish': 'مجدوله'
+'you must change time': 'يجب تحديد وقت النشر أولاً'
+'republish recipe': 'اعاده نشر'
+'publish recipe': 'نشر'
+'delete single recipe %title%': 'انت على وشك حذف (%title%)، هل تريد إتمام الحذف؟'
+'delete single publish recipe %title%': 'انت على وشك حذف وصفة منشورة على الموقع بعنوان "%title%"  ... هل تريد اﻷستمرار و حذف هذه الوصفة من الموقع؟'
+'delete multiple recipe %no%': 'أنت على وشك حذف (%no%) وصفات، هل تريد إتمام العملية؟'
+'delete multiple publish recipe %no%': 'انت على وشك حذف "%no%" وصفات منشورة على الموقع بعنوان  ... هل تريد اﻷستمرار و حذف هذه الوصفة من الموقع؟'
+'delete recipe': 'حذف'
+'you must write delete reason': 'الرجاء ادخال سبب الحذف'
+'already deleted': 'عذراً، هذه الوصفة محذوفه مسبقاً'
+'recipe': 'الوصفه'
+
 
 
 

@@ -6,7 +6,7 @@ use Ibtikar\GlanceDashboardBundle\Controller\RecipeController;
 use Symfony\Component\HttpFoundation\Request;
 use Ibtikar\GlanceDashboardBundle\Document\Recipe;
 
-class DeletedController extends RecipeController
+class PublishController extends RecipeController
 {
 
     public function __construct()
@@ -14,9 +14,8 @@ class DeletedController extends RecipeController
         parent::__construct();
         $calledClassName = explode('\\', $this->calledClassName);
         $this->calledClassName = 'recipe' . strtolower($calledClassName[1]);
-        $this->recipeStatus = Recipe::$statuses['deleted'];
+        $this->recipeStatus = Recipe::$statuses['publish'];
     }
-
 
     protected function configureListColumns()
     {
@@ -25,15 +24,16 @@ class DeletedController extends RecipeController
             "titleEn" => array("type" => "translated"),
             "country" => array("isSortable" => false),
             "createdBy" => array("isSortable" => false),
-            "course" => array("isSortable"=>false,"searchFieldType"=>"select",'type'=>'many'),
-            "deletedBy" => array("isSortable" => false),
+            "publishedBy" => array("isSortable" => false),
             "createdAt" => array("type" => "date"),
-            "deletedAt" => array("type" => "date"),
+            "publishedAt" => array("type" => "date"),
+            "course" => array("isSortable"=>false,"searchFieldType"=>"select",'type'=>'many'),
             "updatedAt" => array("type" => "date"),
             "chef" => array("isSortable" => false),
         );
         $this->defaultListColumns = array(
             "title",
+            "publishedAt",
             "createdAt",
             "chef",
         );
@@ -43,16 +43,12 @@ class DeletedController extends RecipeController
     protected function configureListParameters(Request $request)
     {
         parent::configureListParameters($request);
-        $this->listViewOptions->setDefaultSortBy("createdAt");
+        $this->listViewOptions->setDefaultSortBy("publishedAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
-//        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Recipe\List:deleted.html.twig");
+//        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Recipe\List:new.html.twig");
     }
 
-    protected function doList(Request $request)
-    {
 
-        $renderingParams = parent::doList($request);
-        return $this->getTabCount($renderingParams);
-    }
+
 
 }
