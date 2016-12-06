@@ -925,6 +925,39 @@ class Recipe  extends Publishable {
     }
 
     /**
+     * Set galleryType
+     *
+     * @param string $galleryType
+     * @return self
+     */
+    public function setGalleryType($galleryType)
+    {
+        $this->galleryType = $galleryType;
+        return $this;
+    }
+
+    /**
+     * Get galleryType
+     *
+     * @return string $galleryType
+     */
+    public function getGalleryType()
+    {
+        return $this->galleryType;
+    }
+
+    /**
+     * Set defaultCoverPhoto
+     *
+     * @param string $defaultCoverPhoto
+     * @return self
+     */
+    public function setDefaultCoverPhoto($defaultCoverPhoto)
+    {
+        $this->defaultCoverPhoto = $defaultCoverPhoto;
+        return $this;
+    }
+    /**
      * Set reason
      *
      * @param string $reason
