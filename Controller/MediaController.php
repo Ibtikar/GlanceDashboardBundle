@@ -164,6 +164,7 @@ class MediaController extends BackendController
         return array(
             'imageUrl' => $media->getWebPath(),
             'id' => $media->getId(),
+            'type' => $media->getType(),
             'coverPhoto' => $media->getCoverPhoto(),
             'caption' => ($collectionType=='Recipe')?$media->getCaptionAr():'',
             'captionEn' => ($collectionType=='Recipe')?$media->getCaptionEn():'',
