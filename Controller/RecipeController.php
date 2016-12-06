@@ -488,6 +488,7 @@ class RecipeController extends BackendController
                     //                set default cover photo in case it's from the gallary images
                     if (isset($image['cover']) && $image['cover']) {
                         $document->setDefaultCoverPhoto($mediaObj->getPath());
+                        $document->setCoverPhoto($mediaObj);
 
                         $mediaObj->setCoverPhoto(TRUE);
                         $coverExist = TRUE;
