@@ -282,6 +282,9 @@ class Media extends Document {
             $uploadDirectory .= '/product-file/' . $this->getProduct()->getId();
         } else if ($this->getSubproduct()) {
             $uploadDirectory .= '/subproduct-file/' . $this->getSubproduct()->getId();
+
+        } else if ($this->getRecipe()) {
+            $uploadDirectory .= '/recipe-file/' . $this->getRecipe()->getId();
         } else {
             if (!$this->getCreatedBy()) {
                 throw new \Exception('Please set the created by user.');
