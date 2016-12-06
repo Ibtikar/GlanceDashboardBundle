@@ -376,10 +376,10 @@
         <td style="width: 150px">
             <div class="thumbnail">
                 <div class="thumb thumb-slide">
-                    <img src="/%image-src%" data-image-id="%image-id%" alt="%image-name%">
+                    <img src="%image-src%" data-image-id="%image-id%" alt="%image-name%">
                     <div class="caption">
                         <span>
-                            <a href="/%image-src%" data-image-id="%image-id%" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                            <a href="%image-src%" data-image-id="%image-id%" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
                         </span>
                     </div>
                 </div>
@@ -425,7 +425,7 @@
         <div class="media-body">
             <div class="radio">
                 <label>
-                    <input type="radio" name="stacked-radio-left" class="styled" >
+                    <input type="radio" name="stacked-radio-left" class="styled" value="%video-id%">
                     <h6 class="media-heading"><a href="#">%video-title%</a></h6>
                 </label>
             </div>
@@ -584,6 +584,8 @@
     var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'all','documentId':'null','collectionType':'Recipe'})}}";
     var imageSortTemplate = '{{ imageSortTemplate|escape('js') }}';
     var videoSearchTemplate = '{{ videoSearchTemplate|escape('js') }}';
+    var youtubeUploadVideo = '{{ path('ibtikar_glance_dashboard_media_youtube_upload_video',{'type':'video','documentId':'null','collectionType':'Recipe'}) }}';
+
         var element;
         var name;
         var type;

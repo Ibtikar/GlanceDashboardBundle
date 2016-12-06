@@ -11,6 +11,11 @@ ibtikar_glance_dashboard_media_crop:
 ibtikar_glance_dashboard_media_delete:
     path:  /delete/{id}/{collectionType}
     defaults: { _controller: IbtikarGlanceDashboardBundle:Media:deleteFile }
+    
+    
+ibtikar_glance_dashboard_video_delete:
+    path:  /delete/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Media:deleteVideo }    
 
 ibtikar_glance_dashboard_media_user_files:
     path:  /user-files/{type}/{documentId}/{collectionType}
@@ -31,4 +36,9 @@ ibtikar_glance_dashboard_media_user_files:
 google_upload_image:
     path:  /upload-image-from-google/{documentId}/{collectionType}
     defaults: { _controller: IbtikarGlanceDashboardBundle:Media:uploadImageFromGoogle ,documentId: ~, collectionType: ~ }
+    
+    
 
+ibtikar_glance_dashboard_media_youtube_upload_video:
+    path:  /upload-video-from-youtube/{type}/{documentId}/{collectionType}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Media:uploadYoutubeVideo , type: ~,documentId : ~,collectionType: ~}
