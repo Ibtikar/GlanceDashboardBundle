@@ -165,8 +165,8 @@ class MediaController extends BackendController
             'imageUrl' => $media->getWebPath(),
             'id' => $media->getId(),
             'coverPhoto' => $media->getCoverPhoto(),
-            'caption' => $media->getCaption(),
-            'captionEn' => $media->getCaptionEn(),
+            'caption' => ($collectionType=='Recipe')?$media->getCaptionAr():$media->getCaption(),
+            'captionEn' => ($collectionType=='Recipe')?$media->getCaptionEn():'',
             'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_delete', array('id' => $media->getId(),'collectionType'=>$collectionType)),
             'cropUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_crop', array('id' => $media->getId(),'collectionType'=>$collectionType)),
             'pop' => str_replace('%title%', $this->trans('image', array(), $this->translationDomain), $this->get('app.twig.popover_factory_extension')->popoverFactory(array("question" => "You are about to delete %title%,Are you sure?")))
