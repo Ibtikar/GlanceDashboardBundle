@@ -38,11 +38,16 @@ class Media extends Document {
      */
     private $subproduct;
 
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe", simple=true)
+     * @KeepReference
+     */
+    private $recipe;
 
     /**
      * @MongoDB\String
      */
-    private $caption;
+    private $captionAr;
 
 
     /**
@@ -58,7 +63,13 @@ class Media extends Document {
     /**
      * @MongoDB\String
      */
+    private $name;
+
+    /**
+     * @MongoDB\String
+     */
     private $path;
+
     /**
      * @MongoDB\String
      */
@@ -417,9 +428,9 @@ class Media extends Document {
      * @param string $caption
      * @return self
      */
-    public function setCaption($caption)
+    public function setCaptionAr($caption)
     {
-        $this->caption = $caption;
+        $this->captionAr = $caption;
         return $this;
     }
 
@@ -428,9 +439,9 @@ class Media extends Document {
      *
      * @return string $caption
      */
-    public function getCaption()
+    public function getCaptionAr()
     {
-        return $this->caption;
+        return $this->captionAr;
     }
 
     /**
@@ -654,5 +665,49 @@ class Media extends Document {
 
     public function __toString() {
         return $this->getWebPath();
+    }
+
+    /**
+     * Set recipe
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $recipe
+     * @return self
+     */
+    public function setRecipe(\Ibtikar\GlanceDashboardBundle\Document\Recipe $recipe)
+    {
+        $this->recipe = $recipe;
+        return $this;
+    }
+
+    /**
+     * Get recipe
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\Recipe $recipe
+     */
+    public function getRecipe()
+    {
+        return $this->recipe;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return self
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string $name
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

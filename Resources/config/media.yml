@@ -16,7 +16,7 @@ ibtikar_glance_dashboard_media_user_files:
     path:  /user-files/{type}/{documentId}/{collectionType}
     defaults: { _controller: IbtikarGlanceDashboardBundle:Media:userFiles ,documentId: ~, collectionType: ~ }
     requirements:
-        type:  file|image
+        type:  file|image|all
 
 #material_upload_imageUrl:
 #    path:  /upload_imageUrl
@@ -28,7 +28,7 @@ ibtikar_glance_dashboard_media_user_files:
 #        type:  file|image
 #
 #
-#google_upload_image:
-#    path:  /upload-image-from-google/{documentId}/{collectionType}
-#    defaults: { _controller: IbtikarGlanceDashboardBundle:Media:uploadImageFromGoogle ,documentId: ~, collectionType: ~ }
+google_upload_image:
+    path:  /upload-image-from-google/{documentId}/{collectionType}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Media:uploadImageFromGoogle ,documentId: ~, collectionType: ~ }
 

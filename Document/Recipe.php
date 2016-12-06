@@ -86,8 +86,10 @@ class Recipe  extends Publishable {
     /**
      * @MongoDB\String
      * @Assert\Length(
-     *      min = 10,
+     *      min = 3,
      *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 150,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
      * )
      */
     private $brief;
@@ -95,8 +97,10 @@ class Recipe  extends Publishable {
     /**
      * @MongoDB\String
      * @Assert\Length(
-     *      min = 10,
+     *      min = 3,
      *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 150,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
      * )
      */
     private $briefEn;
@@ -217,6 +221,16 @@ class Recipe  extends Publishable {
      * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Media", simple=true)
      */
     private $coverPhoto;
+
+    /**
+     * @MongoDB\String
+     */
+    private $defaultCoverPhoto;
+
+    /**
+     * @MongoDB\String
+     */
+    private $galleryType = 'sequence';
 
     /**
      * @MongoDB\Date
@@ -872,5 +886,39 @@ class Recipe  extends Publishable {
     public function getAutoPublishDate()
     {
         return $this->autoPublishDate;
+    }
+
+    /**
+     * Set galleryType
+     *
+     * @param string $galleryType
+     * @return self
+     */
+    public function setGalleryType($galleryType)
+    {
+        $this->galleryType = $galleryType;
+        return $this;
+    }
+
+    /**
+     * Get galleryType
+     *
+     * @return string $galleryType
+     */
+    public function getGalleryType()
+    {
+        return $this->galleryType;
+    }
+
+    /**
+     * Set defaultCoverPhoto
+     *
+     * @param string $defaultCoverPhoto
+     * @return self
+     */
+    public function setDefaultCoverPhoto($defaultCoverPhoto)
+    {
+        $this->defaultCoverPhoto = $defaultCoverPhoto;
+        return $this;
     }
 }

@@ -202,4 +202,18 @@ abstract class Publishable extends Document
         return $this->sendPushNotification;
     }
 
+    public function __construct()
+    {
+        $this->publishLocations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Get id
+     *
+     * @return id $id
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }

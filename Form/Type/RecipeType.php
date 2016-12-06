@@ -44,7 +44,9 @@ class RecipeType extends AbstractType {
                 ->add('method',  CKEditorType::class, array('required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
                 ->add('methodEn',CKEditorType::class, array('required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
                 ->add('chef', DocumentType::class, array('required' => false,'placeholder' => 'اختار الشيف','class' => 'IbtikarGlanceUMSBundle:Staff', 'attr' => array('data-img-method'=>'webPath','data-img-default'=>'bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg','class' => 'select-with-thumb')))
-                ->add('preparationTime', formType\TextType::class, array('required' => false, 'attr' => array()))
+                ->add('country', DocumentType::class, array('required' => false,'class' => 'IbtikarGlanceUMSBundle:Country', 'query_builder' => function($repo) {
+                    return $repo->findCountrySorted();
+                },'placeholder' => 'اختار البلد', 'choice_label' => 'countryName', 'attr' => array('data-country' => true, 'class' => 'dev-country select')))                ->add('preparationTime', formType\TextType::class, array('required' => false, 'attr' => array()))
                 ->add('cookingTime', formType\TextType::class, array('required' => false, 'attr' => array()))
                 ->add('servingCount', formType\TextType::class, array('required' => false, 'attr' => array()))
                 ->add('difficulty', formType\ChoiceType::class, array('required' => FALSE,
@@ -53,17 +55,21 @@ class RecipeType extends AbstractType {
                 ))
                 ->add('course', formType\ChoiceType::class, array('required' => FALSE,
                     'choices' => array_flip(Recipe::$courseMap),
-                    'multiple' => true, 'placeholder' => false, 'empty_data' => null,'choice_translation_domain'=>'recipe'
+                    'multiple' => true, 'placeholder' => false, 'empty_data' => null,'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-multiple')
                 ))
                 ->add('meal', formType\ChoiceType::class, array('required' => FALSE,
                     'choices' => array_flip(Recipe::$mealMap),
-                    'multiple' => true, 'placeholder' => false, 'empty_data' => null,'choice_translation_domain'=>'recipe'
+                    'multiple' => true, 'placeholder' => false, 'empty_data' => null,'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-multiple')
                 ))
                 ->add('keyIngredient', formType\ChoiceType::class, array('required' => FALSE,
                     'choices' => array_flip(Recipe::$keyIngredientMap),
-                    'multiple' => true, 'placeholder' => false, 'empty_data' => null,'choice_translation_domain'=>'recipe'
+                    'multiple' => true, 'placeholder' => false, 'empty_data' => null,'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-multiple')
                 ))
                 ->add('products', DocumentType::class, array('required' => false,'multiple' => 'multiple','placeholder' => 'Choose Product','class' => 'IbtikarGlanceDashboardBundle:Product', 'attr' => array('data-img-method'=>'profilePhoto','data-img-default'=>'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg','class' => 'select-with-thumb')))
+//                ->add('relatedMaterialId', formType\TextType::class, array('attr' => array("data-validation-message"=>'','data-rule-unique' => 'material_check_field_unique', 'data-name' => 'relatedMaterial'), 'required' => FALSE, 'mapped' => false, 'data' => $this->relatedMaterialId))
+                ->add('defaultCoverPhoto', formType\HiddenType::class)
+                ->add('galleryType', formType\HiddenType::class)
+                ->add('media', formType\TextareaType::class, array('required' => FALSE, "mapped" => false))
                 ->add('submitButton', formType\SubmitType::class);
     }
 

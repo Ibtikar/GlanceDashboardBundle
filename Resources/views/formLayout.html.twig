@@ -32,7 +32,9 @@
         var accessDeniedUrl = '{{ path('access_denied') }}';
         var notFoundUrl="{{ path('ibtikar_glance_dashboard_not_found')}}";
         var messages = {
-            NotBlank: '{% trans from 'validators' %}This value should not be blank.{% endtrans %}'
+            NotBlank: '{% trans from 'validators' %}This value should not be blank.{% endtrans %}',
+            pleaseSelectOneImage: '{% trans %}pleaseSelectOneImage{% endtrans %}',
+
         };
     </script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/uniform.min.js')}}"></script>
@@ -73,13 +75,11 @@
     var loginUrl="{{ path('ibtikar_glance_ums_staff_login')}}";
 
     function formPluginsInit(){
-            $('.select').select2({ "language": "ar"});
+            $('.select,.select-multiple').select2({ "language": "ar"});
             $(".select-with-thumb").select2({
                 templateResult: addUserPic,
                 templateSelection: addUserPic
             });
-
-            $('select:not(".select2-hidden-accessible")').select2({ "language": "ar"});
 
             $('[id$="Time"],[id$="Count"]').TouchSpin({
                 min: 0,
@@ -91,6 +91,15 @@
             $("[type='radio']").uniform({
                 radioClass: 'choice'
             });
+
+            dragula([document.getElementById('media-list-target-right')], {
+                mirrorContainer: document.querySelector('.media-list-container'),
+                moves: function (el, container, handle) {
+                    return handle.classList.contains('dragula-handle');
+                }
+            });
+
+            $(document).trigger('form-plugin-init');
     }
 
     function addUserPic(opt) {

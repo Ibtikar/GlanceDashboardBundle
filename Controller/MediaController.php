@@ -90,7 +90,7 @@ class MediaController extends BackendController
                         ));
                         break;
                 }
-                if ($document) {
+                if (isset($document)) {
                     return new JsonResponse(array('status' => 'reload'));
                 }
             }
@@ -164,6 +164,9 @@ class MediaController extends BackendController
         return array(
             'imageUrl' => $media->getWebPath(),
             'id' => $media->getId(),
+            'coverPhoto' => $media->getCoverPhoto(),
+            'caption' => $media->getCaption(),
+            'captionEn' => $media->getCaptionEn(),
             'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_delete', array('id' => $media->getId(),'collectionType'=>$collectionType)),
             'cropUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_crop', array('id' => $media->getId(),'collectionType'=>$collectionType)),
             'pop' => str_replace('%title%', $this->trans('image', array(), $this->translationDomain), $this->get('app.twig.popover_factory_extension')->popoverFactory(array("question" => "You are about to delete %title%,Are you sure?")))
@@ -322,7 +325,7 @@ class MediaController extends BackendController
             }
         } else {
             $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
-                'type' => $type,
+                'type' => $type == "all"?array('$in'=>array('image','video')):$type,
                 'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                 'product' => null,
                 'subproduct' => null,
@@ -359,13 +362,16 @@ class MediaController extends BackendController
      */
     private function getMediaDataArray(Media $media, $documentId = null, $collectionType = null)
     {
-
         $data = array(
             'imageUrl' => $media->getWebPath(),
             'id' => $media->getId(),
-            'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_delete', array('id' => $media->getId())),
-            'cropUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_crop', array('id' => $media->getId())),
-            'pop' => str_replace('%title%', $this->trans('image', array(), $this->translationDomain), $this->get('app.twig.popover_factory_extension')->popoverFactory([]))
+            'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_delete', array('id' => $media->getId(),'collectionType'=>$collectionType)),
+            'cropUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_crop', array('id' => $media->getId(),'collectionType'=>$collectionType)),
+            'pop' => str_replace('%title%', $this->trans('image', array(), $this->translationDomain), $this->get('app.twig.popover_factory_extension')->popoverFactory([])),
+            'captionAr' => $media->getCaption()?$media->getCaption():"",
+            'captionEn' => $media->getCaptionEn()?$media->getCaptionEn():"",
+            'path' => $media->getPath(),
+            'type' => $media->getType()
         );
         return $data;
     }
@@ -606,38 +612,7 @@ class MediaController extends BackendController
                 $media->setCreatedBy($this->getUser());
                 $media->setCollectionType($collectionType);
                 if ($documentId && $documentId != 'null') {
-                    if ($collectionType === 'Material') {
-                        $response = $this->getInvalidResponseForMaterial($documentId, $this->getRequest()->get('room'));
-                        if ($response) {
-                            return $response;
-                        }
-                    } elseif ($collectionType === 'Comics') {
-                        $response = $this->getInvalidResponseForComic($documentId);
-                        if ($response) {
-                            return $response;
-                        }
-                    } elseif ($collectionType === 'Event') {
-                        $response = $this->getInvalidResponseForEvent($documentId, $this->getRequest()->get('room'));
-                        if ($response) {
-                            return $response;
-                        }
-                    } else {
-                        if ($collectionType != 'City' && $collectionType != 'Place') {
-                            return $this->getAccessDeniedResponse();
-                        }
-                    }
-                    if ($collectionType == 'City') {
-                        $document = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarBackendBundle:' . $collectionType)->find($documentId);
-                    } elseif ($collectionType == 'Place') {
-                        $document = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarBackendBundle:' . $collectionType)->find($documentId);
-                        $documentMedia = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarAppBundle:Media')->findOneBy(array('place' => $documentId));
-                        if ($documentMedia) {
-                            $document->setCopyright(true);
-                            $this->get('doctrine_mongodb')->getManager()->remove($documentMedia);
-                        }
-                    } else {
                         $document = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarAppBundle:' . $collectionType)->find($documentId);
-                    }
                     $collectionSetter = "set" . $collectionType;
                     $media->$collectionSetter($document);
                     $lastPic = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder($this->getObjectShortName())
@@ -669,9 +644,9 @@ class MediaController extends BackendController
                 $media->setPath($media->getImagePath($extension));
                 $validator = $this->get('validator');
                 if ($collectionType == 'Place' && $documentId == 'null') {
-                    $errors = $validator->validate($media, array('image', 'oneImage'));
+                    $errors = $validator->validate($media);
                 } else {
-                    $errors = $validator->validate($media, array('image'));
+                    $errors = $validator->validate($media);
                 }
 
                 if (count($errors) > 0) {
@@ -681,11 +656,6 @@ class MediaController extends BackendController
                 } else {
                     $dm->persist($media);
                     $dm->flush();
-                    if ($media->getPlace() != NULL) {
-                        $media->getPlace()->setDefaultCoverPhoto($media->getPath());
-                        $media->getPlace()->setCopyright(TRUE);
-                        $dm->flush();
-                    }
 
                     $successIds [] = $url;
                     $files [] = $this->getMediaDataArray($media, $documentId, $collectionType);

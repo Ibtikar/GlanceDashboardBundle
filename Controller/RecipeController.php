@@ -381,7 +381,11 @@ class RecipeController extends BackendController
                     }
                 }
                 $dm->persist($recipe);
+
                 $dm->flush();
+
+                $this->updateMaterialGallary($recipe, $formData['media'], $dm);
+
                 $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
             }
         }
@@ -390,6 +394,81 @@ class RecipeController extends BackendController
                 'title' => $this->trans('Add new Recipe', array(), $this->translationDomain),
                 'translationDomain' => $this->translationDomain
         ));
+    }
+
+
+
+    /**
+     * rename folder with material name and add material to media documents
+     *
+     * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
+     */
+
+    public function updateMaterialGallary($document, $gallary, $dm = null) {
+        if (!$dm) {
+            $dm = $this->get('doctrine_mongodb')->getManager();
+        }
+
+        $gallary = json_decode($gallary,true);
+
+        if (isset($gallary[0]) && is_array($gallary[0])) {
+
+                $imagesIds = array();
+                $imagesData = array();
+                foreach ($gallary as $galleryImageData) {
+                    $imagesIds [] = $galleryImageData['id'];
+                    $imagesData[$galleryImageData['id']] = $galleryImageData;
+                }
+                $images = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array('id' => array('$in' => $imagesIds)));
+                if (count($images) > 0 ) {
+                    $firstImg = $images[0];
+                    $this->oldDir = $firstImg->getUploadRootDir();
+                    $newDir = substr($this->oldDir, 0, strrpos($this->oldDir, "/")) . "/" . $document->getId();
+                    if (!file_exists($newDir)) {
+                        @mkdir($newDir);
+                    }
+                }
+                $documentImages = 0;
+
+                $documentImages = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array('recipe' => $document->getId(), 'coverPhoto' => false));
+
+                $count= count($documentImages);
+                $coverExist = FALSE;
+
+                foreach ($images as $mediaObj) {
+                    $image = $imagesData[$mediaObj->getId()];
+
+                    $oldFilePath = $this->oldDir . "/" . $mediaObj->getPath();
+                    $newFilePath = $newDir . "/" . $mediaObj->getPath();
+                    @rename($oldFilePath, $newFilePath);
+
+                    $mediaObj->setRecipe($document);
+
+                    $mediaObj->setOrder($image['order']);
+                    $mediaObj->setCaptionAr($image['captionAr']);
+                    $mediaObj->setCaptionEn($image['captionEn']);
+
+                    $mediaObj->setCoverPhoto(FALSE);
+                    //                set default cover photo in case it's from the gallary images
+                    if (isset($image['cover']) && $image['cover']) {
+                        $document->setDefaultCoverPhoto($mediaObj->getPath());
+
+                        $mediaObj->setCoverPhoto(TRUE);
+                        $coverExist = TRUE;
+                    }
+                }
+//                if (!$isComics && !$isEvent && !$isTask) {
+//                    if($count > 6 || ($count == 6 && !$coverExist)) {
+//                        if ($document->getGalleryType() == "thumbnails") {
+//                            $document->setGalleryType("sequence");
+//                       }
+//                    }
+//                }
+                $dm->flush();
+
+        }
+
+        $dm->flush();
     }
 
     public function getTagsAction()
