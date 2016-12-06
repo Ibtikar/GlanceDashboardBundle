@@ -3,12 +3,13 @@ parameters:
     autoCompelet_display_item: 5
 
 services:
-    
-    request_set_language:
+
+    GlanceDashboardBundle.eventListeners.localeRewriteListener::
         class: Ibtikar\GlanceDashboardBundle\Listener\LanguageChangeListener
-        arguments: [ "%accepted_locales%", "%locale%" ]
+        arguments: ["@router", "%locale%", "%accepted_locales%"]
         tags:
-            - { name: kernel.event_listener, event: kernel.request, method: changeRequestLocale, priority: 17 }
+              - { name: kernel.event_subscriber }
+
     list_view:
         class: Ibtikar\GlanceDashboardBundle\Service\ListView
         arguments: ["@service_container" ]
