@@ -588,7 +588,7 @@ jQuery(document).ready(function($) {
                         YT.reset(true);
                         addImageToSortView(data.video);
                         $('#GoogleImportVideos-modal').modal('hide')
-                 
+
                     }
 
                     $('.dev-youtube-submit').removeAttr('disabled');
@@ -680,10 +680,12 @@ jQuery(document).ready(function($) {
     });
 
 // external source start
-// 
+//
 // external source end
 
 
     refreshMediaSortView();
     updateGallaryType();
+    setUploadedImagesCount();
+    setUploadedVideosCount();
 });

@@ -201,7 +201,7 @@ $(document).ready(function () {
 
     });
 
-    $('#image-cropper-modal').cropit('previewSize', { width: 500, height: 400 });
+    $('#image-cropper-modal').cropit('previewSize', { width: 500, height: 350 });
     $('#image-cropper-modal').cropit('exportZoom', 2);
 
 
@@ -221,7 +221,7 @@ $(document).ready(function () {
             processData: false,
             success: function (data) {
                 if(data.status=='login'){
-                            window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
+                    window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
                 }
                 else if (data.status == 'success') {
                     var media = data.media;
