@@ -36,9 +36,12 @@ class RecipeRepository extends DocumentRepository
 
     public function getMostView($skip = 0, $limit = 4)
     {
+        $date = new \DateTime();
+        $date->modify("-1 month");
         return $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                 ->field('status')->equals(Recipe::$statuses['publish'])
                 ->field('deleted')->equals(FALSE)
+                ->field('publishedAt')->lte($date)
                 ->sort('noOfViews', 'DESC')
                 ->eagerCursor()
                 ->limit($limit)

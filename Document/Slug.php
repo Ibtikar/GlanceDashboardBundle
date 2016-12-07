@@ -36,7 +36,13 @@ class Slug extends Document {
      * @Assert\NotBlank
      * @MongoDB\String
      */
-    private $slug;
+    private $slugAr;
+
+    /**
+     * @Assert\NotBlank
+     * @MongoDB\String
+     */
+    private $slugEn;
 
     /**
      * @MongoDB\Boolean
@@ -45,19 +51,12 @@ class Slug extends Document {
 
     static  $TYPE_CATEGORY="Category";
 
-    static  $TYPE_MATERIALS="Material";
-
-    static  $TYPE_COMICS="Comics";
-
-    static  $TYPE_EVENT="Event";
-
-    static  $TYPE_HOME="Home";
+    static  $TYPE_RECIPE="recipe";
 
     static  $TYPE_ARTICLES="Article";
 
     static  $TYPE_Rout="Rout";
 
-    static  $TYPE_SHORTURL = 'shortUrl';
 
     /**
      * Get id
@@ -155,5 +154,49 @@ class Slug extends Document {
     public function getPublish()
     {
         return $this->publish;
+    }
+
+    /**
+     * Set slugAr
+     *
+     * @param string $slugAr
+     * @return self
+     */
+    public function setSlugAr($slugAr)
+    {
+        $this->slugAr = $slugAr;
+        return $this;
+    }
+
+    /**
+     * Get slugAr
+     *
+     * @return string $slugAr
+     */
+    public function getSlugAr()
+    {
+        return $this->slugAr;
+    }
+
+    /**
+     * Set slugEn
+     *
+     * @param string $slugEn
+     * @return self
+     */
+    public function setSlugEn($slugEn)
+    {
+        $this->slugEn = $slugEn;
+        return $this;
+    }
+
+    /**
+     * Get slugEn
+     *
+     * @return string $slugEn
+     */
+    public function getSlugEn()
+    {
+        return $this->slugEn;
     }
 }
