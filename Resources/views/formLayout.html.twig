@@ -140,7 +140,7 @@
 
         })
         if(typeof CKEDITOR != "undefined"){
-            CKEDITOR.on( 'instanceReady', function(evt,ss,w) {
+            CKEDITOR.on( 'instanceReady', function(evt) {
                 evt.editor.on('change', function(evt) {
                     evt.editor.updateElement();
                     $(evt.sender.element.$).valid();
