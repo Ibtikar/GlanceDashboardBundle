@@ -72,7 +72,7 @@ function addImageToSortView(media) {
             imageSortTemplate
             .replace(/%image-id%/g, media.id)
             .replace(/%image-name%|%title%/g, media.path)
-            .replace(/%image-src%/g, media.imageUrl + '?flushCache=' + encodeURIComponent(new Date().getTime() + Math.random()))
+            .replace(/%image-src%/g,media.type == "image" ? '/'+media.imageUrl + '?flushCache=' + encodeURIComponent(new Date().getTime() + Math.random()):media.imageUrl)
             .replace(/%image-caption%/g, quoteattr(media.caption))
             .replace(/%check%/g, media.cover)
             .replace(/%image-icon%/g, media.type == "image" ? 'icon-image2' : 'icon-video-camera')
@@ -409,7 +409,7 @@ var YT = {
         });
     },
     checked: function() {
-        return $('#video-tab1 .searchItem input:checked').map(function() {
+        return $('.videossearch-results-list li input:checked').map(function() {
             return this.value;
         });
     },
@@ -419,7 +419,7 @@ var YT = {
         }).toArray();
     },
     uncheck: function() {
-        $('#video-tab1 .searchItem input:checked').prop('checked', false);
+        $('.videossearch-results-list li input:checked').prop('checked', false);
     },
     appendSpinner: function() {
         $('#youtube-no-result').hide();
@@ -556,6 +556,7 @@ jQuery(document).ready(function($) {
     $('.dev-youtube-submit').on('click', function() {
 
         var selectedVideos = YT.checked();
+        console.log(selectedVideos)
 
         if ($("#dev-search-gvideo-box").parent().hasClass('has-error')) {
             $('#error').remove();
@@ -583,13 +584,11 @@ jQuery(document).ready(function($) {
                 success: function(data) {
                     if (data.status === 'success') {
                         YT.uncheck();
-
-                        showNotificationMsg(messages.uploadSuccessfuly);
-
+                        showNotificationMsg(data.message, "", data.status);
                         YT.reset(true);
-                        if(typeof eventCollection =='undefined'){
-                            refreshVideoSortView();
-                        }
+                        addImageToSortView(data.video);
+                        $('#GoogleImportVideos-modal').modal('hide')
+                 
                     }
 
                     $('.dev-youtube-submit').removeAttr('disabled');

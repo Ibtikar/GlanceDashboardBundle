@@ -716,26 +716,4 @@ class Media extends Document {
     {
         return $this->name;
     }
-
-    /**
-     * Set vid
-     *
-     * @param string $vid
-     * @return self
-     */
-    public function setVid($vid)
-    {
-        $this->vid = $vid;
-        return $this;
-    }
-
-    /**
-     * Get vid
-     *
-     * @return string $vid
-     */
-    public function getVid()
-    {
-        return $this->vid;
-    }
 }
