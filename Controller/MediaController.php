@@ -161,11 +161,13 @@ class MediaController extends BackendController
 
     private function prepareMedia($media,$collectionType)
     {
+        
         return array(
             'imageUrl' => $media->getWebPath(),
             'id' => $media->getId(),
+            'type' => $media->getType(),
             'coverPhoto' => $media->getCoverPhoto(),
-            'caption' => ($collectionType=='Recipe')?$media->getCaptionAr():$media->getCaption(),
+            'caption' => ($collectionType=='Recipe')?$media->getCaptionAr():'',
             'captionEn' => ($collectionType=='Recipe')?$media->getCaptionEn():'',
             'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_delete', array('id' => $media->getId(),'collectionType'=>$collectionType)),
             'cropUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_crop', array('id' => $media->getId(),'collectionType'=>$collectionType)),
@@ -347,7 +349,13 @@ class MediaController extends BackendController
                 $profilePhoto = $this->prepareMedia($document,$collectionType);
                 continue;
             }
-            $files [] = $this->getMediaDataArray($document, $documentId, $collectionType);
+            if($document->getType()=='video'){
+                $files [] = $this->getVideoArray($document, $documentId, $collectionType);
+
+            }else{
+               $files [] = $this->getMediaDataArray($document, $documentId, $collectionType);
+
+            }
         }
 
         return new JsonResponse(array('images' => $files, 'coverPhoto' => $coverPhoto, 'profilePhoto' => $profilePhoto));
@@ -368,7 +376,7 @@ class MediaController extends BackendController
             'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_delete', array('id' => $media->getId(),'collectionType'=>$collectionType)),
             'cropUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_crop', array('id' => $media->getId(),'collectionType'=>$collectionType)),
             'pop' => str_replace('%title%', $this->trans('image', array(), $this->translationDomain), $this->get('app.twig.popover_factory_extension')->popoverFactory([])),
-            'captionAr' => $media->getCaption()?$media->getCaption():"",
+            'captionAr' => $media->getCaptionAr()?$media->getCaptionAr():"",
             'captionEn' => $media->getCaptionEn()?$media->getCaptionEn():"",
             'path' => $media->getPath(),
             'type' => $media->getType()
@@ -674,14 +682,6 @@ class MediaController extends BackendController
     private function getCurlInstance($url)
     {
         $ch = curl_init();
-        $cookiesStringToPass = '';
-        foreach ($this->getRequest()->cookies->all() as $name => $value) {
-            if ($cookiesStringToPass) {
-                $cookiesStringToPass .= ';';
-            }
-            $cookiesStringToPass .= $name . '=' . urlencode($value);
-        }
-        curl_setopt($ch, CURLOPT_COOKIE, $cookiesStringToPass);
         // cloudflare will block the request if it does not contain the user agent string
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux x86_64; rv:33.0) Gecko/20100101 Firefox/33.0');
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -717,5 +717,139 @@ class MediaController extends BackendController
         $return = curl_exec($ch);
         curl_close($ch);
         return $return;
+    }
+
+
+
+
+    public function uploadYoutubeVideoAction(Request $request,$type='video',$documentId = null, $collectionType = 'Material')
+    {
+
+        $data = array(
+            'status' => 'success',
+
+        );
+        if ($request->getMethod() === 'POST') {
+            $dm = $this->get('doctrine_mongodb')->getManager();
+            $videos = $request->get('videos');
+            foreach ($videos as $video) {
+                $videoObj = new Media();
+                $video = explode('#', $video);
+                $vid = $video[0];
+                $videoObj->setVid($vid);
+                if ($request->get('collectionType')) {
+                    $videoObj->setCollectionType($request->get('collectionType'));
+                }
+                if ($documentId && $documentId!='null') {
+                    if ($request->get('collectionType') != 'Task') {
+                        $material = $dm->getRepository('IbtikarAppBundle:Material')->find($documentId);
+                        $lastVideo = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder($this->getObjectShortName())
+                                ->field('material')->equals($documentId)
+                                ->sort('order', 'DESC')
+                                ->getQuery()->getSingleResult();
+                        $order = 0;
+                        if ($lastVideo) {
+                            $order = $lastVideo->getOrder() + 1;
+                        }
+                        $videoObj->setOrder($order);
+                        $videoObj->setMaterial($material);
+                    } else {
+                        $task = $dm->getRepository('IbtikarBackendBundle:Task')->find($documentId);
+                        $lastVideo = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder($this->getObjectShortName())
+                                ->field('task')->equals($documentId)
+                                ->sort('order', 'DESC')
+                                ->getQuery()->getSingleResult();
+                        $order = 0;
+                        if ($lastVideo) {
+                            $order = $lastVideo->getOrder() + 1;
+                        }
+                        $videoObj->setOrder($order);
+                        $videoObj->setTask($task);
+                    }
+                }
+                $videoObj->setCreatedBy($this->getUser());
+                $videoObj->setType($type);
+                $dm->persist($videoObj);
+                $dm->flush();
+                $data['message']=  $this->trans('upload successfuly');
+                $data['video']=$this->getVideoArray($videoObj, null,$request->get('collectionType'));
+            }
+        }
+        return new JsonResponse($data);
+    }
+
+
+    private function getVideoArray($video, $documentId = null,$collectionType='Recipe') {
+        $routeParameters = array('id' => $video->getId());
+        if($documentId) {
+            $routeParameters['materialId'] = $documentId;
+            $routeParameters['collectionType'] = $collectionType;
+        }
+        $data = array(
+            'id' => $video->getId(),
+            'vid' => $video->getVid(),
+            'imageUrl'=>'https://i.ytimg.com/vi/' . $video->getVid() . '/hqdefault.jpg',
+            'captionAr' => is_null($video->getCaptionAr())?"":$video->getCaptionAr(),
+            'captionEn' => is_null($video->getCaptionEn())?"":$video->getCaptionEn(),
+            'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_video_delete', $routeParameters),
+            'type' => $video->getType()
+        );
+        return $data;
+    }
+
+        public function deleteVideoAction(Request $request ,$id) {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        /* @var $document Media */
+
+        $document = $dm->getRepository($this->getObjectShortName())->find($id);
+
+        if (!$document) {
+            return $this->getNotificationResponse(null, array(), 'error');
+        }
+        $documentId = $request->get('documentId');
+        $collectionType = $request->get('collectionType');
+
+        if ($documentId && $documentId != 'null' && $collectionType != 'Task') {
+            $response = $this->getInvalidResponseForMaterial($documentId, $request->get('room'));
+            if ($response) {
+                return $response;
+            }
+        }
+//        if ($collectionType == 'Task') {
+//            if ($document->getTask() === null && $document->getCreatedBy()->getId() !== $this->getUser()->getId()) {
+//                return $this->getNotificationResponse(null, array(), 'error');
+//            }
+//        } else {
+//            if ($document->getMaterial() === null && $document->getCreatedBy()->getId() !== $this->getUser()->getId()) {
+//                return $this->getNotificationResponse(null, array(), 'error');
+//            }
+//        }
+
+        $dm->remove($document);
+        try {
+            $dm->flush();
+        } catch (\Exception $e) {
+            return $$this->getNotificationResponse(null, array(), 'error');
+        }
+        return $this->getNotificationResponse($this->trans('Deleted sucessfully.'));
+    }
+
+
+    /**
+     * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
+     *
+     */
+    public function imageProxyAction(Request $request)
+    {
+        $ch = $this->getCurlInstance($request->get('url'));
+        $return = curl_exec($ch);
+        curl_close($ch);
+        return new Response(
+            $return,
+            200,
+            array(
+                'Content-Type' => 'image/jpeg'
+            )
+        );
     }
 }

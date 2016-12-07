@@ -273,11 +273,17 @@ class Recipe  extends Publishable {
      */
     private $slugEn;
 
+    /**
+     * @MongoDB\String
+     */
+    private $trackingNumber;
+
     public function __construct()
     {
         $this->tag = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tagEn = new \Doctrine\Common\Collections\ArrayCollection();
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->trackingNumber = 'Recipe' . date('ymdHis') . rand(0, 99);
     }
 
     public function __toString()
@@ -1056,4 +1062,25 @@ class Recipe  extends Publishable {
     {
         return $this->slugEn;
     }
+
+    /**
+     * Get trackingNumber
+     *
+     * @return string $trackingNumber
+     */
+    public function getTrackingNumber() {
+        return $this->trackingNumber;
+    }
+
+    /**
+     * Set trackingNumber
+     *
+     * @param string $trackingNumber
+     * @return self
+     */
+    public function setTrackingNumber($trackingNumber) {
+        $this->trackingNumber = $trackingNumber;
+        return $this;
+    }
+
 }

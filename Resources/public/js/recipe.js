@@ -125,6 +125,9 @@ $(document).ready(function () {
 
     $("form.form-horizontal").data("validator").settings.ignore = [];
 
+    if($('#recipe_country').val() == ""){
+        $('#recipe_country').val($('#recipe_country option:eq(1)').val()).trigger('change');
+    }
 
     $(document).on('click','.upload-image-modal-open',function () {
         if(uploadpopup){
@@ -144,14 +147,6 @@ $(document).ready(function () {
         }
 
         cropperPluginInitialized = true;
-    });
-
-    $('.image-editor').cropit({
-        smallImage: 'stretch',
-        minZoomstring:'fill',
-        imageState: {
-            src: '/images/cover.jpg'
-        }
     });
 
 
@@ -176,8 +171,9 @@ $(document).ready(function () {
                 var value = elementObject.val(),
                         file = value.toLowerCase(),
                         extension = file.substring(file.lastIndexOf('.') + 1);
-
-                if ($.inArray(extension, ['jpeg', 'jpg', 'png']) == -1) {
+                console.log(extension);
+                if ($.inArray(extension, ['jpeg', 'jpg', 'png', 'gif']) == -1) {
+                    console.log("heya");
                     showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
 
                 } else if (elementObject.attr('data-size') > (4 * 1024 * 1024)) {
@@ -210,7 +206,7 @@ $(document).ready(function () {
 
 
     $(document).on('click', '.dev-submit-image', function () {
-        var imageFile = $('#image-cropper-modal').cropit('export')
+        var imageFile = $('#image-cropper-modal').cropit('export');
         var formData = new FormData();
         formData.append("media[file]", imageFile);
         $('.dev-crop-spinner').show();

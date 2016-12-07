@@ -13,21 +13,14 @@ $.validator.addMethod('mobile', function (value, element) {
     }
   }
   return true;
-//    $element.attr('data-remove-color', 'false');
-//    var phoneText = formatPhoneText($element);
-//    var countryElement = $element.parent().find('select.dev-phone-country-select');
-//    var phoneCountry = countryForE164Number(phoneText);
-//    if (phoneCountry.toUpperCase() !== countryElement.val().toUpperCase()) {
-//        $element.attr('data-remove-color', 'false');
-//        return false;
-//    }
-//    return isValidNumber(phoneText, countryElement.val());
 }, 'phone must be in the right format');
 
 $.validator.addMethod('ckmin', function (value, element, param) {
     if(CKEDITOR && CKEDITOR.instances[$(element).attr('id')]){
         var editorContent = CKEDITOR.instances[$(element).attr('id')].document.getBody().getText();
-        return editorContent.length >= param;
+        // return true in case of empty content as element is not required
+        // or return false if it contant a string more than the min limit
+        return editorContent.trim().length == 0?true:editorContent.length >= param;
     }
     return true;
 });
