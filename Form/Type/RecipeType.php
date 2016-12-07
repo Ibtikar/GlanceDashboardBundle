@@ -55,17 +55,17 @@ class RecipeType extends AbstractType {
                 ))
                 ->add('course', formType\ChoiceType::class, array('required' => FALSE,
                     'choices' => array_flip(Recipe::$courseMap),
-                    'multiple' => true, 'placeholder' => false, 'empty_data' => null,'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-multiple')
+                    'multiple' => true, 'placeholder' => false, 'empty_data' => null,'choice_translation_domain'=>'recipe','attr' => array('data-maximum-selection-length'=> 3,'class' => 'select-multiple')
                 ))
                 ->add('meal', formType\ChoiceType::class, array('required' => FALSE,
                     'choices' => array_flip(Recipe::$mealMap),
-                    'multiple' => true, 'placeholder' => false, 'empty_data' => null,'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-multiple')
+                    'multiple' => true, 'placeholder' => false, 'empty_data' => null,'choice_translation_domain'=>'recipe','attr' => array('data-maximum-selection-length'=> 3,'class' => 'select-multiple')
                 ))
                 ->add('keyIngredient', formType\ChoiceType::class, array('required' => FALSE,
                     'choices' => array_flip(Recipe::$keyIngredientMap),
-                    'multiple' => true, 'placeholder' => false, 'empty_data' => null,'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-multiple')
+                    'multiple' => true, 'placeholder' => false, 'empty_data' => null,'choice_translation_domain'=>'recipe','attr' => array('data-maximum-selection-length'=> 3,'class' => 'select-multiple')
                 ))
-                ->add('products', DocumentType::class, array('required' => false,'multiple' => 'multiple','placeholder' => 'Choose Product','class' => 'IbtikarGlanceDashboardBundle:Product', 'attr' => array('data-img-method'=>'profilePhoto','data-img-default'=>'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg','class' => 'select-with-thumb')))
+                ->add('products', DocumentType::class, array('required' => false,'multiple' => 'multiple','placeholder' => 'Choose Product','class' => 'IbtikarGlanceDashboardBundle:Product', 'attr' => array('data-maximum-selection-length'=> 10,'data-img-method'=>'profilePhoto','data-img-default'=>'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg','class' => 'select-with-thumb')))
 //                ->add('relatedMaterialId', formType\TextType::class, array('attr' => array("data-validation-message"=>'','data-rule-unique' => 'material_check_field_unique', 'data-name' => 'relatedMaterial'), 'required' => FALSE, 'mapped' => false, 'data' => $this->relatedMaterialId))
                 ->add('defaultCoverPhoto', formType\HiddenType::class)
                 ->add('galleryType', formType\HiddenType::class)

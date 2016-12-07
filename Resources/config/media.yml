@@ -18,6 +18,10 @@ ibtikar_glance_dashboard_media_user_files:
     requirements:
         type:  file|image|all
 
+ibtikar_glance_dashboard_media_get_external:
+    path:  /image-proxy
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Media:imageProxy }
+
 #material_upload_imageUrl:
 #    path:  /upload_imageUrl
 #    defaults: { _controller: IbtikarGlanceDashboardBundle:Media:upload_imageUrl }

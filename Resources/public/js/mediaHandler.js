@@ -230,7 +230,7 @@ function checkGoogleHeight() {
 }
 
 $(document).on('click','.dev-google-upload', function() {
-    $('#image-cropper-modal').cropit('imageSrc',$('#dev-google input:checked').attr('data-url'));
+    $('#image-cropper-modal').cropit('imageSrc',corsBroxy + "?url=" + encodeURI($('#dev-google input:checked').attr('data-url')));
     $('#uploadImg').modal('show');
     return false;
     var selectedImage = [];
@@ -515,14 +515,7 @@ function updateGallaryType(){
 
 jQuery(document).ready(function($) {
 
-    var uploadpopup = false;
-
     $(document).on('click', '.dev-upload-recipe-img', function() {
-        if (uploadpopup) {
-            uploadpopup = false;
-            return false;
-        }
-        uploadpopup = true;
         $('input.cropit-image-input').val('');
         $('.cropit-preview').removeClass('cropit-image-loaded');
         $('.cropit-preview-image').attr('src', '');
@@ -686,6 +679,10 @@ jQuery(document).ready(function($) {
         YT.reset();
 //        $('#dev-search-gvideo-box,#dev-search-gvideo-box-small').val("");
     });
+
+// external source start
+// 
+// external source end
 
 
     refreshMediaSortView();

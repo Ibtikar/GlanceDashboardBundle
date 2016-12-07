@@ -264,11 +264,11 @@
 
                             <div class="input-group content-group">
                                 <div class="has-feedback">
-                                    <input class="form-control input-xs" value=" " type="text">
+                                    <input class="form-control input-xs dev-recipe-imgeUrl" value=" " type="text">
                                 </div>
 
                                 <div class="input-group-btn">
-                                    <button type="submit" class="btn btn-primary btn-xs">اصف</button>
+                                    <button type="submit" class="btn btn-primary btn-xs dev-imageurl-submit">اصف</button>
                                 </div>
                             </div>
 
@@ -578,7 +578,8 @@
     var cropButton = '{{ cropButton|escape('js') }}';
     var deleteButton = '{{ deleteButton|escape('js') }}';
     var uploadButton = '{{ uploadButton|escape('js') }}';
-        var cropperPluginInitialized = false;
+    var cropperPluginInitialized = false;
+    var corsBroxy = "{{ path('ibtikar_glance_dashboard_media_get_external')}}";
     var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':'null','collectionType':'Recipe'})}}";
     var googleUploadImage = '{{ path('google_upload_image', {'documentId':'null', 'collectionType':'Recipe'}) }}';
     var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'all','documentId':'null','collectionType':'Recipe'})}}";

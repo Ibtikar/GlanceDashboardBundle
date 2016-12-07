@@ -368,7 +368,7 @@ class MediaController extends BackendController
             'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_delete', array('id' => $media->getId(),'collectionType'=>$collectionType)),
             'cropUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_crop', array('id' => $media->getId(),'collectionType'=>$collectionType)),
             'pop' => str_replace('%title%', $this->trans('image', array(), $this->translationDomain), $this->get('app.twig.popover_factory_extension')->popoverFactory([])),
-            'captionAr' => $media->getCaption()?$media->getCaption():"",
+            'captionAr' => $media->getCaptionAr()?$media->getCaptionAr():"",
             'captionEn' => $media->getCaptionEn()?$media->getCaptionEn():"",
             'path' => $media->getPath(),
             'type' => $media->getType()
@@ -674,14 +674,6 @@ class MediaController extends BackendController
     private function getCurlInstance($url)
     {
         $ch = curl_init();
-        $cookiesStringToPass = '';
-        foreach ($this->getRequest()->cookies->all() as $name => $value) {
-            if ($cookiesStringToPass) {
-                $cookiesStringToPass .= ';';
-            }
-            $cookiesStringToPass .= $name . '=' . urlencode($value);
-        }
-        curl_setopt($ch, CURLOPT_COOKIE, $cookiesStringToPass);
         // cloudflare will block the request if it does not contain the user agent string
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux x86_64; rv:33.0) Gecko/20100101 Firefox/33.0');
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -717,5 +709,23 @@ class MediaController extends BackendController
         $return = curl_exec($ch);
         curl_close($ch);
         return $return;
+    }
+
+    /**
+     * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
+     *
+     */
+    public function imageProxyAction(Request $request)
+    {
+        $ch = $this->getCurlInstance($request->get('url'));
+        $return = curl_exec($ch);
+        curl_close($ch);
+        return new Response(
+            $return,
+            200,
+            array(
+                'Content-Type' => 'image/jpeg'
+            )
+        );
     }
 }

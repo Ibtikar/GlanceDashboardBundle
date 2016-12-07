@@ -75,7 +75,13 @@
     var loginUrl="{{ path('ibtikar_glance_ums_staff_login')}}";
 
     function formPluginsInit(){
+
+            $.fn.select2.defaults.set("language--maximum-selected", function(e){
+                        return "الحد الأقصى هو "+e.maximum+" عناصر"
+                    });
+
             $('.select,.select-multiple').select2({ "language": "ar"});
+
             $(".select-with-thumb").select2({
                 templateResult: addUserPic,
                 templateSelection: addUserPic
