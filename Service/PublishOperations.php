@@ -249,15 +249,15 @@ abstract class PublishOperations
             $result->field('isSelectable')->notEqual(true);
         }
 
-//        if(is_null($document->getDefaultCoverPhoto())){
-//            $result->field('requiredCoverImage')->notEqual(true);
-//        }
+        if(is_null($document->getDefaultCoverPhoto())){
+            $result->field('requiredCoverImage')->notEqual(true);
+        }
 
         $result = $result->getQuery()->execute();
 
-        if ($result->count() == 0) {
-            throw new \Exception("Empty Location List");
-        }
+//        if ($result->count() == 0) {
+//            throw new \Exception("Empty Location List");
+//        }
 
         return $result;
     }
