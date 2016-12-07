@@ -41,7 +41,7 @@ class RecipeRepository extends DocumentRepository
         return $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                 ->field('status')->equals(Recipe::$statuses['publish'])
                 ->field('deleted')->equals(FALSE)
-                ->field('publishedAt')->lte($date)
+                ->field('publishedAt')->gte($date)
                 ->sort('noOfViews', 'DESC')
                 ->eagerCursor()
                 ->limit($limit)
