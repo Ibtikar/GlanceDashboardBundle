@@ -221,7 +221,7 @@ function checkGoogleHeight() {
     }
 }
 
-$(document).on('click','.devfsel-google-upload', function() {
+$(document).on('click','.dev-google-upload', function() {
     $('#image-cropper-modal').cropit('imageSrc',corsBroxy + "?url=" + encodeURI($('#dev-google input:checked').attr('data-url')));
     $('#uploadImg').modal('show');
     return false;
@@ -511,6 +511,14 @@ function updateGallaryType(){
 
 jQuery(document).ready(function($) {
 
+
+    $(document).on('change', '.dev-cover-img', function() {
+        if($(this).is(':checked')){
+            $('[id$="_defaultCoverPhoto"]').val($(this).val());
+        }else{
+            $('[id$="_defaultCoverPhoto"]').val("");
+        }
+    });
     $(document).on('click', '.dev-upload-recipe-img', function() {
         $('input.cropit-image-input').val('');
         $('.cropit-preview').removeClass('cropit-image-loaded');
@@ -527,6 +535,10 @@ jQuery(document).ready(function($) {
 
     $('body').on('preAjaxCallback',function(){
         populateData();
+        if(!$('.dev-cover-img').is(':checked')){
+            showNotificationMsg("يجب إختيار صورة غلاف", "", "error");
+            return false;
+        }
     });
 
     $(document).on('click', '#search-vid-btn', function(e) {
