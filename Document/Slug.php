@@ -9,10 +9,12 @@ use Ibtikar\GlanceDashboardBundle\Document\Document;
 
 /**
  * @MongoDB\Document(repositoryClass="Ibtikar\GlanceDashboardBundle\Document\SlugRepository")
- * @MongoDBUnique(fields={"slug"})
+ * @MongoDBUnique(fields={"slugAr"})
+ * @MongoDBUnique(fields={"slugEn"})
  * @MongoDB\Index(keys={"slug"="asc"})
  */
-class Slug extends Document {
+class Slug extends Document
+{
 
     /**
      * @MongoDB\Id
@@ -48,15 +50,10 @@ class Slug extends Document {
      * @MongoDB\Boolean
      */
     private $publish = false;
-
-    static  $TYPE_CATEGORY="Category";
-
-    static  $TYPE_RECIPE="recipe";
-
-    static  $TYPE_ARTICLES="Article";
-
-    static  $TYPE_Rout="Rout";
-
+    static $TYPE_CATEGORY = "Category";
+    static $TYPE_RECIPE = "recipe";
+    static $TYPE_ARTICLES = "Article";
+    static $TYPE_Rout = "Rout";
 
     /**
      * Get id
@@ -112,27 +109,6 @@ class Slug extends Document {
         return $this->referenceId;
     }
 
-    /**
-     * Set slug
-     *
-     * @param string $slug
-     * @return self
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-        return $this;
-    }
-
-    /**
-     * Get slug
-     *
-     * @return string $slug
-     */
-    public function getSlug()
-    {
-        return $this->slug;
-    }
 
     /**
      * Set publish

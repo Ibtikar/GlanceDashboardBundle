@@ -375,7 +375,6 @@ class RecipeController extends BackendController
             if ($form->isValid()) {
                 $formData = $request->get('recipe');
 
-                $this->slugifier($recipe);
 
                 $tags = $formData['tags'];
                 $tagsEn = $formData['tagsEn'];
@@ -420,6 +419,7 @@ class RecipeController extends BackendController
                     }
                 }
                 $dm->persist($recipe);
+                $this->slugifier($recipe);
 
                 $dm->flush();
 
