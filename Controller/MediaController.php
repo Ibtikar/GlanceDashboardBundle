@@ -67,7 +67,7 @@ class MediaController extends BackendController
             }
 
         } else {
-            if ($imageType) {
+            if ($imageType && $imageType!='undefined') {
                 switch ($imageType) {
                     case 'profilePhoto':
                         $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
@@ -90,7 +90,7 @@ class MediaController extends BackendController
                         ));
                         break;
                 }
-                if (isset($document)) {
+                if ($document) {
                     return new JsonResponse(array('status' => 'reload'));
                 }
             }
