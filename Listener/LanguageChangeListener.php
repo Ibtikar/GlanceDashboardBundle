@@ -77,6 +77,7 @@ class LanguageChangeListener implements EventSubscriberInterface
         //If the route does indeed exist then lets redirect there.
         if ($route_exists == true) {
             $locale = $this->defaultLocale;
+            $request->setLocale($this->defaultLocale);
             $event->setResponse(new RedirectResponse("/" . $locale . $path));
         }
     }
