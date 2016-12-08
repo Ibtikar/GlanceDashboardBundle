@@ -228,15 +228,15 @@ $(document).ready(function () {
                 else if (data.status == 'success') {
                     var media = data.media;
                     addImageToSortView(media);
-                    var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
-                            .replace(/%image-id%/g, media.id)
-                            .replace(/%name%/g, name)
-                            .replace(/%image-delete-url%/g, media.deleteUrl)
-                            .replace(/%arabicName%/g, imageErrorMessages[name])
-                            .replace(/%uploadButton%/g, '')
-                            .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
-                            .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
-                    element.closest('tr').replaceWith(temepelate);
+//                    var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
+//                            .replace(/%image-id%/g, media.id)
+//                            .replace(/%name%/g, name)
+//                            .replace(/%image-delete-url%/g, media.deleteUrl)
+//                            .replace(/%arabicName%/g, imageErrorMessages[name])
+//                            .replace(/%uploadButton%/g, '')
+//                            .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
+//                            .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
+//                    element.closest('tr').replaceWith(temepelate);
                     showNotificationMsg(data.message, "", data.status);
                     $('#uploadImg').modal('hide');
                     $('[data-popup="popover"]').popover({
