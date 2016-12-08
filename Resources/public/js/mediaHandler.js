@@ -221,7 +221,7 @@ function checkGoogleHeight() {
     }
 }
 
-$(document).on('click','.dev-google-upload', function() {
+$(document).on('click','.devfsel-google-upload', function() {
     $('#image-cropper-modal').cropit('imageSrc',corsBroxy + "?url=" + encodeURI($('#dev-google input:checked').attr('data-url')));
     $('#uploadImg').modal('show');
     return false;
@@ -604,6 +604,11 @@ jQuery(document).ready(function($) {
 
 
     })
+    $('#dev-search-gimage-box-small').on('keyup',function(e) {
+                if (e.which === 13) {
+                    $('#search-img-btn-small').trigger('click');
+                }
+           });
     $(document).on('click', '#search-img-btn-small', function() {
         if ($('#dev-search-gimage-box-small').val().trim() != "") {
             $('#dev-search-gimage-box').val($('#dev-search-gimage-box-small').val());
