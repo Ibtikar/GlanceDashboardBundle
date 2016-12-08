@@ -31,7 +31,7 @@ class ArabicMongoRegex {
      * @return string
      */
     public static function slugify($string, $separator = '-') {
-        return strtolower(trim(preg_replace('/([\d_\W])+/u', '-', preg_replace("/[\x{064B}-\x{0653}]/u","",$string)), $separator));
+        return strtolower(trim(preg_replace('/([_\W])+/u', '-', preg_replace("/[\x{064B}-\x{0653}]/u","",$string)), $separator));
     }
 
 }

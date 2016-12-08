@@ -161,14 +161,16 @@ class MediaController extends BackendController
 
     private function prepareMedia($media,$collectionType)
     {
-        
+
         return array(
             'imageUrl' => $media->getWebPath(),
+            'path' => $media->getPath(),
             'id' => $media->getId(),
             'type' => $media->getType(),
             'coverPhoto' => $media->getCoverPhoto(),
-            'caption' => ($collectionType=='Recipe')?$media->getCaptionAr():'',
-            'captionEn' => ($collectionType=='Recipe')?$media->getCaptionEn():'',
+            'captionAr' => $media->getCaptionAr()?$media->getCaptionAr():'',
+            'caption' => $media->getCaptionAr()?$media->getCaptionAr():'',
+            'captionEn' => $media->getCaptionEn()?$media->getCaptionEn():'',
             'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_delete', array('id' => $media->getId(),'collectionType'=>$collectionType)),
             'cropUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_crop', array('id' => $media->getId(),'collectionType'=>$collectionType)),
             'pop' => str_replace('%title%', $this->trans('image', array(), $this->translationDomain), $this->get('app.twig.popover_factory_extension')->popoverFactory(array("question" => "You are about to delete %title%,Are you sure?")))

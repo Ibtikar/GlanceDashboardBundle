@@ -9,7 +9,8 @@ use Ibtikar\GlanceDashboardBundle\Document\Recipe;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Ibtikar\GlanceDashboardBundle\Service\RecipeOperations;
 use Ibtikar\GlanceDashboardBundle\Document\Tag;
-
+use Ibtikar\GlanceDashboardBundle\Service\ArabicMongoRegex;
+use Ibtikar\GlanceDashboardBundle\Document\Slug;
 
 class RecipeController extends BackendController
 {
@@ -373,6 +374,8 @@ class RecipeController extends BackendController
 
             if ($form->isValid()) {
                 $formData = $request->get('recipe');
+
+                $this->slugifier($recipe);
 
                 $tags = $formData['tags'];
                 $tagsEn = $formData['tagsEn'];
@@ -744,6 +747,25 @@ class RecipeController extends BackendController
         return new JsonResponse(array('status' => 'success','data' => $documentObjects, "draw" => 0, 'sEcho' => 0,'columns'=>$rowsHeader['columnHeader'],
             "recordsTotal" => $renderingParams['total'],
             "recordsFiltered" => $renderingParams['total']));
+    }
+
+    /**
+     *@author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
+     */
+    private function slugifier($recipe) {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $slugAr = ArabicMongoRegex::slugify($recipe->getTitle()."-".  date('ymdHis'));
+        $slugEn = ArabicMongoRegex::slugify($recipe->getTitleEn()."-".date('ymdHis'));
+        $recipe->setSlug($slugAr);
+        $recipe->setSlugEn($slugEn);
+
+        $slug = new Slug();
+        $slug->setReferenceId($recipe->getId());
+        $slug->setType(Slug::$TYPE_RECIPE);
+        $slug->setSlugAr($slugAr);
+        $slug->setSlugEn($slugEn);
+        $dm->persist($slug);
+        $dm->flush();
     }
 
 }

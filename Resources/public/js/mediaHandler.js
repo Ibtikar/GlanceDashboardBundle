@@ -69,31 +69,23 @@ function quoteattr(s, preserveCR) {
  */
 function addImageToSortView(media) {
     $('.filesUploaded table tbody').append(
-            imageSortTemplate
-            .replace(/%image-id%/g, media.id)
-            .replace(/%image-name%|%title%/g, media.path)
-            .replace(/%image-src%/g,media.type == "image" ? '/'+media.imageUrl + '?flushCache=' + encodeURIComponent(new Date().getTime() + Math.random()):media.imageUrl)
-            .replace(/%image-caption%/g, quoteattr(media.caption))
-            .replace(/%check%/g, media.cover)
-            .replace(/%image-icon%/g, media.type == "image" ? 'icon-image2' : 'icon-video-camera')
-            .replace(/%delete-url%/g, media.deleteUrl)
-            .replace(/%is-gif%/g, media.isGif)
-            .replace(/%caption-ar%/g, media.captionAr)
-            .replace(/%caption-en%/g, media.captionEn)
-            );
-//    checkImageCanBeCropped(media.id, media.path + '?flushCache=' + encodeURIComponent(new Date().getTime() + Math.random()));
-//    setUploadedImagesCount();
-//    initSortable('#tab5');
-//    checkSelectedAllImages();
-//    if ($('.dev-delete-image-checkbox').length > 0) {
-//        $('.dev-check-images-all').closest('.row').show();
-//    } else {
-//        $('.dev-check-images-all').closest('.row').hide();
-//    }
-//    if ($('.dev-default-photo-sort:checked').length > 0) {
-//        $('.dev-default-photo-sort').change();
-//    }
-//    populateData();
+        imageSortTemplate
+        .replace(/%image-id%/g, media.id)
+        .replace(/%image-name%|%title%/g, media.path)
+        .replace(/%image-src%/g,media.type == "image" ? '/'+media.imageUrl + '?flushCache=' + encodeURIComponent(new Date().getTime() + Math.random()):media.imageUrl)
+        .replace(/%image-caption%/g, quoteattr(media.caption))
+        .replace(/%check%/g, media.cover)
+        .replace(/%image-icon%/g, media.type == "image" ? 'icon-image2' : 'icon-video-camera')
+        .replace(/%delete-url%/g, media.deleteUrl)
+        .replace(/%is-gif%/g, media.isGif)
+        .replace(/%caption-ar%/g, media.captionAr)
+        .replace(/%caption-en%/g, media.captionEn)
+    );
+
+    setUploadedImagesCount();
+    setUploadedVideosCount();
+    populateData();
+
 }
 
 
@@ -497,7 +489,11 @@ function refreshMediaSortView() {
                 addImageToSortView(data.images[i]);
             }
             populateData();
-            $('a[data-popup="popover"]').popover()
+            setUploadedImagesCount();
+            setUploadedVideosCount();
+            $('a[data-popup="popover"]').popover({
+                delay:{ "hide": 500 }
+            });
         }
     });
 }
@@ -666,6 +662,8 @@ jQuery(document).ready(function($) {
                         showNotificationMsg(imageErrorMessages.generalError, "", 'error');
                         refreshImages();
                     }
+                    setUploadedImagesCount();
+                    setUploadedVideosCount();
                     tdLoadingToggle(closestTd);
                 }
             });
