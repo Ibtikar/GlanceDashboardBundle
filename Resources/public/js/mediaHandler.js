@@ -222,6 +222,8 @@ function checkGoogleHeight() {
 }
 
 $(document).on('click','.dev-google-upload', function() {
+    $('.cropit-preview-image').removeAttr('src');
+    $('.cropit-preview-background').removeAttr('src');
     $('#image-cropper-modal').cropit('imageSrc',corsBroxy + "?url=" + encodeURI($('#dev-google input:checked').attr('data-url')));
     $('#uploadImg').modal('show');
     return false;
