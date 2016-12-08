@@ -34,7 +34,7 @@ class RecipeType extends AbstractType {
 
         $builder
                 ->add('title', formType\TextType::class, array('attr' => array('data-rule-minlength' => 3,'data-rule-maxlength' => 150)))
-                ->add('titleEn', formType\TextType::class, array('attr' => array('data-rule-minlength' => 3,'data-rule-maxlength' => 150)))
+                ->add('titleEn', formType\TextType::class, array('label' => 'title','attr' => array('data-rule-minlength' => 3,'data-rule-maxlength' => 150)))
                 ->add('brief',  formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
                 ->add('briefEn',formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
                 ->add('tags', formType\TextType::class, array('mapped' => false, 'required' => FALSE, 'attr' => array('data-tag-input'=>true,'data-rule-taglength' => 330),'label_attr' => array()))
@@ -69,7 +69,7 @@ class RecipeType extends AbstractType {
 //                ->add('relatedMaterialId', formType\TextType::class, array('attr' => array("data-validation-message"=>'','data-rule-unique' => 'material_check_field_unique', 'data-name' => 'relatedMaterial'), 'required' => FALSE, 'mapped' => false, 'data' => $this->relatedMaterialId))
                 ->add('defaultCoverPhoto', formType\HiddenType::class)
                 ->add('galleryType', formType\HiddenType::class)
-                ->add('media', formType\TextareaType::class, array('required' => FALSE, "mapped" => false))
+                ->add('media', formType\TextareaType::class, array('required' => FALSE, "mapped" => false,'attr'=>array('parent-class'=>'hidden')))
                 ->add('submitButton', formType\SubmitType::class);
     }
 

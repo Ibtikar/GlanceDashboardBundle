@@ -497,7 +497,9 @@ function refreshMediaSortView() {
                 addImageToSortView(data.images[i]);
             }
             populateData();
-            $('a[data-popup="popover"]').popover()
+            setUploadedImagesCount();
+            setUploadedVideosCount();
+            $('a[data-popup="popover"]').popover();
         }
     });
 }
