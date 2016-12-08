@@ -861,7 +861,7 @@ class Recipe  extends Publishable {
 
     public function getSlug()
     {
-
+        return $this->slug;
     }
 
     /**

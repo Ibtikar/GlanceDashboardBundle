@@ -12,5 +12,12 @@ use Doctrine\ODM\MongoDB\DocumentRepository;
  */
 class MediaRepository extends DocumentRepository {
 
-
+    public function getRecipeMedia($recipeId)
+    {
+        return $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Media')
+                ->field('deleted')->equals(FALSE)
+                ->field('recipe')->equals($recipeId)
+                ->sort('order', 'ASC')
+                ->getQuery()->execute();
+    }
 }
