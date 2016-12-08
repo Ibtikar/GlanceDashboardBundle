@@ -50,7 +50,9 @@ function refreshImages(){
                             .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
                             .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
                     $('#dev-coverPhoto').closest('tr').replaceWith(temepelate);
-                    $('[data-popup="popover"]').popover();
+                    $('[data-popup="popover"]').popover({
+                        delay:{ "hide": 500 }
+                    });
 
 
                     // Tooltip
@@ -80,7 +82,9 @@ function refreshImages(){
                             .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
                             .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
                     $('#dev-profilePhoto').closest('tr').replaceWith(temepelate);
-                    $('[data-popup="popover"]').popover();
+                    $('[data-popup="popover"]').popover({
+                        delay:{ "hide": 500 }
+                    });
 
 
                     // Tooltip
@@ -171,9 +175,7 @@ $(document).ready(function () {
                 var value = elementObject.val(),
                         file = value.toLowerCase(),
                         extension = file.substring(file.lastIndexOf('.') + 1);
-                console.log(extension);
                 if ($.inArray(extension, ['jpeg', 'jpg', 'png', 'gif']) == -1) {
-                    console.log("heya");
                     showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
 
                 } else if (elementObject.attr('data-size') > (4 * 1024 * 1024)) {
@@ -237,7 +239,9 @@ $(document).ready(function () {
                     element.closest('tr').replaceWith(temepelate);
                     showNotificationMsg(data.message, "", data.status);
                     $('#uploadImg').modal('hide');
-                    $('[data-popup="popover"]').popover();
+                    $('[data-popup="popover"]').popover({
+                        delay:{ "hide": 500 }
+                    });
 
 
                     // Tooltip

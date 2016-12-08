@@ -499,7 +499,9 @@ function refreshMediaSortView() {
             populateData();
             setUploadedImagesCount();
             setUploadedVideosCount();
-            $('a[data-popup="popover"]').popover();
+            $('a[data-popup="popover"]').popover({
+                delay:{ "hide": 500 }
+            });
         }
     });
 }
@@ -668,6 +670,8 @@ jQuery(document).ready(function($) {
                         showNotificationMsg(imageErrorMessages.generalError, "", 'error');
                         refreshImages();
                     }
+                    setUploadedImagesCount();
+                    setUploadedVideosCount();
                     tdLoadingToggle(closestTd);
                 }
             });
