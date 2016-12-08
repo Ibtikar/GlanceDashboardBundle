@@ -423,6 +423,8 @@ class RecipeController extends BackendController
                 $this->updateMaterialGallary($recipe, $formData['media'], $dm);
 
                 $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
+                return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_recipenew_list_new_recipe'), array(), true));
+
             }
         }
         return $this->render('IbtikarGlanceDashboardBundle:Recipe:create.html.twig', array(
