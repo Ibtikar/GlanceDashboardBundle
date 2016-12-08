@@ -76,19 +76,27 @@
 
     function formPluginsInit(){
 
-            $.fn.select2.defaults.set("language--maximum-selected", function(e){
+{#            $.fn.select2.defaults.set("language--maximum-selected", function(e){
                         return "الحد الأقصى هو "+e.maximum+" عناصر"
-                    });
+                    });#}
 
             $('.select,.select-multiple').select2({
-                "language": "ar",
-
+                language:{
+                        maximumSelected: function(e){
+                            return "الحد الأقصى هو "+e.maximum+" عناصر"
+                        }
+                    }
             });
 
             $(".select-with-thumb").select2({
                 templateResult: addUserPic,
-                templateSelection: addUserPic
-            });
+                templateSelection: addUserPic,
+                language:{
+                        maximumSelected: function(e){
+                            return "الحد الأقصى هو "+e.maximum+" عناصر"
+                        }
+                    }
+                });
 
             $('[id$="Time"],[id$="Count"]').TouchSpin({
                 min: 0,
@@ -101,12 +109,14 @@
                 radioClass: 'choice'
             });
 
-            dragula([document.getElementById('media-list-target-right')], {
-                mirrorContainer: document.querySelector('.media-list-container'),
-                moves: function (el, container, handle) {
-                    return handle.classList.contains('dragula-handle');
-                }
-            });
+            if(typeof dragula != "undefined"){
+                dragula([document.getElementById('media-list-target-right')], {
+                    mirrorContainer: document.querySelector('.media-list-container'),
+                    moves: function (el, container, handle) {
+                        return handle.classList.contains('dragula-handle');
+                    }
+                });
+            }
 
             $(document).trigger('form-plugin-init');
     }
