@@ -59,27 +59,33 @@ class LanguageChangeListener implements EventSubscriberInterface
         // Redirect all incoming requests to their /locale/route equivlent as long as the route will exists when we do so.
         // Do nothing if it already has /locale/ in the route to prevent redirect loops
 
-        $request = $event->getRequest();
-        if (strpos($request->getRequestUri(), 'backend')) {
-            return;
-        }
-        $path = $request->getPathInfo();
-
-        $route_exists = false; //by default assume route does not exist.
-
-        foreach ($this->routeCollection as $routeObject) {
-            $routePath = $routeObject->getPath();
-            if ($routePath == "/{_locale}" . $path) {
-                $route_exists = true;
-                break;
-            }
-        }
-        //If the route does indeed exist then lets redirect there.
-        if ($route_exists == true) {
-            $locale = $this->defaultLocale;
-            $request->setLocale($this->defaultLocale);
-            $event->setResponse(new RedirectResponse("/" . $locale . $path));
-        }
+//        $request = $event->getRequest();
+//        if (strpos($request->getRequestUri(), 'backend')) {
+//            return;
+//        }
+//        $path = $request->getPathInfo();
+//
+//
+//        $route_exists = false; //by default assume route does not exist.
+//
+//        foreach ($this->routeCollection as $routeObject) {
+//            $routePath = $routeObject->getPath();
+//
+//
+//            if ($routePath == "/{_locale}" . $path) {
+//                $route_exists = true;
+//                 exit;
+//                break;
+//            }
+//        }
+////        var_dump('hna');
+////        exit;
+//        //If the route does indeed exist then lets redirect there.
+//        if ($route_exists == true) {
+//            $locale = $this->defaultLocale;
+//            $request->setLocale($this->defaultLocale);
+//            $event->setResponse(new RedirectResponse("/" . $locale . $path));
+//        }
     }
 
     public static function getSubscribedEvents()
