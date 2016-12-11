@@ -254,6 +254,11 @@ class Recipe  extends Publishable {
     private $noOfViews = 0;
 
     /**
+     * @MongoDB\Increment
+     */
+    private $noOfLikes = 0;
+
+    /**
      * @MongoDB\String
      * @Assert\Regex(pattern="/^[a-zA-Z\x{0600}-\x{06ff}\-]+$/u", message="only characters and dashes allowed", groups={"Default"})
      * @Assert\Length(
@@ -277,6 +282,11 @@ class Recipe  extends Publishable {
      * @MongoDB\String
      */
     private $trackingNumber;
+
+    /**
+     * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe" , simple=true)
+     */
+    private $relatedRecipe;
 
     public function __construct()
     {
@@ -1083,4 +1093,56 @@ class Recipe  extends Publishable {
         return $this;
     }
 
+
+    /**
+     * Set noOfLikes
+     *
+     * @param increment $noOfLikes
+     * @return self
+     */
+    public function setNoOfLikes($noOfLikes)
+    {
+        $this->noOfLikes = $noOfLikes;
+        return $this;
+    }
+
+    /**
+     * Get noOfLikes
+     *
+     * @return increment $noOfLikes
+     */
+    public function getNoOfLikes()
+    {
+        return $this->noOfLikes;
+    }
+
+    /**
+     * Add relatedRecipe
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedRecipe
+     */
+    public function addRelatedRecipe(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedRecipe)
+    {
+        $this->relatedRecipe[] = $relatedRecipe;
+    }
+
+    /**
+     * Remove relatedRecipe
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedRecipe
+     */
+    public function removeRelatedRecipe(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedRecipe)
+    {
+        $this->relatedRecipe->removeElement($relatedRecipe);
+    }
+
+    /**
+     * Get relatedRecipe
+     *
+     * @return \Doctrine\Common\Collections\Collection $relatedRecipe
+     */
+    public function getRelatedRecipe()
+    {
+        return $this->relatedRecipe;
+    }
 }
