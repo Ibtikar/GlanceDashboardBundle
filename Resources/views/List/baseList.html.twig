@@ -297,7 +297,7 @@
                                                     {% elseif field.propertyName == "username"  %}
                                                         <td>
                                                             <div class="media-left media-middle">
-                                                    <a href="javascript:void(0)"><img src="{{ asset( attribute(object, 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg')) }}" class="img-circle img-lg" alt=""></a>
+                                                   <img src="{{ asset( attribute(object, 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg')) }}" class="img-circle img-lg" alt="">
                                                 </div>
                                                 <div class="media-body">
                                                     <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">   {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}} </a>

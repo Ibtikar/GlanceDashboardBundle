@@ -531,8 +531,8 @@ class BackendController extends Controller {
                     if (!$image) {
                         $image = 'bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg';
                     }
-                    $oneDocument[$value] = '<div class="media-left media-middle"><a href="javascript:void(0)">'
-                        . '<img src="/' . $image . '" class="img-circle img-lg" alt=""></a></div>
+                    $oneDocument[$value] = '<div class="media-left media-middle">'
+                        . '<img src="/' . $image . '" class="img-circle img-lg" alt=""></div>
                                                 <div class="media-body">
                                                     <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">  ' . $document->$getfunction() . ' </a>
                                                 </div>';
