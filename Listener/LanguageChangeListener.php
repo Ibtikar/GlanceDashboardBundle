@@ -2,9 +2,7 @@
 
 namespace Ibtikar\GlanceDashboardBundle\Listener;
 
-
 use Symfony\Component\HttpFoundation\RedirectResponse;
-
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -14,14 +12,15 @@ use Symfony\Component\Routing\RouteCollection;
 
 class LanguageChangeListener implements EventSubscriberInterface
 {
+
     /**
      * @var Symfony\Component\Routing\RouterInterface
      */
     private $router;
 
     /**
-    * @var routeCollection \Symfony\Component\Routing\RouteCollection
-    */
+     * @var routeCollection \Symfony\Component\Routing\RouteCollection
+     */
     private $routeCollection;
 
     /**
@@ -66,14 +65,21 @@ class LanguageChangeListener implements EventSubscriberInterface
             $request->setLocale($this->defaultLocale);
             return;
         }
-        if ('' == rtrim($request->getPathInfo(), '/') ) {
-            $locale = $request->attributes->get('_locale');
-            if (!$locale) {
-                $request->attributes->set('_locale',$this->defaultLocale);
-                $request->setLocale($this->defaultLocale);
-                $event->setResponse(new RedirectResponse("/" . $locale . $request->getPathInfo()));
+        $path = $request->getPathInfo();
 
+        $route_exists = false; //by default assume route does not exist.
+
+        foreach($this->routeCollection as $routeObject){
+            $routePath = $routeObject->getPath();
+            if($routePath == "/{_locale}".$path){
+                $route_exists = true;
+                break;
             }
+        }
+
+        //If the route does indeed exist then lets redirect there.
+        if($route_exists == true){
+            $event->setResponse(new RedirectResponse("/".$this->defaultLocale.$path));
         }
     }
 
@@ -81,7 +87,7 @@ class LanguageChangeListener implements EventSubscriberInterface
     {
         return array(
             // must be registered before the default Locale listener
-            KernelEvents::REQUEST => array(array('onKernelRequest', 17)),
+            KernelEvents::REQUEST => array(array('onKernelRequest', 5000)),
         );
     }
 }
