@@ -114,7 +114,7 @@
 
                                                         </td>
                                                     {% else %}
-                                                        <td >
+                                                        <td {% if field.propertyName!= 'subcategoryNo' %}class="reorderTd"{% endif%}  >
                                                             {% if field.isClickable %}
                                                                 {% if attribute(object, field.propertyName) !=0 %}
                                                                     <a href="javascript:void(0)" class="{{field.class}}" data-id="{{object.id}}">
