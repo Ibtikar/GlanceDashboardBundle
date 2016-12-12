@@ -81,30 +81,30 @@
                                             <tr id="{{object.id}}">
                                                 {% for field in list.fields %}
                                                     {% if field.propertyName == "order" %}
-                                                        <td>
+                                                        <td class="reorderTd">
                                                             <span class="icon icon-move"></span>
                                                             {{ attribute(object, field.propertyName) }}
                                                         </td>
                                                     {% elseif field.type == "date" %}
-                                                        <td class="{{field.class}}" {% if field.isClickable %} style="cursor:pointer" onclick="window.location = '{{field.isClickable|replace({'--id--':object.document.id})}}'" {% endif %}>
+                                                        <td class="{{field.class}} reorderTd" {% if field.isClickable %} style="cursor:pointer" onclick="window.location = '{{field.isClickable|replace({'--id--':object.document.id})}}'" {% endif %}>
 
                                                             {{ attribute(object, field.propertyName) is empty ? "" : attribute(object, field.propertyName)|date('Y-m-d') }}
                                                         </td>
                                                     {% elseif field.type == "many"  %}
-                                                        <td>
+                                                        <td class="reorderTd">
                                                             {% for element in attribute(object, field.propertyName|humanize|title|replace({' ':''})) %}
                                                                 {% if not loop.first %},{% endif %}
                                                                 {{ element }}
                                                             {% endfor %}
                                                         </td>
                                                     {% elseif field.type == "refereceImage"  %}
-                                                        <td>
+                                                        <td class="reorderTd">
                                                             <div class="media-left media-middle">
                                                                 <a href="javascript:void(0)"><img src="{{ asset( attribute(attribute(object, field.propertyName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}" class="img-lg" alt=""></a>
                                                             </div>
                                                         </td>
                                                     {% elseif field.propertyName == "username"  %}
-                                                        <td>
+                                                        <td class="reorderTd">
                                                             <div class="media-left media-middle">
                                                                 <a href="javascript:void(0)"><img src="{{ asset( attribute(object, 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg')) }}" class="img-circle img-lg" alt=""></a>
                                                             </div>
