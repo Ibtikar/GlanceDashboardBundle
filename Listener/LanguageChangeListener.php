@@ -61,6 +61,7 @@ class LanguageChangeListener implements EventSubscriberInterface
 
         $request = $event->getRequest();
         if (strpos($request->getRequestUri(), 'backend')) {
+            $request->attributes->set('_locale',$this->defaultLocale);
             $request->setLocale($this->defaultLocale);
             return;
         }
