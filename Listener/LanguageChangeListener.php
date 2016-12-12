@@ -59,10 +59,11 @@ class LanguageChangeListener implements EventSubscriberInterface
         // Redirect all incoming requests to their /locale/route equivlent as long as the route will exists when we do so.
         // Do nothing if it already has /locale/ in the route to prevent redirect loops
 
-//        $request = $event->getRequest();
-//        if (strpos($request->getRequestUri(), 'backend')) {
-//            return;
-//        }
+        $request = $event->getRequest();
+        if (strpos($request->getRequestUri(), 'backend')) {
+            $request->setLocale($this->defaultLocale);
+            return;
+        }
 //        $path = $request->getPathInfo();
 //
 //
