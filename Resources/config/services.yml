@@ -1,6 +1,7 @@
 parameters:
     per_page_items: 10
     autoCompelet_display_item: 5
+    router.request_context.host: %site_domain%
 
 services:
 
