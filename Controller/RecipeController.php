@@ -796,8 +796,7 @@ class RecipeController extends BackendController
                 return new JsonResponse(array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('not valid')));
             }
 
-            $path = trim(str_replace("app_dev.php","",array_pop($array)), "/");
-
+            $path = trim(str_replace('/ar',"",str_replace("app_dev.php","",array_pop($array))), "/");
             preg_match('/^[a-zA-Z0-9\x{0600}-\x{06ff}\-]+/u', urldecode($path), $slug);
 
             $material = $em->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
