@@ -332,6 +332,7 @@ class MediaController extends BackendController
                 'type' => $type == "all"?array('$in'=>array('image','video')):$type,
                 'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                 'product' => null,
+                'recipe' => null,
                 'subproduct' => null,
                 'collectionType' => $collectionType
             ));
