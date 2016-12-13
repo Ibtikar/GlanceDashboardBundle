@@ -301,6 +301,21 @@ class Recipe  extends Publishable {
         return (string) $this->title;
     }
 
+    public function getRelatedMaterialsJson(){
+        $array = array();
+        if($this->getRelatedRecipe()){
+            foreach($this->getRelatedRecipe() as $material){
+                $array[] = array(
+                            'id'=>$material->getId(),
+                            'title'=>$material->getTitle(),
+                            'slug' =>$material->getSlug()
+                        );
+            }
+
+        }
+        return json_encode($array);
+    }
+
     public function getDefaultCoverPhoto()
     {
         return $this->coverPhoto;

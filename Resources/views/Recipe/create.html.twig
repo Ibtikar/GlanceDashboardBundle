@@ -4,7 +4,7 @@
 
 {% block form_container %}
 
-
+ {% form_theme form   'IbtikarGlanceDashboardBundle::form_theme_recipe.html.twig' %}
 
     {{ form_start(form)}}
     <div class="tabbable">
@@ -450,6 +450,23 @@
     </div>#}
 {% endset %}
 {% block javascripts %}
+    
+    
+    <div id="iframeModal" class="modal fade">
+       <div class="modal-dialog">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                   <h3 class="modal-title"></h3>
+               </div>
+               <div class="modal-body">
+                   <div id="iframe-loader" class="loading">
+                   </div>
+                   <iframe class="dev-iframe-auto-resize" src="" scrolling="no" width="100%" style="border: none;"></iframe>
+               </div>
+           </div><!-- /.modal-content -->
+       </div><!-- /.modal-dialog -->
+   </div><!-- /.modal -->
     <!-- uploadImg modal -->
     <div id="uploadImg" class="modal fade">
         <div class="modal-dialog  modal-full">
@@ -586,7 +603,8 @@
     var imageSortTemplate = '{{ imageSortTemplate|escape('js') }}';
     var videoSearchTemplate = '{{ videoSearchTemplate|escape('js') }}';
     var youtubeUploadVideo = '{{ path('ibtikar_glance_dashboard_media_youtube_upload_video',{'type':'video','documentId':'null','collectionType':'Recipe'}) }}';
-
+    var relatedMaterialDeleteUrl = '{{ path('ibtikar_glance_dashboard_recipe_related_material_delete') }}';
+    var requestId = '{{ app.request.get('id') }}';
         var element;
         var name;
         var type;

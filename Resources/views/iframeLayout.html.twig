@@ -1,0 +1,23 @@
+{% extends 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard.html.twig' %}
+
+{% block header %}
+{% endblock %}
+{% block navbar %}
+  
+{% endblock %}
+{% block side_menu %}
+ 
+{% endblock %}
+
+{% block javascripts %}
+   {{ parent() }}
+        <script src="{{ asset('bundles/ibtikarglancedashboard/js/plugins/iframe/iframeResizer.contentWindow.min.js') }}"></script>
+        <script>
+            $(window).load(function() {
+                $('#iframe-loader',window.parent.document).hide();
+            });
+            window.onbeforeunload = function() {
+                $('#iframe-loader',window.parent.document).show();
+            }
+        </script>
+{% endblock %}

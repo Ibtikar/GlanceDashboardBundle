@@ -1,0 +1,37 @@
+{% extends "IbtikarShareEconomyDashboardDesignBundle:Theme:dashboard.html.twig" %}
+
+
+
+{% block form_widget_simple -%}
+      {{- parent() -}}
+        {% if name == "relatedRecipe" %}
+        <div class="input-group">
+            <input type="text" id="related-materials-source" data-url="{{path('ibtikar_glance_dashboard_recipe_check_material_published')}}" bulk-data-url="{{path('ibtikar_glance_dashboard_recipe_check_material_published_bulk')}}" data-search-url="{{path('ibtikar_glance_dashboard_recipe_related_material_search',{ 'iframe' : true })}}" data-rule-minlength="3" class="form-control valid" data-error-after-selector=".input-group"><span class="loader-push-righ InputLoader"><i class="fa fa-spinner fa-spin"></i></span>
+            <span class="input-group-addon dev-add-related-material">
+              <span class="ui-tooltip" ><i class="fa fa-plus"></i></span>
+            </span>
+
+            <span class="input-group-addon dev-search-related-material" validate-first="#related-materials-source" data-search-url="{{path('ibtikar_glance_dashboard_recipe_related_material_search',{ iframe : true })}}" data-refresh-function-parameter="city"  data-original-title="البحث عن اخبار ذات صلة" title="البحث عن اخبار ذات صلة">
+              <span class="ui-tooltip" ><i class="fa fa-search"></i></span>
+            </span>
+        </div>
+        <div>
+        <span class="help-block">فم بالبحث او ادخال رابط الوصفة</span>
+        <ul class="dev-related-list media-list width-350 notificationList">
+            {% if choices is defined %}
+            {% for choice in choices %}
+                <li class="dev-related-item">
+                <a href="{{ path('ibtikar_goody_frontend_view', {'slug': choice.slug,'_locale':'ar'}) }}" target="_blank">choice.mainTitle</a><div class="btn btn-danger dev-delete-file"><i class="fa fa-trash-o"></i></div>
+            </li>
+            {% endfor %}
+       {% endif %}
+        </ul>
+        </div>
+
+   
+    {% endif %}
+   
+    
+{%- endblock form_widget_simple %}
+
+

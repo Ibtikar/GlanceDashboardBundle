@@ -32,6 +32,270 @@ function showNotificationMsg(title, text, type) {
 }
 
 
+function searchRelatedMaterialResult(response) {
+    var $this = $('#related-materials-source');
+
+
+    if ($this.closest('form').attr('ajax-running') === 'true') {
+        return;
+    }
+
+    $this.parents('.form-group').removeClass('has-error').find('.help-block').remove();
+    $this.val("");
+
+    $(response.data).each(function(){
+        if (this.valid) {
+            RelatedMaterialObj.push({
+                'id':this.id,
+                'title':this.title,
+                'slug':this.slug
+            });
+        } else {
+            showNotification(this.message, 'error');
+        }
+
+        $('#material_type_relatedMaterials').val(JSON.stringify(RelatedMaterialObj));
+        updateRelatedMaterial();
+    });
+
+}
+
+
+function searchRelatedMaterial(element) {
+        var $this = $(element);
+        if($this.val().trim() == "") return;
+
+        if ($this.valid()) {
+            quickAddRefreshFunctionParameter = $this.attr('data-refresh-function-parameter');
+            setSearchIframeUrl($this);
+            $('#iframeModal .modal-title').html($('.dev-search-related-material').attr('data-original-title'));
+            $('#iframeModal').modal('show');
+            $('html').css('overflow-x','visible');
+        }
+}
+
+function setSearchIframeUrl($this) {
+    ids = getExistingRelatedMaterial();
+    $('#iFrameResizer0').contents().find('body').html('');
+//    document.getElementById('iFrameResizer0').contentDocument.body.innerHTML="";
+    $('#iframeModal iframe').attr('src', $this.attr('data-search-url') + '&searchString=' + $("#related-materials-source").val());
+}
+
+function updateRelatedMaterial(){
+    if($('#recipe_relatedRecipe').length > 0){
+        var data = JSON.parse($('#recipe_relatedRecipe').val());
+        RelatedMaterialObj = data;
+        $('.dev-related-list').html("");
+        $(data).each(function(){
+            $('.dev-related-list').append('<li class="media dev-related-item"><div class="media-body"><a href="'+$('base').attr('href')+this.slug+'" target="_blank">'+this.title+'</a>  </div><div class="dev-delete-related-material media-right" data-related-material-id="'+this.id+'" data-related-material-slug="'+this.slug+'"><i class="icon icon-cross2"></i></div></li>');
+        });
+    }
+}
+
+function getExistingRelatedMaterial(){
+    if(typeof RelatedMaterialObj == "undefined"){
+        RelatedMaterialObj = new Array();
+    }
+    return $.map( RelatedMaterialObj, function( value, key ) {
+                return value.id;
+            });
+}
+
+/**
+ * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
+ * @param array elementsIds
+ */
+function removeElementsByIds(elementsIds) {
+    if (elementsIds) {
+        for (var i = 0; i < elementsIds.length; i++) {
+            $('#' + elementsIds[i]).remove();
+        }
+    }
+}
+function checkRelatedMaterials() {
+        var $this = $('#related-materials-source');
+        window.self.close();
+        $this.removeAttr('data-force-published-valid');
+        $this.removeAttr('data-published-valid');
+        var $loader = $this.closest('.form-group').find('.InputLoader').show();
+
+        if($this.parents('.form-group').find('#recipe_relatedRecipe').val() != ""){
+            RelatedMaterialObj = JSON.parse($this.parents('.form-group').find('#recipe_relatedRecipe').val());
+        }else{
+            RelatedMaterialObj = [];
+        }
+        var existingIds = getExistingRelatedMaterial();
+
+        $.ajax({
+            url: $this.attr('bulk-data-url'),
+            data: {existing: existingIds, new : ids, id: requestId},
+            success: function (data) {
+                ids = getExistingRelatedMaterial();
+                searchRelatedMaterialResult(data);
+                $('#iframeModal').modal('hide');
+                $('html').css('overflow-x','visible');
+            },
+            error: function () {
+            },
+            complete: function () {
+                $loader.hide();
+            }
+        });
+}
+
+
+/**
+ *
+ * get materials for releated search results
+ *
+ * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
+ */
+function searchRelatedMaterialResult(response) {
+    var $this = $('#related-materials-source');
+
+
+    if ($this.closest('form').attr('ajax-running') === 'true') {
+        return;
+    }
+
+    $this.parents('.form-group').removeClass('has-error').find('.help-block').remove();
+    $this.val("");
+
+    $(response.data).each(function(){
+        if (this.valid) {
+            RelatedMaterialObj.push({
+                'id':this.id,
+                'title':this.title,
+                'slug':this.slug
+            });
+        } else {
+            showNotification(this.message, 'error');
+        }
+
+        $('#recipe_relatedRecipe').val(JSON.stringify(RelatedMaterialObj));
+        updateRelatedMaterial();
+    });
+
+}
+
+
+
+function addRelatedMaterial(element) {
+        checkPublishedValidation(element);
+}
+
+function checkPublishedValidation(element) {
+    var $this = $(element);
+    console.log($this)
+    if($this.val().trim() == "") return;
+    if ($this.valid()) {
+        $this.removeAttr('data-force-published-valid');
+        $this.removeAttr('data-published-valid');
+        var $loader = $this.closest('.form-group').find('.InputLoader').show();
+console.log($this.parents('.form-group').find('#recipe_relatedRecipe').val())
+        if($this.parents('.form-group').find('#recipe_relatedRecipe').val() != ""){
+            RelatedMaterialObj = JSON.parse($this.parents('.form-group').find('#recipe_relatedRecipe').val());
+        }else{
+            RelatedMaterialObj = [];
+        }
+        var ids     = $.map( RelatedMaterialObj, function( value, key ) {
+            return value.id;
+        });
+
+        $.ajax({
+            url: $this.attr('data-url'),
+            data: {existing: ids, fieldValue: $this.val(), id: requestId},
+            success: function (data) {
+                if ($this.closest('form').attr('ajax-running') === 'true') {
+                    return;
+                }
+
+                $this.parents('.form-group').removeClass('has-error').find('.help-block').remove();
+
+                if (data.valid) {
+                    $this.val("");
+                    RelatedMaterialObj.push({
+                        'id':data.id,
+                        'title':data.title,
+                        'slug':data.slug
+                    });
+                    $('#recipe_relatedRecipe').val(JSON.stringify(RelatedMaterialObj));
+                    updateRelatedMaterial();
+                }else{
+                    $this.attr('data-validation-message', data.message);
+                    markElementAsNotValid($this);
+                }
+            },
+            error: function () {
+            },
+            complete: function () {
+                $loader.hide();
+            }
+        });
+    }
+}
+
+$(document).on("click",'.dev-add-related-material',function(){
+        addRelatedMaterial($('#related-materials-source'));
+    });
+
+    $(document).on("click",'.dev-search-related-material',function(){
+        searchRelatedMaterial($('#related-materials-source'));
+    });
+
+    $(document).on("keyup",'#related-materials-source',function(e){
+        if(e.keyCode == 13){
+            addRelatedMaterial($(this));
+        }else{
+            $(this).parents('.form-group').removeClass('has-error').find('.help-block').remove();
+            $(this).removeAttr('data-validation-message');
+        }
+    });
+
+    $(document).on('click', '.dev-delete-related-material', function() {
+        var $this = $(this);
+
+            if($this.parents('.form-group').find('#recipe_relatedRecipe').val() != ""){
+                RelatedMaterialObj = JSON.parse($this.parents('.form-group').find('#recipe_relatedRecipe').val());
+            }else{
+                RelatedMaterialObj = [];
+            }
+
+            var ids     = $.map( RelatedMaterialObj, function( value, key ) {
+                return value.id;
+            });
+
+            $.ajax({
+                url: relatedMaterialDeleteUrl,
+                method: 'POST',
+                data:{parent:requestId,child:$this.attr('data-related-material-id')},
+                success: function(data) {
+                    if(data.status == "success"){
+                        $this.parents('li').remove();
+                        var objArray = [];
+                        $.each($('.dev-related-list .dev-delete-related-material'),function(){
+                            objArray.push({
+                                'id':$(this).attr('data-related-material-id'),
+                                'title':$(this).siblings('a').html().trim(),
+                                'slug':$(this).attr('data-related-material-slug')
+                            });
+                        });
+                        $('#recipe_relatedRecipe').val(JSON.stringify(objArray));
+                        updateRelatedMaterial();
+                    }
+
+                    showNotificationMsg(data.message, "", data.status);
+
+                }
+            });
+        
+    });
+
+
+
+
+
+
 function refreshImages(){
     $.ajax({
             url:refreshImagesUrl,

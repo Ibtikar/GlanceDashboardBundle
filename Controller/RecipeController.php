@@ -374,7 +374,9 @@ class RecipeController extends BackendController
 
             if ($form->isValid()) {
                 $formData = $request->get('recipe');
-
+                if($formData['relatedRecipe']){
+                    $this->updateRelatedMaterial($recipe, $formData['relatedRecipe'],$dm);
+                }
 
                 $tags = $formData['tags'];
                 $tagsEn = $formData['tagsEn'];
@@ -766,6 +768,234 @@ class RecipeController extends BackendController
         $slug->setSlugEn($slugEn);
         $dm->persist($slug);
         $dm->flush();
+    }
+
+
+    public function checkMaterialPublishedAction(Request $request) {
+
+        $response = array('status' => 'success', 'valid' => TRUE);
+
+        $loggedInUser = $this->getUser();
+        if (!$loggedInUser) {
+            return new JsonResponse(array('status' => 'login'));
+        }
+
+        $em = $this->get('doctrine_mongodb')->getManager();
+
+        $existing = $request->get('existing')!=""?$request->get('existing'):array();
+        $fieledValue = strtolower($request->get('fieldValue'));
+        $id = strtolower($request->get('id'));
+
+
+        // check if value is url
+        if(strpos($fieledValue,".")){
+
+            $array = explode($this->container->get('router')->getContext()->getHost(), $fieledValue);
+
+            if (count($array) < 2) {
+                return new JsonResponse(array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('not valid')));
+            }
+
+            $path = trim(str_replace("app_dev.php","",array_pop($array)), "/");
+
+            preg_match('/^[a-zA-Z0-9\x{0600}-\x{06ff}\-]+/u', urldecode($path), $slug);
+
+            $material = $em->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                ->field('slug')->equals($slug[0])
+                    ->getQuery()->getSingleResult();
+
+
+        } else {
+            $material = $em->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                ->field('trackingNumber')->equals(trim($request->get('fieldValue')))
+                ->getQuery()->getSingleResult();
+        }
+
+        $parentMaterial = $em->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($id);
+
+        if(is_null($material)){
+            $response = array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('not valid'));
+        }elseif($material->getId() == $id){
+            $response = array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('Sorry, this material cant be linked to itself',array('%type%' => substr($material->getMaterialType(),2))));
+        }elseif(in_array($material->getId(), $existing)){
+            $response = array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('Sorry, this material is already linked',array('%type%' => substr($material->getMaterialType(),2))));
+        }elseif($material->getStatus() == 'deleted'){
+            $response = array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('Sorry, this material is deleted',array('%type%' => substr($material->getMaterialType(),2))));
+        }elseif($material->getStatus() !== 'publish' && $material->getStatus() !== 'unpublished'){
+            $response = array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('Sorry, this material is not published',array('%type%' => substr($material->getMaterialType(),2))));
+        }elseif(count($existing) >= 10){
+            $response = array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('Sorry, you cant add more than 10 materials'));
+        }
+
+        if($response['valid']){
+            $response['title'] = $material->getTitle();
+            $response['slug']   = $material->getSlug();
+            $response['id']    = $material->getId();
+        }
+
+        return new JsonResponse($response);
+    }
+
+
+
+    public function updateRelatedMaterial($document,$relatedJson,$dm = null) {
+        if (!$dm) {
+            $dm = $this->get('doctrine_mongodb')->getManager();
+        }
+
+        $array = json_decode($relatedJson,true);
+        foreach($array as $relatedMaterial){
+            $material = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($relatedMaterial['id']);
+
+            if($this->validToRelate($material, $document) && count($document->getRelatedRecipe()) < 10){
+                    $document->addRelatedRecipe($material);
+            }
+
+        }
+
+
+    }
+
+
+
+    public function validToRelate($material,$document) {
+
+        if($material && ($material->getStatus() == "publish")){
+            if(is_null($document->getRelatedRecipe()) || is_array($document->getRelatedRecipe())){
+                return true;
+            }elseif(is_object($document->getRelatedRecipe()) && !$document->getRelatedRecipe()->contains($material)){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+
+    }
+
+       public function checkMaterialPublishedBulkAction(Request $request) {
+
+        $loggedInUser = $this->getUser();
+        if (!$loggedInUser) {
+            return new JsonResponse(array('status' => 'login'));
+        }
+
+        $em = $this->get('doctrine_mongodb')->getManager();
+
+        $existing = $request->get('existing')!=""?$request->get('existing'):array();
+        $new = $request->get('new');
+        $parentId = strtolower($request->get('id'));
+        $responseArr = array();
+
+        $materials = $em->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+            ->field('_id')->in($new)
+            ->field('_id')->notIn($existing)
+            ->getQuery()->execute();
+
+        foreach ($materials as $material) {
+            $id = $material->getId();
+
+            if(is_null($material)){
+                $responseArr[] = array('id' => $id, 'valid' => FALSE, 'message' => $this->trans('not valid'));
+            }elseif($material->getId() == $parentId){
+                $responseArr[] = array('id' => $id, 'valid' => FALSE, 'message' => $material->getTitle()."<br/>".$this->trans('Sorry, this material cant be linked to itself',array('%type%' => substr($material->getMaterialType(),2))));
+            }elseif(in_array($material->getId(), $existing)){
+                $responseArr[] = array('id' => $id, 'valid' => FALSE, 'message' => $material->getTitle()."<br/>".$this->trans('Sorry, this material is already linked',array('%type%' => substr($material->getMaterialType(),2))));
+            }elseif($material->getStatus() == 'deleted'){
+                $responseArr[] = array('id' => $id, 'valid' => FALSE, 'message' => $material->getTitle()."<br/>".$this->trans('Sorry, this material is deleted',array('%type%' => substr($material->getMaterialType(),2))));
+            }elseif($material->getStatus() !== 'publish' ){
+                $responseArr[] = array('id' => $id, 'valid' => FALSE, 'message' => $material->getTitle()."<br/>".$this->trans('Sorry, this material is not published',array('%type%' => substr($material->getMaterialType(),2))));
+            }elseif(count($existing) >= 10){
+                $responseArr[] = array('id' => $id, 'valid' => FALSE, 'message' => $material->getTitle()."<br/>".$this->trans('Sorry, you cant add more than 10 materials'));
+                break;
+            }else{
+                $responseArr[] = array(
+                        'status' => 'success',
+                        'valid' => TRUE,
+                        'title' => $material->getTitle(),
+                        'slug'  => $material->getSlug(),
+                        'id'    => $id
+                );
+            }
+        }
+
+        return new JsonResponse(array('data' => $responseArr));
+    }
+
+       public function searchRelatedAction(Request $request) {
+//        die(var_dump($request->request->all(),$request->query->all()));
+
+        $queryBuilder = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe');
+
+        $searchString = trim($request->get('searchString'));
+
+        if ($searchString && strlen($searchString) >= 3) {
+            $searchRegex = new \MongoRegex('/' . preg_quote($searchString) . '/');
+            $queryBuilder->addOr($queryBuilder->expr()->field('title')->equals($searchRegex));
+            $queryBuilder->addOr($queryBuilder->expr()->field('titleEn')->equals($searchRegex));
+        }
+
+        $queryBuilder->field('status')->equals('publish')
+                ->field('type')->equals('recipe')
+                ->sort('createdAt', 'DESC');
+
+
+
+        $query = $queryBuilder->getQuery();
+
+        $pageNumber = $request->query->get('page', 1);
+
+        if($pageNumber < 1) {
+            throw $this->createNotFoundException($this->trans('Wrong id'));
+        }
+
+        $paginator = $this->get('knp_paginator');
+
+        $pagination = $paginator->paginate(
+                $query, $pageNumber /* page number */, 10/* limit per page */
+        );
+
+        $items = $pagination->getItems();
+
+        if (!$request->isXmlHttpRequest() && empty($items) && $pagination->getCurrentPageNumber() != 1) {
+            throw $this->createNotFoundException($this->trans('Wrong id'));
+        }
+
+//        if($request->isXmlHttpRequest() && empty($items) && $pagination->getCurrentPageNumber() != 1) {
+//            $pageNumber = $pageNumber - 1;
+//            $pagination = $paginator->paginate($query, $pageNumber, 10);
+//        }
+//        die(var_dump("tata"));
+        return $this->render('IbtikarGlanceDashboardBundle:Recipe:searchRelated.html.twig',array(
+                        'pageNumber' => $pageNumber,
+                        'pagination' => $pagination,
+                        'paginationData' => $pagination->getPaginationData(),
+                        'translationDomain' => $this->translationDomain,
+                        'searchString'  => $searchString
+                    )
+                );
+    }
+
+    public function relatedMaterialDeleteAction(Request $request) {
+
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $parent = $request->get('parent');
+        $child = $request->get('child');
+
+        $materialParent = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($parent);
+        $materialChild = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($child);
+
+        if($materialParent && $materialChild && $materialParent->getRelatedRecipe()->contains($materialChild)){
+            $materialParent->removeRelatedRecipe($materialChild);
+            $dm->flush();
+        }
+            $response = array('status' => 'success','message' => $this->trans('Deleted sucessfully.'));
+
+
+        return new JsonResponse($response);
+
     }
 
 }

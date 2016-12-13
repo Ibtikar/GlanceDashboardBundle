@@ -1,0 +1,102 @@
+{% extends 'IbtikarGlanceDashboardBundle::iframeLayout.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        #related-material-search-form .search-body label.error {
+            color : #a94442;
+            float : left;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <form id="related-material-search-form" novalidate="novalidate">
+<div class="modal-body">
+    <div class="search-body">
+{#        <input type="text" id="related-material-search-string" name="material_type[mainTitle]" required="required" data-rule-minlength="3" class="form-control  " aria-required="true" aria-invalid="true">#}
+        <input type="text" id="related-material-search-string" name="searchString" placeholder="ادخل كلمة البحث" value="{{ searchString }}" data-rule-minlength="3" required="required" aria-required="true"/>
+        <button data-base="{{ path('ibtikar_glance_dashboard_recipe_related_material_search') }}?iframe=1&searchString=" id="related-material-search-link" class="btn btn-primary"><i class="fa fa-search"></i></button>
+    </div>
+    <br />
+    {% if pagination|length > 0 %}
+        {% for object in pagination %}
+            <label>
+                <input type="checkbox" name="ids[]" value="{{object.id}}">
+                <span style="" class="ng-binding"> {{object.title}}</span>
+{#                <span style="" class="ng-binding"> {{object.titleEn}}</span>#}
+            </label>
+            <hr />
+        {% endfor %}
+    {% else %}
+        <label>
+            <span style="" class="ng-binding"> لا توجد نتائج</span>
+        </label>
+    {% endif %}
+    <nav>
+        {{ knp_pagination_render(pagination,'IbtikarGlanceDashboardBundle:List:miniPager.html.twig') }}
+    </nav>
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default pull-left" onclick="window.parent.$('#iframeModal').modal('hide')">الغاء</button>
+    <button type="button" style="margin-left: 5px;" class="btn btn-primary pull-left" onclick="window.parent.checkRelatedMaterials()">اضافة</button>
+</div>
+</form>
+{% endblock %}
+
+{% block javascripts %}
+   {{ parent() }}
+    <script>
+    var existing = window.parent.getExistingRelatedMaterial();
+
+    function uncheckedMaterialUpdate(){
+        if(window.parent.ids.length >= 10){
+            $('[name="ids[]"]:unchecked').prop('disabled', true);
+        } else {
+            $('[name="ids[]"]:unchecked').prop('disabled', false);
+        }
+    }
+
+    $(window.parent.ids).each(function(){
+        var elm = $('[value="'+this+'"]');
+        if(elm.length > 0){
+                elm.prop('checked', true);
+            if(existing.indexOf(this.toString()) >= 0) {
+                elm.prop('disabled', true);
+            }else{
+                elm.prop('disabled', false);
+            }
+        }
+
+        uncheckedMaterialUpdate();
+    });
+
+     $('#related-material-search-string').on("keyup",function(e){
+         if(e.keyCode == 13){
+            if($(this).valid()){
+                window.parent.ids = window.parent.getExistingRelatedMaterial();
+                location.href = $('#related-material-search-link').attr('data-base')+$('#related-material-search-string').val();
+            }
+         }
+     });
+     $('#related-material-search-form').on('submit',function(e){
+         e.preventDefault();
+         if($('#related-material-search-string').valid()){
+            window.parent.ids = window.parent.getExistingRelatedMaterial();
+            location.href = $('#related-material-search-link').attr('data-base')+$('#related-material-search-string').val();
+         }
+     });
+     $('[name="ids[]"]').on('change',function(){
+         if($(this).is(':checked')){
+            window.parent.ids.push($(this).val());
+         }else{
+            var i = window.parent.ids.indexOf($(this).val());
+            if(i>-1){
+                window.parent.ids.splice(i, 1);
+            }
+        }
+
+        uncheckedMaterialUpdate();
+     });
+
+ </script>
+{% endblock %}
