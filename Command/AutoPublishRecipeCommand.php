@@ -64,7 +64,7 @@ class AutoPublishRecipeCommand extends ContainerAwareCommand
                     '%type%',
                 ), array(
                 $recipe->getPublishedBy()->__toString(),
-                $this->getContainer()->get('router')->generate('ibtikar_glance_dashboard_recipe_create', array(), TRUE),
+                $this->getContainer()->get('router')->generate('ibtikar_goody_frontend_view', array('slug'=>$recipe->getSlug(),'_locale'=>'ar'), UrlGeneratorInterface::ABSOLUTE_URL ),
                 $recipe->getTitle(),
                 $recipe->getTitle(),
                 $emailTemplate->getMessage(),
