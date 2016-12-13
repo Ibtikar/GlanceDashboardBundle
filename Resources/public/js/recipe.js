@@ -175,6 +175,7 @@ $(document).ready(function () {
                 var value = elementObject.val(),
                         file = value.toLowerCase(),
                         extension = file.substring(file.lastIndexOf('.') + 1);
+               
                 if ($.inArray(extension, ['jpeg', 'jpg', 'png', 'gif']) == -1) {
                     showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
 
@@ -187,8 +188,12 @@ $(document).ready(function () {
                     showNotificationMsg(imageErrorMessages.imageDimension, "", 'error');
 
                 } else {
+                    if (extension == 'gif') {
+                        uploadImageToServer($('.cropit-preview-image').attr('src'), uploadUrl);
+                    } else {
+                        $('#uploadImg').modal('show');
+                    }
 
-                    $('#uploadImg').modal('show');
                 }
             }
 
@@ -196,25 +201,31 @@ $(document).ready(function () {
             $('#uploadImg').modal('hide');
             showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
         },
-        onFileReaderError: function(){
+        onFileReaderError: function () {
             $('#uploadImg').modal('hide');
             showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
         }
 
     });
 
-    $('#image-cropper-modal').cropit('previewSize', { width: 500, height: 350 });
+    $('#image-cropper-modal').cropit('previewSize', {width: 500, height: 350});
     $('#image-cropper-modal').cropit('exportZoom', 2);
 
 
     $(document).on('click', '.dev-submit-image', function () {
         var imageFile = $('#image-cropper-modal').cropit('export');
+        uploadImageToServer(imageFile, $(this).attr('data-url'))
+
+    });
+
+
+    function uploadImageToServer(imageFile, url) {
         var formData = new FormData();
         formData.append("media[file]", imageFile);
         $('.dev-crop-spinner').show();
         $('.dev-submit-image').hide();
         $.ajax({
-            url: $(this).attr('data-url') + '?imageType=' + name,
+            url: url + '?imageType=' + name,
             type: 'POST',
             data: formData,
 //            async: false,
@@ -222,25 +233,16 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (data) {
-                if(data.status=='login'){
+                if (data.status == 'login') {
                     window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
                 }
                 else if (data.status == 'success') {
                     var media = data.media;
                     addImageToSortView(media);
-//                    var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
-//                            .replace(/%image-id%/g, media.id)
-//                            .replace(/%name%/g, name)
-//                            .replace(/%image-delete-url%/g, media.deleteUrl)
-//                            .replace(/%arabicName%/g, imageErrorMessages[name])
-//                            .replace(/%uploadButton%/g, '')
-//                            .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
-//                            .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
-//                    element.closest('tr').replaceWith(temepelate);
                     showNotificationMsg(data.message, "", data.status);
                     $('#uploadImg').modal('hide');
                     $('[data-popup="popover"]').popover({
-                        delay:{ "hide": 500 }
+                        delay: {"hide": 500}
                     });
 
 
@@ -249,7 +251,7 @@ $(document).ready(function () {
                         trigger: 'hover'
                     });
 
-                }else{
+                } else {
                     $('#uploadImg').modal('hide');
                     showNotificationMsg(imageErrorMessages.generalError, "", 'error');
                     refreshImages();
@@ -259,7 +261,7 @@ $(document).ready(function () {
             }
 
         });
-    });
+    }
 
     $(document).on('click', '.dev-crop-images', function () {
 //        type = 'crop';
