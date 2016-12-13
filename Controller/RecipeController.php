@@ -815,13 +815,13 @@ class RecipeController extends BackendController
         if(is_null($material)){
             $response = array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('not valid'));
         }elseif($material->getId() == $id){
-            $response = array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('Sorry, this material cant be linked to itself',array('%type%' => substr($material->getMaterialType(),2))));
+            $response = array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('Sorry, this material cant be linked to itself',array('%type%' => substr($material->getType(),2))));
         }elseif(in_array($material->getId(), $existing)){
-            $response = array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('Sorry, this material is already linked',array('%type%' => substr($material->getMaterialType(),2))));
+            $response = array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('Sorry, this material is already linked',array('%type%' => substr($material->getType(),2))));
         }elseif($material->getStatus() == 'deleted'){
-            $response = array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('Sorry, this material is deleted',array('%type%' => substr($material->getMaterialType(),2))));
+            $response = array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('Sorry, this material is deleted',array('%type%' => substr($material->getType(),2))));
         }elseif($material->getStatus() !== 'publish' && $material->getStatus() !== 'unpublished'){
-            $response = array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('Sorry, this material is not published',array('%type%' => substr($material->getMaterialType(),2))));
+            $response = array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('Sorry, this material is not published',array('%type%' => substr($material->getType(),2))));
         }elseif(count($existing) >= 10){
             $response = array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('Sorry, you cant add more than 10 materials'));
         }
@@ -898,13 +898,13 @@ class RecipeController extends BackendController
             if(is_null($material)){
                 $responseArr[] = array('id' => $id, 'valid' => FALSE, 'message' => $this->trans('not valid'));
             }elseif($material->getId() == $parentId){
-                $responseArr[] = array('id' => $id, 'valid' => FALSE, 'message' => $material->getTitle()."<br/>".$this->trans('Sorry, this material cant be linked to itself',array('%type%' => substr($material->getMaterialType(),2))));
+                $responseArr[] = array('id' => $id, 'valid' => FALSE, 'message' => $material->getTitle()."<br/>".$this->trans('Sorry, this material cant be linked to itself',array('%type%' => substr($material->getType(),2))));
             }elseif(in_array($material->getId(), $existing)){
-                $responseArr[] = array('id' => $id, 'valid' => FALSE, 'message' => $material->getTitle()."<br/>".$this->trans('Sorry, this material is already linked',array('%type%' => substr($material->getMaterialType(),2))));
+                $responseArr[] = array('id' => $id, 'valid' => FALSE, 'message' => $material->getTitle()."<br/>".$this->trans('Sorry, this material is already linked',array('%type%' => substr($material->getType(),2))));
             }elseif($material->getStatus() == 'deleted'){
-                $responseArr[] = array('id' => $id, 'valid' => FALSE, 'message' => $material->getTitle()."<br/>".$this->trans('Sorry, this material is deleted',array('%type%' => substr($material->getMaterialType(),2))));
+                $responseArr[] = array('id' => $id, 'valid' => FALSE, 'message' => $material->getTitle()."<br/>".$this->trans('Sorry, this material is deleted',array('%type%' => substr($material->getType(),2))));
             }elseif($material->getStatus() !== 'publish' ){
-                $responseArr[] = array('id' => $id, 'valid' => FALSE, 'message' => $material->getTitle()."<br/>".$this->trans('Sorry, this material is not published',array('%type%' => substr($material->getMaterialType(),2))));
+                $responseArr[] = array('id' => $id, 'valid' => FALSE, 'message' => $material->getTitle()."<br/>".$this->trans('Sorry, this material is not published',array('%type%' => substr($material->getType(),2))));
             }elseif(count($existing) >= 10){
                 $responseArr[] = array('id' => $id, 'valid' => FALSE, 'message' => $material->getTitle()."<br/>".$this->trans('Sorry, you cant add more than 10 materials'));
                 break;
