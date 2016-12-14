@@ -374,9 +374,9 @@ class RecipeController extends BackendController
 
             if ($form->isValid()) {
                 $formData = $request->get('recipe');
-                if($formData['relatedRecipe']){
-                    $this->updateRelatedMaterial($recipe, $formData['relatedRecipe'],$dm);
-                }
+//                if($formData['relatedRecipe']){
+//                    $this->updateRelatedMaterial($recipe, $formData['relatedRecipe'],$dm);
+//                }
 
                 $tags = $formData['tags'];
                 $tagsEn = $formData['tagsEn'];
