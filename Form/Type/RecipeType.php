@@ -67,14 +67,14 @@ class RecipeType extends AbstractType {
                 ))
                 ->add('products', DocumentType::class, array('required' => false,'multiple' => 'multiple','placeholder' => 'Choose Product','class' => 'IbtikarGlanceDashboardBundle:Product', 'attr' => array('data-maximum-selection-length'=> 10,'data-img-method'=>'profilePhoto','data-img-default'=>'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg','class' => 'select-with-thumb')))
 //                ->add('relatedMaterialId', formType\TextType::class, array('attr' => array("data-validation-message"=>'','data-rule-unique' => 'material_check_field_unique', 'data-name' => 'relatedMaterial'), 'required' => FALSE, 'mapped' => false, 'data' => $this->relatedMaterialId))
-                ->add('relatedRecipe', formType\TextType::class, array(
-                    'mapped' => false,
-                    'data' => $builder->getData()->getRelatedMaterialsJson(),
-                    'required' => false,
-                    'attr'=>array(
-                        'class'=> 'hide'
-                    )
-                ))
+//                ->add('relatedRecipe', formType\TextType::class, array(
+//                    'mapped' => false,
+//                    'data' => $builder->getData()->getRelatedMaterialsJson(),
+//                    'required' => false,
+//                    'attr'=>array(
+//                        'class'=> 'hide'
+//                    )
+//                ))
                 ->add('defaultCoverPhoto', formType\HiddenType::class,array('required' => true,'attr'=>array('data-msg-required'=>' ')))
                 ->add('galleryType', formType\HiddenType::class)
                 ->add('media', formType\TextareaType::class, array('required' => FALSE, "mapped" => false,'attr'=>array('parent-class'=>'hidden')))
