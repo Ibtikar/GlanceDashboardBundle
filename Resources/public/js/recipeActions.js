@@ -84,7 +84,17 @@ function showBulkDeleteModal(clickedElementIfNotBulk) {
 
 
     var basicModal = new BasicModal();
-    basicModal.show(deleteUrl + '?count=' + $('tbody .dev-checkbox:checked').length, function () {
+    var type='';
+    $('tbody .dev-checkbox:checked').each(function(index,value){
+        if(index==0){
+           type=$(value).attr('data-type');
+        }else{
+            if(type!= $(value).attr('data-type') ){
+                type='all';
+            }
+        }
+    })
+    basicModal.show(deleteUrl + '?count=' + $('tbody .dev-checkbox:checked').length+'&type='+type, function () {
         unblockPage();
         $(".dev-save-delete-recipe").click(function () {
             if ($.trim($('#dev-delete-reason').val())) {
@@ -128,39 +138,47 @@ function recipeBulkFunction() {
         },
         success: function (data) {
 
-            var status = "success";
+           var status = "success";
 
-            if (data.status != "success") {
+            if(data.status != "success"){
                 status = "error";
             }
-            showNotificationMsg(data.message, "", status);
+            showNotificationMsg(data.message,"",status);
 
             unblockPage();
 
-            if (data.status === 'success') {
-                table.ajax.reload(function () {
-                    if (data.status != 'reload-table') {
-                        $('.dev-new-recipe').html(data.newRecipeCount);
-                        $('.dev-new-assign-recipe').html(data.assignedRecipeCount);
-                        $('.dev-autopublish-recipe').html(data.autopublishRecipeCount);
-                        $('.dev-published-recipe').html(data.publishRecipeCount);
-                        $('.dev-deleted-recipe').html(data.deletedRecipeCount);
-                    }
+            if (data.status == 'success') {
+                if (((data.success).length == numOfCheckedRecord || (data.success).length == 0) && pageNum != 1 && numOfRecords === numOfCheckedRecord) {
+                    table.page(parseInt(table.page(), 10) - parseInt(1, 10));
+                }
+                table.ajax.reload(function (){
+                    $('.dev-new-recipe').html(data.newRecipeCount);
+                    $('.dev-new-assign-recipe').html(data.assignedRecipeCount);
+                    $('.dev-autopublish-recipe').html(data.autopublishRecipeCount);
+                    $('.dev-published-recipe').html(data.publishRecipeCount);
+                    $('.dev-deleted-recipe').html(data.deletedRecipeCount);
                     for (message in data.errors) {
                         for (index in data.errors[message]) {
                             var $tr = $('input[value="' + data.errors[message][index] + '"]').parents('tr');
                             if ($tr.length !== 0) {
                                 $(".dev-list-table").removeClass("dev-hide-errors");
-                                $tr.find('input[type="checkbox"]').prop('checked', true).uniform('refresh');
-                                $tr.addClass('danger').attr('title', message);
+                                $tr.find('input[type="checkbox"]').prop('checked',true).uniform('refresh');
+                                $tr.addClass('danger').attr('title',message);
                                 $tr.powerTip({followMouse: true});
-                                showBulkActionSelect();
+
                             }
                         }
                     }
+                    showBulkActionSelect();
 
                 }, false);
+            }else{
+               table.ajax.reload(function (){
+
+               })
             }
+
+        $('#modal_theme_primary').modal('hide')
         }
     });
 }

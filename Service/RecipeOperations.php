@@ -60,8 +60,14 @@ class RecipeOperations extends PublishOperations
     public function validateDelete($recipe) {
         $translator = $this->container->get('translator');
         //invalid material OR user who wants to forward is not the material owner
-        if ($recipe->getStatus()=='deleted') {
-            return array("status"=>"error","message"=>$this->translator->trans('already deleted',array(),'recipe'));
+        if ($recipe->getStatus() == 'deleted') {
+            if ($recipe->getType() == 'recipe') {
+                return array("status" => "error", "message" => $this->translator->trans('already deleted', array(), 'recipe'));
+            } elseif ($recipe->getType() == 'article') {
+                return array("status" => "error", "message" => $this->translator->trans('article already deleted', array(), 'recipe'));
+            } else {
+                return array("status" => "error", "message" => $this->translator->trans('tip already deleted', array(), 'recipe'));
+            }
         }
         return array("status"=>'success',"message" => $this->translator->trans('done sucessfully'));
     }

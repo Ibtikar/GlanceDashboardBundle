@@ -11,6 +11,8 @@ use Ibtikar\GlanceDashboardBundle\Service\RecipeOperations;
 use Ibtikar\GlanceDashboardBundle\Document\Tag;
 use Ibtikar\GlanceDashboardBundle\Service\ArabicMongoRegex;
 use Ibtikar\GlanceDashboardBundle\Document\Slug;
+use Doctrine\ODM\MongoDB\DocumentRepository;
+use Ibtikar\GlanceDashboardBundle\Document\Document;
 
 class RecipeController extends BackendController
 {
@@ -549,20 +551,20 @@ class RecipeController extends BackendController
             }
             if ($this->calledClassName != 'recipepublish') {
                 if ($id) {
-                    $msg = str_replace('%title%', $recipe->getTitle(), $this->trans('delete single recipe %title%', array(), $this->translationDomain));
+                    $msg = str_replace(array('%title%','%type%'),array($recipe->getTitle(),  $this->trans($recipe->getType(), array(), $this->translationDomain)) , $this->trans('delete single %type% %title%', array(), $this->translationDomain));
                     $url=  $this->generateUrl('ibtikar_glance_dashboard_'.strtolower($this->calledClassName).'_delete',array('id'=>$id));
                 } else {
-                    $msg = str_replace('%no%',$request->get('count') , $this->trans('delete multiple recipe %no%', array(), $this->translationDomain));
+                    $msg = str_replace(array('%no%',),$request->get('count') , $this->trans(str_replace('%type%',$request->get('type'),'delete multiple %type% %no%'), array(), $this->translationDomain));
                     $url=  $this->generateUrl('ibtikar_glance_dashboard_'.strtolower($this->calledClassName).'_bulk_actions');
 
                 }
             } else {
                 if ($id) {
-                   $msg = str_replace('%title%', $recipe->getTitle(), $this->trans('delete single publish recipe %title%', array(), $this->translationDomain));
+                   $msg = str_replace(array('%title%','%type%'),array($recipe->getTitle(),  $this->trans($recipe->getType(), array(), $this->translationDomain)) , $this->trans('delete single publish %type% %title%', array(), $this->translationDomain));
                    $url=  $this->generateUrl('ibtikar_glance_dashboard_'.strtolower($this->calledClassName).'_delete',array('id'=>$id));
 
                 } else {
-                    $msg =  str_replace('%no%', $request->get('count'), $this->trans('delete multiple publish recipe %no%', array(), $this->translationDomain));
+                    $msg =  str_replace('%no%', $request->get('count'), $this->trans(str_replace('%type%',$request->get('type'),'delete multiple publish %type% %no%'), array(), $this->translationDomain));
                     $url=  $this->generateUrl('ibtikar_glance_dashboard_'.strtolower($this->calledClassName).'_bulk_actions');
 
                 }
@@ -606,7 +608,7 @@ class RecipeController extends BackendController
         $dm = $this->get('doctrine_mongodb')->getManager();
         $documents = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findBy(array('id' => array('$in' => array_values($ids))));
         $translator = $this->get('translator');
-        $message = str_replace(array('%action%', '%item-translation%', '%ids-count%'), array($translator->trans($bulkAction), $this->trans(strtolower($this->oneItem != "" ? $this->oneItem : $this->calledClassName)), count($ids)), $translator->trans('successfully %action% %success-count% %item-translation% from %ids-count%.'));
+        $message = str_replace(array('%action%', '%item-translation%', '%ids-count%'), array($translator->trans($bulkAction), $this->trans('recipe',array(),$this->translationDomain), count($ids)), $translator->trans('successfully %action% %success-count% %item-translation% from %ids-count%.'));
         $foundDocumentsIds = array();
         foreach ($documents as $document) {
             $foundDocumentsIds [] = $document->getId();
@@ -635,6 +637,7 @@ class RecipeController extends BackendController
                 }
                 foreach ($documents as $document) {
                     $errorMessage = $this->validateDelete($document);
+
                     if ($document->getNotModified()) {
                         $data['errors'][$translator->trans('failed operation')] [] = $document->getId();
                         continue;
@@ -645,7 +648,9 @@ class RecipeController extends BackendController
                     }
 
                     try {
-                        $forwardResult = $this->get('recipe_operations')->delete($recipe, $request->get('reason'));
+
+
+                        $forwardResult = $this->get('recipe_operations')->delete($document, $request->get('reason'));
                         $dm->flush();
                         $successIds [] = $document->getId();
                     } catch (\Exception $e) {
@@ -669,7 +674,7 @@ class RecipeController extends BackendController
                 if ($value == 'id') {
                     $oneDocument['id'] = '<div class="form-group">
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" name="ids[]" class="styled dev-checkbox" value="' . $document->getId() . '">
+                                        <input type="checkbox" name="ids[]"  data-type="' . $document->getType() . '" class="styled dev-checkbox" value="' . $document->getId() . '">
                                     </label>
                               </div>';
                     continue;
@@ -994,6 +999,20 @@ class RecipeController extends BackendController
 
 
         return new JsonResponse($response);
+
+    }
+
+    protected function validateDelete(Document $document){
+        //invalid material OR user who wants to forward is not the material owner
+        if ($document->getStatus() == 'deleted') {
+            if ($document->getType() == 'recipe') {
+                return $this->trans('already deleted', array(), 'recipe');
+            } elseif ($document->getType() == 'article') {
+                return  $this->trans('article already deleted', array(), 'recipe');
+            } else {
+                return  $this->trans('tip already deleted', array(), 'recipe');
+            }
+        }
 
     }
 

@@ -113,15 +113,26 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 'you must change time': 'يجب تحديد وقت النشر أولاً'
 'republish recipe': 'اعاده نشر'
 'publish recipe': 'نشر'
-'delete single recipe %title%': 'انت على وشك حذف (%title%)، هل تريد إتمام الحذف؟'
-'delete single publish recipe %title%': 'انت على وشك حذف وصفة منشورة على الموقع بعنوان "%title%"  ... هل تريد اﻷستمرار و حذف هذه الوصفة من الموقع؟'
-'delete multiple recipe %no%': 'أنت على وشك حذف (%no%) وصفات، هل تريد إتمام العملية؟'
-'delete multiple publish recipe %no%': 'انت على وشك حذف "%no%" وصفات منشورة على الموقع بعنوان  ... هل تريد اﻷستمرار و حذف هذه الوصفة من الموقع؟'
+'delete single %type% %title%': 'انت على وشك حذف (%title%)، هل تريد إتمام الحذف؟'
+'delete single publish %type% %title%': 'انت على وشك حذف %type% منشورة على الموقع بعنوان "%title%"  ... هل تريد اﻷستمرار و حذف هذه الوصفة من الموقع؟'
+
+'delete multiple recipe %no%': 'أنت على وشك حذف (%no%) وصفه، هل تريد إتمام العملية؟'
+'delete multiple publish recipe %no%': 'انت على وشك حذف "%no%" وصفه منشورة على الموقع   ... هل تريد اﻷستمرار و حذف هذه الوصفه من الموقع؟'
+
+'delete multiple article %no%': 'أنت على وشك حذف (%no%) مقال، هل تريد إتمام العملية؟'
+'delete multiple publish article %no%': 'انت على وشك حذف "%no%" مقال منشور على الموقع   ... هل تريد اﻷستمرار و حذف هذه المقال من الموقع؟'
+
+'delete multiple tip %no%': 'أنت على وشك حذف (%no%) وصفات، هل تريد إتمام العملية؟'
+'delete multiple publish tip %no%': 'انت على وشك حذف "%no%" وصفات منشورة على الموقع بعنوان  ... هل تريد اﻷستمرار و حذف هذه الوصفة من الموقع؟'
+
+'delete multiple all %no%': 'أنت على وشك حذف (%no%) محتوى، هل تريد إتمام العملية؟'
+'delete multiple publish all %no%': 'انت على وشك حذف "%no%" محتوى منشور على الموقع   ... هل تريد اﻷستمرار و حذف هذه المحتوى من الموقع؟'
 'delete recipe': 'حذف'
 'you must write delete reason': 'الرجاء ادخال سبب الحذف'
 'already deleted': 'عذراً، هذه الوصفة محذوفه مسبقاً'
-'recipe': 'الوصفه'
-
+'article already deleted': 'عذراً، هذا المقال محذوف مسبقاً'
+'tip already deleted': 'عذراً، هذه الوصفة محذوفه مسبقاً'
+'recipe': 'وصفه'
 
 
 

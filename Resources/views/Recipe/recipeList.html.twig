@@ -100,7 +100,7 @@
                                                                 <span class="dev-bulk-action-container" data-list-name="{{listName|lower}}" data-href="{{ list.hasBulkActions(listName) ? path(prefixRoute|lower ~ '_bulk_actions') : '' }}" style="display: none;">
                                                                     {% for action in list.bulkActions %}
                                                                         {% if action == "Delete"  and (is_granted('ROLE_'~listName|upper~'_DELETE') or is_granted('ROLE_ADMIN')) %}
-                                                                            <a data-action="{{action}}"  class="btn btn-default btn-sm dev-delete-bulk-recipe" data-placement="bottom"> <i class="icon-trash"></i> <span class="hidden-sm position-right">{{ 'delete'|trans }} {{ ((oneItem|capitalize)~"s")|trans }}</span></a>
+                                                                            <a data-action="{{action}}"  class="btn btn-default btn-sm dev-delete-bulk-recipe" data-placement="bottom"> <i class="icon-trash"></i> <span class="hidden-sm position-right">{{ 'delete'|trans }}</span></a>
                                                                         {% endif %}
                                                                     {% endfor %}
                                                                 </span>
@@ -164,7 +164,7 @@
                                                                 <td class="" data-id="{{ object.id }}">
                                                                     <div class="form-group">
                                                                         <label class="checkbox-inline">
-                                                                            <input type="checkbox" name="ids[]" class="styled dev-checkbox" value="{{object.id}}" >
+                                                                            <input type="checkbox" name="ids[]" class="styled dev-checkbox" value="{{object.id}}" data-type="{{ object.type}}" >
                                                                         </label>
                                                                     </div>
 
