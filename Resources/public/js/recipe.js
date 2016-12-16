@@ -432,6 +432,9 @@ $(document).ready(function () {
                 $('.dev-submit-image').attr('data-url', element.attr('data-crop-url'))
                 $('.dev-submit-image').attr('data-id', element.attr('id'))
 
+            }else{
+                $('.dev-submit-image').attr('data-url', uploadUrl)
+                $('.dev-submit-image').attr('data-id', '')  
             }
             var elementObject = $('#uploadImg .cropit-image-input');
             if (elementObject.val()) {
@@ -505,6 +508,7 @@ $(document).ready(function () {
                     addImageToSortView(media);
                     showNotificationMsg(data.message, "", data.status);
                     $('#uploadImg').modal('hide');
+                    $('#GoogleImportImg-modal').modal('hide')
                     $('[data-popup="popover"]').popover({
                         delay: {"hide": 500}
                     });
@@ -517,6 +521,7 @@ $(document).ready(function () {
 
                 } else {
                     $('#uploadImg').modal('hide');
+                    $('#GoogleImportImg-modal').modal('hide')
                     showNotificationMsg(imageErrorMessages.generalError, "", 'error');
                     refreshImages();
                 }

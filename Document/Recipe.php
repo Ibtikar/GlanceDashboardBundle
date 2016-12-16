@@ -260,7 +260,6 @@ class Recipe  extends Publishable {
 
     /**
      * @MongoDB\String
-     * @Assert\Regex(pattern="/^[a-zA-Z\x{0600}-\x{06ff}\-]+$/u", message="only characters and dashes allowed", groups={"Default"})
      * @Assert\Length(
      *      max = 125,
      *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
@@ -270,7 +269,6 @@ class Recipe  extends Publishable {
 
     /**
      * @MongoDB\String
-     * @Assert\Regex(pattern="/^[a-zA-Z\x{0600}-\x{06ff}\-]+$/u", message="only characters and dashes allowed", groups={"Default"})
      * @Assert\Length(
      *      max = 125,
      *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"

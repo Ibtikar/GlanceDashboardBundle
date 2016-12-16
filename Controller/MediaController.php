@@ -64,6 +64,16 @@ class MediaController extends BackendController
                     return $response;
                 }
                 $fieldUpdate='Product';
+            }elseif ($collectionType === 'Recipe') {
+                $document = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($documentId);
+                if (!$document) {
+                    throw $this->createNotFoundException($this->trans('Wrong id'));
+                }
+                $response = $this->getInvalidResponseForRecipe($documentId, $this->container->get('request_stack')->getCurrentRequest()->get('room'));
+                if ($response) {
+                    return $response;
+                }
+                $fieldUpdate='Recipe';
             }
 
         } else {
@@ -280,6 +290,16 @@ class MediaController extends BackendController
                 }
             }
         }
+
+        if ($collectionType == 'Recipe' && $document->getRecipe()) {
+//            $response = $this->getInvalidResponseForRecipe($document->getRecipe()->getId(), $request->get('room'));
+//            if ($response) {
+//                return $response;
+//            }
+            if ($document->getCoverPhoto()) {
+                return $this->getNotificationResponse(null, array(), 'error');
+            }
+        }
         $dm->remove($document);
         try {
             $dm->flush();
@@ -327,6 +347,20 @@ class MediaController extends BackendController
                 'collectionType' => $collectionType
             ));
             }
+            if ($collectionType === 'Recipe') {
+                $reponse = $this->getInvalidResponseForRecipe($documentId, $this->container->get('request_stack')->getCurrentRequest()->get('room'));
+                if ($reponse) {
+                    return $reponse;
+                }
+            $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                'type' => $type == "all"?array('$in'=>array('image','video')):$type,
+                'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                'recipe' => new \MongoId($documentId),
+                'subproduct' => null,
+                'product' => null,
+                'collectionType' => $collectionType
+            ));
+            }
         } else {
             $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
                 'type' => $type == "all"?array('$in'=>array('image','video')):$type,
@@ -344,7 +378,7 @@ class MediaController extends BackendController
 
         /* @var $document Media */
         foreach ($documents as $document) {
-            if ($document->getCoverPhoto()) {
+            if ($document->getCoverPhoto() && $collectionType!='Recipe') {
                 $coverPhoto = $this->prepareMedia($document,$collectionType);
                 continue;
             }
@@ -382,7 +416,8 @@ class MediaController extends BackendController
             'captionAr' => $media->getCaptionAr()?$media->getCaptionAr():"",
             'captionEn' => $media->getCaptionEn()?$media->getCaptionEn():"",
             'path' => $media->getPath(),
-            'type' => $media->getType()
+            'type' => $media->getType(),
+            'cover'=>$media->getCoverPhoto()?'checked':''
         );
         return $data;
     }
@@ -743,19 +778,26 @@ class MediaController extends BackendController
                 if ($request->get('collectionType')) {
                     $videoObj->setCollectionType($request->get('collectionType'));
                 }
-                if ($documentId && $documentId!='null') {
-                    if ($request->get('collectionType') != 'Task') {
-                        $material = $dm->getRepository('IbtikarAppBundle:Material')->find($documentId);
+                if ($documentId && $documentId != 'null') {
+                    if ($request->get('collectionType') == 'Recipe') {
+                        $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($documentId);
+                        if (!$recipe) {
+                            throw $this->createNotFoundException($this->trans('Wrong id'));
+                        }
+                        $reponse = $this->getInvalidResponseForRecipe($documentId, $this->container->get('request_stack')->getCurrentRequest()->get('room'));
+                        if ($reponse) {
+                            return $reponse;
+                        }
                         $lastVideo = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder($this->getObjectShortName())
-                                ->field('material')->equals($documentId)
-                                ->sort('order', 'DESC')
-                                ->getQuery()->getSingleResult();
+                                        ->field('recipe')->equals($documentId)
+                                        ->sort('order', 'DESC')
+                                        ->getQuery()->getSingleResult();
                         $order = 0;
                         if ($lastVideo) {
                             $order = $lastVideo->getOrder() + 1;
                         }
                         $videoObj->setOrder($order);
-                        $videoObj->setMaterial($material);
+                        $videoObj->setRecipe($recipe);
                     } else {
                         $task = $dm->getRepository('IbtikarBackendBundle:Task')->find($documentId);
                         $lastVideo = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder($this->getObjectShortName())
@@ -795,7 +837,8 @@ class MediaController extends BackendController
             'captionAr' => is_null($video->getCaptionAr())?"":$video->getCaptionAr(),
             'captionEn' => is_null($video->getCaptionEn())?"":$video->getCaptionEn(),
             'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_video_delete', $routeParameters),
-            'type' => $video->getType()
+            'type' => $video->getType(),
+            'cover'=>$video->getCoverPhoto()?'checked':''
         );
         return $data;
     }
@@ -812,12 +855,16 @@ class MediaController extends BackendController
         $documentId = $request->get('documentId');
         $collectionType = $request->get('collectionType');
 
-        if ($documentId && $documentId != 'null' && $collectionType != 'Task') {
-            $response = $this->getInvalidResponseForMaterial($documentId, $request->get('room'));
-            if ($response) {
-                return $response;
+        if ($documentId && $documentId != 'null' && $collectionType == 'Recipe') {
+//            $response = $this->getInvalidResponseForRecipe($documentId, $request->get('room'));
+//            if ($response) {
+//                return $response;
+//            }
+            if ($document->getCoverPhoto()) {
+                return $this->getNotificationResponse($this->trans('cant delete cover photo'), array(), 'error');
             }
         }
+
 //        if ($collectionType == 'Task') {
 //            if ($document->getTask() === null && $document->getCreatedBy()->getId() !== $this->getUser()->getId()) {
 //                return $this->getNotificationResponse(null, array(), 'error');
@@ -855,4 +902,23 @@ class MediaController extends BackendController
             )
         );
     }
+
+    public function getInvalidResponseForRecipe($documentId, $room) {
+        if (!$this->getUser()) {
+            return $this->getLoginResponse();
+        }
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $material = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($documentId);
+        if (!$material) {
+            throw $this->createNotFoundException($this->trans('Wrong id'));
+        }
+
+        $securityContext = $this->get('security.authorization_checker');
+        if (!$room || (!$securityContext->isGranted('ROLE_' . strtoupper($room) . '_EDIT') && !$securityContext->isGranted('ROLE_ADMIN'))) {
+
+            return $this->getAccessDeniedResponse();
+        }
+
+    }
+
 }

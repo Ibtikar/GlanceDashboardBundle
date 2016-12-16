@@ -78,6 +78,7 @@ function addImageToSortView(media) {
         .replace(/%image-icon%/g, media.type == "image" ? 'icon-image2' : 'icon-video-camera')
         .replace(/%delete-url%/g, media.deleteUrl)
         .replace(/%is-gif%/g, media.isGif)
+        .replace(/%check%/g, media.cover)
         .replace(/%caption-ar%/g, media.captionAr)
         .replace(/%caption-en%/g, media.captionEn)
     );

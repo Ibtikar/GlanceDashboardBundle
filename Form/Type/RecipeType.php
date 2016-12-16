@@ -20,12 +20,16 @@ class RecipeType extends AbstractType {
         "tagSelected" => null
     );
 
-    /**
-     * @param boolean|array|string $validationGroups
-     */
-    public function __construct($config = array()) {
-        $this->config = array_merge($this->defaultConfig, $config);
+   public function __construct(array $options = array())
+    {
+        $resolver = new \Symfony\Component\OptionsResolver\OptionsResolver();
+        $this->configureOptions($resolver);
+
+        $this->options = $resolver->resolve($options);
     }
+
+
+
     /**
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
      * @param array $options
@@ -60,8 +64,12 @@ class RecipeType extends AbstractType {
                 ->add('meal', formType\ChoiceType::class, array('required' => FALSE,
                     'choices' => array_flip(Recipe::$mealMap),
                     'multiple' => true, 'placeholder' => false, 'empty_data' => null,'choice_translation_domain'=>'recipe','attr' => array('data-maximum-selection-length'=> 3,'class' => 'select-multiple')
-                ))
-                ->add('keyIngredient', formType\ChoiceType::class, array('required' => FALSE,
+                ));
+                if($options['type']=='edit'){
+                $builder->add('tagSelected', formType\HiddenType::class, array('mapped' => false, 'required' => FALSE, 'data' => $options['tagSelected']))
+                ->add('tagEnSelected', formType\HiddenType::class, array('mapped' => false, 'required' => FALSE, 'data' =>$options['tagEnSelected'] ));
+                }
+                $builder->add('keyIngredient', formType\ChoiceType::class, array('required' => FALSE,
                     'choices' => array_flip(Recipe::$keyIngredientMap),
                     'multiple' => true, 'placeholder' => false, 'empty_data' => null,'choice_translation_domain'=>'recipe','attr' => array('data-maximum-selection-length'=> 3,'class' => 'select-multiple')
                 ))
@@ -87,6 +95,15 @@ class RecipeType extends AbstractType {
      */
     public function getName() {
         return 'recipe_type';
+    }
+
+    public function configureOptions( \Symfony\Component\OptionsResolver\OptionsResolver $resolver ) {
+    $resolver->setDefaults( [
+      'type' => 'create',
+      'tagSelected' => '',
+      'tagEnSelected' => '',
+
+        ]);
     }
 
 }
