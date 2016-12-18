@@ -174,7 +174,7 @@ function recipeBulkFunction() {
                 }, false);
             }else{
                table.ajax.reload(function (){
-
+                showBulkActionSelect();
                })
             }
 

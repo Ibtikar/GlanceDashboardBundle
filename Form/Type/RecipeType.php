@@ -39,6 +39,7 @@ class RecipeType extends AbstractType {
         $builder
                 ->add('title', formType\TextType::class, array('attr' => array('data-rule-minlength' => 3,'data-rule-maxlength' => 150)))
                 ->add('titleEn', formType\TextType::class, array('label' => 'title','attr' => array('data-rule-minlength' => 3,'data-rule-maxlength' => 150)))
+                ->add('hideEnglishContent', formType\CheckboxType::class, array('required' => false,'attr'=>array('class'=>'styled')))
                 ->add('brief',  formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
                 ->add('briefEn',formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
                 ->add('tags', formType\TextType::class, array('mapped' => false, 'required' => FALSE, 'attr' => array('data-tag-input'=>true,'data-rule-taglength' => 330),'label_attr' => array()))
