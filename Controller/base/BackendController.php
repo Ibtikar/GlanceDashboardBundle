@@ -783,4 +783,17 @@ class BackendController extends Controller {
      * @param mixed $ids can be a single  string (id) or successful (id)s array
      */
     protected function postDelete($ids){}
+
+    protected function getTagsForDocument($document,$lang="ar") {
+        $tags = $lang=="ar"?$document->getTags():$document->getTagsEn();
+        $tagName = array();
+        $tagSelected = '';
+        if ($tags) {
+            foreach ($tags as $tag) {
+                $tagName[] = $tag->getName();
+            }
+            $tagSelected = implode(',', $tagName);
+        }
+        return $tagSelected;
+    }
 }

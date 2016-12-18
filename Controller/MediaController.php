@@ -495,30 +495,6 @@ class MediaController extends BackendController
      */
     public function upload_imageUrlAction(Request $request)
     {
-        $documentId = $request->get('documentId');
-        if ($documentId && $documentId != 'null') {
-            $collectionType = $request->get('collectionType');
-            if ($collectionType === 'Material') {
-                $response = $this->getInvalidResponseForMaterial($documentId, $this->getRequest()->get('room'));
-                if ($response) {
-                    return $response;
-                }
-            } elseif ($collectionType === 'Comics') {
-                $response = $this->getInvalidResponseForComic($documentId);
-                if ($response) {
-                    return $response;
-                }
-            } elseif ($collectionType === 'Event') {
-                $response = $this->getInvalidResponseForEvent($documentId, $this->getRequest()->get('room'));
-                if ($response) {
-                    return $response;
-                }
-            } else {
-                if ($collectionType != 'City' && $collectionType != 'Place') {
-                    return $this->getAccessDeniedResponse();
-                }
-            }
-        }
 
         $imageUrl = $request->get('imageUrl');
         if (!$imageUrl || @filter_var($imageUrl, FILTER_VALIDATE_URL) === FALSE) {

@@ -1,3 +1,6 @@
+var RelatedRecipeObj = [];
+
+
 function showNotificationMsg(title, text, type) {
 
     var notificationIcons = {
@@ -45,7 +48,7 @@ function searchRelatedMaterialResult(response) {
 
     $(response.data).each(function(){
         if (this.valid) {
-            RelatedMaterialObj.push({
+            RelatedRecipeObj.push({
                 'id':this.id,
                 'title':this.title,
                 'slug':this.slug
@@ -54,7 +57,7 @@ function searchRelatedMaterialResult(response) {
             showNotification(this.message, 'error');
         }
 
-        $('#material_type_relatedMaterials').val(JSON.stringify(RelatedMaterialObj));
+        $('#material_type_relatedMaterials').val(JSON.stringify(RelatedRecipeObj));
         updateRelatedMaterial();
     });
 
@@ -82,12 +85,13 @@ function setSearchIframeUrl($this) {
 }
 
 function updateRelatedMaterial(){
-    if($('#recipe_relatedRecipe').length > 0){
-        var data = JSON.parse($('#recipe_relatedRecipe').val());
-        RelatedMaterialObj = data;
+    if($('#recipe_related').length > 0){
+        var data = JSON.parse($('#recipe_related').val());
+        RelatedRecipeObj = data;
         $('.dev-related-list').html("");
         $(data).each(function(){
-            $('.dev-related-list').append('<li class="media dev-related-item"><div class="media-body"><a href="'+$('base').attr('href')+this.slug+'" target="_blank">'+this.title+'</a>  </div><div class="dev-delete-related-material media-right" data-related-material-id="'+this.id+'" data-related-material-slug="'+this.slug+'"><i class="icon icon-cross2"></i></div></li>');
+            $('.dev-related-list').append('<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="/'+this.img+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>');
+//            $('.dev-related-list').append('<li class="media dev-related-item"><div class="media-body"><a href="'+$('base').attr('href')+this.slug+'" target="_blank">'+this.title+'</a>  </div><div class="dev-delete-related-material media-right" data-related-material-id="'+this.id+'" data-related-material-slug="'+this.slug+'"><i class="icon icon-cross2"></i></div></li>');
         });
     }
 }
@@ -180,8 +184,16 @@ function searchRelatedMaterialResult(response) {
 
 
 
-function addRelatedMaterial(element) {
-        checkPublishedValidation(element);
+function addRelatedMaterial(data) {
+    RelatedRecipeObj.push({
+        'id':data.id,
+        'text':data.text,
+        'img':data.img
+    });
+    $('#recipe_related').val(JSON.stringify(RelatedRecipeObj));
+    updateRelatedMaterial();
+
+//    checkPublishedValidation(element);
 }
 
 function checkPublishedValidation(element) {
@@ -235,6 +247,11 @@ console.log($this.parents('.form-group').find('#recipe_relatedRecipe').val())
     }
 }
 
+$('#recipe_relatedRecipe').on('select2:select',function(e){
+    addRelatedMaterial(e.params.data);
+    $(this).val(null).trigger("change");
+});
+
 $(document).on("click",'.dev-add-related-material',function(){
         addRelatedMaterial($('#related-materials-source'));
     });
@@ -252,43 +269,21 @@ $(document).on("click",'.dev-add-related-material',function(){
         }
     });
 
-    $(document).on('click', '.dev-delete-related-material', function() {
-        var $this = $(this);
+    $(document).on('click', '.dev-related-delete', function(e) {
+        e.preventDefault();
+            var $this = $(this);
 
-            if($this.parents('.form-group').find('#recipe_relatedRecipe').val() != ""){
-                RelatedMaterialObj = JSON.parse($this.parents('.form-group').find('#recipe_relatedRecipe').val());
-            }else{
-                RelatedMaterialObj = [];
-            }
-
-            var ids     = $.map( RelatedMaterialObj, function( value, key ) {
-                return value.id;
-            });
-
-            $.ajax({
-                url: relatedMaterialDeleteUrl,
-                method: 'POST',
-                data:{parent:requestId,child:$this.attr('data-related-material-id')},
-                success: function(data) {
-                    if(data.status == "success"){
-                        $this.parents('li').remove();
-                        var objArray = [];
-                        $.each($('.dev-related-list .dev-delete-related-material'),function(){
-                            objArray.push({
-                                'id':$(this).attr('data-related-material-id'),
-                                'title':$(this).siblings('a').html().trim(),
-                                'slug':$(this).attr('data-related-material-slug')
-                            });
-                        });
-                        $('#recipe_relatedRecipe').val(JSON.stringify(objArray));
-                        updateRelatedMaterial();
-                    }
-
-                    showNotificationMsg(data.message, "", data.status);
-
-                }
-            });
-        
+            $this.parents('li').remove();
+            var objArray = [];
+            $.each($('.dev-related-list .media'),function(){
+                    objArray.push({
+                        'id':$(this).attr('data-related-material-id'),
+                        'text':$(this).find('media-body').text().trim(),
+                        'img':"/"+$(this).find('img').attr('src')
+                    });
+                });
+                $('#recipe_related').val(JSON.stringify(objArray));
+                updateRelatedMaterial();
     });
 
 
@@ -442,7 +437,7 @@ $(document).ready(function () {
                 var value = elementObject.val(),
                         file = value.toLowerCase(),
                         extension = file.substring(file.lastIndexOf('.') + 1);
-               
+
                 if ($.inArray(extension, ['jpeg', 'jpg', 'png', 'gif']) == -1) {
                     showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
 

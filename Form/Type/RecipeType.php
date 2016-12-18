@@ -20,12 +20,12 @@ class RecipeType extends AbstractType {
         "tagSelected" => null
     );
 
-   public function __construct(array $options = array())
-    {
-        $resolver = new \Symfony\Component\OptionsResolver\OptionsResolver();
-        $this->configureOptions($resolver);
-
-        $this->options = $resolver->resolve($options);
+    /**
+     * @param boolean|array|string $validationGroups
+     */
+    public function __construct($config = array(), $tagSelected = null) {
+        $this->config = array_merge($this->defaultConfig, $config);
+        $this->tagSelected = $tagSelected;
     }
 
 
@@ -83,9 +83,13 @@ class RecipeType extends AbstractType {
 //                        'class'=> 'hide'
 //                    )
 //                ))
+                ->add('relatedRecipe', formType\ChoiceType::class, array('multiple'=>true,'required' => FALSE,'mapped' => FALSE,
+                    'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-ajax','ajax-url-var' => 'relatedMaterialSearchUrl')
+                ))
                 ->add('defaultCoverPhoto', formType\HiddenType::class,array('required' => true,'attr'=>array('data-msg-required'=>' ')))
                 ->add('galleryType', formType\HiddenType::class)
                 ->add('media', formType\TextareaType::class, array('required' => FALSE, "mapped" => false,'attr'=>array('parent-class'=>'hidden')))
+                ->add('related', formType\TextareaType::class, array('required' => FALSE, "mapped" => false,'attr'=>array('parent-class'=>'hidden')))
                 ->add('submitButton', formType\SubmitType::class);
     }
 

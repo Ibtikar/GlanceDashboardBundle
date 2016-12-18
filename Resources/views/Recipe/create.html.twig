@@ -45,12 +45,11 @@
         </div>
     </div>
     <hr/>
-
     {{form_row(form.submitButton)}}
     {{ form_end(form) }}
 
-
-
+<div class="form-group has-feedback">
+    <label class="control-label col-lg-2" for="recipe_relatedRecipe"></label><div class="col-lg-10" style="padding: 0;"><ul class='dev-related-list media-list width-350 notificationList'></ul></div></div>
     <div id="GoogleImportImg-modal" class="modal fade">
         <div class="modal-dialog  modal-full">
             <div class="modal-content">
@@ -191,13 +190,6 @@
 
                                 </ul>
 
-
-                                <div class="dropdown-content-footer">
-                                    <div class="moreNotifications">
-                                        <i class="icon-spinner6 spinner display-block"></i>
-                                    </div>
-                                </div>
-
                             </div>
 
 
@@ -248,7 +240,7 @@
 
                             <div class="input-group content-group">
                                 <div class="has-feedback">
-                                    <input id="dev-search-gimage-box-small" class="form-control input-xs" value="" type="text">
+                                    <input id="dev-search-gimage-box-small" class="form-control input-xs click-on-enter" value="" type="text">
                                 </div>
 
                                 <div class="input-group-btn">
@@ -258,22 +250,22 @@
 
 
                         </li>
-                        {#<li class="divider"></li>
+                        <li class="divider"></li>
                         <li>  رابط مباشر
 
 
                             <div class="input-group content-group">
                                 <div class="has-feedback">
-                                    <input class="form-control input-xs dev-recipe-imgeUrl" value=" " type="text">
+                                    <input class="form-control input-xs dev-recipe-imgeUrl click-on-enter" value=" " type="text">
                                 </div>
 
                                 <div class="input-group-btn">
-                                    <button type="submit" class="btn btn-primary btn-xs dev-imageurl-submit">اصف</button>
+                                    <button type="submit" class="btn btn-primary btn-xs dev-imageurl-submit">أضف</button>
                                 </div>
                             </div>
 
 
-                        </li>#}
+                        </li>
                     </ul>
                 </div><!-- btn-group -->
 
@@ -285,7 +277,7 @@
 
                             <div class="input-group content-group">
                                 <div class="has-feedback">
-                                    <input id="dev-search-gvideo-box-small" class="form-control input-xs" value="" type="text">
+                                    <input id="dev-search-gvideo-box-small" class="form-control input-xs click-on-enter" value="" type="text">
                                 </div>
 
                                 <div class="input-group-btn">
@@ -301,11 +293,11 @@
 
                             <div class="input-group content-group">
                                 <div class="has-feedback">
-                                    <input class="form-control input-xs" value=" " type="text">
+                                    <input class="form-control input-xs dev-recipe-videoUrl" value=" " type="text">
                                 </div>
 
                                 <div class="input-group-btn">
-                                    <button type="submit" class="btn btn-primary btn-xs">اصف</button>
+                                    <button type="submit" class="btn btn-primary btn-xs dev-videourl-submit">أضف</button>
                                 </div>
                             </div>
 
@@ -341,11 +333,11 @@
                         <span><span class="dev-image-count">0</span> صورة</span>
 
                     </li>
-                    {#<li class="filterActive videosFilter">
+                    <li class="filterActive videosFilter">
 
                         <span><span class="dev-video-count">0</span> فيديو</span>
 
-                    </li>#}
+                    </li>
 
                 </ul>
 
@@ -450,8 +442,8 @@
     </div>#}
 {% endset %}
 {% block javascripts %}
-    
-    
+
+
     <div id="iframeModal" class="modal fade">
        <div class="modal-dialog">
            <div class="modal-content">
@@ -591,6 +583,7 @@
 
     <script>
         var googleStopSearch = 1;
+    var uploadImageUrl = '{{ path('recipe_upload_imageUrl') }}';
     var imageTempelate = '{{ imageTempelate|escape('js') }}';
     var cropButton = '{{ cropButton|escape('js') }}';
     var deleteButton = '{{ deleteButton|escape('js') }}';
@@ -601,8 +594,10 @@
     var googleUploadImage = '{{ path('google_upload_image', {'documentId':'null', 'collectionType':'Recipe'}) }}';
     var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'all','documentId':'null','collectionType':'Recipe'})}}";
     var imageSortTemplate = '{{ imageSortTemplate|escape('js') }}';
+    var relatedMaterialSearchUrl = "{{ path('ibtikar_glance_dashboard_recipe_related_material_search')}}";
     var videoSearchTemplate = '{{ videoSearchTemplate|escape('js') }}';
     var youtubeUploadVideo = '{{ path('ibtikar_glance_dashboard_media_youtube_upload_video',{'type':'video','documentId':'null','collectionType':'Recipe'}) }}';
+    var validateVideoUrl = '{{ path('youtube_validate_videoUrl') }}';
     var relatedMaterialDeleteUrl = '{{ path('ibtikar_glance_dashboard_recipe_related_material_delete') }}';
     var requestId = '{{ app.request.get('id') }}';
         var element;

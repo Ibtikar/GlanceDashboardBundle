@@ -33,18 +33,18 @@ ibtikar_glance_dashboard_recipe_change_list_columns:
 get_tags:
     path: /get-tags
     defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:getTags }
-    
+
 ibtikar_glance_dashboard_recipe_check_material_published:
     path: /checkMaterialPublished
     defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:checkMaterialPublished }
 
 ibtikar_glance_dashboard_recipe_check_material_published_bulk:
     path: /checkMaterialPublishedBulk
-    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:checkMaterialPublishedBulk }    
-    
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:checkMaterialPublishedBulk }
+
 ibtikar_glance_dashboard_recipe_related_material_search:
     path:  /related-material-search
-    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:searchRelated }    
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:searchRelated }
 
 ibtikar_glance_dashboard_recipe_related_material_delete:
     path: /related-material-delete

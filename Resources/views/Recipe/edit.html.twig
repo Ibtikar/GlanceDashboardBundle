@@ -22,7 +22,6 @@
                 {{ form_row(form.brief) }}
 
                 {{ form_row(form.tags) }}
-                {{ form_row(form.tagSelected) }}
                 <hr/>
                 {{ form_row(form.ingredients) }}
                 <hr/>
@@ -37,8 +36,6 @@
                 {{ form_row(form.briefEn) }}
 
                 {{ form_row(form.tagsEn) }}
-                {{ form_row(form.tagEnSelected) }}
-
                 <hr/>
                 {{ form_row(form.ingredientsEn) }}
                 <hr/>
@@ -48,12 +45,17 @@
         </div>
     </div>
     <hr/>
-
     {{form_row(form.submitButton)}}
     {{ form_end(form) }}
 
-
-
+<div class="form-group has-feedback">
+        <label class="control-label col-lg-2" for="recipe_relatedRecipe"></label><div class="col-lg-10" style="padding: 0;">
+        <ul class='dev-related-list media-list width-350 notificationList'>
+            {% for choice in recipe.relatedRecipeJson %}
+                <li class="media" data-related-material-id="{{choice.id}}"><div class="media-left"><img src="/{{choice.img}}" class="img-circle" alt=""></div><div class="media-body"><b> {{choice.text}}</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="{{choice.id}}"><i class="icon icon-cross2"></i></a></div></li>
+            {% endfor %}
+        </ul>
+            </div></div>
     <div id="GoogleImportImg-modal" class="modal fade">
         <div class="modal-dialog  modal-full">
             <div class="modal-content">
@@ -194,13 +196,6 @@
 
                                 </ul>
 
-
-                                <div class="dropdown-content-footer">
-                                    <div class="moreNotifications">
-                                        <i class="icon-spinner6 spinner display-block"></i>
-                                    </div>
-                                </div>
-
                             </div>
 
 
@@ -251,7 +246,7 @@
 
                             <div class="input-group content-group">
                                 <div class="has-feedback">
-                                    <input id="dev-search-gimage-box-small" class="form-control input-xs" value="" type="text">
+                                    <input id="dev-search-gimage-box-small" class="form-control input-xs click-on-enter" value="" type="text">
                                 </div>
 
                                 <div class="input-group-btn">
@@ -261,22 +256,22 @@
 
 
                         </li>
-                        {#<li class="divider"></li>
+                        <li class="divider"></li>
                         <li>  رابط مباشر
 
 
                             <div class="input-group content-group">
                                 <div class="has-feedback">
-                                    <input class="form-control input-xs dev-recipe-imgeUrl" value=" " type="text">
+                                    <input class="form-control input-xs dev-recipe-imgeUrl click-on-enter" value=" " type="text">
                                 </div>
 
                                 <div class="input-group-btn">
-                                    <button type="submit" class="btn btn-primary btn-xs dev-imageurl-submit">اصف</button>
+                                    <button type="submit" class="btn btn-primary btn-xs dev-imageurl-submit">أضف</button>
                                 </div>
                             </div>
 
 
-                        </li>#}
+                        </li>
                     </ul>
                 </div><!-- btn-group -->
 
@@ -288,7 +283,7 @@
 
                             <div class="input-group content-group">
                                 <div class="has-feedback">
-                                    <input id="dev-search-gvideo-box-small" class="form-control input-xs" value="" type="text">
+                                    <input id="dev-search-gvideo-box-small" class="form-control input-xs click-on-enter" value="" type="text">
                                 </div>
 
                                 <div class="input-group-btn">
@@ -304,11 +299,11 @@
 
                             <div class="input-group content-group">
                                 <div class="has-feedback">
-                                    <input class="form-control input-xs" value=" " type="text">
+                                    <input class="form-control input-xs dev-recipe-videoUrl" value=" " type="text">
                                 </div>
 
                                 <div class="input-group-btn">
-                                    <button type="submit" class="btn btn-primary btn-xs">اصف</button>
+                                    <button type="submit" class="btn btn-primary btn-xs dev-videourl-submit">أضف</button>
                                 </div>
                             </div>
 
@@ -344,11 +339,11 @@
                         <span><span class="dev-image-count">0</span> صورة</span>
 
                     </li>
-                    {#<li class="filterActive videosFilter">
+                    <li class="filterActive videosFilter">
 
                         <span><span class="dev-video-count">0</span> فيديو</span>
 
-                    </li>#}
+                    </li>
 
                 </ul>
 
@@ -453,8 +448,8 @@
     </div>#}
 {% endset %}
 {% block javascripts %}
-    
-    
+
+
     <div id="iframeModal" class="modal fade">
        <div class="modal-dialog">
            <div class="modal-content">
@@ -594,18 +589,21 @@
 
     <script>
         var googleStopSearch = 1;
+    var uploadImageUrl = '{{ path('recipe_upload_imageUrl') }}';
     var imageTempelate = '{{ imageTempelate|escape('js') }}';
     var cropButton = '{{ cropButton|escape('js') }}';
     var deleteButton = '{{ deleteButton|escape('js') }}';
     var uploadButton = '{{ uploadButton|escape('js') }}';
     var cropperPluginInitialized = false;
     var corsBroxy = "{{ path('ibtikar_glance_dashboard_media_get_external')}}";
-    var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':app.request.get('id'),'collectionType':'Recipe','room':room })}}";
-    var googleUploadImage = '{{ path('google_upload_image', {'documentId':app.request.get('id'), 'collectionType':'Recipe','room':room}) }}';
-    var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'all','documentId':app.request.get('id'),'collectionType':'Recipe','room':room})}}";
+    var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':'null','collectionType':'Recipe'})}}";
+    var googleUploadImage = '{{ path('google_upload_image', {'documentId':'null', 'collectionType':'Recipe'}) }}';
+    var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'all','documentId':'null','collectionType':'Recipe'})}}";
     var imageSortTemplate = '{{ imageSortTemplate|escape('js') }}';
+    var relatedMaterialSearchUrl = "{{ path('ibtikar_glance_dashboard_recipe_related_material_search')}}";
     var videoSearchTemplate = '{{ videoSearchTemplate|escape('js') }}';
-    var youtubeUploadVideo = '{{ path('ibtikar_glance_dashboard_media_youtube_upload_video',{'type':'video','documentId':app.request.get('id'),'collectionType':'Recipe','room':room}) }}';
+    var youtubeUploadVideo = '{{ path('ibtikar_glance_dashboard_media_youtube_upload_video',{'type':'video','documentId':'null','collectionType':'Recipe'}) }}';
+    var validateVideoUrl = '{{ path('youtube_validate_videoUrl') }}';
     var relatedMaterialDeleteUrl = '{{ path('ibtikar_glance_dashboard_recipe_related_material_delete') }}';
     var requestId = '{{ app.request.get('id') }}';
         var element;
@@ -629,19 +627,6 @@
     <script>
 
     function getTags() {
-        $('#recipe_tags').val($('#recipe_tagSelected').val());
-        $.ajax({
-            url: Tags,
-            success: function(data) {
-                $('[data-tag-input]').tokenfield({
-                    autocomplete: {
-                        source: data,
-                        delay: 50
-                    }
-                });
-            }
-        });
-        $('#recipe_tagsEn').val($('#recipe_tagEnSelected').val());
         $.ajax({
             url: Tags,
             success: function(data) {

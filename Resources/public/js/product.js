@@ -148,7 +148,7 @@ $(document).ready(function () {
 
     $('.image-editor').cropit({smallImage: 'allow',
         imageState: {
-            src: '/images/cover.jpg'
+//            src: '/images/cover.jpg'
         }
     });
 

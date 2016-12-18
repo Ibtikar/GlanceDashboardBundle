@@ -1158,4 +1158,19 @@ class Recipe  extends Publishable {
     {
         return $this->relatedRecipe;
     }
+
+    public function getRelatedRecipeJson(){
+        $array = array();
+        if($this->getRelatedRecipe()){
+            foreach($this->getRelatedRecipe() as $recipe){
+                $array[] = array(
+                            'id'=>$recipe->getId(),
+                            'text'=>$recipe->getTitle(),
+                            'img' =>$recipe->getDefaultCoverPhoto()?$recipe->getDefaultCoverPhoto()->getWebPath():""
+                        );
+            }
+
+        }
+        return $array;
+    }
 }

@@ -71,7 +71,7 @@ function addImageToSortView(media) {
     $('.filesUploaded table tbody').append(
         imageSortTemplate
         .replace(/%image-id%/g, media.id)
-        .replace(/%image-name%|%title%/g, media.path)
+        .replace(/%image-name%|%title%/g, media.path?media.path:media.vid)
         .replace(/%image-src%/g,media.type == "image" ? '/'+media.imageUrl + '?flushCache=' + encodeURIComponent(new Date().getTime() + Math.random()):media.imageUrl)
         .replace(/%image-caption%/g, quoteattr(media.caption))
         .replace(/%check%/g, media.cover)
@@ -225,6 +225,7 @@ function checkGoogleHeight() {
 $(document).on('click','.dev-google-upload', function() {
     $('.cropit-preview-image').removeAttr('src');
     $('.cropit-preview-background').removeAttr('src');
+    type = 'upload';
     $('#image-cropper-modal').cropit('imageSrc',corsBroxy + "?url=" + encodeURI($('#dev-google input:checked').attr('data-url')));
     $('#uploadImg').modal('show');
     return false;
@@ -504,6 +505,31 @@ function refreshMediaSortView() {
 //////////////   google video search end   /////////////
 //////////////   google search end   ///////////////////
 
+    var delay = (function() {
+        var timer = 0;
+        return function(callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
+
+
+/**
+ * @author ahmad Gamal <a.gamal@ibtikar.net.sa>
+ */
+function valid_youtubeUrl(videoUrl) {
+    return videoUrl.match(/^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/);
+}
+/**
+ * @author ahmad Gamal <a.gamal@ibtikar.net.sa>
+ * on keyup only if the key is a letter or number only + backspace
+ */
+function isValidKey(keyCode) {
+    var invalidKeysCodes = [9, 32, 16, 17, 18, 20, 37, 38, 39, 40, 92,
+        144, 122, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123];
+
+    if($.inArray(keyCode, invalidKeysCodes) !== -1) return false;
+}
 function updateGallaryType(){
     $('[name="dev-gallary-type"]').each(
             function(){
@@ -567,7 +593,6 @@ jQuery(document).ready(function($) {
     $('.dev-youtube-submit').on('click', function() {
 
         var selectedVideos = YT.checked();
-        console.log(selectedVideos)
 
         if ($("#dev-search-gvideo-box").parent().hasClass('has-error')) {
             $('#error').remove();
@@ -619,9 +644,10 @@ jQuery(document).ready(function($) {
 
 
     })
-    $('#dev-search-gimage-box-small').on('keyup',function(e) {
+    $('.click-on-enter').on('keyup',function(e) {
                 if (e.which === 13) {
-                    $('#search-img-btn-small').trigger('click');
+                    $(this).parent().next().find('button').trigger('click');
+                    return false;
                 }
            });
     $(document).on('click', '#search-img-btn-small', function() {
@@ -698,7 +724,149 @@ jQuery(document).ready(function($) {
     });
 
 // external source start
+
+    $(document).on('click', '.dev-imageurl-submit', function() {
+        var errorContainer = $('.dev-recipe-imgeUrl-error');
+            var obj = $('input.dev-recipe-imgeUrl').val();
+            var imageSrc = $.trim(obj);
+            var errorContainer = $('.dev-recipe-imgeUrl-error');
+
+            if (imageSrc.length > 0) {
+                $('.dev-imageurl-submit').attr('disabled','disabled');
+                $.ajax({
+                    url: uploadImageUrl,
+                    method: 'post',
+                    data: {'imageUrl': imageSrc},
+                    success: function(data) {
+                        if (data == 'error') {
+                            showNotificationMsg(messages.wrongURL,'','error');
+                        }
+                        if (data == 'errorImageExtension') {
+                            showNotificationMsg(messages.imageTypeError,'','error');
+                        }
+                        if (data == 'errorImageSize') {
+                            showNotificationMsg(messages.imageDimensionsError,'','error');
+                        }
+                        if (data == 'errorImageFileSize') {
+                            showNotificationMsg(messages.largeImageError,'','error');
+                            $('.dev-recipe-imgeUrl').val('');
+                        }
+                        if (data == 'success') {
+                                type = 'upload';
+                                $('.cropit-preview-image').removeAttr('src');
+                                $('.cropit-preview-background').removeAttr('src');
+                                $('#image-cropper-modal').cropit('imageSrc',corsBroxy + "?url=" + encodeURI(imageSrc));
+                                $('#uploadImg').modal('show');
+//                                return false;
+//            $('.dev-imageurl-submit').attr('disabled','disabled');
+//            var imageUrl = [];
+//            imageUrl.push({url: imageSrc});
 //
+//            if (imageUrl.length != 0) {
+//                $.ajax({
+//                    url: googleUploadImage,
+//                    method: "POST",
+//                    data: {images: imageUrl},
+//                    success: function(data) {
+//                        $('.dev-recipe-imgeUrl').val('');
+//
+//                        if(typeof data.errors != "undefined" && data.errors.length != 0){
+//                            $.each(data.errors,function(key){
+//                                showNotificationMsg(key,'error');
+//                            });
+//                        }else if (data.status === 'success') {
+//
+//                            for (var i = 0; i < data.files.length; i++) {
+//                                addImageToSortView(data.files[i]);
+//                            }
+//                            showNotificationMsg(data.message, "", data.status);
+//                        }
+//                        $('.dev-imageurl-submit').removeAttr('disabled');
+//                    }
+//                });
+//            }
+
+                        }
+                        $('.dev-imageurl-submit').removeAttr('disabled');
+                        $('.dev-recipe-imgeUrl').val('');
+
+                    }
+                });
+            }
+
+        });
+///////////////////////////////////
+
+    $(document).on('click', '.dev-videourl-submit', function() {
+
+
+//////////////////////////////////////////////////////////////////////
+            if(typeof ytXhr !== "undefined")
+                ytXhr.abort();
+
+
+            var obj = $('input.dev-recipe-videoUrl').val();
+            var videoUrl = $.trim(obj);
+
+            if (videoUrl === "") {
+                errorContainer.removeClass('has-error');
+                $('.dev-videoUrl-overlay').hide();
+                return;
+            }
+
+            if (!valid_youtubeUrl(videoUrl)) {
+                showNotificationMsg(messages.wrongURL,'','error');
+                $('.dev-recipe-videoUrl').val('');
+                return;
+            }
+
+            var videoId = videoUrl.substr(videoUrl.indexOf("=") + 1);
+
+            if (videoId.indexOf("https://www.youtube") > -1) {
+                showNotificationMsg(messages.wrongURL,'','error');
+                $('.dev-recipe-videoUrl').val('');
+                return;
+            }
+
+            ytXhr = $.ajax({
+                url: validateVideoUrl,
+                method: 'post',
+                data: {'videoUrl': videoUrl},
+                success: function(data) {
+                    if (data == 'error') {
+                        showNotificationMsg(messages.wrongURL,'','error');
+                    } else {
+                            $('.dev-videourl-submit').attr('disabled','disabled');
+                            var videos = [];
+                            videos[0] = videoId;
+
+                            $.ajax({
+                                url: youtubeUploadVideo,
+                                method: "POST",
+                                data: {videos: videos},
+                                success: function(data) {
+                                    if (data.status === 'success') {
+                                        showNotificationMsg(data.message, "", data.status);
+                                        addImageToSortView(data.video);
+                                    }
+
+                                    $('.dev-recipe-videoUrl').val('');
+                                    $('.dev-videourl-submit').removeAttr('disabled');
+                                }
+                            });
+
+                    }
+                }
+            });
+//////////////////////////////////////////////////////////////////////
+    });
+
+
+
+
+
+
+
 // external source end
 
 

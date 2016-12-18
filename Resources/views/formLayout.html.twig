@@ -35,7 +35,10 @@
         var messages = {
             NotBlank: '{% trans from 'validators' %}This value should not be blank.{% endtrans %}',
             pleaseSelectOneImage: '{% trans %}pleaseSelectOneImage{% endtrans %}',
-
+            imageTypeError: '{% trans from 'validators' %}picture not correct.{% endtrans %}',
+            imageDimensionsError: '{% trans from 'validators' %}Image dimension must be more than 200*200{% endtrans %}',
+            wrongURL: '{% trans from 'validators' %}wrong URL{% endtrans %}',
+            largeImageError: '{% trans from 'validators' %}File size must be less than 4mb{% endtrans %}',
         };
     </script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/uniform.min.js')}}"></script>
@@ -81,25 +84,49 @@
                         return "الحد الأقصى هو "+e.maximum+" عناصر"
                     });#}
 
-            $('.select,.select-multiple').select2({
-                language:{
-                        maximumSelected: function(e){
-                            return "الحد الأقصى هو "+e.maximum+" عناصر"
-                        }
+        $('.select,.select-multiple').select2({
+            language:{
+                    maximumSelected: function(e){
+                        return "الحد الأقصى هو "+e.maximum+" عناصر"
                     }
+                }
+        });
+
+        $(".select-with-thumb").select2({
+            templateResult: addUserPic,
+            templateSelection: addUserPic,
+            language:{
+                    maximumSelected: function(e){
+                        return "الحد الأقصى هو "+e.maximum+" عناصر"
+                    }
+                }
             });
 
-            $(".select-with-thumb").select2({
-                templateResult: addUserPic,
-                templateSelection: addUserPic,
-                language:{
-                        maximumSelected: function(e){
-                            return "الحد الأقصى هو "+e.maximum+" عناصر"
-                        }
-                    }
-                });
 
-            $('[id$="Time"],[id$="Count"]').TouchSpin({
+    $(".select-ajax").select2({
+        ajax: {
+          url: function(){
+              return eval($(this).attr('ajax-url-var'));
+          },
+    dataType: 'json',
+    delay: 1000,
+    data: function (params) {
+      return {
+        q: params.term
+      };
+    },
+    processResults: function (data) {
+      return {
+        results: data
+      };
+    },
+    cache: true
+  },
+  escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+  minimumInputLength: 1,
+  templateResult: addUserPic
+});
+    $('[id$="Time"],[id$="Count"]').TouchSpin({
                 min: 0,
                 max: 1000,
                 verticalbuttons: true,
@@ -126,12 +153,13 @@
         if (!opt.id) {
             return opt.text;
         }
-        var optimage = $(opt.element).data('image');
+        var optimage = $(opt.element).data('image')?$(opt.element).data('image'):(opt.img?"/"+opt.img:null);
         if (!optimage) {
             return opt.text;
         } else {
+            var optText = $(opt.element).text()?$(opt.element).text():opt.text;
             var $opt = $(
-                    '<span class="userName"><img src="' + optimage + '" class="userPic" /> ' + $(opt.element).text() + '</span>'
+                    '<span class="userName"><img src="' + optimage + '" class="userPic" /> ' + optText + '</span>'
                     );
             return $opt;
         }
