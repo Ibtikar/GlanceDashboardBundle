@@ -52,8 +52,8 @@ class RecipeType extends AbstractType {
                 ->add('country', DocumentType::class, array('required' => false,'class' => 'IbtikarGlanceUMSBundle:Country', 'query_builder' => function($repo) {
                     return $repo->findCountrySorted();
                 },'placeholder' => 'اختار البلد', 'choice_label' => 'countryName', 'attr' => array('data-country' => true, 'class' => 'dev-country select')))                ->add('preparationTime', formType\TextType::class, array('required' => false, 'attr' => array()))
-                ->add('cookingTime', formType\TextType::class, array('required' => false, 'attr' => array()))
-                ->add('servingCount', formType\TextType::class, array('required' => false, 'attr' => array()))
+                ->add('cookingTime', formType\TextType::class, array('required' => false, 'attr' => array('data-rule-number'=>true)))
+                ->add('servingCount', formType\TextType::class, array('required' => false, 'attr' => array('data-rule-number'=>true)))
                 ->add('difficulty', formType\ChoiceType::class, array('required' => FALSE,
                     'choices' => Recipe::$difficultyMap,
                     'expanded' => true, 'placeholder' => false, 'empty_data' => null,'choice_translation_domain'=>'recipe'
@@ -66,10 +66,10 @@ class RecipeType extends AbstractType {
                     'choices' => array_flip(Recipe::$mealMap),
                     'multiple' => true, 'placeholder' => false, 'empty_data' => null,'choice_translation_domain'=>'recipe','attr' => array('data-maximum-selection-length'=> 3,'class' => 'select-multiple')
                 ));
-                if($options['type']=='edit'){
-                $builder->add('tagSelected', formType\HiddenType::class, array('mapped' => false, 'required' => FALSE, 'data' => $options['tagSelected']))
-                ->add('tagEnSelected', formType\HiddenType::class, array('mapped' => false, 'required' => FALSE, 'data' =>$options['tagEnSelected'] ));
-                }
+//                if($options['type']=='edit'){
+//                $builder->add('tagSelected', formType\HiddenType::class, array('mapped' => false, 'required' => FALSE, 'data' => $options['tagSelected']))
+//                ->add('tagEnSelected', formType\HiddenType::class, array('mapped' => false, 'required' => FALSE, 'data' =>$options['tagEnSelected'] ));
+//                }
                 $builder->add('keyIngredient', formType\ChoiceType::class, array('required' => FALSE,
                     'choices' => array_flip(Recipe::$keyIngredientMap),
                     'multiple' => true, 'placeholder' => false, 'empty_data' => null,'choice_translation_domain'=>'recipe','attr' => array('data-maximum-selection-length'=> 3,'class' => 'select-multiple')
