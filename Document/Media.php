@@ -45,6 +45,12 @@ class Media extends Document {
     private $recipe;
 
     /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Magazine", simple=true)
+     * @KeepReference
+     */
+    private $magazine;
+
+    /**
      * @MongoDB\String
      */
     private $captionAr;
@@ -113,8 +119,7 @@ class Media extends Document {
     private $vid;
 
     /**
-     * @Assert\File(maxSize="1835008", maxSizeMessage="File size must be less than 1mb", mimeTypes={"application/pdf", "application/vnd.ms-office", "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/excel", "application/x-excel", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword", "application/zip", "application/x-zip", "application/x-zip-compressed"}, mimeTypesMessage="file not correct.", groups={"contactMessageFile"})
-     * @Assert\Image(maxSize="1835008", maxSizeMessage="Image size must be less than 1mb", minWidth=200, minHeight=200, minWidthMessage="Image dimension must be more than 200*200", minHeightMessage="Image dimension must be more than 200*200", mimeTypes={"image/jpeg", "image/pjpeg", "image/png", "image/gif"}, mimeTypesMessage="picture extension not correct.", groups={"contactMessageImage"})
+     * @Assert\Image(maxSize="4194304", maxSizeMessage="Image size must be less than 4mb", minWidth=819, maxWidth = 819, minHeight=1091,maxHeight = 1091, minWidthMessage="Image dimension must be more than 819*1091", minHeightMessage="Image dimension must be more than 819*1091", minWidthMessage="Image dimension must be more than 819*1091", minHeightMessage="Image dimension must be more than 819*1091", mimeTypes={"image/jpeg", "image/pjpeg", "image/png", "image/gif"}, mimeTypesMessage="picture extension not correct.", groups={"Magazine"})
      * @Assert\File(maxSize="4194304", maxSizeMessage="File size must be less than 4mb", mimeTypes={"application/pdf", "application/vnd.ms-office", "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/excel", "application/x-excel", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword", "application/zip", "application/x-zip", "application/x-zip-compressed"}, mimeTypesMessage="file not correct.", groups={"file"})
      * @Assert\Image(maxSize="4194304", maxSizeMessage="Image size must be less than 4mb", minWidth=200, minHeight=200, minWidthMessage="Image dimension must be more than 200*200", minHeightMessage="Image dimension must be more than 200*200", mimeTypes={"image/jpeg", "image/pjpeg", "image/png"}, mimeTypesMessage="picture extension not correct.", groups={"product"})
      * @ImageValid(groups={"image","contactMessageImage"})
@@ -288,6 +293,8 @@ class Media extends Document {
 
         } else if ($this->getRecipe()) {
             $uploadDirectory .= '/recipe-file/' . $this->getRecipe()->getId();
+        } else if ($this->getMagazine()) {
+            $uploadDirectory .= '/magazine-file/' . $this->getMagazine()->getId();
         } else {
             if (!$this->getCreatedBy()) {
                 throw new \Exception('Please set the created by user.');
@@ -737,5 +744,27 @@ class Media extends Document {
     public function getVid()
     {
         return $this->vid;
+    }
+
+    /**
+     * Set magazine
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Magazine $magazine
+     * @return self
+     */
+    public function setMagazine(\Ibtikar\GlanceDashboardBundle\Document\Magazine $magazine)
+    {
+        $this->magazine = $magazine;
+        return $this;
+    }
+
+    /**
+     * Get magazine
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\Magazine $magazine
+     */
+    public function getMagazine()
+    {
+        return $this->magazine;
     }
 }

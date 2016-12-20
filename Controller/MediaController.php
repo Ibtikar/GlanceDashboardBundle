@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Ibtikar\GlanceDashboardBundle\Document\Media;
 use Symfony\Component\HttpFoundation\File\File;
 use Ibtikar\GlanceDashboardBundle\Form\Type\MediaType;
+use Symfony\Component\Filesystem\Filesystem;
 
 class MediaController extends BackendController
 {
@@ -85,6 +86,8 @@ class MediaController extends BackendController
                             'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                             'product' => null,
                             'subproduct' => null,
+                            'recipe' => null,
+                            'magazine' => null,
                             'collectionType' => $collectionType,
                             'ProfilePhoto' => TRUE
                         ));
@@ -95,6 +98,8 @@ class MediaController extends BackendController
                             'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                             'product' => null,
                             'subproduct' => null,
+                            'recipe' => null,
+                            'magazine' => null,
                             'collectionType' => $collectionType,
                             'coverPhoto' => TRUE
                         ));
@@ -158,7 +163,7 @@ class MediaController extends BackendController
             }
         }
         if ($tempPath) {
-            $fileSystem = new \Symfony\Component\Filesystem\Filesystem();
+            $fileSystem = new Filesystem();
             $fileSystem->remove($media->getTempPath());
         }
         $error = $this->trans('failed operation');
@@ -197,7 +202,7 @@ class MediaController extends BackendController
         if (isset($fileMedia['file']) && $fileMedia['file']) {
             $fileData = explode('base64,', $fileMedia['file']);
             $imageString = base64_decode($fileData[1]);
-            $fileSystem = new \Symfony\Component\Filesystem\Filesystem();
+            $fileSystem = new Filesystem();
             if ($imageString) {
                 $dm = $this->get('doctrine_mongodb')->getManager();
                 $media = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->find($id);
@@ -218,6 +223,13 @@ class MediaController extends BackendController
                     }
                 }
 
+                if ($media->getMagazine()) {
+                    $securityContext = $this->get('security.authorization_checker');
+                    if (!$securityContext->isGranted('ROLE_MAGAZINE_EDIT') && !$securityContext->isGranted('ROLE_ADMIN')) {
+                        return $this->getAccessDeniedResponse();
+                    }
+                }
+
                 $imageRandomName = uniqid();
                 $uploadDirectory = $media->getUploadRootDir() . '/temp/';
                 $fileSystem->mkdir($uploadDirectory, 0755);
@@ -233,9 +245,21 @@ class MediaController extends BackendController
 
                     $uploadedFile = new \Symfony\Component\HttpFoundation\File\UploadedFile($uploadPath, $imageRandomName, null, null, 0, true);
                     $media->setFile($uploadedFile);
+                    $validationGroup = array($collectionType);
+                    $validator = $this->get('validator');
+                    $errors = $validator->validate($media,null, $validationGroup);
+                    if(count($errors) > 0){
+                    if ($tempUrlPath) {
+                        $fileSystem = new Filesystem();
+                        $fileSystem->remove($tempUrlPath);
+                    }
+                    return new JsonResponse(array('status' => 'error',  'message' => $errors->first()->getMessage()));
+
+                    }
+
                     $dm->flush();
                     if ($tempUrlPath) {
-                        $fileSystem = new \Symfony\Component\Filesystem\Filesystem();
+                        $fileSystem = new Filesystem();
                         $fileSystem->remove($tempUrlPath);
                     }
                     return new JsonResponse(array('status' => 'success', 'media' => $this->prepareMedia($media,$collectionType), 'message' => $this->trans('upload successfuly')));
@@ -326,40 +350,52 @@ class MediaController extends BackendController
                 if ($reponse) {
                     return $reponse;
                 }
-            $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
-                'type' => $type,
-                'createdBy.$id' => new \MongoId($this->getUser()->getId()),
-                'product' => new \MongoId($documentId),
-                'subproduct' => null,
-                'collectionType' => $collectionType
-            ));
-            }
-            if ($collectionType === 'SubProduct') {
+                $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                    'type' => $type,
+                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                    'product' => new \MongoId($documentId),
+                    'subproduct' => null,
+                    'collectionType' => $collectionType
+                ));
+            } elseif ($collectionType === 'SubProduct') {
                 $reponse = $this->getInvalidResponseForSubProduct(new \MongoId($documentId), '', 'list');
                 if ($reponse) {
                     return $reponse;
                 }
-            $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
-                'type' => $type,
-                'createdBy.$id' => new \MongoId($this->getUser()->getId()),
-                'subproduct' => new \MongoId($documentId),
-                'product' => null,
-                'collectionType' => $collectionType
-            ));
-            }
-            if ($collectionType === 'Recipe') {
+                $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                    'type' => $type,
+                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                    'subproduct' => new \MongoId($documentId),
+                    'product' => null,
+                    'collectionType' => $collectionType
+                ));
+            } elseif ($collectionType === 'Recipe') {
                 $reponse = $this->getInvalidResponseForRecipe($documentId, $this->container->get('request_stack')->getCurrentRequest()->get('room'));
                 if ($reponse) {
                     return $reponse;
                 }
-            $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
-                'type' => $type == "all"?array('$in'=>array('image','video')):$type,
-                'createdBy.$id' => new \MongoId($this->getUser()->getId()),
-                'recipe' => new \MongoId($documentId),
-                'subproduct' => null,
-                'product' => null,
-                'collectionType' => $collectionType
-            ));
+                $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                    'type' => $type == "all" ? array('$in' => array('image', 'video')) : $type,
+                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                    'recipe' => new \MongoId($documentId),
+                    'subproduct' => null,
+                    'product' => null,
+                    'collectionType' => $collectionType
+                ));
+            } elseif ($collectionType === 'Magazine') {
+                $securityContext = $this->get('security.authorization_checker');
+                if (!$securityContext->isGranted('ROLE_MAGAZINE_EDIT') && !$securityContext->isGranted('ROLE_ADMIN')) {
+                    return $this->getAccessDeniedResponse();
+                }
+                $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                    'type' => 'image',
+                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                    'magazine' => new \MongoId($documentId),
+                    'subproduct' => null,
+                    'product' => null,
+                    'recipe' => null,
+                    'collectionType' => $collectionType
+                ));
             }
         } else {
             $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
@@ -367,6 +403,7 @@ class MediaController extends BackendController
                 'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                 'product' => null,
                 'recipe' => null,
+                'magazine' => null,
                 'subproduct' => null,
                 'collectionType' => $collectionType
             ));
@@ -819,7 +856,7 @@ class MediaController extends BackendController
         return $data;
     }
 
-        public function deleteVideoAction(Request $request ,$id) {
+    public function deleteVideoAction(Request $request ,$id) {
         $dm = $this->get('doctrine_mongodb')->getManager();
         /* @var $document Media */
 

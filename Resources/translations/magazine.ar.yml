@@ -1,0 +1,40 @@
+# #############Labels############
+'Name': 'الاسم بالعربية'
+'NameEn': 'الاسم بالإنجليزية'
+'name': 'الاسم بالعربية'
+'nameEn': 'الاسم بالإنجليزية'
+'Name en': 'الاسم بالإنجليزية'
+'Link': 'الرابط'
+'createdAt': تاريخ الإنشاء
+'Created at': تاريخ الإنشاء
+'createdBy': قام بالإنشاء
+'updatedAt': تاريخ التحديث
+'Updated at': تاريخ التحديث
+'image': 'الصوره'
+'coverPhoto': 'صورة المجله'
+'product': 'منتج'
+Created by:  قام بالإنشاء
+Updated by: 'قام بالتحديث'
+updatedBy: 'قام بالتحديث'
+'Cover photo': 'صوره المجله'
+'magazine': 'مجله'
+'Magazines': 'مجلات'
+'magazines': 'مجلات'
+
+# ############Messages############
+
+# ############Titles############
+Add new magazine: 'إدخال مجله جديده'
+'Edit Magazine': 'تعديل مجله'
+'edit magazine': 'تعديل مجله'
+'List Magazine': 'المجلات'
+'list Magazine': 'المجلات'
+Delete Magazine: 'حذف مجله'
+
+# ############Buttons############
+
+
+# #############General############
+
+'defaultCoverPhoto': 'صوره المجله'
+'Save': 'حفظ'

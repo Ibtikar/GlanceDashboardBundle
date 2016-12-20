@@ -149,6 +149,9 @@ class BackendController extends Controller {
         }
 
         $pageNumber = $request->query->get('page', 1);
+        if($pageNumber==0){
+          $pageNumber=1;
+        }
         if ($pageNumber < 1) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
@@ -537,15 +540,15 @@ class BackendController extends Controller {
                                                     <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">  ' . $document->$getfunction() . ' </a>
                                                 </div>';
                 }
-                elseif ($value == 'profilePhoto') {
-                    $image = $document->getProfilePhoto();
+                elseif ($value == 'profilePhoto' || $value == 'coverPhoto') {
+                    $image = $document->$getfunction();
                     if (!$image) {
                         $image = 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg';
                     } else {
                         $image = $image->getWebPath();
                     }
-                    $oneDocument[$value] = '<div class="media-left media-middle"><a href="javascript:void(0)">'
-                        . '<img src="/' . $image . '" class="img-lg" alt=""></a></div>';
+                    $oneDocument[$value] = '<div class="media-left media-middle">'
+                        . '<img src="/' . $image . '" class="img-lg" alt=""></div>';
                 } elseif ($document->$getfunction() instanceof \DateTime) {
                     $oneDocument[$value] = $document->$getfunction() ? $document->$getfunction()->format('Y-m-d') : null;
                 } elseif (is_array($document->$getfunction()) || $document->$getfunction() instanceof \Traversable) {

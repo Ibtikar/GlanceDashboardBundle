@@ -291,7 +291,7 @@
                                                     {% elseif field.type == "refereceImage"  %}
                                                         <td>
                                                             <div class="media-left media-middle">
-                                                                <a href="javascript:void(0)"><img src="{{ asset( attribute(attribute(object, field.propertyName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}" class="img-lg" alt=""></a>
+                                                              <img src="{{ asset( attribute(attribute(object, field.propertyName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}" class="img-lg" alt="">
                                                             </div>
                                                         </td>
                                                     {% elseif field.propertyName == "username"  %}

@@ -429,7 +429,7 @@ $(document).ready(function () {
 
             }else{
                 $('.dev-submit-image').attr('data-url', uploadUrl)
-                $('.dev-submit-image').attr('data-id', '')  
+                $('.dev-submit-image').attr('data-id', '')
             }
             var elementObject = $('#uploadImg .cropit-image-input');
             if (elementObject.val()) {
@@ -445,7 +445,7 @@ $(document).ready(function () {
 
                     showNotificationMsg(imageErrorMessages.sizeError, "", 'error');
 
-                } else if ($('#image-cropper-modal').cropit('imageSize').width < 200 || $('#image-cropper-modal').cropit('imageSize').heigth < 200) {
+                } else if ($('#image-cropper-modal').cropit('imageSize').width < 200 || $('#image-cropper-modal').cropit('imageSize').height < 200) {
 
                     showNotificationMsg(imageErrorMessages.imageDimension, "", 'error');
 
