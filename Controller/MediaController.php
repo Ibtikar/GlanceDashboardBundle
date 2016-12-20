@@ -359,7 +359,7 @@ class MediaController extends BackendController
                 'subproduct' => null,
                 'product' => null,
                 'collectionType' => $collectionType
-            ));
+            ),array('order' => 'ASC'));
             }
         } else {
             $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(

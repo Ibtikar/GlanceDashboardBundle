@@ -86,7 +86,7 @@ class RecipeType extends AbstractType {
                 ->add('relatedRecipe', formType\ChoiceType::class, array('multiple'=>true,'required' => FALSE,'mapped' => FALSE,
                     'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-ajax','ajax-url-var' => 'relatedMaterialSearchUrl')
                 ))
-                ->add('defaultCoverPhoto', formType\HiddenType::class,array('required' => true,'attr'=>array('data-msg-required'=>' ')))
+                ->add('defaultCoverPhoto', formType\HiddenType::class,array("mapped" => false,'required' => true,'attr'=>array('data-msg-required'=>' ')))
                 ->add('galleryType', formType\HiddenType::class)
                 ->add('media', formType\TextareaType::class, array('required' => FALSE, "mapped" => false,'attr'=>array('parent-class'=>'hidden')))
                 ->add('related', formType\TextareaType::class, array('required' => FALSE, "mapped" => false,'attr'=>array('parent-class'=>'hidden')))

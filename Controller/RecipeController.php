@@ -447,9 +447,11 @@ class RecipeController extends BackendController
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function editAction(Request $request)
-    {
+    public function editAction(Request $request) {
 
+        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Recipe', 'link' => $this->generateUrl('ibtikar_glance_dashboard_recipe_create')),
+        );
+        $breadCrumbArray = $this->preparedMenu($menus);
 
         if (!$this->getUser()) {
             return $this->getLoginResponse();
@@ -461,15 +463,15 @@ class RecipeController extends BackendController
             return new JsonResponse($result);
         }
         $dm = $this->get('doctrine_mongodb')->getManager();
-            $id = $request->get('id', '');
-            if ($id) {
-                $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($id);
-                if (!$recipe) {
-                    throw $this->createNotFoundException($this->trans('Wrong id'));
-                }
+        $id = $request->get('id', '');
+        if ($id) {
+            $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($id);
+            if (!$recipe) {
+                throw $this->createNotFoundException($this->trans('Wrong id'));
             }
+        }
         $tagSelected = $this->getTagsForDocument($recipe);
-        $tagSelectedEn = $this->getTagsForDocument($recipe,"en");
+        $tagSelectedEn = $this->getTagsForDocument($recipe, "en");
 
         $form = $this->createForm(RecipeType::class, $recipe, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
 
@@ -482,20 +484,73 @@ class RecipeController extends BackendController
             $form->handleRequest($request);
 
             if ($form->isValid()) {
-                $formData = $request->get('form');
+
+                $formData = $request->get('recipe');
+
+                if ($formData['related']) {
+                    $this->updateRelatedRecipe($recipe, $formData['related'], $dm);
+                }
+
+                $this->updateMaterialGallary($recipe, $formData['media'], $dm);
+
+                $tags = $formData['tags'];
+                $tagsEn = $formData['tagsEn'];
+
+                $recipe->setTags();
+                $recipe->setTagsEn();
+
+                if ($tags) {
+                    $tagsArray = explode(',', $tags);
+                    $tagsArray = array_unique($tagsArray);
+                    foreach ($tagsArray as $tag) {
+                        $tag = trim($tag);
+                        if (mb_strlen($tag, 'UTF-8') <= 330) {
+                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('name' => $tag));
+                            if (!$tagObject) {
+                                $NewTag = new Tag();
+                                $NewTag->setName($tag);
+                                $dm->persist($NewTag);
+                                $recipe->addTag($NewTag);
+                            } else {
+                                $recipe->addTag($tagObject);
+                            }
+                        }
+                    }
+                }
+                if ($tagsEn) {
+                    $tagsArray = explode(',', $tagsEn);
+                    $tagsArray = array_unique($tagsArray);
+                    foreach ($tagsArray as $tag) {
+                        $tag = trim($tag);
+                        if (mb_strlen($tag, 'UTF-8') <= 330) {
+                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('name' => $tag));
+                            if (!$tagObject) {
+                                $NewTag = new Tag();
+                                $NewTag->setName($tag);
+                                $dm->persist($NewTag);
+                                $recipe->addTagEn($NewTag);
+                            } else {
+                                $recipe->addTagEn($tagObject);
+                            }
+                        }
+                    }
+                }
+
                 $dm->flush();
+
 
                 $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
 
-                return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_recipe_list'), array(), true));
+                return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_' . strtolower($this->calledClassName) . '_list_' . $recipe->getStatus() . '_recipe'), array(), true));
             }
         }
 
         return $this->render('IbtikarGlanceDashboardBundle:Recipe:edit.html.twig', array(
-                'recipe' => $recipe,
-                'form' => $form->createView(),
-                'title' => $this->trans('Edit Recipe', array(), $this->translationDomain),
-                'translationDomain' => $this->translationDomain
+                    'recipe' => $recipe,
+                    'form' => $form->createView(),
+                    'title' => $this->trans('Edit Recipe', array(), $this->translationDomain),
+                    'translationDomain' => $this->translationDomain,
+                    'room' => $this->calledClassName,
         ));
     }
 

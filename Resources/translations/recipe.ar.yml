@@ -70,6 +70,7 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 
 # ############Titles############
 'Add new Recipe': 'إدخال وصفة جديد'
+'Edit Recipe': 'تعديل وصفة'
 'list Recipe': 'قائمه الوصفات'
 'recipes new': 'وصفات جديده'
 'recipes assigned to me': 'مسندة إلي'

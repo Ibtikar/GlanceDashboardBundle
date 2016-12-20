@@ -273,9 +273,34 @@ $(document).on("click",'.dev-add-related-material',function(){
         e.preventDefault();
             var $this = $(this);
 
-            $this.parents('li').remove();
-            var objArray = [];
-            $.each($('.dev-related-list .media'),function(){
+            if(document.location.pathname.indexOf('edit') >= 0){
+                $.ajax({
+                    url: relatedMaterialDeleteUrl,
+                    method: 'POST',
+                    data:{parent:requestId,child:$this.attr('data-related-material-id')},
+                    success: function(data) {
+                        if(data.status == "success"){
+                            $this.parents('li').remove();
+                            var objArray = [];
+                            $.each($('.dev-related-list .media'),function(){
+                                objArray.push({
+                                    'id':$(this).attr('data-related-material-id'),
+                                    'text':$(this).find('media-body').text().trim(),
+                                    'img':"/"+$(this).find('img').attr('src')
+                                });
+                            });
+                            $('#recipe_related').val(JSON.stringify(objArray));
+                            updateRelatedMaterial();
+                        }
+
+                        showNotificationMsg(data.message,"");
+
+                    }
+                });
+            }else{
+                $this.parents('li').remove();
+                var objArray = [];
+                $.each($('.dev-related-list .media'),function(){
                     objArray.push({
                         'id':$(this).attr('data-related-material-id'),
                         'text':$(this).find('media-body').text().trim(),
@@ -284,6 +309,7 @@ $(document).on("click",'.dev-add-related-material',function(){
                 });
                 $('#recipe_related').val(JSON.stringify(objArray));
                 updateRelatedMaterial();
+            }
     });
 
 
@@ -429,7 +455,7 @@ $(document).ready(function () {
 
             }else{
                 $('.dev-submit-image').attr('data-url', uploadUrl)
-                $('.dev-submit-image').attr('data-id', '')  
+                $('.dev-submit-image').attr('data-id', '')
             }
             var elementObject = $('#uploadImg .cropit-image-input');
             if (elementObject.val()) {
