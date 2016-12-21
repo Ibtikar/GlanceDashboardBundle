@@ -14,6 +14,10 @@ ibtikar_glance_dashboard_magazine_list:
     path: /list
     defaults: { _controller: IbtikarGlanceDashboardBundle:Magazine:list }
 
+ibtikar_glance_dashboard_magazine_publish:
+    path:  /ajax/publish
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Magazine:publish }
+
 ibtikar_glance_dashboard_magazine_delete:
     path: /delete
     defaults: { _controller: IbtikarGlanceDashboardBundle:Magazine:delete}

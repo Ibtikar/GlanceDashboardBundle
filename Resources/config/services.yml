@@ -29,6 +29,10 @@ services:
         class: Ibtikar\GlanceDashboardBundle\Service\RecipeOperations
         arguments: [ "@service_container" ]
 
+    document_operations:
+        class: Ibtikar\GlanceDashboardBundle\Service\DocumentPublishOperations
+        arguments: [ "@service_container" ]
+
     update_actions_users:
         class: Ibtikar\GlanceDashboardBundle\Service\UpdateActionsUsers
         tags:

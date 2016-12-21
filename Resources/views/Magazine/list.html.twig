@@ -10,3 +10,10 @@
                     <a class="btn btn-link btn-float has-text activeLink" href="javascript:void(0)"><i class="icon-table2"></i> <span> المجلات</span></a>
 
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var publisUrl="{{ path(prefixRoute|lower~'_publish')}}";
+    </script>
+{% endblock %}

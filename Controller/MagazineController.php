@@ -40,7 +40,7 @@ class MagazineController extends BackendController {
     {
         $this->listViewOptions->setDefaultSortBy("updatedAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
-        $this->listViewOptions->setActions(array("Edit", "Delete"));
+        $this->listViewOptions->setActions(array( "Delete"));
         $this->listViewOptions->setBulkActions(array("Delete"));
         $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Magazine:list.html.twig");
     }

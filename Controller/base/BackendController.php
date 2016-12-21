@@ -547,8 +547,9 @@ class BackendController extends Controller {
                     } else {
                         $image = $image->getWebPath();
                     }
-                    $oneDocument[$value] = '<div class="media-left media-middle">'
-                        . '<img src="/' . $image . '" class="img-lg" alt=""></div>';
+                    $oneDocument[$value] = '<div class="thumbnail small-thumbnail"><div class="thumb thumb-slide"><img alt="" src="/' . $image . '">
+                            <div class="caption"><span> <a data-popup="lightbox" class="btn btn-primary btn-icon" href="/' . $image . '"><i class="icon-zoomin3"></i></a>
+                                </span> </div>  </div> </div>';
                 } elseif ($document->$getfunction() instanceof \DateTime) {
                     $oneDocument[$value] = $document->$getfunction() ? $document->$getfunction()->format('Y-m-d') : null;
                 } elseif (is_array($document->$getfunction()) || $document->$getfunction() instanceof \Traversable) {
@@ -665,6 +666,136 @@ class BackendController extends Controller {
         }
 
         return new JsonResponse(array('status' => 'success', 'message' => $this->get('translator')->trans('done sucessfully')));
+    }
+
+
+    public function publishAction(Request $request)
+    {
+        if (!$this->getUser()) {
+            return $this->getLoginResponse();
+        }
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $securityContext = $this->get('security.authorization_checker');
+        $publishOperations = $this->get('document_operations');
+        if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_PUBLISH') && !$securityContext->isGranted('ROLE_ADMIN')) {
+            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
+            return new JsonResponse($result);
+        }
+
+        if ($request->getMethod() === 'GET') {
+            $id = $request->get('id');
+            if (!$id) {
+                return $this->getFailedResponse();
+            }
+
+            $recipe = $dm->getRepository($this->getObjectShortName())->findOneById($id);
+            if (!$recipe)
+                throw $this->createNotFoundException($this->trans('Wrong id'));
+
+            $currentPublishedLocations = array();
+            $locations = array();
+            foreach ($recipe->getPublishLocations() as $location) {
+                $currentPublishedLocations[] = $location->getSection();
+            }
+
+
+
+
+            $allowedLocations = $publishOperations->getAllowedLocations($recipe);
+
+            foreach ($allowedLocations as $location) {
+
+                $locations[] = $location;
+            }
+            $autoPublishDate = '';
+
+            if ($recipe->getAutoPublishDate()) {
+                $autoPublishDate = $recipe->getAutoPublishDate()->format('m/d/Y H:i A');
+            }
+
+
+            return $this->render('IbtikarGlanceDashboardBundle:Recipe:publishModal.html.twig', array(
+                    'autoPublishDate' => $autoPublishDate,
+                    'translationDomain' => $this->translationDomain,
+                    'locations' => $locations,
+                    'currentLocations' => $currentPublishedLocations,
+                    'document' => $recipe
+            ));
+        } else if ($request->getMethod() === 'POST') {
+
+            $recipe = $dm->getRepository($this->getObjectShortName())->findOneById($request->get('documentId'));
+            if (!$recipe) {
+                $result = array('status' => 'reload-table', 'message' => $this->trans('not done'));
+                return new JsonResponse($result);
+            }
+            $locations = $request->get('publishLocation', array());
+            if (!empty($locations)) {
+                $locations = $dm->getRepository('IbtikarGlanceDashboardBundle:Location')->findBy(array('id' => array('$in' => $request->get('publishLocation'))));
+            }
+
+            $recipeStatus = $recipe->getStatus();
+            $status = $request->get('status');
+            if ($status != $recipeStatus) {
+                $result = array('status' => 'reload-table', 'message' => $this->trans('not done'));
+                return new JsonResponse($result);
+            }
+
+
+            switch ($recipeStatus) {
+                case 'new':
+                    if ($request->get('publishNow')) {
+                        $publishResult = $publishOperations->publish($recipe, $locations);
+                    } else if ($request->get('autoPublishDate', '')) {
+                        $autoPublishDateString = $request->get('autoPublishDate', '');
+                        if (strlen(trim($autoPublishDateString)) > 0) {
+                            try {
+                                $autoPublishDate = new \DateTime($autoPublishDateString);
+                            } catch (\Exception $e) {
+                                $autoPublishDate = null;
+                            }
+                        }
+                        $publishResult = $publishOperations->autoPublish($recipe, $locations, $autoPublishDate);
+                    }
+                    break;
+                case 'publish':
+                    $publishResult = $publishOperations->managePublishControl($recipe, $locations);
+                    break;
+                case 'deleted':
+                    if ($request->get('publishNow')) {
+                        $publishResult = $publishOperations->publish($recipe, $locations, TRUE);
+                    } else if ($request->get('autoPublishDate', '')) {
+                        $autoPublishDateString = $request->get('autoPublishDate', '');
+                        if (strlen(trim($autoPublishDateString)) > 0) {
+                            try {
+                                $autoPublishDate = new \DateTime($autoPublishDateString);
+                            } catch (\Exception $e) {
+                                $autoPublishDate = null;
+                            }
+                        }
+                        $publishResult = $publishOperations->autoPublish($recipe, $locations, $autoPublishDate);
+                    }
+                    break;
+                case 'autopublish':
+                    if ($request->get('publishNow')) {
+                        $publishResult = $publishOperations->publish($recipe, $locations);
+                    } else if ($request->get('autoPublishDate', '')) {
+                        $autoPublishDateString = $request->get('autoPublishDate', '');
+                        if (strlen(trim($autoPublishDateString)) > 0) {
+                            try {
+                                $autoPublishDate = new \DateTime($autoPublishDateString);
+                            } catch (\Exception $e) {
+                                $autoPublishDate = null;
+                            }
+                        }
+                        $publishResult = $publishOperations->manageAutoPublishControl($recipe, $locations, $autoPublishDate);
+                    }
+                    break;
+            }
+
+
+
+            return new JsonResponse(array_merge($publishResult, $this->getTabCount()));
+        }
     }
 
     /**

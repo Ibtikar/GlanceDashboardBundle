@@ -10,7 +10,6 @@ use Ibtikar\GlanceDashboardBundle\Document\PublishLocation;
 use Ibtikar\GlanceDashboardBundle\Document\Publishable;
 use Ibtikar\GlanceUMSBundle\Document\Staff;
 use Ibtikar\GlanceDashboardBundle\Service\Redirect;
-use Ibtikar\GlanceDashboardBundle\Document\Recipe;
 
 /**
  * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
@@ -152,23 +151,21 @@ abstract class PublishOperations
 
         foreach ($locations as $location) {
             if (!$rePublish || $location->getIsSelectable()) {
-                 $this->publishInLocation($document, $location->getPublishedLocationObject($user), $location->getMaxNumberOfMaterials());
+                $this->publishInLocation($document, $location->getPublishedLocationObject($user), $location->getMaxNumberOfMaterials());
             }
         }
         $document->setPublishedAt(new \DateTime());
         $document->setPublishedBy($user);
         $document->setStatus(Recipe::$statuses['publish']);
-        $document->setAssignedTo(null);
 
 
         if (!$rePublish) {
             $this->showFrontEndUrl($document);
         }
 //        if (php_sapi_name() !== 'cli') {
-            if ($document instanceof \Ibtikar\GlanceDashboardBundle\Document\Recipe && $document->getStatus() == 'autopublish') {
-                $document->setAutoPublishDate(null);
-                $document->setAssignedTo(null);
-            }
+        if ($document instanceof \Ibtikar\GlanceDashboardBundle\Document\Recipe && $document->getStatus() == 'autopublish') {
+            $document->setAutoPublishDate(null);
+        }
 //        }
 
         $this->dm->flush();
@@ -249,7 +246,7 @@ abstract class PublishOperations
             $result->field('isSelectable')->notEqual(true);
         }
 
-        if(is_null($document->getDefaultCoverPhoto())){
+        if (is_null($document->getCoverPhoto())) {
             $result->field('requiredCoverImage')->notEqual(true);
         }
 
@@ -298,7 +295,7 @@ abstract class PublishOperations
         $document->setStatus(Recipe::$statuses['autopublish']);
         $document->setAssignedTo(null);
         $this->dm->flush();
-        return array("status" => 'success', "message" => $this->translator->trans('recipe will be published at %datetime%',array('%datetime%' => $document->getAutoPublishDate()->format('Y-m-d h:i A'))));
+        return array("status" => 'success', "message" => $this->translator->trans('recipe will be published at %datetime%', array('%datetime%' => $document->getAutoPublishDate()->format('Y-m-d h:i A'))));
     }
 
     /**
@@ -404,13 +401,12 @@ abstract class PublishOperations
             $this->addPublishLocation($document, $location->getPublishedLocationObject($this->getUser(), $autoPublishDate));
         }
 
-        $document->setAssignedTo(null);
         $document->setPublishedBy($this->getUser());
         $document->setAutoPublishDate($autoPublishDate);
 
         $this->dm->flush();
 
-        return array("status" => 'success', "message" => $this->translator->trans('recipe will be published at %datetime%',array('%datetime%' => $document->getAutoPublishDate()->format('Y-m-d h:i A'))));
+        return array("status" => 'success', "message" => $this->translator->trans('recipe will be published at %datetime%', array('%datetime%' => $document->getAutoPublishDate()->format('Y-m-d h:i A'))));
     }
 
     protected function validateToPublish(Publishable $document, array $locations)
@@ -447,8 +443,8 @@ abstract class PublishOperations
         }
     }
 
-
-    public function delete($recipe,$fromRoomName,$reason=NULL) {
+    public function delete($recipe, $fromRoomName, $reason = NULL)
+    {
 
         $userFrom = $this->container->get('security.token_storage')->getToken()->getUser();
 
@@ -474,6 +470,8 @@ abstract class PublishOperations
         return $isValid;
     }
 
-    public function validateDelete($recipe) {
+    public function validateDelete($recipe)
+    {
+
     }
 }

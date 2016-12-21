@@ -290,8 +290,16 @@
                                                         </td>
                                                     {% elseif field.type == "refereceImage"  %}
                                                         <td>
-                                                            <div class="media-left media-middle">
-                                                              <img src="{{ asset( attribute(attribute(object, field.propertyName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}" class="img-lg" alt="">
+                                                            <div class="thumbnail small-thumbnail">
+                                                                        <div class="thumb thumb-slide">
+                                                                            <img alt="" src="{{ asset( attribute(attribute(object, field.propertyName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}">
+                                                                            <div class="caption">
+                                                                                <span>
+                                                                                    <a data-popup="lightbox" class="btn btn-primary btn-icon" href="{{ asset( attribute(attribute(object, field.propertyName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}"><i class="icon-zoomin3"></i></a>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+
                                                             </div>
                                                         </td>
                                                     {% elseif field.propertyName == "username"  %}
@@ -348,7 +356,12 @@
                                                                             <i class="icon-eye" data-popup="tooltip"  data-placement="right" title="{{('View One ' ~  listName|capitalize)|trans({},translationDomain)}}" ></i>
                                                                         </a>
                                                                     {% endif %}
+                                                                    {% elseif action == "Publish" %}
+                                                                    {% if is_granted('ROLE_' ~ listName|upper ~'_PUBLISH') or is_granted('ROLE_ADMIN')%}
+                                                                            <a href="javascript:void(0)" data-toggle="modal"  class="btn btn-defualt dev-publish-document" data-id="{{ object.getId() }}"><i class="icon-share" data-placement="right"  data-popup="tooltip" title="{{('publish ' ~  sublistName)|trans({},translationDomain)}}"></i></a>
+                                                                    {% endif %}
                                                                 {%endif%}
+
 
                                                             {% endfor %}
                                                             {#<a tabindex="0" class="btn btn-defualt" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="  هل ترغب في ايقاف الموظف  " data-html="true"
@@ -411,6 +424,8 @@
                     var toggleButtonColor = '#D6494C';
                     var ajaxData = '{{path(prefixRoute|lower~"_list")}}';
                     var changeListColumnsUrl = "{{path(prefixRoute|lower~'_change_list_columns')}}";
+                    var publishErrorMessage= "{% trans from translationDomain%}you must change time{% endtrans %}"
+
 
                 </script>
 {#                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/app.js') }}"></script>#}
@@ -436,6 +451,10 @@
 
                 <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/dragula.min.js')}}"></script>
                 <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/extension_dnd.js')}}"></script>
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/media/fancybox.min.js')}}"></script>
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_thumbnails.js')}}"></script>
+
+
 {#                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/notifications/pnotify.min.js')}}"></script>#}
 
 
