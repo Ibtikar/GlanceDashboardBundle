@@ -20,7 +20,6 @@ class MagazineController extends BackendController {
     protected function configureListColumns() {
         $this->allListColumns = array(
             "name" => array(),
-            "nameEn" => array(),
             "coverPhoto" => array("type" => "refereceImage", 'isSortable' => FALSE),
             "createdAt" => array("type" => "date"),
             "updatedAt" => array("type" => "date"),
