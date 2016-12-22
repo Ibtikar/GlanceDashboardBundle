@@ -11,16 +11,14 @@ use Ibtikar\GlanceDashboardBundle\Document\Publishable;
 
 /**
  * @MongoDB\hasLifeCycleCallbacks
- * @MongoDB\Document(repositoryClass="Ibtikar\GlanceDashboardBundle\Document\RecipeRepository")
+ * @MongoDB\Document(repositoryClass="Ibtikar\GlanceDashboardBundle\Document\MagazineRepository")
  */
 class Magazine extends Publishable
 {
 
     public static $statuses = array(
         "new" => "new",
-        "deleted" => "deleted",
         "publish" => "publish",
-        "autopublish" => "autopublish"
     );
 
     /**
