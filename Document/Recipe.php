@@ -756,7 +756,11 @@ class Recipe  extends Publishable {
      */
     public function setCourse($course)
     {
-        $this->course = $course;
+        $courese = array();
+        foreach ($course as $value) {
+            $courese[$value] = $value;
+        }
+        $this->course = $courese;
         return $this;
     }
 
@@ -778,7 +782,11 @@ class Recipe  extends Publishable {
      */
     public function setMeal($meal)
     {
-        $this->meal = $meal;
+        $meals = array();
+        foreach ($meal as $mealType) {
+            $meals[$mealType] = $mealType;
+        }
+        $this->meal = $meals;
         return $this;
     }
 
@@ -800,7 +808,11 @@ class Recipe  extends Publishable {
      */
     public function setKeyIngredient($keyIngredient)
     {
-        $this->keyIngredient = $keyIngredient;
+        $ingrediant = array();
+        foreach ($keyIngredient as $value) {
+            $ingrediant[$value] = $value;
+        }
+        $this->keyIngredient = $ingrediant;
         return $this;
     }
 
@@ -1185,7 +1197,7 @@ class Recipe  extends Publishable {
     {
         return $this->hideEnglishContent;
     }
-    
+
     public function getRelatedRecipeJson(){
         $array = array();
         if($this->getRelatedRecipe()){
