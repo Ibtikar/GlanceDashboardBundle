@@ -1,0 +1,19 @@
+{% extends  'IbtikarGlanceDashboardBundle:List:baseList.html.twig' %}
+
+
+{% block statistic %}
+    <span class="label bg-number heading-text"><span class="dev-document-count">{{total}}</span> {% trans from translationDomain %}magazine{% endtrans %}</span>
+{% endblock %}
+
+{% block breadCrumb %}
+                    <a class="btn btn-link btn-float has-text" href="{{path('ibtikar_glance_dashboard_magazine_create')}}"><i class="icon-add"></i><span>إدخال مجله</span></a>
+                    <a class="btn btn-link btn-float has-text activeLink" href="javascript:void(0)"><i class="icon-table2"></i> <span> المجلات</span></a>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var publisUrl="{{ path(prefixRoute|lower~'_publish')}}";
+    </script>
+{% endblock %}

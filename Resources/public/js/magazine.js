@@ -45,10 +45,8 @@ function refreshImages(){
                             .replace(/%image-id%/g, media.id)
                             .replace(/%name%/g, 'coverPhoto')
                             .replace(/%arabicName%/g, imageErrorMessages.coverPhoto)
-                            .replace(/%image-delete-url%/g, media.deleteUrl)
                             .replace(/%uploadButton%/g, '')
                             .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
-                            .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
                     $('#dev-coverPhoto').closest('tr').replaceWith(temepelate);
                     $('[data-popup="popover"]').popover();
 
@@ -64,40 +62,10 @@ function refreshImages(){
                                     .replace(/%name%/g, 'coverPhoto')
                                     .replace(/%arabicName%/g, imageErrorMessages.coverPhoto)
                                     .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, 'coverPhoto'))
-                                    .replace(/%cropButton%/g, '')
-                                    .replace(/%deleteButton%/g, '');
+                                    .replace(/%cropButton%/g, '');
                              $('#dev-coverPhoto').replaceWith(temepelate);
                 }
-                if (data.profilePhoto) {
-                    var media = data.profilePhoto;
-                    var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
-                            .replace(/%image-id%/g, media.id)
-                            .replace(/%name%/g, 'profilePhoto')
-                            .replace(/%arabicName%/g, imageErrorMessages.profilePhoto)
 
-                            .replace(/%image-delete-url%/g, media.deleteUrl)
-                            .replace(/%uploadButton%/g, '')
-                            .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
-                            .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
-                    $('#dev-profilePhoto').closest('tr').replaceWith(temepelate);
-                    $('[data-popup="popover"]').popover();
-
-
-                    // Tooltip
-                    $('[data-popup="tooltip"]').tooltip({
-                        trigger: 'hover'
-                    });
-
-                }else{
-                     var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
-                                    .replace(/%image-id%/g, '')
-                                    .replace(/%name%/g, 'profilePhoto')
-                                    .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, 'profilePhoto'))
-                                    .replace(/%arabicName%/g, imageErrorMessages.profilePhoto)
-                                    .replace(/%cropButton%/g, '')
-                                    .replace(/%deleteButton%/g, '');
-                             $('#dev-profilePhoto').replaceWith(temepelate);
-                }
             }
         }
 
@@ -155,7 +123,8 @@ $(document).ready(function () {
 
 
     $('#image-cropper-modal').cropit({
-        smallImage: 'allow',
+        smallImage: 'stretch',
+        minZoomstring:'fill',
         imageBackground: true,
         imageBackgroundBorderWidth: 30,
         onImageLoaded: function () {
@@ -165,6 +134,7 @@ $(document).ready(function () {
             } else if (type == 'crop') {
                 $('.dev-submit-image').attr('data-url', element.attr('data-crop-url'))
                 $('.dev-submit-image').attr('data-id', element.attr('id'))
+                uploadUrl=element.attr('data-crop-url');
 
             }
             var elementObject = $('#uploadImg .cropit-image-input');
@@ -174,41 +144,46 @@ $(document).ready(function () {
                         file = value.toLowerCase(),
                         extension = file.substring(file.lastIndexOf('.') + 1);
 
-                if ($.inArray(extension, ['jpeg', 'jpg', 'png']) == -1) {
+                if ($.inArray(extension, ['jpeg', 'jpg', 'png', 'gif']) == -1) {
                     showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
 
                 } else if (elementObject.attr('data-size') > (4 * 1024 * 1024)) {
 
                     showNotificationMsg(imageErrorMessages.sizeError, "", 'error');
 
-                } else if ($('#image-cropper-modal').cropit('imageSize').width < 200 || $('#image-cropper-modal').cropit('imageSize').height < 200) {
+                } else if ($('#image-cropper-modal').cropit('imageSize').width != 819 || $('#image-cropper-modal').cropit('imageSize').height != 1091) {
 
                     showNotificationMsg(imageErrorMessages.imageDimension, "", 'error');
 
                 } else {
+                    uploadImageToServer($('.cropit-preview-image').attr('src'), uploadUrl);
 
-                    $('#uploadImg').modal('show');
+
                 }
             }
 
         }, onImageError: function () {
-            $('#uploadImg').modal('hide');
             showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
         },
-        onFileReaderError: function(){
-            $('#uploadImg').modal('hide');
+        onFileReaderError: function () {
             showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
         }
 
-    })
+    });
+
     $(document).on('click', '.dev-submit-image', function () {
-        var imageFile = $('#image-cropper-modal').cropit('export')
+        var imageFile = $('#image-cropper-modal').cropit('export');
+        uploadImageToServer(imageFile, $(this).attr('data-url'))
+
+    });
+
+    function uploadImageToServer(imageFile, url) {
         var formData = new FormData();
         formData.append("media[file]", imageFile);
         $('.dev-crop-spinner').show();
         $('.dev-submit-image').hide();
         $.ajax({
-            url: $(this).attr('data-url') + '?imageType=' + name,
+            url: url + '?imageType=' + name,
             type: 'POST',
             data: formData,
 //            async: false,
@@ -216,8 +191,8 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (data) {
-                if(data.status=='login'){
-                            window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
+                if (data.status == 'login') {
+                    window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
                 }
                 else if (data.status == 'success') {
                     var media = data.media;
@@ -228,62 +203,23 @@ $(document).ready(function () {
                             .replace(/%arabicName%/g, imageErrorMessages[name])
                             .replace(/%uploadButton%/g, '')
                             .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
-                            .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
                     element.closest('tr').replaceWith(temepelate);
                     showNotificationMsg(data.message, "", data.status);
-                    $('#uploadImg').modal('hide');
-                    $('[data-popup="popover"]').popover();
+                    $('#form_defaultCoverPhoto').val(media.id)
+                } else {
+                    if (typeof data.message != 'undefined') {
+                        showNotificationMsg(data.message, "", 'error');
+                    } else {
+                        showNotificationMsg(imageErrorMessages.generalError, "", 'error');
+                    }
 
-
-                    // Tooltip
-                    $('[data-popup="tooltip"]').tooltip({
-                        trigger: 'hover'
-                    });
-
-                }else{
-                    $('#uploadImg').modal('hide');
-                    showNotificationMsg(imageErrorMessages.generalError, "", 'error');
                     refreshImages();
                 }
-                $('.dev-crop-spinner').hide();
-                $('.dev-submit-image').show();
             }
 
         });
-    });
+    }
 
-    $(document).on('click', '.dev-delete-btn', function (e) {
-        var $this = $(this);
-        var closestTr = $this.parents('[role="tooltip"]').prev().closest('tr');
-        var closestTd = $this.parents('[role="tooltip"]').prev().closest('td');
-        tdLoadingToggle(closestTd);
-        $.ajax
-                ({
-                    'dataType': 'json',
-                    'url': $this.parents('[role="tooltip"]').prev().data('href'),
-                    'success': function (data) {
-                        if(data.status=='login'){
-                            window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
-                        }
-                        else if (data.type == 'success') {
-                            var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
-                                    .replace(/%image-id%/g, '')
-                                    .replace(/%name%/g, (closestTr.attr('id')).replace(/dev-/g,''))
-                                    .replace(/%arabicName%/g, imageErrorMessages[(closestTr.attr('id')).replace(/dev-/g,'')])
-                                    .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, (closestTr.attr('id')).replace(/dev-/g,'')))
-                                    .replace(/%cropButton%/g, '')
-                                    .replace(/%deleteButton%/g, '');
-                            closestTr.replaceWith(temepelate);
-                            showNotificationMsg(data.message, "", data.status);
-
-                        }else{
-                            showNotificationMsg(imageErrorMessages.generalError, "", 'error');
-                            refreshImages();
-                        }
-                        tdLoadingToggle(closestTd);
-                    }
-                });
-    })
     $(document).on('click', '.dev-crop-images', function () {
 //        type = 'crop';
 //        name = $(this).closest('td').attr('data-name');

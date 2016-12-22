@@ -7,16 +7,16 @@
 
 
     {{ form_start(form)}}
+    {{ form_errors(form)}}
 
 
 
     <div class="row">
-  {% set deleteAttrs = popover_factory(deletePopoverConfig is defined?deletePopoverConfig:[]) %}
 
         <div class="col-md-12">
 
             <h5>ادخل
-                الصور المطلوبة
+                الصوره المطلوبة
             </h5>
 
 
@@ -24,14 +24,14 @@
                 <table class="table table-bordered">
 
                     <tbody>
-                        <tr id="dev-profilePhoto">
+                        <tr id="dev-coverPhoto">
                             <td style="width: 150px">
 
                                 <div class="thumbnail">
                                     <div class="thumb thumb-slide">
 
-                                        {% if profileImage is not empty %}
-                                            <img src="{{ asset(profileImage.getWebPath())}}" alt="">
+                                        {% if coverImage is not empty %}
+                                            <img src="{{ asset(coverImage.getWebPath())}}" alt="">
 
                                         {% else %}
                                             <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
@@ -39,8 +39,8 @@
                                         {% endif %}
                                         <div class="caption">
                                             <span>
-                                                {% if profileImage is not empty %}
-                                                    <a href="{{ asset(profileImage.getWebPath())}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                                                {% if coverImage is not empty %}
+                                                    <a href="{{ asset(coverImage.getWebPath())}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
 
                                                 {% else %}
                                                     <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
@@ -53,19 +53,19 @@
                                 </div>
                             </td>
                             <td class="thumbnail-caption">
-                                <h4>صوره المنتج الفرعى</h4>
+                                <h4>صوره المجله</h4>
                                 <ul class="text-grey-300">
                                     <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
-                                    <li> يجب الا تقل ابعاد الصورة عن 200*200 </li>
-                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                                    <li> يجب ان تكون ابعاد الصورة 819*1091 </li>
+
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG او GIF </li>
                                 </ul>
                             </td>
-                            <td style="width: 300px" data-name="profilePhoto">
-                                {% if profileImage is empty %}
+                            <td style="width: 300px" data-name="coverPhoto">
+                                {% if coverImage is empty %}
                                     <a class="btn btn-defualt upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
                                 {% endif %}
-                                <a class="btn btn-defualt dev-crop-images"   {% if profileImage is empty %}style="display: none"{%else%} data-image-id="{{ profileImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':profileImage.id,'collectionType':'SubProduct'})}}"{%endif%}   >  رفع الصورة </a>
-                                <a class="btn btn-defualt dev-trash-image" {% if profileImage is empty %}style="display: none" {%else%}  data-image-id="{{ profileImage.id }}"  data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': profileImage.id,'collectionType':'SubProduct'}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%} > <i class="icon-trash"></i></a>
+                                <a class="btn btn-defualt dev-crop-images"   {% if coverImage is empty %}style="display: none"{%else%} data-image-id="{{ coverImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':coverImage.id,'collectionType':'Magazine'})}}"{%endif%}   >   تغير الصورة </a>
 
 
                             </td>
@@ -96,7 +96,6 @@
 
 
 
-                {{ form_row(form.description) }}
 
 {#                {{ form_row(form.images) }}#}
 
@@ -109,7 +108,6 @@
 
 
 
-                {{ form_row(form.descriptionEn) }}
 
 
 
@@ -117,8 +115,9 @@
 
         </div>
     </div>
-{#                <hr/>#}
-{#  {{ form_row(form.product) }}#}
+                <hr/>
+  {{ form_row(form.link) }}
+  {{ form_row(form.defaultCoverPhoto) }}
 
     {{ form_end(form) }}
 
@@ -212,14 +211,13 @@
                                 <h4>   %arabicName%</h4>
                                 <ul class="text-grey-300">
                                     <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
-                                    <li> يجب الا تقل ابعاد الصورة عن 200*200 </li>
-                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                                    <li> يجب ان تكون ابعاد الصورة 819*1091 </li>
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG او GIF </li>
                                 </ul>
                             </td>
                             <td style="width: 300px" data-name="%name%">
                                 %uploadButton%
                                 %cropButton%
-                                %deleteButton%
 
 
                             </td>
@@ -231,11 +229,9 @@
         <a class="btn btn-defualt upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
      {% endset %}
      {% set cropButton %}
-        <a class="btn btn-defualt dev-crop-images"    data-image-id="%image-id%" data-crop-url="%crop-url%">  رفع الصورة </a>
+        <a class="btn btn-defualt dev-crop-images"    data-image-id="%image-id%" data-crop-url="%crop-url%">  تغير الصورة </a>
      {% endset %}
-     {% set deleteButton %}
-         <a class="btn btn-defualt dev-trash-image" data-image-id="%image-id%"  data-href = "%image-delete-url%"  %pop-block%> <i class="icon-trash"></i></a>
-         {% endset %}
+
 
 
 
@@ -261,30 +257,38 @@
 
         var imageTempelate = '{{ imageTempelate|escape('js') }}';
         var cropButton = '{{ cropButton|escape('js') }}';
-        var deleteButton = '{{ deleteButton|escape('js') }}';
         var uploadButton = '{{ uploadButton|escape('js') }}';
         var cropperPluginInitialized = false;
-        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':'null','collectionType':'SubProduct'})}}";
-        var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'image','documentId':'null','collectionType':'SubProduct'})}}";
+        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':'null','collectionType':'Magazine'})}}";
+        var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'image','documentId':'null','collectionType':'Magazine'})}}";
         var element;
         var name;
         var type;
         var imageErrorMessages={
             'imageExtension': '{% trans from 'validators'%}picture not correct.{%endtrans%}',
-            'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 200*200{%endtrans%}',
+            'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 819*1091{%endtrans%}',
             'sizeError': '{% trans from 'validators'%}File size must be less than 4mb{%endtrans%}',
             'generalError': '{% trans %}failed operation{%endtrans%}',
-            'profilePhoto': '{% trans from translationDomain %}sub profilePhoto{%endtrans%}',
+            'coverPhoto': '{% trans from translationDomain %}defaultCoverPhoto{%endtrans%}',
         }
+        {% if coverImage is not empty %}
+        $('#form_defaultCoverPhoto').val("{{ coverImage.id}}")
+        {% endif %}
         $(document).ready(function(){
                 $(".alert.alert-success").fadeTo(5000, 500).slideUp(500, function () {
                 $(".alert.alert-success").slideUp(500);
             });
+        $('body').on('preAjaxCallback',function(){
+        if($('#form_defaultCoverPhoto').val()==''){
+            showNotificationMsg("يجب إختيار صورة المجله", "", "error");
+            return false;
+        }
+    });
         })
 
 
     </script>
-    <script src="{{ asset('bundles/ibtikarglancedashboard/js/product.js') }}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/magazine.js') }}"></script>
 
 
 {% endblock %}

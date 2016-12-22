@@ -57,7 +57,7 @@ function submitAjaxForm() {
         success: function(data){
             if(typeof data != 'object') {
             var form = $(data).find('form.dev-page-main-form');
-            var messages = $(data).find('.alert-success,.alert-danger');
+            var messages = $(data).find('.alert-success');
 
 
             $('.alert').remove();

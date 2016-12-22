@@ -16,6 +16,10 @@ ibtikar_glance_dashboard_subproduct:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/subproduct.yml"
     prefix:   /subproduct
 
+ibtikar_glance_dashboard_magazine:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/magazine.yml"
+    prefix:   /magazine
+
 ibtikar_glance_dashboard_category:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/category.yml"
     prefix:   /category

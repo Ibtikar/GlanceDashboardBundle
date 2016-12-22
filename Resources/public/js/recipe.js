@@ -471,7 +471,7 @@ $(document).ready(function () {
 
                     showNotificationMsg(imageErrorMessages.sizeError, "", 'error');
 
-                } else if ($('#image-cropper-modal').cropit('imageSize').width < 200 || $('#image-cropper-modal').cropit('imageSize').heigth < 200) {
+                } else if ($('#image-cropper-modal').cropit('imageSize').width < 200 || $('#image-cropper-modal').cropit('imageSize').height < 200) {
 
                     showNotificationMsg(imageErrorMessages.imageDimension, "", 'error');
 

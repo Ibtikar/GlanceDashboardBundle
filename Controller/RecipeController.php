@@ -246,7 +246,7 @@ class RecipeController extends BackendController
             ));
         } else if ($request->getMethod() === 'POST') {
 
-            $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($request->get('recipeId'));
+            $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($request->get('documentId'));
             if (!$recipe) {
                 $result = array('status' => 'reload-table', 'message' => $this->trans('not done'));
                 return new JsonResponse($result);

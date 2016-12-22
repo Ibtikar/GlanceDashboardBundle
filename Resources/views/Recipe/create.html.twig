@@ -30,8 +30,22 @@
 
             <div class="tab-pane" id="english">
 
+                <div class="form-group has-feedback">
+                    <div class="col-md-12">
+                        <label class="checkbox-inline">
+                            {{ form_widget(form.hideEnglishContent) }}
+
+                            {% trans from translationDomain %}Hide english content{% endtrans %}
+                        </label>
+
+                    </div>
+                </div>
+                <hr>
 
                 {{ form_row(form.titleEn) }}
+
+
+{#                {{ form_row(form.hideEnglishContent) }}#}
 
                 {{ form_row(form.briefEn) }}
 

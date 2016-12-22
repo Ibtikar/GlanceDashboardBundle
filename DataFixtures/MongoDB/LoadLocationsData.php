@@ -22,6 +22,16 @@ class LoadLocationsData implements FixtureInterface {
         $location->setMaxNumberOfMaterials(1);
         $location->setRequiredCoverImage(true);
         $manager->persist($location);
+
+        $location = new Location();
+        $location->setPage('Home');
+        $location->setSection('home-magazine');
+        $location->setIsSelectable(TRUE);
+        $location->setType(array('magazine'));
+        $location->setMaxNumberOfMaterials(4);
+        $location->setRequiredCoverImage(true);
+        $manager->persist($location);
+
         $manager->flush();
     }
 

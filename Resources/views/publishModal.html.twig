@@ -1,0 +1,64 @@
+{% extends 'IbtikarGlanceDashboardBundle::baseModal.html.twig' %}
+
+{% block modalHeader %}
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 class="modal-title">{% if document.status=='publish'%}{{'republish'|trans({},translationDomain)}}{% else %}{{'publish'|trans({},translationDomain)}}{% endif%}</h3>
+{% endblock %}
+
+{% block modalBody %}
+
+        <form method="post" id="dev-publish-modal">
+
+            انت على وشك {% if document.status=='publish'%}{{'republish'|trans({},translationDomain)}}{% else %}{{'publish'|trans({},translationDomain)}}{% endif%} ({{ document.name}})، هل تريد إتمام النشر؟
+         <hr/>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class="control-label">اماكن  النشر</label>
+                    {% for location in locations %}
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"   value="{{location.id}}" class="styled" name="publishLocation[]" {% if (location.section in currentLocations) %} checked {% endif%}>
+                                {{location.section|trans({},'publishLocations')}}
+                            </label>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+            <input type="hidden" name="documentId" value="{{document.id}}"/>
+            <input type="hidden" name="status" value="{{document.status}}"/>
+        </form>
+
+
+
+{% endblock %}
+
+{% block modalFooter %}
+    <button type="button" class="btn btn-link" data-dismiss="modal">الغاء</button>
+
+    <button type="button" class="btn btn-primary dev-save-publish-location">
+        {{'publish'|trans({},translationDomain)}}
+    </button>
+{% endblock %}
+
+
+
+{% block javascript %}
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_modals.js')}}"></script>
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/date/moment.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/date/bootstrap-datetimepicker.min.js')}}" type="text/javascript"></script>
+    <script>
+        var toggleButtonColor = '#D6494C';
+        var dateToday = new Date();
+        var recipeStatus= "{{document.status}}";
+        $('.modal-dialog').addClass('modal-sm')
+        $(document).ready(function () {
+            $('input').uniform();
+
+
+        });
+
+
+    </script>
+{% endblock %}

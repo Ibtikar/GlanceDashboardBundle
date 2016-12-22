@@ -286,6 +286,11 @@ class Recipe  extends Publishable {
      */
     private $relatedRecipe;
 
+    /**
+     * @MongoDB\Boolean
+     */
+    protected $hideEnglishContent = false;
+
     public function __construct()
     {
         $this->tag = new \Doctrine\Common\Collections\ArrayCollection();
@@ -751,7 +756,11 @@ class Recipe  extends Publishable {
      */
     public function setCourse($course)
     {
-        $this->course = $course;
+        $courese = array();
+        foreach ($course as $value) {
+            $courese[$value] = $value;
+        }
+        $this->course = $courese;
         return $this;
     }
 
@@ -773,7 +782,11 @@ class Recipe  extends Publishable {
      */
     public function setMeal($meal)
     {
-        $this->meal = $meal;
+        $meals = array();
+        foreach ($meal as $mealType) {
+            $meals[$mealType] = $mealType;
+        }
+        $this->meal = $meals;
         return $this;
     }
 
@@ -795,7 +808,11 @@ class Recipe  extends Publishable {
      */
     public function setKeyIngredient($keyIngredient)
     {
-        $this->keyIngredient = $keyIngredient;
+        $ingrediant = array();
+        foreach ($keyIngredient as $value) {
+            $ingrediant[$value] = $value;
+        }
+        $this->keyIngredient = $ingrediant;
         return $this;
     }
 
@@ -1157,6 +1174,28 @@ class Recipe  extends Publishable {
     public function getRelatedRecipe()
     {
         return $this->relatedRecipe;
+    }
+
+    /**
+     * Set hideEnglishContent
+     *
+     * @param boolean $hideEnglishContent
+     * @return self
+     */
+    public function setHideEnglishContent($hideEnglishContent)
+    {
+        $this->hideEnglishContent = $hideEnglishContent;
+        return $this;
+    }
+
+    /**
+     * Get hideEnglishContent
+     *
+     * @return boolean $hideEnglishContent
+     */
+    public function getHideEnglishContent()
+    {
+        return $this->hideEnglishContent;
     }
 
     public function getRelatedRecipeJson(){
