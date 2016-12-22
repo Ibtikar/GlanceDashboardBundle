@@ -646,7 +646,8 @@ class BackendController extends Controller {
         $document = $dm->getRepository($this->getObjectShortName())->find($id);
 
         if (!$document || $document->getDeleted()) {
-            return $this->getFailedResponse();
+            return new JsonResponse(array('status' => 'failed', 'message' => $this->get('translator')->trans('failed operation'),'count'=>  $this->getDocumentCount()));
+
         }
 
         $errorMessage = $this->validateDelete($document);
@@ -665,9 +666,19 @@ class BackendController extends Controller {
             return $this->getFailedResponse();
         }
 
-        return new JsonResponse(array('status' => 'success', 'message' => $this->get('translator')->trans('done sucessfully')));
+        $count = $this->getDocumentCount();
+
+        return new JsonResponse(array('status' => 'success', 'message' => $this->get('translator')->trans('done sucessfully'),'count'=>$count));
     }
 
+    public function getDocumentCount()
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        return $dm->createQueryBuilder($this->getObjectShortName())
+                ->field('deleted')->equals(FALSE)
+                ->getQuery()
+                ->count();
+    }
 
     public function publishAction(Request $request)
     {
@@ -714,7 +725,7 @@ class BackendController extends Controller {
             }
 
 
-            return $this->render('IbtikarGlanceDashboardBundle:Recipe:publishModal.html.twig', array(
+            return $this->render('IbtikarGlanceDashboardBundle::publishModal.html.twig', array(
                     'autoPublishDate' => $autoPublishDate,
                     'translationDomain' => $this->translationDomain,
                     'locations' => $locations,
@@ -794,7 +805,7 @@ class BackendController extends Controller {
 
 
 
-            return new JsonResponse(array_merge($publishResult, $this->getTabCount()));
+            return new JsonResponse($publishResult);
         }
     }
 
@@ -840,6 +851,7 @@ class BackendController extends Controller {
         $data['errors'][$translator->trans('Already deleted.')] = $deletedIds;
         if (count($deletedIds) === count($ids)) {
             $data['message'] = str_replace('%success-count%', 0, $message);
+            $data['count']=  $this->getDocumentCount();
             return new JsonResponse($data);
         }
 
@@ -890,6 +902,7 @@ class BackendController extends Controller {
                 break;
             }
 
+            $data['count'] =  $this->getDocumentCount();
 
         $data['message'] = str_replace('%success-count%', count($successIds), $message);
         return new JsonResponse($data);

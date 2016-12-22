@@ -277,20 +277,7 @@ function  showDocumentPublishModal(element) {
     basicModal.show(publisUrl + '?id=' + element.attr('data-id'), function () {
         unblockPage();
         $(".dev-save-publish-location").click(function () {
-            if (recipeStatus != "publish") {
-                if ($('.open-datetimepicker').val() == '' && $('#publishNow').prop('checked') == false) {
-                    $('#dev-publish-modal').find('.alert.alert-danger').remove();
-                    $('#dev-publish-modal').prepend('<div class="alert alert-danger no-border"><button data-dismiss="alert" class="close" type="button">' +
-                            '<span>×</span><span class="sr-only">Close</span></button>' + publishErrorMessage
-                            + '</div>');
-                } else {
-                    saveInpublishLocation(basicModal, publisUrl);
-                }
-
-            } else {
                 saveInpublishLocation(basicModal, publisUrl);
-            }
-
         })
     });
 }
@@ -484,6 +471,8 @@ function bulkFunction() {
                 if (((data.success).length == numOfCheckedRecord || (data.success).length == 0) && pageNum != 1 && numOfRecords === numOfCheckedRecord) {
                     table.page(parseInt(table.page(), 10) - parseInt(1, 10));
                 }
+                $('.dev-document-count').html( data.count)
+
                 table.ajax.reload(function (){
                     for (message in data.errors) {
                         for (index in data.errors[message]) {
@@ -615,6 +604,7 @@ $(document).ready(function () {
                 if(json.status != "success"){
                     status = "error";
                 }
+                $('.dev-document-count').html( json.count)
                 showNotificationMsg(json.message,"",status);
                 unblockPage();
                 $('.dev-bulk-action-container').hide();

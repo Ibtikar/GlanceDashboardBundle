@@ -31,6 +31,7 @@ Add new magazine: 'إدخال مجله جديده'
 'List Magazine': 'المجلات'
 'list Magazine': 'المجلات'
 Delete Magazine: 'حذف مجله'
+'publish Magazine': 'نشر المجله'
 
 # ############Buttons############
 
@@ -39,3 +40,5 @@ Delete Magazine: 'حذف مجله'
 
 'defaultCoverPhoto': 'صوره المجله'
 'Save': 'حفظ'
+'publish': 'نشر'
+'republish': 'اعاده نشر'

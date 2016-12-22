@@ -34,7 +34,7 @@
                                 <h5 class="panel-title">    {{ list.listType == 'trash' ? 'View deleted items'|trans : ('List '~ listName)|trans({}, translationDomain)}} </h5>
                                 <div class="heading-elements">
                                     {% block statistic %}
-                                        <span class="label bg-number heading-text">{{total}} {% trans from translationDomain %}category{% endtrans %}</span>
+                                        <span class="label bg-number heading-text"><span class="dev-document-count">{{total}}</span> {% trans from translationDomain %}category{% endtrans %}</span>
 
                                     {% endblock %}
 

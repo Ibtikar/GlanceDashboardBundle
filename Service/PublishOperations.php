@@ -10,6 +10,7 @@ use Ibtikar\GlanceDashboardBundle\Document\PublishLocation;
 use Ibtikar\GlanceDashboardBundle\Document\Publishable;
 use Ibtikar\GlanceUMSBundle\Document\Staff;
 use Ibtikar\GlanceDashboardBundle\Service\Redirect;
+use Ibtikar\GlanceDashboardBundle\Document\Recipe;
 
 /**
  * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>

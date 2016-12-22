@@ -80,11 +80,13 @@ function showDeleteModal(clickedElement) {
     });
 }
 
+ var type='';
+
 function showBulkDeleteModal(clickedElementIfNotBulk) {
 
 
     var basicModal = new BasicModal();
-    var type='';
+
     $('tbody .dev-checkbox:checked').each(function(index,value){
         if(index==0){
            type=$(value).attr('data-type');
@@ -121,6 +123,8 @@ function recipeBulkFunction() {
     $('tr[data-id]').each(function () {
         $(this).removeClass('success').removeClass('danger').find('td:last').html('');
     });
+
+    $('#DocumentType').val(type);
 
     var $form = $('.dev-bulk-actions-form');
     var formData = $form.serializeArray();
