@@ -352,7 +352,7 @@ class MediaController extends BackendController
                 }
                 $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
                     'type' => $type,
-                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+//                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                     'product' => new \MongoId($documentId),
                     'subproduct' => null,
                     'collectionType' => $collectionType
@@ -364,7 +364,7 @@ class MediaController extends BackendController
                 }
                 $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
                     'type' => $type,
-                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+//                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                     'subproduct' => new \MongoId($documentId),
                     'product' => null,
                     'collectionType' => $collectionType
@@ -376,7 +376,7 @@ class MediaController extends BackendController
                 }
                 $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
                     'type' => $type == "all" ? array('$in' => array('image', 'video')) : $type,
-                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+//                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                     'recipe' => new \MongoId($documentId),
                     'subproduct' => null,
                     'product' => null,
@@ -389,7 +389,7 @@ class MediaController extends BackendController
                 }
                 $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
                     'type' => 'image',
-                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+//                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                     'magazine' => new \MongoId($documentId),
                     'subproduct' => null,
                     'product' => null,
