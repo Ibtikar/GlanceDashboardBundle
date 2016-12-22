@@ -381,7 +381,7 @@ class MediaController extends BackendController
                     'subproduct' => null,
                     'product' => null,
                     'collectionType' => $collectionType
-                ));
+                ),array('order' => 'ASC'));
             } elseif ($collectionType === 'Magazine') {
                 $securityContext = $this->get('security.authorization_checker');
                 if (!$securityContext->isGranted('ROLE_MAGAZINE_EDIT') && !$securityContext->isGranted('ROLE_ADMIN')) {
