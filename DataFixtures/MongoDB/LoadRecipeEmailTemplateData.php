@@ -82,7 +82,7 @@ class LoadRecipeEmailTemplateData implements FixtureInterface
                                                                                 <!-- title -->
                                                                                 <tr>
                                                                                     <td style="padding: 10px 20px;font-family: Helvetica, arial, sans-serif; font-size: 16px; color:%color%; text-align:right; line-height: 24px;">
-عنوان الوصفة
+العنوان
                                                                                     </td>
                                                                                 </tr>
                                                                                 <!-- end of title -->
