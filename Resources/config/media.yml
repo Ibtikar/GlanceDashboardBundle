@@ -14,7 +14,7 @@ ibtikar_glance_dashboard_media_delete:
 
 
 ibtikar_glance_dashboard_video_delete:
-    path:  /delete/{id}
+    path:  /delete/{id}/{collectionType}
     defaults: { _controller: IbtikarGlanceDashboardBundle:Media:deleteVideo }
 
 ibtikar_glance_dashboard_media_user_files:

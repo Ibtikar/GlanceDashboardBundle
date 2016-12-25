@@ -830,7 +830,7 @@ class MediaController extends BackendController
                 $dm->persist($videoObj);
                 $dm->flush();
                 $data['message']=  $this->trans('upload successfuly');
-                $data['video']=$this->getVideoArray($videoObj, null,$request->get('collectionType'));
+                $data['video'][]=$this->getVideoArray($videoObj, null,$request->get('collectionType'));
             }
         }
         return new JsonResponse($data);
@@ -838,10 +838,9 @@ class MediaController extends BackendController
 
 
     private function getVideoArray($video, $documentId = null,$collectionType='Recipe') {
-        $routeParameters = array('id' => $video->getId());
+        $routeParameters = array('id' => $video->getId(),'collectionType' => $collectionType);
         if($documentId) {
             $routeParameters['materialId'] = $documentId;
-            $routeParameters['collectionType'] = $collectionType;
         }
         $data = array(
             'id' => $video->getId(),
@@ -894,7 +893,7 @@ class MediaController extends BackendController
         } catch (\Exception $e) {
             return $$this->getNotificationResponse(null, array(), 'error');
         }
-        return $this->getNotificationResponse($this->trans('Deleted sucessfully.'));
+        return $this->getNotificationResponse($this->trans('done sucessfully'));
     }
 
 
