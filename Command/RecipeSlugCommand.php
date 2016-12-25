@@ -24,15 +24,15 @@ class RecipeSlugCommand extends ContainerAwareCommand
     {
         $dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
         $recipes = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findBy(array(
-//            'status' => \Ibtikar\GlanceDashboardBundle\Document\Recipe::$statuses['publish'],
+            'status' => \Ibtikar\GlanceDashboardBundle\Document\Recipe::$statuses['publish'],
         ));
         $successCount = 0;
         $failCount = 0;
 
         foreach ($recipes as $recipe) {
             if(!$recipe->getSlug()){
-        $slugAr = ArabicMongoRegex::slugify($recipe->getTitle()."-".  $recipe->getCreatedAt()->format('ymdHis'));
-        $slugEn = ArabicMongoRegex::slugify($recipe->getTitleEn()."-".$recipe->getCreatedAt()->format('ymdHis'));
+        $slugAr = ArabicMongoRegex::slugify($recipe->getTitle()."-".  $recipe->getPublishedAt()->format('ymdHis'));
+        $slugEn = ArabicMongoRegex::slugify($recipe->getTitleEn()."-".$recipe->getPublishedAt()->format('ymdHis'));
         $recipe->setSlug($slugAr);
         $recipe->setSlugEn($slugEn);
 
