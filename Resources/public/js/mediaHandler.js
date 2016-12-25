@@ -495,6 +495,7 @@ function refreshMediaSortView() {
             populateData();
             setUploadedImagesCount();
             setUploadedVideosCount();
+            selectedCover = $('input.dev-cover-img:checked').val()?$('input.dev-cover-img:checked').val():null;
             $('a[data-popup="popover"]').popover({
                 delay:{ "hide": 500 }
             });
@@ -538,12 +539,27 @@ function updateGallaryType(){
     $.uniform.update();
 }
 
+/**
+ * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
+ */
+function updateCheckedCover() {
+    if (selectedCover) {
+        $('input[type="radio"][value="' + selectedCover + '"]').prop('checked', true);
+    }
+}
+
 jQuery(document).ready(function($) {
 
+    drake.on('drop',function(elm){
+        setTimeout(function(){
+            updateCheckedCover();
+        },0);
+    });
 
     $(document).on('change', '.dev-cover-img', function() {
         if($(this).is(':checked')){
             $('[id$="_defaultCoverPhoto"]').val($(this).val());
+            selectedCover = $(this).val();
         }else{
             $('[id$="_defaultCoverPhoto"]').val("");
         }
@@ -622,10 +638,18 @@ jQuery(document).ready(function($) {
                         YT.uncheck();
                         showNotificationMsg(data.message, "", data.status);
                         YT.reset(true);
-                        addImageToSortView(data.video);
+
+                        $(data.video).each(function(){
+                            addImageToSortView(this);
+                        });
+
                         $('#GoogleImportVideos-modal').modal('hide')
 
                     }
+
+                    $('a[data-popup="popover"]').popover({
+                        delay:{ "hide": 500 }
+                    });
 
                     $('.dev-youtube-submit').removeAttr('disabled');
                 }
@@ -633,17 +657,6 @@ jQuery(document).ready(function($) {
         }
     });
 
-    $(document).on('keyup', '#dev-search-gvideo-box', function() {
-        if ($('#dev-search-gvideo-box').val().trim() != "") {
-            YT.removeError();
-        } else {
-            YT.removeError();
-            $("#dev-search-gvideo-box").parent().addClass('has-error');
-            $("#dev-search-gvideo-box").parent().append('<div class="help-block help-error" id="error">'+messages.NotBlank+'</div>');
-        }
-
-
-    })
     $('.click-on-enter').on('keyup',function(e) {
                 if (e.which === 13) {
                     $(this).parent().next().find('button').trigger('click');
@@ -670,7 +683,8 @@ jQuery(document).ready(function($) {
     $(document).on('click', '#dev-load-more-gimage', function() {
         makeRequest(googleSearch, googleStartIndex);
     });
-    $(document).on('keyup', '#dev-search-gimage-box,#dev-search-gimage-box-small', function() {
+
+    $(document).on('keyup', '#dev-search-gimage-box,#dev-search-gimage-box-small,#dev-search-gvideo-box,#dev-search-gvideo-box-small', function() {
         var parentElm = $(this).parents(".input-group");
         if ($(this).val().trim() != "") {
             if (parentElm.hasClass('has-error')) {
@@ -684,7 +698,6 @@ jQuery(document).ready(function($) {
             }
             parentElm.addClass('has-error');
             parentElm.after('<div class="help-block help-error redText" id="error">'+messages.NotBlank+'</div>')
-
         }
     });
 

@@ -138,7 +138,7 @@
             });
 
             if(typeof dragula != "undefined"){
-                dragula([document.getElementById('media-list-target-right')], {
+                drake = dragula([document.getElementById('media-list-target-right')], {
                     mirrorContainer: document.querySelector('.media-list-container'),
                     moves: function (el, container, handle) {
                         return handle.classList.contains('dragula-handle');
