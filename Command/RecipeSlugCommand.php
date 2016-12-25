@@ -31,8 +31,8 @@ class RecipeSlugCommand extends ContainerAwareCommand
 
         foreach ($recipes as $recipe) {
             if(!$recipe->getSlug()){
-        $slugAr = ArabicMongoRegex::slugify($recipe->getTitle()."-".  $recipe->getPublishedAt()->format('ymdHis'));
-        $slugEn = ArabicMongoRegex::slugify($recipe->getTitleEn()."-".$recipe->getPublishedAt()->format('ymdHis'));
+        $slugAr = ArabicMongoRegex::slugify($recipe->getTitle()."-".  $recipe->getCreatedAt()->format('ymdHis'));
+        $slugEn = ArabicMongoRegex::slugify($recipe->getTitleEn()."-".$recipe->getCreatedAt()->format('ymdHis'));
         $recipe->setSlug($slugAr);
         $recipe->setSlugEn($slugEn);
 
