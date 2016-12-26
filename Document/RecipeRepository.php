@@ -28,7 +28,7 @@ class RecipeRepository extends DocumentRepository
                 ->field('status')->equals(Recipe::$statuses['publish'])
                 ->field('publishLocations.section')->notEqual('Daily-solution')
                 ->field('deleted')->equals(FALSE)
-                ->field('coverPhoto')->prime(true)
+//                ->field('coverPhoto')->prime(true)
                 ->sort('publishedAt', 'DESC')
                 ->eagerCursor()
                 ->limit($limit)
