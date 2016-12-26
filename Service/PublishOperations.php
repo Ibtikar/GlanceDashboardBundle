@@ -11,6 +11,7 @@ use Ibtikar\GlanceDashboardBundle\Document\Publishable;
 use Ibtikar\GlanceUMSBundle\Document\Staff;
 use Ibtikar\GlanceDashboardBundle\Service\Redirect;
 use Ibtikar\GlanceDashboardBundle\Document\Recipe;
+use Ibtikar\GlanceDashboardBundle\Document\Magazine;
 
 /**
  * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
@@ -203,6 +204,11 @@ abstract class PublishOperations
     {
         $this->setType($document);
         if ($maxNumberInLocation > 0) {
+            if ($document instanceof Recipe) {
+                $this->type = 'Recipe';
+            } elseif ($document instanceof Magazine) {
+                $this->type = 'Magazine';
+            }
             $this->readyLocationVacancy($location, $maxNumberInLocation);
         }
         if (php_sapi_name() !== 'cli') {
@@ -417,7 +423,7 @@ abstract class PublishOperations
 
     protected function readyLocationVacancy(PublishLocation $location, $maxNumberInLocation)
     {
-        $documents = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+        $documents = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:'.$this->type)
                 ->field('status')->equals('publish')
                 ->field('publishLocations.section')->equals($location->getSection())
                 ->field('publishLocations.page')->equals($location->getPage())
