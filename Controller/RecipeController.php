@@ -719,7 +719,7 @@ class RecipeController extends BackendController
         $dm = $this->get('doctrine_mongodb')->getManager();
         $documents = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findBy(array('id' => array('$in' => array_values($ids))));
         $translator = $this->get('translator');
-        $message = str_replace(array('%action%', '%item-translation%', '%ids-count%'), array($translator->trans($bulkAction), $this->trans('recipe',array(),$this->translationDomain), count($ids)), $translator->trans('successfully %action% %success-count% %item-translation% from %ids-count%.'));
+        $message = str_replace(array('%action%', '%item-translation%', '%ids-count%'), array($translator->trans($bulkAction), $this->trans($request->get('type','recipe'),array(),$this->translationDomain), count($ids)), $translator->trans('successfully %action% %success-count% %item-translation% from %ids-count%.'));
         $foundDocumentsIds = array();
         foreach ($documents as $document) {
             $foundDocumentsIds [] = $document->getId();
