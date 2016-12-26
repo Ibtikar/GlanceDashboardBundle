@@ -513,7 +513,7 @@ class BackendController extends Controller {
                             } elseif ($action == 'Assign' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_ASSIGN'))) {
                                 $actionTd.= '<a class="btn btn-defualt dev-assign-to-me" href="javascript:void(0);"  data-url="'.$this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_assign_to_me').'" data-id="'.$document->getId().'"><i class="icon-user"  title="' . $this->trans('AssignToMe', array(), $this->translationDomain) . '"  data-popup="tooltip" data-placement="right"></i></a>';
                             } elseif ($action == 'Publish' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_PUBLISH'))) {
-                                $actionTd.= '<a href="javascript:void(0)" data-toggle="modal"  class="btn btn-defualt dev-publish-recipe" data-id="'.$document->getId().'"><i class="icon-share" data-placement="right"  data-popup="tooltip" title="' . $this->trans('publish ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '"></i></a>
+                                $actionTd.= '<a href="javascript:void(0)" data-toggle="modal"  class="btn btn-defualt dev-publish-document" data-id="'.$document->getId().'"><i class="icon-share" data-placement="right"  data-popup="tooltip" title="' . $this->trans('publish ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '"></i></a>
 ';
                             }
 //                            elseif ($action == 'AutoPublish' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_AUTOPUBLISH'))) {
@@ -699,20 +699,20 @@ class BackendController extends Controller {
                 return $this->getFailedResponse();
             }
 
-            $recipe = $dm->getRepository($this->getObjectShortName())->findOneById($id);
-            if (!$recipe)
+            $document = $dm->getRepository($this->getObjectShortName())->findOneById($id);
+            if (!$document)
                 throw $this->createNotFoundException($this->trans('Wrong id'));
 
             $currentPublishedLocations = array();
             $locations = array();
-            foreach ($recipe->getPublishLocations() as $location) {
+            foreach ($document->getPublishLocations() as $location) {
                 $currentPublishedLocations[] = $location->getSection();
             }
 
 
 
 
-            $allowedLocations = $publishOperations->getAllowedLocations($recipe);
+            $allowedLocations = $publishOperations->getAllowedLocations($document);
 
             foreach ($allowedLocations as $location) {
 
@@ -720,8 +720,8 @@ class BackendController extends Controller {
             }
             $autoPublishDate = '';
 
-            if ($recipe->getAutoPublishDate()) {
-                $autoPublishDate = $recipe->getAutoPublishDate()->format('m/d/Y H:i A');
+            if ($document->getAutoPublishDate()) {
+                $autoPublishDate = $document->getAutoPublishDate()->format('m/d/Y H:i A');
             }
 
 
@@ -730,12 +730,12 @@ class BackendController extends Controller {
                     'translationDomain' => $this->translationDomain,
                     'locations' => $locations,
                     'currentLocations' => $currentPublishedLocations,
-                    'document' => $recipe
+                    'document' => $document
             ));
         } else if ($request->getMethod() === 'POST') {
 
-            $recipe = $dm->getRepository($this->getObjectShortName())->findOneById($request->get('documentId'));
-            if (!$recipe) {
+            $document = $dm->getRepository($this->getObjectShortName())->findOneById($request->get('documentId'));
+            if (!$document) {
                 $result = array('status' => 'reload-table', 'message' => $this->trans('not done'));
                 return new JsonResponse($result);
             }
@@ -744,62 +744,20 @@ class BackendController extends Controller {
                 $locations = $dm->getRepository('IbtikarGlanceDashboardBundle:Location')->findBy(array('id' => array('$in' => $request->get('publishLocation'))));
             }
 
-            $recipeStatus = $recipe->getStatus();
+            $documentStatus = $document->getStatus();
             $status = $request->get('status');
-            if ($status != $recipeStatus) {
+            if ($status != $documentStatus) {
                 $result = array('status' => 'reload-table', 'message' => $this->trans('not done'));
                 return new JsonResponse($result);
             }
 
 
-            switch ($recipeStatus) {
+            switch ($documentStatus) {
                 case 'new':
-                    if ($request->get('publishNow')) {
-                        $publishResult = $publishOperations->publish($recipe, $locations);
-                    } else if ($request->get('autoPublishDate', '')) {
-                        $autoPublishDateString = $request->get('autoPublishDate', '');
-                        if (strlen(trim($autoPublishDateString)) > 0) {
-                            try {
-                                $autoPublishDate = new \DateTime($autoPublishDateString);
-                            } catch (\Exception $e) {
-                                $autoPublishDate = null;
-                            }
-                        }
-                        $publishResult = $publishOperations->autoPublish($recipe, $locations, $autoPublishDate);
-                    }
+                    $publishResult = $publishOperations->publish($document, $locations);
                     break;
                 case 'publish':
-                    $publishResult = $publishOperations->managePublishControl($recipe, $locations);
-                    break;
-                case 'deleted':
-                    if ($request->get('publishNow')) {
-                        $publishResult = $publishOperations->publish($recipe, $locations, TRUE);
-                    } else if ($request->get('autoPublishDate', '')) {
-                        $autoPublishDateString = $request->get('autoPublishDate', '');
-                        if (strlen(trim($autoPublishDateString)) > 0) {
-                            try {
-                                $autoPublishDate = new \DateTime($autoPublishDateString);
-                            } catch (\Exception $e) {
-                                $autoPublishDate = null;
-                            }
-                        }
-                        $publishResult = $publishOperations->autoPublish($recipe, $locations, $autoPublishDate);
-                    }
-                    break;
-                case 'autopublish':
-                    if ($request->get('publishNow')) {
-                        $publishResult = $publishOperations->publish($recipe, $locations);
-                    } else if ($request->get('autoPublishDate', '')) {
-                        $autoPublishDateString = $request->get('autoPublishDate', '');
-                        if (strlen(trim($autoPublishDateString)) > 0) {
-                            try {
-                                $autoPublishDate = new \DateTime($autoPublishDateString);
-                            } catch (\Exception $e) {
-                                $autoPublishDate = null;
-                            }
-                        }
-                        $publishResult = $publishOperations->manageAutoPublishControl($recipe, $locations, $autoPublishDate);
-                    }
+                    $publishResult = $publishOperations->managePublishControl($document, $locations);
                     break;
             }
 

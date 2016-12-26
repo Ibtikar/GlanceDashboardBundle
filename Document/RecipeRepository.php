@@ -18,6 +18,7 @@ class RecipeRepository extends DocumentRepository
         return $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                 ->field('status')->equals(Recipe::$statuses['publish'])
                 ->field('publishLocations.section')->equals('Daily-solution')
+                ->sort('publishedAt', 'DESC')
                 ->getQuery()->getSingleResult();
     }
 
