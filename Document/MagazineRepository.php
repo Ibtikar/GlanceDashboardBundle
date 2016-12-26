@@ -18,6 +18,7 @@ class MagazineRepository extends DocumentRepository
         return $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Magazine')
                 ->field('status')->equals('publish')
                 ->field('publishLocations.section')->equals('home-magazine')
+                ->field('coverPhoto')->prime(true)
                 ->sort('publishedAt', 'DESC')
                 ->getQuery()->execute();
     }
