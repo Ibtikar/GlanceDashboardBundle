@@ -264,6 +264,12 @@
                         return false;
                     }
                 });
+
+                $('body').on('ajaxCallback', function () {
+                    if($('.dev-crop-images').length > 0){
+                         $('#form_defaultCoverPhoto').val($('.dev-crop-images').attr('data-image-id'))
+                       }
+                    })
             })
 
 
