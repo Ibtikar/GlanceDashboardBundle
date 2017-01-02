@@ -291,6 +291,16 @@ class Recipe  extends Publishable {
      */
     protected $hideEnglishContent = false;
 
+    /**
+     * @MongoDB\Boolean
+     */
+    protected $migrated;
+
+    /**
+     * @MongoDB\String
+     */
+    protected $migrationData;
+
     public function __construct()
     {
         $this->tag = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1212,4 +1222,49 @@ class Recipe  extends Publishable {
         }
         return $array;
     }
+
+    /**
+     * Set migrated
+     *
+     * @param string $migrated
+     * @return self
+     */
+    public function setMigrated($migrated)
+    {
+        $this->migrated = $migrated;
+        return $this;
+    }
+
+    /**
+     * Get migrated
+     *
+     * @return string $migrated
+     */
+    public function getMigrated()
+    {
+        return $this->migrated;
+    }
+
+    /**
+     * Set migrationData
+     *
+     * @param string $migrationData
+     * @return self
+     */
+    public function setMigrationData($migrationData)
+    {
+        $this->migrationData = $migrationData;
+        return $this;
+    }
+
+    /**
+     * Get migrationData
+     *
+     * @return string $migrationData
+     */
+    public function getMigrationData()
+    {
+        return $this->migrationData;
+    }
+
 }
