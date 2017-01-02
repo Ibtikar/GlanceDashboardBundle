@@ -108,8 +108,8 @@
 {% block form_buttons %}
     <div class="row actionButtons">
         <div class="col-xs-12">
-            <button class="btn btn-primary  dev-form-submit-btn" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
-            <button class="btn btn-defualt dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
+            <button class="btn btn-primary btn-lg  dev-form-submit-btn" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
+            <button class="btn btn-defualt btn-lg dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
 
 
 
@@ -264,6 +264,12 @@
                         return false;
                     }
                 });
+
+                $('body').on('ajaxCallback', function () {
+                    if($('.dev-crop-images').length > 0){
+                         $('#form_defaultCoverPhoto').val($('.dev-crop-images').attr('data-image-id'))
+                       }
+                    })
             })
 
 

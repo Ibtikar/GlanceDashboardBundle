@@ -42,45 +42,45 @@ class AutoPublishRecipeCommand extends ContainerAwareCommand
                 $failCount++;
             } else {
                 $successCount++;
-            }
-//            if ($comic->getPublishedBy() && $comic->getPublishedBy()->getEnabled() && $comic->getPublishedBy()->getEmailtoComicPublisher()) {
-            $output->write("sending email");
 
-            $emailTemplate = $dm->getRepository('IbtikarGlanceDashboardBundle:EmailTemplate')->findOneByName('auto publish recipe');
+//            if ($comic->getPublishedBy() && $comic->getPublishedBy()->getEnabled() && $comic->getPublishedBy()->getEmailtoComicPublisher()) {
+                $output->write("sending email");
+                $emailTemplate = $dm->getRepository('IbtikarGlanceDashboardBundle:EmailTemplate')->findOneByName('auto publish recipe');
 //            $status = $this->getContainer()->get('translator')->trans('AutoPublish recipe', array(), 'recipe');
-            $body = str_replace(
-                array(
-                '%fullname%',
-                '%link%',
-                '%shortTitle%',
-                '%title%',
-                '%message%',
-                '%status%',
-                '%time%',
-                '%date%',
-                '%smallMessage%',
-                '%extraInfo%',
-                '%color%',
+                $body = str_replace(
+                    array(
+                    '%fullname%',
+                    '%link%',
+                    '%shortTitle%',
+                    '%title%',
+                    '%message%',
+                    '%status%',
+                    '%time%',
+                    '%date%',
+                    '%smallMessage%',
+                    '%extraInfo%',
+                    '%color%',
                     '%type%',
-                ), array(
-                $recipe->getPublishedBy()->__toString(),
-                $this->getContainer()->get('router')->generate('ibtikar_goody_frontend_view', array('slug'=>$recipe->getSlug(),'_locale'=>'ar'), UrlGeneratorInterface::ABSOLUTE_URL ),
-                $recipe->getTitle(),
-                $recipe->getTitle(),
-                $emailTemplate->getMessage(),
-                'تم النشر تلقائياً'
-                ,
-                $recipe->getPublishedAt()->format('h:i a'),
-                $recipe->getPublishedAt()->format('d/m/Y'),
-                $emailTemplate->getSmallMessage(), str_replace(array('%date%', '%time%'), array($recipe->getPublishedAt()->format('d/m/Y'), $recipe->getPublishedAt()->format('h:i a')), $emailTemplate->getExtraInfo()),
-                $this->getContainer()->getParameter('themeColor'),
-                $this->getContainer()->get('translator')->trans($recipe->getType(),array(),'recipe')
-                ), str_replace('%extra_content%', $emailTemplate->getTemplate(), $this->getContainer()->get('base_email')->getBaseRender($recipe->getPublishedBy()->getPersonTitle()))
-            );
-            $subject = str_replace('%shortTitle%', mb_substr($recipe->getTitle(), 0, 10, 'utf-8'), $emailTemplate->getSubject());
-            $receiver = $recipe->getPublishedBy()->getEmail();
-            $this->sendMail($body, $subject, $receiver);
+                    ), array(
+                    $recipe->getPublishedBy()->__toString(),
+                    $this->getContainer()->get('router')->generate('ibtikar_goody_frontend_view', array('slug' => $recipe->getSlug(), '_locale' => 'ar'), UrlGeneratorInterface::ABSOLUTE_URL),
+                    $recipe->getTitle(),
+                    $recipe->getTitle(),
+                    $emailTemplate->getMessage(),
+                    'تم النشر تلقائياً'
+                    ,
+                    $recipe->getPublishedAt()->format('h:i a'),
+                    $recipe->getPublishedAt()->format('d/m/Y'),
+                    $emailTemplate->getSmallMessage(), str_replace(array('%date%', '%time%'), array($recipe->getPublishedAt()->format('d/m/Y'), $recipe->getPublishedAt()->format('h:i a')), $emailTemplate->getExtraInfo()),
+                    $this->getContainer()->getParameter('themeColor'),
+                    $this->getContainer()->get('translator')->trans($recipe->getType(), array(), 'recipe')
+                    ), str_replace('%extra_content%', $emailTemplate->getTemplate(), $this->getContainer()->get('base_email')->getBaseRender($recipe->getPublishedBy()->getPersonTitle()))
+                );
+                $subject = str_replace('%shortTitle%', mb_substr($recipe->getTitle(), 0, 10, 'utf-8'), $emailTemplate->getSubject());
+                $receiver = $recipe->getPublishedBy()->getEmail();
+                $this->sendMail($body, $subject, $receiver);
 //            }
+            }
         }
         $output->write("Command finished sucessfully");
         if ($successCount > 0) {

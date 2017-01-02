@@ -18,6 +18,7 @@ class RecipeRepository extends DocumentRepository
         return $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                 ->field('status')->equals(Recipe::$statuses['publish'])
                 ->field('publishLocations.section')->equals('Daily-solution')
+                ->sort('publishedAt', 'DESC')
                 ->getQuery()->getSingleResult();
     }
 
@@ -42,6 +43,7 @@ class RecipeRepository extends DocumentRepository
         return $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                 ->field('status')->equals(Recipe::$statuses['publish'])
                 ->field('deleted')->equals(FALSE)
+                ->field('coverPhoto')->prime(true)
                 ->field('publishedAt')->gte($date)
                 ->sort('noOfViews', 'DESC')
                 ->eagerCursor()
