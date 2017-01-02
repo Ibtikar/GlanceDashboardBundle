@@ -50,6 +50,7 @@ function refreshImages(){
                     $('#dev-coverPhoto').closest('tr').replaceWith(temepelate);
                     $('[data-popup="popover"]').popover();
 
+                    $('#form_defaultCoverPhoto').val(media.id)
 
                     // Tooltip
                     $('[data-popup="tooltip"]').tooltip({

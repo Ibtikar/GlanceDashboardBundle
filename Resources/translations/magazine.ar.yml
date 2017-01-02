@@ -21,6 +21,9 @@ updatedBy: 'قام بالتحديث'
 'Magazines': 'مجلات'
 'magazines': 'مجلات'
 'List Magazine': 'المجلات'
+'Brief': 'النبذة'
+'Brief en': 'النبذة'
+'Url': 'الرابط'
 
 # ############Messages############
 
@@ -33,6 +36,7 @@ Add new magazine: 'إدخال مجله جديده'
 Delete Magazine: 'حذف مجله'
 'publish Magazine': 'نشر المجله'
 
+
 # ############Buttons############
 
 
@@ -42,3 +46,4 @@ Delete Magazine: 'حذف مجله'
 'Save': 'حفظ'
 'publish': 'نشر'
 'republish': 'اعاده نشر'
+'Edit Magazine section page': 'إدارة صفحة المجلات‎'

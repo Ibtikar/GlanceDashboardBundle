@@ -1,0 +1,94 @@
+{% extends 'IbtikarGlanceDashboardBundle::formLayout.html.twig' %}
+
+
+
+{% block form_container %}
+
+
+
+    {{ form_start(form)}}
+    {{ form_errors(form)}}
+
+
+
+
+
+    <div class="tabbable">
+        <ul class="nav nav-tabs nav-tabs-highlight">
+            <li class="active"><a href="#arabic" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}" alt="arabic" width="30" height="20"/></a></li>
+            <li><a href="#english" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}" alt="english" width="30" height="20"/></a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="arabic">
+
+
+                {{ form_row(form.brief) }}
+
+
+
+
+{#                {{ form_row(form.images) }}#}
+
+            </div><!-- arabic end -->
+
+            <div class="tab-pane" id="english">
+
+
+                {{ form_row(form.briefEn) }}
+
+
+
+
+
+
+            </div><!-- english end -->
+
+        </div>
+    </div>
+                <hr/>
+  {{ form_row(form.url) }}
+
+    {{ form_end(form) }}
+
+
+{% endblock %}
+{% block form_buttons %}
+    <div class="row actionButtons">
+        <div class="col-xs-12">
+            <button class="btn btn-primary btn-lg dev-form-submit-btn " type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
+            <button class="btn btn-defualt btn-lg dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
+
+
+
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+     {{ parent() }}
+
+
+
+
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
+
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/media/fancybox.min.js')}}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_thumbnails.js')}}"></script>
+
+
+    <!-- Plugin file uploaded JS -->
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/bootstrap-fileupload.js')}}"></script>
+
+
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/jquery.cropit.js')}}"></script>
+
+
+{% endblock %}
