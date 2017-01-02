@@ -34,7 +34,6 @@ class MigrationCommand extends ContainerAwareCommand {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-
         $total = 897;
         $data = array();
         $helper = $this->getHelper('question');
@@ -99,22 +98,22 @@ class MigrationCommand extends ContainerAwareCommand {
                             $recipe->setSlugEn((string) $postmeta->meta_value);
                             break;
                         case "recipe-introduction-ar":
-                            $recipe->setBrief(html_entity_decode(strip_tags((string) $postmeta->meta_value)));
+                            $recipe->setBrief(str_replace(array('[:ar]','[:en]','[:]'), '', html_entity_decode(strip_tags((string) $postmeta->meta_value))));
                             break;
                         case "recipe-introduction-en":
-                            $recipe->setBriefEn(html_entity_decode(strip_tags((string) $postmeta->meta_value)));
+                            $recipe->setBriefEn(str_replace(array('[:ar]','[:en]','[:]'), '', html_entity_decode(strip_tags((string) $postmeta->meta_value))));
                             break;
                         case "recipe-ingrdients-ar":
-                            $recipe->setIngredients((string) $postmeta->meta_value);
+                            $recipe->setIngredients(str_replace(array('[:ar]','[:en]','[:]'), '', (string) $postmeta->meta_value));
                             break;
                         case "recipe-ingrdients-en":
-                            $recipe->setIngredientsEn((string) $postmeta->meta_value);
+                            $recipe->setIngredientsEn(str_replace(array('[:ar]','[:en]','[:]'), '', (string) $postmeta->meta_value));
                             break;
                         case "recipe-prepare-ar":
-                            $recipe->setMethod((string) $postmeta->meta_value);
+                            $recipe->setMethod(str_replace(array('[:ar]','[:en]','[:]'), '', (string) $postmeta->meta_value));
                             break;
                         case "recipe-prepare-en":
-                            $recipe->setMethodEn((string) $postmeta->meta_value);
+                            $recipe->setMethodEn(str_replace(array('[:ar]','[:en]','[:]'), '', (string) $postmeta->meta_value));
                             break;
                         case "recipe-preparation-time":
                         case "recipe-total-time":
