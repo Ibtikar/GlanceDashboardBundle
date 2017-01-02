@@ -162,7 +162,7 @@ class MagazineController extends BackendController {
         }
 
         $magazinePage = $dm->getRepository('IbtikarGlanceDashboardBundle:Page')->findOneByTitle('magazine page');
-        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new magazine', 'link' => $this->generateUrl('ibtikar_glance_dashboard_magazine_create')),
+        $menus = array(array('type' => 'create', 'active' => FALSE, 'linkType' => 'add', 'title' => 'Add new magazine', 'link' => $this->generateUrl('ibtikar_glance_dashboard_magazine_create')),
             array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list Magazine'), array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'Edit Magazine section page', 'link' => $this->generateUrl('ibtikar_glance_dashboard_magazine_editPage', array('id' => $magazinePage->getId())))
         );
         $breadCrumbArray = $this->preparedMenu($menus);
