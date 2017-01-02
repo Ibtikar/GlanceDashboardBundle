@@ -450,7 +450,7 @@ abstract class PublishOperations
         }
     }
 
-    public function delete($recipe, $fromRoomName, $reason = NULL)
+    public function delete($recipe,$reason = NULL)
     {
 
         $userFrom = $this->container->get('security.token_storage')->getToken()->getUser();
@@ -467,7 +467,7 @@ abstract class PublishOperations
                 ->setDeletedAt(new \DateTime())
                 ->setDeletedBy($userFrom)
                 ->setAssignedTo(NULL)
-                ->setReason($reason['reason']);
+                ->setReason($reason);
             if ($recipe->getStatus() == 'published') {
                 $this->container->get('redirect')->removeRedirect($this->getFrontEndUrl($recipe));
                 $this->hideFrontEndUrl($recipe);
