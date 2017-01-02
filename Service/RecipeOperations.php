@@ -86,7 +86,7 @@ class RecipeOperations extends PublishOperations
         if (php_sapi_name() === 'cli') {
             $user = $document->getPublishedBy();
         } else {
-            $user = $this->getUser();
+            $user = $this->getUser()?$this->getUser():$document->getPublishedBy();
         }
 
         foreach ($locations as $location) {
@@ -94,7 +94,11 @@ class RecipeOperations extends PublishOperations
                 $this->publishInLocation($document, $location->getPublishedLocationObject($user), $location->getMaxNumberOfMaterials());
             }
         }
-        $document->setPublishedAt(new \DateTime());
+
+        if(!$document->getMigrated()){
+           $document->setPublishedAt(new \DateTime());
+        }
+
         $document->setPublishedBy($user);
         $document->setStatus(Recipe::$statuses['publish']);
         $document->setAssignedTo(null);
