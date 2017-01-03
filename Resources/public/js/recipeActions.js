@@ -125,6 +125,7 @@ function recipeBulkFunction() {
     });
 
     $('#DocumentType').val(type);
+    $('#reason').val($('#dev-delete-reason').val());
 
     var $form = $('.dev-bulk-actions-form');
     var formData = $form.serializeArray();
