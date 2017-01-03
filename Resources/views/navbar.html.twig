@@ -13,7 +13,7 @@
    {% if is_granted('ROLE_JOB_VIEW') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CITY_VIEW') or is_granted('ROLE_STAFF_VIEW') or  is_granted('ROLE_ROLE_VIEW') %}
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="icon-make-group position-left"></i> إدارة المستخدمين <span class="caret"></span>
+                            <i class="icon-make-group position-left"></i> المستخدمين  <span class="caret"></span>
                         </a>
 
                         <ul class="dropdown-menu width-250">
@@ -37,23 +37,19 @@
                         </ul>
                     </li>
     {% endif %}
-         {% if is_granted('ROLE_PRODUCT_VIEW') or is_granted('ROLE_CATEGORY_VIEW') or is_granted('ROLE_RECIPENEW_VIEW') or is_granted('ROLE_RECIPEDELETED_VIEW') or is_granted('ROLE_RECIPEAUTOPUBLISH_VIEW') or is_granted('ROLE_RECIPEPUBLISH_VIEW') or is_granted('ROL_MAGAZINE_VIEW') or is_granted('ROLE_ADMIN')%}
+         {% if is_granted('ROLE_PRODUCT_VIEW') or is_granted('ROLE_RECIPENEW_VIEW') or is_granted('ROLE_RECIPEDELETED_VIEW') or is_granted('ROLE_RECIPEAUTOPUBLISH_VIEW') or is_granted('ROLE_RECIPEPUBLISH_VIEW')  or is_granted('ROLE_ADMIN')%}
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="icon-make-group position-left"></i> {% trans from 'role' %}content{% endtrans%}<span class="caret"></span>
+                            <i class="icon-make-group position-left"></i>
+{#                            {% trans from 'role' %}content{% endtrans%}#}
+                            المحتوى
+                            <span class="caret"></span>
                         </a>
 
                             <ul class="dropdown-menu width-250">
 
-                                {% if is_granted('ROLE_PRODUCT_VIEW') or is_granted('ROLE_ADMIN')%}
-                                    <li><a href="{{ path('ibtikar_glance_dashboard_product_list') }}" {% if 'product' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'product'%}List Product{% endtrans %}</a></li>
-                                {% endif %}
-                                {% if is_granted('ROLE_CATEGORY_VIEW') or is_granted('ROLE_ADMIN')%}
-                                <li><a href="{{ path('ibtikar_glance_dashboard_category_list') }}" {% if 'category' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'category'%}List Category{% endtrans %}</a></li>
-                                {% endif %}
-                                {% if is_granted('ROLE_MAGAZINE_VIEW') or is_granted('ROLE_ADMIN')%}
-                                <li><a href="{{ path('ibtikar_glance_dashboard_magazine_list') }}" {% if 'magazine' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'magazine'%}List Magazine{% endtrans %}</a></li>
-                                {% endif %}
+
+
                                 {% if is_granted('ROLE_RECIPENEW_VIEW') or is_granted('ROLE_ADMIN')%}
                                 <li><a href="{{ path('ibtikar_glance_dashboard_recipenew_list_new_recipe') }}" {% if 'recipe' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'recipe'%}List Recipe{% endtrans %}</a></li>
                                 {% elseif is_granted('ROLE_RECIPEDELETED_VIEW') or is_granted('ROLE_ADMIN') %}
@@ -63,6 +59,33 @@
                                 {% elseif is_granted('ROLE_RECIPEPUBLISH_VIEW') or is_granted('ROLE_ADMIN') %}
                                 <li><a href="{{ path('ibtikar_glance_dashboard_recipepublish_list_publish_recipe') }}" {% if 'recipe' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'recipe'%}List Recipe{% endtrans %}</a></li>
                                 {% endif %}
+
+                                {% if is_granted('ROLE_PRODUCT_VIEW') or is_granted('ROLE_ADMIN')%}
+                                    <li><a href="{{ path('ibtikar_glance_dashboard_product_list') }}" {% if 'product' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i>
+{#                                            {% trans from 'product'%}List Product{% endtrans %}#}
+منتجات قودي
+                                        </a></li>
+                                {% endif %}
+                            </ul>
+                    </li>
+     {% endif %}
+
+         {% if  is_granted('ROLE_CATEGORY_VIEW')  or is_granted('ROL_MAGAZINE_VIEW') or is_granted('ROLE_ADMIN')%}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-make-group position-left"></i>
+{#                            {% trans from 'role' %}content{% endtrans%}#}
+                          أقسام الموقع
+                            <span class="caret"></span>
+                        </a>
+                            <ul class="dropdown-menu width-250">
+                                {% if is_granted('ROLE_CATEGORY_VIEW') or is_granted('ROLE_ADMIN')%}
+                                <li><a href="{{ path('ibtikar_glance_dashboard_category_list') }}" {% if 'category' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'category'%}List Category{% endtrans %}</a></li>
+                                {% endif %}
+                                {% if is_granted('ROLE_MAGAZINE_VIEW') or is_granted('ROLE_ADMIN')%}
+                                <li><a href="{{ path('ibtikar_glance_dashboard_magazine_list') }}" {% if 'magazine' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i> {% trans from 'magazine'%}List Magazine{% endtrans %}</a></li>
+                                {% endif %}
+
                             </ul>
                     </li>
      {% endif %}
