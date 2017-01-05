@@ -513,7 +513,7 @@ $(document).ready(function () {
         $('.dev-crop-spinner').show();
         $('.dev-submit-image').hide();
         $.ajax({
-            url: url + '?imageType=' + name,
+            url: url ,
             type: 'POST',
             data: formData,
 //            async: false,

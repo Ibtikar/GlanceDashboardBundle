@@ -447,23 +447,12 @@ class RecipeController extends BackendController
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function editAction(Request $request) {
+    public function editAction(Request $request,$id) {
 
         $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Recipe', 'link' => $this->generateUrl('ibtikar_glance_dashboard_recipe_create')),
         );
         $breadCrumbArray = $this->preparedMenu($menus);
-
-        if (!$this->getUser()) {
-            return $this->getLoginResponse();
-        }
-        $securityContext = $this->get('security.authorization_checker');
-
-        if (!$securityContext->isGranted('ROLE_ADMIN') && !$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_DELETE')) {
-            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
-            return new JsonResponse($result);
-        }
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $id = $request->get('id', '');
         if ($id) {
             $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($id);
             if (!$recipe) {
