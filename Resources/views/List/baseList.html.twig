@@ -310,7 +310,10 @@
                                                 <div class="media-body">
                                                     <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">   {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}} </a>
                                                 </div>
-
+                                                        </td>
+                                                    {% elseif field.type == "translated"  %}
+                                                        <td>
+                                                            {{ attribute(object, field.propertyName)|trans({},translationDomain)}}
                                                         </td>
                                                     {% else %}
                                                         <td >

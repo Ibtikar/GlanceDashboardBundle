@@ -23,6 +23,7 @@ class MagazineController extends BackendController {
             "coverPhoto" => array("type" => "refereceImage", 'isSortable' => FALSE),
             "createdAt" => array("type" => "date"),
             "updatedAt" => array("type" => "date"),
+            "status"=>array("type"=>"translated"),
             "createdBy" => array("isSortable" => false),
             "updatedBy" => array("isSortable" => false)
         );

@@ -540,6 +540,9 @@ class BackendController extends Controller {
                                                     <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">  ' . $document->$getfunction() . ' </a>
                                                 </div>';
                 }
+                elseif ($value == 'status') {
+                    $oneDocument[$value] = $this->trans($document->$getfunction(),  array(),$this->translationDomain);
+                }
                 elseif ($value == 'profilePhoto' || $value == 'coverPhoto') {
                     $image = $document->$getfunction();
                     if (!$image) {
