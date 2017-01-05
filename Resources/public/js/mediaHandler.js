@@ -860,7 +860,9 @@ jQuery(document).ready(function($) {
                                 success: function(data) {
                                     if (data.status === 'success') {
                                         showNotificationMsg(data.message, "", data.status);
-                                        addImageToSortView(data.video);
+                                        $(data.video).each(function () {
+                                            addImageToSortView(this);
+                                        });
                                     }
 
                                     $('.dev-recipe-videoUrl').val('');
