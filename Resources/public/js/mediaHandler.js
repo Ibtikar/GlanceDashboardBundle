@@ -689,7 +689,9 @@ jQuery(document).ready(function($) {
         makeRequest(googleSearch, googleStartIndex);
     });
 
-    $(document).on('keyup', '#dev-search-gimage-box,#dev-search-gimage-box-small,#dev-search-gvideo-box,#dev-search-gvideo-box-small', function() {
+    $(document).on('keyup', '#dev-search-gimage-box,#dev-search-gimage-box-small,#dev-search-gvideo-box,#dev-search-gvideo-box-small', function (e) {
+        e.preventDefault();
+
         var parentElm = $(this).parents(".input-group");
         if ($(this).val().trim() != "") {
             if (parentElm.hasClass('has-error')) {
