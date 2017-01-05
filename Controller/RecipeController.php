@@ -362,7 +362,7 @@ class RecipeController extends BackendController
     {
 
         $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Recipe'),
-            array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list Recipe')
+         
         );
         $breadCrumbArray = $this->preparedMenu($menus);
 
@@ -437,6 +437,7 @@ class RecipeController extends BackendController
         }
         return $this->render('IbtikarGlanceDashboardBundle:Recipe:create.html.twig', array(
                 'form' => $form->createView(),
+                'breadcrumb' => $breadCrumbArray,
                 'title' => $this->trans('Add new Recipe', array(), $this->translationDomain),
                 'translationDomain' => $this->translationDomain
         ));
@@ -537,6 +538,7 @@ class RecipeController extends BackendController
         return $this->render('IbtikarGlanceDashboardBundle:Recipe:edit.html.twig', array(
                     'recipe' => $recipe,
                     'form' => $form->createView(),
+                    'breadcrumb' => $breadCrumbArray,
                     'title' => $this->trans('Edit Recipe', array(), $this->translationDomain),
                     'translationDomain' => $this->translationDomain,
                     'room' => $this->calledClassName,
