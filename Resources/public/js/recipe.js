@@ -300,15 +300,16 @@ $(document).on("click",'.dev-add-related-material',function(){
             }else{
                 $this.parents('li').remove();
                 var objArray = [];
+                var objectElement;
                 $.each($('.dev-related-list .media'),function(){
+                  objectElement=$(this)
                     objArray.push({
-                        'id':$(this).attr('data-related-material-id'),
-                        'text':$(this).find('media-body').text().trim(),
-                        'img':"/"+$(this).find('img').attr('src')
+                        'id':objectElement.attr('data-related-material-id'),
+                        'text':objectElement.find('media-body').text().trim(),
+                        'img':objectElement.find('img').attr('src')
                     });
                 });
                 $('#recipe_related').val(JSON.stringify(objArray));
-                updateRelatedMaterial();
             }
     });
 
