@@ -585,6 +585,7 @@ jQuery(document).ready(function($) {
 
     $('body').on('preAjaxCallback',function(){
         populateData();
+        $('#recipe_galleryType').val($('input.dev-gallary-type:checked').val())
         if(!$('.dev-cover-img').is(':checked')){
             showNotificationMsg("يجب إختيار صورة غلاف", "", "error");
             return false;

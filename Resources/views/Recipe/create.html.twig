@@ -323,11 +323,11 @@
             <div class="col-md-6">
                 <div class="pull-right position-left">
                     <label class="radio-inline">
-                        <input type="radio" id="recipe_galleryType_0" name="dev-gallary-type" class="styled" value="sequence">
+                        <input type="radio" id="recipe_galleryType_0" name="dev-gallary-type" class="styled dev-gallary-type" value="sequence">
                         تسلسلي
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" id="recipe_galleryType_1" name="dev-gallary-type" class="styled" value="slider">
+                        <input type="radio" id="recipe_galleryType_1" name="dev-gallary-type" class="styled dev-gallary-type" value="slider">
                         سليدر
                     </label>
                 </div>
@@ -651,16 +651,7 @@
 
     $(document).ready(function() {
         getTags();
-        $('body').on('preAjaxCallback', function(e) {
-            var button = $(document.activeElement)
-            if (button.hasClass('dev-save-add')) {
-                $('#form_submitButton').val('add_save');
-            } else {
-                $('#form_submitButton').val('save');
-            }
 
-
-        });
 
     })
     </script>
