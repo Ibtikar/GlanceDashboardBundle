@@ -362,7 +362,7 @@ class RecipeController extends BackendController
     {
 
         $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Recipe'),
-         
+
         );
         $breadCrumbArray = $this->preparedMenu($menus);
 
@@ -1035,6 +1035,13 @@ class RecipeController extends BackendController
         $queryBuilder = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe');
 
         $searchString = trim($request->get('q'));
+        $oldvalue = json_decode(trim($request->get('old')), true);
+
+        if (count($oldvalue) >= 10) {
+            return new JsonResponse(array(array(
+                'message' => $this->trans('recipe must less than 10',array(),  $this->translationDomain))
+            ));
+        }
 
         if(strpos($searchString,".")){
 
@@ -1058,9 +1065,15 @@ class RecipeController extends BackendController
             $queryBuilder->addOr($queryBuilder->expr()->field('title')->equals($searchRegex));
             $queryBuilder->addOr($queryBuilder->expr()->field('titleEn')->equals($searchRegex));
         }
-
+        $existingIds=array();
+        if($oldvalue){
+        foreach($oldvalue as $value){
+            $existingIds[]=$value['id'];
+        }
+        }
         $queryBuilder->field('status')->equals('publish')
                 ->field('type')->equals('recipe')
+                ->field('id')->notIn($existingIds)
                 ->limit(10)
                 ->sort('createdAt', 'DESC');
 

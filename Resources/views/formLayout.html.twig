@@ -102,7 +102,7 @@
                 }
             });
 
-
+var recipeValue='';
     $(".select-ajax").select2({
         ajax: {
           url: function(){
@@ -112,7 +112,8 @@
     delay: 1000,
     data: function (params) {
       return {
-        q: params.term
+        q: params.term,
+        old: $('#recipe_related').val()
       };
     },
     processResults: function (data) {
@@ -150,8 +151,14 @@
     }
 
     function addUserPic(opt) {
+
+     
         if (!opt.id) {
-            return opt.text;
+            if(!opt.text){
+           return '<span class="select2-results__option select2-results__message" aria-live="assertive" role="treeitem">'+opt.message+'</span>'
+       }
+       return opt.text;
+             
         }
         var optimage = $(opt.element).data('image')?$(opt.element).data('image'):(opt.img?"/"+opt.img:null);
         if (!optimage) {

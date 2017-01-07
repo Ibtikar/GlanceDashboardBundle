@@ -138,6 +138,7 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 'tip already deleted': 'عذراً، هذه الوصفة محذوفه مسبقاً'
 'recipe': 'وصفه'
 'all': 'محتوى'
+'recipe must less than 10': 'لا يمكن اختيار اكتر من 10 وصفات'
 
 
 

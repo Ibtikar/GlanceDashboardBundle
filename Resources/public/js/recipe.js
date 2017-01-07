@@ -90,7 +90,7 @@ function updateRelatedMaterial(){
         RelatedRecipeObj = data;
         $('.dev-related-list').html("");
         $(data).each(function(){
-            $('.dev-related-list').append('<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="/'+this.img+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>');
+            $('.dev-related-list').append('<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="/'+(this.img).replace(/^\/+/g,'')+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>');
 //            $('.dev-related-list').append('<li class="media dev-related-item"><div class="media-body"><a href="'+$('base').attr('href')+this.slug+'" target="_blank">'+this.title+'</a>  </div><div class="dev-delete-related-material media-right" data-related-material-id="'+this.id+'" data-related-material-slug="'+this.slug+'"><i class="icon icon-cross2"></i></div></li>');
         });
     }
@@ -285,7 +285,7 @@ $(document).on("click",'.dev-add-related-material',function(){
                             $.each($('.dev-related-list .media'),function(){
                                 objArray.push({
                                     'id':$(this).attr('data-related-material-id'),
-                                    'text':$(this).find('media-body').text().trim(),
+                                    'text':$(this).find('.media-body b').text().trim(),
                                     'img':"/"+$(this).find('img').attr('src')
                                 });
                             });
@@ -305,11 +305,12 @@ $(document).on("click",'.dev-add-related-material',function(){
                   objectElement=$(this)
                     objArray.push({
                         'id':objectElement.attr('data-related-material-id'),
-                        'text':objectElement.find('media-body').text().trim(),
+                        'text':objectElement.find('.media-body b').text().trim(),
                         'img':objectElement.find('img').attr('src')
                     });
                 });
                 $('#recipe_related').val(JSON.stringify(objArray));
+                RelatedRecipeObj = objArray;
             }
     });
 
