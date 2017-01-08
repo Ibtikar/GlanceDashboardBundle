@@ -63,31 +63,23 @@ class LanguageChangeListener implements EventSubscriberInterface
         if (strpos($request->getRequestUri(), 'backend')) {
             $request->attributes->set('_locale', $this->defaultLocale);
             $request->setLocale($this->defaultLocale);
-            $session->set('_locale', $this->defaultLocale);
             return;
         }
         $path = $request->getPathInfo();
 
-        $session = $request->getSession();
-        $locale = $request->get('_locale');
-
-        if ($locale && $this->isLocaleSupported($locale)) {
-            $session->set('_locale', $locale);
-        }
-
         $route_exists = false; //by default assume route does not exist.
 
-        foreach ($this->routeCollection as $routeObject) {
+        foreach($this->routeCollection as $routeObject){
             $routePath = $routeObject->getPath();
-            if ($routePath == "/{_locale}" . $path) {
+            if($routePath == "/{_locale}".$path){
                 $route_exists = true;
                 break;
             }
         }
 
         //If the route does indeed exist then lets redirect there.
-        if ($route_exists == true) {
-            $event->setResponse(new RedirectResponse("/" . $this->defaultLocale . $path));
+        if($route_exists == true){
+            $event->setResponse(new RedirectResponse("/".$this->defaultLocale.$path));
         }
     }
 
@@ -95,7 +87,7 @@ class LanguageChangeListener implements EventSubscriberInterface
     {
         return array(
             // must be registered before the default Locale listener
-            KernelEvents::REQUEST => array(array('onKernelRequest', 17)),
+            KernelEvents::REQUEST => array(array('onKernelRequest', 5000)),
         );
     }
 }
