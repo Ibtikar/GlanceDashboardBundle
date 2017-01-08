@@ -11,6 +11,12 @@ services:
         tags:
               - { name: kernel.event_subscriber }
 
+    GlanceDashboardBundle.eventListeners.SessionLanguageListener::
+        class: Ibtikar\GlanceDashboardBundle\Listener\SessionLanguageListener
+        arguments: ["@router", "%locale%", "%accepted_locales%"]
+        tags:
+              - { name: kernel.event_subscriber }
+
     list_view:
         class: Ibtikar\GlanceDashboardBundle\Service\ListView
         arguments: ["@service_container" ]
