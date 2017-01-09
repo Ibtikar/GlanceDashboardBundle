@@ -55,6 +55,10 @@ class EmailTemplate extends Document {
      */
     private $extraInfo;
 
+    /**
+     * @MongoDB\String
+     */
+    private $locale;
 
     /**
      * Get id
@@ -152,6 +156,27 @@ class EmailTemplate extends Document {
     public function getMessage()
     {
         return $this->message;
+    }
+    /**
+     * Set locale
+     *
+     * @param string $message
+     * @return self
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+        return $this;
+    }
+
+    /**
+     * Get locale
+     *
+     * @return string $locale
+     */
+    public function getLocale()
+    {
+        return $this->locale;
     }
 
     /**

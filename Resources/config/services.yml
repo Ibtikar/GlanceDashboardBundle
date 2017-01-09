@@ -25,6 +25,10 @@ services:
         class: Ibtikar\GlanceDashboardBundle\Service\BaseEmail
         arguments: ["@templating"]
 
+    frontend_base_email:
+        class: Ibtikar\GlanceDashboardBundle\Service\FrontendBaseEmail
+        arguments: ["@templating"]
+
     not_found_listener:
         class: Ibtikar\GlanceDashboardBundle\Service\NotFoundExceptionListener
         tags:
