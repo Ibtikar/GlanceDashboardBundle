@@ -9,6 +9,8 @@
 'Tags en' : 'الكلمات المفتاحية'
 'Ingredients': 'المكونات'
 'Ingredients en': 'المكونات'
+'Text': 'المحتوى'
+'Text en': 'المحتوى'
 'Method': 'الطريقة'
 'Method en': 'الطريقة'
 'Chef': 'الشيف'
@@ -26,6 +28,10 @@
 'easy': 'سهلة'
 'medium': 'متوسطة'
 'difficult': 'صعبة'
+'Type': 'النوع'
+'article': 'مقال'
+'tip': 'نصيحة'
+'kitchen911': 'kitchen91111'
 'Salad': '‫سلطة‬'
 'Soup': '‫شوربة‬'
 'Sandwich': '‫ساندويتش‬'
@@ -70,6 +76,7 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 
 # ############Titles############
 'Add new Recipe': 'إدخال وصفة جديد'
+'Add new Blog': 'إدخال مقال/نصيحة'
 'Edit Recipe': 'تعديل وصفة'
 'list Recipe': 'قائمه الوصفات'
 'recipes new': 'وصفات جديده'

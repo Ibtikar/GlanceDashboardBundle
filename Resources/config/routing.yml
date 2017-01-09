@@ -49,4 +49,8 @@ ibtikar_glance_dashboard_recipe_autopublish:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/recipe/autopublish.yml"
     prefix:   /recipe-autopublish
 
+ibtikar_glance_dashboard_blog:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/blog.yml"
+    prefix:   /blog
+
 

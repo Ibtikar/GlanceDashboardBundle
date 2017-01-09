@@ -904,4 +904,14 @@ class BackendController extends Controller {
         }
         return $tagSelected;
     }
+    
+    public function getTagsAction() {
+        $tags = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Tag')->findAll();
+        $responseContent = array();
+        foreach ($tags as $tag) {
+//            $responseContent[] = array("id"=>$tag->getId(),"text"=>$tag->getName());
+            $responseContent[] = $tag->getName();
+        }
+        return new JsonResponse($responseContent);
+    }
 }

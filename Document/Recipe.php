@@ -53,6 +53,13 @@ class Recipe  extends Publishable {
         "publish" => "publish",
         "autopublish" => "autopublish"
     );
+    
+    public static $types = array(
+        "recipe" => "recipe",
+        "article" => "article",
+        "tip" => "tip",
+        "kitchen911" => "kitchen911"
+    );
 
     /**
      * @MongoDB\Id
@@ -122,6 +129,25 @@ class Recipe  extends Publishable {
      * )
      */
     private $ingredientsEn;
+    
+    
+        /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 10,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     * )
+     */
+    private $text;
+
+    /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 10,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     * )
+     */
+    private $textEn;
 
 
     /**
@@ -475,6 +501,52 @@ class Recipe  extends Publishable {
     {
         return $this->ingredientsEn;
     }
+      
+    /**
+     * Set text
+     *
+     * @param string $text
+     * @return self
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+        return $this;
+    }
+
+    /**
+     * Get text
+     *
+     * @return string $text
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * Set ingredientsEn
+     *
+     * @param string $textEn
+     * @return self
+     */
+    public function setTextEn($textEn)
+    {
+        $this->textEn = $textEn;
+        return $this;
+    }
+
+    /**
+     * Get textEn
+     *
+     * @return string $textEn
+     */
+    public function getTextEn()
+    {
+        return $this->textEn;
+    }
+    
+    
 
     /**
      * Set method

@@ -369,7 +369,7 @@ class RecipeController extends BackendController
         $recipe = new Recipe();
         $dm = $this->get('doctrine_mongodb')->getManager();
 
-        $form = $this->createForm(RecipeType::class, $recipe, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal'),'type'=>'create'));
+        $form = $this->createForm(RecipeType::class, $recipe, array('translation_domain' => $this->translationDomain, 'attr' => array('contentType' => 'recipe', 'class' => 'dev-page-main-form dev-js-validation form-horizontal'),'type'=>'create'));
 
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
@@ -463,7 +463,7 @@ class RecipeController extends BackendController
         $tagSelected = $this->getTagsForDocument($recipe);
         $tagSelectedEn = $this->getTagsForDocument($recipe, "en");
 
-        $form = $this->createForm(RecipeType::class, $recipe, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
+        $form = $this->createForm(RecipeType::class, $recipe, array('translation_domain' => $this->translationDomain, 'attr' => array('contentType' => 'recipe', 'class' => 'dev-page-main-form dev-js-validation form-horizontal')));
 
         $form->get('tags')->setData($tagSelected);
         $form->get('tagsEn')->setData($tagSelectedEn);
@@ -617,17 +617,6 @@ class RecipeController extends BackendController
         }
 
         $dm->flush();
-    }
-
-    public function getTagsAction()
-    {
-        $tags = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Tag')->findAll();
-        $responseContent = array();
-        foreach ($tags as $tag) {
-//            $responseContent[] = array("id"=>$tag->getId(),"text"=>$tag->getName());
-            $responseContent[] = $tag->getName();
-        }
-        return new JsonResponse($responseContent);
     }
 
     public function deleteAction(Request $request)

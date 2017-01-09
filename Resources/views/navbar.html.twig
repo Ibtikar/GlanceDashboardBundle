@@ -66,6 +66,14 @@
 منتجات قودي
                                         </a></li>
                                 {% endif %}
+                                
+                                {% if is_granted('ROLE_BLOG_VIEW') or is_granted('ROLE_ADMIN')%}
+                                    <li>
+                                        <a href="{{ path('ibtikar_glance_dashboard_blog_list') }}" {% if 'blog' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-file-css"></i>
+{#                                            {% trans from 'product'%}List Product{% endtrans %}#}
+ مقالات
+                                        </a></li>
+                                {% endif %}
                             </ul>
                     </li>
      {% endif %}
