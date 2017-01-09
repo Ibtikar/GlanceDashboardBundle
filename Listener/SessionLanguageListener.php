@@ -9,9 +9,11 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
-class SessionLanguageListener implements EventSubscriberInterface
-{
+
+class SessionLanguageListener {
 
     /**
      * @var Symfony\Component\Routing\RouterInterface
@@ -27,6 +29,11 @@ class SessionLanguageListener implements EventSubscriberInterface
      * @var string
      */
     private $defaultLocale;
+    
+    /**
+     * @var string
+     */
+    private $container;
 
     /**
      * @var array
@@ -38,22 +45,21 @@ class SessionLanguageListener implements EventSubscriberInterface
      */
     private $localeRouteParam;
 
-    public function __construct(RouterInterface $router, $defaultLocale = 'ar', array $supportedLocales = array('en'), $localeRouteParam = '_locale')
-    {
+    public function __construct($container,RouterInterface $router, $defaultLocale = 'ar', array $supportedLocales = array('en'), $localeRouteParam = '_locale') {
         $this->router = $router;
         $this->routeCollection = $router->getRouteCollection();
         $this->defaultLocale = $defaultLocale;
         $this->supportedLocales = $supportedLocales;
         $this->localeRouteParam = $localeRouteParam;
+        $this->container=$container;
     }
 
-    public function isLocaleSupported($locale)
-    {
+    public function isLocaleSupported($locale) {
         return in_array($locale, $this->supportedLocales);
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
-    {
+    public function onResponse(FilterResponseEvent $event) {
+
 
         if (\Symfony\Component\HttpKernel\HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
             return;
@@ -64,20 +70,38 @@ class SessionLanguageListener implements EventSubscriberInterface
         $locale = $request->get('_locale');
         if (strpos($request->getRequestUri(), 'backend')) {
             $session->set('_locale', $this->defaultLocale);
+
+            $response = $event->getResponse();
+
+            $response->headers->setCookie(new Cookie('_locale', $this->defaultLocale));
             return;
         }
 
         if ($locale && $this->isLocaleSupported($locale)) {
             $session->set('_locale', $locale);
+            $response = $event->getResponse();
+            $response->headers->setCookie(new Cookie('_locale', $locale));
         }
+        
+//        $cookies = $request->cookies;
+//        if ($cookies->has('_locale')) {
+//            $locale = $cookies->get('_locale');
+//        }
+//        
 
+        
+//        $request = $event->getRequest();
+//        if (strpos($request->getRequestUri(), 'logout')) {
+//
+//        if (!$this->container->get('security.authorization_checker')->isGranted('ROLE_STAFF')) {
+//            $event->setResponse(new RedirectResponse("/".$locale));
+//        }
+//        }
+        
+        
+        
     }
 
-    public static function getSubscribedEvents()
-    {
-        return array(
-            // must be registered before the default Locale listener
-            KernelEvents::REQUEST => array(array('onKernelRequest', 17)),
-        );
-    }
+
+
 }

@@ -66,7 +66,7 @@ class LanguageChangeListener implements EventSubscriberInterface
             return;
         }
         $path = $request->getPathInfo();
-
+        
         $route_exists = false; //by default assume route does not exist.
 
         foreach($this->routeCollection as $routeObject){
@@ -75,12 +75,24 @@ class LanguageChangeListener implements EventSubscriberInterface
                 $route_exists = true;
                 break;
             }
+                
         }
+        
+        
+//        die($path);
 
+//        $cookies = $request->cookies;
+//        if ($cookies->has('_locale')) {
+//            $this->defaultLocale = $cookies->get('_locale');
+//        }
+        
+        
         //If the route does indeed exist then lets redirect there.
         if($route_exists == true){
             $event->setResponse(new RedirectResponse("/".$this->defaultLocale.$path));
         }
+        
+        
     }
 
     public static function getSubscribedEvents()

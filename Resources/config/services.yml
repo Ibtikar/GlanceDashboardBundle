@@ -13,9 +13,9 @@ services:
 
     GlanceDashboardBundle.eventListeners.SessionLanguageListener::
         class: Ibtikar\GlanceDashboardBundle\Listener\SessionLanguageListener
-        arguments: ["@router", "%locale%", "%accepted_locales%"]
+        arguments: ["@service_container","@router", "%locale%", "%accepted_locales%"]
         tags:
-              - { name: kernel.event_subscriber }
+            - { name: kernel.event_listener, event: kernel.response, method: onResponse, priority: -255 }
 
     list_view:
         class: Ibtikar\GlanceDashboardBundle\Service\ListView
