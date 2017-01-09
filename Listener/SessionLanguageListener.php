@@ -29,7 +29,7 @@ class SessionLanguageListener {
      * @var string
      */
     private $defaultLocale;
-    
+
     /**
      * @var string
      */
@@ -70,6 +70,7 @@ class SessionLanguageListener {
         $locale = $request->get('_locale');
         if (strpos($request->getRequestUri(), 'backend')) {
             $session->set('_locale', $this->defaultLocale);
+            $request->setLocale($this->defaultLocale);
 
             $response = $event->getResponse();
 
@@ -80,16 +81,17 @@ class SessionLanguageListener {
         if ($locale && $this->isLocaleSupported($locale)) {
             $session->set('_locale', $locale);
             $response = $event->getResponse();
+            $request->setLocale($locale);
             $response->headers->setCookie(new Cookie('_locale', $locale));
         }
-        
+
 //        $cookies = $request->cookies;
 //        if ($cookies->has('_locale')) {
 //            $locale = $cookies->get('_locale');
 //        }
-//        
+//
 
-        
+
 //        $request = $event->getRequest();
 //        if (strpos($request->getRequestUri(), 'logout')) {
 //
@@ -97,9 +99,9 @@ class SessionLanguageListener {
 //            $event->setResponse(new RedirectResponse("/".$locale));
 //        }
 //        }
-        
-        
-        
+
+
+
     }
 
 
