@@ -52,7 +52,7 @@ class Slug extends Document
     private $publish = false;
     static $TYPE_CATEGORY = "Category";
     static $TYPE_RECIPE = "recipe";
-    static $TYPE_ARTICLES = "Article";
+    static $TYPE_ARTICLE = "Article";
     static $TYPE_TIP = "Tip";
     static $TYPE_KITCHEN911 = "Kitchen911";
     static $TYPE_Rout = "Rout";
