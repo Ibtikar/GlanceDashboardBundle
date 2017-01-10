@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Ibtikar\GlanceDashboardBundle\Document\Document;
 use Ibtikar\GlanceDashboardBundle\Document\StaffListColumns;
 use Ibtikar\GlanceDashboardBundle\Document\Recipe;
+use Ibtikar\GlanceDashboardBundle\Document\Slug;
+use Ibtikar\GlanceDashboardBundle\Service\ArabicMongoRegex;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 
 class BackendController extends Controller {
@@ -1012,5 +1014,27 @@ class BackendController extends Controller {
             return false;
         }
 
+    }
+    
+    /**
+     *@author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
+     */
+    protected function slugifier($recipe) {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $slugAr = ArabicMongoRegex::slugify($recipe->getTitle()."-".  date('ymdHis'));
+        $slugEn = ArabicMongoRegex::slugify($recipe->getTitleEn()."-".date('ymdHis'));
+        
+        $recipe->setSlug($slugAr);
+        $recipe->setSlugEn($slugEn);
+        
+        $type = strtoupper('type_'.$recipe->getType());
+
+        $slug = new Slug();
+        $slug->setReferenceId($recipe->getId());
+        $slug->setType(Slug::$$type);
+        $slug->setSlugAr($slugAr);
+        $slug->setSlugEn($slugEn);
+        $dm->persist($slug);
+        $dm->flush();
     }
 }

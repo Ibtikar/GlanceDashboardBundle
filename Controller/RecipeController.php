@@ -846,27 +846,7 @@ class RecipeController extends BackendController
             "recordsTotal" => $renderingParams['total'],
             "recordsFiltered" => $renderingParams['total']));
     }
-
-    /**
-     *@author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
-     */
-    private function slugifier($recipe) {
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $slugAr = ArabicMongoRegex::slugify($recipe->getTitle()."-".  date('ymdHis'));
-        $slugEn = ArabicMongoRegex::slugify($recipe->getTitleEn()."-".date('ymdHis'));
-        $recipe->setSlug($slugAr);
-        $recipe->setSlugEn($slugEn);
-
-        $slug = new Slug();
-        $slug->setReferenceId($recipe->getId());
-        $slug->setType(Slug::$TYPE_RECIPE);
-        $slug->setSlugAr($slugAr);
-        $slug->setSlugEn($slugEn);
-        $dm->persist($slug);
-        $dm->flush();
-    }
-
-
+    
     public function checkMaterialPublishedAction(Request $request) {
 
         $response = array('status' => 'success', 'valid' => TRUE);
