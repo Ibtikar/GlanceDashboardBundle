@@ -26,10 +26,15 @@
 
                 <div class="heading-btn-group">
                     {% block breadCrumb %}
+                        {% if is_granted('ROLE_RECIPE_CREATE') or is_granted('ROLE_ADMIN') %}
                         <a class="btn btn-link btn-float has-text" href="{{ path('ibtikar_glance_dashboard_recipe_create')}}"><i class="icon-add"></i><span>إدخال وصفه</span></a>
                                 {#                        <a class="btn btn-link btn-float has-text activeLink" href="Role-view.php"><i class="icon-table2"></i> <span>مشاهدة الادوار</span></a>
-                                #}                    {% endblock %}
-                        <a class="btn btn-link btn-float has-text" href="{{ path('ibtikar_glance_dashboard_blog_create')}}"><i class="icon-add"></i><span>إدخال مقال/نصيحة</span></a>
+                                #}  
+                        {% endif %}
+                        {% if is_granted('ROLE_BLOG_CREATE') or is_granted('ROLE_ADMIN') %}
+                            <a class="btn btn-link btn-float has-text" href="{{ path('ibtikar_glance_dashboard_blog_create')}}"><i class="icon-add"></i><span>إدخال مقال/نصيحة</span></a>
+                        {% endif %}
+                    {% endblock %}
                     </div>
                 </div>
             </div>
