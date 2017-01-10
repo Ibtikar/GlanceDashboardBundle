@@ -54,11 +54,11 @@ class RecipeType extends AbstractType {
                             ->add('textEn',CKEditorType::class, array('required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
                             ->add('type', formType\ChoiceType::class, 
                                     array(
-                                        'required' => FALSE, 
+                                        'required' => TRUE, 
                                         'choices' => $blogTypes,
                                         'expanded' => true, 
                                         'placeholder' => false, 
-                                        'empty_data' => null,
+                                        'data' => $blogTypes['article'],
                                         'choice_translation_domain'=>'recipe'
                                     )
                                 )
@@ -106,7 +106,7 @@ class RecipeType extends AbstractType {
                 }
                 
                         
-                $builder->add('products', DocumentType::class, array('required' => false,'multiple' => 'multiple','placeholder' => 'Choose Product','class' => 'IbtikarGlanceDashboardBundle:Product', 'attr' => array('data-maximum-selection-length'=> 10,'data-img-method'=>'profilePhoto','data-img-default'=>'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg','class' => 'select-with-thumb')))
+                $builder->add('products', DocumentType::class, array('required' => false,'multiple' => 'multiple','placeholder' => 'Choose Product','class' => 'IbtikarGlanceDashboardBundle:Product', 'attr' => array('data-maximum-selection-length'=> 10,'data-img-method'=>'profilePhoto','data-img-default'=>'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg','class' => 'select-with-thumb')));
 //                ->add('relatedMaterialId', formType\TextType::class, array('attr' => array("data-validation-message"=>'','data-rule-unique' => 'material_check_field_unique', 'data-name' => 'relatedMaterial'), 'required' => FALSE, 'mapped' => false, 'data' => $this->relatedMaterialId))
 //                ->add('relatedRecipe', formType\TextType::class, array(
 //                    'mapped' => false,
@@ -117,16 +117,27 @@ class RecipeType extends AbstractType {
 //                    )
 //                ))
                         
+                if($options['attr']['contentType'] == 'recipe') {
+                    $builder->add('relatedRecipe', formType\ChoiceType::class, array('multiple'=>true,'required' => FALSE,'mapped' => FALSE,
+                        'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-ajax', 'data_related_container'=>'related_tip', 'ajax-url-var' => 'relatedMaterialSearchUrl')
+                    ))
+                    ->add('related', formType\TextareaType::class, array('required' => FALSE, "mapped" => false,'attr'=>array('parent-class'=>'hidden')))
+                    ;
+                } else {
+                    $builder->add('relatedArticle', formType\ChoiceType::class, array('multiple'=>true,'required' => FALSE,'mapped' => FALSE,
+                        'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-ajax', 'data_related_container'=>'related_article', 'ajax-url-var' => 'relatedArticleSearchUrl')))
+                    ->add('relatedTip', formType\ChoiceType::class, array('multiple'=>true,'required' => FALSE,'mapped' => FALSE,
+                        'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-ajax', 'data_related_container'=>'related_tip', 'ajax-url-var' => 'relatedTipSearchUrl')
+                    ))
+                    ->add('related_article', formType\TextareaType::class, array('required' => FALSE, "mapped" => false,'attr'=>array('parent-class'=>'hidden')))
+                    ->add('related_tip', formType\TextareaType::class, array('required' => FALSE, "mapped" => false,'attr'=>array('parent-class'=>'hidden')))
+                    ;
+                }
                         
-                ->add('relatedRecipe', formType\ChoiceType::class, array('multiple'=>true,'required' => FALSE,'mapped' => FALSE,
-                    'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-ajax','ajax-url-var' => 'relatedMaterialSearchUrl')
-                ))
                         
-                        
-                ->add('defaultCoverPhoto', formType\HiddenType::class,array("mapped" => false,'required' => true,'attr'=>array('data-msg-required'=>' ')))
+                $builder->add('defaultCoverPhoto', formType\HiddenType::class,array("mapped" => false,'required' => true,'attr'=>array('data-msg-required'=>' ')))
                 ->add('galleryType', formType\HiddenType::class)
                 ->add('media', formType\TextareaType::class, array('required' => FALSE, "mapped" => false,'attr'=>array('parent-class'=>'hidden')))
-                ->add('related', formType\TextareaType::class, array('required' => FALSE, "mapped" => false,'attr'=>array('parent-class'=>'hidden')))
                 ->add('submitButton', formType\SubmitType::class);
     }
 

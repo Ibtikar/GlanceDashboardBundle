@@ -311,6 +311,17 @@ class Recipe  extends Publishable {
      * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe" , simple=true)
      */
     private $relatedRecipe;
+    
+    /**
+     * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe" , simple=true)
+     */
+    private $relatedArticle;
+    
+    
+    /**
+     * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe" , simple=true)
+     */
+    private $relatedTip;
 
     /**
      * @MongoDB\Boolean
@@ -1256,6 +1267,66 @@ class Recipe  extends Publishable {
     public function getRelatedRecipe()
     {
         return $this->relatedRecipe;
+    }
+    
+    /**
+     * Add relatedArticle
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle
+     */
+    public function addRelatedArticle(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle)
+    {
+        $this->relatedArticle[] = $relatedArticle;
+    }
+
+    /**
+     * Remove relatedArticle
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle
+     */
+    public function removeRelatedArticle(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle)
+    {
+        $this->relatedArticle->removeElement($relatedArticle);
+    }
+
+    /**
+     * Get relatedArticle
+     *
+     * @return \Doctrine\Common\Collections\Collection $relatedArticle
+     */
+    public function getRelatedArticle()
+    {
+        return $this->relatedArticle;
+    }
+    
+    /**
+     * Add relatedTip
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip
+     */
+    public function addRelatedTip(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip)
+    {
+        $this->relatedTip[] = $relatedTip;
+    }
+
+    /**
+     * Remove relatedTip
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip
+     */
+    public function removeRelatedTip(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip)
+    {
+        $this->relatedTip->removeElement($relatedTip);
+    }
+
+    /**
+     * Get relatedTip
+     *
+     * @return \Doctrine\Common\Collections\Collection $relatedTip
+     */
+    public function getRelatedTip()
+    {
+        return $this->relatedTip;
     }
 
     /**

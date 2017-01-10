@@ -248,6 +248,7 @@ console.log($this.parents('.form-group').find('#recipe_relatedRecipe').val())
 }
 
 $('#recipe_relatedRecipe').on('select2:select',function(e){
+    console.log(e.params.data);
     addRelatedMaterial(e.params.data);
     $(this).val(null).trigger("change");
 });

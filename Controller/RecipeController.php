@@ -1018,68 +1018,6 @@ class RecipeController extends BackendController
         return new JsonResponse(array('data' => $responseArr));
     }
 
-       public function searchRelatedAction(Request $request) {
-//        die(var_dump($request->request->all(),$request->query->all()));
-
-        $queryBuilder = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe');
-
-        $searchString = trim($request->get('q'));
-        $oldvalue = json_decode(trim($request->get('old')), true);
-
-        if (count($oldvalue) >= 10) {
-            return new JsonResponse(array(array(
-                'message' => $this->trans('recipe must less than 10',array(),  $this->translationDomain))
-            ));
-        }
-
-        if(strpos($searchString,".")){
-
-            $array = explode($this->container->get('router')->getContext()->getHost(), $searchString);
-
-            if (count($array) < 2) {
-                return new JsonResponse(array('status' => 'success', 'valid' => FALSE, 'message' => $this->trans('not valid')));
-            }
-
-            $path = trim(str_replace("app_dev.php","",array_pop($array)), "/");
-//            die(var_dump(urldecode($path)));
-            preg_match_all('/[a-zA-Z0-9\x{0600}-\x{06ff}\-]+/u', urldecode($path), $slug);
-
-            if(isset($slug[0][1])){
-                $queryBuilder->addOr($queryBuilder->expr()->field('slug')->equals($slug[0][1]));
-                $queryBuilder->addOr($queryBuilder->expr()->field('slugEn')->equals($slug[0][1]));
-            }
-
-        }elseif ($searchString && strlen($searchString) >= 1) {
-            $searchRegex = new \MongoRegex('/' . preg_quote($searchString) . '/');
-            $queryBuilder->addOr($queryBuilder->expr()->field('title')->equals($searchRegex));
-            $queryBuilder->addOr($queryBuilder->expr()->field('titleEn')->equals($searchRegex));
-        }
-        $existingIds=array();
-        if($oldvalue){
-        foreach($oldvalue as $value){
-            $existingIds[]=$value['id'];
-        }
-        }
-        $queryBuilder->field('status')->equals('publish')
-                ->field('type')->equals('recipe')
-                ->field('id')->notIn($existingIds)
-                ->limit(10)
-                ->sort('createdAt', 'DESC');
-
-        $result = $queryBuilder->getQuery()->toArray();
-        $responseArr = array();
-
-        foreach($result as $recipe){
-            $responseArr[] = array(
-                'id' => $recipe->getId(),
-                'text' => $recipe->getTitle(),
-                'img' => $recipe->getDefaultCoverPhoto()?$recipe->getDefaultCoverPhoto()->getWebPath():""
-            );
-        }
-
-        return new JsonResponse($responseArr);
-    }
-
     public function relatedMaterialDeleteAction(Request $request) {
 
         $dm = $this->get('doctrine_mongodb')->getManager();

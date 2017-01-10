@@ -113,7 +113,7 @@ var recipeValue='';
     data: function (params) {
       return {
         q: params.term,
-        old: $('#recipe_related').val()
+        old: $(this).attr('data_related_container').val()
       };
     },
     processResults: function (data) {

@@ -43,8 +43,8 @@ ibtikar_glance_dashboard_recipe_check_material_published_bulk:
     defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:checkMaterialPublishedBulk }
 
 ibtikar_glance_dashboard_recipe_related_material_search:
-    path:  /related-material-search
-    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:searchRelated }
+    path:  /related-material-search/{collectionType}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:searchRelated, collectionType ~ }
 
 ibtikar_glance_dashboard_recipe_related_material_delete:
     path: /related-material-delete
