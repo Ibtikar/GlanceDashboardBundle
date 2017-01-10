@@ -1,4 +1,6 @@
 var RelatedRecipeObj = [];
+var RelatedArticleObj = [];
+var RelatedTipObj = [];
 
 
 function showNotificationMsg(title, text, type) {
@@ -93,6 +95,47 @@ function updateRelatedMaterial(){
             $('.dev-related-list').append('<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="/'+(this.img).replace(/^\/+/g,'')+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>');
 //            $('.dev-related-list').append('<li class="media dev-related-item"><div class="media-body"><a href="'+$('base').attr('href')+this.slug+'" target="_blank">'+this.title+'</a>  </div><div class="dev-delete-related-material media-right" data-related-material-id="'+this.id+'" data-related-material-slug="'+this.slug+'"><i class="icon icon-cross2"></i></div></li>');
         });
+    }
+}
+
+function updateRelatedArticle(){
+    if($('#recipe_related_article').length > 0){
+        var data = JSON.parse($('#recipe_related_article').val());
+        RelatedArticleObj = data;
+//        $('.dev-related-article-list').html("");
+        var articles = '<label class="control-label col-lg-2 dev-related-article-list" for="recipe_relatedRecipe"></label><div class="col-lg-12" style="padding: 0;"><ul class="dev-related-article-list media-list width-350 notificationList">';
+        $(data).each(function(){
+            articles += '<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="/'+(this.img).replace(/^\/+/g,'')+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-article-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>';
+//            $('.dev-related-list').append('<li class="media dev-related-item"><div class="media-body"><a href="'+$('base').attr('href')+this.slug+'" target="_blank">'+this.title+'</a>  </div><div class="dev-delete-related-material media-right" data-related-material-id="'+this.id+'" data-related-material-slug="'+this.slug+'"><i class="icon icon-cross2"></i></div></li>');
+        });
+        articles += "</ul></div></div>"
+        
+        if($('#recipe_relatedArticle').parent().find('.dev-related-article-list').length > 0) {
+            $('label.dev-related-article-list').remove(); 
+            $('.dev-related-article-list').parent().remove(); 
+        }
+        $('#recipe_relatedArticle').parent().append(articles);
+    }
+}
+
+function updateRelatedTip(){
+    if($('#recipe_related_tip').length > 0){
+        var data = JSON.parse($('#recipe_related_tip').val());
+        RelatedTipObj = data;
+//        $('.dev-related-tip-list').html("");
+        
+        var tips = '<label class="control-label col-lg-2 dev-related-tip-list" for="recipe_relatedRecipe"></label><div class="col-lg-12" style="padding: 0;"><ul class="dev-related-tip-list media-list width-350 notificationList">';
+        $(data).each(function(){
+            tips += '<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="/'+(this.img).replace(/^\/+/g,'')+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-tip-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>';
+//            $('.dev-related-tip-list').append('<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="/'+(this.img).replace(/^\/+/g,'')+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>');
+//            $('.dev-related-list').append('<li class="media dev-related-item"><div class="media-body"><a href="'+$('base').attr('href')+this.slug+'" target="_blank">'+this.title+'</a>  </div><div class="dev-delete-related-material media-right" data-related-material-id="'+this.id+'" data-related-material-slug="'+this.slug+'"><i class="icon icon-cross2"></i></div></li>');
+        });
+        tips += "</ul></div></div>"
+        if($('#recipe_relatedTip').parent().find('.dev-related-tip-list').length > 0) {
+           $('label.dev-related-tip-list').remove(); 
+           $('.dev-related-tip-list').parent().remove(); 
+        }
+        $('#recipe_relatedTip').parent().append(tips);
     }
 }
 
@@ -196,15 +239,35 @@ function addRelatedMaterial(data) {
 //    checkPublishedValidation(element);
 }
 
+function addRelatedArticles(data) {
+    RelatedArticleObj.unshift({
+        'id':data.id,
+        'text':data.text,
+        'img':data.img
+    });
+    $('#recipe_related_article').val(JSON.stringify(RelatedArticleObj));
+    updateRelatedArticle();
+
+//    checkPublishedValidation(element);
+}
+
+function addRelatedTip(data) {
+    RelatedTipObj.unshift({
+        'id':data.id,
+        'text':data.text,
+        'img':data.img
+    });
+    $('#recipe_related_tip').val(JSON.stringify(RelatedTipObj));
+    updateRelatedTip();
+}
+
 function checkPublishedValidation(element) {
     var $this = $(element);
-    console.log($this)
     if($this.val().trim() == "") return;
     if ($this.valid()) {
         $this.removeAttr('data-force-published-valid');
         $this.removeAttr('data-published-valid');
         var $loader = $this.closest('.form-group').find('.InputLoader').show();
-console.log($this.parents('.form-group').find('#recipe_relatedRecipe').val())
         if($this.parents('.form-group').find('#recipe_relatedRecipe').val() != ""){
             RelatedMaterialObj = JSON.parse($this.parents('.form-group').find('#recipe_relatedRecipe').val());
         }else{
@@ -248,8 +311,15 @@ console.log($this.parents('.form-group').find('#recipe_relatedRecipe').val())
 }
 
 $('#recipe_relatedRecipe').on('select2:select',function(e){
-    console.log(e.params.data);
     addRelatedMaterial(e.params.data);
+    $(this).val(null).trigger("change");
+});
+$('#recipe_relatedArticle').on('select2:select',function(e){
+    addRelatedArticles(e.params.data);
+    $(this).val(null).trigger("change");
+});
+$('#recipe_relatedTip').on('select2:select',function(e){
+    addRelatedTip(e.params.data);
     $(this).val(null).trigger("change");
 });
 
@@ -312,6 +382,96 @@ $(document).on("click",'.dev-add-related-material',function(){
                 });
                 $('#recipe_related').val(JSON.stringify(objArray));
                 RelatedRecipeObj = objArray;
+            }
+    });
+
+    $(document).on('click', '.dev-related-article-delete', function(e) {
+        e.preventDefault();
+            var $this = $(this);
+
+            if(document.location.pathname.indexOf('edit') >= 0){
+                $.ajax({
+                    url: relatedMaterialDeleteUrl,
+                    method: 'POST',
+                    data:{parent:requestId,child:$this.attr('data-related-material-id')},
+                    success: function(data) {
+                        if(data.status == "success"){
+                            $this.parents('li').remove();
+                            var objArray = [];
+                            $.each($('.dev-related-list .media'),function(){
+                                objArray.push({
+                                    'id':$(this).attr('data-related-material-id'),
+                                    'text':$(this).find('.media-body b').text().trim(),
+                                    'img':"/"+$(this).find('img').attr('src')
+                                });
+                            });
+                            $('#recipe_related').val(JSON.stringify(objArray));
+                            updateRelatedMaterial();
+                        }
+
+                        showNotificationMsg(data.message,"");
+
+                    }
+                });
+            }else{
+                $this.parents('li').remove();
+                var objArray = [];
+                var objectElement;
+                $.each($('.dev-related-article-list .media'),function(){
+                  objectElement=$(this)
+                    objArray.push({
+                        'id':objectElement.attr('data-related-material-id'),
+                        'text':objectElement.find('.media-body b').text().trim(),
+                        'img':objectElement.find('img').attr('src')
+                    });
+                });
+                $('#recipe_related_article').val(JSON.stringify(objArray));
+                RelatedArticleObj = objArray;
+            }
+    });
+
+    $(document).on('click', '.dev-related-tip-delete', function(e) {
+        e.preventDefault();
+            var $this = $(this);
+
+            if(document.location.pathname.indexOf('edit') >= 0){
+                $.ajax({
+                    url: relatedMaterialDeleteUrl,
+                    method: 'POST',
+                    data:{parent:requestId,child:$this.attr('data-related-material-id')},
+                    success: function(data) {
+                        if(data.status == "success"){
+                            $this.parents('li').remove();
+                            var objArray = [];
+                            $.each($('.dev-related-list .media'),function(){
+                                objArray.push({
+                                    'id':$(this).attr('data-related-material-id'),
+                                    'text':$(this).find('.media-body b').text().trim(),
+                                    'img':"/"+$(this).find('img').attr('src')
+                                });
+                            });
+                            $('#recipe_related').val(JSON.stringify(objArray));
+                            updateRelatedMaterial();
+                        }
+
+                        showNotificationMsg(data.message,"");
+
+                    }
+                });
+            }else{
+                $this.parents('li').remove();
+                var objArray = [];
+                var objectElement;
+                $.each($('.dev-related-tip-list .media'),function(){
+                  objectElement=$(this)
+                    objArray.push({
+                        'id':objectElement.attr('data-related-material-id'),
+                        'text':objectElement.find('.media-body b').text().trim(),
+                        'img':objectElement.find('img').attr('src')
+                    });
+                });
+                $('#recipe_related_tip').val(JSON.stringify(objArray));
+                RelatedTipObj = objArray;
             }
     });
 

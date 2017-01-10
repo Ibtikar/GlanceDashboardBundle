@@ -610,7 +610,7 @@
     var googleUploadImage = '{{ path('google_upload_image', {'documentId':'null', 'collectionType':'Recipe'}) }}';
     var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'all','documentId':app.request.get('id'),'collectionType':'Recipe','room':room})}}";
     var imageSortTemplate = '{{ imageSortTemplate|escape('js') }}';
-    var relatedMaterialSearchUrl = "{{ path('ibtikar_glance_dashboard_recipe_related_material_search', {'collectionType':'Recipe'})}}";
+    var relatedMaterialSearchUrl = "{{ path('ibtikar_glance_dashboard_recipe_related_material_search', {'collectionType':'recipe'})}}";
     var videoSearchTemplate = '{{ videoSearchTemplate|escape('js') }}';
     var youtubeUploadVideo = '{{ path('ibtikar_glance_dashboard_media_youtube_upload_video',{'type':'video','documentId':app.request.get('id'),'collectionType':'Recipe','room':room}) }}';
     var validateVideoUrl = '{{ path('youtube_validate_videoUrl') }}';

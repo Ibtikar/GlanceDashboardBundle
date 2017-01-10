@@ -43,8 +43,12 @@ class BlogController extends BackendController
             if ($form->isValid()) {
                 $formData = $request->get('recipe');
 
-                if($formData['related']){
-                    $this->updateRelatedRecipe($recipe, $formData['related'],$dm);
+                if($formData['related_article']){
+                    $this->updateRelatedRecipe($recipe, $formData['related_article'],$dm);
+                }
+                
+                if($formData['related_tip']){
+                    $this->updateRelatedRecipe($recipe, $formData['related_tip'],$dm);
                 }
 
                 $tags = $formData['tags'];

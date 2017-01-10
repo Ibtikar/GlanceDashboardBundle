@@ -119,15 +119,15 @@ class RecipeType extends AbstractType {
                         
                 if($options['attr']['contentType'] == 'recipe') {
                     $builder->add('relatedRecipe', formType\ChoiceType::class, array('multiple'=>true,'required' => FALSE,'mapped' => FALSE,
-                        'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-ajax', 'data_related_container'=>'related_tip', 'ajax-url-var' => 'relatedMaterialSearchUrl')
+                        'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-ajax', 'data_related_container'=>'recipe_related', 'ajax-url-var' => 'relatedMaterialSearchUrl')
                     ))
                     ->add('related', formType\TextareaType::class, array('required' => FALSE, "mapped" => false,'attr'=>array('parent-class'=>'hidden')))
                     ;
                 } else {
                     $builder->add('relatedArticle', formType\ChoiceType::class, array('multiple'=>true,'required' => FALSE,'mapped' => FALSE,
-                        'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-ajax', 'data_related_container'=>'related_article', 'ajax-url-var' => 'relatedArticleSearchUrl')))
+                        'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-ajax', 'data_related_container'=>'recipe_related_article', 'ajax-url-var' => 'relatedArticleSearchUrl')))
                     ->add('relatedTip', formType\ChoiceType::class, array('multiple'=>true,'required' => FALSE,'mapped' => FALSE,
-                        'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-ajax', 'data_related_container'=>'related_tip', 'ajax-url-var' => 'relatedTipSearchUrl')
+                        'choice_translation_domain'=>'recipe','attr' => array('class' => 'select-ajax', 'data_related_container'=>'recipe_related_tip', 'ajax-url-var' => 'relatedTipSearchUrl')
                     ))
                     ->add('related_article', formType\TextareaType::class, array('required' => FALSE, "mapped" => false,'attr'=>array('parent-class'=>'hidden')))
                     ->add('related_tip', formType\TextareaType::class, array('required' => FALSE, "mapped" => false,'attr'=>array('parent-class'=>'hidden')))

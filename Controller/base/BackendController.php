@@ -929,7 +929,7 @@ class BackendController extends Controller {
 
         if (count($oldvalue) >= 10) {
             return new JsonResponse(array(array(
-                'message' => $this->trans('recipe must less than 10',array(),  $this->translationDomain))
+                'message' => $this->trans($type.' must less than 10',array(),  $this->translationDomain))
             ));
         }
 
@@ -978,5 +978,39 @@ class BackendController extends Controller {
         }
 
         return new JsonResponse($responseArr);
+    }
+    
+    public function updateRelatedRecipe($document,$relatedJson,$dm = null) {
+        if (!$dm) {
+            $dm = $this->get('doctrine_mongodb')->getManager();
+        }
+
+        $array = json_decode($relatedJson,true);
+        foreach($array as $relatedRecipe){
+            $material = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($relatedRecipe['id']);
+
+            if($this->validToRelate($material, $document) && count($document->getRelatedRecipe()) < 10){
+                    $document->addRelatedRecipe($material);
+            }
+        }
+    }
+    
+    public function validToRelate($recipe, $document) {
+
+        if($recipe && ($recipe->getStatus() == "publish")){
+            if($document->getType() !== $recipe->getType()) {
+                return false;
+            }
+            if(is_null($document->getRelatedRecipe()) || is_array($document->getRelatedRecipe())){
+                return true;
+            }elseif(is_object($document->getRelatedRecipe()) && !$document->getRelatedRecipe()->contains($recipe)){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+
     }
 }

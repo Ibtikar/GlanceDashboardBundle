@@ -148,7 +148,8 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 'recipe': 'وصفه'
 'all': 'محتوى'
 'recipe must less than 10': 'لا يمكن اختيار اكتر من 10 وصفات'
-
+'article must less than 10': 'لا يمكن اختيار اكتر من 10 مقالات'
+'tip must less than 10': 'لا يمكن اختيار اكتر من 10 نصائح'
 
 
 # #############General############
