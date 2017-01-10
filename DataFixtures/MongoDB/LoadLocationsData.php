@@ -18,7 +18,7 @@ class LoadLocationsData implements FixtureInterface {
         $location->setPage('Home');
         $location->setSection('Daily-solution');
         $location->setIsSelectable(TRUE);
-        $location->setType(array('recipe'));
+        $location->setType(array('recipe','article','tip','kitchen911'));
         $location->setMaxNumberOfMaterials(1);
         $location->setRequiredCoverImage(true);
         $manager->persist($location);

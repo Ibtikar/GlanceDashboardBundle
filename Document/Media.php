@@ -292,7 +292,7 @@ class Media extends Document {
             $uploadDirectory .= '/subproduct-file/' . $this->getSubproduct()->getId();
 
         } else if ($this->getRecipe()) {
-            $uploadDirectory .= '/recipe-file/' . $this->getRecipe()->getId();
+            $uploadDirectory .= "/".strtolower($this->collectionType)."-file/" . $this->getRecipe()->getId();
         } else if ($this->getMagazine()) {
             $uploadDirectory .= '/magazine-file/' . $this->getMagazine()->getId();
         } else {

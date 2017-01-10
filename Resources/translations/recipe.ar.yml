@@ -135,8 +135,8 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 'delete multiple article %no%': 'أنت على وشك حذف (%no%) مقال، هل تريد إتمام العملية؟'
 'delete multiple publish article %no%': 'انت على وشك حذف "%no%" مقال منشور على الموقع   ... هل تريد اﻷستمرار و حذف هذه المقال من الموقع؟'
 
-'delete multiple tip %no%': 'أنت على وشك حذف (%no%) وصفات، هل تريد إتمام العملية؟'
-'delete multiple publish tip %no%': 'انت على وشك حذف "%no%" وصفات منشورة على الموقع بعنوان  ... هل تريد اﻷستمرار و حذف هذه الوصفة من الموقع؟'
+'delete multiple tip %no%': 'أنت على وشك حذف (%no%) نصائح، هل تريد إتمام العملية؟'
+'delete multiple publish tip %no%': 'انت على وشك حذف "%no%" نصائح منشورة على الموقع بعنوان  ... هل تريد اﻷستمرار و حذف هذه النصيحه من الموقع؟'
 
 'delete multiple all %no%': 'أنت على وشك حذف (%no%) محتوى، هل تريد إتمام العملية؟'
 'delete multiple publish all %no%': 'انت على وشك حذف "%no%" محتوى منشور على الموقع   ... هل تريد اﻷستمرار و حذف هذه المحتوى من الموقع؟'
@@ -144,7 +144,7 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 'you must write delete reason': 'الرجاء ادخال سبب الحذف'
 'already deleted': 'عذراً، هذه الوصفة محذوفه مسبقاً'
 'article already deleted': 'عذراً، هذا المقال محذوف مسبقاً'
-'tip already deleted': 'عذراً، هذه الوصفة محذوفه مسبقاً'
+'tip already deleted': 'عذراً، هذه النصيحه محذوفه مسبقاً'
 'recipe': 'وصفه'
 'all': 'محتوى'
 'recipe must less than 10': 'لا يمكن اختيار اكتر من 10 وصفات'
