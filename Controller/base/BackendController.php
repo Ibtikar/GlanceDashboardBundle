@@ -642,7 +642,8 @@ class BackendController extends Controller {
             return new JsonResponse(array('status' => 'login'));
         }
         if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_DELETE') && !$securityContext->isGranted('ROLE_ADMIN')) {
-            return new JsonResponse(array('status' => 'denied'));
+            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
+            return new JsonResponse($result);
         }
         $id = $request->get('id');
         if (!$id) {
@@ -825,8 +826,8 @@ class BackendController extends Controller {
                 $permission = 'ROLE_' . strtoupper($this->calledClassName) . '_DELETE';
 
                 if (!$securityContext->isGranted($permission) && !$securityContext->isGranted('ROLE_ADMIN')) {
-                    $this->get('session')->getFlashBag()->add('error', $translator->trans('You are not authorized to do this action any more'));
-                    return new JsonResponse(array('status' => 'reload-page'), 403);
+                    $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
+                    return new JsonResponse($result);
                 }
 
                 $bulkQueries = array(
@@ -907,7 +908,7 @@ class BackendController extends Controller {
         }
         return $tagSelected;
     }
-    
+
     public function getTagsAction() {
         $tags = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Tag')->findAll();
         $responseContent = array();
@@ -917,13 +918,13 @@ class BackendController extends Controller {
         }
         return new JsonResponse($responseContent);
     }
-    
+
     public function searchRelatedAction(Request $request) {
 //        die(var_dump($request->request->all(),$request->query->all()));
         $dm = $this->get('doctrine_mongodb')->getManager();
-        
+
         $type = $request->get('collectionType');
-        
+
         $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')->field('type')->equals(Recipe::$types[$type]);
 
         $searchString = trim($request->get('q'));
@@ -981,7 +982,7 @@ class BackendController extends Controller {
 
         return new JsonResponse($responseArr);
     }
-    
+
     public function updateRelatedRecipe($document,$relatedJson,$dm = null) {
         if (!$dm) {
             $dm = $this->get('doctrine_mongodb')->getManager();
@@ -990,17 +991,17 @@ class BackendController extends Controller {
         $array = json_decode($relatedJson,true);
         foreach($array as $relatedRecipe){
             $material = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($relatedRecipe['id']);
-            
+
             $contentType = $material->getType();
             $addMethod = "addRelated".strtoupper($contentType);
             $getMethod = "getRelated".strtoupper($contentType);
-            
+
             if($this->validToRelate($material, $document) && count($document->$getMethod()) < 10){
                 $document->$addMethod($material);
             }
         }
     }
-    
+
     public function validToRelate($relatedRecipe, $document) {
 
         if($relatedRecipe && ($relatedRecipe->getStatus() == "publish")){
@@ -1016,7 +1017,7 @@ class BackendController extends Controller {
         }
 
     }
-    
+
     /**
      *@author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
      */
@@ -1024,10 +1025,10 @@ class BackendController extends Controller {
         $dm = $this->get('doctrine_mongodb')->getManager();
         $slugAr = ArabicMongoRegex::slugify($recipe->getTitle()."-".  date('ymdHis'));
         $slugEn = ArabicMongoRegex::slugify($recipe->getTitleEn()."-".date('ymdHis'));
-        
+
         $recipe->setSlug($slugAr);
         $recipe->setSlugEn($slugEn);
-        
+
         $type = strtoupper('type_'.$recipe->getType());
 
         $slug = new Slug();
