@@ -75,6 +75,16 @@ class MediaController extends BackendController
                     return $response;
                 }
                 $fieldUpdate='Recipe';
+            } elseif ($collectionType === 'Blog') {
+                $document = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($documentId);
+                if (!$document) {
+                    throw $this->createNotFoundException($this->trans('Wrong id'));
+                }
+                $response = $this->getInvalidResponseForRecipe($documentId, $this->container->get('request_stack')->getCurrentRequest()->get('room'));
+                if ($response) {
+                    return $response;
+                }
+                $fieldUpdate='Recipe';
             }
 
         } else {
@@ -320,9 +330,9 @@ class MediaController extends BackendController
 //            if ($response) {
 //                return $response;
 //            }
-            if ($document->getCoverPhoto()) {
-                return $this->getNotificationResponse(null, array(), 'error');
-            }
+//            if ($document->getCoverPhoto()) {
+//                return $this->getNotificationResponse(null, array(), 'error');
+//            }
         }
         $dm->remove($document);
         try {
