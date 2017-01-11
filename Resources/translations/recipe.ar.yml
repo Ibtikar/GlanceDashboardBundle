@@ -88,7 +88,10 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 'List recipedeleted':  الوصفات المحذوفه
 'recipes deleted': وصفات محذوفه
 'List content': 'محتوى'
-'edit recipe': 'تعديل وصفه'
+'Edit recipe': 'تعديل وصفه'
+'Edit article': 'تعديل مقال'
+'Edit tip': 'تعديل نصيحة'
+'Edit kitchen911': 'تعديل مطبخ الطوارئs'
 
 # ############Buttons############
 'AssignToMe': 'اسناد لي'

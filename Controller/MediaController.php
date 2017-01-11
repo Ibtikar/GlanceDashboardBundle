@@ -344,6 +344,8 @@ class MediaController extends BackendController
         if (!$this->getUser()) {
             return $this->getLoginResponse();
         }
+        
+        $documents = array();
         if ($documentId && $documentId != 'null') {
             if ($collectionType === 'Product') {
                 $reponse = $this->getInvalidResponseForProduct(new \MongoId($documentId), '', 'list');

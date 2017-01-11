@@ -990,22 +990,23 @@ class BackendController extends Controller {
         $array = json_decode($relatedJson,true);
         foreach($array as $relatedRecipe){
             $material = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($relatedRecipe['id']);
-
-            if($this->validToRelate($material, $document) && count($document->getRelatedRecipe()) < 10){
-                    $document->addRelatedRecipe($material);
+            
+            $contentType = $material->getType();
+            $addMethod = "addRelated".strtoupper($contentType);
+            $getMethod = "getRelated".strtoupper($contentType);
+            
+            if($this->validToRelate($material, $document) && count($document->$getMethod()) < 10){
+                $document->$addMethod($material);
             }
         }
     }
     
-    public function validToRelate($recipe, $document) {
+    public function validToRelate($relatedRecipe, $document) {
 
-        if($recipe && ($recipe->getStatus() == "publish")){
-            if($document->getType() !== $recipe->getType()) {
-                return false;
-            }
+        if($relatedRecipe && ($relatedRecipe->getStatus() == "publish")){
             if(is_null($document->getRelatedRecipe()) || is_array($document->getRelatedRecipe())){
                 return true;
-            }elseif(is_object($document->getRelatedRecipe()) && !$document->getRelatedRecipe()->contains($recipe)){
+            }elseif(is_object($document->getRelatedRecipe()) && !$document->getRelatedRecipe()->contains($relatedRecipe)){
                 return true;
             }else{
                 return false;

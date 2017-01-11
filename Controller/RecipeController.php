@@ -369,7 +369,7 @@ class RecipeController extends BackendController
         $recipe = new Recipe();
         $dm = $this->get('doctrine_mongodb')->getManager();
 
-        $form = $this->createForm(RecipeType::class, $recipe, array('translation_domain' => $this->translationDomain, 'attr' => array('contentType' => 'recipe', 'class' => 'dev-page-main-form dev-js-validation form-horizontal'),'type'=>'create'));
+        $form = $this->createForm(RecipeType::class, $recipe, array('translation_domain' => $this->translationDomain, 'attr' => array('contentType' => 'recipe', 'type' => 'add', 'class' => 'dev-page-main-form dev-js-validation form-horizontal'),'type'=>'create'));
 
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
@@ -460,10 +460,13 @@ class RecipeController extends BackendController
                 throw $this->createNotFoundException($this->trans('Wrong id'));
             }
         }
+        
+        $contentType =  $recipe->getType() == Recipe::$types['recipe'] ? 'Recipe' : 'Blog';
+
         $tagSelected = $this->getTagsForDocument($recipe);
         $tagSelectedEn = $this->getTagsForDocument($recipe, "en");
 
-        $form = $this->createForm(RecipeType::class, $recipe, array('translation_domain' => $this->translationDomain, 'attr' => array('contentType' => 'recipe', 'class' => 'dev-page-main-form dev-js-validation form-horizontal')));
+        $form = $this->createForm(RecipeType::class, $recipe, array('translation_domain' => $this->translationDomain, 'attr' => array('contentType' => strtolower($contentType), 'type' => 'edit', 'class' => 'dev-page-main-form dev-js-validation form-horizontal')));
 
         $form->get('tags')->setData($tagSelected);
         $form->get('tagsEn')->setData($tagSelectedEn);
@@ -476,9 +479,17 @@ class RecipeController extends BackendController
             if ($form->isValid()) {
 
                 $formData = $request->get('recipe');
-
-                if ($formData['related']) {
+                
+                if ($contentType == 'Recipe' && $formData['related']) {
                     $this->updateRelatedRecipe($recipe, $formData['related'], $dm);
+                }
+                
+                if($contentType == 'Blog' && $formData['related_article']){
+                    $this->updateRelatedRecipe($recipe, $formData['related_article'],$dm);
+                }
+                
+                if($contentType == 'Blog' && $formData['related_tip']){
+                    $this->updateRelatedRecipe($recipe, $formData['related_tip'],$dm);
                 }
 
                 $this->updateMaterialGallary($recipe, $formData['media'], $dm);
@@ -534,12 +545,12 @@ class RecipeController extends BackendController
                 return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_' . strtolower($this->calledClassName) . '_list_' . $recipe->getStatus() . '_recipe'), array(), true));
             }
         }
-
-        return $this->render('IbtikarGlanceDashboardBundle:Recipe:edit.html.twig', array(
+        
+        return $this->render('IbtikarGlanceDashboardBundle:'.$contentType.':edit.html.twig', array(
                     'recipe' => $recipe,
                     'form' => $form->createView(),
                     'breadcrumb' => $breadCrumbArray,
-                    'title' => $this->trans('Edit Recipe', array(), $this->translationDomain),
+                    'title' => $this->trans('Edit '.$recipe->getType(), array(), $this->translationDomain),
                     'translationDomain' => $this->translationDomain,
                     'room' => $this->calledClassName,
         ));

@@ -35,7 +35,7 @@ class BlogController extends BackendController
         $recipe = new Recipe();
         $dm = $this->get('doctrine_mongodb')->getManager();
 
-        $form = $this->createForm(RecipeType::class, $recipe, array('translation_domain' => $this->translationDomain, 'attr' => array('contentType' => 'blog', 'class' => 'dev-page-main-form dev-js-validation form-horizontal'),'type'=>'create'));
+        $form = $this->createForm(RecipeType::class, $recipe, array('translation_domain' => $this->translationDomain, 'attr' => array('contentType' => 'blog', 'type' => 'add', 'class' => 'dev-page-main-form dev-js-validation form-horizontal'),'type'=>'create'));
 
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
@@ -50,7 +50,7 @@ class BlogController extends BackendController
                 if($formData['related_tip']){
                     $this->updateRelatedRecipe($recipe, $formData['related_tip'],$dm);
                 }
-
+                
                 $tags = $formData['tags'];
                 $tagsEn = $formData['tagsEn'];
 

@@ -51,8 +51,10 @@ class RecipeType extends AbstractType {
                     $blogTypes = Recipe::$types;
                     array_shift($blogTypes);
                     $builder->add('text',  CKEditorType::class, array('required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
-                            ->add('textEn',CKEditorType::class, array('required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
-                            ->add('type', formType\ChoiceType::class, 
+                            ->add('textEn',CKEditorType::class, array('required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')));
+                    
+                        if($options['attr']['type']=='add'){
+                            $builder->add('type', formType\ChoiceType::class, 
                                     array(
                                         'required' => TRUE, 
                                         'choices' => $blogTypes,
@@ -61,8 +63,8 @@ class RecipeType extends AbstractType {
                                         'data' => $blogTypes['article'],
                                         'choice_translation_domain'=>'recipe'
                                     )
-                                )
-                            ;           
+                            );
+                        }
                 }
         
                 if($options['attr']['contentType'] == 'recipe') {
