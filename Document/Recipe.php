@@ -1365,6 +1365,36 @@ class Recipe  extends Publishable {
         }
         return $array;
     }
+    
+    public function getRelatedArticleJson(){
+        $array = array();
+        if($this->getRelatedArticle()){
+            foreach($this->getRelatedArticle() as $article){
+                $array[] = array(
+                            'id'=>$article->getId(),
+                            'text'=>$article->getTitle(),
+                            'img' =>$article->getDefaultCoverPhoto()?$article->getDefaultCoverPhoto()->getWebPath():""
+                        );
+            }
+
+        }
+        return $array;
+    }
+    
+    public function getRelatedTipJson(){
+        $array = array();
+        if($this->getRelatedTip()){
+            foreach($this->getRelatedTip() as $tip){
+                $array[] = array(
+                            'id'=>$tip->getId(),
+                            'text'=>$tip->getTitle(),
+                            'img' =>$tip->getDefaultCoverPhoto()?$tip->getDefaultCoverPhoto()->getWebPath():""
+                        );
+            }
+
+        }
+        return $array;
+    }
 
     /**
      * Set migrated

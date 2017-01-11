@@ -187,6 +187,7 @@ jQuery(document).ready(function($) {
                     }
 //                }
             }
+            console.log($('form.dev-page-main-form').valid());
         if ($('form.dev-page-main-form').valid()) {
             $('form.dev-page-main-form').attr('data-form-valid', 'true');
 //            if (mainFormNeedConfirm) {

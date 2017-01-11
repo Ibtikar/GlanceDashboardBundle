@@ -43,7 +43,7 @@
                 {{ form_row(form.briefEn) }}
 
                 {{ form_row(form.tagsEn) }}
-                
+
                 <hr/>
                 {{ form_row(form.textEn) }}
                 <hr/>
@@ -55,15 +55,15 @@
     {{form_row(form.submitButton)}}
     {{ form_end(form) }}
 
-{#    <div class="form-group has-feedback">
-        <label class="control-label col-lg-2" for="recipe_relatedRecipe"></label><div class="col-lg-10" style="padding: 0;">
-            <ul class='dev-related-list media-list width-350 notificationList'>
-                {% for choice in recipe.relatedRecipeJson %}
-                    <li class="media" data-related-material-id="{{choice.id}}"><div class="media-left"><img src="/{{choice.img}}" class="img-circle" alt=""></div><div class="media-body"><b> {{choice.text}}</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="{{choice.id}}"><i class="icon icon-cross2"></i></a></div></li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>#}
+    {#    <div class="form-group has-feedback">
+            <label class="control-label col-lg-2" for="recipe_relatedRecipe"></label><div class="col-lg-10" style="padding: 0;">
+                <ul class='dev-related-list media-list width-350 notificationList'>
+                    {% for choice in recipe.relatedRecipeJson %}
+                        <li class="media" data-related-material-id="{{choice.id}}"><div class="media-left"><img src="/{{choice.img}}" class="img-circle" alt=""></div><div class="media-body"><b> {{choice.text}}</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="{{choice.id}}"><i class="icon icon-cross2"></i></a></div></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>#}
     <div id="GoogleImportImg-modal" class="modal fade">
         <div class="modal-dialog  modal-full">
             <div class="modal-content">
@@ -371,6 +371,13 @@
     </div>
 {% endblock %}
 
+
+{% set relatedArticleTemplate %}
+
+
+{% endset %}
+
+
 {% set imageSortTemplate %}
     <tr class="media videoRow" id="%image-id%">
         <td class="library-drag">
@@ -608,7 +615,8 @@
         var googleUploadImage = '{{ path('google_upload_image', {'documentId':'null', 'collectionType':'Recipe'}) }}';
         var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'all','documentId':app.request.get('id'),'collectionType':'Blog','room':room})}}";
         var imageSortTemplate = '{{ imageSortTemplate|escape('js') }}';
-        var relatedMaterialSearchUrl = "{{ path('ibtikar_glance_dashboard_recipe_related_material_search', {'collectionType':'blog'})}}";
+        var relatedArticleSearchUrl = "{{ path('ibtikar_glance_dashboard_recipe_related_material_search', {'collectionType': 'article'})}}";
+        var relatedTipSearchUrl = "{{ path('ibtikar_glance_dashboard_recipe_related_material_search', {'collectionType': 'tip'})}}";
         var videoSearchTemplate = '{{ videoSearchTemplate|escape('js') }}';
         var youtubeUploadVideo = '{{ path('ibtikar_glance_dashboard_media_youtube_upload_video',{'type':'video','documentId':app.request.get('id'),'collectionType':'Recipe','room':room}) }}';
         var validateVideoUrl = '{{ path('youtube_validate_videoUrl') }}';
@@ -653,7 +661,15 @@
 
             getTags();
 
-        })
+        });
+
+        var RelatedArticleObj = '{{recipe.relatedArticleJson|json_encode|raw}}';
+        $('#recipe_related_article').val(RelatedArticleObj);
+        updateRelatedArticle();
+
+        var RelatedTipObj = '{{recipe.relatedTipJson|json_encode|raw}}';
+        $('#recipe_related_tip').val(RelatedTipObj);
+        updateRelatedTip();
     </script>
 
 {% endblock %}

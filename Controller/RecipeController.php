@@ -470,8 +470,8 @@ class RecipeController extends BackendController
 
         $form->get('tags')->setData($tagSelected);
         $form->get('tagsEn')->setData($tagSelectedEn);
-
-
+        
+        
         if ($request->getMethod() === 'POST') {
 
             $form->handleRequest($request);
@@ -483,7 +483,7 @@ class RecipeController extends BackendController
                 if ($contentType == 'Recipe' && $formData['related']) {
                     $this->updateRelatedRecipe($recipe, $formData['related'], $dm);
                 }
-                
+                                
                 if($contentType == 'Blog' && $formData['related_article']){
                     $this->updateRelatedRecipe($recipe, $formData['related_article'],$dm);
                 }
@@ -984,9 +984,14 @@ class RecipeController extends BackendController
 
         $materialParent = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($parent);
         $materialChild = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($child);
-
-        if($materialParent && $materialChild && $materialParent->getRelatedRecipe()->contains($materialChild)){
-            $materialParent->removeRelatedRecipe($materialChild);
+        
+        
+        $contentType = $materialChild->getType();
+        $removeMethod = "removeRelated".strtoupper($contentType);
+        $getMethod = "getRelated".strtoupper($contentType);
+            
+        if($materialParent && $materialChild && $materialParent->$getMethod()->contains($materialChild)){
+            $materialParent->$removeMethod($materialChild);
             $dm->flush();
         }
             $response = array('status' => 'success','message' => $this->trans('done sucessfully'));
