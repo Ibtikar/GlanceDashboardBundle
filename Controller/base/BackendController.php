@@ -1002,11 +1002,11 @@ class BackendController extends Controller {
     }
     
     public function validToRelate($relatedRecipe, $document) {
-
+        $getMethod = "getRelated".strtoupper($relatedRecipe->getType());
         if($relatedRecipe && ($relatedRecipe->getStatus() == "publish")){
-            if(is_null($document->getRelatedRecipe()) || is_array($document->getRelatedRecipe())){
+            if(is_null($document->$getMethod()) || is_array($document->$getMethod())){
                 return true;
-            }elseif(is_object($document->getRelatedRecipe()) && !$document->getRelatedRecipe()->contains($relatedRecipe)){
+            }elseif(is_object($document->$getMethod()) && !$document->$getMethod()->contains($relatedRecipe)){
                 return true;
             }else{
                 return false;

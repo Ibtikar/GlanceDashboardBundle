@@ -501,6 +501,7 @@ function refreshMediaSortView() {
             setUploadedImagesCount();
             setUploadedVideosCount();
             selectedCover = $('input.dev-cover-img:checked').val()?$('input.dev-cover-img:checked').val():null;
+            $('#recipe_defaultCoverPhoto').val($('input.dev-cover-img:checked').val())
             $('a[data-popup="popover"]').popover({
                 delay:{ "hide": 500 }
             });

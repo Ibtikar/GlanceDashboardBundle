@@ -398,6 +398,19 @@ class MediaController extends BackendController
                     'recipe' => null,
                     'collectionType' => $collectionType
                 ));
+            } elseif ($collectionType === 'Blog') {
+                $reponse = $this->getInvalidResponseForRecipe($documentId, $this->container->get('request_stack')->getCurrentRequest()->get('room'));
+                if ($reponse) {
+                    return $reponse;
+                }
+                $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                    'type' => $type == "all" ? array('$in' => array('image', 'video')) : $type,
+//                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                    'recipe' => new \MongoId($documentId),
+                    'subproduct' => null,
+                    'product' => null,
+                    'collectionType' => $collectionType
+                ),array('order' => 'ASC'));
             }
         } else {
             $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
@@ -405,6 +418,7 @@ class MediaController extends BackendController
                 'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                 'product' => null,
                 'recipe' => null,
+                'blog' => null,
                 'magazine' => null,
                 'subproduct' => null,
                 'collectionType' => $collectionType
@@ -417,7 +431,7 @@ class MediaController extends BackendController
 
         /* @var $document Media */
         foreach ($documents as $document) {
-            if ($document->getCoverPhoto() && $collectionType!='Recipe') {
+            if ($document->getCoverPhoto() && !in_array($collectionType, ['Recipe', 'Blog'])) {
                 $coverPhoto = $this->prepareMedia($document,$collectionType);
                 continue;
             }
