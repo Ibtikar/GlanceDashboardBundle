@@ -590,29 +590,36 @@ $(document).ready(function () {
         bulkFunction();
     });
 
-    $('.dataTables_wrapper').on('click','.dev-delete-btn',function(e){
+    $('.dataTables_wrapper').on('click', '.dev-delete-btn', function (e) {
+        var numOfRecords = $('tbody .dev-checkbox').length;
+        var pageNum = getQueryVariable('page');
         $.ajax
-        ({
-            'dataType': 'json',
-            'url': $(this).parents('[role="tooltip"]').prev().data('href'),
-            beforeSend: function () {
-                blockPage();
-            },
-            'success': function (json) {
+                ({
+                    'dataType': 'json',
+                    'url': $(this).parents('[role="tooltip"]').prev().data('href'),
+                    beforeSend: function () {
+                        blockPage();
+                    },
+                    'success': function (json) {
                         var status = "success";
 
-                if(json.status != "success"){
-                    status = "error";
-                }
-                $('.dev-document-count').html( json.count)
-                showNotificationMsg(json.message,"",status);
-                unblockPage();
-                $('.dev-bulk-action-container').hide();
-                table.ajax.reload(function (){
-                    showBulkActionSelect();
-                }, false);
-            }
-        });
+                        if (json.status != "success") {
+                            status = "error";
+                        }
+                        if (json.status == 'success') {
+                            if (pageNum != 1 && numOfRecords==1) {
+                                table.page(parseInt(table.page(), 10) - parseInt(1, 10));
+                            }
+                        }
+                        $('.dev-document-count').html(json.count)
+                        showNotificationMsg(json.message, "", status);
+                        unblockPage();
+                        $('.dev-bulk-action-container').hide();
+                        table.ajax.reload(function () {
+                            showBulkActionSelect();
+                        }, false);
+                    }
+                });
     });
 
     $('.content-wrapper').on('change', '.dev-checkbox', showBulkActionSelect);
