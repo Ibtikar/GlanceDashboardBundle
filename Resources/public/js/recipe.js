@@ -760,7 +760,7 @@ $(document).ready(function () {
                 if (data.status == 'login') {
                     window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
                 } else if (data.status == 'success') {
-                    showNotificationMsg(data.message,"");
+//                    showNotificationMsg(data.message,"");
                 } else {
                     showNotificationMsg(imageErrorMessages.generalError, "", 'error');
                 }

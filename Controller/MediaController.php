@@ -295,7 +295,7 @@ class MediaController extends BackendController
         $dm = $this->get('doctrine_mongodb')->getManager();
         /* @var $document Media */
         $document = $dm->getRepository($this->getObjectShortName())->find($id);
-
+        
         if (!$document) {
             return $this->getNotificationResponse(null, array('deleted' => true), 'error');
         }
@@ -327,15 +327,16 @@ class MediaController extends BackendController
                 }
             }
         }
-
-        if ($collectionType == 'Recipe' && $document->getRecipe()) {
+        
+        if (in_array($collectionType, ['Recipe', 'Blog']) && $document->getRecipe()) {
 //            $response = $this->getInvalidResponseForRecipe($document->getRecipe()->getId(), $request->get('room'));
+//            
 //            if ($response) {
 //                return $response;
 //            }
-//            if ($document->getCoverPhoto()) {
-//                return $this->getNotificationResponse(null, array(), 'error');
-//            }
+            if ($document->getCoverPhoto()) {
+                return $this->getNotificationResponse($this->trans('cant delete cover photo'), array(), 'error');
+            }
         }
         $dm->remove($document);
         try {
@@ -864,7 +865,7 @@ class MediaController extends BackendController
                 $dm->persist($videoObj);
                 $dm->flush();
                 $data['message']=  $this->trans('upload successfuly');
-                $data['video'][]=$this->getVideoArray($videoObj, null,$request->get('collectionType'));
+                $data['video'][]=$this->getVideoArray($videoObj, $documentId,$request->get('collectionType'));
             }
         }
         return new JsonResponse($data);
@@ -992,6 +993,7 @@ class MediaController extends BackendController
         
         $media->setCoverPhoto(TRUE);
         
+        $document->setCoverPhoto($media);
         $dm->flush();
         
         return new JsonResponse(array('status' => 'success'));

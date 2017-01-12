@@ -929,7 +929,7 @@ class BackendController extends Controller {
 
         $searchString = trim($request->get('q'));
         $oldvalue = json_decode(trim($request->get('old')), true);
-
+        
         if (count($oldvalue) >= 10) {
             return new JsonResponse(array(array(
                 'message' => $this->trans($type.' must less than 10',array(),  $this->translationDomain))
@@ -971,8 +971,9 @@ class BackendController extends Controller {
 
         $result = $queryBuilder->getQuery()->toArray();
         $responseArr = array();
-
+        
         foreach($result as $recipe){
+//            var_dump($recipe->getDefaultCoverPhoto());
             $responseArr[] = array(
                 'id' => $recipe->getId(),
                 'text' => $recipe->getTitle(),
