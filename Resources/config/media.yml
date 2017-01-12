@@ -23,6 +23,10 @@ ibtikar_glance_dashboard_media_user_files:
     requirements:
         type:  file|image|all
 
+ibtikar_glance_dashboard_media_change_defaultcover:
+    path:  /change-default-cover/{imageId}/{documentId}/{collectionType}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Media:changeDefaultCover}
+
 ibtikar_glance_dashboard_media_get_external:
     path:  /image-proxy
     defaults: { _controller: IbtikarGlanceDashboardBundle:Media:imageProxy }
