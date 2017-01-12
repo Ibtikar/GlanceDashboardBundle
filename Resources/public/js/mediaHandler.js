@@ -75,6 +75,7 @@ function addImageToSortView(media) {
         .replace(/%image-src%/g,media.type == "image" ? '/'+media.imageUrl + '?flushCache=' + encodeURIComponent(new Date().getTime() + Math.random()):media.imageUrl)
         .replace(/%image-caption%/g, quoteattr(media.caption))
         .replace(/%check%/g, media.cover)
+        .replace(/%changeDefaultUrl%/g, media.changeCoverUrl)
         .replace(/%image-icon%/g, media.type == "image" ? 'icon-image2' : 'icon-video-camera')
         .replace(/%delete-url%/g, media.deleteUrl)
         .replace(/%is-gif%/g, media.isGif)

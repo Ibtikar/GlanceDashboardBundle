@@ -186,6 +186,8 @@ class MediaController extends BackendController
 
     private function prepareMedia($media,$collectionType)
     {
+        
+        $getCollection = 'get'.strtoupper($collectionType);
 
         return array(
             'imageUrl' => $media->getWebPath(),
@@ -193,6 +195,7 @@ class MediaController extends BackendController
             'id' => $media->getId(),
             'type' => $media->getType(),
             'coverPhoto' => $media->getCoverPhoto(),
+            'changeCoverUrl' => $media->$getCollection() ? $this->generateUrl('ibtikar_glance_dashboard_media_change_defaultcover', array('imageId' => $media->getId(), 'documentId' => $media->$getCollection()->getId(), 'collectionType'=>$collectionType)) : '',
             'captionAr' => $media->getCaptionAr()?$media->getCaptionAr():'',
             'caption' => $media->getCaptionAr()?$media->getCaptionAr():'',
             'captionEn' => $media->getCaptionEn()?$media->getCaptionEn():'',
@@ -470,6 +473,10 @@ class MediaController extends BackendController
      */
     private function getMediaDataArray(Media $media, $documentId = null, $collectionType = null)
     {
+        $getCollection = $collectionType == 'Blog' ? 'Recipe' : $collectionType;
+        if($documentId) {
+            $getCollection = 'get'. $getCollection;
+        }
         $data = array(
             'imageUrl' => $media->getWebPath(),
             'id' => $media->getId(),
@@ -480,7 +487,8 @@ class MediaController extends BackendController
             'captionEn' => $media->getCaptionEn()?$media->getCaptionEn():"",
             'path' => $media->getPath(),
             'type' => $media->getType(),
-            'cover'=>$media->getCoverPhoto()?'checked':''
+            'cover'=>$media->getCoverPhoto()?'checked':'',
+            'changeCoverUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_change_defaultcover', array('imageId' => $media->getId(), 'documentId' => $documentId, 'collectionType'=>$collectionType)),
         );
         return $data;
     }
@@ -876,7 +884,8 @@ class MediaController extends BackendController
             'captionEn' => is_null($video->getCaptionEn())?"":$video->getCaptionEn(),
             'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_video_delete', $routeParameters),
             'type' => $video->getType(),
-            'cover'=>$video->getCoverPhoto()?'checked':''
+            'cover'=>$video->getCoverPhoto()?'checked':'',
+            'changeCoverUrl' => $documentId ? $this->generateUrl('ibtikar_glance_dashboard_media_change_defaultcover', array('imageId' => $video->getId(), 'documentId' => $documentId, 'collectionType'=>$collectionType)) : '',
         );
         return $data;
     }
@@ -958,5 +967,33 @@ class MediaController extends BackendController
         }
 
     }
-
+    
+    /**
+     * @author Ahmad Gamal <a.gamal@ibtikar.net.sa>
+     * @param Request $request
+     */
+    public function changeDefaultCoverAction(Request $request, $imageId, $documentId, $collectionType) {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $document = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($documentId);
+        if (!$document) {
+            throw $this->createNotFoundException($this->trans('Wrong id'));
+        }
+        
+        $media = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->find($imageId);
+        if (!$media) {
+            throw $this->createNotFoundException($this->trans('Wrong id'));
+        }        
+        
+        $documentImages = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array('recipe' => $documentId, 'coverPhoto' => true));
+        
+        foreach ($documentImages as $key => $documentImage) {
+            $documentImage->setCoverPhoto(FALSE);
+        }
+        
+        $media->setCoverPhoto(TRUE);
+        
+        $dm->flush();
+        
+        return new JsonResponse(array('status' => 'success'));
+    }
 }

@@ -492,6 +492,7 @@ function refreshImages(){
                     var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
                             .replace(/%image-id%/g, media.id)
                             .replace(/%name%/g, 'coverPhoto')
+                            .replace(/%changeDefaultUrl%/g, media.changeCoverUrl)
                             .replace(/%arabicName%/g, imageErrorMessages.coverPhoto)
                             .replace(/%image-delete-url%/g, media.deleteUrl)
                             .replace(/%uploadButton%/g, '')
@@ -750,6 +751,23 @@ $(document).ready(function () {
 
     $(document).on('onFailSubmitForm', function () {
         refreshImages();
-    })
+    });
+    
+    $(document).on('click','.dev-cover-img-edit',function () {
+        $.ajax({
+            url: $(this).attr('data-change-default-url') ,
+            success: function (data) {
+                if (data.status == 'login') {
+                    window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
+                } else if (data.status == 'success') {
+                    showNotificationMsg(data.message,"");
+                } else {
+                    showNotificationMsg(imageErrorMessages.generalError, "", 'error');
+                }
+//                refreshImages();
+            }
+        });
+
+    });
 
 })
