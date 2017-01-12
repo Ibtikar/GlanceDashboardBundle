@@ -186,8 +186,8 @@ class MediaController extends BackendController
 
     private function prepareMedia($media,$collectionType)
     {
-        
-        $getCollection = 'get'.strtoupper($collectionType);
+        $getCollection = $collectionType == 'Blog' ? 'Recipe' : $collectionType;
+        $getCollection = 'get'.$getCollection;
 
         return array(
             'imageUrl' => $media->getWebPath(),
