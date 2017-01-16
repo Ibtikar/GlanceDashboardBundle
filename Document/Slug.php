@@ -54,6 +54,7 @@ class Slug extends Document
     static $TYPE_RECIPE = "recipe";
     static $TYPE_ARTICLE = "Article";
     static $TYPE_TIP = "Tip";
+    static $TYPE_PRODUCT = "Product";
     static $TYPE_KITCHEN911 = "Kitchen911";
     static $TYPE_Rout = "Rout";
 

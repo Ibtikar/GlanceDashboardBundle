@@ -4,6 +4,7 @@
 
 {% block form_container %}
 
+ {% form_theme form   'IbtikarGlanceDashboardBundle::form_theme_recipe.html.twig' %}
 
 
     {{ form_start(form)}}
@@ -161,7 +162,6 @@
     {{form_row(form.submitButton)}}
     {{ form_end(form) }}
 
-
 {% endblock %}
 {% block form_buttons %}
     <div class="row actionButtons">
@@ -308,6 +308,10 @@
         var cropperPluginInitialized = false;
         var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':'null','collectionType':'Product'})}}";
         var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'image','documentId':'null','collectionType':'Product'})}}";
+        var relatedMaterialSearchUrl = "{{ path('ibtikar_glance_dashboard_product_related_material_search', {'collectionType':'recipe'})}}";
+        var relatedKitchen911SearchUrl = "{{ path('ibtikar_glance_dashboard_product_related_material_search', {'collectionType': 'kitchen911'})}}";
+        var relatedTipSearchUrl = "{{ path('ibtikar_glance_dashboard_product_related_material_search', {'collectionType': 'tip'})}}";
+
         var element;
         var name;
         var type;

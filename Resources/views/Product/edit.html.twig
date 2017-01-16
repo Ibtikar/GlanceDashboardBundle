@@ -3,6 +3,7 @@
 
 
 {% block form_container %}
+ {% form_theme form   'IbtikarGlanceDashboardBundle::form_theme_recipe.html.twig' %}
 
 
 
@@ -297,6 +298,7 @@
 
 
     <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/jquery.cropit.js')}}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/product.js') }}"></script>
 
     <script>
 
@@ -307,6 +309,12 @@
         var cropperPluginInitialized = false;
         var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':app.request.get('id'),'collectionType':'Product'})}}";
         var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'image','documentId':app.request.get('id'),'collectionType':'Product'})}}";
+        var relatedMaterialSearchUrl = "{{ path('ibtikar_glance_dashboard_product_related_material_search', {'collectionType':'recipe'})}}";
+        var relatedKitchen911SearchUrl = "{{ path('ibtikar_glance_dashboard_product_related_material_search', {'collectionType': 'kitchen911'})}}";
+        var relatedTipSearchUrl = "{{ path('ibtikar_glance_dashboard_product_related_material_search', {'collectionType': 'tip'})}}";
+        var relatedMaterialDeleteUrl = '{{ path('ibtikar_glance_dashboard_producte_related_material_delete') }}';
+        var relatedMaterialAddUrl = '{{ path('ibtikar_glance_dashboard_producte_related_material_add') }}';
+
         var element;
         var name;
         var type;
@@ -318,9 +326,27 @@
             'coverPhoto': '{% trans from translationDomain %}coverPhoto{%endtrans%}',
             'profilePhoto': '{% trans from translationDomain %}profilePhoto{%endtrans%}',
         }
+        RelatedRecipeObj = '{{product.getRelatedRecipeJson|json_encode|raw}}';
+        $('#form_related').val(RelatedRecipeObj);
+           if($('#form_related').val()!=''){
+        updateRelatedMaterial();
+    }
 
+
+
+         RelatedTipObj = '{{product.relatedTipJson|json_encode|raw}}';
+        $('#form_related_tip').val(RelatedTipObj);
+        if($('#form_related_tip').val()!=''){
+                  updateRelatedTip();
+
+        }
+
+        RelatedKitchen911Obj = '{{product.getRelatedKitchen911Json()|json_encode|raw}}';
+        $('#form_related_kitchen911').val(RelatedKitchen911Obj);
+        if($('#form_related_kitchen911').val()!=''){
+        updateRelatedKitchen911();
+    }
     </script>
-    <script src="{{ asset('bundles/ibtikarglancedashboard/js/product.js') }}"></script>
 
 
 {% endblock %}

@@ -125,6 +125,16 @@ var recipeValue='';
   },
   escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
   minimumInputLength: 1,
+   language: {
+    inputTooShort: function(args) {
+      // args.minimum is the minimum required length
+      // args.input is the user-typed text
+      return "من فضلك ادخل حرف او اكثر";
+    }
+,
+ "noResults": function(){
+           return "نأسف  لا توجد نتائج";
+       }},
   templateResult: addUserPic
 });
     $('[id$="Time"],[id$="Count"]').TouchSpin({

@@ -7,7 +7,9 @@ use Ibtikar\GlanceDashboardBundle\Document\Document;
 use Ibtikar\GlanceDashboardBundle\Document\Product;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Ibtikar\GlanceDashboardBundle\Document\Slug;
 use Symfony\Component\Form\Extension\Core\Type as formType;
+use Ibtikar\GlanceDashboardBundle\Service\ArabicMongoRegex;
 
 class ProductController extends BackendController {
 
@@ -89,21 +91,46 @@ class ProductController extends BackendController {
                 }
                 }
         $product = new Product();
-        $form = $this->createFormBuilder($product, array('translation_domain' => $this->translationDomain,'attr'=>array('class'=>'dev-page-main-form dev-js-validation form-horizontal')))
-                ->add('name',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
-                ->add('nameEn',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
-                ->add('description',  formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
-                ->add('descriptionEn',formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
-                ->add('submitButton', formType\HiddenType::class, array('required' => FALSE, "mapped" => false))
-                ->add('save', formType\SubmitType::class)
-                ->getForm();
+        $form = $this->createFormBuilder($product, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
+            ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
+            ->add('nameEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
+            ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+            ->add('descriptionEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+            ->add('relatedRecipe', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
+                'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related', 'ajax-url-var' => 'relatedMaterialSearchUrl')
+            ))
+            ->add('related', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
+            ->add('relatedTip', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
+                'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related_tip', 'ajax-url-var' => 'relatedTipSearchUrl')
+            ))
+            ->add('relatedKitchen911', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
+                'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => '#form_related_kitchen911', 'ajax-url-var' => 'relatedKitchen911SearchUrl')))
+            ->add('related_tip', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
+            ->add('related_kitchen911', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
+            ->add('minimumRelatedRecipe', formType\HiddenType::class, array('required' => true, 'attr' => array('data-msg-required' => ' '), 'mapped' => FALSE))
+
+            ->add('submitButton', formType\HiddenType::class, array('required' => FALSE, "mapped" => false))
+            ->add('save', formType\SubmitType::class)
+            ->getForm();
 
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $formData = $request->get('form');
 
+                if ($formData['related']) {
+                    $this->updateRelatedRecipe($product, $formData['related'], $dm);
+                }
+                if ($formData['related_kitchen911']) {
+                    $this->updateRelatedRecipe($product, $formData['related_kitchen911'], $dm);
+                }
+
+                if ($formData['related_tip']) {
+                    $this->updateRelatedRecipe($product, $formData['related_tip'], $dm);
+                }
+
                 $dm->persist($product);
+                $this->slugifier($product);
                 $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
                     'type' => 'image',
                     'createdBy.$id' => new \MongoId($this->getUser()->getId()),
@@ -176,14 +203,26 @@ class ProductController extends BackendController {
         $profileImage=$product->getProfilePhoto();
         $coverImage=$product->getCoverPhoto();
 
-       $form = $this->createFormBuilder($product, array('translation_domain' => $this->translationDomain,'attr'=>array('class'=>'dev-page-main-form dev-js-validation form-horizontal')))
-                ->add('name',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
-                ->add('nameEn',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 3)))
-                ->add('description',  formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
-                ->add('descriptionEn',formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
-                ->add('submitButton', formType\HiddenType::class, array('required' => FALSE, "mapped" => false))
-                ->add('save', formType\SubmitType::class)
-                ->getForm();
+       $form = $this->createFormBuilder($product, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
+            ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
+            ->add('nameEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
+            ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+            ->add('descriptionEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+            ->add('relatedRecipe', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
+                'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related', 'ajax-url-var' => 'relatedMaterialSearchUrl')
+            ))
+            ->add('related', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
+            ->add('relatedTip', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
+                'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related_tip', 'ajax-url-var' => 'relatedTipSearchUrl')
+            ))
+            ->add('relatedKitchen911', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
+                'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => '#form_related_kitchen911', 'ajax-url-var' => 'relatedKitchen911SearchUrl')))
+            ->add('related_tip', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
+            ->add('related_kitchen911', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
+            ->add('minimumRelatedRecipe', formType\HiddenType::class, array('required' => true, 'attr' => array('data-msg-required' => ' '), 'mapped' => FALSE))
+            ->add('submitButton', formType\HiddenType::class, array('required' => FALSE, "mapped" => false))
+            ->add('save', formType\SubmitType::class)
+            ->getForm();
 
 
         //handle form submission
@@ -193,6 +232,17 @@ class ProductController extends BackendController {
 
             if ($form->isValid()) {
                 $formData = $request->get('form');
+                      if ($formData['related']) {
+                    $this->updateRelatedRecipe($product, $formData['related'], $dm);
+                }
+                if ($formData['related_kitchen911']) {
+                    $this->updateRelatedRecipe($product, $formData['related_kitchen911'], $dm);
+                }
+
+                if ($formData['related_tip']) {
+                    $this->updateRelatedRecipe($product, $formData['related_tip'], $dm);
+                }
+
                 $dm->flush();
 
                 $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
@@ -208,14 +258,14 @@ class ProductController extends BackendController {
         return $this->render('IbtikarGlanceDashboardBundle:Product:edit.html.twig', array(
                 'form' => $form->createView(),
                 'breadcrumb' => $breadCrumbArray,
+                'product' => $product,
                 'profileImage' => $profileImage,
                 'coverImage' => $coverImage,
-                'deletePopoverConfig'=>array("question" => "You are about to delete %title%,Are you sure?"),
+                'deletePopoverConfig' => array("question" => "You are about to delete %title%,Are you sure?"),
                 'title' => $this->trans('edit Product', array(), $this->translationDomain),
                 'translationDomain' => $this->translationDomain
         ));
     }
-
 
     protected function postDelete($ids) {
 
@@ -230,5 +280,89 @@ class ProductController extends BackendController {
                 ->field('product')->in($ids)
                 ->getQuery()
                 ->execute();
+    }
+
+    public function slugifier($product) {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $slugAr = ArabicMongoRegex::slugify($product->getName()."-".  date('ymdHis'));
+        $slugEn = ArabicMongoRegex::slugify($product->getNameEn()."-".date('ymdHis'));
+
+        $product->setSlug($slugAr);
+        $product->setSlugEn($slugEn);
+
+        $slug = new Slug();
+        $slug->setReferenceId($product->getId());
+        $slug->setType(Slug::$TYPE_PRODUCT);
+        $slug->setSlugAr($slugAr);
+        $slug->setSlugEn($slugEn);
+        $dm->persist($slug);
+        $dm->flush();
+    }
+
+    public function relatedMaterialDeleteAction(Request $request) {
+
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $parent = $request->get('parent');
+        $child = $request->get('child');
+
+        $materialParent = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($parent);
+        $materialChild = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($child);
+
+
+        $contentType = $materialChild->getType();
+        $removeMethod = "removeRelated".ucfirst($contentType);
+        $getMethod = "getRelated".ucfirst($contentType);
+        if($materialParent && $materialChild && $materialParent->$getMethod()->contains($materialChild)){
+            $materialParent->$removeMethod($materialChild);
+            $dm->flush();
+        }
+            $response = array('status' => 'success','message' => $this->trans('done sucessfully'));
+
+
+        return new JsonResponse($response);
+
+    }
+
+    public function relatedMaterialAddAction(Request $request)
+    {
+
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $parent = $request->get('parent');
+        $child = $request->get('child');
+
+        $materialParent = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($parent);
+        $materialChild = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($child);
+
+
+        $contentType = $materialChild->getType();
+        $addMethod = "addRelated" . ucfirst($contentType);
+        $getMethod = "getRelated" . ucfirst($contentType);
+        if ($this->validToRelate($materialChild, $materialParent) && count($materialParent->$getMethod()) < 10) {
+
+            $materialParent->$addMethod($materialChild);
+            $dm->flush();
+        }
+        $response = array('status' => 'success', 'message' => $this->trans('done sucessfully'));
+
+
+        return new JsonResponse($response);
+    }
+
+    public function validToRelate($relatedRecipe, $document) {
+        $getMethod = "getRelated".ucfirst($relatedRecipe->getType());
+        if($relatedRecipe){
+            if(is_null($document->$getMethod()) || is_array($document->$getMethod())){
+                return true;
+            }elseif(is_object($document->$getMethod()) && !$document->$getMethod()->contains($relatedRecipe)){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+
     }
 }

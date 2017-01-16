@@ -929,7 +929,24 @@ class BackendController extends Controller {
 
         $searchString = trim($request->get('q'));
         $oldvalue = json_decode(trim($request->get('old')), true);
-        
+
+        if ($this->calledClassName == 'Product') {
+            if (count($oldvalue) >= 8 && $type == 'recipe') {
+                return new JsonResponse(array(array(
+                        'message' => $this->trans($type . ' must less than 8', array(), $this->translationDomain))
+                ));
+            }
+            if (count($oldvalue) >= 3 && $type == 'kitchen911') {
+                return new JsonResponse(array(array(
+                        'message' => $this->trans($type . ' must less than 3', array(), $this->translationDomain))
+                ));
+            }
+            if (count($oldvalue) >= 3 && $type == 'tip') {
+                return new JsonResponse(array(array(
+                        'message' => $this->trans($type . ' must less than 3', array(), $this->translationDomain))
+                ));
+            }
+        }
         if (count($oldvalue) >= 10) {
             return new JsonResponse(array(array(
                 'message' => $this->trans($type.' must less than 10',array(),  $this->translationDomain))
@@ -971,7 +988,7 @@ class BackendController extends Controller {
 
         $result = $queryBuilder->getQuery()->toArray();
         $responseArr = array();
-        
+
         foreach($result as $recipe){
 //            var_dump($recipe->getDefaultCoverPhoto());
             $responseArr[] = array(
@@ -994,8 +1011,8 @@ class BackendController extends Controller {
             $material = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($relatedRecipe['id']);
 
             $contentType = $material->getType();
-            $addMethod = "addRelated".strtoupper($contentType);
-            $getMethod = "getRelated".strtoupper($contentType);
+            $addMethod = "addRelated".ucfirst($contentType);
+            $getMethod = "getRelated".ucfirst($contentType);
 
             if($this->validToRelate($material, $document) && count($document->$getMethod()) < 10){
                 $document->$addMethod($material);
@@ -1004,7 +1021,7 @@ class BackendController extends Controller {
     }
 
     public function validToRelate($relatedRecipe, $document) {
-        $getMethod = "getRelated".strtoupper($relatedRecipe->getType());
+        $getMethod = "getRelated".ucfirst($relatedRecipe->getType());
         if($relatedRecipe && ($relatedRecipe->getStatus() == "publish")){
             if(is_null($document->$getMethod()) || is_array($document->$getMethod())){
                 return true;
@@ -1022,7 +1039,7 @@ class BackendController extends Controller {
     /**
      *@author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
      */
-    protected function slugifier($recipe) {
+    public function slugifier($recipe) {
         $dm = $this->get('doctrine_mongodb')->getManager();
         $slugAr = ArabicMongoRegex::slugify($recipe->getTitle()."-".  date('ymdHis'));
         $slugEn = ArabicMongoRegex::slugify($recipe->getTitleEn()."-".date('ymdHis'));

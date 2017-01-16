@@ -33,3 +33,15 @@ ibtikar_glance_dashboard_product_check_field_unique:
 ibtikar_glance_dashboard_product_change_list_columns:
     path:  /change-list-columns
     defaults: { _controller: IbtikarGlanceDashboardBundle:Product:changeListColumns }
+
+ibtikar_glance_dashboard_product_related_material_search:
+    path:  /related-material-search/{collectionType}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Product:searchRelated, collectionType: ~ }
+
+ibtikar_glance_dashboard_producte_related_material_delete:
+    path: /related-material-delete
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Product:relatedMaterialDelete }
+
+ibtikar_glance_dashboard_producte_related_material_add:
+    path: /related-material-add
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Product:relatedMaterialAdd }
