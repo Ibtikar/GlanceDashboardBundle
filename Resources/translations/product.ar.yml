@@ -48,6 +48,10 @@ Delete SubProduct: حذف منتج فرعى
 'recipe must less than 8': 'الحد الأقصى هو 8 عناصر'
 'kitchen911 must less than 3': 'الحد الأقصى هو 3 عناصر'
 'tip must less than 3': 'الحد الأقصى هو 3 عناصر'
+'Slug': 'الرابط'
+"Slug en": 'الرابط بالانجليزى'
+'slug': 'الرابط'
+"slugEn": 'الرابط بالانجليزى'
 
 # ############Buttons############
 

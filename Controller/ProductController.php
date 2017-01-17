@@ -21,6 +21,7 @@ class ProductController extends BackendController {
             "nameEn" => array(),
             "profilePhoto" => array("type"=>"refereceImage",'isSortable'=>FALSE),
             "subproductNo" => array('type' => 'number'),
+            "slug" => array('type' => 'slug'),
             "createdAt" => array("type"=>"date"),
             "updatedAt"=> array("type"=>"date"),
             "createdBy" => array("isSortable" => false),

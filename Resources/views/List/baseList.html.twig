@@ -315,6 +315,12 @@
                                                         <td>
                                                             {{ attribute(object, field.propertyName)|trans({},translationDomain)}}
                                                         </td>
+                                                    {% elseif field.type == "slug"  %}
+                                                        <td>
+                                                            <a href="{{ url('ibtikar_goody_frontend_view',{'slug': attribute(object, field.propertyName) ,'_locale':'ar'})}}" target="_blank">
+                                                            {{ url('ibtikar_goody_frontend_view',{'slug': attribute(object, field.propertyName) ,'_locale':'ar'})}}
+                                                            </a>
+                                                        </td>
                                                     {% else %}
                                                         <td >
                                                             {% if field.isClickable %}

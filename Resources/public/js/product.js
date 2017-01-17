@@ -270,7 +270,7 @@ $(document).on("click",'.dev-add-related-material',function(){
             var $this = $(this);
 
             if(document.location.pathname.indexOf('edit') >= 0){
-                if ($('.dev-related-list li').length < 4) {
+                if ($('.dev-related-list li').length <= 4) {
                     showNotificationMsg(" لا يمكن الحذف حيث ان الحد الادنى للوصفات ذات صله 4", "", "error");
                     return false;
                 }

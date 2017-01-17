@@ -13,6 +13,7 @@ use Ibtikar\GlanceDashboardBundle\Document\Recipe;
 use Ibtikar\GlanceDashboardBundle\Document\Slug;
 use Ibtikar\GlanceDashboardBundle\Service\ArabicMongoRegex;
 use Doctrine\ODM\MongoDB\DocumentRepository;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class BackendController extends Controller {
 
@@ -544,9 +545,11 @@ class BackendController extends Controller {
                                                 </div>';
                 }
                 elseif ($value == 'status') {
-                    $oneDocument[$value] = $this->trans($document->$getfunction(),  array(),$this->translationDomain);
-                }
-                elseif ($value == 'profilePhoto' || $value == 'coverPhoto') {
+                    $oneDocument[$value] = $this->trans($document->$getfunction(), array(), $this->translationDomain);
+                } elseif ($value == 'slug') {
+                    $request->setLocale('ar');
+                    $oneDocument[$value] = '<a href="' . $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $document->$getfunction()), UrlGeneratorInterface::ABSOLUTE_URL) . '" target="_blank">' . $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $document->$getfunction()), UrlGeneratorInterface::ABSOLUTE_URL) . ' </a>';
+                } elseif ($value == 'profilePhoto' || $value == 'coverPhoto') {
                     $image = $document->$getfunction();
                     if (!$image) {
                         $image = 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg';
