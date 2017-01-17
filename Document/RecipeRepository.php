@@ -51,4 +51,33 @@ class RecipeRepository extends DocumentRepository
                 ->skip($skip)
                 ->getQuery()->execute();
     }
+    
+    public function getContentInTag($tagId, $limit, $skip) {
+        $queryBuilder = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                        ->field('status')->equals(Recipe::$statuses['publish'])
+                        ->field('deleted')->equals(FALSE)
+                        ->field('coverPhoto')->prime(true);
+        
+        $queryBuilder->addOr($queryBuilder->expr()->field('tags')->equals($tagId));
+        $queryBuilder->addOr($queryBuilder->expr()->field('tagsEn')->equals($tagId));
+        
+        $queryBuilder->sort('publishedAt', 'DESC')
+                            ->eagerCursor(true)
+                            ->limit($limit+1)
+                            ->skip($skip)
+                            ;
+        
+        return $queryBuilder->getQuery()->execute();
+    }
+    
+    public function getCountContentInTag($tagId) {
+        $queryBuilder = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                        ->field('status')->equals(Recipe::$statuses['publish'])
+                        ->field('deleted')->equals(FALSE);
+        
+        $queryBuilder->addOr($queryBuilder->expr()->field('tags')->equals($tagId));
+        $queryBuilder->addOr($queryBuilder->expr()->field('tagsEn')->equals($tagId));
+        
+        return $queryBuilder->getQuery()->count();
+    }
 }
