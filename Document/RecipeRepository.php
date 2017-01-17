@@ -51,33 +51,100 @@ class RecipeRepository extends DocumentRepository
                 ->skip($skip)
                 ->getQuery()->execute();
     }
-    
+
+    /**
+     * @author Ahmad Gamal <a.gamal@ibtikar.net.sa>
+     * @param string $tagId
+     * @param integer $limit
+     * @param integer $skip
+     * @return object
+     */
     public function getContentInTag($tagId, $limit, $skip) {
         $queryBuilder = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                         ->field('status')->equals(Recipe::$statuses['publish'])
                         ->field('deleted')->equals(FALSE)
                         ->field('coverPhoto')->prime(true);
-        
+
         $queryBuilder->addOr($queryBuilder->expr()->field('tags')->equals($tagId));
         $queryBuilder->addOr($queryBuilder->expr()->field('tagsEn')->equals($tagId));
-        
+
         $queryBuilder->sort('publishedAt', 'DESC')
                             ->eagerCursor(true)
                             ->limit($limit+1)
                             ->skip($skip)
                             ;
-        
+
         return $queryBuilder->getQuery()->execute();
     }
-    
+
+    /**
+     * @author Ahmad Gamal <a.gamal@ibtikar.net.sa>
+     * @param string $tagId
+     * @return integer
+     */
     public function getCountContentInTag($tagId) {
         $queryBuilder = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                         ->field('status')->equals(Recipe::$statuses['publish'])
                         ->field('deleted')->equals(FALSE);
-        
+
         $queryBuilder->addOr($queryBuilder->expr()->field('tags')->equals($tagId));
         $queryBuilder->addOr($queryBuilder->expr()->field('tagsEn')->equals($tagId));
-        
+
         return $queryBuilder->getQuery()->count();
     }
+
+    /**
+     * @author Ahmad Gamal <a.gamal@ibtikar.net.sa>
+     * @param string $keyword
+     * @param integer $limit
+     * @param integer $skip
+     * @param integer $sort
+     * @return object
+     */
+    public function getSearchContentByKeyword($keyword, $limit, $skip, $sort) {
+        $queryBuilder = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                        ->field('status')->equals(Recipe::$statuses['publish'])
+                        ->field('deleted')->equals(FALSE)
+                        ->field('coverPhoto')->prime(true);
+
+        $queryBuilder->addOr($queryBuilder->expr()->field('title')->equals(new \MongoRegex(('/' . preg_quote(trim($keyword)) . '/i'))));
+        $queryBuilder->addOr($queryBuilder->expr()->field('titleEn')->equals(new \MongoRegex(('/' . preg_quote(trim($keyword)) . '/i'))));
+
+        $queryBuilder->addOr($queryBuilder->expr()->field('brief')->equals(new \MongoRegex(('/' . preg_quote(trim($keyword)) . '/i'))));
+        $queryBuilder->addOr($queryBuilder->expr()->field('briefEn')->equals(new \MongoRegex(('/' . preg_quote(trim($keyword)) . '/i'))));
+
+        $queryBuilder->addOr($queryBuilder->expr()->field('text')->equals(new \MongoRegex(('/' . preg_quote(trim($keyword)) . '/i'))));
+        $queryBuilder->addOr($queryBuilder->expr()->field('textEn')->equals(new \MongoRegex(('/' . preg_quote(trim($keyword)) . '/i'))));
+
+        $queryBuilder->sort($sort, 'DESC')
+                            ->eagerCursor(true)
+                            ->limit($limit+1)
+                            ->skip($skip)
+                            ;
+
+        return $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * @author Ahmad Gamal <a.gamal@ibtikar.net.sa>
+     * @param string $keyword
+     * @return integer count
+     */
+    public function getCountSearchContentByKeyword($keyword) {
+        $queryBuilder = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                        ->field('status')->equals(Recipe::$statuses['publish'])
+                        ->field('deleted')->equals(FALSE);
+
+        $queryBuilder->addOr($queryBuilder->expr()->field('title')->equals(new \MongoRegex(('/' . preg_quote(trim($keyword)) . '/i'))));
+        $queryBuilder->addOr($queryBuilder->expr()->field('titleEn')->equals(new \MongoRegex(('/' . preg_quote(trim($keyword)) . '/i'))));
+
+        $queryBuilder->addOr($queryBuilder->expr()->field('brief')->equals(new \MongoRegex(('/' . preg_quote(trim($keyword)) . '/i'))));
+        $queryBuilder->addOr($queryBuilder->expr()->field('briefEn')->equals(new \MongoRegex(('/' . preg_quote(trim($keyword)) . '/i'))));
+
+        $queryBuilder->addOr($queryBuilder->expr()->field('text')->equals(new \MongoRegex(('/' . preg_quote(trim($keyword)) . '/i'))));
+        $queryBuilder->addOr($queryBuilder->expr()->field('textEn')->equals(new \MongoRegex(('/' . preg_quote(trim($keyword)) . '/i'))));
+
+        return $queryBuilder->getQuery()->count();
+    }
+
 }
