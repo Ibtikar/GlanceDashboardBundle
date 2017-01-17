@@ -84,7 +84,7 @@
                                                         },
                                                         {
                                                             text : "Cancel",
-                                                            class : "btn-defualt"
+                                                            class : "btn-default"
                                                         }
                                                     ]
                                             })|replace({'%type%': (oneItem~"s")|lower|trans})|raw}} class="btn btn-default btn-sm" data-placement="bottom"> <i class="icon-trash"></i> <span class="hidden-sm position-right">{{ 'delete'|trans }} {{ ((oneItem|capitalize)~"s")|trans }}</span></a>
@@ -100,7 +100,7 @@
 
                                 <a data-content="
                                    &lt;button type='button' class='btn btn-danger'&gt;نعم&lt;/button&gt;
-                                   &lt;button type='button' class='btn btn-defualt'&gt;الغاء&lt;/button&gt;
+                                   &lt;button type='button' class='btn btn-default'&gt;الغاء&lt;/button&gt;
                                    " data-html="true" title="" data-trigger="focus" data-popup="popover" data-placement="bottom" data-toggle="popover" role="button" class="btn btn-default btn-sm" tabindex="0" data-original-title="انت على وشك حذف (@عنوان)، هل تريد إتمام الحذف؟"> <i class="icon-trash"></i> <span class="hidden-sm position-right">مسح الادوار</span></a>
 
                                 <a data-placement="bottom" title="" data-popup="tooltip"  data-toggle="modal"  href="javascript:void(0)" class="btn btn-default btn-sm dev-change-columns" type="button" data-original-title="خانات الجدول"><i class="icon-table2 "></i> <span class="hidden-sm"> </span></a>
@@ -345,32 +345,32 @@
                                                                 {% if action == "Edit" %}
                                                                     {% if is_granted('ROLE_' ~ listName|upper ~'_EDIT') or is_granted('ROLE_ADMIN') %}
 
-                                                                        <a class="btn btn-defualt"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}"  ><i class="icon-pencil" data-popup="tooltip"  data-placement="right" title="{{ ('Edit ' ~  sublistName)|trans({},translationDomain)}}"></i></a>
+                                                                        <a class="btn btn-default"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}"  ><i class="icon-pencil" data-popup="tooltip"  data-placement="right" title="{{ ('Edit ' ~  sublistName)|trans({},translationDomain)}}"></i></a>
                                                                         {% endif %}
                                                                     {% elseif action == "Delete" %}
                                                                         {% if is_granted('ROLE_' ~ listName|upper ~'_DELETE') or is_granted('ROLE_ADMIN')%}
-                                                                        <a class="btn btn-defualt"  data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-trash" data-popup="tooltip" title="{{ ('Delete ' ~  sublistName)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
+                                                                        <a class="btn btn-default"  data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-trash" data-popup="tooltip" title="{{ ('Delete ' ~  sublistName)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
                                                                         {% endif %}
                                                                     {% elseif action == "ViewOne" %}
 
                                                                     {% if is_granted('ROLE_' ~ listName|upper ~'_VIEWONE') or is_granted('ROLE_ADMIN')  %}
 
-                                                                        <a href="{{ path(prefixRoute|lower~'_view', {'id': object.id}) }}" class="btn btn-defualt">
+                                                                        <a href="{{ path(prefixRoute|lower~'_view', {'id': object.id}) }}" class="btn btn-default">
                                                                             <i class="icon-eye" data-popup="tooltip"  data-placement="right" title="{{('View One ' ~  listName|capitalize)|trans({},translationDomain)}}" ></i>
                                                                         </a>
                                                                     {% endif %}
                                                                     {% elseif action == "Publish" %}
                                                                     {% if is_granted('ROLE_' ~ listName|upper ~'_PUBLISH') or is_granted('ROLE_ADMIN')%}
-                                                                            <a href="javascript:void(0)" data-toggle="modal"  class="btn btn-defualt dev-publish-document" data-id="{{ object.getId() }}"><i class="icon-share" data-placement="right"  data-popup="tooltip" title="{{('publish ' ~  sublistName)|trans({},translationDomain)}}"></i></a>
+                                                                            <a href="javascript:void(0)" data-toggle="modal"  class="btn btn-default dev-publish-document" data-id="{{ object.getId() }}"><i class="icon-share" data-placement="right"  data-popup="tooltip" title="{{('publish ' ~  sublistName)|trans({},translationDomain)}}"></i></a>
                                                                     {% endif %}
                                                                 {%endif%}
 
 
                                                             {% endfor %}
-                                                            {#<a tabindex="0" class="btn btn-defualt" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="  هل ترغب في ايقاف الموظف  " data-html="true"
+                                                            {#<a tabindex="0" class="btn btn-default" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="  هل ترغب في ايقاف الموظف  " data-html="true"
                                                                data-html="true" data-content="
                                                                <button type='button' class='btn btn-danger'>نعم</button>
-                                                               <button type='button' class='btn btn-defualt'>الغاء</button>
+                                                               <button type='button' class='btn btn-default'>الغاء</button>
                                                                "> <i class="icon-user-block"></i></a>#}
 
 

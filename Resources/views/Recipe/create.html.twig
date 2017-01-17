@@ -412,7 +412,7 @@
         </td>
         <td style="width: 120px">
 
-            <a class="btn btn-defualt" data-href="%delete-url%" {{popover_factory({})|replace({'%type%': "recipe"|lower|trans})|raw}} > <i class="icon-trash"></i></a>
+            <a class="btn btn-default" data-href="%delete-url%" {{popover_factory({})|replace({'%type%': "recipe"|lower|trans})|raw}} > <i class="icon-trash"></i></a>
         </td>
     </tr>
 {% endset %}
@@ -562,13 +562,13 @@
 
     {% endset %}
     {% set uploadButton %}
-        <a class="btn btn-defualt upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
+        <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
     {% endset %}
     {% set cropButton %}
-        <a class="btn btn-defualt dev-crop-images"    data-image-id="%image-id%" data-crop-url="%crop-url%">  رفع الصورة </a>
+        <a class="btn btn-default dev-crop-images"    data-image-id="%image-id%" data-crop-url="%crop-url%">  رفع الصورة </a>
     {% endset %}
     {% set deleteButton %}
-        <a class="btn btn-defualt dev-trash-image" data-image-id="%image-id%"  data-href = "%image-delete-url%"  %pop-block%> <i class="icon-trash"></i></a>
+        <a class="btn btn-default dev-trash-image" data-image-id="%image-id%"  data-href = "%image-delete-url%"  %pop-block%> <i class="icon-trash"></i></a>
         {% endset %}
 
 

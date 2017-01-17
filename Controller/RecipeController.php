@@ -460,7 +460,7 @@ class RecipeController extends BackendController
                 throw $this->createNotFoundException($this->trans('Wrong id'));
             }
         }
-        
+
         $contentType =  $recipe->getType() == Recipe::$types['recipe'] ? 'Recipe' : 'Blog';
 
         $tagSelected = $this->getTagsForDocument($recipe);
@@ -470,8 +470,8 @@ class RecipeController extends BackendController
 
         $form->get('tags')->setData($tagSelected);
         $form->get('tagsEn')->setData($tagSelectedEn);
-        
-        
+
+
         if ($request->getMethod() === 'POST') {
 
             $form->handleRequest($request);
@@ -479,15 +479,15 @@ class RecipeController extends BackendController
             if ($form->isValid()) {
 
                 $formData = $request->get('recipe');
-                
+
                 if ($contentType == 'Recipe' && $formData['related']) {
                     $this->updateRelatedRecipe($recipe, $formData['related'], $dm);
                 }
-                                
+
                 if($contentType == 'Blog' && $formData['related_article']){
                     $this->updateRelatedRecipe($recipe, $formData['related_article'],$dm);
                 }
-                
+
                 if($contentType == 'Blog' && $formData['related_tip']){
                     $this->updateRelatedRecipe($recipe, $formData['related_tip'],$dm);
                 }
@@ -545,7 +545,7 @@ class RecipeController extends BackendController
                 return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_' . strtolower($this->calledClassName) . '_list_' . $recipe->getStatus() . '_recipe'), array(), true));
             }
         }
-        
+
         return $this->render('IbtikarGlanceDashboardBundle:'.$contentType.':edit.html.twig', array(
                     'recipe' => $recipe,
                     'form' => $form->createView(),
@@ -788,19 +788,19 @@ class RecipeController extends BackendController
                     if ($this->listViewOptions->hasActionsColumn($this->calledClassName)) {
                         foreach ($this->listViewOptions->getActions() as $action) {
                             if ($action == 'Edit' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_EDIT')) && !$document->getNotModified()) {
-                                $actionTd.= '<a class="btn btn-defualt"  href = "' . $this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_edit', array('id' => $document->getId())) . '" ><i class="icon-pencil" data-popup="tooltip" title="' . $this->trans('Edit ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '" data-placement="right"></i></a>';
+                                $actionTd.= '<a class="btn btn-default"  href = "' . $this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_edit', array('id' => $document->getId())) . '" ><i class="icon-pencil" data-popup="tooltip" title="' . $this->trans('Edit ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '" data-placement="right"></i></a>';
                             } elseif ($action == 'Delete' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_DELETE')) && !$document->getNotModified()) {
-                                $actionTd.= '<a class="btn btn-defualt dev-delete-single-recipe"  data-href = "' . $this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_delete', array('id' => $document->getId())) . '" data-id="'. $document->getId().'" ><i class="icon-trash" data-popup="tooltip" title="' . $this->trans('Delete ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '" data-placement="right"></i></a>';
+                                $actionTd.= '<a class="btn btn-default dev-delete-single-recipe"  data-href = "' . $this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_delete', array('id' => $document->getId())) . '" data-id="'. $document->getId().'" ><i class="icon-trash" data-popup="tooltip" title="' . $this->trans('Delete ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '" data-placement="right"></i></a>';
                             } elseif ($action == 'ViewOne' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_VIEWONE'))) {
-                                $actionTd.= '<a class="btn btn-defualt"  href = "' . $this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_view', array('id' => $document->getId())) . '" ><i class="icon-eye" data-popup="tooltip"  title="' . $this->trans('View One ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '"  data-placement="right" ></i></a>';
+                                $actionTd.= '<a class="btn btn-default"  href = "' . $this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_view', array('id' => $document->getId())) . '" ><i class="icon-eye" data-popup="tooltip"  title="' . $this->trans('View One ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '"  data-placement="right" ></i></a>';
                             } elseif ($action == 'Assign' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_ASSIGN'))) {
-                                $actionTd.= '<a class="btn btn-defualt dev-assign-to-me" href="javascript:void(0);"  data-url="'.$this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_assign_to_me').'" data-id="'.$document->getId().'"><i class="icon-user"  title="' . $this->trans('AssignToMe', array(), $this->translationDomain) . '"  data-popup="tooltip" data-placement="right"></i></a>';
+                                $actionTd.= '<a class="btn btn-default dev-assign-to-me" href="javascript:void(0);"  data-url="'.$this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_assign_to_me').'" data-id="'.$document->getId().'"><i class="icon-user"  title="' . $this->trans('AssignToMe', array(), $this->translationDomain) . '"  data-popup="tooltip" data-placement="right"></i></a>';
                             } elseif ($action == 'Publish' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_PUBLISH'))) {
-                                $actionTd.= '<a href="javascript:void(0)" data-toggle="modal"  class="btn btn-defualt dev-publish-recipe" data-id="'.$document->getId().'"><i class="icon-share" data-placement="right"  data-popup="tooltip" title="' . $this->trans('publish ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '"></i></a>
+                                $actionTd.= '<a href="javascript:void(0)" data-toggle="modal"  class="btn btn-default dev-publish-recipe" data-id="'.$document->getId().'"><i class="icon-share" data-placement="right"  data-popup="tooltip" title="' . $this->trans('publish ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '"></i></a>
 ';
                             }
 //                            elseif ($action == 'AutoPublish' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_AUTOPUBLISH'))) {
-//                                $actionTd.= '<a class="btn btn-defualt" href="javascript:void(0);" title="'  . $this->trans('autopublish ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '" data-popup="tooltip"  data-placement="bottom" ><i class="icon-checkmark3"></i></a>';
+//                                $actionTd.= '<a class="btn btn-default" href="javascript:void(0);" title="'  . $this->trans('autopublish ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '" data-popup="tooltip"  data-placement="bottom" ><i class="icon-checkmark3"></i></a>';
 //                            }
                         }
 
@@ -857,7 +857,7 @@ class RecipeController extends BackendController
             "recordsTotal" => $renderingParams['total'],
             "recordsFiltered" => $renderingParams['total']));
     }
-    
+
     public function checkMaterialPublishedAction(Request $request) {
 
         $response = array('status' => 'success', 'valid' => TRUE);
@@ -924,7 +924,7 @@ class RecipeController extends BackendController
 
 
 
-    
+
 
        public function checkMaterialPublishedBulkAction(Request $request) {
 
@@ -984,12 +984,12 @@ class RecipeController extends BackendController
 
         $materialParent = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($parent);
         $materialChild = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($child);
-        
-        
+
+
         $contentType = $materialChild->getType();
         $removeMethod = "removeRelated".strtoupper($contentType);
         $getMethod = "getRelated".strtoupper($contentType);
-            
+
         if($materialParent && $materialChild && $materialParent->$getMethod()->contains($materialChild)){
             $materialParent->$removeMethod($materialChild);
             $dm->flush();

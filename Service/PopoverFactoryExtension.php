@@ -29,7 +29,7 @@ class PopoverFactoryExtension extends \Twig_Extension
                 ],
                 [
                     "text" => "Cancel",
-                    "class" => "btn-defualt",
+                    "class" => "btn-default",
                 ],
             ),
             "translationDomain" => null,

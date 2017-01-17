@@ -29,7 +29,7 @@
                         {% if is_granted('ROLE_RECIPE_CREATE') or is_granted('ROLE_ADMIN') %}
                         <a class="btn btn-link btn-float has-text" href="{{ path('ibtikar_glance_dashboard_recipe_create')}}"><i class="icon-add"></i><span>إدخال وصفه</span></a>
                                 {#                        <a class="btn btn-link btn-float has-text activeLink" href="Role-view.php"><i class="icon-table2"></i> <span>مشاهدة الادوار</span></a>
-                                #}  
+                                #}
                         {% endif %}
                         {% if is_granted('ROLE_BLOG_CREATE') or is_granted('ROLE_ADMIN') %}
                             <a class="btn btn-link btn-float has-text" href="{{ path('ibtikar_glance_dashboard_blog_create')}}"><i class="icon-add"></i><span>إدخال مقال/نصيحة</span></a>
@@ -235,24 +235,24 @@
                                                                             {% if action == "Edit" %}
                                                                                 {% if is_granted('ROLE_' ~ listName|upper ~'_EDIT') or is_granted('ROLE_ADMIN') %}
 
-                                                                                    <a class="btn btn-defualt"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}"  ><i class="icon-pencil" data-popup="tooltip"  data-placement="right" title="{{ ('Edit ' ~  listName)|trans({},translationDomain)}}"></i></a>
+                                                                                    <a class="btn btn-default"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}"  ><i class="icon-pencil" data-popup="tooltip"  data-placement="right" title="{{ ('Edit ' ~  listName)|trans({},translationDomain)}}"></i></a>
                                                                                     {% endif %}
                                                                                 {% elseif action == "Delete" %}
                                                                                     {% if  (is_granted('ROLE_RECIPE' ~ object.status|upper ~'_DELETE') or is_granted('ROLE_ADMIN')) %}
-                                                                                    <a class="btn btn-defualt dev-delete-single-recipe"  data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" data-id="{{ object.id }}" ><i class="icon-trash" data-popup="tooltip" title="{{ ('Delete ' ~  listName)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
+                                                                                    <a class="btn btn-default dev-delete-single-recipe"  data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" data-id="{{ object.id }}" ><i class="icon-trash" data-popup="tooltip" title="{{ ('Delete ' ~  listName)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
                                                                                 {% endif %}
                                                                                 {% elseif action == "ViewOne" %}
 
                                                                                 {% if is_granted('ROLE_' ~ listName|upper ~'_VIEWONE') or is_granted('ROLE_ADMIN')  %}
 
-                                                                                    <a href="{{ path(prefixRoute|lower~'_view', {'id': object.id}) }}" class="btn btn-defualt">
+                                                                                    <a href="{{ path(prefixRoute|lower~'_view', {'id': object.id}) }}" class="btn btn-default">
                                                                                         <i class="icon-eye" data-popup="tooltip"  data-placement="right" title="{{('View One ' ~  listName|capitalize)|trans({},translationDomain)}}" ></i>
                                                                                     </a>
                                                                                 {% endif %}
 
                                                                             {% elseif action == "Assign" %}
                                                                                 {% if is_granted('ROLE_' ~ listName|upper ~'_ASSIGN') or is_granted('ROLE_ADMIN')%}
-                                                                                    <a href="javascript:void(0);"   class="btn btn-defualt dev-assign-to-me"   data-id="{{ object.getId() }}" data-url="{{ path(prefixRoute|lower ~'_assign_to_me')}}"  >
+                                                                                    <a href="javascript:void(0);"   class="btn btn-default dev-assign-to-me"   data-id="{{ object.getId() }}" data-url="{{ path(prefixRoute|lower ~'_assign_to_me')}}"  >
                                                                                         <i class="icon-user" data-popup="tooltip"  data-placement="right" title="{% trans from translationDomain %}AssignToMe{% endtrans %}"  ></i>
                                                                                     </a>
                                                                                 {% endif %}
@@ -262,14 +262,14 @@
 
 
                                                                                 {% if is_granted('ROLE_' ~ listName|upper ~'_PUBLISH') or is_granted('ROLE_ADMIN')%}
-                                                                                        <a href="javascript:void(0)" data-toggle="modal"  class="btn btn-defualt dev-publish-recipe" data-id="{{ object.getId() }}"><i class="icon-share" data-placement="right"  data-popup="tooltip" title="{{('publish ' ~  listName|capitalize)|trans({},translationDomain)}}"></i></a>
+                                                                                        <a href="javascript:void(0)" data-toggle="modal"  class="btn btn-default dev-publish-recipe" data-id="{{ object.getId() }}"><i class="icon-share" data-placement="right"  data-popup="tooltip" title="{{('publish ' ~  listName|capitalize)|trans({},translationDomain)}}"></i></a>
                                                                                 {% endif %}
                               {#                                              {% elseif action == "AutoPublish" %}
 
                                                                                 {% if is_granted('ROLE_' ~ listName|upper ~'_AUTOPUBLISH') or is_granted('ROLE_ADMIN')  %}
                                                                                     {% if  'publish' not in object.getStatus() %}
                                                                                         <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-action="autopublish"
-                                                                                                class="btn btn-defualt" data-popup="tooltip"  data-placement="bottom"  {% if object.getStatus() is defined %}data-status="{{object.getStatus()}}"{%endif%} title="{{('autopublish ' ~  listName|capitalize)|trans({},translationDomain)}}">
+                                                                                                class="btn btn-default" data-popup="tooltip"  data-placement="bottom"  {% if object.getStatus() is defined %}data-status="{{object.getStatus()}}"{%endif%} title="{{('autopublish ' ~  listName|capitalize)|trans({},translationDomain)}}">
                                                                                             <i class="icon-checkmark3"></i>
                                                                                         </button>
                                                                                     {% endif %}

@@ -62,10 +62,10 @@
                             </td>
                             <td style="width: 300px" data-name="profilePhoto">
                                 {% if profileImage is empty %}
-                                    <a class="btn btn-defualt upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
+                                    <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
                                 {% endif %}
-                                <a class="btn btn-defualt dev-crop-images"   {% if profileImage is empty %}style="display: none"{%else%} data-image-id="{{ profileImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':profileImage.id,'collectionType':'SubProduct'})}}"{%endif%}   >  رفع الصورة </a>
-                                <a class="btn btn-defualt dev-trash-image" {% if profileImage is empty %}style="display: none" {%else%}  data-image-id="{{ profileImage.id }}"  data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': profileImage.id,'collectionType':'SubProduct'}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%} > <i class="icon-trash"></i></a>
+                                <a class="btn btn-default dev-crop-images"   {% if profileImage is empty %}style="display: none"{%else%} data-image-id="{{ profileImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':profileImage.id,'collectionType':'SubProduct'})}}"{%endif%}   >  رفع الصورة </a>
+                                <a class="btn btn-default dev-trash-image" {% if profileImage is empty %}style="display: none" {%else%}  data-image-id="{{ profileImage.id }}"  data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': profileImage.id,'collectionType':'SubProduct'}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%} > <i class="icon-trash"></i></a>
 
 
                             </td>
@@ -128,7 +128,7 @@
     <div class="row actionButtons">
         <div class="col-xs-12">
             <button class="btn btn-primary  dev-form-submit-btn" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
-            <button class="btn btn-defualt dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
+            <button class="btn btn-default dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
 
 
 
@@ -228,13 +228,13 @@
 
     {% endset %}
      {% set uploadButton %}
-        <a class="btn btn-defualt upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
+        <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
      {% endset %}
      {% set cropButton %}
-        <a class="btn btn-defualt dev-crop-images"    data-image-id="%image-id%" data-crop-url="%crop-url%">  رفع الصورة </a>
+        <a class="btn btn-default dev-crop-images"    data-image-id="%image-id%" data-crop-url="%crop-url%">  رفع الصورة </a>
      {% endset %}
      {% set deleteButton %}
-         <a class="btn btn-defualt dev-trash-image" data-image-id="%image-id%"  data-href = "%image-delete-url%"  %pop-block%> <i class="icon-trash"></i></a>
+         <a class="btn btn-default dev-trash-image" data-image-id="%image-id%"  data-href = "%image-delete-url%"  %pop-block%> <i class="icon-trash"></i></a>
          {% endset %}
 
 

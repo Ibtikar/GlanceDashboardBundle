@@ -32,7 +32,7 @@ function showNotificationMsg(title, text, type) {
         buttons: {
             sticker: false
         },
-        stack: {"dir1": "up", "dir2": "left", "firstpos1": 60, "firstpos2": 0}
+        stack:  {"dir1": "down", "dir2": "right", "firstpos1": 0, "firstpos2": 0}
     });
 }
 
@@ -109,10 +109,10 @@ function updateRelatedArticle(){
 //            $('.dev-related-list').append('<li class="media dev-related-item"><div class="media-body"><a href="'+$('base').attr('href')+this.slug+'" target="_blank">'+this.title+'</a>  </div><div class="dev-delete-related-material media-right" data-related-material-id="'+this.id+'" data-related-material-slug="'+this.slug+'"><i class="icon icon-cross2"></i></div></li>');
         });
         articles += "</ul></div></div>"
-        
+
         if($('#recipe_relatedArticle').parent().find('.dev-related-article-list').length > 0) {
-            $('label.dev-related-article-list').remove(); 
-            $('.dev-related-article-list').parent().remove(); 
+            $('label.dev-related-article-list').remove();
+            $('.dev-related-article-list').parent().remove();
         }
         $('#recipe_relatedArticle').parent().append(articles);
     }
@@ -123,7 +123,7 @@ function updateRelatedTip(){
         var data = JSON.parse($('#recipe_related_tip').val());
         RelatedTipObj = data;
 //        $('.dev-related-tip-list').html("");
-        
+
         var tips = '<label class="control-label col-lg-2 dev-related-tip-list" for="recipe_relatedRecipe"></label><div class="col-lg-12" style="padding: 0;"><ul class="dev-related-tip-list media-list width-350 notificationList">';
         $(data).each(function(){
             tips += '<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="/'+(this.img).replace(/^\/+/g,'')+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-tip-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>';
@@ -132,8 +132,8 @@ function updateRelatedTip(){
         });
         tips += "</ul></div></div>"
         if($('#recipe_relatedTip').parent().find('.dev-related-tip-list').length > 0) {
-           $('label.dev-related-tip-list').remove(); 
-           $('.dev-related-tip-list').parent().remove(); 
+           $('label.dev-related-tip-list').remove();
+           $('.dev-related-tip-list').parent().remove();
         }
         $('#recipe_relatedTip').parent().append(tips);
     }
@@ -752,7 +752,7 @@ $(document).ready(function () {
     $(document).on('onFailSubmitForm', function () {
         refreshImages();
     });
-    
+
     $(document).on('click','.dev-cover-img-edit',function () {
         $.ajax({
             url: $(this).attr('data-change-default-url') ,

@@ -30,7 +30,7 @@ function showNotificationMsg(title, text, type) {
         buttons: {
             sticker: false
         },
-        stack: {"dir1": "up", "dir2": "left", "firstpos1": 60, "firstpos2": 0}
+        stack:  {"dir1": "down", "dir2": "right", "firstpos1": 0, "firstpos2": 0}
     });
 }
 
