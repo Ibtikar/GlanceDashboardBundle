@@ -594,9 +594,13 @@ $(document).on("click",'.dev-add-related-material',function(){
     });
 
     $('body').on('preAjaxCallback', function () {
-        if ($('#form_minimumRelatedRecipe').val()=='') {
-            showNotificationMsg("يجب اختيار على الاقل  4 وصفات ذات صله", "", "error");
-            return false;
+        if ($('#form_minimumRelatedRecipe').val() == '') {
+            if ($('.dev-related-list li').length != 0) {
+                showNotificationMsg("يجب اختيار على الاقل  4 وصفات ذات صله", "", "error");
+                return false;
+            } else {
+                $('#form_minimumRelatedRecipe').val('valid');
+            }
         }
     });
     $(document).on('openTab', function () {

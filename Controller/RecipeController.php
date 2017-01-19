@@ -543,6 +543,13 @@ class RecipeController extends BackendController
                 $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
 
                 return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_' . strtolower($this->calledClassName) . '_list_' . $recipe->getStatus() . '_recipe'), array(), true));
+            }  else {
+//                $errors=array();
+//                   foreach ($form->getErrors() as $key => $error) {
+//            $errors[] = $error->getMessage();
+//        }
+//                 \Doctrine\Common\Util\Debug::dump($errors);
+//                 exit;
             }
         }
 
