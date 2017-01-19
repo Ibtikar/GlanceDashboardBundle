@@ -33,7 +33,7 @@ class Redirect {
         $requestedUrl = $event->getRequest()->getPathInfo();
 
         // The redirect listener should not work on all routes it should check for the route name before selecting from database`
-        if (!in_array($this->container->get('request_stack')->getCurrentRequest()->get('_route'), array('app_view', 'app_sub_view'))) {
+        if (!in_array($this->container->get('request_stack')->getCurrentRequest()->get('_route'), array('ibtikar_goody_frontend_shorturl'))) {
             return;
         }
 
@@ -102,10 +102,13 @@ class Redirect {
             throw new \Exception('please set old url.');
         }
         if (is_null($redirectToUrl)) {
-            $redirectToUrl = $this->container->get('router')->generate('home_page');
+            $redirectToUrl = $this->container->get('router')->generate('ibtikar_goody_frontend_homepage');
         }
-        if ($this->container->isScopeActive('request')) {
-            $scriptName = $this->container->get('request')->getScriptName();
+
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+
+        if ($request) {
+            $scriptName = $request->getScriptName();
             $redirectToUrl = str_replace($scriptName, '', $redirectToUrl);
             $oldUrl = str_replace($scriptName, '', $oldUrl);
         }
