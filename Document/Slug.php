@@ -57,7 +57,7 @@ class Slug extends Document
     static $TYPE_PRODUCT = "Product";
     static $TYPE_KITCHEN911 = "Kitchen911";
     static $TYPE_Rout = "Rout";
-
+    static  $TYPE_SHORTURL = 'shortUrl';
     /**
      * Get id
      *
