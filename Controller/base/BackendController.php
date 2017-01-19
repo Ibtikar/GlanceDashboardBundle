@@ -1044,8 +1044,8 @@ class BackendController extends Controller {
      */
     public function slugifier($recipe) {
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $slugAr = ArabicMongoRegex::slugify($recipe->getTitle()."-".  date('ymdHis'));
-        $slugEn = ArabicMongoRegex::slugify($recipe->getTitleEn()."-".date('ymdHis'));
+        $slugAr = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($recipe->getTitle(),125)."-".  date('ymdHis'));
+        $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringEn($recipe->getTitleEn(),125)."-".date('ymdHis'));
 
         $recipe->setSlug($slugAr);
         $recipe->setSlugEn($slugEn);
@@ -1059,5 +1059,23 @@ class BackendController extends Controller {
         $slug->setSlugEn($slugEn);
         $dm->persist($slug);
         $dm->flush();
+    }
+
+        public function getShortDescriptionStringAr($content, $length = 150)
+    {
+        $shortDescription = trim(html_entity_decode(strip_tags($content)));
+        if (mb_strlen($shortDescription) > $length) {
+            $shortDescription = mb_substr($shortDescription, 0, $length, 'utf-8') . '..';
+        }
+        return $shortDescription;
+    }
+
+    public function getShortDescriptionStringEn($content, $length = 150)
+    {
+        $shortDescription = trim(html_entity_decode(strip_tags($content)));
+        if (strlen($shortDescription) > $length) {
+            $shortDescription = substr($shortDescription, 0, $length) . '..';
+        }
+        return $shortDescription;
     }
 }
