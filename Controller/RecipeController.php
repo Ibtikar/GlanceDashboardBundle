@@ -539,6 +539,7 @@ class RecipeController extends BackendController
 
                 $dm->flush();
 
+                $this->container->get('facebook_scrape')->update($recipe);
 
                 $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
 

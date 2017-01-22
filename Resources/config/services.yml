@@ -108,4 +108,8 @@ services:
         class: Ibtikar\GlanceDashboardBundle\Service\UserReadLater
         arguments: ["@doctrine_mongodb"]
 
+    facebook_scrape:
+            class: Ibtikar\GlanceDashboardBundle\Service\FacebookScrapeUpdate
+            arguments: [ "@doctrine_mongodb" ]
+
 #
