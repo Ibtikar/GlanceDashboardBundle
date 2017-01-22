@@ -51,8 +51,8 @@ class ShortUrl {
     }
 
     private function changeUrlToSiteDomain($url){
-        $urlParts = parse_url($url);
-        $url = str_replace($urlParts['host'], $this->container->getParameter('site_domain'), $url);
+//        $urlParts = parse_url($url);
+//        $url = str_replace($urlParts['host'], $this->container->getParameter('site_domain'), $url);
         return $url;
     }
 
