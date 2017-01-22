@@ -285,8 +285,8 @@ class ProductController extends BackendController {
 
     public function slugifier($product) {
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $slugAr = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($product->getName(),125)."-".  date('ymdHis'));
-        $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringEn($product->getNameEn(),125)."-".date('ymdHis'));
+        $slugAr = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($product->getName(),100)."-".  date('ymdHis'));
+        $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringEn($product->getNameEn(),100)."-".date('ymdHis'));
 
         $product->setSlug($slugAr);
         $product->setSlugEn($slugEn);
