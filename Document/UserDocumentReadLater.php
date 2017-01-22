@@ -19,7 +19,7 @@ class UserDocumentReadLater extends Document {
     private $id;
 
     /**
-     * @MongoDB\ReferenceOne(discriminatorField="type", discriminatorMap={"material"="Ibtikar\GlanceDashboardBundle\Document\Recipe"})
+     * @MongoDB\ReferenceOne(discriminatorField="type", discriminatorMap={"recipe"="Ibtikar\GlanceDashboardBundle\Document\Recipe"})
      */
     private $document;
 

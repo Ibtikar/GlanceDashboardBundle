@@ -1,14 +1,12 @@
 <?php
 
-namespace Ibtikar\UserBundle\Service;
+namespace Ibtikar\GlanceDashboardBundle\Service;
 
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\ODM\MongoDB\DocumentManager;
-use Ibtikar\UserBundle\Document\UserDocumentReadLater;
-use Ibtikar\AppBundle\Document\Material;
-use Ibtikar\AppBundle\Document\Comics;
-use Ibtikar\UserBundle\Document\Document;
-use Ibtikar\UserBundle\Document\User;
+use Ibtikar\GlanceDashboardBundle\Document\UserDocumentReadLater;
+use Ibtikar\GlanceDashboardBundle\Document\Document;
+use Ibtikar\GlanceUMSBundle\Document\User;
 
 /**
  * @author Moemen Hussein <moemen.hussein@ibtikar.net.sa>
@@ -32,17 +30,14 @@ class UserReadLater {
      * @return boolean
      */
     public function read(Document $document, User $user) {
-        $userDocumentReadLater = $this->dm->getRepository('IbtikarUserBundle:UserDocumentReadLater')->getUserDocumentReadLater($document->getId(), $user->getId());
+        $userDocumentReadLater = $this->dm->getRepository('IbtikarGlanceDashboardBundle:UserDocumentReadLater')->getUserDocumentReadLater($document->getId(), $user->getId());
         if ($userDocumentReadLater) {
             return false;
         }
         $documentReadLater = new UserDocumentReadLater();
         $documentReadLater->setUser($user);
         $documentReadLater->setDocument($document);
-        $documentReadLater->setDocumentType('comics');
-        if($document instanceof Material){
-            $documentReadLater->setDocumentType($document->getMaterialType());
-        }
+        $documentReadLater->setDocumentType($document->getType());
         $this->dm->persist($documentReadLater);
         $this->dm->flush();
         return true;
@@ -55,7 +50,7 @@ class UserReadLater {
      * @return boolean
      */
     public function unread(Document $document, User $user) {
-        $userDocumentReadLater = $this->dm->getRepository('IbtikarUserBundle:UserDocumentReadLater')->getUserDocumentReadLater($document->getId(), $user->getId());
+        $userDocumentReadLater = $this->dm->getRepository('IbtikarGlanceDashboardBundle:UserDocumentReadLater')->getUserDocumentReadLater($document->getId(), $user->getId());
         if ($userDocumentReadLater) {
             $userDocumentReadLater->delete($this->dm, $user);
             $this->dm->flush();
