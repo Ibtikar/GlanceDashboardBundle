@@ -98,4 +98,14 @@ services:
             - { name: form.type, alias: phone }
         arguments: ["@service_container"]
 
+
+
+    user_like:
+        class: Ibtikar\GlanceDashboardBundle\Service\UserLike
+        arguments: ["@doctrine_mongodb","@service_container"]
+
+    user_read_later:
+        class: Ibtikar\GlanceDashboardBundle\Service\UserReadLater
+        arguments: ["@doctrine_mongodb"]
+
 #
