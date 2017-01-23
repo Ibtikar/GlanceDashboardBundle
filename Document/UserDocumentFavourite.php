@@ -6,12 +6,12 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Ibtikar\GlanceDashboardBundle\Document\Document;
 
 /**
- * @MongoDB\Document(repositoryClass="Ibtikar\GlanceDashboardBundle\Document\UserDocumentReadLaterRepository")
+ * @MongoDB\Document(repositoryClass="Ibtikar\GlanceDashboardBundle\Document\UserDocumentFavouriteRepository")
  * @MongoDB\Indexes({
  *   @MongoDB\Index(keys={"document.$id"="asc", "user.$id"="asc"}),
  * })
  */
-class UserDocumentReadLater extends Document {
+class UserDocumentFavourite extends Document {
 
     /**
      * @MongoDB\Id

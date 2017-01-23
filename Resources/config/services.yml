@@ -104,8 +104,8 @@ services:
         class: Ibtikar\GlanceDashboardBundle\Service\UserLike
         arguments: ["@doctrine_mongodb","@service_container"]
 
-    user_read_later:
-        class: Ibtikar\GlanceDashboardBundle\Service\UserReadLater
+    user_favourite:
+        class: Ibtikar\GlanceDashboardBundle\Service\UserFavourite
         arguments: ["@doctrine_mongodb"]
 
     facebook_scrape:
