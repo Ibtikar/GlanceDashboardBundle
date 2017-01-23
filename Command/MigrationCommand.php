@@ -59,7 +59,6 @@ class MigrationCommand extends ContainerAwareCommand {
 
             $user = $this->dm->getRepository('IbtikarGlanceUMSBundle:Staff')->findOneByUsername('goodyAdmin');
 
-
             $z = new \XMLReader;
             $doc = new \DOMDocument;
 
@@ -106,32 +105,32 @@ class MigrationCommand extends ContainerAwareCommand {
                         case "recipe-ingrdients-ar":
                             $intro = (string) $postmeta->meta_value;
                             if(strrpos($intro, '[:en]')){
-                                preg_match('/\[\:ar\](.*?)\[\:en\]/', $intro, $values);
-                                $intro = $values[1];
+                                $arr = explode('[:en]', $intro);
+                                $intro = array_shift($arr);
                             }
                             $recipe->setIngredients("<span style='direction:rtl'>".str_replace(array('[:ar]','[:en]','[:]'), '', $intro)."</span>");
                             break;
                         case "recipe-ingrdients-en":
                             $intro = (string) $postmeta->meta_value;
                             if(strrpos($intro, '[:en]')){
-                                preg_match('/\[\:en\](.*?)\[\:\]/', $intro, $values);
-                                $intro = $values[1];
+                                $arr = explode('[:en]', $intro);
+                                $intro = array_pop($arr);
                             }
                             $recipe->setIngredientsEn(str_replace(array('[:ar]','[:en]','[:]'), '', $intro));
                             break;
                         case "recipe-prepare-ar":
                             $intro = (string) $postmeta->meta_value;
                             if(strrpos($intro, '[:en]')){
-                                preg_match('/\[\:ar\](.*?)\[\:en\]/', $intro, $values);
-                                $intro = $values[1];
+                                $arr = explode('[:en]', $intro);
+                                $intro = array_shift($arr);
                             }
                             $recipe->setMethod("<span style='direction:rtl'>".str_replace(array('[:ar]','[:en]','[:]'), '', $intro)."</span>");
                             break;
                         case "recipe-prepare-en":
                             $intro = (string) $postmeta->meta_value;
                             if(strrpos($intro, '[:en]')){
-                                preg_match('/\[\:en\](.*?)\[\:\]/', $intro, $values);
-                                $intro = $values[1];
+                                $arr = explode('[:en]', $intro);
+                                $intro = array_pop($arr);
                             }
                             $recipe->setMethodEn(str_replace(array('[:ar]','[:en]','[:]'), '', $intro));
                             break;
