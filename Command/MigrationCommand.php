@@ -76,7 +76,7 @@ class MigrationCommand extends ContainerAwareCommand {
 
                 $recipe = new Recipe();
                 $recipe->setMigrated(true);
-//                $recipe->setPublishedBy($user);
+                $recipe->setPublishedBy($user);
 
                 $media = new Media();
 
@@ -297,7 +297,7 @@ class MigrationCommand extends ContainerAwareCommand {
             $this->dm->persist($media);
             $recipe->setDefaultCoverPhoto($name);
             $recipe->setCoverPhoto($media);
-//            $publishResult = $this->getContainer()->get('recipe_operations')->publish($recipe, array());
+            $publishResult = $this->getContainer()->get('recipe_operations')->publish($recipe, array());
             $progress->advance();
         }
 
