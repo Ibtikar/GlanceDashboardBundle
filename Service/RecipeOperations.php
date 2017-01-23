@@ -97,9 +97,9 @@ class RecipeOperations extends PublishOperations
 
         if(!$document->getMigrated()){
            $document->setPublishedAt(new \DateTime());
+            $document->setPublishedBy($user);
         }
 
-        $document->setPublishedBy($user);
         $document->setStatus(Recipe::$statuses['publish']);
         $document->setAssignedTo(null);
 
