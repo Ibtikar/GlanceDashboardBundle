@@ -11,7 +11,8 @@ use Ibtikar\GlanceDashboardBundle\Document\Document;
  *   @MongoDB\Index(keys={"document.$id"="asc", "user.$id"="asc"}),
  * })
  */
-class UserDocumentLike extends Document {
+class UserDocumentLike extends Document
+{
 
     /**
      * @MongoDB\Id
@@ -19,31 +20,45 @@ class UserDocumentLike extends Document {
     private $id;
 
     /**
-     * @MongoDB\ReferenceOne(discriminatorField="type", discriminatorMap={"material"="Ibtikar\AppBundle\Document\Material", "comics"="Ibtikar\AppBundle\Document\Comics","comment"="Ibtikar\AppBundle\Document\Comment","questionnaire"="Ibtikar\AppBundle\Document\Questionnaire"})
+     * @MongoDB\ReferenceOne(discriminatorField="type", discriminatorMap={"recipe"="Ibtikar\GlanceDashboardBundle\Document\Recipe"})
      */
     private $document;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\User", discriminatorField="type", discriminatorMap={"visitor"="Ibtikar\VisitorBundle\Document\Visitor", "staff"="Ibtikar\BackendBundle\Document\Staff"})
+     * @MongoDB\String
+     */
+    private $documentType;
+
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\User", discriminatorField="type", discriminatorMap={"visitor"="Ibtikar\GlanceUMSBundle\Document\Visitor", "staff"="Ibtikar\GlanceUMSBundle\Document\Staff"})
      */
     private $user;
+
+    /**
+     * @MongoDB\String
+
+     */
+    private $type;
+
 
     /**
      * Get id
      *
      * @return id $id
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
      * Set document
      *
-     * @param Ibtikar\GlanceDashboardBundle\Document\Document $document
+     * @param $document
      * @return self
      */
-    public function setDocument(\Ibtikar\GlanceDashboardBundle\Document\Document $document) {
+    public function setDocument($document)
+    {
         $this->document = $document;
         return $this;
     }
@@ -51,10 +66,33 @@ class UserDocumentLike extends Document {
     /**
      * Get document
      *
-     * @return Ibtikar\GlanceDashboardBundle\Document\Document $document
+     * @return $document
      */
-    public function getDocument() {
+    public function getDocument()
+    {
         return $this->document;
+    }
+
+    /**
+     * Set documentType
+     *
+     * @param string $documentType
+     * @return self
+     */
+    public function setDocumentType($documentType)
+    {
+        $this->documentType = $documentType;
+        return $this;
+    }
+
+    /**
+     * Get documentType
+     *
+     * @return string $documentType
+     */
+    public function getDocumentType()
+    {
+        return $this->documentType;
     }
 
     /**
@@ -63,7 +101,8 @@ class UserDocumentLike extends Document {
      * @param Ibtikar\GlanceUMSBundle\Document\User $user
      * @return self
      */
-    public function setUser(\Ibtikar\GlanceUMSBundle\Document\User $user) {
+    public function setUser(\Ibtikar\GlanceUMSBundle\Document\User $user)
+    {
         $this->user = $user;
         return $this;
     }
@@ -73,8 +112,30 @@ class UserDocumentLike extends Document {
      *
      * @return Ibtikar\GlanceUMSBundle\Document\User $user
      */
-    public function getUser() {
+    public function getUser()
+    {
         return $this->user;
     }
 
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return self
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string $type
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 }
