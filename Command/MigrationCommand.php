@@ -59,7 +59,6 @@ class MigrationCommand extends ContainerAwareCommand {
 
             $user = $this->dm->getRepository('IbtikarGlanceUMSBundle:Staff')->findOneByUsername('goodyAdmin');
 
-
             $z = new \XMLReader;
             $doc = new \DOMDocument;
 
@@ -104,16 +103,36 @@ class MigrationCommand extends ContainerAwareCommand {
                             $recipe->setBriefEn(str_replace(array('[:ar]','[:en]','[:]'), '', html_entity_decode(strip_tags((string) $postmeta->meta_value))));
                             break;
                         case "recipe-ingrdients-ar":
-                            $recipe->setIngredients(str_replace(array('[:ar]','[:en]','[:]'), '', (string) $postmeta->meta_value));
+                            $intro = (string) $postmeta->meta_value;
+                            if(strrpos($intro, '[:en]')){
+                                $arr = explode('[:en]', $intro);
+                                $intro = array_shift($arr);
+                            }
+                            $recipe->setIngredients("<span style='direction:rtl'>".str_replace(array('[:ar]','[:en]','[:]'), '', $intro)."</span>");
                             break;
                         case "recipe-ingrdients-en":
-                            $recipe->setIngredientsEn(str_replace(array('[:ar]','[:en]','[:]'), '', (string) $postmeta->meta_value));
+                            $intro = (string) $postmeta->meta_value;
+                            if(strrpos($intro, '[:en]')){
+                                $arr = explode('[:en]', $intro);
+                                $intro = array_pop($arr);
+                            }
+                            $recipe->setIngredientsEn(str_replace(array('[:ar]','[:en]','[:]'), '', $intro));
                             break;
                         case "recipe-prepare-ar":
-                            $recipe->setMethod(str_replace(array('[:ar]','[:en]','[:]'), '', (string) $postmeta->meta_value));
+                            $intro = (string) $postmeta->meta_value;
+                            if(strrpos($intro, '[:en]')){
+                                $arr = explode('[:en]', $intro);
+                                $intro = array_shift($arr);
+                            }
+                            $recipe->setMethod("<span style='direction:rtl'>".str_replace(array('[:ar]','[:en]','[:]'), '', $intro)."</span>");
                             break;
                         case "recipe-prepare-en":
-                            $recipe->setMethodEn(str_replace(array('[:ar]','[:en]','[:]'), '', (string) $postmeta->meta_value));
+                            $intro = (string) $postmeta->meta_value;
+                            if(strrpos($intro, '[:en]')){
+                                $arr = explode('[:en]', $intro);
+                                $intro = array_pop($arr);
+                            }
+                            $recipe->setMethodEn(str_replace(array('[:ar]','[:en]','[:]'), '', $intro));
                             break;
                         case "recipe-preparation-time":
                         case "recipe-total-time":
@@ -169,11 +188,11 @@ class MigrationCommand extends ContainerAwareCommand {
             $this->dm->clear();
             gc_collect_cycles();
 
-            $output->writeln(array("Start placing cover photo and publishing."));
+            $output->writeln(array("Start placing cover photos and save recipes."));
 
             $this->postPersist(new ProgressBar($output,$answer));
             $progress->finish();
-            $output->writeln(PHP_EOL . $answer . " Recipes was migrated and published successfully.");
+            $output->writeln(PHP_EOL . $answer . " Recipes was migrated and added successfully.");
         } else {
             $output->writeln(array("      (Wrong Answer)", "(ノಠ益ಠ)ノ"));
         }
@@ -259,7 +278,7 @@ class MigrationCommand extends ContainerAwareCommand {
 
             $extension = $imageExt[1];
             $media = new Media();
-            $media->setCollectionType("recipe");
+            $media->setCollectionType("Recipe");
             $document = $recipe;
             $collectionSetter = "setRecipe";
             $media->$collectionSetter($document);
