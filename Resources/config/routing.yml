@@ -53,4 +53,9 @@ ibtikar_glance_dashboard_blog:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/blog.yml"
     prefix:   /blog
 
+ibtikar_glance_dashboard_stars:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/stars.yml"
+    prefix:   /stars
+
+
 

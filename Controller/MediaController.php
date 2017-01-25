@@ -195,7 +195,7 @@ class MediaController extends BackendController
             'id' => $media->getId(),
             'type' => $media->getType(),
             'coverPhoto' => $media->getCoverPhoto(),
-            'changeCoverUrl' => $media->$getCollection() ? $this->generateUrl('ibtikar_glance_dashboard_media_change_defaultcover', array('imageId' => $media->getId(), 'documentId' => $media->$getCollection()->getId(), 'collectionType'=>$collectionType)) : '',
+            'changeCoverUrl' => method_exists($media,$getCollection) && $media->$getCollection() ? $this->generateUrl('ibtikar_glance_dashboard_media_change_defaultcover', array('imageId' => $media->getId(), 'documentId' => $media->$getCollection()->getId(), 'collectionType'=>$collectionType)) : '',
             'captionAr' => $media->getCaptionAr()?$media->getCaptionAr():'',
             'caption' => $media->getCaptionAr()?$media->getCaptionAr():'',
             'captionEn' => $media->getCaptionEn()?$media->getCaptionEn():'',
@@ -295,7 +295,7 @@ class MediaController extends BackendController
         $dm = $this->get('doctrine_mongodb')->getManager();
         /* @var $document Media */
         $document = $dm->getRepository($this->getObjectShortName())->find($id);
-        
+
         if (!$document) {
             return $this->getNotificationResponse(null, array('deleted' => true), 'error');
         }
@@ -327,10 +327,10 @@ class MediaController extends BackendController
                 }
             }
         }
-        
+
         if (in_array($collectionType, ['Recipe', 'Blog']) && $document->getRecipe()) {
 //            $response = $this->getInvalidResponseForRecipe($document->getRecipe()->getId(), $request->get('room'));
-//            
+//
 //            if ($response) {
 //                return $response;
 //            }
@@ -358,7 +358,7 @@ class MediaController extends BackendController
         if (!$this->getUser()) {
             return $this->getLoginResponse();
         }
-        
+
         $documents = array();
         if ($documentId && $documentId != 'null') {
             if ($collectionType === 'Product') {
@@ -968,7 +968,7 @@ class MediaController extends BackendController
         }
 
     }
-    
+
     /**
      * @author Ahmad Gamal <a.gamal@ibtikar.net.sa>
      * @param Request $request
@@ -979,23 +979,23 @@ class MediaController extends BackendController
         if (!$document) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
-        
+
         $media = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->find($imageId);
         if (!$media) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
-        }        
-        
+        }
+
         $documentImages = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array('recipe' => $documentId, 'coverPhoto' => true));
-        
+
         foreach ($documentImages as $key => $documentImage) {
             $documentImage->setCoverPhoto(FALSE);
         }
-        
+
         $media->setCoverPhoto(TRUE);
-        
+
         $document->setCoverPhoto($media);
         $dm->flush();
-        
+
         return new JsonResponse(array('status' => 'success'));
     }
 }

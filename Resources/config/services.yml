@@ -108,6 +108,9 @@ services:
         class: Ibtikar\GlanceDashboardBundle\Service\UserFavourite
         arguments: ["@doctrine_mongodb"]
 
+    system_settings:
+            class: Ibtikar\GlanceDashboardBundle\Service\SystemSettings
+            arguments: [ "@doctrine_mongodb", "@service_container" ]
     facebook_scrape:
             class: Ibtikar\GlanceDashboardBundle\Service\FacebookScrapeUpdate
             arguments: [ "@doctrine_mongodb" ]
