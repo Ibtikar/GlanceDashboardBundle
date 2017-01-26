@@ -315,6 +315,7 @@ class RecipeController extends BackendController
                     break;
             }
 
+            $this->container->get('facebook_scrape')->update($recipe);
 
 
             return new JsonResponse(array_merge($publishResult, $this->getTabCount()));
