@@ -15,11 +15,33 @@ $.validator.addMethod('mobile', function (value, element) {
   return true;
 }, 'phone must be in the right format');
 
+// ckeditor content required
+$.validator.addMethod('ckreq', function (value, element) {
+    if(CKEDITOR && CKEDITOR.instances[$(element).attr('id')]){
+        var editorContent = CKEDITOR.instances[$(element).attr('id')].document.getBody().getText();
+        // return false in case of empty content
+        return editorContent.trim().length !== 0;
+    }
+    return true;
+});
+// ckeditor content max limit
+$.validator.addMethod('ckmax', function (value, element, param) {
+            console.log('mada5al');
+    if(CKEDITOR && CKEDITOR.instances[$(element).attr('id')]){
+        var editorContent = CKEDITOR.instances[$(element).attr('id')].document.getBody().getText();
+        // return true in case of empty content as element is not required
+        // or return false if it contant a string more than the max limit
+        return editorContent.trim().length == 0?true:editorContent.length < param;
+    }
+    return true;
+});
+
+// ckeditor content min limit
 $.validator.addMethod('ckmin', function (value, element, param) {
     if(CKEDITOR && CKEDITOR.instances[$(element).attr('id')]){
         var editorContent = CKEDITOR.instances[$(element).attr('id')].document.getBody().getText();
         // return true in case of empty content as element is not required
-        // or return false if it contant a string more than the min limit
+        // or return false if it contant a string less than the min limit
         return editorContent.trim().length == 0?true:editorContent.length >= param;
     }
     return true;
@@ -362,7 +384,7 @@ function initFormValidation(form_selector) {
         form_selector = 'form.dev-page-main-form,form.dev-js-validation';
     }
     $(form_selector).each(function () {
-        var ignoredElementsSelector = ':reset,:hidden:not(#keycode,textarea[id^="recipe_"]),.select-input,input.contact_subject_dev,.dev-ignore-validation';
+        var ignoredElementsSelector = ':reset,:hidden:not(#keycode,textarea[id^="recipe_"],textarea[id^="form_benefits"]),.select-input,input.contact_subject_dev,.dev-ignore-validation';
         var $form = $(this);
         var $resetButtons = $form.find(':reset');
         $resetButtons.each(function() {

@@ -66,6 +66,11 @@
 منتجات قودي
                                         </a></li>
                                 {% endif %}
+                                {% if is_granted('ROLE_STARS_EDIT') or is_granted('ROLE_ADMIN')%}
+                                    <li><a href="{{ path('ibtikar_glance_dashboard_stars_edit') }}" {% if 'stars' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-star-empty3"></i>
+نجوم قودي
+                                        </a></li>
+                                {% endif %}
                             </ul>
                     </li>
      {% endif %}
