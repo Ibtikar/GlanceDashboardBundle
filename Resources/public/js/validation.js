@@ -384,7 +384,7 @@ function initFormValidation(form_selector) {
         form_selector = 'form.dev-page-main-form,form.dev-js-validation';
     }
     $(form_selector).each(function () {
-        var ignoredElementsSelector = ':reset,:hidden:not(#keycode,textarea[id^="recipe_"],textarea[id^="form_benefits"]),.select-input,input.contact_subject_dev,.dev-ignore-validation';
+        var ignoredElementsSelector = ':reset,:hidden:not(#keycode,.nice-select,textarea[id^="recipe_"],textarea[id^="form_benefits"]),.select-input,input.contact_subject_dev,.dev-ignore-validation';
         var $form = $(this);
         var $resetButtons = $form.find(':reset');
         $resetButtons.each(function() {
