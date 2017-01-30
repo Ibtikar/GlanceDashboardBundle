@@ -997,7 +997,7 @@ class BackendController extends Controller {
             $responseArr[] = array(
                 'id' => $recipe->getId(),
                 'text' => $recipe->getTitle(),
-                'img' => $recipe->getDefaultCoverPhoto()?$recipe->getDefaultCoverPhoto()->getWebPath():""
+                'img' => $recipe->getCoverPhoto()?$recipe->getCoverPhoto()->getWebPath():""
             );
         }
 

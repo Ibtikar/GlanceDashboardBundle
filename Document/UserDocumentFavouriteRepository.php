@@ -26,6 +26,6 @@ class UserDocumentFavouriteRepository extends DocumentRepository
     public function getUserDocumentFavouriteList($userId, $limit = 10, $skip = 0)
     {
         return $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:UserDocumentFavourite')
-                ->field('user.$id')->equals(new \MongoId($userId))->eagerCursor(true)->skip($skip)->limit($limit)->sort(array('createdAt' => 'ASC'))->getQuery()->execute();
+                ->field('user.$id')->equals(new \MongoId($userId))->eagerCursor(true)->skip($skip)->limit($limit)->sort(array('createdAt' => 'DESC'))->getQuery()->execute();
     }
 }
