@@ -60,7 +60,7 @@ class Document {
         }
         $this->deletedAt = new \DateTime();
         $this->deleted = true;
-        $this->removeDocumentReferences($dm, $user);
+//        $this->removeDocumentReferences($dm, $user);
         $this->updateReferencesCounts(-1);
     }
 
