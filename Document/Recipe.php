@@ -1379,12 +1379,25 @@ class Recipe  extends Publishable {
                 $array[] = array(
                             'id'=>$recipe->getId(),
                             'text'=>$recipe->getTitle(),
-                            'img' =>$recipe->getDefaultCoverPhoto()?$recipe->getDefaultCoverPhoto()->getWebPath():""
+                            'img' => $this->getDefaultCoverImage($recipe)
                         );
             }
 
         }
         return $array;
+    }
+
+    public function getDefaultCoverImage($document){
+        if($document->getCoverPhoto()){
+            $type=$document->getCoverPhoto()->getType();
+            if($type=='image'){
+            return  '/'.$document->getCoverPhoto()->getWebPath()   ;
+            }else{
+              return  'https://i.ytimg.com/vi/' . $document->getCoverPhoto()->getVid() . '/default.jpg' ;
+            }
+
+        }
+        return '';
     }
 
     public function getRelatedArticleJson(){
@@ -1394,7 +1407,7 @@ class Recipe  extends Publishable {
                 $array[] = array(
                             'id'=>$article->getId(),
                             'text'=>$article->getTitle(),
-                            'img' =>$article->getDefaultCoverPhoto()?$article->getDefaultCoverPhoto()->getWebPath():""
+                            'img' => $this->getDefaultCoverImage($article)
                         );
             }
 
@@ -1409,7 +1422,7 @@ class Recipe  extends Publishable {
                 $array[] = array(
                             'id'=>$tip->getId(),
                             'text'=>$tip->getTitle(),
-                            'img' =>$tip->getDefaultCoverPhoto()?$tip->getDefaultCoverPhoto()->getWebPath():""
+                            'img' => $this->getDefaultCoverImage($tip)
                         );
             }
 

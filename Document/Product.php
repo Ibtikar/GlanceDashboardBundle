@@ -137,7 +137,8 @@ class Product extends Document
                 $array[] = array(
                     'id' => $recipe->getId(),
                     'text' => $recipe->getTitle(),
-                    'img' => $recipe->getCoverPhoto() ? $recipe->getCoverPhoto()->getWebPath() : ""
+                    'img' => $this->getDefaultCoverPhoto($recipe)
+
                 );
             }
         }
@@ -152,7 +153,8 @@ class Product extends Document
                 $array[] = array(
                     'id' => $article->getId(),
                     'text' => $article->getTitle(),
-                    'img' => $article->getCoverPhoto() ? $article->getCoverPhoto()->getWebPath() : ""
+                    'img' => $this->getDefaultCoverPhoto($article)
+
                 );
             }
         }
@@ -167,11 +169,25 @@ class Product extends Document
                 $array[] = array(
                     'id' => $tip->getId(),
                     'text' => $tip->getTitle(),
-                    'img' => $tip->getCoverPhoto() ? $tip->getCoverPhoto()->getWebPath() : ""
+                    'img' => $this->getDefaultCoverPhoto($tip)
+
                 );
             }
         }
         return $array;
+    }
+
+    public function getDefaultCoverPhoto($document){
+        if($document->getCoverPhoto()){
+            $type=$document->getCoverPhoto()->getType();
+            if($type=='image'){
+            return  '/'.$document->getCoverPhoto()->getWebPath()   ;
+            }else{
+                return  'https://i.ytimg.com/vi/' . $document->getCoverPhoto()->getVid() . '/default.jpg' ;
+            }
+
+        }
+        return '';
     }
 
     /**

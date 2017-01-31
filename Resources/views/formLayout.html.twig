@@ -170,7 +170,7 @@ var recipeValue='';
        return opt.text;
 
         }
-        var optimage = $(opt.element).data('image')?$(opt.element).data('image'):(opt.img?"/"+opt.img:null);
+        var optimage = $(opt.element).data('image')?$(opt.element).data('image'):(opt.img?opt.img:null);
         if (!optimage) {
             return opt.text;
         } else {

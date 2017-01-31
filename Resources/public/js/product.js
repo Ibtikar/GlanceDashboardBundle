@@ -66,7 +66,7 @@ function updateRelatedMaterial() {
         RelatedRecipeObj = data;
         var recipes = '<label class="control-label col-lg-2 dev-related-recipe-list" for="form_relatedRecipe"></label><div class="col-lg-12" style="padding: 0;"><ul class="dev-related-list media-list width-350 notificationList">';
         $(data).each(function () {
-            recipes += '<li class="media" data-related-material-id="' + this.id + '"><div class="media-left"><img src="/' + (this.img).replace(/^\/+/g, '') + '" class="img-circle" alt=""></div><div class="media-body"><b> ' + this.text + '</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="' + this.id + '"><i class="icon icon-cross2"></i></a></div></li>';
+            recipes += '<li class="media" data-related-material-id="' + this.id + '"><div class="media-left"><img src="' + this.img+ '" class="img-circle" alt=""></div><div class="media-body"><b> ' + this.text + '</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="' + this.id + '"><i class="icon icon-cross2"></i></a></div></li>';
         });
         recipes += "</ul></div></div>"
         $('.dev-related-list').html("");
@@ -89,7 +89,7 @@ function updateRelatedKitchen911(){
 //        $('.dev-related-kitchen911-list').html("");
         var kitchen911s = '<label class="control-label col-lg-2 dev-related-kitchen911-list" for="form_relatedKitchen911"></label><div class="col-lg-12" style="padding: 0;"><ul class="dev-related-kitchen911-list media-list width-350 notificationList">';
         $(data).each(function(){
-            kitchen911s += '<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="/'+(this.img).replace(/^\/+/g,'')+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-kitchen911-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>';
+            kitchen911s += '<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="'+this.img+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-kitchen911-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>';
 //            $('.dev-related-list').append('<li class="media dev-related-item"><div class="media-body"><a href="'+$('base').attr('href')+this.slug+'" target="_blank">'+this.title+'</a>  </div><div class="dev-delete-related-material media-right" data-related-material-id="'+this.id+'" data-related-material-slug="'+this.slug+'"><i class="icon icon-cross2"></i></div></li>');
         });
         kitchen911s += "</ul></div></div>"
@@ -110,7 +110,7 @@ function updateRelatedTip(){
 
         var tips = '<label class="control-label col-lg-2 dev-related-tip-list" for="form_relatedTip"></label><div class="col-lg-12" style="padding: 0;"><ul class="dev-related-tip-list media-list width-350 notificationList">';
         $(data).each(function(){
-            tips += '<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="/'+(this.img).replace(/^\/+/g,'')+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-tip-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>';
+            tips += '<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="'+this.img+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-tip-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>';
 //            $('.dev-related-tip-list').append('<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="/'+(this.img).replace(/^\/+/g,'')+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>');
 //            $('.dev-related-list').append('<li class="media dev-related-item"><div class="media-body"><a href="'+$('base').attr('href')+this.slug+'" target="_blank">'+this.title+'</a>  </div><div class="dev-delete-related-material media-right" data-related-material-id="'+this.id+'" data-related-material-slug="'+this.slug+'"><i class="icon icon-cross2"></i></div></li>');
         });
@@ -286,7 +286,7 @@ $(document).on("click",'.dev-add-related-material',function(){
                                 objArray.push({
                                     'id':$(this).attr('data-related-material-id'),
                                     'text':$(this).find('.media-body b').text().trim(),
-                                    'img':"/"+$(this).find('img').attr('src')
+                                    'img':$(this).find('img').attr('src')
                                 });
                             });
                             $('#form_related').val(JSON.stringify(objArray));
@@ -336,7 +336,7 @@ $(document).on("click",'.dev-add-related-material',function(){
                                 objArray.push({
                                     'id':$(this).attr('data-related-material-id'),
                                     'text':$(this).find('.media-body b').text().trim(),
-                                    'img':"/"+$(this).find('img').attr('src')
+                                    'img':$(this).find('img').attr('src')
                                 });
                             });
                             $('#form_related').val(JSON.stringify(objArray));
@@ -381,7 +381,7 @@ $(document).on("click",'.dev-add-related-material',function(){
                                 objArray.push({
                                     'id':$(this).attr('data-related-material-id'),
                                     'text':$(this).find('.media-body b').text().trim(),
-                                    'img':"/"+$(this).find('img').attr('src')
+                                    'img':$(this).find('img').attr('src')
                                 });
                             });
                             $('#form_related').val(JSON.stringify(objArray));

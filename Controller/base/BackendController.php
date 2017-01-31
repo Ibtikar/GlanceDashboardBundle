@@ -998,11 +998,24 @@ class BackendController extends Controller {
             $responseArr[] = array(
                 'id' => $recipe->getId(),
                 'text' => $recipe->getTitle(),
-                'img' => $recipe->getCoverPhoto()?$recipe->getCoverPhoto()->getWebPath():""
+                'img' => $this->getDefaultCoverPhoto($recipe)
             );
         }
 
         return new JsonResponse($responseArr);
+    }
+
+    public function getDefaultCoverPhoto($document){
+        if($document->getCoverPhoto()){
+            $type=$document->getCoverPhoto()->getType();
+            if($type=='image'){
+            return  '/'.$document->getCoverPhoto()->getWebPath()   ;
+            }else{
+                return  'https://i.ytimg.com/vi/' . $document->getCoverPhoto()->getVid() . '/default.jpg' ;
+            }
+
+        }
+        return '';
     }
 
     public function updateRelatedRecipe($document,$relatedJson,$dm = null,$type='recipe') {
