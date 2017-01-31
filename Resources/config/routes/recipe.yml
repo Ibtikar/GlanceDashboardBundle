@@ -50,4 +50,7 @@ ibtikar_glance_dashboard_recipe_related_material_delete:
     path: /related-material-delete
     defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:relatedMaterialDelete }
 
+ibtikar_glance_dashboard_recipe_related_material_add:
+    path: /related-material-add
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:relatedMaterialAdd }
 

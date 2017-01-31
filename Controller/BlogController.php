@@ -19,7 +19,7 @@ class BlogController extends BackendController
 
     protected $translationDomain = 'recipe';
 
-    
+
     /**
      * @author Ahmad Gamal <a.gamal@ibtikar.net.sa>
      * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
@@ -28,7 +28,7 @@ class BlogController extends BackendController
      */
     public function createAction(Request $request)
     {
-        
+
         $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Blog'),);
         $breadCrumbArray = $this->preparedMenu($menus);
 
@@ -44,13 +44,13 @@ class BlogController extends BackendController
                 $formData = $request->get('recipe');
 
                 if($formData['related_article']){
-                    $this->updateRelatedRecipe($recipe, $formData['related_article'],$dm);
+                    $this->updateRelatedRecipe($recipe, $formData['related_article'],$dm,'article');
                 }
-                
+
                 if($formData['related_tip']){
-                    $this->updateRelatedRecipe($recipe, $formData['related_tip'],$dm);
+                    $this->updateRelatedRecipe($recipe, $formData['related_tip'],$dm,'tip');
                 }
-                
+
                 $tags = $formData['tags'];
                 $tagsEn = $formData['tagsEn'];
 

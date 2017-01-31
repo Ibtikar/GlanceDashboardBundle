@@ -53,7 +53,7 @@ class Recipe  extends Publishable {
         "publish" => "publish",
         "autopublish" => "autopublish"
     );
-    
+
     public static $types = array(
         "recipe" => "recipe",
         "article" => "article",
@@ -129,8 +129,8 @@ class Recipe  extends Publishable {
      * )
      */
     private $ingredientsEn;
-    
-    
+
+
         /**
      * @MongoDB\String
      * @Assert\Length(
@@ -311,13 +311,13 @@ class Recipe  extends Publishable {
      * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe" , simple=true)
      */
     private $relatedRecipe;
-    
+
     /**
      * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe" , simple=true)
      */
     private $relatedArticle;
-    
-    
+
+
     /**
      * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe" , simple=true)
      */
@@ -327,6 +327,11 @@ class Recipe  extends Publishable {
      * @MongoDB\Boolean
      */
     protected $hideEnglishContent = false;
+
+    /**
+     * @MongoDB\Boolean
+     */
+    protected $goodyStar = false;
 
     /**
      * @MongoDB\Boolean
@@ -512,7 +517,7 @@ class Recipe  extends Publishable {
     {
         return $this->ingredientsEn;
     }
-      
+
     /**
      * Set text
      *
@@ -556,8 +561,8 @@ class Recipe  extends Publishable {
     {
         return $this->textEn;
     }
-    
-    
+
+
 
     /**
      * Set method
@@ -1268,7 +1273,7 @@ class Recipe  extends Publishable {
     {
         return $this->relatedRecipe;
     }
-    
+
     /**
      * Add relatedArticle
      *
@@ -1298,7 +1303,7 @@ class Recipe  extends Publishable {
     {
         return $this->relatedArticle;
     }
-    
+
     /**
      * Add relatedTip
      *
@@ -1327,6 +1332,22 @@ class Recipe  extends Publishable {
     public function getRelatedTip()
     {
         return $this->relatedTip;
+    }
+
+
+    public function setRelatedTip($tip=array())
+    {
+       $this->relatedTip= array();
+    }
+
+    public function setRelatedArticle($article=array())
+    {
+       $this->relatedArticle= array();
+    }
+
+    public function setRelatedRecipe($recipe=array())
+    {
+       $this->relatedRecipe= array();
     }
 
     /**
@@ -1365,7 +1386,7 @@ class Recipe  extends Publishable {
         }
         return $array;
     }
-    
+
     public function getRelatedArticleJson(){
         $array = array();
         if($this->getRelatedArticle()){
@@ -1380,7 +1401,7 @@ class Recipe  extends Publishable {
         }
         return $array;
     }
-    
+
     public function getRelatedTipJson(){
         $array = array();
         if($this->getRelatedTip()){
@@ -1440,4 +1461,26 @@ class Recipe  extends Publishable {
         return $this->migrationData;
     }
 
+
+    /**
+     * Set goodyStar
+     *
+     * @param boolean $goodyStar
+     * @return self
+     */
+    public function setGoodyStar($goodyStar)
+    {
+        $this->goodyStar = $goodyStar;
+        return $this;
+    }
+
+    /**
+     * Get goodyStar
+     *
+     * @return boolean $goodyStar
+     */
+    public function getGoodyStar()
+    {
+        return $this->goodyStar;
+    }
 }

@@ -986,6 +986,7 @@ class BackendController extends Controller {
         }
         $queryBuilder->field('status')->equals('publish')
                 ->field('id')->notIn($existingIds)
+                ->field('goodyStar')->equals(FALSE)
                 ->limit(10)
                 ->sort('createdAt', 'DESC');
 
@@ -1004,12 +1005,19 @@ class BackendController extends Controller {
         return new JsonResponse($responseArr);
     }
 
-    public function updateRelatedRecipe($document,$relatedJson,$dm = null) {
+    public function updateRelatedRecipe($document,$relatedJson,$dm = null,$type='recipe') {
         if (!$dm) {
             $dm = $this->get('doctrine_mongodb')->getManager();
         }
 
-        $array = json_decode($relatedJson,true);
+        $array = json_decode($relatedJson, true);
+
+        $setMethod = "setRelated" . ucfirst($type);
+
+        if (method_exists($document, $setMethod)) {
+            $document->$setMethod();
+        }
+
         foreach($array as $relatedRecipe){
             $material = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($relatedRecipe['id']);
 

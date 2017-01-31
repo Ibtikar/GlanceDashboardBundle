@@ -239,6 +239,7 @@ class RecipeController extends BackendController
 
             return $this->render('IbtikarGlanceDashboardBundle:Recipe:publishModal.html.twig', array(
                     'autoPublishDate' => $autoPublishDate,
+                    'goodyStar' => $recipe->getGoodyStar(),
                     'translationDomain' => $this->translationDomain,
                     'locations' => $locations,
                     'currentLocations' => $currentPublishedLocations,
@@ -258,6 +259,7 @@ class RecipeController extends BackendController
 
             $recipeStatus = $recipe->getStatus();
             $status = $request->get('status');
+            $goodyStar = $request->get('goodyStar');
             if ($status != $recipeStatus) {
                 $result = array('status' => 'reload-table', 'message' => $this->trans('not done'));
                 return new JsonResponse($result);
@@ -267,7 +269,7 @@ class RecipeController extends BackendController
             switch ($recipeStatus) {
                 case 'new':
                     if ($request->get('publishNow')) {
-                        $publishResult = $publishOperations->publish($recipe, $locations);
+                        $publishResult = $publishOperations->publish($recipe, $locations,$goodyStar);
                     } else if ($request->get('autoPublishDate', '')) {
                         $autoPublishDateString = $request->get('autoPublishDate', '');
                         if (strlen(trim($autoPublishDateString)) > 0) {
@@ -277,15 +279,15 @@ class RecipeController extends BackendController
                                 $autoPublishDate = null;
                             }
                         }
-                        $publishResult = $publishOperations->autoPublish($recipe, $locations, $autoPublishDate);
+                        $publishResult = $publishOperations->autoPublish($recipe, $locations, $autoPublishDate,$goodyStar);
                     }
                     break;
                 case 'publish':
-                    $publishResult = $publishOperations->managePublishControl($recipe, $locations);
+                    $publishResult = $publishOperations->managePublishControl($recipe, $locations,$goodyStar);
                     break;
                 case 'deleted':
                     if ($request->get('publishNow')) {
-                        $publishResult = $publishOperations->publish($recipe, $locations, TRUE);
+                        $publishResult = $publishOperations->publish($recipe, $locations, TRUE,$goodyStar);
                     } else if ($request->get('autoPublishDate', '')) {
                         $autoPublishDateString = $request->get('autoPublishDate', '');
                         if (strlen(trim($autoPublishDateString)) > 0) {
@@ -295,12 +297,12 @@ class RecipeController extends BackendController
                                 $autoPublishDate = null;
                             }
                         }
-                        $publishResult = $publishOperations->autoPublish($recipe, $locations, $autoPublishDate);
+                        $publishResult = $publishOperations->autoPublish($recipe, $locations, $autoPublishDate,$goodyStar);
                     }
                     break;
                 case 'autopublish':
                     if ($request->get('publishNow')) {
-                        $publishResult = $publishOperations->publish($recipe, $locations);
+                        $publishResult = $publishOperations->publish($recipe, $locations,$goodyStar);
                     } else if ($request->get('autoPublishDate', '')) {
                         $autoPublishDateString = $request->get('autoPublishDate', '');
                         if (strlen(trim($autoPublishDateString)) > 0) {
@@ -310,7 +312,7 @@ class RecipeController extends BackendController
                                 $autoPublishDate = null;
                             }
                         }
-                        $publishResult = $publishOperations->manageAutoPublishControl($recipe, $locations, $autoPublishDate);
+                        $publishResult = $publishOperations->manageAutoPublishControl($recipe, $locations, $autoPublishDate,$goodyStar);
                     }
                     break;
             }
@@ -379,7 +381,7 @@ class RecipeController extends BackendController
                 $formData = $request->get('recipe');
 
                 if($formData['related']){
-                    $this->updateRelatedRecipe($recipe, $formData['related'],$dm);
+                    $this->updateRelatedRecipe($recipe, $formData['related'],$dm,'recipe');
                 }
 
                 $tags = $formData['tags'];
@@ -482,15 +484,15 @@ class RecipeController extends BackendController
                 $formData = $request->get('recipe');
 
                 if ($contentType == 'Recipe' && $formData['related']) {
-                    $this->updateRelatedRecipe($recipe, $formData['related'], $dm);
+                    $this->updateRelatedRecipe($recipe, $formData['related'], $dm,'recipe');
                 }
 
                 if($contentType == 'Blog' && $formData['related_article']){
-                    $this->updateRelatedRecipe($recipe, $formData['related_article'],$dm);
+                    $this->updateRelatedRecipe($recipe, $formData['related_article'],$dm,'article');
                 }
 
                 if($contentType == 'Blog' && $formData['related_tip']){
-                    $this->updateRelatedRecipe($recipe, $formData['related_tip'],$dm);
+                    $this->updateRelatedRecipe($recipe, $formData['related_tip'],$dm,'tip');
                 }
 
                 $this->updateMaterialGallary($recipe, $formData['media'], $dm);
@@ -1024,107 +1026,30 @@ class RecipeController extends BackendController
 
     }
 
-//     /**
-//     * @author Ola <ola.ali@ibtikar.net.sa>
-//     * @param \Symfony\Component\HttpFoundation\Request $request
-//     */
-//    public function editAction(Request $request, $id) {
-//
-//        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Recipe','link'=>$this->generateUrl('ibtikar_glance_dashboard_recipe_create')),
-////            array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list Product')
-//        );
-//        $breadCrumbArray = $this->preparedMenu($menus);
-//        $dm = $this->get('doctrine_mongodb')->getManager();
-//
-//        $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($id);
-//        if (!$recipe) {
-//            throw $this->createNotFoundException($this->trans('Wrong id'));
-//        }
-//        $tagSelected = $this->getTagsForDocument($recipe);
-//        $tagSelectedEn = $this->getTagsEnForDocument($recipe);
-//        $form = $this->createForm(RecipeType::class, $recipe, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal'
-//            ),'type'=>'edit','tagSelected'=>$tagSelected,'tagEnSelected'=>$tagSelectedEn));
-//
-//        if ($request->getMethod() === 'POST') {
-//            $form->handleRequest($request);
-//
-//
-//            if ($form->isValid()) {
-//                $formData = $request->get('recipe');
-//
-////                if($formData['relatedRecipe']){
-////                    $this->updateRelatedMaterial($recipe, $formData['relatedRecipe'],$dm);
-////                }
-//
-//                $tags = $formData['tags'];
-//                $tagsEn = $formData['tagsEn'];
-//
-//                $recipe->setTags();
-//                $recipe->setTagsEn();
-//
-//                if ($tags) {
-//                    $tagsArray = explode(',', $tags);
-//                    $tagsArray = array_unique($tagsArray);
-//                    foreach ($tagsArray as $tag) {
-//                        $tag = trim($tag);
-//                        if (mb_strlen($tag, 'UTF-8') <= 330) {
-//                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('name' => $tag));
-//                            if (!$tagObject) {
-//                                $NewTag = new Tag();
-//                                $NewTag->setName($tag);
-//                                $dm->persist($NewTag);
-//                                $recipe->addTag($NewTag);
-//                            } else {
-//                                $recipe->addTag($tagObject);
-//                            }
-//                        }
-//                    }
-//                }
-//                if ($tagsEn) {
-//                    $tagsArray = explode(',', $tagsEn);
-//                    $tagsArray = array_unique($tagsArray);
-//                    foreach ($tagsArray as $tag) {
-//                        $tag = trim($tag);
-//                        if (mb_strlen($tag, 'UTF-8') <= 330) {
-//                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('name' => $tag));
-//                            if (!$tagObject) {
-//                                $NewTag = new Tag();
-//                                $NewTag->setName($tag);
-//                                $dm->persist($NewTag);
-//                                $recipe->addTagEn($NewTag);
-//                            } else {
-//                                $recipe->addTagEn($tagObject);
-//                            }
-//                        }
-//                    }
-//                }
-//                $dm->persist($recipe);
-////                $this->slugifier($recipe);
-//
-//                $dm->flush();
-//
-//                $this->updateMaterialGallary($recipe, $formData['media'], $dm);
-//
-//                $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
-//
-//                return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_'.  strtolower($this->calledClassName).'_list_'.$recipe->getStatus().'_recipe'), array(), true));
-//
-//            }else{
-//                $errors=array();
-//                  foreach ($form->getErrors() as $errorObject) {
-//            $error[] = $errorObject->getMessage();
-//
-//             }
-//
-//            }
-//        }
-//        return $this->render('IbtikarGlanceDashboardBundle:Recipe:edit.html.twig', array(
-//                'form' => $form->createView(),
-//                'room' => $this->calledClassName,
-//                'breadcrumb' => $breadCrumbArray,
-//                'title' => $this->trans('edit recipe', array(), $this->translationDomain),
-//                'translationDomain' => $this->translationDomain
-//        ));
-//    }
+    public function relatedMaterialAddAction(Request $request)
+    {
+
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $parent = $request->get('parent');
+        $child = $request->get('child');
+
+        $materialParent = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($parent);
+        $materialChild = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($child);
+
+
+        $contentType = $materialChild->getType();
+        $addMethod = "addRelated" . ucfirst($contentType);
+        $getMethod = "getRelated" . ucfirst($contentType);
+        if ($this->validToRelate($materialChild, $materialParent) && count($materialParent->$getMethod()) < 10) {
+
+            $materialParent->$addMethod($materialChild);
+            $dm->flush();
+        }
+        $response = array('status' => 'success', 'message' => $this->trans('done sucessfully'));
+
+
+        return new JsonResponse($response);
+    }
 
 }

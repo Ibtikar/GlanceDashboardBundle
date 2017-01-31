@@ -61,7 +61,7 @@ class RecipeOperations extends PublishOperations
 
     }
 
-    public function publish(Publishable $document, array $locations, $rePublish = false)
+    public function publish(Publishable $document, array $locations, $rePublish = false,$goodyStar=FALSE)
     {
         $error = $this->validateToPublish($document, $locations, true);
 
@@ -102,6 +102,7 @@ class RecipeOperations extends PublishOperations
 
         $document->setStatus(Recipe::$statuses['publish']);
         $document->setAssignedTo(null);
+        $document->setGoodyStar($goodyStar);
 
 
         if (!$rePublish) {
@@ -118,7 +119,7 @@ class RecipeOperations extends PublishOperations
         return array("status" => 'success', "message" => $this->translator->trans('done sucessfully'));
     }
 
-    public function autoPublish(Publishable $document, array $locations, \DateTime $autoPublishDate = null)
+    public function autoPublish(Publishable $document, array $locations, \DateTime $autoPublishDate = null,$goodyStar=FALSE)
     {
 
         $error = $this->validateToPublish($document, $locations, true);
@@ -153,6 +154,8 @@ class RecipeOperations extends PublishOperations
         $document->setAutoPublishDate($autoPublishDate);
         $document->setStatus(Recipe::$statuses['autopublish']);
         $document->setAssignedTo(null);
+        $document->setGoodyStar($goodyStar);
+
         $this->dm->flush();
         return array("status" => 'success', "message" => $this->translator->trans('recipe will be published at %datetime%', array('%datetime%' => $document->getAutoPublishDate()->format('Y-m-d h:i A'))));
     }

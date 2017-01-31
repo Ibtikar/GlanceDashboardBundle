@@ -591,6 +591,12 @@ jQuery(document).ready(function($) {
         if(!$('.dev-cover-img').is(':checked')){
             showNotificationMsg("يجب إختيار صورة غلاف", "", "error");
             return false;
+        }else{
+            updateMinRelated();
+            if($('#recipe_minvalue').val()==''){
+                showNotificationMsg("يجب الا تقل المقالات والنصائح ذات صله عن 2", "", "error");
+                return false;
+            }
         }
     });
 

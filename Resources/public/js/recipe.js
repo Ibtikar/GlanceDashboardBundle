@@ -115,6 +115,7 @@ function updateRelatedArticle(){
             $('.dev-related-article-list').parent().remove();
         }
         $('#recipe_relatedArticle').parent().append(articles);
+        updateMinRelated();
     }
 }
 
@@ -136,9 +137,22 @@ function updateRelatedTip(){
            $('.dev-related-tip-list').parent().remove();
         }
         $('#recipe_relatedTip').parent().append(tips);
+        updateMinRelated();
     }
 }
 
+function updateMinRelated() {
+    if ($('.dev-related-article-list').length > 0) {
+        if (($('.dev-related-article-list li').length != 0 && $('.dev-related-article-list li').length < 2) || ($('.dev-related-tip-list li').length != 0 && $('.dev-related-tip-list li').length < 2))
+        {
+            $('#recipe_minvalue').val('')
+        } else {
+            $('#recipe_minvalue').val('valid')
+        }
+    } else {
+        $('#recipe_minvalue').val('valid')
+    }
+}
 function getExistingRelatedMaterial(){
     if(typeof RelatedMaterialObj == "undefined"){
         RelatedMaterialObj = new Array();
@@ -253,9 +267,9 @@ function addRelatedArticles(data) {
 
 function addRelatedTip(data) {
     RelatedTipObj.unshift({
-        'id':data.id,
-        'text':data.text,
-        'img':data.img
+        'id': data.id,
+        'text': data.text,
+        'img': data.img
     });
     $('#recipe_related_tip').val(JSON.stringify(RelatedTipObj));
     updateRelatedTip();
@@ -345,6 +359,7 @@ $(document).on("click",'.dev-add-related-material',function(){
             var $this = $(this);
 
             if(document.location.pathname.indexOf('edit') >= 0){
+
                 $.ajax({
                     url: relatedMaterialDeleteUrl,
                     method: 'POST',
@@ -389,31 +404,36 @@ $(document).on("click",'.dev-add-related-material',function(){
         e.preventDefault();
             var $this = $(this);
 
-            if(document.location.pathname.indexOf('edit') >= 0){
-                $.ajax({
-                    url: relatedMaterialDeleteUrl,
-                    method: 'POST',
-                    data:{parent:requestId,child:$this.attr('data-related-material-id')},
-                    success: function(data) {
-                        if(data.status == "success"){
-                            $this.parents('li').remove();
-                            var objArray = [];
-                            $.each($('.dev-related-list .media'),function(){
-                                objArray.push({
-                                    'id':$(this).attr('data-related-material-id'),
-                                    'text':$(this).find('.media-body b').text().trim(),
-                                    'img':"/"+$(this).find('img').attr('src')
-                                });
-                            });
-                            $('#recipe_related').val(JSON.stringify(objArray));
-                            updateRelatedMaterial();
-                        }
-
-                        showNotificationMsg(data.message,"");
-
-                    }
-                });
-            }else{
+//            if(document.location.pathname.indexOf('edit') >= 0){
+//                if ($('.dev-related-article-list li').length <= 2) {
+//                    showNotificationMsg(" لا يمكن الحذف حيث ان الحد الادنى للمقالات ذات صله 2", "", "error");
+//                    return false;
+//                }
+//                $.ajax({
+//                    url: relatedMaterialDeleteUrl,
+//                    method: 'POST',
+//                    data:{parent:requestId,child:$this.attr('data-related-material-id')},
+//                    success: function(data) {
+//                        if(data.status == "success"){
+//                            $this.parents('li').remove();
+//                            var objArray = [];
+//                            $.each($('.dev-related-list .media'),function(){
+//                                objArray.push({
+//                                    'id':$(this).attr('data-related-material-id'),
+//                                    'text':$(this).find('.media-body b').text().trim(),
+//                                    'img':"/"+$(this).find('img').attr('src')
+//                                });
+//                            });
+//                            $('#recipe_related').val(JSON.stringify(objArray));
+//                            updateRelatedMaterial();
+//                        }
+//
+//                        showNotificationMsg(data.message,"");
+//                        updateMinRelated();
+//
+//                    }
+//                });
+//            }else{
                 $this.parents('li').remove();
                 var objArray = [];
                 var objectElement;
@@ -427,38 +447,44 @@ $(document).on("click",'.dev-add-related-material',function(){
                 });
                 $('#recipe_related_article').val(JSON.stringify(objArray));
                 RelatedArticleObj = objArray;
-            }
+                updateMinRelated();
+//            }
     });
 
     $(document).on('click', '.dev-related-tip-delete', function(e) {
         e.preventDefault();
             var $this = $(this);
 
-            if(document.location.pathname.indexOf('edit') >= 0){
-                $.ajax({
-                    url: relatedMaterialDeleteUrl,
-                    method: 'POST',
-                    data:{parent:requestId,child:$this.attr('data-related-material-id')},
-                    success: function(data) {
-                        if(data.status == "success"){
-                            $this.parents('li').remove();
-                            var objArray = [];
-                            $.each($('.dev-related-list .media'),function(){
-                                objArray.push({
-                                    'id':$(this).attr('data-related-material-id'),
-                                    'text':$(this).find('.media-body b').text().trim(),
-                                    'img':"/"+$(this).find('img').attr('src')
-                                });
-                            });
-                            $('#recipe_related').val(JSON.stringify(objArray));
-                            updateRelatedMaterial();
-                        }
-
-                        showNotificationMsg(data.message,"");
-
-                    }
-                });
-            }else{
+//            if(document.location.pathname.indexOf('edit') >= 0){
+//                if ($('.dev-related-tip-list li').length <= 2) {
+//                    showNotificationMsg(" لا يمكن الحذف حيث ان الحد الادنى للنصائح ذات صله 2", "", "error");
+//                    return false;
+//                }
+//                $.ajax({
+//                    url: relatedMaterialDeleteUrl,
+//                    method: 'POST',
+//                    data:{parent:requestId,child:$this.attr('data-related-material-id')},
+//                    success: function(data) {
+//                        if(data.status == "success"){
+//                            $this.parents('li').remove();
+//                            var objArray = [];
+//                            $.each($('.dev-related-list .media'),function(){
+//                                objArray.push({
+//                                    'id':$(this).attr('data-related-material-id'),
+//                                    'text':$(this).find('.media-body b').text().trim(),
+//                                    'img':"/"+$(this).find('img').attr('src')
+//                                });
+//                            });
+//                            $('#recipe_related').val(JSON.stringify(objArray));
+//                            updateRelatedMaterial();
+//                        }
+//
+//                        showNotificationMsg(data.message,"");
+//                        updateMinRelated();
+//
+//                    }
+//                });
+//            }else{
                 $this.parents('li').remove();
                 var objArray = [];
                 var objectElement;
@@ -472,7 +498,8 @@ $(document).on("click",'.dev-add-related-material',function(){
                 });
                 $('#recipe_related_tip').val(JSON.stringify(objArray));
                 RelatedTipObj = objArray;
-            }
+                updateMinRelated();
+//            }
     });
 
 
@@ -576,11 +603,12 @@ function tdLoadingToggle(elm){
 var uploadpopup=false;
 $(document).ready(function () {
 
+    updateMinRelated();
     $("form.form-horizontal").data("validator").settings.ignore = [];
 
-    if($('#recipe_country').val() == ""){
-        $('#recipe_country').val($('#recipe_country option:eq(1)').val()).trigger('change');
-    }
+//    if($('#recipe_country').val() == ""){
+//        $('#recipe_country').val($('#recipe_country option:eq(1)').val()).trigger('change');
+//    }
 
     $(document).on('click','.upload-image-modal-open',function () {
         if(uploadpopup){

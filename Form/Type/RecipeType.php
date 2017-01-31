@@ -80,7 +80,8 @@ class RecipeType extends AbstractType {
                 if($options['attr']['contentType'] == 'recipe') {
                     $builder->add('country', DocumentType::class, array('required' => false,'class' => 'IbtikarGlanceUMSBundle:Country', 'query_builder' => function($repo) {
                         return $repo->findCountrySorted();
-                    },'placeholder' => 'اختار البلد', 'choice_label' => 'countryName', 'attr' => array('data-country' => true, 'class' => 'dev-country select')))                ->add('preparationTime', formType\TextType::class, array('required' => false, 'attr' => array()))
+                    },'placeholder' => 'اختر بلد', 'empty_data' => null,  'choice_label' => 'countryName', 'attr' => array('data-country' => true, 'class' => 'dev-country select')))
+                    ->add('preparationTime', formType\TextType::class, array('required' => false, 'attr' => array()))
                     ->add('cookingTime', formType\TextType::class, array('required' => false, 'attr' => array('data-rule-number'=>true)))
                     ->add('servingCount', formType\TextType::class, array('required' => false, 'attr' => array('data-rule-number'=>true)))
                     ->add('difficulty', formType\ChoiceType::class, array('required' => FALSE,
@@ -133,7 +134,9 @@ class RecipeType extends AbstractType {
                     ))
                     ->add('related_article', formType\TextareaType::class, array('required' => FALSE, "mapped" => false,'attr'=>array('parent-class'=>'hidden')))
                     ->add('related_tip', formType\TextareaType::class, array('required' => FALSE, "mapped" => false,'attr'=>array('parent-class'=>'hidden')))
-                    ;
+                    ->add('minvalue', formType\HiddenType::class,array("mapped" => false,'required' => true,'attr'=>array('data-msg-required'=>' ')))
+;
+
                 }
 
 

@@ -123,7 +123,7 @@ abstract class PublishOperations
      * @param array $locations
      * @param boolean $rePublish
      */
-    public function publish(Publishable $document, array $locations, $rePublish = false)
+    public function publish(Publishable $document, array $locations, $rePublish = false,$goodyStar=FALSE)
     {
         $error = $this->validateToPublish($document, $locations, true);
 
@@ -266,7 +266,7 @@ abstract class PublishOperations
         return $result;
     }
 
-    public function autoPublish(Publishable $document, array $locations, \DateTime $autoPublishDate = null)
+    public function autoPublish(Publishable $document, array $locations, \DateTime $autoPublishDate = null,$goodyStar=FALSE)
     {
 
         $error = $this->validateToPublish($document, $locations, true);
@@ -300,6 +300,7 @@ abstract class PublishOperations
 
         $document->setAutoPublishDate($autoPublishDate);
         $document->setStatus(Recipe::$statuses['autopublish']);
+        $document->setGoodyStar($goodyStar);
         $document->setAssignedTo(null);
         $this->dm->flush();
         return array("status" => 'success', "message" => $this->translator->trans('recipe will be published at %datetime%', array('%datetime%' => $document->getAutoPublishDate()->format('Y-m-d h:i A'))));
@@ -311,7 +312,7 @@ abstract class PublishOperations
      * @param $locations array of Location objects
      * @return type
      */
-    public function managePublishControl(Publishable $document, $locations)
+    public function managePublishControl(Publishable $document, $locations,$goodyStar=FALSE)
     {
 
         $newLocationsSections = array();
@@ -352,19 +353,16 @@ abstract class PublishOperations
 
             $this->publishInLocation($document, $publishLocation, $location->getMaxNumberOfMaterials());
         }
+        $document->setGoodyStar($goodyStar);
+
 
         $this->dm->flush();
 
         return array("status" => 'success', "message" => $this->translator->trans('done sucessfully'));
     }
 
-    /**
-     * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
-     * @param \Ibtikar\AppBundle\Document\Publishable $document
-     * @param $locations array of Location objects
-     * @return type
-     */
-    public function manageAutoPublishControl(Publishable $document, $locations, \DateTime $autoPublishDate = null)
+
+    public function manageAutoPublishControl(Publishable $document, $locations, \DateTime $autoPublishDate = null,$goodyStar=FALSE)
     {
 
         if (!($autoPublishDate instanceof \DateTime) || $autoPublishDate < new \DateTime()) {
@@ -410,6 +408,7 @@ abstract class PublishOperations
 
         $document->setPublishedBy($this->getUser());
         $document->setAutoPublishDate($autoPublishDate);
+        $document->setGoodyStar($goodyStar);
 
         $this->dm->flush();
 

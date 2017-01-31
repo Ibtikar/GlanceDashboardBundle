@@ -621,6 +621,8 @@
         var youtubeUploadVideo = '{{ path('ibtikar_glance_dashboard_media_youtube_upload_video',{'type':'video','documentId':app.request.get('id'),'collectionType':'Recipe','room':room}) }}';
         var validateVideoUrl = '{{ path('youtube_validate_videoUrl') }}';
         var relatedMaterialDeleteUrl = '{{ path('ibtikar_glance_dashboard_recipe_related_material_delete') }}';
+        var relatedMaterialAddUrl = '{{ path('ibtikar_glance_dashboard_recipe_related_material_add') }}';
+
         var requestId = '{{ app.request.get('id') }}';
         var element;
         var name;

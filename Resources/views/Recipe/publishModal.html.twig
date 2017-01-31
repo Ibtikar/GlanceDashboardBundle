@@ -18,6 +18,12 @@
                         </label>
                     </div>
                 {% endfor %}
+                <div class="checkbox">
+                       <label>
+                           <input type="checkbox"   value="true" class="styled" name="goodyStar" {% if goodyStar %} checked {% endif%}>
+                           {% trans from 'publishLocations'%}publish in goodyStar{% endtrans%}
+                       </label>
+                </div>
 
             </div>
         </div>
