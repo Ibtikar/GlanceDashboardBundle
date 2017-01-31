@@ -23,9 +23,13 @@ class UserDocumentFavouriteRepository extends DocumentRepository
         return $this->findBy(array('document.$id' => new \MongoId($documentId)));
     }
 
-    public function getUserDocumentFavouriteList($userId, $limit = 10, $skip = 0)
+    public function getUserDocumentFavouriteList($userId, $limit = 10, $skip = 0, $user = null)
     {
-        return $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:UserDocumentFavourite')
-                ->field('user.$id')->equals(new \MongoId($userId))->eagerCursor(true)->skip($skip)->limit($limit)->sort(array('createdAt' => 'DESC'))->getQuery()->execute();
+        $queryBuilder = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:UserDocumentFavourite')
+                ->field('user.$id')->equals(new \MongoId($userId));
+        if (!(is_object($user) && $user->getStar())) {
+            $queryBuilder->field('goodyStar')->equals(FALSE);
+        }
+        return $queryBuilder->eagerCursor(true)->skip($skip)->limit($limit)->sort(array('createdAt' => 'DESC'))->getQuery()->execute();
     }
 }

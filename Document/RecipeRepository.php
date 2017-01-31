@@ -22,29 +22,36 @@ class RecipeRepository extends DocumentRepository
                 ->getQuery()->getSingleResult();
     }
 
-    public function getPreviousDailySolution($skip = 0, $limit = 4)
+    public function getPreviousDailySolution($skip = 0, $limit = 4, $user = null)
     {
-        return $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+        $queryBuilder = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                 ->field('status')->equals(Recipe::$statuses['publish'])
                 ->field('publishLocations.section')->notEqual('Daily-solution')
                 ->field('dailysolutionDate')->exists(TRUE)
                 ->field('deleted')->equals(FALSE)
-                ->field('coverPhoto')->prime(true)
-                ->sort('publishedAt', 'DESC')
+                ->field('coverPhoto')->prime(true);
+        if (!(is_object($user) && $user->getStar())) {
+            $queryBuilder->field('goodyStar')->equals(FALSE);
+        }
+        return $queryBuilder->sort('publishedAt', 'DESC')
                 ->eagerCursor()
                 ->limit($limit)
                 ->skip($skip)
                 ->getQuery()->execute();
     }
 
-    public function getMostView($skip = 0, $limit = 4)
+    public function getMostView($skip = 0, $limit = 4, $user = null)
     {
         $date = new \DateTime();
         $date->modify("-1 month");
-        return $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+        $queryBuilder = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                 ->field('status')->equals(Recipe::$statuses['publish'])
-                ->field('deleted')->equals(FALSE)
-                ->field('coverPhoto')->prime(true)
+                ->field('deleted')->equals(FALSE);
+        if (!(is_object($user) && $user->getStar())) {
+            $queryBuilder->field('goodyStar')->equals(FALSE);
+        }
+
+        return $queryBuilder->field('coverPhoto')->prime(true)
                 ->field('publishedAt')->gte($date)
                 ->sort('noOfViews', 'DESC')
                 ->eagerCursor()
@@ -60,7 +67,7 @@ class RecipeRepository extends DocumentRepository
      * @param integer $skip
      * @return object
      */
-    public function getContentInTag($tagId, $limit, $skip) {
+    public function getContentInTag($tagId, $limit, $skip,$user=null) {
         $queryBuilder = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                         ->field('status')->equals(Recipe::$statuses['publish'])
                         ->field('deleted')->equals(FALSE)
@@ -68,6 +75,9 @@ class RecipeRepository extends DocumentRepository
 
         $queryBuilder->addOr($queryBuilder->expr()->field('tags')->equals($tagId));
         $queryBuilder->addOr($queryBuilder->expr()->field('tagsEn')->equals($tagId));
+        if (!(is_object($user) && $user->getStar())) {
+            $queryBuilder->field('goodyStar')->equals(FALSE);
+        }
 
         $queryBuilder->sort('publishedAt', 'DESC')
                             ->eagerCursor(true)
@@ -83,13 +93,16 @@ class RecipeRepository extends DocumentRepository
      * @param string $tagId
      * @return integer
      */
-    public function getCountContentInTag($tagId) {
+    public function getCountContentInTag($tagId,$user=null) {
         $queryBuilder = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                         ->field('status')->equals(Recipe::$statuses['publish'])
                         ->field('deleted')->equals(FALSE);
 
         $queryBuilder->addOr($queryBuilder->expr()->field('tags')->equals($tagId));
         $queryBuilder->addOr($queryBuilder->expr()->field('tagsEn')->equals($tagId));
+          if (!(is_object($user) && $user->getStar())) {
+            $queryBuilder->field('goodyStar')->equals(FALSE);
+        }
 
         return $queryBuilder->getQuery()->count();
     }
@@ -102,7 +115,7 @@ class RecipeRepository extends DocumentRepository
      * @param integer $sort
      * @return object
      */
-    public function getSearchContentByKeyword($keyword, $limit, $skip, $sort) {
+    public function getSearchContentByKeyword($keyword, $limit, $skip, $sort,$user=null) {
         $queryBuilder = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                         ->field('status')->equals(Recipe::$statuses['publish'])
                         ->field('deleted')->equals(FALSE)
@@ -117,6 +130,9 @@ class RecipeRepository extends DocumentRepository
         $queryBuilder->addOr($queryBuilder->expr()->field('text')->equals(new \MongoRegex(('/' . preg_quote(trim($keyword)) . '/i'))));
         $queryBuilder->addOr($queryBuilder->expr()->field('textEn')->equals(new \MongoRegex(('/' . preg_quote(trim($keyword)) . '/i'))));
 
+        if (!(is_object($user) && $user->getStar())) {
+            $queryBuilder->field('goodyStar')->equals(FALSE);
+        }
         $queryBuilder->sort($sort, 'DESC')
                             ->eagerCursor(true)
                             ->limit($limit+1)
@@ -131,7 +147,7 @@ class RecipeRepository extends DocumentRepository
      * @param string $keyword
      * @return integer count
      */
-    public function getCountSearchContentByKeyword($keyword) {
+    public function getCountSearchContentByKeyword($keyword,$user=null) {
         $queryBuilder = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                         ->field('status')->equals(Recipe::$statuses['publish'])
                         ->field('deleted')->equals(FALSE);
@@ -144,6 +160,9 @@ class RecipeRepository extends DocumentRepository
 
         $queryBuilder->addOr($queryBuilder->expr()->field('text')->equals(new \MongoRegex(('/' . preg_quote(trim($keyword)) . '/i'))));
         $queryBuilder->addOr($queryBuilder->expr()->field('textEn')->equals(new \MongoRegex(('/' . preg_quote(trim($keyword)) . '/i'))));
+        if (!(is_object($user) && $user->getStar())) {
+            $queryBuilder->field('goodyStar')->equals(FALSE);
+        }
 
         return $queryBuilder->getQuery()->count();
     }
