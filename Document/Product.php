@@ -190,6 +190,21 @@ class Product extends Document
         return '';
     }
 
+    public function setRelatedTip($tip = array())
+    {
+        $this->relatedTip = array();
+    }
+
+    public function setRelatedKitchen911($kitchen = array())
+    {
+        $this->relatedKitchen911 = array();
+    }
+
+    public function setRelatedRecipe($recipe = array())
+    {
+        $this->relatedRecipe = array();
+    }
+
     /**
      * Get id
      *
@@ -392,15 +407,7 @@ class Product extends Document
     {
         $this->relatedRecipe[] = $relatedRecipe;
     }
-    /**
-     * Add relatedRecipe
-     *
-     * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedRecipe
-     */
-    public function setRelatedRecipe($relatedRecipe=array())
-    {
-        $this->relatedRecipe = $relatedRecipe;
-    }
+
 
     /**
      * Remove relatedRecipe
@@ -431,15 +438,6 @@ class Product extends Document
     {
         $this->relatedKitchen911[] = $relatedKitchen911;
     }
-    /**
-     * Add relatedKitchen911
-     *
-     * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedKitchen911
-     */
-    public function setRelatedKitchen911($relatedKitchen911 =array())
-    {
-        $this->relatedKitchen911 = $relatedKitchen911;
-    }
 
     /**
      * Remove relatedKitchen911
@@ -469,15 +467,6 @@ class Product extends Document
     public function addRelatedTip(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip)
     {
         $this->relatedTip[] = $relatedTip;
-    }
-    /**
-     * Add relatedTip
-     *
-     * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip
-     */
-    public function setRelatedTip($relatedTip=array())
-    {
-        $this->relatedTip = $relatedTip;
     }
 
     /**
