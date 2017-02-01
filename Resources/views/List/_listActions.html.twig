@@ -1,0 +1,39 @@
+{% set deleteAttrs = popover_factory(deletePopoverConfig is defined?deletePopoverConfig:[]) %}
+{% set conditionalDeleteAttrs = popover_factory(conditionalDeletePopoverConfig is defined?conditionalDeletePopoverConfig:[]) %}
+<td  style="white-space: nowrap;">
+    {% if  object.getNotModified() is not defined  or  object.getNotModified()== false %}
+        {% for action in list.actions %}
+            {% if action == "Edit" %}
+                {% if is_granted('ROLE_' ~ listName|upper ~'_EDIT') or is_granted('ROLE_ADMIN') %}
+
+                    <a class="btn btn-default"  href = "{{ path(prefixRoute|lower ~ '_edit', {'id': object.id}) }}"  ><i class="icon-pencil" data-popup="tooltip"  data-placement="right" title="{{ ('Edit ' ~  sublistName)|trans({},translationDomain)}}"></i></a>
+                    {% endif %}
+                {% elseif action == "Delete" %}
+                    {% if is_granted('ROLE_' ~ listName|upper ~'_DELETE') or is_granted('ROLE_ADMIN')%}
+                    <a class="btn btn-default"  data-href = "{{ path(prefixRoute|lower ~ '_delete', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-trash" data-popup="tooltip" title="{{ ('Delete ' ~  sublistName)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
+                    {% endif %}
+                {% elseif action == "ViewOne" %}
+
+                {% if is_granted('ROLE_' ~ listName|upper ~'_VIEWONE') or is_granted('ROLE_ADMIN')  %}
+
+                    <a href="{{ path(prefixRoute|lower~'_view', {'id': object.id}) }}" class="btn btn-default">
+                        <i class="icon-eye" data-popup="tooltip"  data-placement="right" title="{{('View One ' ~  listName|capitalize)|trans({},translationDomain)}}" ></i>
+                    </a>
+                {% endif %}
+            {% elseif action == "Publish" %}
+                {% if is_granted('ROLE_' ~ listName|upper ~'_PUBLISH') or is_granted('ROLE_ADMIN')%}
+                    <a href="javascript:void(0)" data-toggle="modal"  class="btn btn-default dev-publish-document" data-id="{{ object.getId() }}"><i class="icon-share" data-placement="right"  data-popup="tooltip" title="{{('publish ' ~  sublistName)|trans({},translationDomain)}}"></i></a>
+                    {% endif %}
+                {%endif%}
+
+
+        {% endfor %}
+        {#<a tabindex="0" class="btn btn-default" role="button" data-toggle="popover"  data-popup="popover" data-trigger="focus"     title="  هل ترغب في ايقاف الموظف  " data-html="true"
+           data-html="true" data-content="
+           <button type='button' class='btn btn-danger'>نعم</button>
+           <button type='button' class='btn btn-default'>الغاء</button>
+           "> <i class="icon-user-block"></i></a>#}
+
+
+    {% endif  %}
+</td>

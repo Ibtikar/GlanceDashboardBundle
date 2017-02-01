@@ -60,7 +60,7 @@ class Document {
         }
         $this->deletedAt = new \DateTime();
         $this->deleted = true;
-//        $this->removeDocumentReferences($dm, $user);
+        $this->removeDocumentReferences($dm, $user);
         $this->updateReferencesCounts(-1);
     }
 
@@ -83,11 +83,9 @@ class Document {
         $ignoredDocumentsClasses = array(
             'Ibtikar\GlanceUMSBundle\Document\Document',
             'Ibtikar\GlanceUMSBundle\Document\User',
-            'Ibtikar\VisitorBundle\Document\Social\Facebook',
-            'Ibtikar\VisitorBundle\Document\Social\Google',
-            'Ibtikar\VisitorBundle\Document\Social\LinkedIn',
-            'Ibtikar\VisitorBundle\Document\Social\Twitter',
-            'Ibtikar\VisitorBundle\Document\Social\Yahoo',
+            'Ibtikar\GlanceUMSBundle\Document\Social\Facebook',
+            'Ibtikar\GlanceUMSBundle\Document\Social\Google',
+            'Ibtikar\GlanceUMSBundle\Document\Social\Twitter',
             'Ibtikar\BackendBundle\Document\Phone',
             'Ibtikar\GlanceDashboardBundle\Document\SubProduct'
         );

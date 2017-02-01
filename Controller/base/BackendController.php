@@ -58,8 +58,7 @@ class BackendController extends Controller {
         $this->listViewOptions->setListType("list");
         $renderingParams = $this->doList($request);
         if( $request->isXmlHttpRequest()){
-
-         return $this->getListJsonData($request,$renderingParams);
+        return $this->getListJsonData($request,$renderingParams);
         }
 
         if ($this->listViewOptions->getTemplate()) {
@@ -491,6 +490,7 @@ class BackendController extends Controller {
     {
         $documentObjects = array();
         foreach ($renderingParams['pagination'] as $document) {
+            $templateVars = array_merge(array('object' => $document), $renderingParams);
             $oneDocument = array();
 
             foreach ($renderingParams['columnArray'] as $value) {
@@ -504,28 +504,8 @@ class BackendController extends Controller {
                 }
                 if ($value == 'actions') {
                     $security = $this->container->get('security.authorization_checker');
-                    $actionTd = '';
-
                     if ($this->listViewOptions->hasActionsColumn($this->calledClassName)) {
-                        foreach ($this->listViewOptions->getActions() as $action) {
-                            if ($action == 'Edit' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_EDIT')) && !$document->getNotModified()) {
-                                $actionTd.= '<a class="btn btn-default"  href = "' . $this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_edit', array('id' => $document->getId())) . '" ><i class="icon-pencil" data-popup="tooltip" title="' . $this->trans('Edit ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '" data-placement="right"></i></a>';
-                            } elseif ($action == 'Delete' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_DELETE')) && !$document->getNotModified()) {
-                                $actionTd.= '<a class="btn btn-default"  data-href = "' . $this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_delete', array('id' => $document->getId())) . '" ' . str_replace('%title%', $document, $this->get('app.twig.popover_factory_extension')->popoverFactory(isset($renderingParams['deletePopoverConfig']) ? $renderingParams['deletePopoverConfig'] : [])) . '" ><i class="icon-trash" data-popup="tooltip" title="' . $this->trans('Delete ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '" data-placement="right"></i></a>';
-                            } elseif ($action == 'ViewOne' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_VIEWONE'))) {
-                                $actionTd.= '<a class="btn btn-default"  href = "' . $this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_view', array('id' => $document->getId())) . '" ><i class="icon-eye" data-popup="tooltip"  title="' . $this->trans('View One ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '"  data-placement="right" ></i></a>';
-                            } elseif ($action == 'Assign' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_ASSIGN'))) {
-                                $actionTd.= '<a class="btn btn-default dev-assign-to-me" href="javascript:void(0);"  data-url="'.$this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_assign_to_me').'" data-id="'.$document->getId().'"><i class="icon-user"  title="' . $this->trans('AssignToMe', array(), $this->translationDomain) . '"  data-popup="tooltip" data-placement="right"></i></a>';
-                            } elseif ($action == 'Publish' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_PUBLISH'))) {
-                                $actionTd.= '<a href="javascript:void(0)" data-toggle="modal"  class="btn btn-default dev-publish-document" data-id="'.$document->getId().'"><i class="icon-share" data-placement="right"  data-popup="tooltip" title="' . $this->trans('publish ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '"></i></a>
-';
-                            }
-//                            elseif ($action == 'AutoPublish' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_AUTOPUBLISH'))) {
-//                                $actionTd.= '<a class="btn btn-default" href="javascript:void(0);" title="'  . $this->trans('autopublish ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '" data-popup="tooltip"  data-placement="bottom" ><i class="icon-checkmark3"></i></a>';
-//                            }
-                        }
-
-                        $oneDocument['actions'] = $actionTd;
+                        $oneDocument['actions'] = $this->renderView('IbtikarGlanceDashboardBundle:List:_listActions.html.twig', $templateVars);
                         continue;
                     }
                 }
@@ -673,6 +653,8 @@ class BackendController extends Controller {
             $dm->flush();
             $this->postDelete($id);
         } catch (\Exception $e) {
+            var_dump($e->getMessage());
+            exit;
             return $this->getFailedResponse();
         }
 

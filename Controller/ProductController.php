@@ -276,7 +276,7 @@ class ProductController extends BackendController {
 
         $dm = $this->get('doctrine_mongodb')->getManager();
 
-        $subProducts = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Subproduct')
+        $subProducts = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:SubProduct')
                 ->remove()
                 ->field('product')->in($ids)
                 ->getQuery()
