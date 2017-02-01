@@ -120,14 +120,14 @@ class ProductController extends BackendController {
                 $formData = $request->get('form');
 
                 if ($formData['related']) {
-                    $this->updateRelatedRecipe($product, $formData['related'], $dm);
+                    $this->updateRelatedRecipe($product, $formData['related'], $dm,'recipe');
                 }
                 if ($formData['related_kitchen911']) {
-                    $this->updateRelatedRecipe($product, $formData['related_kitchen911'], $dm);
+                    $this->updateRelatedRecipe($product, $formData['related_kitchen911'], $dm,'kitchen911');
                 }
 
                 if ($formData['related_tip']) {
-                    $this->updateRelatedRecipe($product, $formData['related_tip'], $dm);
+                    $this->updateRelatedRecipe($product, $formData['related_tip'], $dm,'tip');
                 }
 
                 $dm->persist($product);
@@ -234,14 +234,14 @@ class ProductController extends BackendController {
             if ($form->isValid()) {
                 $formData = $request->get('form');
                       if ($formData['related']) {
-                    $this->updateRelatedRecipe($product, $formData['related'], $dm);
+                    $this->updateRelatedRecipe($product, $formData['related'], $dm,'recipe');
                 }
                 if ($formData['related_kitchen911']) {
-                    $this->updateRelatedRecipe($product, $formData['related_kitchen911'], $dm);
+                    $this->updateRelatedRecipe($product, $formData['related_kitchen911'], $dm,'kitchen911');
                 }
 
                 if ($formData['related_tip']) {
-                    $this->updateRelatedRecipe($product, $formData['related_tip'], $dm);
+                    $this->updateRelatedRecipe($product, $formData['related_tip'], $dm,'tip');
                 }
 
                 $dm->flush();

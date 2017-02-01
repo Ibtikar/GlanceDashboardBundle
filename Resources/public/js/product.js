@@ -43,18 +43,18 @@ function addRelatedMaterial(data) {
     });
     $('#form_related').val(JSON.stringify(RelatedRecipeObj));
     updateRelatedMaterial();
-    if (document.location.pathname.indexOf('edit') >= 0) {
-
-        $.ajax({
-            url: relatedMaterialAddUrl,
-            method: 'POST',
-            data: {parent: requestId, child: data.id},
-            success: function (data) {
-
-
-            }
-        });
-    }
+//    if (document.location.pathname.indexOf('edit') >= 0) {
+//
+//        $.ajax({
+//            url: relatedMaterialAddUrl,
+//            method: 'POST',
+//            data: {parent: requestId, child: data.id},
+//            success: function (data) {
+//
+//
+//            }
+//        });
+//    }
 
 //    checkPublishedValidation(element);
 }
@@ -269,35 +269,35 @@ $(document).on("click",'.dev-add-related-material',function(){
         e.preventDefault();
             var $this = $(this);
 
-            if(document.location.pathname.indexOf('edit') >= 0){
-                if ($('.dev-related-list li').length <= 4) {
-                    showNotificationMsg(" لا يمكن الحذف حيث ان الحد الادنى للوصفات ذات صله 4", "", "error");
-                    return false;
-                }
-                $.ajax({
-                    url: relatedMaterialDeleteUrl,
-                    method: 'POST',
-                    data:{parent:requestId,child:$this.attr('data-related-material-id')},
-                    success: function(data) {
-                        if(data.status == "success"){
-                            $this.parents('li').remove();
-                            var objArray = [];
-                            $.each($('.dev-related-list .media'),function(){
-                                objArray.push({
-                                    'id':$(this).attr('data-related-material-id'),
-                                    'text':$(this).find('.media-body b').text().trim(),
-                                    'img':$(this).find('img').attr('src')
-                                });
-                            });
-                            $('#form_related').val(JSON.stringify(objArray));
-                            updateRelatedMaterial();
-                        }
-
-                        showNotificationMsg(data.message,"");
-
-                    }
-                });
-            }else{
+//            if(document.location.pathname.indexOf('edit') >= 0){
+//                if ($('.dev-related-list li').length <= 4) {
+//                    showNotificationMsg(" لا يمكن الحذف حيث ان الحد الادنى للوصفات ذات صله 4", "", "error");
+//                    return false;
+//                }
+//                $.ajax({
+//                    url: relatedMaterialDeleteUrl,
+//                    method: 'POST',
+//                    data:{parent:requestId,child:$this.attr('data-related-material-id')},
+//                    success: function(data) {
+//                        if(data.status == "success"){
+//                            $this.parents('li').remove();
+//                            var objArray = [];
+//                            $.each($('.dev-related-list .media'),function(){
+//                                objArray.push({
+//                                    'id':$(this).attr('data-related-material-id'),
+//                                    'text':$(this).find('.media-body b').text().trim(),
+//                                    'img':$(this).find('img').attr('src')
+//                                });
+//                            });
+//                            $('#form_related').val(JSON.stringify(objArray));
+//                            updateRelatedMaterial();
+//                        }
+//
+//                        showNotificationMsg(data.message,"");
+//
+//                    }
+//                });
+//            }else{
                 $this.parents('li').remove();
                 var objArray = [];
                 var objectElement;
@@ -315,7 +315,7 @@ $(document).on("click",'.dev-add-related-material',function(){
 
         $('#form_minimumRelatedRecipe').val($('.dev-related-list li').length< 4? '':$('.dev-related-list li').length )
 
-            }
+//            }
 
     });
 
