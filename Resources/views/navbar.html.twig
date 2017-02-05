@@ -94,6 +94,25 @@
                             </ul>
                     </li>
      {% endif %}
+     
+     {% if  is_granted('ROLE_MESSAGENEW_VIEW') or is_granted('ROLE_MESSAGEINPROGRESS_VIEW') or is_granted('ROLE_MESSAGECLOSE_VIEW') or is_granted('ROLE_ADMIN')%}
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/sections.png')}}" class=" position-left"/>
+                {% trans from 'message' %}Goody messages{% endtrans%}
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu width-250">
+                {% if is_granted('ROLE_MESSAGENEW_VIEW') or is_granted('ROLE_ADMIN')%}
+                    <li><a href="{{ path('ibtikar_glance_dashboard_messagenew_list_new_message') }}" {% if 'message' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/categories.png')}}" class=" position-left"/> {% trans from 'message'%}List Message{% endtrans %}</a></li>
+                {% elseif is_granted('ROLE_MESSAGEINPROGRESS_VIEW') or is_granted('ROLE_ADMIN')%}
+                    <li><a href="{{ path('ibtikar_glance_dashboard_messageinprogress_list_inprogress_message') }}" {% if 'message' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/magazines.png')}}" class=" position-left"/> {% trans from 'message'%}List Message{% endtrans %}</a></li>
+                {% elseif is_granted('ROLE_MESSAGECLOSE_VIEW') or is_granted('ROLE_ADMIN')%}
+                    <li><a href="{{ path('ibtikar_glance_dashboard_messageclose_list_close_message') }}" {% if 'message' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/magazines.png')}}" class=" position-left"/> {% trans from 'message'%}List Message{% endtrans %}</a></li>
+                {% endif %}
+            </ul>
+        </li>
+     {% endif %}
 
                 </ul>
 
