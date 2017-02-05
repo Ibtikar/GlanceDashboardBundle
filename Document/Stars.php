@@ -55,7 +55,7 @@ class Stars extends Document
 
     /**
      * @Assert\NotBlank
-     * @MongoDB\EmbedOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Phone")
+     * @MongoDB\String
      */
     private $mobile;
 
@@ -225,7 +225,7 @@ class Stars extends Document
      * @param Ibtikar\GlanceDashboardBundle\Document\Phone $mobile
      * @return self
      */
-    public function setMobile(\Ibtikar\GlanceDashboardBundle\Document\Phone $mobile)
+    public function setMobile($mobile)
     {
         $this->mobile = $mobile;
         return $this;
