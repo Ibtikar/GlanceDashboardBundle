@@ -24,7 +24,7 @@
 
                 <div class="heading-btn-group">
                     {% block breadCrumb %}
-                        
+
                     {% endblock %}
                 </div>
             </div>
@@ -146,6 +146,10 @@
                                                                             <div class="media-left media-middle">
                                                                                 <a href="javascript:void(0)"><img src="{{ asset( attribute(attribute(object, field.propertyName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}" class="img-lg" alt=""></a>
                                                                             </div>
+                                                                        </td>
+                                                                    {% elseif field.type == "refrence"  %}
+                                                                        <td>
+                                                                            {{ attribute(object, field.refrenceObject.field.propertyName)}}
                                                                         </td>
                                                                     {% elseif field.propertyName == "username"  %}
                                                                         <td>

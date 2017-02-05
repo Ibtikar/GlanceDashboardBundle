@@ -4,7 +4,7 @@ namespace Ibtikar\GlanceDashboardBundle\Controller\message;
 
 use Ibtikar\GlanceDashboardBundle\Controller\MessageController;
 use Symfony\Component\HttpFoundation\Request;
-use Ibtikar\GlanceDashboardBundle\Document\Message;
+use Ibtikar\GoodyFrontendBundle\Document\ContactMessage;
 
 class InprogressController extends MessageController
 {
@@ -14,7 +14,7 @@ class InprogressController extends MessageController
         parent::__construct();
         $calledClassName = explode('\\', $this->calledClassName);
         $this->calledClassName = 'message' . strtolower($calledClassName[1]);
-        $this->messageStatus = Message::$statuses['inprogress'];
+        $this->messageStatus = ContactMessage::$statuses['inprogress'];
     }
 
     protected function configureListParameters(Request $request)

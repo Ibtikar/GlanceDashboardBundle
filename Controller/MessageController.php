@@ -4,7 +4,7 @@ namespace Ibtikar\GlanceDashboardBundle\Controller;
 
 use Ibtikar\GlanceDashboardBundle\Controller\base\BackendController;
 use Symfony\Component\HttpFoundation\Request;
-use Ibtikar\GlanceDashboardBundle\Document\Message;
+use Ibtikar\GoodyFrontendBundle\Document\ContactMessage;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class MessageController extends BackendController {
@@ -17,16 +17,19 @@ class MessageController extends BackendController {
 
     protected function configureListColumns() {
         $this->allListColumns = array(
-            "title" => array(),
-            "type" => array("type" => "translated"),
-            "createdBy" => array("isSortable" => false),
+            "mainTitle" => array(),
+            "nickName" => array("isSortable" => false, 'type' => 'refrence', 'refrenceObject' => 'createdBy'),
+            "email" => array("isSortable" => false, 'type' => 'refrence', 'refrenceObject' => 'createdBy'),
+            "messageType" => array("type" => "translated"),
             "createdAt" => array("type" => "date"),
-            "updatedAt" => array("type" => "date"),
+            "lastAnswerTime" => array("type" => "date"),
+            "trackingNumber" => array()
         );
         $this->defaultListColumns = array(
-            "title",
+            "nickName",
+            "email",
             "createdAt",
-            "createdBy",
+            "lastAnswerTime",
         );
         $this->listViewOptions->setBundlePrefix("ibtikar_glance_dashboard_");
     }
@@ -34,6 +37,7 @@ class MessageController extends BackendController {
     protected function configureListParameters(Request $message) {
         $dm = $this->get('doctrine_mongodb')->getManager();
         $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Message')
+                        ->field('messageType')->equals(ContactMessage::$messageTypes['mainThread'])
                         ->field('status')->equals($this->messageStatus);
         $this->listViewOptions->setActions(array('Answer', 'ChangeStatus'));
         $this->listViewOptions->setListQueryBuilder($queryBuilder);
@@ -87,13 +91,13 @@ class MessageController extends BackendController {
         $dm = $this->get('doctrine_mongodb')->getManager();
 
         $renderingParams['newMessageCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Message')
-                        ->field('status')->equals(Message::$statuses['new'])
+                        ->field('status')->equals(ContactMessage::$statuses['new'])
                         ->getQuery()->execute()->count();
         $renderingParams['closeMessageCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Message')
-                        ->field('status')->equals(Message::$statuses['close'])
+                        ->field('status')->equals(ContactMessage::$statuses['close'])
                         ->getQuery()->execute()->count();
         $renderingParams['inprogressMessageCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Message')
-                        ->field('status')->equals(Message::$statuses['inprogress'])
+                        ->field('status')->equals(ContactMessage::$statuses['inprogress'])
                         ->getQuery()->execute()->count();
         return $renderingParams;
     }

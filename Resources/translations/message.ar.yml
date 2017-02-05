@@ -1,9 +1,17 @@
 # #############Labels############
-'Title': 'العنوان '
-'title': 'العنوان'
+'Nick name': 'الاسم'
+'nickName': 'الاسم'
+'email': 'البريد الإلكترونى'
+'Email': 'البريد الإلكترونى'
+'Main title': 'العنوان '
+'main title': 'العنوان'
+'mainTitle': 'العنوان'
 'Content': 'المحتوى'
 'Content en': 'المحتوى'
-'Type': 'النوع'
+'Message type': 'نوع الرسالة'
+'messageType': 'نوع الرسالة'
+'Tracking number': 'رقم التتبع'
+'trackingNumber': 'رقم التتبع'
 'createdAt': تاريخ الإنشاء
 'Created at': تاريخ الإنشاء
 'createdBy': قام بالإنشاء
@@ -12,6 +20,8 @@
 'deletedBy': قام بالحذفs
 'updatedAt': تاريخ التحديث
 'Updated at': تاريخ التحديث
+'Last answer time': 'تاريخ التحديث'
+'lastAnswerTime': 'تاريخ التحديث'
 'Deleted at': تاريخ الحذف
 'deletedAt': تاريخ الحذف
 
@@ -45,7 +55,7 @@
 
 
 # #############General############
-'notes': 'ملاحظات'
-'complain': 'شكوى'
-'other': 'اخرى'
+'3-notes': 'ملاحظات'
+'2-complaint': 'شكوى'
+'1-other': 'اخرى'
 
