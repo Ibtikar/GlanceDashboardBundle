@@ -1,0 +1,51 @@
+# #############Labels############
+'Title': 'العنوان '
+'title': 'العنوان'
+'Content': 'المحتوى'
+'Content en': 'المحتوى'
+'Type': 'النوع'
+'createdAt': تاريخ الإنشاء
+'Created at': تاريخ الإنشاء
+'createdBy': قام بالإنشاء
+'Created by':  قام بالإنشاء
+'Deleted by': قام بالحذف
+'deletedBy': قام بالحذفs
+'updatedAt': تاريخ التحديث
+'Updated at': تاريخ التحديث
+'Deleted at': تاريخ الحذف
+'deletedAt': تاريخ الحذف
+
+# ############Messages############
+
+
+# ############Titles############
+'Edit Message': 'تعديل وصفة'
+'list Message': 'قائمه الرسائل'
+'messages new': 'رسائل جديده'
+'List messagenew': 'الرسائل الجديده'
+'List messagedeleted':  الرسائل المحذوفه
+'messages deleted': رسائل محذوفه
+'List content': 'محتوى'
+'Edit message': 'تعديل رسالة'
+'Goody messages': 'رسائل قودي'
+
+# ############Buttons############
+'Change Status Messagenew': 'تغيير الحالة'
+'Change Status Messageinprogress': 'تغيير الحالة'
+'Change Status Messageclose': 'تغيير الحالة'
+'Answer messagenew': 'رد'
+'Answer Messageinprogress': 'رد'
+'Answer Messageclose': 'رد'
+'List Message': 'قائمة رسائل قودي'
+'new': 'جديده'
+'close': 'مؤرشفة'
+'inprogress': 'تحت التشغيل'
+'message': 'رسالة'
+'all': 'محتوى'
+
+
+# #############General############
+'notes': 'ملاحظات'
+'complain': 'شكوى'
+'other': 'اخرى'
+

@@ -1,0 +1,19 @@
+ibtikar_glance_dashboard_messagenew_list_new_message:
+    path:  /list-new-message
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\New:listNewMessage }
+
+ibtikar_glance_dashboard_messagenew_view:
+    path:  /view/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\New:view }
+
+ibtikar_glance_dashboard_messagenew_answer:
+    path:  /answer/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\New:answer }
+
+ibtikar_glance_dashboard_messagenew_change_status:
+    path:  /change-status/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\New:changeStatus }
+
+ibtikar_glance_dashboard_messagenew_list_new_message_change_list_columns:
+    path:  /new-message-change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\New:changeListNewMessageColumns }

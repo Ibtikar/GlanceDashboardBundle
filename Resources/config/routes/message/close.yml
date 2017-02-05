@@ -1,0 +1,15 @@
+ibtikar_glance_dashboard_messageclose_list_close_message:
+    path:  /list-close-message
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\Close:listCloseMessage }
+
+ibtikar_glance_dashboard_messageclose_answer:
+    path:  /answer/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\Close:answer }
+
+ibtikar_glance_dashboard_messageclose_change_status:
+    path:  /change-status/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\Close:changeStatus }
+
+ibtikar_glance_dashboard_messageclose_list_close_message_change_list_columns:
+    path:  /close-message-change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\Close:changeListcloseMessageColumns }
