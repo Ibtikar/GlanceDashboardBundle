@@ -36,7 +36,7 @@ class MessageController extends BackendController {
 
     protected function configureListParameters(Request $message) {
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Message')
+        $queryBuilder = $dm->createQueryBuilder('IbtikarGoodyFrontendBundle:ContactMessage')
                         ->field('messageType')->equals(ContactMessage::$messageTypes['mainThread'])
                         ->field('status')->equals($this->messageStatus);
         $this->listViewOptions->setActions(array('Answer', 'ChangeStatus'));
@@ -90,13 +90,13 @@ class MessageController extends BackendController {
     public function getTabCount($renderingParams = array()) {
         $dm = $this->get('doctrine_mongodb')->getManager();
 
-        $renderingParams['newMessageCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Message')
+        $renderingParams['newMessageCount'] = $dm->createQueryBuilder('IbtikarGoodyFrontendBundle:ContactMessage')
                         ->field('status')->equals(ContactMessage::$statuses['new'])
                         ->getQuery()->execute()->count();
-        $renderingParams['closeMessageCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Message')
+        $renderingParams['closeMessageCount'] = $dm->createQueryBuilder('IbtikarGoodyFrontendBundle:ContactMessage')
                         ->field('status')->equals(ContactMessage::$statuses['close'])
                         ->getQuery()->execute()->count();
-        $renderingParams['inprogressMessageCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Message')
+        $renderingParams['inprogressMessageCount'] = $dm->createQueryBuilder('IbtikarGoodyFrontendBundle:ContactMessage')
                         ->field('status')->equals(ContactMessage::$statuses['inprogress'])
                         ->getQuery()->execute()->count();
         return $renderingParams;
