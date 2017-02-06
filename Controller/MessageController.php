@@ -18,8 +18,8 @@ class MessageController extends BackendController {
     protected function configureListColumns() {
         $this->allListColumns = array(
             "mainTitle" => array(),
-            "nickName" => array("isSortable" => false, 'type' => 'refrence', 'refrenceObject' => 'createdBy'),
-            "email" => array("isSortable" => false, 'type' => 'refrence', 'refrenceObject' => 'createdBy'),
+            "nickName" => array("isSortable" => false, 'type' => 'refrence', 'getterArguments' => 'createdBy'),
+            "email" => array("isSortable" => false, 'type' => 'refrence', 'getterArguments' => 'createdBy'),
             "messageType" => array("type" => "translated"),
             "createdAt" => array("type" => "date"),
             "lastAnswerTime" => array("type" => "date"),
@@ -143,7 +143,8 @@ class MessageController extends BackendController {
                 $getfunction = "get" . ucfirst($value);
                 if ($value == 'name' && $document instanceof \Ibtikar\GlanceUMSBundle\Document\Role) {
                     $oneDocument[$value] = '<a class="dev-role-getPermision" href="javascript:void(0)" data-id="' . $document->getId() . '">' . $document->$getfunction() . '</a>';
-                } elseif ($value == 'username') {
+                }
+                elseif ($value == 'username') {
                     $image = $document->getWebPath();
                     if (!$image) {
                         $image = 'bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg';
@@ -153,7 +154,12 @@ class MessageController extends BackendController {
                                                 <div class="media-body">
                                                     <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">  ' . $document->$getfunction() . ' </a>
                                                 </div>';
-                } elseif ($value == 'profilePhoto') {
+                }
+                elseif ($value == 'nickName' || $value == 'email') {
+
+                    $oneDocument[$value] = $this->get('app.twig.property_accessor')->propertyAccess($document,'createdBy',$value);
+                }
+                elseif ($value == 'profilePhoto') {
                     $image = $document->getProfilePhoto();
                     if (!$image) {
                         $image = 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg';

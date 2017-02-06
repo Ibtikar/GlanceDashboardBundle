@@ -149,7 +149,7 @@
                                                                         </td>
                                                                     {% elseif field.type == "refrence"  %}
                                                                         <td>
-                                                                            {{ attribute(object, field.refrenceObject.field.propertyName)}}
+                                                                            {{ property_access(object,field.arguments,field.propertyName )}}
                                                                         </td>
                                                                     {% elseif field.propertyName == "username"  %}
                                                                         <td>
