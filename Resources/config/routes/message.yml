@@ -1,0 +1,11 @@
+ibtikar_glance_dashboard_message_new:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/message/new.yml"
+    prefix:   /message-new
+
+ibtikar_glance_dashboard_message_inprogress:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/message/inprogress.yml"
+    prefix:   /message-inprogress
+
+ibtikar_glance_dashboard_message_close:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/message/close.yml"
+    prefix:   /message-close

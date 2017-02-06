@@ -79,6 +79,12 @@ services:
         tags:
             - { name: twig.extension }
 
+    app.twig.property_accessor:
+        class: Ibtikar\GlanceDashboardBundle\Service\propertyAccessorExtension
+        arguments: ["@translator"]
+        tags:
+            - { name: twig.extension }
+
 #    translator:
 #        class: Ibtikar\GlanceDashboardBundle\Translation\FallbackTranslator
 #

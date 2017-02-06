@@ -1,0 +1,22 @@
+ibtikar_glance_dashboard_messageinprogress_list_inprogress_message:
+    path:  /list-inprogress-message
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\Inprogress:listInprogressMessage }
+
+ibtikar_glance_dashboard_messageinprogress_answer:
+    path:  /answer/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\Inprogress:answer }
+
+ibtikar_glance_dashboard_messageinprogress_change_status:
+    path:  /change-status/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\Inprogress:changeStatus }
+
+ibtikar_glance_dashboard_messageinprogress_list_inprogress_message_change_list_columns:
+    path:  /inprogress-message-change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\Inprogress:changeListInprogressMessageColumns }
+
+
+
+
+
+
+

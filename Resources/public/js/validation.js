@@ -466,7 +466,7 @@ function initFormValidation(form_selector) {
                 var errorAfterSelector = $(element).attr('data-error-after-selector');
                 if (errorAfterSelector) {
                     if (errorAfterSelector == '.select2-container' || errorAfterSelector == '.dev-after-element') {
-                        $(element).siblings(errorAfterSelector).after(error);
+                        $(element).siblings(errorAfterSelector).after(error).after('<div class="clearfix"></div>');
                         return;
 
                     }

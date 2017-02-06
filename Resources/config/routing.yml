@@ -57,5 +57,6 @@ ibtikar_glance_dashboard_stars:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/stars.yml"
     prefix:   /stars
 
-
-
+ibtikar_glance_dashboard_message:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/message.yml"
+    prefix:   /message

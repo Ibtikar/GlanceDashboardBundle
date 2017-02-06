@@ -97,6 +97,7 @@ class MediaController extends BackendController
                             'product' => null,
                             'subproduct' => null,
                             'recipe' => null,
+                            'contactMessage' => null,
                             'magazine' => null,
                             'collectionType' => $collectionType,
                             'ProfilePhoto' => TRUE
@@ -107,6 +108,7 @@ class MediaController extends BackendController
                             'type' => $type,
                             'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                             'product' => null,
+                            'contactMessage' => null,
                             'subproduct' => null,
                             'recipe' => null,
                             'magazine' => null,
@@ -433,6 +435,7 @@ class MediaController extends BackendController
                 'product' => null,
                 'recipe' => null,
                 'blog' => null,
+                'contactMessage' => null,
                 'magazine' => null,
                 'subproduct' => null,
                 'collectionType' => $collectionType
@@ -487,6 +490,7 @@ class MediaController extends BackendController
             'captionAr' => $media->getCaptionAr()?$media->getCaptionAr():"",
             'captionEn' => $media->getCaptionEn()?$media->getCaptionEn():"",
             'path' => $media->getPath(),
+            'name' => $media->getName(),
             'type' => $media->getType(),
             'cover'=>$media->getCoverPhoto()?'checked':'',
             'changeCoverUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_change_defaultcover', array('imageId' => $media->getId(), 'documentId' => $documentId, 'collectionType'=>$collectionType)),

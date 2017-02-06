@@ -1,0 +1,262 @@
+{% extends 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard.html.twig' %}
+{% block header %}
+    {{ include('IbtikarGlanceDashboardBundle::header.html.twig') }}
+{% endblock %}
+{% block navbar %}
+    {{ include('IbtikarGlanceDashboardBundle::navbar.html.twig') }}
+{% endblock %}
+{% block side_menu %}
+    {{ include('IbtikarGlanceDashboardBundle::sidebar.html.twig') }}
+{% endblock %}
+{% block title %}
+    {{ ('List Message')|trans({}, translationDomain)}}
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/ibtikarglancedashboard/css/jquery.powertip.min.css')}}">
+{% endblock %}
+
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Basic button -->
+        <div class="content-group">
+            <div class="heading-elemnts">
+
+                <div class="heading-btn-group">
+                    {% block breadCrumb %}
+
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+        <!-- /basic button -->
+        <!-- Dashboard content -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- view roles -->
+                        <div class="panel panel-flat">
+                            <div class="panel-heading">
+                                <h5 class="panel-title">{{  ('List Message')|trans({}, translationDomain)}}</h5>
+                                <div class="heading-elements">
+                                    {% block statistic %}
+                                        {# <span class="label heading-text label-flat border-grey text-grey-600">28 closed</span>
+                                         <span class="label heading-text label-flat border-success text-success-600">12338 Approved</span>
+                                         <span class="label heading-text label-flat border-danger text-danger-600">8973 Rejected</span>
+                                         <span class="label heading-text label-flat border-primary text-primary-600">8973 Pending</span>#}
+                                    {% endblock %}
+                                    <ul class="icons-list">
+                                        <li><a data-action="collapse"></a></li>
+                                        <li><a data-action="reload"></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="tabbable">
+                                    <ul class="nav nav-tabs nav-tabs-highlight">
+                                        {% block tabs %}
+                                            {% if is_granted('ROLE_MESSAGENEW_VIEW') or is_granted('ROLE_ADMIN')%}
+                                                <li   {% if 'messagenew_list_new' in app.request.attributes.get('_route') %} class="active"{% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_messagenew_list_new_message') }}" data-toggle="tab"><span class="badge badge-primary position-left dev-new-message">{{ newMessageCount}}</span> {% trans from translationDomain %}new{% endtrans%}</a></li>
+                                                {% endif %}
+                                                {% if is_granted('ROLE_MESSAGEINPROGRESS_VIEW') or is_granted('ROLE_ADMIN') %}
+                                                <li   {% if 'messageinprogress_list_inprogress' in app.request.attributes.get('_route') %} class="active"{% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_messageinprogress_list_inprogress_message') }}" data-toggle="tab"><span class="badge badge-primary position-left dev-inprogress-message">{{ inprogressMessageCount}}</span> {% trans from translationDomain %}inprogress{% endtrans%}</a></li>
+                                                {%  endif %}
+                                                {% if is_granted('ROLE_MESSAGECLOSE_VIEW') or is_granted('ROLE_ADMIN') %}
+                                                <li   {% if 'messageclose_list_close' in app.request.attributes.get('_route') %} class="active" {% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_messageclose_list_close_message') }}" data-toggle="tab"><span class="badge badge-primary position-left dev-close-message">{{ closeMessageCount }}</span> {% trans from translationDomain %}close{% endtrans%}</a></li>
+                                                {% endif %}
+                                            {% endblock %}
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="open">
+                                            <form method="post" action="{{ list.hasBulkActions(listName) ? path(prefixRoute|lower ~ '_bulk_actions') : '' }}" class="dev-bulk-actions-form">
+                                                <input type="hidden" value="" name="type" id="DocumentType"/>
+                                                <input type="hidden" value="" name="reason" id="reason"/>
+                                                <div class="actions">
+                                                    {% block actions %}
+                                                        <a data-placement="bottom" title="" data-popup="tooltip"  data-toggle="modal"  href="javascript:void(0)" class="btn btn-default btn-sm dev-change-columns" type="button" data-original-title="خانات الجدول"><i class="icon-table2 "></i> <span class="hidden-sm"> </span></a>
+                                                        {% if list.hasBulkActions(listName) %}
+                                                            <input type="hidden" id="dev-bulk-action" name="bulk-action" value=""/>
+                                                            <span class="dev-bulk-action-container" data-list-name="{{listName|lower}}" data-href="{{ list.hasBulkActions(listName) ? path(prefixRoute|lower ~ '_bulk_actions') : '' }}" style="display: none;">
+                                                                {% for action in list.bulkActions %}{% endfor %}
+                                                            </span>
+                                                        {% endif %}
+                                                    {% endblock %}
+                                                </div>
+                                                <div style="margin-top: 15px;">
+                                                    <div class="col-md-12">
+                                                        {% for flashMessageType, flashMessageArray in app.session.flashBag.all %}
+                                                            {% for flashMessage in flashMessageArray %}
+                                                                <div class="alert {{ flashMessageType == 'error' ? 'alert-danger' : flashMessageType == 'success' ? 'alert-success' : 'alert-info' }} no-border">
+                                                                    <button data-dismiss="alert" class="close" type="button"><span>×</span><span class="sr-only">{% trans %}Close{% endtrans %}</span></button>{{ flashMessage }}
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                                <table class="table table-hover table-striped datatable-column-search-inputs" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            {% if list.hasBulkActions(listName) %}
+                                                                <th class="" data-orderable="false" data-bSortable="false" data-searchable="false" data-name="id">
+                                                                    <div class="form-group">
+                                                                        <label class="checkbox-inline">
+                                                                            <input type="checkbox" class="styled dev-checkbox dev-checkbox-all">
+                                                                        </label>
+                                                                    </div>
+                                                                </th>
+                                                            {% endif %}
+                                                            {% for field in list.fields %}
+                                                                <th class="" data-name="{{ field.title }}">
+                                                                    {{ field.title|trans({}, translationDomain) }}
+                                                                </th>
+                                                            {% endfor %}
+                                                            {% if list.hasActionsColumn(listName) %}
+                                                                <th  class="">العمليات</th>
+                                                            {%endif %}
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for object in pagination %}
+                                                            <tr>
+                                                                {% if list.hasBulkActions(listName) %}
+                                                                    <td class="" data-id="{{ object.id }}">
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox-inline">
+                                                                                <input type="checkbox" name="ids[]" class="styled dev-checkbox" value="{{object.id}}" data-type="{{ object.type}}" >
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                {% endif %}
+                                                                {% for field in list.fields %}
+                                                                    {% if field.type == "date" %}
+                                                                        <td class="{{field.class}}" {% if field.isClickable %} style="cursor:pointer" onclick="window.location = '{{field.isClickable|replace({'--id--':object.document.id})}}'" {% endif %}>
+
+                                                                            {{ attribute(object, field.propertyName) is empty ? "" : attribute(object, field.propertyName)|date('Y-m-d') }}
+                                                                        </td>
+                                                                    {% elseif field.type == "many"  %}
+                                                                        <td>
+                                                                            {% for element in attribute(object, field.propertyName|humanize|title|replace({' ':''})) %}
+                                                                                {% if not loop.first %},{% endif %}
+                                                                                {{ element|trans({},translationDomain) }}
+                                                                            {% endfor %}
+                                                                        </td>
+                                                                    {% elseif field.type == "refereceImage"  %}
+                                                                        <td>
+                                                                            <div class="media-left media-middle">
+                                                                                <a href="javascript:void(0)"><img src="{{ asset( attribute(attribute(object, field.propertyName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}" class="img-lg" alt=""></a>
+                                                                            </div>
+                                                                        </td>
+                                                                    {% elseif field.type == "refrence"  %}
+                                                                        <td>
+                                                                            {{ property_access(object,field.arguments,field.propertyName )}}
+                                                                        </td>
+                                                                    {% elseif field.propertyName == "username"  %}
+                                                                        <td>
+                                                                            <div class="media-left media-middle">
+                                                                                <a href="javascript:void(0)"><img src="{{ asset( attribute(object, 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg')) }}" class="img-circle img-lg" alt=""></a>
+                                                                            </div>
+                                                                            <div class="media-body">
+                                                                                <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">   {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}} </a>
+                                                                            </div>
+                                                                        </td>
+                                                                    {% else %}
+                                                                        <td >
+                                                                            {% if field.isClickable %}
+                                                                                <a href="javascript:void(0)" class="{{field.class}}" data-id="{{object.id}}">
+                                                                                    {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}}
+                                                                                </a>
+                                                                            {%else%}
+                                                                                {# added to fix the sorting for fields with underscore #}
+
+                                                                                {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}}
+
+
+                                                                            {% endif %}
+
+                                                                        </td>
+                                                                    {% endif %}
+
+
+                                                                {% endfor %}
+
+                                                                {% if list.hasActionsColumn(listName) %}
+                                                                        {{ include('IbtikarGlanceDashboardBundle:Message:_listActions.html.twig') }}
+
+                                                                {% endif  %}
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </form>
+                                        </div><!-- tab 1 -->
+                                        <div class="tab-pane" id="close"></div><!-- tab 2 -->
+                                        <div class="tab-pane" id="edit"></div><!-- tab 3 -->
+                                        <div class="tab-pane" id="delete"></div><!-- tab 4 -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /scrollable datatable -->
+                    </div>
+                </div>
+            </div><!-- col-lg-9 tabs -->
+        </div>
+        <!-- /dashboard content -->
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var loginUrl = "{{ path('ibtikar_glance_ums_staff_login')}}";
+        var notFoundUrl = "{{ path('ibtikar_glance_dashboard_not_found')}}";
+        var accessDeniedUrl = '{{ path('access_denied') }}';
+
+        var columns ={{ columns|raw}} ;
+                var totalNumber = "{{total}}";
+                var limit ={{limit}} ;
+                var start ={{skip}} ;
+                var sort ={% if sort is defined %}{{sort|raw}}{% else %} null{%endif %};
+        var toggleButtonColor = '#D6494C';
+
+        {% if 'messagenew_list_new' in app.request.attributes.get('_route') %}
+            var ajaxData = '{{ path(prefixRoute|lower~'_list_new_message') }}';
+            var changeListColumnsUrl = "{{path(prefixRoute|lower~changeListColumnType~'_change_list_columns')}}";
+        {% endif %}
+
+        {% if 'messageclose_list_close' in app.request.attributes.get('_route') %}
+            var ajaxData = '{{ path(prefixRoute|lower~'_list_close_message') }}';
+            var changeListColumnsUrl = "{{path(prefixRoute|lower~changeListColumnType~'_change_list_columns')}}";
+        {% endif %}
+
+        {% if '_messageinprogress_list_inprogress_message' in app.request.attributes.get('_route') %}
+            var ajaxData = '{{ path('ibtikar_glance_dashboard_messageinprogress_list_inprogress_message') }}';
+            var changeListColumnsUrl = "{{path('ibtikar_glance_dashboard_messageinprogress_list_inprogress_message_change_list_columns')}}";
+        {% endif %}
+
+    </script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/layout_sidebar_sticky_custom.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/uniform.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
+    <!-- datatable files -->
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/tables/datatables/datatables.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/selects/select2.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/datatables_api.js')}}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/jquery.powertip.min.js') }}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/ajaxifyList.js') }}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/recipeActions.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_modals.js')}}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/dragula.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/extension_dnd.js')}}"></script>
+
+    <script>
+        intializeTable();
+        var list = new BaseList();
+    </script>
+
+
+{% endblock %}
