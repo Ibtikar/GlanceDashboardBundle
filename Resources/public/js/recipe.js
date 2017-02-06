@@ -142,7 +142,7 @@ function updateRelatedTip(){
 }
 
 function updateMinRelated() {
-    if ($('.dev-related-article-list').length > 0) {
+    if ($('.dev-related-article-list').length > 0 || $('.dev-related-tip-list').length > 0 ) {
         if (($('.dev-related-article-list li').length != 0 && $('.dev-related-article-list li').length < 2) || ($('.dev-related-tip-list li').length != 0 && $('.dev-related-tip-list li').length < 2))
         {
             $('#recipe_minvalue').val('')
