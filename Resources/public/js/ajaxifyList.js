@@ -654,15 +654,14 @@ $(document).ready(function () {
                     success: function (data) {
                         basicModal.hide()
                         table.ajax.reload(function () {
-                            if (data.status != 'reload-table') {
+                            if (data.status != 'reload-table' && data.status != 'failed-reload' ) {
                                 showNotificationMsg(data.message, "", data.status);
-                                $('.dev-new-message').html(data.newMessageCount);
-                                $('.dev-inprogress-message').html(data.inprogressMessageCount);
-                                $('.dev-close-message').html(data.closeMessageCount);
-
                             } else {
                                 showNotificationMsg(data.message, "", 'error');
                             }
+                            $('.dev-new-message').html(data.newMessageCount);
+                            $('.dev-inprogress-message').html(data.inprogressMessageCount);
+                            $('.dev-close-message').html(data.closeMessageCount);
                         }, false)
 
                     }
