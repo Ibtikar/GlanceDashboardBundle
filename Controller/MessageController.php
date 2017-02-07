@@ -18,15 +18,17 @@ class MessageController extends BackendController {
     protected function configureListColumns() {
         $this->allListColumns = array(
             "mainTitle" => array(),
-            "nickName" => array("isSortable" => false, 'type' => 'refrence', 'getterArguments' => 'createdBy'),
+            "firstName" => array("isSortable" => false, 'type' => 'refrence', 'getterArguments' => 'createdBy'),
+            "lastName" => array("isSortable" => false, 'type' => 'refrence', 'getterArguments' => 'createdBy'),
             "email" => array("isSortable" => false, 'type' => 'refrence', 'getterArguments' => 'createdBy'),
-            "messageType" => array("type" => "translated"),
+//            "messageType" => array("type" => "translated"),
             "createdAt" => array("type" => "date"),
             "lastAnswerTime" => array("type" => "date"),
             "trackingNumber" => array()
         );
         $this->defaultListColumns = array(
-            "nickName",
+            "firstName",
+            "lastName",
             "email",
             "createdAt",
             "lastAnswerTime",
@@ -139,7 +141,7 @@ class MessageController extends BackendController {
                                                     <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">  ' . $document->$getfunction() . ' </a>
                                                 </div>';
                 }
-                elseif ($value == 'nickName' || $value == 'email') {
+                elseif ($value == 'lastName' || $value == 'firstName' || $value == 'email') {
 
                     $oneDocument[$value] = $this->get('app.twig.property_accessor')->propertyAccess($document,'createdBy',$value);
                 }
