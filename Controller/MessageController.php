@@ -180,4 +180,61 @@ class MessageController extends BackendController {
             "recordsFiltered" => $renderingParams['total']));
     }
 
+
+    public function changeStatusAction(Request $request)
+    {
+        if (!$this->getUser()) {
+            return $this->getLoginResponse();
+        }
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $securityContext = $this->get('security.authorization_checker');
+        $publishOperations = $this->get('recipe_operations');
+        if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_CHANGESTATUS') && !$securityContext->isGranted('ROLE_ADMIN')) {
+            $result = array('status' => 'failed-reload', 'message' => $this->trans('You are not authorized to do this action any more'));
+            return new JsonResponse(array_merge($result, $this->getTabCount()));
+        }
+
+        if ($request->getMethod() === 'GET') {
+            $id = $request->get('id');
+            if (!$id) {
+                return $this->getFailedResponse();
+            }
+
+            $message = $dm->getRepository('IbtikarGoodyFrontendBundle:ContactMessage')->findOneById($id);
+            if (!$message)
+                throw $this->createNotFoundException($this->trans('Wrong id'));
+
+            if ($message->getStatus() != $this->messageStatus) {
+                $result = array('status' => 'failed-reload', 'message' => $this->trans('not done'));
+                return new JsonResponse(array_merge($result, $this->getTabCount()));
+            }
+
+            return $this->render('IbtikarGlanceDashboardBundle:Message:changeStatusModal.html.twig', array(
+                    'translationDomain' => $this->translationDomain,
+                    'statuses' => ContactMessage::$statuses,
+                    'prefixRoute' => 'ibtikar_glance_dashboard_' . $this->calledClassName,
+                    'document' => $message
+            ));
+        } else if ($request->getMethod() === 'POST') {
+
+            $message = $dm->getRepository('IbtikarGoodyFrontendBundle:ContactMessage')->findOneById($request->get('documentId'));
+            if (!$message) {
+                $result = array('status' => 'failed-reload', 'message' => $this->trans('not done'));
+                return new JsonResponse(array_merge($result, $this->getTabCount()));
+            }
+
+            $messageStatus = $message->getStatus();
+            $status = $request->get('status');
+            if ($status == $messageStatus) {
+                $result = array('status' => 'failed-reload', 'message' => $this->trans('not done'));
+                return new JsonResponse(array_merge($result, $this->getTabCount()));
+            }
+
+
+            $message->setStatus($status);
+            $dm->flush();
+            $data = array('status' => 'success','message' => $this->trans('done sucessfully'));
+            return new JsonResponse(array_merge($data, $this->getTabCount()));
+        }
+    }
 }

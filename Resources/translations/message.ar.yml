@@ -28,6 +28,10 @@
 'lastAnswerTime': 'تاريخ التحديث'
 'Deleted at': تاريخ الحذف
 'deletedAt': تاريخ الحذف
+'2-new': 'جديده'
+'1-inprogress': 'تحت التشغيل '
+'3-close': 'مغلقه'
+'change status': 'تغير الحاله'
 
 # ############Messages############
 

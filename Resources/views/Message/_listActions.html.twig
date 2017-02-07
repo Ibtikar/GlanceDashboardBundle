@@ -7,7 +7,7 @@
                                                                                     {% endif %}
                                                                                 {% elseif action == "ChangeStatus" %}
                                                                                         {% if is_granted('ROLE_' ~ listName|upper ~'_CHANGESTATUS') or is_granted('ROLE_ADMIN')  %}
-                                                                                        <a href="{{ path(prefixRoute|lower~'_change_status', {'id': object.id}) }}" class="btn btn-default">
+                                                                                        <a href="javascript:void(0);" class="btn btn-default dev-change-status" data-url="{{ path(prefixRoute|lower~'_change_status', {'id': object.id}) }}">
                                                                                             <i class="icon-checkmark3" data-popup="tooltip"  data-placement="right" title="{{('Change Status ' ~  listName|capitalize)|trans({},translationDomain)}}" ></i>
                                                                                         </a>
                                                                                     {% endif %}

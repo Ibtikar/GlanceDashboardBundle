@@ -382,15 +382,20 @@ function BasicModal() {
                     }, false)
                 }
                 if (data.status == 'failed-reload') {
-                    $('#modal_theme_primary').modal('hide');
-                    var numOfRecords = $('tr[data-id]').length;
+                    var numOfRecords = $('tbody .dev-checkbox').length;
                     var pageNum = getQueryVariable('page');
-                    if (pageNum !== 1 && numOfRecords === 1) {
-                        retunToPreviousPage(pageNum);
-                    } else {
-                        stateChangeHandler();
+                    if (pageNum != 1 && numOfRecords == 1) {
+                        table.page(parseInt(table.page(), 10) - parseInt(1, 10));
                     }
-                    return;
+                    table.ajax.reload(function () {
+                        $('#modal_theme_primary').modal('hide');
+                        showNotificationMsg(data.message, "", 'error');
+                        if (typeof data.newMessageCount != 'undefined') {
+                            $('.dev-new-message').html(data.newMessageCount);
+                            $('.dev-inprogress-message').html(data.inprogressMessageCount);
+                            $('.dev-close-message').html(data.closeMessageCount);
+                        }
+                    }, false);
                 }
                 if (data.status == "error") {
                     showAlertBox(data.message);
@@ -412,7 +417,9 @@ function BasicModal() {
         });
     }
     this.hide = function () {
-        $('#modal_theme_primary .select2').select2('destroy');
+        if ($('#modal_theme_primary .select2').data('select2')) {
+            $('#modal_theme_primary .select2').select2('destroy');
+        }
         $('#modal_theme_primary').modal('hide');
         if (thisObject.hideCallback !== undefined)
             thisObject.hideCallback();
@@ -529,6 +536,7 @@ $(document).ready(function () {
 //        }
     });
 
+
     $('div.panel-flat').on('click','.dev-checkbox-all',function (e) {
         if ($(this).is(':checked')) {
             $('.datatable-column-search-inputs').find('input.dev-checkbox').prop('checked', true).uniform('refresh');
@@ -625,6 +633,45 @@ $(document).ready(function () {
 
     $('.content-wrapper').on('change', '.dev-checkbox', showBulkActionSelect);
     showBulkActionSelect();
+
+   // change status in message
+    $('div.panel-flat').on('click', '.dev-change-status', function () {
+        $('[data-popup="tooltip"]').tooltip("hide");
+        blockPage();
+        var basicModal = new BasicModal();
+        basicModal.show($(this).attr('data-url'), function () {
+        unblockPage();
+        $(".dev-save-change-status").click(function () {
+                if ($('.dev-save-change-status').attr('ajax-running')) {
+                    return;
+                }
+                $('.dev-save-change-status').attr('ajax-running', true)
+                $('.dev-save-change-status').append('<i class="icon-spinner6 spinner position-right"></i>');
+                $.ajax({
+                    url: $(this).attr("data-url"),
+                    data: $('form').serialize(),
+                    method: 'post',
+                    success: function (data) {
+                        basicModal.hide()
+                        table.ajax.reload(function () {
+                            if (data.status != 'reload-table') {
+                                showNotificationMsg(data.message, "", data.status);
+                                $('.dev-new-message').html(data.newMessageCount);
+                                $('.dev-inprogress-message').html(data.inprogressMessageCount);
+                                $('.dev-close-message').html(data.closeMessageCount);
+
+                            } else {
+                                showNotificationMsg(data.message, "", 'error');
+                            }
+                        }, false)
+
+                    }
+
+                });
+
+        });
+        });
+    });
 });
 jQuery(document).on('ajaxComplete', function (event, response) {
     if (response) {
