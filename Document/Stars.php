@@ -16,6 +16,7 @@ class Stars extends Document
     public static $statuses = array(
         "new" => "new",
         "approved" => "approved",
+        "rejected" => "rejected",
     );
 
     /**

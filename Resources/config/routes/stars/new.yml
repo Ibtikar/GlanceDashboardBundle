@@ -1,0 +1,15 @@
+ibtikar_glance_dashboard_starsnew_list_new_stars:
+    path:  /list-new-stars
+    defaults: { _controller: IbtikarGlanceDashboardBundle:stars\New:listNewStars }
+
+ibtikar_glance_dashboard_starsnew_approve:
+    path:  /approve/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:stars\New:approve }
+
+ibtikar_glance_dashboard_starsnew_reject:
+    path:  /reject/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:stars\New:reject }
+
+ibtikar_glance_dashboard_starsnew_list_new_stars_change_list_columns:
+    path:  /new-stars-change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:stars\New:changeListNewStarsColumns }

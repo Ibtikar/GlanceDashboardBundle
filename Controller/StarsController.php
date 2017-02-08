@@ -4,11 +4,118 @@ namespace Ibtikar\GlanceDashboardBundle\Controller;
 
 use Ibtikar\GlanceDashboardBundle\Controller\base\BackendController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Form\Extension\Core\Type as formType;
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
+use Ibtikar\GlanceDashboardBundle\Document\Stars;
+
 class StarsController extends BackendController {
 
     protected $translationDomain = 'stars';
+
+    protected $starsStatus = 'new';
+    protected $listName;
+    protected $listStatus;
+    protected $sublistName = 'New';
+
+
+    protected function configureListColumns()
+    {
+        $this->allListColumns = array(
+            "name" => array("searchFieldType" => "input"),
+            "mobile" => array("isSortable" => false),
+            "email" => array("isSortable" => false, 'type' => 'refrence', 'getterArguments' => 'createdBy'),
+            "createdAt" => array("type" => "date"),
+        );
+        $this->defaultListColumns = array(
+            "name",
+            "mobile",
+            "email",
+            "createdAt",
+        );
+        $this->listViewOptions->setBundlePrefix("ibtikar_glance_dashboard_");
+    }
+
+    protected function configureListParameters(Request $request)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        if ($this->listStatus == 'list_new_stars') {
+            $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Stars')
+                    ->field('status')->equals(Stars::$statuses['new'])
+                    ->field('assignedTo')->exists(FALSE)
+                    ->field('deleted')->equals(false);
+            $this->listViewOptions->setActions(array('Assign', 'ViewOne'));
+        } else if ($this->listStatus == 'list_rejected_stars') {
+            $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Stars')
+                    ->field('status')->equals($this->starsStatus)
+                    ->field('deleted')->equals(false);
+            $this->listViewOptions->setActions(array('Edit', 'Publish', 'ViewOne'));
+
+        } else if ($this->listStatus == 'list_approved_stars') {
+
+            $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Stars')
+                    ->field('status')->equals($this->starsStatus)
+                    ->field('deleted')->equals(false);
+            $this->listViewOptions->setActions(array('Edit', 'Publish', 'ViewOne'));
+        }
+
+        if (isset($queryBuilder))
+            $this->listViewOptions->setListQueryBuilder($queryBuilder);
+        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Stars:list.html.twig");
+    }
+
+    public function listNewStarsAction(Request $request)
+    {
+        $this->listStatus = 'list_new_stars';
+        $this->listName = 'stars' . $this->starsStatus . '_' . $this->listStatus;
+
+
+        return parent::listAction($request);
+    }
+
+    public function listRejectedStarsAction(Request $request)
+    {
+        $this->listStatus = 'list_rejected_stars';
+        $this->listName = 'stars' . $this->starsStatus . '_' . $this->listStatus;
+
+
+        return parent::listAction($request);
+    }
+
+    public function listAcceptedStarsAction(Request $request)
+    {
+        $this->listStatus = 'list_approved_stars';
+        $this->listName = 'stars' . $this->starsStatus . '_' . $this->listStatus;
+
+
+        return parent::listAction($request);
+    }
+
+    public function changeListNewStarsColumnsAction(Request $request)
+    {
+        $this->listStatus = 'list_new_stars';
+        $this->listName = 'stars' . $this->starsStatus . '_' . $this->listStatus;
+        return parent::changeListColumnsAction($request);
+    }
+    public function changeListRejectedStarsColumnsAction(Request $request)
+    {
+        $this->listStatus = 'list_Rejected_stars';
+        $this->listName = 'stars' . $this->starsStatus . '_' . $this->listStatus;
+        return parent::changeListColumnsAction($request);
+    }
+    public function changeListApprovedStarsColumnsAction(Request $request)
+    {
+        $this->listStatus = 'list_approved_stars';
+        $this->listName = 'stars' . $this->starsStatus . '_' . $this->listStatus;
+        return parent::changeListColumnsAction($request);
+    }
+
+    protected function doList(Request $request)
+    {
+        $renderingParams = parent::doList($request);
+        return $this->getTabCount($renderingParams);
+    }
+
 
     public function editAction(Request $request) {
 
@@ -73,4 +180,88 @@ class StarsController extends BackendController {
         }
         return $settings;
     }
+
+     public function getTabCount($renderingParams = array())
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $renderingParams['newStarsCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Stars')
+                ->field('status')->equals(Stars::$statuses['new'])
+                ->field('assignedTo')->exists(FALSE)
+                ->field('deleted')->equals(false)
+                ->getQuery()->execute()->count();
+        $renderingParams['approvedStarsCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Stars')
+                ->field('status')->equals(Stars::$statuses['approved'])
+                ->field('deleted')->equals(false)
+                ->getQuery()->execute()->count();
+        $renderingParams['rejectedStarsCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Stars')
+                ->field('status')->equals(Stars::$statuses['rejected'])
+                ->field('deleted')->equals(false)
+                ->getQuery()->execute()->count();
+        return $renderingParams;
+    }
+
+    public function approveAction(Request $request) {
+        return $this->statusChange($request->get('id'),'approved','ROLE_STARS_APPROVE');
+    }
+
+    public function rejectAction(Request $request) {
+        return $this->statusChange($request->get('id'),'rejected','ROLE_STARS_REJECT');
+    }
+
+    private function statusChange($id,$status,$permission) {
+
+        if (!in_array($status, Stars::$statuses)) {
+            throw new \Exception('Wrong Stars Status');
+        }
+
+        $securityContext = $this->get('security.authorization_checker');
+
+        $loggedInUser = $this->getUser();
+        if (!$loggedInUser) {
+            return new JsonResponse(array('status' => 'login'));
+        }
+
+        if (!$securityContext->isGranted($permission) && !$securityContext->isGranted('ROLE_ADMIN')) {
+            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
+            return new JsonResponse($result);
+        }
+        if (!$id) {
+            return $this->getFailedResponse();
+        }
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $document = $dm->getRepository('IbtikarGlanceDashboardBundle:Stars')->find($id);
+        if (!$document || $document->getDeleted()) {
+            return new JsonResponse($this->getTabCount(array('status' => 'failed', 'message' => $this->get('translator')->trans('failed operation'))));
+        }
+
+        $document->setStatus(Stars::$statuses[$status]);
+        $document->getUser()->setStar($status == 'approved'?true:false);
+
+        $dm->flush();
+
+        return new JsonResponse($this->getTabCount(array('status' => 'success', 'message' => $this->get('translator')->trans('done sucessfully'))));
+    }
+
+//    private function statusChangeEmail($status) {
+//                $user = $this->getUser();
+//                $emailTemplate = $dm->getRepository('IbtikarGlanceDashboardBundle:EmailTemplate')->findOneBy(array('name' => 'join stars form submit'));
+//                $body = str_replace(
+//                        array(
+//                    '%user-name%',
+//                        ), array(
+//                    $user->__toString(),
+//                    ), str_replace('%message%', $emailTemplate->getTemplate(), $this->get('frontend_base_email')->getBaseRender($user->getPersonTitle(), false))
+//                );
+//                $mailer = $this->get('swiftmailer.mailer.spool_mailer');
+//                $message = \Swift_Message::newInstance()
+//                        ->setSubject($emailTemplate->getSubject())
+//                        ->setFrom($this->container->getParameter('mailer_user'))
+//                        ->setTo($user->getEmail())
+//                        ->setBody($body, 'text/html')
+//                ;
+//                $mailer->send($message);
+//    }
+
 }

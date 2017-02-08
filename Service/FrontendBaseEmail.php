@@ -40,7 +40,7 @@ class FrontendBaseEmail {
      * @return string
      */
     public function getBaseRender($personTitle = 'الأستاذ/ الأستاذة', $showMessage = true, $showHeaderContent = false,$showSocialLinks = true) {
-        return $this->templating->render('IbtikarGlanceDashboardBundle:Email:frontend-email-base.html.twig', array(
+        return $this->templating->render('IbtikarGlanceDashboardBundle:Email:frontend-email-base2.html.twig', array(
                     'baseImages' => $this->baseImages,
                     'personTitle' => $personTitle,
                     'showMessage' => $showMessage,

@@ -21,6 +21,22 @@
 'Year': 'سنة'
 'Month': 'شهر'
 'Day': 'يوم'
+'new': 'الجديدة'
+'approved': 'مقبولة'
+'rejected': 'مرفوضة'
+'List Stars': 'قائمة النجوم'
+'name': 'الأسم'
+'Name': 'الأسم'
+'mobile': 'رقم الهاتف'
+'Mobile': 'رقم الهاتف'
+'email': 'البريد الإلكتروني'
+'Email': 'البريد الإلكتروني'
+'createdAt': تاريخ الإنشاء
+'Created at': تاريخ الإنشاء
+'Approve starsnew': 'قبول الطلب'
+'Reject starsnew': 'رفض الطلب'
+'Approve starsrejected': 'قبول الطلب'
+'Reject starsapproved': 'رفض الطلب'
 # ############Messages############
 
 # ############Titles############
