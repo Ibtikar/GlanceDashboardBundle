@@ -16,16 +16,16 @@
 'messageType': 'نوع الرسالة'
 'Tracking number': 'رقم التتبع'
 'trackingNumber': 'رقم التتبع'
-'createdAt': تاريخ الإنشاء
-'Created at': تاريخ الإنشاء
+'createdAt': تاريخ الطلب
+'Created at': تاريخ الطلب
 'createdBy': قام بالإنشاء
 'Created by':  قام بالإنشاء
 'Deleted by': قام بالحذف
 'deletedBy': قام بالحذفs
 'updatedAt': تاريخ التحديث
 'Updated at': تاريخ التحديث
-'Last answer time': 'تاريخ التحديث'
-'lastAnswerTime': 'تاريخ التحديث'
+'Last answer time': 'تاريخ الرد'
+'lastAnswerTime': 'تاريخ الرد'
 'Deleted at': تاريخ الحذف
 'deletedAt': تاريخ الحذف
 '2-new': 'جديده'
