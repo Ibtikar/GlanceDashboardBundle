@@ -831,7 +831,7 @@ class MediaController extends BackendController
                     $videoObj->setCollectionType($request->get('collectionType'));
                 }
                 if ($documentId && $documentId != 'null') {
-                    if ($request->get('collectionType') == 'Recipe') {
+                    if ($request->get('collectionType') == 'Recipe' || $request->get('collectionType') == 'Blog') {
                         $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($documentId);
                         if (!$recipe) {
                             throw $this->createNotFoundException($this->trans('Wrong id'));
