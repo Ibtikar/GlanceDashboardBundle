@@ -2,9 +2,9 @@
                                                                         {% if  object.getNotModified() is not defined  or  object.getNotModified()== false %}
                                                                             {% for action in list.actions %}
                                                                                 {% if action == "Answer" %}
-                                                                                    {% if is_granted('ROLE_' ~ listName|upper ~'_ANSWER') or is_granted('ROLE_ADMIN') %}
+                                                                               {#     {% if is_granted('ROLE_' ~ listName|upper ~'_ANSWER') or is_granted('ROLE_ADMIN') %}
                                                                                         <a class="btn btn-default"  href = "{{ path(prefixRoute|lower ~ '_answer', {'id': object.id}) }}"  ><i class="icon-eye" data-popup="tooltip"  data-placement="right" title="{{ ('Answer ' ~  listName|capitalize)|trans({},translationDomain)}}"></i></a>
-                                                                                    {% endif %}
+                                                                                    {% endif %}#}
                                                                                 {% elseif action == "ChangeStatus" %}
                                                                                         {% if is_granted('ROLE_' ~ listName|upper ~'_CHANGESTATUS') or is_granted('ROLE_ADMIN')  %}
                                                                                         <a href="javascript:void(0);" class="btn btn-default dev-change-status" data-url="{{ path(prefixRoute|lower~'_change_status', {'id': object.id}) }}">
