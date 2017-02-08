@@ -269,7 +269,7 @@ class RecipeController extends BackendController
             switch ($recipeStatus) {
                 case 'new':
                     if ($request->get('publishNow')) {
-                        $publishResult = $publishOperations->publish($recipe, $locations,$goodyStar);
+                        $publishResult = $publishOperations->publish($recipe, $locations,FALSE,$goodyStar);
                     } else if ($request->get('autoPublishDate', '')) {
                         $autoPublishDateString = $request->get('autoPublishDate', '');
                         if (strlen(trim($autoPublishDateString)) > 0) {
@@ -302,7 +302,7 @@ class RecipeController extends BackendController
                     break;
                 case 'autopublish':
                     if ($request->get('publishNow')) {
-                        $publishResult = $publishOperations->publish($recipe, $locations,$goodyStar);
+                        $publishResult = $publishOperations->publish($recipe, $locations,FALSE,$goodyStar);
                     } else if ($request->get('autoPublishDate', '')) {
                         $autoPublishDateString = $request->get('autoPublishDate', '');
                         if (strlen(trim($autoPublishDateString)) > 0) {

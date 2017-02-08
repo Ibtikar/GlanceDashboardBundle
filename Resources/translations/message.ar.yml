@@ -6,24 +6,32 @@
 'Main title': 'العنوان '
 'main title': 'العنوان'
 'mainTitle': 'العنوان'
+'First name': 'الاسم الاول'
+'firstName': 'الاسم الاول'
+'Last name': ' الاسم الاخير'
+'lastName': ' الاسم الاخير'
 'Content': 'المحتوى'
 'Content en': 'المحتوى'
 'Message type': 'نوع الرسالة'
 'messageType': 'نوع الرسالة'
 'Tracking number': 'رقم التتبع'
 'trackingNumber': 'رقم التتبع'
-'createdAt': تاريخ الإنشاء
-'Created at': تاريخ الإنشاء
+'createdAt': تاريخ الطلب
+'Created at': تاريخ الطلب
 'createdBy': قام بالإنشاء
 'Created by':  قام بالإنشاء
 'Deleted by': قام بالحذف
 'deletedBy': قام بالحذفs
 'updatedAt': تاريخ التحديث
 'Updated at': تاريخ التحديث
-'Last answer time': 'تاريخ التحديث'
-'lastAnswerTime': 'تاريخ التحديث'
+'Last answer time': 'تاريخ الرد'
+'lastAnswerTime': 'تاريخ الرد'
 'Deleted at': تاريخ الحذف
 'deletedAt': تاريخ الحذف
+'2-new': 'جديده'
+'1-inprogress': 'تحت التشغيل '
+'3-close': 'مغلقه'
+'change status': 'تغير الحاله'
 
 # ############Messages############
 
@@ -43,7 +51,7 @@
 'Change Status Messagenew': 'تغيير الحالة'
 'Change Status Messageinprogress': 'تغيير الحالة'
 'Change Status Messageclose': 'تغيير الحالة'
-'Answer messagenew': 'رد'
+'Answer Messagenew': 'رد'
 'Answer Messageinprogress': 'رد'
 'Answer Messageclose': 'رد'
 'List Message': 'قائمة رسائل قودي'

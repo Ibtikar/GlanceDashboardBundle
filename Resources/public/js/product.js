@@ -76,10 +76,23 @@ function updateRelatedMaterial() {
             $('.dev-related-recipe-list').parent().remove();
         }
         $('#form_relatedRecipe').parent().append(recipes);
-        $('#form_minimumRelatedRecipe').val($('.dev-related-list li').length< 4? '':$('.dev-related-list li').length )
+//        $('#form_minimumRelatedRecipe').val($('.dev-related-list li').length< 4? '':$('.dev-related-list li').length )
+        updateMinRelated();
 
     }
 
+}
+function updateMinRelated() {
+    if ($('.dev-related-list').length > 0 || $('.dev-related-tip-list').length > 0 || $('.dev-related-kitchen911-list').length > 0) {
+        if (($('.dev-related-list li').length != 0 && $('.dev-related-list li').length < 2) || ($('.dev-related-tip-list li').length != 0 && $('.dev-related-tip-list li').length < 2) || ($('.dev-related-kitchen911-list li').length != 0 && $('.dev-related-kitchen911-list li').length < 2))
+        {
+            $('#form_minimumRelatedRecipe').val('')
+        } else {
+            $('#form_minimumRelatedRecipe').val('valid')
+        }
+    } else {
+        $('#form_minimumRelatedRecipe').val('valid')
+    }
 }
 
 function updateRelatedKitchen911(){
@@ -99,6 +112,8 @@ function updateRelatedKitchen911(){
             $('.dev-related-kitchen911-list').parent().remove();
         }
         $('#form_relatedKitchen911').parent().append(kitchen911s);
+        updateMinRelated();
+
     }
 }
 
@@ -120,6 +135,8 @@ function updateRelatedTip(){
            $('.dev-related-tip-list').parent().remove();
         }
         $('#form_relatedTip').parent().append(tips);
+        updateMinRelated();
+
     }
 }
 
@@ -235,7 +252,9 @@ function tdLoadingToggle(elm){
 }
 var uploadpopup=false;
 $(document).ready(function () {
-    $('#form_minimumRelatedRecipe').val($('.dev-related-list li').length< 4? '':$('.dev-related-list li').length )
+//    $('#form_minimumRelatedRecipe').val($('.dev-related-list li').length< 4? '':$('.dev-related-list li').length )
+    updateMinRelated();
+
 
     $("form.form-horizontal").data("validator").settings.ignore = [];
 
@@ -311,9 +330,11 @@ $(document).on("click",'.dev-add-related-material',function(){
                 });
                 $('#form_related').val(JSON.stringify(objArray));
                 RelatedRecipeObj = objArray;
-                            updateRelatedMaterial();
+                updateRelatedMaterial();
+                updateMinRelated();
 
-        $('#form_minimumRelatedRecipe').val($('.dev-related-list li').length< 4? '':$('.dev-related-list li').length )
+
+//        $('#form_minimumRelatedRecipe').val($('.dev-related-list li').length< 4? '':$('.dev-related-list li').length )
 
 //            }
 
@@ -323,31 +344,31 @@ $(document).on("click",'.dev-add-related-material',function(){
         e.preventDefault();
             var $this = $(this);
 
-            if(document.location.pathname.indexOf('edit') >= 0){
-                $.ajax({
-                    url: relatedMaterialDeleteUrl,
-                    method: 'POST',
-                    data:{parent:requestId,child:$this.attr('data-related-material-id')},
-                    success: function(data) {
-                        if(data.status == "success"){
-                            $this.parents('li').remove();
-                            var objArray = [];
-                            $.each($('.dev-related-list .media'),function(){
-                                objArray.push({
-                                    'id':$(this).attr('data-related-material-id'),
-                                    'text':$(this).find('.media-body b').text().trim(),
-                                    'img':$(this).find('img').attr('src')
-                                });
-                            });
-                            $('#form_related').val(JSON.stringify(objArray));
-                            updateRelatedMaterial();
-                        }
-
-                        showNotificationMsg(data.message,"");
-
-                    }
-                });
-            }else{
+//            if(document.location.pathname.indexOf('edit') >= 0){
+//                $.ajax({
+//                    url: relatedMaterialDeleteUrl,
+//                    method: 'POST',
+//                    data:{parent:requestId,child:$this.attr('data-related-material-id')},
+//                    success: function(data) {
+//                        if(data.status == "success"){
+//                            $this.parents('li').remove();
+//                            var objArray = [];
+//                            $.each($('.dev-related-list .media'),function(){
+//                                objArray.push({
+//                                    'id':$(this).attr('data-related-material-id'),
+//                                    'text':$(this).find('.media-body b').text().trim(),
+//                                    'img':$(this).find('img').attr('src')
+//                                });
+//                            });
+//                            $('#form_related').val(JSON.stringify(objArray));
+//                            updateRelatedMaterial();
+//                        }
+//
+//                        showNotificationMsg(data.message,"");
+//
+//                    }
+//                });
+//            }else{
                 $this.parents('li').remove();
                 var objArray = [];
                 var objectElement;
@@ -361,38 +382,40 @@ $(document).on("click",'.dev-add-related-material',function(){
                 });
                 $('#form_related_kitchen911').val(JSON.stringify(objArray));
                 RelatedKitchen911Obj = objArray;
-            }
+                updateMinRelated();
+
+//            }
     });
 
     $(document).on('click', '.dev-related-tip-delete', function(e) {
         e.preventDefault();
             var $this = $(this);
 
-            if(document.location.pathname.indexOf('edit') >= 0){
-                $.ajax({
-                    url: relatedMaterialDeleteUrl,
-                    method: 'POST',
-                    data:{parent:requestId,child:$this.attr('data-related-material-id')},
-                    success: function(data) {
-                        if(data.status == "success"){
-                            $this.parents('li').remove();
-                            var objArray = [];
-                            $.each($('.dev-related-list .media'),function(){
-                                objArray.push({
-                                    'id':$(this).attr('data-related-material-id'),
-                                    'text':$(this).find('.media-body b').text().trim(),
-                                    'img':$(this).find('img').attr('src')
-                                });
-                            });
-                            $('#form_related').val(JSON.stringify(objArray));
-                            updateRelatedMaterial();
-                        }
-
-                        showNotificationMsg(data.message,"");
-
-                    }
-                });
-            }else{
+//            if(document.location.pathname.indexOf('edit') >= 0){
+//                $.ajax({
+//                    url: relatedMaterialDeleteUrl,
+//                    method: 'POST',
+//                    data:{parent:requestId,child:$this.attr('data-related-material-id')},
+//                    success: function(data) {
+//                        if(data.status == "success"){
+//                            $this.parents('li').remove();
+//                            var objArray = [];
+//                            $.each($('.dev-related-list .media'),function(){
+//                                objArray.push({
+//                                    'id':$(this).attr('data-related-material-id'),
+//                                    'text':$(this).find('.media-body b').text().trim(),
+//                                    'img':$(this).find('img').attr('src')
+//                                });
+//                            });
+//                            $('#form_related').val(JSON.stringify(objArray));
+//                            updateRelatedMaterial();
+//                        }
+//
+//                        showNotificationMsg(data.message,"");
+//
+//                    }
+//                });
+//            }else{
                 $this.parents('li').remove();
                 var objArray = [];
                 var objectElement;
@@ -406,7 +429,9 @@ $(document).on("click",'.dev-add-related-material',function(){
                 });
                 $('#form_related_tip').val(JSON.stringify(objArray));
                 RelatedTipObj = objArray;
-            }
+                updateMinRelated();
+
+//            }
     });
 
 
@@ -594,14 +619,13 @@ $(document).on("click",'.dev-add-related-material',function(){
     });
 
     $('body').on('preAjaxCallback', function () {
-        if ($('#form_minimumRelatedRecipe').val() == '') {
-            if ($('.dev-related-list li').length != 0) {
-                showNotificationMsg("يجب اختيار على الاقل  4 وصفات ذات صله", "", "error");
-                return false;
-            } else {
-                $('#form_minimumRelatedRecipe').val('valid');
-            }
+
+        updateMinRelated();
+        if($('#form_minimumRelatedRecipe').val()==''){
+            showNotificationMsg("يجب الا تقل الوصفات والنصائح ومطبخ ذات صله عن 2", "", "error");
+            return false;
         }
+
     });
     $(document).on('openTab', function () {
         $("form.form-horizontal").data("validator").settings.ignore = [];

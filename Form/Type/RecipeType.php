@@ -54,17 +54,21 @@ class RecipeType extends AbstractType {
                             ->add('textEn',CKEditorType::class, array('required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')));
 
                         if($options['attr']['type']=='add'){
+                            $type=$blogTypes['article'];
+                        }else{
+                           $type=$builder->getData()->getType();
+                        }
                             $builder->add('type', formType\ChoiceType::class,
                                     array(
                                         'required' => TRUE,
                                         'choices' => $blogTypes,
                                         'expanded' => true,
                                         'placeholder' => false,
-                                        'data' => $blogTypes['article'],
+                                        'data' => $type,
                                         'choice_translation_domain'=>'recipe'
                                     )
                             );
-                        }
+
                 }
 
                 if($options['attr']['contentType'] == 'recipe') {

@@ -1,0 +1,53 @@
+{% extends 'IbtikarGlanceDashboardBundle::baseModal.html.twig' %}
+
+{% block modalHeader %}
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 class="modal-title">{{'change status'|trans({},translationDomain)}}</h3>
+{% endblock %}
+
+{% block modalBody %}
+
+    <form method="post" id="dev-delete-modal">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <label class="control-label"> الحاله</label>
+                <select class="select select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="status">
+                    {% for status in statuses %}
+                        <option value="{{status}}" {% if document.status == status%}selected{% endif%}>{{ status|trans({},translationDomain) }}</option>
+                    {% endfor %}
+
+
+
+                </select>
+
+            </div>
+        </div>
+        <input type="hidden" name="documentId" value="{{document.id}}"/>
+
+    </form>
+
+
+
+{% endblock %}
+
+{% block modalFooter %}
+    <button type="button" class="btn btn-link" data-dismiss="modal">الغاء</button>
+
+    <button type="button" class="btn btn-primary dev-save-change-status" data-url="{{ path(prefixRoute|lower~'_change_status', {'id': document.id}) }}">
+        نعم
+    </button>
+{% endblock %}
+
+
+
+{% block javascript %}
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_modals.js')}}"></script>
+    <script>
+        var toggleButtonColor = '#D6494C';
+        $('.select').select2();
+
+
+
+    </script>
+{% endblock %}

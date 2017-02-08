@@ -20,8 +20,8 @@ class InprogressController extends MessageController
     protected function configureListParameters(Request $request)
     {
         parent::configureListParameters($request);
-        $this->listViewOptions->setDefaultSortBy("updatedAt");
-        $this->listViewOptions->setDefaultSortOrder("updatedAt");
+        $this->listViewOptions->setDefaultSortBy("createdAt");
+        $this->listViewOptions->setDefaultSortOrder("desc");
     }
 
 

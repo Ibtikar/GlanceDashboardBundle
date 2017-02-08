@@ -130,7 +130,7 @@ class ListView {
                     return TRUE;
                 }
             }
-            if (in_array($action, array("Edit", "Delete", "Activate_Deactivate", "Publish_Unpublish", 'Publish', 'AutoPublish', 'Backward', "Assign", "AssignTo", "History", "Reassign", "Show", "Forward", 'ViewOne', 'Unpublish', 'PublishControl', 'AutoPublishControl', 'ManageOne', 'Manage', 'StopResume', 'Viewcomment', 'ViewPlaces', 'AddPlaces','Resendmail','Favorite_Unfavorite')) && $this->securityContext->isGranted('ROLE_' . strtoupper($listName) . '_' . strtoupper($action))) {
+            if (in_array($action, array("Edit", "Delete", "Activate_Deactivate", "Publish_Unpublish", 'Publish', 'AutoPublish', 'Backward', "Assign", "AssignTo", "History", "Reassign", "Show", "Forward", 'ViewOne', 'Unpublish', 'PublishControl', 'AutoPublishControl', 'ManageOne', 'Manage', 'StopResume', 'Viewcomment', 'ViewPlaces', 'AddPlaces','Resendmail','Favorite_Unfavorite','ChangeStatus')) && $this->securityContext->isGranted('ROLE_' . strtoupper($listName) . '_' . strtoupper($action))) {
                 return TRUE;
             }
             if ($action == "Addcontact" && $this->securityContext->isGranted('ROLE_CONTACT_CREATE')) {
