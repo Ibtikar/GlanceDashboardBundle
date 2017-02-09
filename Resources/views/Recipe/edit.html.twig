@@ -62,7 +62,7 @@
         <label class="control-label col-lg-2" for="recipe_relatedRecipe"></label><div class="col-lg-10" style="padding: 0;">
         <ul class='dev-related-list media-list width-350 notificationList'>
             {% for choice in recipe.relatedRecipeJson %}
-                <li class="media" data-related-material-id="{{choice.id}}"><div class="media-left"><img src="/{{choice.img}}" class="img-circle" alt=""></div><div class="media-body"><b> {{choice.text}}</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="{{choice.id}}"><i class="icon icon-cross2"></i></a></div></li>
+                <li class="media" data-related-material-id="{{choice.id}}"><div class="media-left"><img src="{{choice.img}}" class="img-circle" alt=""></div><div class="media-body"><b> {{choice.text}}</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="{{choice.id}}"><i class="icon icon-cross2"></i></a></div></li>
             {% endfor %}
         </ul>
             </div></div>
