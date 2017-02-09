@@ -95,7 +95,7 @@ class RecipeOperations extends PublishOperations
             }
         }
 
-        if(!$document->getMigrated()){
+        if(php_sapi_name() != 'cli'){
            $document->setPublishedAt(new \DateTime());
             $document->setPublishedBy($user);
         }
