@@ -296,7 +296,7 @@ class MigrationCommand extends ContainerAwareCommand {
             $this->dm->persist($media);
             $recipe->setDefaultCoverPhoto($name);
             $recipe->setCoverPhoto($media);
-            $publishResult = $this->getContainer()->get('recipe_operations')->publish($recipe, array());
+            $publishResult = $this->getContainer()->get('recipe_operations')->publish($recipe, array(),FALSE,FALSE,TRUE);
             $progress->advance();
         }
 

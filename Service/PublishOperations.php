@@ -123,7 +123,7 @@ abstract class PublishOperations
      * @param array $locations
      * @param boolean $rePublish
      */
-    public function publish(Publishable $document, array $locations, $rePublish = false,$goodyStar=FALSE)
+    public function publish(Publishable $document, array $locations, $rePublish = false,$goodyStar=FALSE,$migrated=FALSE)
     {
         $error = $this->validateToPublish($document, $locations, true);
 
@@ -156,7 +156,9 @@ abstract class PublishOperations
                 $this->publishInLocation($document, $location->getPublishedLocationObject($user), $location->getMaxNumberOfMaterials());
             }
         }
+        if(!$migrated){
         $document->setPublishedAt(new \DateTime());
+        }
         $document->setPublishedBy($user);
         $document->setStatus(Recipe::$statuses['publish']);
 
