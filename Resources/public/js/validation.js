@@ -15,6 +15,17 @@ $.validator.addMethod('mobile', function (value, element) {
   return true;
 }, 'phone must be in the right format');
 
+// Add check for birthdate entry. Validation doesn't seem to like a required hidden field.
+jQuery.validator.addMethod('RequiredBirthdate',function(value, element) {
+    var valid = false;
+
+    // First we're going to check if all three fields were provided. If not return false
+    if ($('select#stars_birthDate_year').val() != '' && $('select#stars_birthDate_day').val() != '' && $('select#stars_birthDate_month').val() != '') {
+        valid = true;
+    }
+    return valid
+})
+
 // ckeditor content required
 $.validator.addMethod('ckreq', function (value, element) {
     if(CKEDITOR && CKEDITOR.instances[$(element).attr('id')]){
@@ -26,7 +37,6 @@ $.validator.addMethod('ckreq', function (value, element) {
 });
 // ckeditor content max limit
 $.validator.addMethod('ckmax', function (value, element, param) {
-            console.log('mada5al');
     if(CKEDITOR && CKEDITOR.instances[$(element).attr('id')]){
         var editorContent = CKEDITOR.instances[$(element).attr('id')].document.getBody().getText();
         // return true in case of empty content as element is not required
@@ -384,7 +394,7 @@ function initFormValidation(form_selector) {
         form_selector = 'form.dev-page-main-form,form.dev-js-validation';
     }
     $(form_selector).each(function () {
-        var ignoredElementsSelector = ':reset,:hidden:not(#keycode,.nice-select,textarea[id^="recipe_"],textarea[id^="form_benefits"]),.select-input,input.contact_subject_dev,.dev-ignore-validation';
+        var ignoredElementsSelector = ':reset,:hidden:not(select#stars_birthDate_year,select#stars_birthDate_month,select#stars_birthDate_day,#keycode,.nice-select,textarea[id^="recipe_"],textarea[id^="form_benefits"]),.select-input,input.contact_subject_dev,.dev-ignore-validation';
         var $form = $(this);
         var $resetButtons = $form.find(':reset');
         $resetButtons.each(function() {
@@ -396,6 +406,7 @@ function initFormValidation(form_selector) {
         });
         $form.validate({
             //        debug: true,
+            group: "stars[birthDate][day] stars[birthDate][month] stars[birthDate][year]",
             ignore: ignoredElementsSelector,
             rules: {
                 "hiddencode": {
@@ -405,8 +416,16 @@ function initFormValidation(form_selector) {
                         } else {
                             return false;
                         }
-                    }}
-
+                    }},
+                "stars[birthDate][day]": {
+                        RequiredBirthdate: true,
+                    },
+                "stars[birthDate][month]": {
+                        RequiredBirthdate: true,
+                    },
+                "stars[birthDate][year]": {
+                        RequiredBirthdate: true,
+                    }
             },
             onkeyup: function(element, event) {
 //                $(element).siblings('.dev-loader').hide()
@@ -442,6 +461,10 @@ function initFormValidation(form_selector) {
             errorElement: 'span',
             errorClass: 'help-block',
             errorPlacement: function (error, element) {
+                if($(element).is('#stars_birthDate_day,#stars_birthDate_month,#stars_birthDate_year')){
+                    $(element).parents('#stars_birthDate').after(error);
+                    return;
+                }
                 if(typeof $(element).attr('data-error-right') == 'string') {
                     $(error).css('text-align', 'right');
                 }

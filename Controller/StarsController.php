@@ -130,8 +130,8 @@ class StarsController extends BackendController {
         $form = $this->createFormBuilder(null,array('translation_domain' => $this->translationDomain,'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
         ->add('briefAr',  formType\TextareaType::class, array('data'=> $settingsArray["stars-brief-ar"],'required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
         ->add('briefEn',formType\TextareaType::class, array('data'=>$settingsArray["stars-brief-en"],'required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
-        ->add('benefitsAr',  CKEditorType::class, array('data'=>$settingsArray["stars-benefits-ar"],'required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10,'data-rule-ckmin' => 10,'data-rule-ckmax' => 1000,'data-rule-ckreq' => true,'data-error-after-selector' => '.dev-after-element')))
-        ->add('benefitsEn',CKEditorType::class, array('data'=>$settingsArray["stars-benefits-en"],'required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10,'data-rule-ckmin' => 10,'data-rule-ckmax' => 1000,'data-rule-ckreq' => true,'data-error-after-selector' => '.dev-after-element')))
+        ->add('benefitsAr',  CKEditorType::class, array('data'=>$settingsArray["stars-benefits-ar"],'required' => true,'attr' => array('data-validate-element'=>true,'data-rule-ckmin' => 10,'data-rule-ckmax' => 1000,'data-rule-ckreq' => true,'data-error-after-selector' => '.dev-after-element')))
+        ->add('benefitsEn',CKEditorType::class, array('data'=>$settingsArray["stars-benefits-en"],'required' => true,'attr' => array('data-validate-element'=>true,'data-rule-ckmin' => 10,'data-rule-ckmax' => 1000,'data-rule-ckreq' => true,'data-error-after-selector' => '.dev-after-element')))
         ->getForm();
 
         $image = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findOneBy(array(
@@ -241,27 +241,29 @@ class StarsController extends BackendController {
 
         $dm->flush();
 
+        $this->statusChangeEmail($status);
+
         return new JsonResponse($this->getTabCount(array('status' => 'success', 'message' => $this->get('translator')->trans('done sucessfully'))));
     }
 
-//    private function statusChangeEmail($status) {
-//                $user = $this->getUser();
-//                $emailTemplate = $dm->getRepository('IbtikarGlanceDashboardBundle:EmailTemplate')->findOneBy(array('name' => 'join stars form submit'));
-//                $body = str_replace(
-//                        array(
-//                    '%user-name%',
-//                        ), array(
-//                    $user->__toString(),
-//                    ), str_replace('%message%', $emailTemplate->getTemplate(), $this->get('frontend_base_email')->getBaseRender($user->getPersonTitle(), false))
-//                );
-//                $mailer = $this->get('swiftmailer.mailer.spool_mailer');
-//                $message = \Swift_Message::newInstance()
-//                        ->setSubject($emailTemplate->getSubject())
-//                        ->setFrom($this->container->getParameter('mailer_user'))
-//                        ->setTo($user->getEmail())
-//                        ->setBody($body, 'text/html')
-//                ;
-//                $mailer->send($message);
-//    }
+    private function statusChangeEmail($status) {
+                $user = $this->getUser();
+                $emailTemplate = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:EmailTemplate')->findOneBy(array('name' => $status == "approved"?'join stars':'reject stars'));
+                $body = str_replace(
+                        array(
+                    '%user-name%',
+                        ), array(
+                    $user->__toString(),
+                    ), str_replace('%message%', $emailTemplate->getTemplate(), $this->get('frontend_base_email')->getBaseRender2($user->getPersonTitle(), false))
+                );
+                $mailer = $this->get('swiftmailer.mailer.spool_mailer');
+                $message = \Swift_Message::newInstance()
+                        ->setSubject($emailTemplate->getSubject())
+                        ->setFrom($this->container->getParameter('mailer_user'))
+                        ->setTo($user->getEmail())
+                        ->setBody($body, 'text/html')
+                ;
+                $mailer->send($message);
+    }
 
 }

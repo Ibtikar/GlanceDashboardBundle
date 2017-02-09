@@ -40,6 +40,25 @@ class FrontendBaseEmail {
      * @return string
      */
     public function getBaseRender($personTitle = 'الأستاذ/ الأستاذة', $showMessage = true, $showHeaderContent = false,$showSocialLinks = true) {
+        return $this->templating->render('IbtikarGlanceDashboardBundle:Email:frontend-email-base.html.twig', array(
+                    'baseImages' => $this->baseImages,
+                    'personTitle' => $personTitle,
+                    'showMessage' => $showMessage,
+                    'showHeaderContent' => $showHeaderContent,
+                    'showSocialLinks' => $showSocialLinks
+        ));
+    }
+
+    /**
+     * The new frontend template (to be replaced with getBaserender)
+     * change template frontend-email-base2 back to frontend-email-base
+     *
+     * @param string $personTitle
+     * @param boolean $showMessage
+     * @param boolean $showHeaderContent
+     * @return string
+     */
+    public function getBaseRender2($personTitle = 'الأستاذ/ الأستاذة', $showMessage = true, $showHeaderContent = false,$showSocialLinks = true) {
         return $this->templating->render('IbtikarGlanceDashboardBundle:Email:frontend-email-base2.html.twig', array(
                     'baseImages' => $this->baseImages,
                     'personTitle' => $personTitle,
