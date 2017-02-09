@@ -136,8 +136,10 @@ class BackendController extends Controller {
         }else{
           $sortOrder=  $request->get('columnDir');
         }
+
         if (is_null($request->get('sort')) || !in_array($request->get('sort'), $selectedColumns)) {
             $sortBy = $this->listViewOptions->getDefaultSortBy();
+        
         }else{
            $sortBy =$request->get('sort');
         }
@@ -523,6 +525,10 @@ class BackendController extends Controller {
                                                 <div class="media-body">
                                                     <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">  ' . $document->$getfunction() . ' </a>
                                                 </div>';
+                }
+                  elseif ( $value == 'email'&& !method_exists($document, $value)) {
+
+                    $oneDocument[$value] = $this->get('app.twig.property_accessor')->propertyAccess($document,'createdBy',$value);
                 }
                 elseif ($value == 'status') {
                     $oneDocument[$value] = $this->trans($document->$getfunction(), array(), $this->translationDomain);

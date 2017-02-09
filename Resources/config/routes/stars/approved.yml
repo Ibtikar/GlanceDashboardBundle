@@ -1,0 +1,11 @@
+ibtikar_glance_dashboard_starsapproved_list_approved_stars:
+    path:  /list-approved-stars
+    defaults: { _controller: IbtikarGlanceDashboardBundle:stars\Approved:listAcceptedStars }
+
+ibtikar_glance_dashboard_starsapproved_reject:
+    path:  /reject/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:stars\Approved:reject }
+
+ibtikar_glance_dashboard_starsapproved_list_approved_stars_change_list_columns:
+    path:  /approve-stars-change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:stars\Approved:changeListApprovedStarsColumns }

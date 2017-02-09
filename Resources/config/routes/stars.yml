@@ -1,3 +1,19 @@
+ibtikar_glance_dashboard_stars_list:
+    path:  /list
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Stars:list }
+
 ibtikar_glance_dashboard_stars_edit:
     path:  /edit
     defaults: { _controller: IbtikarGlanceDashboardBundle:Stars:edit }
+
+ibtikar_glance_dashboard_stars_news:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/stars/new.yml"
+    prefix:   /stars-new
+
+ibtikar_glance_dashboard_stars_approved:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/stars/approved.yml"
+    prefix:   /stars-approved
+
+ibtikar_glance_dashboard_stars_rejected:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/stars/rejected.yml"
+    prefix:   /stars-rejected
