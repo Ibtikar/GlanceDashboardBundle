@@ -95,10 +95,10 @@ class RecipeOperations extends PublishOperations
             }
         }
 
-        if(php_sapi_name() != 'cli'){
+//        if(!$document->getMigrated()){
            $document->setPublishedAt(new \DateTime());
-            $document->setPublishedBy($user);
-        }
+           $document->setPublishedBy($user);
+//        }
 
         $document->setStatus(Recipe::$statuses['publish']);
         $document->setAssignedTo(null);
