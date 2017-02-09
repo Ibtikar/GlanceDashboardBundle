@@ -61,7 +61,7 @@ class RecipeOperations extends PublishOperations
 
     }
 
-    public function publish(Publishable $document, array $locations, $rePublish = false,$goodyStar=FALSE)
+    public function publish(Publishable $document, array $locations, $rePublish = false,$goodyStar=FALSE,$migrated=FALSE)
     {
         $error = $this->validateToPublish($document, $locations, true);
 
