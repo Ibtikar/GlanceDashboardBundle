@@ -27,6 +27,7 @@
         maxlength: $.validator.format("الحد الأقصى لعدد الحروف هو {0}"),
         minlength: $.validator.format('يجب أن تكون عدد الحروف {0} أو أكثر'),
         ckmin: $.validator.format('يجب أن تكون عدد الحروف {0} أو أكثر'),
+        RequiredBirthdate: 'الرجاء إدخال قيمة‎',
         rangelength: $.validator.format("عدد الحروف يجب أن يكون بين {0} و {1}"),
         range: $.validator.format("رجاء إدخال عدد قيمته بين {0} و {1}"),
         min: $.validator.format("عذراً, اقل قيمة ممكنه هي  {0}"),

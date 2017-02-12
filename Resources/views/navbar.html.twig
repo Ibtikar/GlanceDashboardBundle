@@ -33,6 +33,13 @@
                                 <li><a href="{{ path('ibtikar_glance_ums_role_list') }}" {% if 'role' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/roles.png')}}" class=" position-left"/>{% trans %}Roles{% endtrans %}</a></li>
                                 {% endif %}
 
+                                {% if is_granted('ROLE_STARSNEW_VIEW') or is_granted('ROLE_ADMIN')%}
+                                <li><a href="{{ path('ibtikar_glance_dashboard_starsnew_list_new_stars') }}" {% if 'stars' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-star-empty3"></i>نجوم قودي</a></li>
+                                {% elseif is_granted('ROLE_STARSREJECTED_VIEW') or is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path('ibtikar_glance_dashboard_starsrejected_list_rejected_stars') }}" {% if 'stars' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-star-empty3"></i>نجوم قودي</a></li>
+                                {% elseif is_granted('ROLE_STARSAPPROVED_VIEW') or is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path('ibtikar_glance_dashboard_starsapproved_list_approved_stars') }}" {% if 'stars' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-star-empty3"></i>نجوم قودي</a></li>
+                                {% endif %}
 
                         </ul>
                     </li>
@@ -66,11 +73,6 @@
 منتجات قودي
                                         </a></li>
                                 {% endif %}
-                                {% if is_granted('ROLE_STARS_EDIT') or is_granted('ROLE_ADMIN')%}
-                                    <li><a href="{{ path('ibtikar_glance_dashboard_stars_edit') }}" {% if 'stars' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-star-empty3"></i>
-نجوم قودي
-                                        </a></li>
-                                {% endif %}
                             </ul>
                     </li>
      {% endif %}
@@ -90,11 +92,15 @@
                                 {% if is_granted('ROLE_MAGAZINE_VIEW') or is_granted('ROLE_ADMIN')%}
                                 <li><a href="{{ path('ibtikar_glance_dashboard_magazine_list') }}" {% if 'magazine' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/magazines.png')}}" class=" position-left"/> {% trans from 'magazine'%}List Magazine{% endtrans %}</a></li>
                                 {% endif %}
-
+                                {% if is_granted('ROLE_STARS_EDIT') or is_granted('ROLE_ADMIN')%}
+                                    <li><a href="{{ path('ibtikar_glance_dashboard_stars_edit') }}" {% if 'stars' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-star-empty3"></i>
+نجوم قودي
+                                        </a></li>
+                                {% endif %}
                             </ul>
                     </li>
      {% endif %}
-     
+
      {% if  is_granted('ROLE_MESSAGENEW_VIEW') or is_granted('ROLE_MESSAGEINPROGRESS_VIEW') or is_granted('ROLE_MESSAGECLOSE_VIEW') or is_granted('ROLE_ADMIN')%}
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
