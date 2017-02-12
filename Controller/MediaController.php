@@ -610,7 +610,7 @@ class MediaController extends BackendController
             return new Response($responseContent);
         }
 
-        if ($imagesize[0] < 200 || $imagesize[1] < 200) {
+        if ($imagesize[0] < 1000 || $imagesize[1] < 700) {
             $responseContent = "errorImageSize";
             return new Response($responseContent);
         }
@@ -676,7 +676,7 @@ class MediaController extends BackendController
         // die(var_dump($request->request->all()));
         $data = array(
             'status' => 'success',
-            'message' => '',
+            'message' => $this->trans('upload successfuly'),
             'files' => &$files,
             'success' => &$successIds,
             'errors' => array()
@@ -684,7 +684,7 @@ class MediaController extends BackendController
         if ($request->getMethod() === 'POST') {
             $dm = $this->get('doctrine_mongodb')->getManager();
             $images = $request->get('images');
-            $documentDir = __DIR__ . '/../../../../web/uploads/' . strtolower($collectionType) . '-file/google/' . $this->getUser()->getId() . '/';
+            $documentDir = __DIR__ . '/../../../../web/uploads/' . strtolower($collectionType) . '-file/' . $this->getUser()->getId() . '/';
             if (!empty($images)) {
                 if (!file_exists($documentDir)) {
                     mkdir($documentDir, 0755, true);
@@ -710,11 +710,11 @@ class MediaController extends BackendController
                 $media->setCreatedBy($this->getUser());
                 $media->setCollectionType($collectionType);
                 if ($documentId && $documentId != 'null') {
-                        $document = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarAppBundle:' . $collectionType)->find($documentId);
-                    $collectionSetter = "set" . $collectionType;
+                        $document = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Recipe' )->find($documentId);
+                    $collectionSetter = "setRecipe" ;
                     $media->$collectionSetter($document);
                     $lastPic = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder($this->getObjectShortName())
-                            ->field(strtolower($collectionType))->equals($documentId)
+                            ->field('recipe')->equals($documentId)
                             ->field('type')->equals('image')
                             ->sort('order', 'DESC')
                             ->getQuery()->getSingleResult();
@@ -723,9 +723,6 @@ class MediaController extends BackendController
                         $order = $lastPic->getOrder() + 1;
                     }
                     $media->setOrder($order);
-                    if (method_exists($document, 'getSlug') && $document->getSlug()) {
-                        $this->get('cache_operations')->invalidateDocumentTag($document->getSlug(), 'view');
-                    }
                 }
                 $name = $media->getImagePath($extension);
                 $filePath = $documentDir . $name;
@@ -741,22 +738,20 @@ class MediaController extends BackendController
                 $media->setType('image');
                 $media->setPath($media->getImagePath($extension));
                 $validator = $this->get('validator');
-                if ($collectionType == 'Place' && $documentId == 'null') {
-                    $errors = $validator->validate($media);
-                } else {
-                    $errors = $validator->validate($media);
-                }
+                $validationGroup = array(strtolower($collectionType));
+                $errors = $validator->validate($media, NULL, $validationGroup);
 
                 if (count($errors) > 0) {
+                    $data['status']='error';
                     foreach ($errors as $error) {
-                        $data['errors'][$error->getMessage()][] = $url;
+                        $data['message'] = $error->getMessage();
                     }
                 } else {
                     $dm->persist($media);
                     $dm->flush();
 
                     $successIds [] = $url;
-                    $files [] = $this->getMediaDataArray($media, $documentId, $collectionType);
+                    $data['media'] = $this->prepareMedia($media, $collectionType);
                 }
                 @unlink($filePath);
             }

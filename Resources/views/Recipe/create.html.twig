@@ -145,6 +145,8 @@
                 <span id="google-hr"></span>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-link" data-dismiss="modal">الغاء</button>
+                    <button type="button" class="btn btn-link dev-google-crop-spinner" style="display: none"><i class="spinner icon-spinner text-success"></i></button>
+
                     <button type="button" class="btn btn-primary dev-google-upload">ادخال</button>
                 </div>
             </div>
@@ -619,7 +621,7 @@
         var type;
         var imageErrorMessages = {
         'imageExtension': '{% trans from 'validators'%}picture not correct.{%endtrans%}',
-        'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 200*200{%endtrans%}',
+        'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 1000*700{%endtrans%}',
         'sizeError': '{% trans from 'validators'%}File size must be less than 4mb{%endtrans%}',
         'generalError': '{% trans %}failed operation{%endtrans%}',
         'coverPhoto': '{% trans from translationDomain %}coverPhoto{%endtrans%}',
