@@ -1,0 +1,729 @@
+{% extends 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard.html.twig' %}
+{% block header %}
+    {{ include('IbtikarGlanceDashboardBundle::header.html.twig') }}
+{% endblock %}
+{% block navbar %}
+    {{ include('IbtikarGlanceDashboardBundle::navbar.html.twig') }}
+{% endblock %}
+{% block side_menu %}
+    {{ include('IbtikarGlanceDashboardBundle::sidebar.html.twig') }}
+{% endblock %}
+{% block title %}{% trans from 'product' %}View One Product{% endtrans%}{% endblock%}
+
+
+{% block breadCrumb %}
+    <a class="btn btn-link btn-float has-text" href="{{path('ibtikar_glance_dashboard_product_create')}}"><i class="icon-add"></i><span>إدخال منتج</span></a>
+    <a class="btn btn-link btn-float has-text activeLink" href="{{path('ibtikar_glance_dashboard_product_list')}}"><i class="icon-table2"></i> <span> المنتجات</span></a>
+
+{% endblock %}
+
+{% block body %}
+<div class="content-wrapper">
+
+
+            <!-- Basic button -->
+
+            <!-- /basic button -->
+
+
+
+            <!-- Dashboard content -->
+            <div class="row">
+                <div class="col-lg-12">
+
+
+                    <div class="row">
+
+
+                        <div class="col-lg-12">
+
+
+                            <form class="form-horizontal">
+                                <!-- Navigation -->
+                                <div class="panel panel-flat">
+
+                                    <div class="panel-heading">
+                                        <h5 class="panel-title">مشاهده {{data['document'].type|trans({},translationDomain) }} </h5>
+                                        <div class="heading-elements">
+                                            {% if  data['document'].getStatus() !='new' or data['document'].getAssignedTo()!= null %}
+                                {% if is_granted('ROLE_RECIPE' ~ data['document'].getStatus()|upper ~'_EDIT') or is_granted('ROLE_ADMIN')%}
+                                    <a href = "{{ path('ibtikar_glance_dashboard_recipe'~ data['document'].getStatus()|lower ~ '_edit', {'id': data['document'].id}) }}"  class="btn btn-primary heading-btn"    >
+                                            {{('Edit recipe'~data['document'].getStatus()|lower)|trans({},translationDomain)}}
+
+                                    </a>
+
+                                {% endif %}
+                                {% if (is_granted('ROLE_RECIPE' ~ data['document'].getStatus()|upper ~'_DELETE') or is_granted('ROLE_ADMIN'))  and 'recipedeleted' not in app.request.attributes.get('_route') %}
+                                    <a  data-name="{{ data['document'] }}" href="javascript:void(0)" data-id="{{ data['document'].getId() }}" data-href = "{{ path('ibtikar_glance_dashboard_recipe'~ data['document'].getStatus()|lower ~ '_delete', {'id': data['document'].getId()}) }}"
+                                        class="btn btn-primary heading-btn dev-delete-single-recipe" >
+
+                                        {{ ('Delete recipe' ~data['document'].getStatus()|lower)|trans({},translationDomain)}}
+                                    </a>
+                                {% endif %}
+                                {% if is_granted('ROLE_RECIPE' ~ data['document'].getStatus()|upper ~'_PUBLISH') or is_granted('ROLE_ADMIN')%}
+                                    <a href="javascript:void(0)" data-toggle="modal"  class="btn btn-primary heading-btn dev-publish-recipe" data-id="{{ data['document'].getId() }}">
+                                        {{('publish Recipe'~data['document'].getStatus()|lower)|trans({},translationDomain)}}
+
+                                    </a>
+                                {% endif %}
+
+
+
+                            {% else %}
+                                {% if (is_granted('ROLE_RECIPE' ~ data['document'].getStatus()|upper ~'_ASSIGN')  or is_granted('ROLE_ADMIN') ) and  data['document'].getStatus() !='autopublish'%}
+                                    <a  tabindex="0" data-placement="top" href="javascript:void(0)" data-toggle="tooltip" title="{% trans %}AssignToMe{% endtrans %}" class="btn btn-primary heading-btn dev-assign-to-me" data-id="{{ data['document'].getId() }}" data-url="{{ path('ibtikar_glance_dashboard_recipe'~ data['document'].getStatus()|lower ~'_assign_to_me')}}" data-type="view">
+                                        {% trans from translationDomain %}AssignToMe{% endtrans %}
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+
+
+								</div>
+                                    <a class="heading-elements-toggle"><i class="icon-more"></i></a></div>
+
+
+
+                                    <div class="panel-body">
+             <div style="margin-top: 15px;">
+                                    <div class="col-md-12">
+                                        {% for flashMessageType, flashMessageArray in app.session.flashBag.all %}
+                                            {% for flashMessage in flashMessageArray %}
+                                                <div class="alert {{ flashMessageType == 'error' ? 'alert-danger' : flashMessageType == 'success' ? 'alert-success' : 'alert-info' }} no-border">
+                                                    <button data-dismiss="alert" class="close" type="button"><span>×</span><span class="sr-only">{% trans %}Close{% endtrans %}</span></button>{{ flashMessage }}
+                                                </div>
+                                            {% endfor %}
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+
+                                                 <div class="row">
+
+
+                                            <div class="col-md-12">
+
+
+
+
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered">
+
+                                                        <tbody>
+
+                                                            <tr>
+                                                                <td style="width: 150px">
+                                                                    <div class="thumbnail">
+                                                                        <div class="thumb thumb-slide">
+                                                                            <img alt="" src="{{ data['coverPhoto']['img']}}">
+                                                                            <div class="caption">
+                                                                                <span>
+                                                                                    <a data-popup="lightbox" class="btn btn-primary btn-icon" href="{{ data['coverPhoto']['img']}}"><i class="icon-zoomin3"></i></a>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </td>
+                                                                <td class="thumbnail-caption">
+                                                                    <h4>  صورة الغلاف</h4>
+{#                                                                    <span class="help-block"> PNG · 1.44 KB · 30 × 30 Added Oct 25, 2016 5:26 am by ola hamdy </span>
+#}                                                                </td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <hr>
+     <div class="tabbable">
+                                            <ul class="nav nav-tabs nav-tabs-highlight">
+                                                <li class="active"><a data-toggle="tab" href="#arabic" aria-expanded="false"><img width="30" height="20" alt="arabic" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}"></a></li>
+                                                <li class=""><a data-toggle="tab" href="#english" aria-expanded="true"><img width="30" height="20" alt="english" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}"></a></li>
+                                            </ul>
+
+                                            <div class="tab-content">
+                                                <div id="arabic" class="tab-pane active">
+
+
+                                                             <div class="form-group has-feedback">
+                                        <label class="control-label col-lg-2">   {% trans from translationDomain%}Title{%endtrans%} </label>
+                                        <div class="control-label col-lg-10">
+                                            {{ data['document'].title}}
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2">{% trans from translationDomain%}Brief{%endtrans%} </label>
+                                        <div class="control-label col-lg-10">
+                                            {{ data['document'].brief}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2">{% trans from translationDomain%}Ingredients{%endtrans%} </label>
+                                        <div class="control-label col-lg-10">
+                                            {{ data['document'].ingredients|raw}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2">{% trans from translationDomain%}Method{%endtrans%} </label>
+                                        <div class="control-label col-lg-10">
+                                            {{ data['document'].method|raw}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2">{% trans from translationDomain%}Text{%endtrans%} </label>
+                                        <div class="control-label col-lg-10">
+                                            {{ data['document'].text|raw}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2">{% trans from translationDomain%}Tags{%endtrans%} </label>
+                                        <div class="control-label col-lg-10">
+                                            {% for tag in data['document'].tags %}
+                                                {{ tag }} {% if not loop.last %},{% endif%}
+                                            {% endfor  %}
+
+
+                                        </div>
+                                    </div>
+
+
+                                                </div><!-- arabic end -->
+
+                                                <div id="english" class="tab-pane ">
+
+
+                                             <div class="form-group has-feedback">
+                                        <label class="control-label col-lg-2">{% trans from translationDomain%}titleEn{%endtrans%}</label>
+                                        <div class="control-label col-lg-10">
+                                            {{ data['document'].titleEn}}
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2">{% trans from translationDomain%}Briefen{%endtrans%}</label>
+                                        <div class="control-label col-lg-10">
+                                            {{ data['document'].briefEn}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2">{% trans from translationDomain%}Ingredientsen{%endtrans%} </label>
+                                        <div class="control-label col-lg-10">
+                                            {{ data['document'].ingredientsEn|raw}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2">{% trans from translationDomain%}Methoden{%endtrans%} </label>
+                                        <div class="control-label col-lg-10">
+                                            {{ data['document'].methodEn|raw}}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2">{% trans from translationDomain%}Texten{%endtrans%} </label>
+                                        <div class="control-label col-lg-10">
+                                            {{ data['document'].textEn|raw}}
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2">{% trans from translationDomain%}Tags en{%endtrans%} </label>
+                                        <div class="control-label col-lg-10">
+                                            {% for tag in data['document'].tagsEn %}
+                                                {{ tag }} {% if not loop.last %},{% endif%}
+                                                {% endfor  %}
+
+
+                                        </div>
+                                    </div>
+
+
+                                                </div><!-- english end -->
+
+                                            </div>
+                                        </div>
+
+
+                                        <hr>
+
+
+                                       <div class="form-group">
+                            <label class="control-label col-lg-2"> {% trans from 'app'%}preparation time{%endtrans%}  </label>
+                            <div class="col-lg-10">
+                                <h5> {{ data['document'].preparationTime}} </h5>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2"> {% trans from 'app'%}Cooking time{%endtrans%}  </label>
+                            <div class="col-lg-10">
+                                <h5> {{ data['document'].cookingTime}}  </h5>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2"> {% trans from 'app'%}Difficulty rate{%endtrans%}  </label>
+                            <div class="col-lg-10">
+                                <h5> {{ data['document'].difficulty|trans({},'app')}}</h5>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2"> {% trans from translationDomain %}chef{%endtrans%}  </label>
+                            <div class="col-lg-10">
+                                <h5> {{ data['document'].getChef()}}</h5>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2"> {% trans from translationDomain %}course{%endtrans%}  </label>
+                            <div class="col-lg-10">
+                                 {% for corse in data['document'].course %}
+                                     {{ corse|trans({},translationDomain) }} {% if not loop.last %},{% endif%}
+                                                {% endfor  %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2"> {% trans from translationDomain %}Meal{%endtrans%}  </label>
+                            <div class="col-lg-10">
+                                 {% for ml in data['document'].meal %}
+                                                {{ ml|trans({},translationDomain) }} {% if not loop.last %},{% endif%}
+                                                {% endfor  %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2"> {% trans from translationDomain %}Key ingredient{%endtrans%}  </label>
+                            <div class="col-lg-10">
+                                 {% for ml in data['document'].keyIngredient %}
+                                                {{ ml|trans({},translationDomain) }} {% if not loop.last %},{% endif%}
+                                                {% endfor  %}
+                            </div>
+                        </div>
+                                                                                            {% if data['relatedRecipes']|length > 0 %}
+
+                        <div class="form-group">
+                            <label class="control-label col-lg-2"> {% trans from translationDomain %}Related recipe{%endtrans%}  </label>
+                            <div class="col-lg-10">
+                                <ul class="dev-related-list media-list width-350 notificationList">
+                                     {% for relatedRecipe in data['relatedRecipes'] %}
+                                    <li  class="media">
+                                        <div class="media-left">
+                                            <img alt="" class="img-circle" src="{{ relatedRecipe['img']}}">
+                                        </div>
+                                        <div class="media-body">
+                                            <b> {{ relatedRecipe['title']}}‬‬</b>
+                                        </div>
+
+                                    </li>
+                                     {% endfor  %}
+                                </ul>
+
+                            </div>
+                        </div>
+                                {% endif %}
+                                                                {% if data['relatedArticles']|length > 0 %}
+
+                        <div class="form-group">
+                            <label class="control-label col-lg-2"> {% trans from translationDomain %}Related article{%endtrans%}  </label>
+                            <div class="col-lg-10">
+                                <ul class="dev-related-list media-list width-350 notificationList">
+                                     {% for relatedRecipe in data['relatedArticles'] %}
+                                    <li  class="media">
+                                        <div class="media-left">
+                                            <img alt="" class="img-circle" src="{{ relatedRecipe['img']}}">
+                                        </div>
+                                        <div class="media-body">
+                                            <b> {{ relatedRecipe['title']}}‬‬</b>
+                                        </div>
+
+                                    </li>
+                                     {% endfor  %}
+                                </ul>
+
+                            </div>
+                        </div>
+                                {% endif %}
+                                {% if data['relatedTips']|length > 0 %}
+                        <div class="form-group">
+                            <label class="control-label col-lg-2"> {% trans from translationDomain %}Related tip{%endtrans%}  </label>
+                            <div class="col-lg-10">
+                                <ul class="dev-related-list media-list width-350 notificationList">
+                                     {% for relatedRecipe in data['relatedTips'] %}
+                                    <li  class="media">
+                                        <div class="media-left">
+                                            <img alt="" class="img-circle" src="{{ relatedRecipe['img']}}">
+                                        </div>
+                                        <div class="media-body">
+                                            <b> {{ relatedRecipe['title']}}‬‬</b>
+                                        </div>
+
+                                    </li>
+                                     {% endfor  %}
+                                </ul>
+
+                            </div>
+                        </div>
+                                {% endif %}
+
+
+
+                                        <hr>
+
+
+{% if data['mediaList']|length > 0 %}
+
+                                        <div class="row">
+
+                                            <div class="col-md-12">
+
+
+                                                                                                <h5>
+                                                    الملفات التي تم رفعها
+                                                </h5>
+
+
+                                                <div class="table-responsive filesUploaded">
+
+                                                    <table class="table table-bordered">
+
+                                                        <tbody id="media-list-target-right" class="media-list media-list-container">
+                                                            {% for media in data['mediaList'] %}
+                                                                {% if media['type']=='image' %}
+                                                            <tr class="media imageRow">
+
+                                                                <td class="UploadkindIcon">
+                                                                    <i class="icon-image2"></i>
+                                                                </td>
+                                                                <td style="width: 150px">
+
+                                                                    <div class="thumbnail">
+                                                                        <div class="thumb thumb-slide">
+                                                                            <img alt="" src="{{ asset(media['img']|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg'))}}">
+                                                                            <div class="caption">
+                                                                                <span>
+                                                                                    <a data-popup="lightbox" class="btn btn-primary btn-icon" href="{{ asset(media['img']|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg'))}}"><i class="icon-zoomin3"></i></a>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </td>
+                                                                <td class="thumbnail-caption">
+{#                                                                    <h4>   اسم الصورة اللي رافعها يتكتب هنا</h4>#}
+                                                                    <div class="row">
+                                                                        <div class="col-lg-12 marginBottom-20">
+                                                                     <img width="30" height="20" alt="arabic" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}">
+                                                                  {{ media['caption']}}
+                                                                        </div>
+
+                                                                        <div class="col-lg-12">
+                                                                               <img width="30" height="20" alt="arabic" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}">
+                                                                  {{ media['captionEn']}}
+
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </td>
+
+                                                            </tr>
+
+{% else %}
+
+                                                            <tr class="media videoRow">
+
+                                                                <td class="UploadkindIcon">
+                                                                    <i class="icon-video-camera"></i>
+                                                                </td>
+                                                                <td style="width: 150px">
+                                                                    <div class="thumbnail">
+                                                                        <div class="thumb thumb-slide">
+                                                                            <img alt="" src="{{ 'https://i.ytimg.com/vi/' ~media['videoCode']~ '/sddefault.jpg'  }}">
+                                                                            <div class="caption">
+                                                                                <span>
+                                                                                    <a data-popup="lightbox" class="btn btn-primary btn-icon" href="{{ 'https://i.ytimg.com/vi/' ~media['videoCode']~ '/sddefault.jpg'  }}"><i class="icon-zoomin3"></i></a>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </td>
+                                                                <td class="thumbnail-caption">
+{#                                                                    <h4>   اسم الصورة اللي رافعها يتكتب هنا</h4>
+#}                                                                    <div class="row">
+                                                                        <div class="col-lg-12 marginBottom-20">
+                                                                     <img width="30" height="20" alt="arabic" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}">
+                                                                 {{ media['caption']}}
+                                                                        </div>
+
+                                                                        <div class="col-lg-12">
+                                                                               <img width="30" height="20" alt="arabic" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}">
+                                                                                                                                 {{ media['captionEn']}}
+
+
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </td>
+
+                                                            </tr>
+                                                            {% endif %}
+{% endfor %}
+
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                        </div>
+{% endif %}
+
+                                    </div>
+
+
+
+                                </div><!-- panel end -->
+                            </form>
+
+
+
+                        </div><!-- col-lg-12 -->
+                    </div><!-- row end -->
+
+
+
+
+                </div><!-- col-lg-12 tabs -->
+
+
+            </div>
+            <!-- /dashboard content -->
+
+        </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/layout_sidebar_sticky_custom.js')}}"></script>
+     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/uniform.min.js')}}"></script>
+     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/media/fancybox.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_thumbnails.js')}}"></script>
+
+    <script>
+         var publishErrorMessage= "{% trans from translationDomain%}you must change time{% endtrans %}"
+        var deleteErrorMessage= "{% trans from translationDomain%}you must write delete reason{% endtrans %}"
+        {% if 'recipedeleted_view' in app.request.attributes.get('_route') %}
+            var listUrl = '{{ path('ibtikar_glance_dashboard_recipedeleted_list_deleted_recipe') }}';
+        {% endif %}
+        {% if 'recipenew_view' in app.request.attributes.get('_route') %}
+            {% if data['document'].getAssignedTo()!= null %}
+            var listUrl = '{{ path('ibtikar_glance_dashboard_recipenew_list_assigned_recipe') }}';
+
+            {% else %}
+            var listUrl = '{{ path('ibtikar_glance_dashboard_recipenew_list_new_recipe') }}';
+            {% endif%}
+
+        {% endif %}
+
+        {% if 'recipepublish_view' in app.request.attributes.get('_route') %}
+            var listUrl = '{{ path('ibtikar_glance_dashboard_recipepublish_list_publish_recipe') }}';
+        {% endif %}
+        {% if 'recipeautopublish_view' in app.request.attributes.get('_route') %}
+            var listUrl = '{{ path('ibtikar_glance_dashboard_recipeautopublish_list_autopublish_recipe') }}';
+        {% endif %}
+
+        {% if data['document'].getStatus() !='new' or data['document'].getAssignedTo()!= null %}
+        var publisUrl="{{ path('ibtikar_glance_dashboard_recipe'~data['document'].status|lower~'_publish')}}";
+        {% endif %}
+
+$(document).ready(function(){
+       $('div.panel-flat').on('click', '.dev-delete-single-recipe', function () {
+        $('[data-popup="tooltip"]').tooltip("hide");
+        blockPage();
+        showDeleteModal($(this));
+    });
+    $('div.panel-flat').on('click', '.dev-publish-recipe', function () {
+        $('[data-popup="tooltip"]').tooltip("hide");
+        blockPage();
+        showPublishModal($(this));
+    });
+
+        $(document).on('click', '.dev-assign-to-me', function (e) {
+        e.preventDefault();
+        blockPage();
+        assignToMe($(this));
+    });
+})
+
+var assign=true;
+function  assignToMe(clickedElement) {
+    var Params = {recipeId: clickedElement.attr("data-id"),'type':'view'};
+    if (assign) {
+        assign = false;
+        $.ajax({
+            url: clickedElement.attr("data-url"),
+            data: Params,
+            method: 'post',
+            success: function (data) {
+                assign = true;
+        window.location.reload();
+
+            }
+
+        });
+    }
+
+}
+
+function  showPublishModal(element) {
+    var basicModal = new BasicModal();
+    basicModal.show(publisUrl + '?id=' + element.attr('data-id'), function () {
+        unblockPage();
+        $(".dev-save-publish-location").click(function () {
+            if (recipeStatus != "publish") {
+                if ($('.open-datetimepicker').val() == '' && $('#publishNow').prop('checked') == false) {
+                    $('#dev-publish-modal').find('.alert.alert-danger').remove();
+                    $('#dev-publish-modal').prepend('<div class="alert alert-danger no-border"><button data-dismiss="alert" class="close" type="button">' +
+                            '<span>×</span><span class="sr-only">Close</span></button>' + publishErrorMessage
+                            + '</div>');
+                } else {
+                    savepublishLocation(basicModal, publisUrl);
+                }
+
+            } else {
+                savepublishLocation(basicModal, publisUrl);
+            }
+
+        })
+    });
+}
+function BasicModal() {
+    var thisObject = this;
+    this.hideCallback;
+    this.show = function (url, callback, params) {
+        $('#modal_theme_primary').on('hidden.bs.modal', function () {
+            thisObject.hide();
+        });
+        $.ajax({
+            url: url,
+            method: 'GET',
+            data: params,
+            success: function (data) {
+                if (data.status == 'reload-table') {
+                    $('#modal_theme_primary').modal('hide');
+                        window.location.href=listUrl;
+
+                }
+                if (data.status == 'failed-reload') {
+                    window.location.href=listUrl;
+                }
+                if (data.status == "error") {
+                    showAlertBox(data.message);
+                    return;
+                }
+                var basicModal = $('#modal_theme_primary');
+                basicModal.find('.modal-content').html(data);
+
+
+                $('select.select2').on('select2-close', function () {
+                    $('#modal_theme_primary').attr('tabindex', '-1');
+                }).on("select2-open", function () {
+                    $('#modal_theme_primary').removeAttr('tabindex');
+                });
+                callback();
+                basicModal.modal({keyboard: true})
+                basicModal.modal('show');
+            }
+        });
+    }
+    this.hide = function () {
+        if ($('#modal_theme_primary .select2').data('select2')) {
+            $('#modal_theme_primary .select2').select2('destroy');
+        }
+        $('#modal_theme_primary').modal('hide');
+        if (thisObject.hideCallback !== undefined)
+            thisObject.hideCallback();
+    }
+    this.onHide = function (callback) {
+        thisObject.hideCallback = callback;
+    }
+}
+
+function savepublishLocation(basicModal, url) {
+    //modified to use this way instead of form serialize to fix this bug #3535:
+    if ($('.dev-save-publish-location').attr('ajax-running')) {
+        return;
+    }
+    $('.dev-save-publish-location').attr('ajax-running', true)
+    $('.dev-save-publish-location').append('<i class="icon-spinner6 spinner position-right"></i>');
+
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: $('#dev-publish-modal').serialize()+'&type=view',
+        success: function (data) {
+//            console.log('hnaa')
+            if (data.status == 'login') {
+                window.location.reload(true);
+
+            } else {
+                window.location.href=listUrl;
+            }
+        }
+    });
+}
+
+function showDeleteModal(clickedElement) {
+
+
+    var basicModal = new BasicModal();
+    basicModal.show(clickedElement.attr('data-href'), function () {
+        unblockPage();
+        $(".dev-save-delete-recipe").click(function () {
+            if ($.trim($('#dev-delete-reason').val())) {
+                if ($('.dev-save-delete-recipe').attr('ajax-running')) {
+                    return;
+                }
+                $('.dev-save-delete-recipe').attr('ajax-running', true)
+                $('.dev-save-delete-recipe').append('<i class="icon-spinner6 spinner position-right"></i>');
+                var Params = {id: clickedElement.attr("data-id"), 'reason': $('#dev-delete-reason').val(),'type':'view'};
+                $.ajax({
+                    url: $(this).attr("data-url"),
+                    data: Params,
+                    method: 'post',
+                    success: function (data) {
+                        basicModal.hide()
+                        window.location.href=listUrl;
+
+
+
+                    }
+
+                });
+            } else {
+                $('#dev-delete-modal').find('.alert.alert-danger').remove();
+                $('#dev-delete-modal').prepend('<div class="alert alert-danger no-border"><button data-dismiss="alert" class="close" type="button">' +
+                        '<span>×</span><span class="sr-only">Close</span></button>' + deleteErrorMessage
+                        + '</div>');
+
+            }
+        });
+    });
+}
+    </script>
+
+{% endblock %}
