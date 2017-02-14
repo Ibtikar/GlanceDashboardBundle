@@ -179,12 +179,15 @@
                                             {{ data['document'].method|raw}}
                                         </div>
                                     </div>
+                                        
+                                            {% if data['document'].text %}
                                     <div class="form-group">
                                         <label class="control-label col-lg-2">{% trans from translationDomain%}Text{%endtrans%} </label>
                                         <div class="control-label col-lg-10">
                                             {{ data['document'].text|raw}}
                                         </div>
                                     </div>
+                                            {% endif %}
                                     <div class="form-group">
                                         <label class="control-label col-lg-2">{% trans from translationDomain%}Tags{%endtrans%} </label>
                                         <div class="control-label col-lg-10">
@@ -229,6 +232,7 @@
                                             {{ data['document'].methodEn|raw}}
                                         </div>
                                     </div>
+                                        {% if data['document'].textEn %}
 
                                     <div class="form-group">
                                         <label class="control-label col-lg-2">{% trans from translationDomain%}Texten{%endtrans%} </label>
@@ -237,6 +241,7 @@
 
                                         </div>
                                     </div>
+                                            {% endif %}
 
                                     <div class="form-group">
                                         <label class="control-label col-lg-2">{% trans from translationDomain%}Tags en{%endtrans%} </label>
