@@ -128,9 +128,9 @@ function makeRequest(q, googleStart) {
             hideGImageLoading();
             imageSearch = response;
             appendResults(response);
-            $(".styled, .multiselect-container input").uniform({
-                radioClass: 'choice'
-            });
+//            $(".styled, .multiselect-container input").uniform({
+//                radioClass: 'choice'
+//            });
             $('#dev-google').scrollTop($('#dev-google')[0].scrollHeight - 600);
         }, function(reason) {
             googleStopSearch = 0;
@@ -193,7 +193,7 @@ function appendResults(response) {
             var result = results[i];
             var disabled = '';
             var image_link = (result.link).split("?");
-            if (result.image.height < 200 || result.image.width < 200 || result.image.byteSize > 4194304) {
+            if (result.image.height < 700 || result.image.width < 1000 || result.image.byteSize > 4194304) {
 // || checkExtensionValid(image_link[0])
                 disabled = "disabled";
             }
@@ -203,6 +203,10 @@ function appendResults(response) {
                           +'<label><input type="radio" name="stacked-radio-left" data-url="'+result.link+'" class="styled" >' + result.title.slice(0,10) + '</label>'
                           +'</div></div></div></div>';
             $('#dev-google').append(imgContainer);
+                      $(".styled, .multiselect-container input").uniform({
+                radioClass: 'choice'
+            });
+
         }
 //        checkGoogleHeight();
     }
@@ -223,96 +227,83 @@ function checkGoogleHeight() {
     }
 }
 
-$(document).on('click','.dev-google-upload', function() {
+$(document).on('click', '.dev-google-upload', function () {
     $('.cropit-preview-image').removeAttr('src');
     $('.cropit-preview-background').removeAttr('src');
     type = 'upload';
-    if($('#dev-google input:checked').length==0 ){
-        showNotificationMsg( "يجب اختيار صورة اولا ", "", 'error');
+    if ($('#dev-google input:checked').length == 0) {
+        showNotificationMsg("يجب اختيار صورة اولا ", "", 'error');
         return false;
     }
 
-    $('#image-cropper-modal').cropit('imageSrc',corsBroxy + "?url=" + encodeURI($('#dev-google input:checked').attr('data-url')));
-    $('#uploadImg').modal('show');
-    return false;
-    var selectedImage = [];
-    if ($('#dev-google input:checked').length == 0) {
-        if ($('.dev-google-result').find('.help-block.help-error').length == 0) {
-            $('<div class="help-block help-error" id="choose-error" style="margin-bottom: 10px;color:#a94442">'+messages.pleaseSelectOneImage+'</div>').insertAfter('#google-hr');
-        }
-    } else if ($('#dev-google input:checked').length == 0 && $('#dev-google').children().length == 0) {
-        if ($("#google-field").hasClass('has-error')) {
-            $('#error').remove();
-            $("#google-field").removeClass('has-error');
-        }
-        $("#google-field").addClass('has-error');
-        $("#google-field").append('<div class="help-block help-error" id="error">'+messages.searchBeforeUpload+' </div>')
+    var extension = encodeURI($('#dev-google input:checked').attr('data-url')).substring(($('#dev-google input:checked').attr('data-url')).lastIndexOf('.') + 1);
 
-    } else {
-        $('.dev-google-upload').attr('disabled','disabled');
-        if ($("#google-field").hasClass('has-error')) {
-            $('#error').remove();
-            $("#google-field").removeClass('has-error');
-        }
-        $('#dev-google input:checked').each(function() {
+
+    if (extension == 'gif') {
+        var selectedImage = [];
+
+        $('#dev-google input:checked').each(function () {
             selectedImage.push({
                 url: $(this).data('url')
 
             });
         });
-        $('.img-upload-spinner').show();
-        var noOfSelectedImage = $('#dev-google input:checked').length;
-        $.ajax({
+        sendgoogleImageToserver(selectedImage);
+         $('.dev-google-crop-spinner').show();
+        $('.dev-google-upload').hide();
+
+    } else {
+        $('#image-cropper-modal').cropit('imageSrc', corsBroxy + "?url=" + encodeURI($('#dev-google input:checked').attr('data-url')));
+        $('#uploadImg').modal('show');
+        return false;
+
+    }
+
+
+});
+
+function sendgoogleImageToserver(selectedImage){
+     $.ajax({
             url: googleUploadImage,
             method: "POST",
             data: {
                 images: selectedImage,
             },
-            success: function(data) {
-                if (data.status === 'success') {
-                    googleStartIndex = 0;
-                    $('#dev-google').html('');
-                    $('#googlesearchResult').scrollTop(0);
-                    $('#googlesearchResult').hide();
-                    $('#searchbox').val('');
-                    googleSearch = '';
-                    if (data.success) {
-                        showNotificationMsg(messages.uploadSuccessfuly);
-                    } else if (!data.success && data.errors) {
-                        showNotificationMsg(messages.notDone, 'error');
-                    }
-
-                    if (!$.isEmptyObject(data.errors)) {
-                        $('#googlesearchResult').show();
-                    }
-                    for (message in data.errors) {
-                        for (index in data.errors[message]) {
-                            var imgContainer = '<div class="col-md-3 col-sm-6 col-xs-4 googleImgItem">'
-                                    + '<div class="errorMessage">' + message + '</div>'
-                                    + ' <div class="searchItem"><span class="inputWrapper">'
-                                    + '<input type="checkbox" value="None"  name="check" class="check dev-check-image" data-url="' + data.errors[message][index] + '" disabled />'
-                                    + '</span><img src="' + data.errors[message][index] + '" class="img-responsive" />'
-                                    + '</div></div>';
-                            $('#dev-google').append(imgContainer);
-                        }
-
-                    }
-                    $('.img-upload-spinner').hide();
-                    if(data.files) {
-                        for (var i = 0; i < data.files.length; i++) {
-                            addImageToSortView(data.files[i]);
-                        }
-                    }
-                    setUploadedImagesCount();
+            success: function (data) {
+                if (data.status == 'login') {
+                    window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
                 }
+                else if (data.status == 'success') {
+                    var media = data.media;
+                    addImageToSortView(media);
+                    showNotificationMsg(data.message, "", data.status);
+                    $('#uploadImg').modal('hide');
+                    $('#GoogleImportImg-modal').modal('hide')
+                    $('[data-popup="popover"]').popover({
+                        delay: {"hide": 500}
+                    });
 
-                $('.dev-google-upload').removeAttr('disabled');
+
+                    // Tooltip
+                    $('[data-popup="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    });
+
+
+                } else {
+                    $('#uploadImg').modal('hide');
+                    $('#GoogleImportImg-modal').modal('hide')
+                    showNotificationMsg(data.message, "", 'error');
+//                    refreshImages();
+                }
+                $(".styled, .multiselect-container input").uniform({
+                    radioClass: 'choice'
+                });
+                $('.dev-google-crop-spinner').hide();
+                $('.dev-google-upload').show();
             }
         });
-    }
-});
-
-
+}
 
 ////////////////   google image search end   /////////////
 //////////////   google video search start   ///////////
@@ -494,10 +485,13 @@ function refreshMediaSortView() {
 //    setUploadedImagesCount();
     $.ajax({
         url: refreshImagesUrl,
-        success: function(data) {
+        success: function (data) {
             for (var i = 0; i < data.images.length; i++) {
                 addImageToSortView(data.images[i]);
             }
+            $(".styled, .multiselect-container input").uniform({
+                radioClass: 'choice'
+            });
             populateData();
             setUploadedImagesCount();
             setUploadedVideosCount();
@@ -653,8 +647,11 @@ jQuery(document).ready(function($) {
                         showNotificationMsg(data.message, "", data.status);
                         YT.reset(true);
 
-                        $(data.video).each(function(){
+                        $(data.video).each(function () {
                             addImageToSortView(this);
+                        });
+                        $(".styled, .multiselect-container input").uniform({
+                            radioClass: 'choice'
                         });
 
                         $('#GoogleImportVideos-modal').modal('hide')
@@ -754,38 +751,48 @@ jQuery(document).ready(function($) {
 
 // external source start
 
-    $(document).on('click', '.dev-imageurl-submit', function() {
+    $(document).on('click', '.dev-imageurl-submit', function () {
         var errorContainer = $('.dev-recipe-imgeUrl-error');
-            var obj = $('input.dev-recipe-imgeUrl').val();
-            var imageSrc = $.trim(obj);
-            var errorContainer = $('.dev-recipe-imgeUrl-error');
+        var obj = $('input.dev-recipe-imgeUrl').val();
+        var imageSrc = $.trim(obj);
+        var errorContainer = $('.dev-recipe-imgeUrl-error');
+        if (imageSrc.length > 0) {
+            var extension = encodeURI(imageSrc).substring((imageSrc).lastIndexOf('.') + 1);
+            if (extension == 'gif') {
+                var selectedImage = [];
+                    selectedImage.push({
+                        url: imageSrc
 
-            if (imageSrc.length > 0) {
-                $('.dev-imageurl-submit').attr('disabled','disabled');
+                });
+
+                sendgoogleImageToserver(selectedImage);
+            } else {
+
+                $('.dev-imageurl-submit').attr('disabled', 'disabled');
                 $.ajax({
                     url: uploadImageUrl,
                     method: 'post',
                     data: {'imageUrl': imageSrc},
-                    success: function(data) {
+                    success: function (data) {
                         if (data == 'error') {
-                            showNotificationMsg(messages.wrongURL,'','error');
+                            showNotificationMsg(messages.wrongURL, '', 'error');
                         }
                         if (data == 'errorImageExtension') {
-                            showNotificationMsg(messages.imageTypeError,'','error');
+                            showNotificationMsg(messages.imageTypeError, '', 'error');
                         }
                         if (data == 'errorImageSize') {
-                            showNotificationMsg(messages.imageDimensionsError,'','error');
+                            showNotificationMsg(messages.imageDimensionsError, '', 'error');
                         }
                         if (data == 'errorImageFileSize') {
-                            showNotificationMsg(messages.largeImageError,'','error');
+                            showNotificationMsg(messages.largeImageError, '', 'error');
                             $('.dev-recipe-imgeUrl').val('');
                         }
                         if (data == 'success') {
-                                type = 'upload';
-                                $('.cropit-preview-image').removeAttr('src');
-                                $('.cropit-preview-background').removeAttr('src');
-                                $('#image-cropper-modal').cropit('imageSrc',corsBroxy + "?url=" + encodeURI(imageSrc));
-                                $('#uploadImg').modal('show');
+                            type = 'upload';
+                            $('.cropit-preview-image').removeAttr('src');
+                            $('.cropit-preview-background').removeAttr('src');
+                            $('#image-cropper-modal').cropit('imageSrc', corsBroxy + "?url=" + encodeURI(imageSrc));
+                            $('#uploadImg').modal('show');
 //                                return false;
 //            $('.dev-imageurl-submit').attr('disabled','disabled');
 //            var imageUrl = [];
@@ -821,9 +828,10 @@ jQuery(document).ready(function($) {
 
                     }
                 });
-            }
 
-        });
+            }
+        }
+    });
 ///////////////////////////////////
 
     $(document).on('click', '.dev-videourl-submit', function() {

@@ -663,7 +663,7 @@ $(document).ready(function () {
 
                     showNotificationMsg(imageErrorMessages.sizeError, "", 'error');
 
-                } else if ($('#image-cropper-modal').cropit('imageSize').width < 200 || $('#image-cropper-modal').cropit('imageSize').height < 200) {
+                } else if ($('#image-cropper-modal').cropit('imageSize').width < 1000 || $('#image-cropper-modal').cropit('imageSize').height < 700) {
 
                     showNotificationMsg(imageErrorMessages.imageDimension, "", 'error');
 
@@ -738,6 +738,9 @@ $(document).ready(function () {
                     showNotificationMsg(imageErrorMessages.generalError, "", 'error');
                     refreshImages();
                 }
+                $(".styled, .multiselect-container input").uniform({
+                    radioClass: 'choice'
+                });
                 $('.dev-crop-spinner').hide();
                 $('.dev-submit-image').show();
             }

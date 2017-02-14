@@ -192,26 +192,36 @@ class RecipeController extends BackendController
         }
         $securityContext = $this->get('security.authorization_checker');
         if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_ASSIGN') && !$securityContext->isGranted('ROLE_ADMIN')) {
-            $result = array('status' => 'reload-table','message'=>$this->trans('You are not authorized to do this action any more'));
+            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
             return new JsonResponse($result);
         }
         $recipeId = $request->get('recipeId');
-        $status = $this->get('recipe_operations')->assignToMe($recipeId,  $this->recipeStatus);
+        $status = $this->get('recipe_operations')->assignToMe($recipeId, $this->recipeStatus);
         $dm = $this->get('doctrine_mongodb')->getManager();
+        $type = $request->get('type');
 
         if ($status == RecipeOperations::$TIME_OUT) {
-         return new JsonResponse(array_merge(array('status' => 'error', 'message' => $this->get('translator')->trans('failed operation')),$this->getTabCount()));
+            if ($type && $type == 'view') {
+                $this->addFlash('error', $this->trans('failed operation'));
+            }
+            return new JsonResponse(array_merge(array('status' => 'error', 'message' => $this->get('translator')->trans('failed operation')), $this->getTabCount()));
         } elseif ($status == RecipeOperations::$ASSIGN_TO_OTHER_USER) {
-            return new JsonResponse(array_merge(array('status' => 'error', 'message' => $this->get('translator')->trans('sorry this recipe assign to other user',array(),  $this->translationDomain)),$this->getTabCount()));
+            if ($type && $type == 'view') {
+                $this->addFlash('error', $this->get('translator')->trans('sorry this recipe assign to other user', array(), $this->translationDomain));
+            }
+            return new JsonResponse(array_merge(array('status' => 'error', 'message' => $this->get('translator')->trans('sorry this recipe assign to other user', array(), $this->translationDomain)), $this->getTabCount()));
         } elseif ($status == RecipeOperations::$ASSIGN_TO_ME) {
             $successMessage = $this->get('translator')->trans('done sucessfully');
-            return new JsonResponse(array_merge(array('status' => 'success', 'message' => $successMessage),  $this->getTabCount()));
+            if ($type && $type == 'view') {
+                $this->addFlash('success', $successMessage);
+            }
+            return new JsonResponse(array_merge(array('status' => 'success', 'message' => $successMessage), $this->getTabCount()));
         }
     }
 
-
     public function publishAction(Request $request)
     {
+        $type=$request->get('type');
         if (!$this->getUser()) {
             return $this->getLoginResponse();
         }
@@ -219,6 +229,9 @@ class RecipeController extends BackendController
         $securityContext = $this->get('security.authorization_checker');
         $publishOperations = $this->get('recipe_operations');
         if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_PUBLISH') && !$securityContext->isGranted('ROLE_ADMIN')) {
+            if($type && $type=='view'){
+                $this->addFlash('error', $this->trans('You are not authorized to do this action any more'));
+            }
             $result = array('status' => 'reload-table','message'=>$this->trans('You are not authorized to do this action any more'));
             return new JsonResponse($result);
         }
@@ -267,6 +280,9 @@ class RecipeController extends BackendController
 
             $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($request->get('documentId'));
             if (!$recipe) {
+                if ($type && $type == 'view') {
+                    $this->addFlash('error', $this->trans('not done'));
+                }
                 $result = array('status' => 'reload-table', 'message' => $this->trans('not done'));
                 return new JsonResponse($result);
             }
@@ -279,6 +295,9 @@ class RecipeController extends BackendController
             $status = $request->get('status');
             $goodyStar = $request->get('goodyStar');
             if ($status != $recipeStatus) {
+                if ($type && $type == 'view') {
+                    $this->addFlash('error', $this->trans('not done'));
+                }
                 $result = array('status' => 'reload-table', 'message' => $this->trans('not done'));
                 return new JsonResponse($result);
             }
@@ -287,7 +306,7 @@ class RecipeController extends BackendController
             switch ($recipeStatus) {
                 case 'new':
                     if ($request->get('publishNow')) {
-                        $publishResult = $publishOperations->publish($recipe, $locations,FALSE,$goodyStar);
+                        $publishResult = $publishOperations->publish($recipe, $locations, FALSE, $goodyStar);
                     } else if ($request->get('autoPublishDate', '')) {
                         $autoPublishDateString = $request->get('autoPublishDate', '');
                         if (strlen(trim($autoPublishDateString)) > 0) {
@@ -297,15 +316,15 @@ class RecipeController extends BackendController
                                 $autoPublishDate = null;
                             }
                         }
-                        $publishResult = $publishOperations->autoPublish($recipe, $locations, $autoPublishDate,$goodyStar);
+                        $publishResult = $publishOperations->autoPublish($recipe, $locations, $autoPublishDate, $goodyStar);
                     }
                     break;
                 case 'publish':
-                    $publishResult = $publishOperations->managePublishControl($recipe, $locations,$goodyStar);
+                    $publishResult = $publishOperations->managePublishControl($recipe, $locations, $goodyStar);
                     break;
                 case 'deleted':
                     if ($request->get('publishNow')) {
-                        $publishResult = $publishOperations->publish($recipe, $locations, TRUE,$goodyStar);
+                        $publishResult = $publishOperations->publish($recipe, $locations, TRUE, $goodyStar);
                     } else if ($request->get('autoPublishDate', '')) {
                         $autoPublishDateString = $request->get('autoPublishDate', '');
                         if (strlen(trim($autoPublishDateString)) > 0) {
@@ -315,12 +334,12 @@ class RecipeController extends BackendController
                                 $autoPublishDate = null;
                             }
                         }
-                        $publishResult = $publishOperations->autoPublish($recipe, $locations, $autoPublishDate,$goodyStar);
+                        $publishResult = $publishOperations->autoPublish($recipe, $locations, $autoPublishDate, $goodyStar);
                     }
                     break;
                 case 'autopublish':
                     if ($request->get('publishNow')) {
-                        $publishResult = $publishOperations->publish($recipe, $locations,FALSE,$goodyStar);
+                        $publishResult = $publishOperations->publish($recipe, $locations, FALSE, $goodyStar);
                     } else if ($request->get('autoPublishDate', '')) {
                         $autoPublishDateString = $request->get('autoPublishDate', '');
                         if (strlen(trim($autoPublishDateString)) > 0) {
@@ -330,11 +349,14 @@ class RecipeController extends BackendController
                                 $autoPublishDate = null;
                             }
                         }
-                        $publishResult = $publishOperations->manageAutoPublishControl($recipe, $locations, $autoPublishDate,$goodyStar);
+                        $publishResult = $publishOperations->manageAutoPublishControl($recipe, $locations, $autoPublishDate, $goodyStar);
                     }
                     break;
             }
 
+            if ($type && $type == 'view') {
+                $this->addFlash($publishResult['status'], $publishResult['message']);
+            }
             $this->container->get('facebook_scrape')->update($recipe);
 
 
@@ -665,8 +687,13 @@ class RecipeController extends BackendController
             return $this->getLoginResponse();
         }
         $securityContext = $this->get('security.authorization_checker');
+        $type=$request->get('type');
 
         if (!$securityContext->isGranted('ROLE_ADMIN') && !$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_DELETE')) {
+            if($type && $type=='view'){
+                $this->addFlash('error', $this->trans('You are not authorized to do this action any more'));
+
+            }
             $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
             return new JsonResponse($result);
         }
@@ -676,6 +703,9 @@ class RecipeController extends BackendController
             if ($id) {
                 $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($id);
                 if (!$recipe) {
+                    if ($type && $type == 'view') {
+                        $this->addFlash('error', $this->trans('You are not authorized to do this action any more'));
+                    }
                     $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
                     return new JsonResponse($result);
                 }
@@ -713,8 +743,11 @@ class RecipeController extends BackendController
 
             $forwardResult = $this->get('recipe_operations')->delete($recipe, $request->get('reason'));
 
+            if ($type && $type == 'view') {
+                $this->addFlash($forwardResult['status'], $forwardResult['message']);
+            }
 
-            return new JsonResponse(array_merge(array('status' => $forwardResult["status"], 'message' => $forwardResult["message"]),$this->getTabCount()));
+            return new JsonResponse(array_merge(array('status' => $forwardResult["status"], 'message' => $forwardResult["message"]), $this->getTabCount()));
         }
     }
 
@@ -1068,6 +1101,101 @@ class RecipeController extends BackendController
 
 
         return new JsonResponse($response);
+    }
+
+    public function viewAction(Request $request, $id) {
+
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $recipe = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('id')->equals($id)
+                    ->field('status')->equals($this->recipeStatus)
+                    ->field('chef')->prime(true)
+                    ->field('tags')->prime(true)
+                    ->field('tagsEn')->prime(true)
+                    ->field('relatedRecipe')->prime(true)
+
+                    ->getQuery()->getSingleResult();
+
+                if (!$recipe) {
+            throw $this->createNotFoundException($this->trans('Wrong id'));
+        }
+
+        $data['document'] = $recipe;
+
+
+        $data['mediaList'] = array();
+        $data['relatedRecipes'] = array();
+        $data['relatedArticles'] = array();
+        $data['relatedTips'] = array();
+
+
+
+        foreach ($recipe->getRelatedRecipe() as $relatedRecipe) {
+            $data['relatedRecipes'][] = array(
+                'title' => $relatedRecipe->getTitle(),
+                'titleEn' => $relatedRecipe->getTitleEn(),
+                'img' => $relatedRecipe->getCoverPhoto() ? '/' . $relatedRecipe->getCoverPhoto()->getWebPath() : '',
+            );
+        }
+
+        foreach ($recipe->getRelatedArticle() as $relatedArticle) {
+            $data['relatedArticles'][] = array(
+                'title' => $relatedArticle->getTitle(),
+                'titleEn' => $relatedArticle->getTitleEn(),
+                'img' => $relatedArticle->getCoverPhoto() ? '/' . $relatedArticle->getCoverPhoto()->getWebPath() : '',
+            );
+        }
+
+
+        foreach ($recipe->getRelatedTip() as $relatedTip) {
+            $data['relatedTips'][] = array(
+                'title' => $relatedTip->getTitle(),
+                'titleEn' => $relatedTip->getTitleEn(),
+                'img' => $relatedTip->getCoverPhoto() ? '/' . $relatedTip->getCoverPhoto()->getWebPath() : '',
+            );
+        }
+
+
+        $mediaRepo = $dm->getRepository('IbtikarGlanceDashboardBundle:Media');
+        $medias = $mediaRepo->getRecipeMedia($recipe->getId());
+        foreach ($medias as $media) {
+            if ($media->getCoverPhoto()) {
+                $data['coverPhoto']['type'] = $media->getType();
+//                $data['coverPhoto']['img'] = $media->getType()=='image'? $document->getMigrated()?$media->getWebPath():$this->getImageUrl($media->getWebPath()): 'https://www.youtube.com/embed/' . $media->getVid() . '?autoplay=1';
+                $data['coverPhoto']['img'] = $media->getType() == 'image' ? '/'.$media->getWebPath() : 'https://i.ytimg.com/vi/' . $media->getVid().'/sddefault.jpg' ;
+                $data['coverPhoto']['caption'] = $media->getCaptionAr();
+                $data['coverPhoto']['captionEn'] = $media->getCaptionEn();
+                continue;
+            }
+            if ($media->getType() == 'image') {
+
+                $data['mediaList'] [] = array(
+                    'type' => $media->getType(),
+                    'img' => '/'.$media->getWebPath(),
+                    'caption' =>  $media->getCaptionAr(),
+                    'captionEn' =>  $media->getCaptionEn(),
+                );
+            } else {
+
+                $data['mediaList'] [] = array(
+                    'type' => $media->getType(),
+                    'videoCode' => $media->getVid(),
+                    'caption' =>  $media->getCaptionAr(),
+                    'captionEn' =>  $media->getCaptionEn() ,
+                );
+            }
+        }
+
+
+
+
+
+        return $this->render('IbtikarGlanceDashboardBundle:Recipe:view.html.twig', array(
+                    'translationDomain' => $this->translationDomain,
+                    'data' => $data,
+
+        ));
     }
 
 }

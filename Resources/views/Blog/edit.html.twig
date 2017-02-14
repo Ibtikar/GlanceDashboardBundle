@@ -145,6 +145,8 @@
                 <span id="google-hr"></span>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-link" data-dismiss="modal">الغاء</button>
+                    <button type="button" class="btn btn-link dev-google-crop-spinner" style="display: none"><i class="spinner icon-spinner text-success"></i></button>
+
                     <button type="button" class="btn btn-primary dev-google-upload">ادخال</button>
                 </div>
             </div>
@@ -612,7 +614,7 @@
         var cropperPluginInitialized = false;
         var corsBroxy = "{{ path('ibtikar_glance_dashboard_media_get_external')}}";
         var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':app.request.get('id'),'collectionType':'Blog','room':room})}}";
-        var googleUploadImage = '{{ path('google_upload_image', {'documentId':'null', 'collectionType':'Recipe'}) }}';
+        var googleUploadImage = '{{ path('google_upload_image', {'documentId':app.request.get('id'), 'collectionType':'Blog'}) }}';
         var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'all','documentId':app.request.get('id'),'collectionType':'Blog','room':room})}}";
         var imageSortTemplate = '{{ imageSortTemplate|escape('js') }}';
         var relatedArticleSearchUrl = "{{ path('ibtikar_glance_dashboard_recipe_related_material_search', {'collectionType': 'article'})}}";
@@ -629,7 +631,7 @@
         var type;
         var imageErrorMessages = {
             'imageExtension': '{% trans from 'validators'%}picture not correct.{%endtrans%}',
-            'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 200*200{%endtrans%}',
+            'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 1000*700{%endtrans%}',
             'sizeError': '{% trans from 'validators'%}File size must be less than 4mb{%endtrans%}',
             'generalError': '{% trans %}failed operation{%endtrans%}',
             'coverPhoto': '{% trans from translationDomain %}coverPhoto{%endtrans%}',
