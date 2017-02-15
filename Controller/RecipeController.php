@@ -1155,6 +1155,8 @@ class RecipeController extends BackendController
                 'title' => $relatedRecipe->getTitle(),
                 'titleEn' => $relatedRecipe->getTitleEn(),
                 'img' => $relatedRecipe->getCoverPhoto() ? '/' . $relatedRecipe->getCoverPhoto()->getWebPath() : '',
+                'url' =>  $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $relatedRecipe->getSlug()), true)
+
             );
         }
 
@@ -1163,6 +1165,8 @@ class RecipeController extends BackendController
                 'title' => $relatedArticle->getTitle(),
                 'titleEn' => $relatedArticle->getTitleEn(),
                 'img' => $relatedArticle->getCoverPhoto() ? '/' . $relatedArticle->getCoverPhoto()->getWebPath() : '',
+                'url' =>  $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $relatedRecipe->getSlug()), true)
+
             );
         }
 
@@ -1172,6 +1176,8 @@ class RecipeController extends BackendController
                 'title' => $relatedTip->getTitle(),
                 'titleEn' => $relatedTip->getTitleEn(),
                 'img' => $relatedTip->getCoverPhoto() ? '/' . $relatedTip->getCoverPhoto()->getWebPath() : '',
+                'url' =>  $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $relatedRecipe->getSlug()), true)
+
             );
         }
 

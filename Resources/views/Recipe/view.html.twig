@@ -179,7 +179,7 @@
                                             {{ data['document'].method|raw}}
                                         </div>
                                     </div>
-                                        
+
                                             {% if data['document'].text %}
                                     <div class="form-group">
                                         <label class="control-label col-lg-2">{% trans from translationDomain%}Text{%endtrans%} </label>
@@ -320,13 +320,15 @@
                                 <ul class="dev-related-list media-list width-350 notificationList">
                                      {% for relatedRecipe in data['relatedRecipes'] %}
                                     <li  class="media">
+                                        <a href="{{ relatedRecipe['url']}}" target="_blank">
+
                                         <div class="media-left">
                                             <img alt="" class="img-circle" src="{{ relatedRecipe['img']}}">
                                         </div>
                                         <div class="media-body">
                                             <b> {{ relatedRecipe['title']}}‬‬</b>
                                         </div>
-
+                                        </a>
                                     </li>
                                      {% endfor  %}
                                 </ul>
@@ -342,13 +344,14 @@
                                 <ul class="dev-related-list media-list width-350 notificationList">
                                      {% for relatedRecipe in data['relatedArticles'] %}
                                     <li  class="media">
+                                        <a href="{{ relatedRecipe['url']}}" target="_blank">
                                         <div class="media-left">
                                             <img alt="" class="img-circle" src="{{ relatedRecipe['img']}}">
                                         </div>
                                         <div class="media-body">
                                             <b> {{ relatedRecipe['title']}}‬‬</b>
                                         </div>
-
+                                        </a>
                                     </li>
                                      {% endfor  %}
                                 </ul>
@@ -361,17 +364,19 @@
                             <label class="control-label col-lg-2"> {% trans from translationDomain %}Related tip{%endtrans%}  </label>
                             <div class="col-lg-10">
                                 <ul class="dev-related-list media-list width-350 notificationList">
-                                     {% for relatedRecipe in data['relatedTips'] %}
-                                    <li  class="media">
-                                        <div class="media-left">
-                                            <img alt="" class="img-circle" src="{{ relatedRecipe['img']}}">
-                                        </div>
-                                        <div class="media-body">
-                                            <b> {{ relatedRecipe['title']}}‬‬</b>
-                                        </div>
+                                    {% for relatedRecipe in data['relatedTips'] %}
+                                        <li  class="media">
+                                            <a href="{{ relatedRecipe['url']}}"  target="_blank">
 
-                                    </li>
-                                     {% endfor  %}
+                                                <div class="media-left">
+                                                    <img alt="" class="img-circle" src="{{ relatedRecipe['img']}}">
+                                                </div>
+                                                <div class="media-body">
+                                                    <b> {{ relatedRecipe['title']}}‬‬</b>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    {% endfor  %}
                                 </ul>
 
                             </div>
