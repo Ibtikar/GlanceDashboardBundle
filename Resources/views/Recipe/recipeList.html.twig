@@ -130,14 +130,43 @@
                                                     <input type="text" name="form-title" placeholder="بحث" class="form-control input-sm show dev-form-title" value="{{app.request.get('title')}}">
                                                 </div>
                                             </div>
-                                            {#<div class="col-md-3">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label>{{ 'Chef'|trans({}, translationDomain) }}</label>
-                                                    <select class="select" name="recipe[chef]" id="recipe_chef"><option value="">اختار الشيف</option></select>
+                                                    <select class="select dev-form-chef" name="recipe[chef]">
+                                                        <option value="">اختار الشيف</option>
+                                                        {% for key,value in chefs %}
+                                                            <option value="{{ value.id }}" {% if chef_selected == value.id and search %} selected {% endif %}>{{ value }}</option>
+                                                        {% endfor%}
+                                                   </select>
                                                 </div>
-                                            </div>#}
-
-
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>{{ 'Created From'|trans({}, translationDomain) }}</label>
+                                                    <div>
+                                                        <div class='input-group date datepicker'>
+                                                            <input type='text' class="form-control dev-form-created open-datetimepicker" />
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>{{ 'Created To'|trans({}, translationDomain) }}</label>
+                                                    <div>
+                                                        <div class='input-group date datepicker'>
+                                                            <input type='text' class="form-control dev-to-created open-datetimepicker" />
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             {#<div class="col-md-3">
                                                 <div class="form-group">
                                                     <label>المجموعة</label>
@@ -477,6 +506,22 @@
         intializeTable();
         var list = new BaseList();
 $('document').ready(function(){
+
+
+    $(function() {
+        $('.datepicker').datetimepicker({
+            format: 'D/M/YYYY',
+            showClear:true
+        });
+    });
+
+
+    $('.open-datetimepicker').click(function(event) {
+        event.preventDefault();
+        $(this).next().click();
+    });
+
+
     $('document').on('click','#advanced-search-Btn', function () {
         if ($(".advanced-search").hasClass("searchhidden")) {
             $(".advanced-search").slideDown();
@@ -496,13 +541,41 @@ $('document').ready(function(){
     var queryStringFlag = false;
 
     var title = $('.dev-form-title').val();
-    if (title !== '0') {
-{#        qs += (queryStringFlag) ? "&" : "?";#}
+    if (title !== '') {
+        qs += (queryStringFlag) ? "&" : "";
         qs += 'title=' + title;
         url += qs;
         queryStringFlag = true;
     }
+
+    var chef = $('.dev-form-chef').val();
+    if (chef !== '') {
+        qs += (queryStringFlag) ? "&" : "";
+        qs += 'chef=' + chef;
+        url += qs;
+        queryStringFlag = true;
+    }
+
+    var createdFrom = $('.dev-form-created').val();
+    if (createdFrom !== '') {
+        qs += (queryStringFlag) ? "&" : "";
+        qs += 'from=' + createdFrom;
+        url += qs;
+        queryStringFlag = true;
+    }
+
+    var createdTo = $('.dev-to-created').val();
+    if (createdTo !== '') {
+        qs += (queryStringFlag) ? "&" : "";
+        qs += 'to=' + createdTo;
+        url += qs;
+        queryStringFlag = true;
+    }
+
     parameterNotRemoved = qs;
+    if(queryStringFlag){
+        parameterNotRemoved+="&search=true"
+    }
         table.ajax.reload(function () {
 //            showBulkActionSelect();
         }, false);
@@ -512,6 +585,7 @@ $(document).on('click', '.dev-search-clear', function () {
         parameterNotRemoved = "";
         $("#advanced-search-Btn").click();
         $('.advanced-search input').val('');
+        $('.advanced-search select').val(null).trigger("change");
 
         table.ajax.reload(function () {
 //            showBulkActionSelect();

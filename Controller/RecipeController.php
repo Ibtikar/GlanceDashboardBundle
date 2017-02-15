@@ -92,6 +92,17 @@ class RecipeController extends BackendController
                         )
                     );
         }
+        if ($request->get('chef')) {
+            $queryBuilder = $queryBuilder->field('chef.$id')->equals(new \MongoId($request->get('chef')));
+        }
+
+        if ($request->get('from') && (bool) strtotime($request->get('from'))) {
+            $queryBuilder = $queryBuilder->field('createdAt')->gte(\DateTime::createFromFormat('d/m/Y',$request->get('from')));
+        }
+        if ($request->get('to') && (bool) strtotime($request->get('to'))) {
+            $fromDate = \DateTime::createFromFormat('d/m/Y',$request->get('to'));
+            $queryBuilder->field('createdAt')->lte($fromDate->modify('+1 day'));
+        }
 
         if (isset($queryBuilder))
             $this->listViewOptions->setListQueryBuilder($queryBuilder);
@@ -172,14 +183,22 @@ class RecipeController extends BackendController
 
     protected function doList(Request $request)
     {
+
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
         $renderingParams = parent::doList($request);
 
         $renderingParams['title_selected'] = $request->get('title');
+        $renderingParams['chef_selected'] = $request->get('chef');
+        $renderingParams['dateFrom_selected'] = $request->get('from');
+        $renderingParams['dateTo_selected'] = $request->get('to');
         $renderingParams['search'] = FALSE;
 
-        if ($renderingParams['title_selected']) {
+        if ($renderingParams['title_selected'] || $renderingParams['chef_selected'] || $renderingParams['dateFrom_selected'] || $renderingParams['dateTo_selected']) {
             $renderingParams['search'] = TRUE;
         }
+
+        $renderingParams['chefs'] = $dm->getRepository('IbtikarGlanceUMSBundle:Staff')->findAll();
 
         return $this->getTabCount($renderingParams);
     }

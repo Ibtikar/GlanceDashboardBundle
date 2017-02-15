@@ -77,7 +77,8 @@
 'deletedAt': تاريخ الحذف
 'autoPublishDate': 'تاريخ النشر التلقائى'
 'Auto publish date': 'تاريخ النشر التلقائى'
-
+'Created From': ' من تاريخ'
+'Created To': ' إلي تاريخ'
 # ############Messages############
 sorry this recipe assign to other user: عذراً، هذه الوصفه  مسنده الى موظف اخر.
 
