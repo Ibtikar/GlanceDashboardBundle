@@ -1188,7 +1188,7 @@ class RecipeController extends BackendController
             if ($media->getCoverPhoto()) {
                 $data['coverPhoto']['type'] = $media->getType();
 //                $data['coverPhoto']['img'] = $media->getType()=='image'? $document->getMigrated()?$media->getWebPath():$this->getImageUrl($media->getWebPath()): 'https://www.youtube.com/embed/' . $media->getVid() . '?autoplay=1';
-                $data['coverPhoto']['img'] = $media->getType() == 'image' ? '/'.$media->getWebPath() : 'https://i.ytimg.com/vi/' . $media->getVid().'/sddefault.jpg' ;
+                $data['coverPhoto']['img'] = $media->getType() == 'image' ? '/'.$media->getWebPath() : 'https://i.ytimg.com/vi/' . $media->getVid().'/hqdefault.jpg' ;
                 $data['coverPhoto']['caption'] = $media->getCaptionAr();
                 $data['coverPhoto']['captionEn'] = $media->getCaptionEn();
                 continue;
