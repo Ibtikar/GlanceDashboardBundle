@@ -8,9 +8,24 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 
 
-class MediaType extends AbstractType {
+
+class MediaType extends AbstractType
+{
+
+    private $extension;
+
+     public function __construct(array $options = array())
+    {
+        $resolver = new \Symfony\Component\OptionsResolver\OptionsResolver();
+        $this->configureOptions($resolver);
+        $this->options = $resolver->resolve($options);
+    }
+
+
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
+
+        $this->extension=$options['extension'];
         $builder->add('file', \Symfony\Component\Form\Extension\Core\Type\FileType::class, array('error_bubbling' => true))
         ->addModelTransformer(new CallbackTransformer(
             function ($file) {
@@ -32,6 +47,9 @@ class MediaType extends AbstractType {
                 if (@file_put_contents($uploadPath, $imageString)) {
                     $file = new \Symfony\Component\HttpFoundation\File\File($uploadPath, false);
                     $imageExtension = $file->guessExtension();
+                    if ($this->extension) {
+                        $imageExtension = $this->extension;
+                    }
                     $uploadPath = "$uploadDirectory$imageRandomName.$imageExtension";
                     $fileSystem->rename($uploadDirectory . $imageRandomName, $uploadPath);
                     $imageRandomName = "$imageRandomName.$imageExtension";
@@ -53,5 +71,10 @@ class MediaType extends AbstractType {
     public function getName() {
         return 'media_type';
     }
-
+    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'extension' => ''
+        ]);
+    }
 }

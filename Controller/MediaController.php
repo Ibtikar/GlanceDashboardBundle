@@ -133,12 +133,23 @@ class MediaController extends BackendController
             $functionName = "set$fieldUpdate";
             $media->$functionName($document);
         }
+        $extension = '';
+        if ($request->get('fileName')) {
+            $fileNameArray = explode('.', $request->get('fileName'));
+            if (count($fileNameArray) > 0) {
+                if (in_array($fileNameArray[count($fileNameArray) - 1], array('gif', 'png', 'jpeg', 'jpg'))) {
+                    $extension = $fileNameArray[count($fileNameArray) - 1];
+                }
+            }
+        }
+
 
         $validationGroup = array($collectionType);
         $form = $this->createForm(MediaType::class, $media, array(
             'translation_domain' => $this->translationDomain,
             'validation_groups' => $validationGroup,
-            'csrf_protection' => false
+            'csrf_protection' => false,
+            'extension' => $extension
         ));
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
@@ -164,6 +175,10 @@ class MediaController extends BackendController
                 $tempPath = $media->getTempPath();
                 $media->setTempPath('');
                 $dm->persist($media);
+                if ($request->get('fileName')) {
+                    $media->setName($request->get('fileName'));
+                }
+
                 $dm->flush();
 
 
@@ -196,6 +211,7 @@ class MediaController extends BackendController
             'path' => $media->getPath(),
             'id' => $media->getId(),
             'type' => $media->getType(),
+            'name' => $media->getName(),
             'coverPhoto' => $media->getCoverPhoto(),
             'changeCoverUrl' => method_exists($media,$getCollection) && $media->$getCollection() ? $this->generateUrl('ibtikar_glance_dashboard_media_change_defaultcover', array('imageId' => $media->getId(), 'documentId' => $media->$getCollection()->getId(), 'collectionType'=>$collectionType)) : '',
             'captionAr' => $media->getCaptionAr()?$media->getCaptionAr():'',
