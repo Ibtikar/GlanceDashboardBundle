@@ -194,7 +194,7 @@ function  showPublishModal(element) {
         unblockPage();
         $(".dev-save-publish-location").click(function () {
             if (recipeStatus != "publish") {
-                if ($('.open-datetimepicker').val() == '' && $('#publishNow').prop('checked') == false) {
+                if ($('#datetimepicker1 input').val() == '' && $('#publishNow').prop('checked') == false) {
                     $('#dev-publish-modal').find('.alert.alert-danger').remove();
                     $('#dev-publish-modal').prepend('<div class="alert alert-danger no-border"><button data-dismiss="alert" class="close" type="button">' +
                             '<span>×</span><span class="sr-only">Close</span></button>' + publishErrorMessage
