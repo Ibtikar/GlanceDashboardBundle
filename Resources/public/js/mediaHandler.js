@@ -173,7 +173,9 @@ function sendRequestToGoogleImageApi() {
             $("#google-field").removeClass('has-error');
         }
         $("#google-field").addClass('has-error');
-        $("#google-field").append('<div class="help-block help-error" id="error">'+messages.NotBlank+'</div>')
+//        $("#google-field").append('<div class="help-block help-error" id="error">'+messages.NotBlank+'</div>')
+        $("#google-field").after('<div class="help-block help-error redText" id="error">'+messages.NotBlank+'</div>')
+
     }
 }
 
@@ -608,8 +610,8 @@ jQuery(document).ready(function($) {
         } else {
             YT.reset();
             YT.removeError();
-            $("#dev-search-gvideo-box").parent().addClass('has-error');
-            $("#dev-search-gvideo-box").parent().append('<div class="help-block help-error" id="error">يجب إدخال القيمة</div>');
+            $("#dev-search-gvideo-box").parents('.input-group').addClass('has-error');
+            $("#dev-search-gvideo-box").parents('.input-group').after('<div class="help-block help-error redText" id="error">يجب إدخال القيمة</div>');
         }
 
     });
@@ -695,6 +697,9 @@ jQuery(document).ready(function($) {
         makeRequest(googleSearch, googleStartIndex);
     });
 
+$(document).on('submit','.main-search',function() {
+  return false;
+});
     $(document).on('keyup', '#dev-search-gimage-box,#dev-search-gimage-box-small,#dev-search-gvideo-box,#dev-search-gvideo-box-small', function (e) {
         e.preventDefault();
 
