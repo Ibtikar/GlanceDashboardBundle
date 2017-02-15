@@ -33,7 +33,7 @@ services:
         class: Ibtikar\GlanceDashboardBundle\Service\NotFoundExceptionListener
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException}
-        arguments: [ "@templating" ]
+        arguments: [ "@templating" ,"@router" ]
 
     recipe_operations:
         class: Ibtikar\GlanceDashboardBundle\Service\RecipeOperations
