@@ -109,7 +109,7 @@ class RecipeOperations extends PublishOperations
             $this->showFrontEndUrl($document);
         }
 //        if (php_sapi_name() !== 'cli') {
-        if ($document instanceof \Ibtikar\GlanceDashboardBundle\Document\Recipe && $document->getStatus() == 'autopublish') {
+        if ($document instanceof \Ibtikar\GlanceDashboardBundle\Document\Recipe) {
             $document->setAutoPublishDate(null);
             $document->setAssignedTo(null);
         }
