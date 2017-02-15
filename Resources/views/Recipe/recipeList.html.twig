@@ -103,6 +103,9 @@
 
                                                         {% block actions %}
                                                             <a data-placement="bottom" title="" data-popup="tooltip"  data-toggle="modal"  href="javascript:void(0)" class="btn btn-default btn-sm dev-change-columns" type="button" data-original-title="خانات الجدول"><i class="icon-table2 "></i> <span class="hidden-sm"> </span></a>
+
+                                                            <a id="advanced-search-Btn" data-placement="bottom" title="" data-popup="tooltip"  data-toggle="modal"  href="javascript:void(0)" class="btn btn-default btn-sm" type="button" data-original-title="البحث"><i class="icon-search4"></i> <span class="hidden-sm"> </span></a>
+
                                                             {% if list.hasBulkActions(listName) %}
                                                                 <input type="hidden" id="dev-bulk-action" name="bulk-action" value=""/>
                                                                 <span class="dev-bulk-action-container" data-list-name="{{listName|lower}}" data-href="{{ list.hasBulkActions(listName) ? path(prefixRoute|lower ~ '_bulk_actions') : '' }}" style="display: none;">
@@ -116,8 +119,54 @@
 
 
                                                         {% endblock %}
+                {% block searchList %}
+                    <div class='advanced-search {% if not search %}searchhidden{% endif %}'>
 
+                        <form id="search-form">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>{{ 'Title'|trans({}, translationDomain) }}</label>
+                                                    <input type="text" name="form-title" placeholder="بحث" class="form-control input-sm show dev-form-title" value="{{app.request.get('title')}}">
+                                                </div>
                                             </div>
+                                            {#<div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>{{ 'Chef'|trans({}, translationDomain) }}</label>
+                                                    <select class="select" name="recipe[chef]" id="recipe_chef"><option value="">اختار الشيف</option></select>
+                                                </div>
+                                            </div>#}
+
+
+                                            {#<div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>المجموعة</label>
+                                                    <select class="select">
+
+                                                        <option value="HI">role 2</option>
+                                                        <option value="CA">role 3</option>
+                                                        <option value="NV">role 4</option>
+                                                        <option value="WA">role 5</option>
+                                                        <option value="AZ">role 6</option>
+                                                        <option value="CO">role 7</option>
+                                                        <option value="ID">role 8 </option>
+
+                                                    </select>
+                                                </div>
+                                            </div>#}
+                                        </div><!-- row end -->
+                                        <div class="row">
+                                            <div class="col-xs-12">
+
+
+                                                <button class="btn btn-primary btn-lg dev-search-submit" type="button" style="margin-left: 5px">بحث</button>
+                                                <button class="btn btn-default btn-lg dev-search-clear" type="button">إلغاء</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                {% endblock %}
+    </form>                                        </div>
 
                                             <div style="margin-top: 15px;">
                                                 <div class="col-md-12">
@@ -427,7 +476,50 @@
     <script>
         intializeTable();
         var list = new BaseList();
+$('document').ready(function(){
+    $('document').on('click','#advanced-search-Btn', function () {
+        if ($(".advanced-search").hasClass("searchhidden")) {
+            $(".advanced-search").slideDown();
+            $(".advanced-search").removeClass('searchhidden');
+        } else {
+            $(".advanced-search").slideUp();
+            $(".advanced-search").addClass('searchhidden');
+            $(".advanced-search-more").slideUp();
+        }
 
+    });
+
+    $(document).on('click', '.dev-search-submit', function () {
+        parameterNotRemoved = "";
+    var url = window.location.pathname;
+    var qs = "";
+    var queryStringFlag = false;
+
+    var title = $('.dev-form-title').val();
+    if (title !== '0') {
+{#        qs += (queryStringFlag) ? "&" : "?";#}
+        qs += 'title=' + title;
+        url += qs;
+        queryStringFlag = true;
+    }
+    parameterNotRemoved = qs;
+        table.ajax.reload(function () {
+//            showBulkActionSelect();
+        }, false);
+});
+
+$(document).on('click', '.dev-search-clear', function () {
+        parameterNotRemoved = "";
+        $("#advanced-search-Btn").click();
+        $('.advanced-search input').val('');
+
+        table.ajax.reload(function () {
+//            showBulkActionSelect();
+        }, false);
+});
+
+
+});
     </script>
 
 

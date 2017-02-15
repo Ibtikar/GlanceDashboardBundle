@@ -83,6 +83,16 @@ class RecipeController extends BackendController
             $this->listViewOptions->setDefaultSortOrder("desc");
         }
 
+        //search parameters query
+        if ($request->get('title')) {
+            $queryBuilder->addAnd($queryBuilder->expr()->addOr(
+                        $queryBuilder->expr()->field('title')->equals(new \MongoRegex(('/' .  preg_quote($request->get('title')) . '/i')))
+                        )->addOr(
+                        $queryBuilder->expr()->field('titleEn')->equals(new \MongoRegex(('/' .  preg_quote($request->get('title')) . '/i')))
+                        )
+                    );
+        }
+
         if (isset($queryBuilder))
             $this->listViewOptions->setListQueryBuilder($queryBuilder);
         $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Recipe:recipeList.html.twig");
@@ -163,6 +173,14 @@ class RecipeController extends BackendController
     protected function doList(Request $request)
     {
         $renderingParams = parent::doList($request);
+
+        $renderingParams['title_selected'] = $request->get('title');
+        $renderingParams['search'] = FALSE;
+
+        if ($renderingParams['title_selected']) {
+            $renderingParams['search'] = TRUE;
+        }
+
         return $this->getTabCount($renderingParams);
     }
 
