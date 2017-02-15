@@ -630,7 +630,7 @@ $(document).ready(function () {
         cropperPluginInitialized = true;
     });
 
-
+var fileName='';
 
     $('#image-cropper-modal').cropit({
         smallImage: 'stretch',
@@ -655,7 +655,7 @@ $(document).ready(function () {
                 var value = elementObject.val(),
                         file = value.toLowerCase(),
                         extension = file.substring(file.lastIndexOf('.') + 1);
-
+                fileName=file;
                 if ($.inArray(extension, ['jpeg', 'jpg', 'png', 'gif']) == -1) {
                     showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
 
@@ -705,7 +705,7 @@ $(document).ready(function () {
         $('.dev-crop-spinner').show();
         $('.dev-submit-image').hide();
         $.ajax({
-            url: url ,
+            url: url+'?fileName='+fileName ,
             type: 'POST',
             data: formData,
 //            async: false,
