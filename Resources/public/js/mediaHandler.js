@@ -624,12 +624,12 @@ jQuery(document).ready(function($) {
         }
 
         if (selectedVideos.length == 0 && $('#video-tab1 .searchItem').length != 0) {
+            console.log('hnaa')
             $('#video-tab1 .help-error').remove();
             $('<div class="help-block help-error" style="margin-bottom: 10px;color:#a94442">'+messages.pleaseSelectOneVideo+'</div>').insertAfter('#youtube-hr');
         } else if (selectedVideos.length == 0 && $('#video-tab1 .searchItem').length == 0) {
-            $("#dev-search-gvideo-box").parent().addClass('has-error');
-            $("#dev-search-gvideo-box").parent().append('<div class="help-block help-error" id="error">'+messages.searchBeforeUpload+' </div>');
-
+             showNotificationMsg("الرجاء اختيار فيديو", "", "error");
+            return false;
         } else {
             $('.dev-youtube-submit').attr('disabled','disabled');
 
