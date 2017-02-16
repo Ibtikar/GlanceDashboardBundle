@@ -591,7 +591,7 @@ class BackendController extends Controller {
         if ($this->listViewOptions->hasActionsColumn($this->calledClassName)) {
             $prepareColumns[] = array('data' => 'actions', 'orderable' => FALSE, 'name' => 'actions', 'title' => $this->trans('actions'),'class'=> "text-right");
         }
-        if ($sortIndex) {
+        if ($sortIndex === 0 || $sortIndex) {
             $sort = json_encode(array($sortIndex, $this->listViewOptions->getDefaultSortOrder()));
         } else {
             $sort = null;

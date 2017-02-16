@@ -124,7 +124,7 @@ if(sort){
     table = $('.datatable-column-search-inputs').DataTable($.extend({},dataTableDefault, { "deferLoading": totalNumber,"order": sort}));
 
 }else{
-    table = $('.datatable-column-search-inputs').DataTable($.extend({},dataTableDefault, { "deferLoading": totalNumber}));
+    table = $('.datatable-column-search-inputs').DataTable($.extend({},dataTableDefault, { "deferLoading": totalNumber,"order": []}));
 
     }
 
@@ -163,7 +163,7 @@ function reIntaializeTable(data) {
                 });
             }})
     } else {
-        datatableSetting = $.extend({}, dataTableDefault, {"initComplete": function (settings, json) {
+        datatableSetting = $.extend({}, dataTableDefault, {"order": [], "initComplete": function (settings, json) {
                 $(".dataTables_length select").select2({
                     /* select2 options, as an example */
                     minimumResultsForSearch: -1,
@@ -171,7 +171,13 @@ function reIntaializeTable(data) {
                 });
             }});
     }
-    table = $('.datatable-column-search-inputs').DataTable(datatableSetting)
+    var page = parseInt(table.page(), 10) + parseInt(1, 10);
+    var url = ajaxData + '?page=' + page + '&limit=' + table.page.info().length;
+    if (typeof parameterNotRemoved != 'undefined') {
+        url += '&' + parameterNotRemoved;
+    }
+    pushNewState(null, null, url);
+    table = $('.datatable-column-search-inputs').DataTable(datatableSetting);
 }
 
 
