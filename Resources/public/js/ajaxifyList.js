@@ -38,13 +38,19 @@ var dataTableDefault = {
                 var columndir = sorting[1];
                 var columnName = $(table.column(sorting[0]).header()).attr('data-name').trim();
             }
+
             var page = parseInt(table.page(), 10) + parseInt(1, 10);
             // reset search page to one in case of search
             if(typeof parameterNotRemoved != 'undefined' && parameterNotRemoved.indexOf('search=true')!=-1){
-                parameterNotRemoved = parameterNotRemoved.replace('&search=true','');
+                parameterNotRemoved = parameterNotRemoved.replace('&search=true', '');
                 page = 1;
             }
-            var url = ajaxData + '?page=' + page + '&sort=' + columnName + '&columnDir=' + columndir + '&limit=' + table.page.info().length;
+            if (typeof columndir != 'undefined' && typeof columnName != 'undefined') {
+                var url = ajaxData + '?page=' + page + '&sort=' + columnName + '&columnDir=' + columndir + '&limit=' + table.page.info().length;
+            } else {
+                var url = ajaxData + '?page=' + page + '&limit=' + table.page.info().length;
+
+            }
             if (typeof parameterNotRemoved != 'undefined') {
                 url += '&' + parameterNotRemoved;
             }
