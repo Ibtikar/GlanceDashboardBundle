@@ -56,7 +56,7 @@
                                 <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
                                  {% endif %}
                                  <a class="btn btn-default  dev-crop-images"   {% if coverImage is empty %}style="display: none"{%else %} data-image-id="{{ coverImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':coverImage.id,'collectionType':'Product'})}}"{%endif%}  >  رفع الصورة </a>
-                                <a class="btn btn-default dev-trash-image" {% if coverImage is empty %}style="display: none" {%else %} data-image-id="{{ coverImage.id }}"   data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': coverImage.id,'collectionType':'Product'}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%}> <i class="icon-trash"></i></a>
+                                <a class="btn btn-default dev-trash-image" {% if coverImage is empty %}style="display: none" {%else %} data-image-id="{{ coverImage.id }}"   data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': coverImage.id,'collectionType':'Product'}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans()})|raw }} {%endif%}> <i class="icon-trash"></i></a>
 
 
                             </td>
