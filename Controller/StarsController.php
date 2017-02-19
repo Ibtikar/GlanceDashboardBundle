@@ -202,11 +202,11 @@ class StarsController extends BackendController {
     }
 
     public function approveAction(Request $request) {
-        return $this->statusChange($request->get('id'),'approved','ROLE_STARS_APPROVE');
+        return $this->statusChange($request->get('id'),'approved','ROLE_STARS'.  strtoupper($this->starsStatus).'_APPROVE');
     }
 
     public function rejectAction(Request $request) {
-        return $this->statusChange($request->get('id'),'rejected','ROLE_STARS_REJECT');
+        return $this->statusChange($request->get('id'),'rejected','ROLE_STARS'.  strtoupper($this->starsStatus).'_REJECT');
     }
 
     private function statusChange($id,$status,$permission) {
