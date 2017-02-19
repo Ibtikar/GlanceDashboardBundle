@@ -99,7 +99,7 @@ class StarsController extends BackendController {
     }
     public function changeListRejectedStarsColumnsAction(Request $request)
     {
-        $this->listStatus = 'list_Rejected_stars';
+        $this->listStatus = 'list_rejected_stars';
         $this->listName = 'stars' . $this->starsStatus . '_' . $this->listStatus;
         return parent::changeListColumnsAction($request);
     }
