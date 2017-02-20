@@ -95,7 +95,7 @@ class Recipe  extends Publishable {
      * @Assert\Length(
      *      min = 3,
      *      minMessage = "Your name must be at least {{ limit }} characters long",
-     *      max = 150,
+     *      max = 250,
      *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
      * )
      */
@@ -106,7 +106,7 @@ class Recipe  extends Publishable {
      * @Assert\Length(
      *      min = 3,
      *      minMessage = "Your name must be at least {{ limit }} characters long",
-     *      max = 150,
+     *      max = 250,
      *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
      * )
      */

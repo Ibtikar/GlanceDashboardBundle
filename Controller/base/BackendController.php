@@ -525,12 +525,9 @@ class BackendController extends Controller {
                                                 <div class="media-body">
                                                     <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">  ' . $document->$getfunction() . ' </a>
                                                 </div>';
-                }
-                  elseif ( $value == 'email'&& !method_exists($document, $value)) {
-
-                    $oneDocument[$value] = $this->get('app.twig.property_accessor')->propertyAccess($document,'createdBy',$value);
-                }
-                elseif ($value == 'status') {
+                } elseif ($value == 'email' && !method_exists($document, 'get' . ucfirst($value))) {
+                    $oneDocument[$value] = $this->get('app.twig.property_accessor')->propertyAccess($document, 'createdBy', $value);
+                } elseif ($value == 'status') {
                     $oneDocument[$value] = $this->trans($document->$getfunction(), array(), $this->translationDomain);
                 } elseif ($value == 'slug') {
                     $request->setLocale('ar');
@@ -594,7 +591,7 @@ class BackendController extends Controller {
         if ($this->listViewOptions->hasActionsColumn($this->calledClassName)) {
             $prepareColumns[] = array('data' => 'actions', 'orderable' => FALSE, 'name' => 'actions', 'title' => $this->trans('actions'),'class'=> "text-right");
         }
-        if ($sortIndex) {
+        if ($sortIndex === 0 || $sortIndex) {
             $sort = json_encode(array($sortIndex, $this->listViewOptions->getDefaultSortOrder()));
         } else {
             $sort = null;

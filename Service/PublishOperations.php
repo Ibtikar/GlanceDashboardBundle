@@ -460,7 +460,7 @@ abstract class PublishOperations
 
         if ($isValid['status'] == 'success') {
 
-            if ($recipe->getStatus() == 'published' || $recipe->getStatus() == 'autopublish') {
+            if ($recipe->getStatus() == 'publish' || $recipe->getStatus() == 'autopublish') {
                 $this->container->get('recipe_operations')->unpublish($recipe);
             }
             $recipe
