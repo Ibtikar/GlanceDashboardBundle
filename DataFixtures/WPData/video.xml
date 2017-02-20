@@ -40,7 +40,7 @@
 	<wp:author><wp:author_id>18706</wp:author_id><wp:author_login><![CDATA[zozzett1]]></wp:author_login><wp:author_email><![CDATA[zinabgoodykitchen@gmail.com]]></wp:author_email><wp:author_display_name><![CDATA[زينب باقادر]]></wp:author_display_name><wp:author_first_name><![CDATA[زينب]]></wp:author_first_name><wp:author_last_name><![CDATA[باقادر]]></wp:author_last_name></wp:author>
 
 
-	
+
 
 	<item>
 		<title>عجة باستا بالاعشاب العطرية</title>
@@ -21556,7 +21556,7 @@
 		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[recipe-preparation-time]]></wp:meta_key>
-			<wp:meta_value><![CDATA[[:ar]20 minutes[:en]20 دقيقة[:]]]></wp:meta_value>
+			<wp:meta_value><![CDATA[[:ar]20 minutes[:en]20 minutes[:]]]></wp:meta_value>
 		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[_recipe-preparation-time]]></wp:meta_key>
@@ -21564,7 +21564,7 @@
 		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[recipe-total-time]]></wp:meta_key>
-			<wp:meta_value><![CDATA[[:ar]20 minutes[:en]20 دقيقة[:]]]></wp:meta_value>
+			<wp:meta_value><![CDATA[[:ar]20 minutes[:en]20 minutes[:]]]></wp:meta_value>
 		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[_recipe-total-time]]></wp:meta_key>
@@ -22738,16 +22738,14 @@
 		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[recipe-preparation-time]]></wp:meta_key>
-			<wp:meta_value><![CDATA[15 دقيقة ]]></wp:meta_value>
-		</wp:postmeta>
+			<wp:meta_value><![CDATA[[:ar]15 دقيقة [:en]15 minutes[:]]]></wp:meta_value>		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[_recipe-preparation-time]]></wp:meta_key>
 			<wp:meta_value><![CDATA[field_55cc8d4f44c1e]]></wp:meta_value>
 		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[recipe-total-time]]></wp:meta_key>
-			<wp:meta_value><![CDATA[15 دقيقة ]]></wp:meta_value>
-		</wp:postmeta>
+			<wp:meta_value><![CDATA[[:ar]15 دقيقة [:en]15 minutes[:]]]></wp:meta_value>		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[_recipe-total-time]]></wp:meta_key>
 			<wp:meta_value><![CDATA[field_55cc8e3a44c1f]]></wp:meta_value>
@@ -26922,7 +26920,7 @@
 		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[recipe-preparation-time]]></wp:meta_key>
-			<wp:meta_value><![CDATA[[:ar]15 دقيقة [:en]15 miuntes[:]]]></wp:meta_value>
+			<wp:meta_value><![CDATA[[:ar]15 دقيقة [:en]15 minutes[:]]]></wp:meta_value>
 		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[_recipe-preparation-time]]></wp:meta_key>
@@ -26930,7 +26928,7 @@
 		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[recipe-total-time]]></wp:meta_key>
-			<wp:meta_value><![CDATA[[:ar]15 دقيقة [:en]15 miuntes[:]]]></wp:meta_value>
+			<wp:meta_value><![CDATA[[:ar]15 دقيقة [:en]15 minutes[:]]]></wp:meta_value>
 		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[_recipe-total-time]]></wp:meta_key>
@@ -27660,7 +27658,7 @@
 		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[recipe-preparation-time]]></wp:meta_key>
-			<wp:meta_value><![CDATA[15 دقيقة]]></wp:meta_value>
+			<wp:meta_value><![CDATA[[:ar]15 دقيقة [:en]15 minutes[:]]]></wp:meta_value>
 		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[_recipe-preparation-time]]></wp:meta_key>
@@ -27668,7 +27666,7 @@
 		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[recipe-total-time]]></wp:meta_key>
-			<wp:meta_value><![CDATA[1 ساعة ]]></wp:meta_value>
+			<wp:meta_value><![CDATA[[:ar]1 ساعة[:en]1 hour[:]]]></wp:meta_value>
 		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[_recipe-total-time]]></wp:meta_key>
