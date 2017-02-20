@@ -139,7 +139,7 @@ class BackendController extends Controller {
 
         if (is_null($request->get('sort')) || !in_array($request->get('sort'), $selectedColumns)) {
             $sortBy = $this->listViewOptions->getDefaultSortBy();
-        
+
         }else{
            $sortBy =$request->get('sort');
         }
