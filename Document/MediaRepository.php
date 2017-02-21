@@ -20,4 +20,13 @@ class MediaRepository extends DocumentRepository {
                 ->sort('order', 'ASC')
                 ->getQuery()->execute();
     }
+
+    public function getproductsMedia($ids)
+    {
+        return $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Media')
+                ->field('deleted')->equals(FALSE)
+                ->field('products')->in($ids)
+                ->sort('order', 'ASC')
+                ->getQuery()->execute();
+    }
 }
