@@ -79,6 +79,9 @@
 'Auto publish date': 'تاريخ النشر التلقائى'
 'Created From': ' من تاريخ'
 'Created To': ' إلي تاريخ'
+'Published From': 'نشرت من'
+'Published To': 'نشرت إلي'
+
 # ############Messages############
 sorry this recipe assign to other user: عذراً، هذه الوصفه  مسنده الى موظف اخر.
 

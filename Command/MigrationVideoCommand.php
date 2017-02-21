@@ -13,7 +13,7 @@ use Ibtikar\GlanceDashboardBundle\Document\Media;
 use Ibtikar\GlanceDashboardBundle\Document\Slug;
 use Symfony\Component\HttpFoundation\File\File;
 
-class MigrationCommand extends ContainerAwareCommand {
+class MigrationVideoCommand extends ContainerAwareCommand {
 
     private $dataDir;
     private $tags = array();
@@ -29,20 +29,14 @@ class MigrationCommand extends ContainerAwareCommand {
         $this->dataDir = __DIR__ . "/../DataFixtures/WPData/";
 
         $this
-                ->setName('migration:start')
+                ->setName('migration:video:start')
                 ->setDescription('Goody Kitchen data migration from json object.')
-                ->addOption(
-                    'file',
-                    'f',
-                     \Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL,
-                    'Change Default XML source (posts.xml)',
-                    'posts.xml'
-                );
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $this->time = new \DateTime();
-        $total = ($input->getOption('file') != 'posts.xml'?8:897);
+        $total = 131;
         $data = array();
         $helper = $this->getHelper('question');
         $question = new Question('How many records you want to migrate?[' . $total . ']: ', $total);
@@ -59,8 +53,6 @@ class MigrationCommand extends ContainerAwareCommand {
 
             $i = 0;
 
-            $mediaArr = json_decode(file_get_contents($this->dataDir . 'media.json'));
-
             $this->dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
 
             $this->getTags();
@@ -70,7 +62,7 @@ class MigrationCommand extends ContainerAwareCommand {
             $z = new \XMLReader;
             $doc = new \DOMDocument;
 
-            $z->open($this->dataDir . $input->getOption('file'));
+            $z->open($this->dataDir . 'video.xml');
 
             while ($z->read() && $z->name !== 'item');
 
@@ -94,9 +86,17 @@ class MigrationCommand extends ContainerAwareCommand {
                 $recipe->setPublishedAt(new \DateTime((string) $node->pubDate));
 
                 $ns = $node->getNamespaces(true);
-
                 $children = $node->children($ns['wp']);
 
+//                die(var_dump(get_meta_tags('https://goodykitchen.com/en/video-category/%D8%AD%D9%84%D9%88%D9%89-%D8%A7%D9%84%D9%81%D9%86%D8%AF%D9%88-%D8%A8%D8%A7%D9%84%D9%81%D8%A7%D8%AF%D8%AC/')));
+                if(!strpos($node->asXML(), '_qts_slug_en')){
+                    $metas = get_meta_tags(str_replace("/ar","/en",$node->link));
+                    $title = str_replace(' | Goody Kitchen','', $metas['twitter:title']);
+                    $recipe->setTitleEn($title);
+                    $recipe->setSlugEn(str_replace(' ', '-', $title));
+                    $recipe->setSlug(urldecode((string) $children->post_name));
+                }
+//                var_dump($children->postmeta->xpath('wp:meta_key'));
 
                 foreach ($children->postmeta as $postmeta) {
                     switch ((string) $postmeta->meta_key) {
@@ -166,9 +166,8 @@ class MigrationCommand extends ContainerAwareCommand {
                             $recipe->setSlug(urldecode((string) $postmeta->meta_value));
 
                             break;
-                        case "_thumbnail_id":
-                            $id = (string) $postmeta->meta_value;
-                            $data['media'] = $mediaArr->$id;
+                        case "video-youtube-id":
+                            $data['media'] = (string) $postmeta->meta_value;
                             break;
 
                         default:
@@ -273,36 +272,19 @@ class MigrationCommand extends ContainerAwareCommand {
             $slug->setSlugAr($recipe->getSlug());
             $slug->setSlugEn($recipe->getSlugEn());
             $this->dm->persist($slug);
-            $documentDir = __DIR__ . '/../../../../web/uploads/recipe-file/' . $recipe->getId() . '/';
-            if (!file_exists($documentDir)) {
-                mkdir($documentDir, 0755, true);
-            }
 
-            $url = $migrationData['media'];
-            $imagesize = @getimagesize($url);
 
-            $imageExt = explode('/', $imagesize['mime']);
-            // $extension = pathinfo($filePath, PATHINFO_EXTENSION);
-
-            $extension = $imageExt[1];
             $media = new Media();
             $media->setCollectionType("Recipe");
+            $media->setType('video');
             $document = $recipe;
             $collectionSetter = "setRecipe";
             $media->$collectionSetter($document);
             $media->setOrder(0);
-            $name = $media->getImagePath($extension);
-            $filePath = $documentDir . $name;
-            @file_put_contents($filePath, file_get_contents($migrationData['media']));
-            //  $extension = pathinfo($filePath, PATHINFO_EXTENSION);
-            $file = new File($filePath);
-            $media->setFile($file);
-
-            $media->setType('image');
-            $media->setPath($name);
+            $media->setVid($migrationData['media']);
+            $recipe->setMigrationData('video');
             $media->setCoverPhoto(true);
             $this->dm->persist($media);
-            $recipe->setDefaultCoverPhoto($name);
             $recipe->setCoverPhoto($media);
             $publishResult = $this->getContainer()->get('recipe_operations')->publish($recipe, array(),FALSE,FALSE,TRUE);
             $progress->advance();

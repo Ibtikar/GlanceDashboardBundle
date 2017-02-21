@@ -146,7 +146,7 @@
                                                     <label>{{ 'Created From'|trans({}, translationDomain) }}</label>
                                                     <div>
                                                         <div class='input-group date datepicker'>
-                                                            <input type='text' class="form-control dev-form-created open-datetimepicker" />
+                                                            <input type='text' class="form-control dev-form-created open-datetimepicker"  value="{{app.request.get('from')}}"/>
                                                             <span class="input-group-addon">
                                                                 <span class="glyphicon glyphicon-calendar"></span>
                                                             </span>
@@ -159,7 +159,7 @@
                                                     <label>{{ 'Created To'|trans({}, translationDomain) }}</label>
                                                     <div>
                                                         <div class='input-group date datepicker'>
-                                                            <input type='text' class="form-control dev-to-created open-datetimepicker" />
+                                                            <input type='text' class="form-control dev-to-created open-datetimepicker" value="{{app.request.get('to')}}" />
                                                             <span class="input-group-addon">
                                                                 <span class="glyphicon glyphicon-calendar"></span>
                                                             </span>
@@ -167,23 +167,83 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            {#<div class="col-md-3">
+                                        </div><!-- row end -->
+                                            <div class="row">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label>المجموعة</label>
-                                                    <select class="select">
-
-                                                        <option value="HI">role 2</option>
-                                                        <option value="CA">role 3</option>
-                                                        <option value="NV">role 4</option>
-                                                        <option value="WA">role 5</option>
-                                                        <option value="AZ">role 6</option>
-                                                        <option value="CO">role 7</option>
-                                                        <option value="ID">role 8 </option>
-
+                                                    {% set selected_tags = app.request.get('tags')|split(',') %}
+                                                    <label>{{ 'Tags'|trans({}, translationDomain) }}</label>
+                                                    <select type="text" name="form-tags" placeholder="بحث" class="select form-control input-sm show dev-form-tags" multiple="" value="{{app.request.get('tags')}}">
+                                                        <option value="">كلمات مفتاحية</option>
+                                                        {% for key,value in tags %}
+                                                            <option value="{{ value.id }}" {% if  search and value.id in selected_tags %} selected {% endif %}>{{ value }}</option>
+                                                        {% endfor%}
                                                     </select>
                                                 </div>
-                                            </div>#}
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>{{ 'Meal'|trans({}, translationDomain) }}</label>
+                                                    <select multiple="" class="select dev-form-meal" name="recipe[meals]">
+                                                        {% for key,value in meals %}
+                                                            <option value="{{ value }}" {% if meals_selected == value and search %} selected {% endif %}>{{ value|trans({}, translationDomain) }}</option>
+                                                        {% endfor%}
+                                                   </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>{{ 'Ingredients'|trans({}, translationDomain) }}</label>
+                                                    <select multiple="" class="select dev-form-ingredient" name="recipe[Ingredients]">
+                                                        {% for key,value in ingredients %}
+                                                            <option value="{{ value }}" {% if ingredients_selected == value and search %} selected {% endif %}>{{ value|trans({}, translationDomain) }}</option>
+                                                        {% endfor%}
+                                                   </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>{{ 'Products'|trans({}, translationDomain) }}</label>
+                                                    <select multiple="" class="select dev-form-product" name="recipe[products]">
+                                                        {% for key,value in products %}
+                                                            <option value="{{ value.id }}" {% if products_selected == value.id and search %} selected {% endif %}>{{ value }}</option>
+                                                        {% endfor%}
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div><!-- row end -->
+
+        {% if 'recipepublish_list_publish' in app.request.attributes.get('_route') %}
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>{{ 'Published From'|trans({}, translationDomain) }}</label>
+                                                    <div>
+                                                        <div class='input-group date datepicker'>
+                                                            <input type='text' class="form-control dev-form-published open-datetimepicker"  value="{{app.request.get('pub-from')}}"/>
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>{{ 'Published To'|trans({}, translationDomain) }}</label>
+                                                    <div>
+                                                        <div class='input-group date datepicker'>
+                                                            <input type='text' class="form-control dev-to-published open-datetimepicker" value="{{app.request.get('pub-to')}}" />
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- row end -->
+        {% endif %}
                                         <div class="row">
                                             <div class="col-xs-12">
 
@@ -572,13 +632,61 @@ $('document').ready(function(){
         queryStringFlag = true;
     }
 
+    var tags = $('.dev-form-tags').val();
+    if (tags) {
+        qs += (queryStringFlag) ? "&" : "";
+        qs += 'tags=' + tags.join(',');
+        url += qs;
+        queryStringFlag = true;
+    }
+
+    var meals = $('.dev-form-meal').val();
+    if (meals) {
+        qs += (queryStringFlag) ? "&" : "";
+        qs += 'meals=' + meals.join(',');
+        url += qs;
+        queryStringFlag = true;
+    }
+
+    var ingredients = $('.dev-form-ingredient').val();
+    if (ingredients) {
+        qs += (queryStringFlag) ? "&" : "";
+        qs += 'ingredients=' + ingredients.join(',');
+        url += qs;
+        queryStringFlag = true;
+    }
+
+    var products = $('.dev-form-product').val();
+    if (products) {
+        qs += (queryStringFlag) ? "&" : "";
+        qs += 'products=' + products.join(',');
+        url += qs;
+        queryStringFlag = true;
+    }
+
+    var publishedFrom = $('.dev-form-published').val();
+    if (publishedFrom !== '') {
+        qs += (queryStringFlag) ? "&" : "";
+        qs += 'pub-from=' + publishedFrom;
+        url += qs;
+        queryStringFlag = true;
+    }
+
+    var publishedTo = $('.dev-to-published').val();
+    if (publishedTo !== '') {
+        qs += (queryStringFlag) ? "&" : "";
+        qs += 'pub-to=' + publishedTo;
+        url += qs;
+        queryStringFlag = true;
+    }
+
     parameterNotRemoved = qs;
     if(queryStringFlag){
         parameterNotRemoved+="&search=true"
     }
         table.ajax.reload(function () {
 //            showBulkActionSelect();
-        }, false);
+        });
 });
 
 $(document).on('click', '.dev-search-clear', function () {

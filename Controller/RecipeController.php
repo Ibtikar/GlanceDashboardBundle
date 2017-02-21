@@ -103,6 +103,44 @@ class RecipeController extends BackendController
             $fromDate = \DateTime::createFromFormat('d/m/Y',$request->get('to'));
             $queryBuilder->field('createdAt')->lte($fromDate->modify('+1 day'));
         }
+        if ($request->get('tags')) {
+            $tags = explode(',', $request->get('tags'));
+            $queryBuilder->addAnd($queryBuilder->expr()->addOr(
+                        $queryBuilder->expr()->field('tags')->all($tags)
+                        )->addOr(
+                        $queryBuilder->expr()->field('tagsEn')->all($tags)
+                        )
+                    );
+        }
+
+        if ($request->get('meals')) {
+            $meals = explode(',', $request->get('meals'));
+            foreach ($meals as $meal) {
+                $queryBuilder->field('meal.'.$meal)->exists(true);
+            }
+        }
+
+        if ($request->get('ingredients')) {
+            $ingredients = explode(',', $request->get('ingredients'));
+            foreach ($ingredients as $ingredient) {
+                $queryBuilder->field('keyIngredient.'.$ingredient)->exists(true);
+            }
+        }
+
+        if ($request->get('products')) {
+            $products = explode(',', $request->get('products'));
+            $queryBuilder->field('products')->all($products);
+        }
+
+        if($this->listStatus == 'list_publish_recipe'){
+            if ($request->get('pub-from') && (bool) strtotime($request->get('pub-from'))) {
+                $queryBuilder = $queryBuilder->field('publishedAt')->gte(\DateTime::createFromFormat('d/m/Y',$request->get('pub-from')));
+            }
+            if ($request->get('pub-to') && (bool) strtotime($request->get('pub-to'))) {
+                $fromDate = \DateTime::createFromFormat('d/m/Y',$request->get('pub-to'));
+                $queryBuilder->field('publishedAt')->lte($fromDate->modify('+1 day'));
+            }
+        }
 
         if (isset($queryBuilder))
             $this->listViewOptions->setListQueryBuilder($queryBuilder);
@@ -192,14 +230,23 @@ class RecipeController extends BackendController
         $renderingParams['chef_selected'] = $request->get('chef');
         $renderingParams['dateFrom_selected'] = $request->get('from');
         $renderingParams['dateTo_selected'] = $request->get('to');
+        $renderingParams['tags_selected'] = $request->get('tags');
+        $renderingParams['meals_selected'] = $request->get('meals');
+        $renderingParams['ingredients_selected'] = $request->get('ingredients');
+        $renderingParams['products_selected'] = $request->get('products');
+        $renderingParams['publishedFrom_selected'] = $request->get('pub-from');
+        $renderingParams['publishedTo_selected'] = $request->get('pub-to');
         $renderingParams['search'] = FALSE;
 
-        if ($renderingParams['title_selected'] || $renderingParams['chef_selected'] || $renderingParams['dateFrom_selected'] || $renderingParams['dateTo_selected']) {
+        if ($renderingParams['title_selected'] || $renderingParams['chef_selected'] || $renderingParams['dateFrom_selected'] || $renderingParams['dateTo_selected'] || $renderingParams['tags_selected'] || $renderingParams['meals_selected'] || $renderingParams['ingredients_selected'] || $renderingParams['products_selected'] || $renderingParams['publishedFrom_selected'] || $renderingParams['publishedTo_selected']) {
             $renderingParams['search'] = TRUE;
         }
 
         $renderingParams['chefs'] = $dm->getRepository('IbtikarGlanceUMSBundle:Staff')->findAll();
-
+        $renderingParams['tags'] = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findAll();
+        $renderingParams['meals'] = Recipe::$mealMap;
+        $renderingParams['ingredients'] = Recipe::$keyIngredientMap;
+        $renderingParams['products'] = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->findAll();
         return $this->getTabCount($renderingParams);
     }
 
