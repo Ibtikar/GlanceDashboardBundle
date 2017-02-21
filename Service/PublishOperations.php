@@ -355,7 +355,8 @@ abstract class PublishOperations
 
             $this->publishInLocation($document, $publishLocation, $location->getMaxNumberOfMaterials());
         }
-        $document->setGoodyStar($goodyStar);
+        
+        if(method_exists($document,'setGoodyStar')) $document->setGoodyStar($goodyStar);
 
 
         $this->dm->flush();
