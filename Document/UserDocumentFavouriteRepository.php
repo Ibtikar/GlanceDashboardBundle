@@ -27,9 +27,10 @@ class UserDocumentFavouriteRepository extends DocumentRepository
     {
         $queryBuilder = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:UserDocumentFavourite')
                 ->field('user.$id')->equals(new \MongoId($userId));
-        if (!(is_object($user) && $user->getStar())) {
-            $queryBuilder->field('goodyStar')->equals(FALSE);
-        }
+//!! THIS CODITION WAS REMOVED AS THE STAR FLAG IS IN THE USER DOCUMENT NOT IN UserDocumentFavourite
+//        if (!(is_object($user) && $user->getStar())) {
+//            $queryBuilder->field('goodyStar')->equals(FALSE);
+//        }
         return $queryBuilder->eagerCursor(true)->skip($skip)->limit($limit)->sort(array('createdAt' => 'DESC'))->getQuery()->execute();
     }
 }
