@@ -1212,7 +1212,7 @@ class RecipeController extends BackendController
                 'title' => $relatedArticle->getTitle(),
                 'titleEn' => $relatedArticle->getTitleEn(),
                 'img' => $relatedArticle->getCoverPhoto() ? '/' . $relatedArticle->getCoverPhoto()->getWebPath() : '',
-                'url' =>  $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $relatedRecipe->getSlug()), true)
+                'url' =>  $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $relatedArticle->getSlug()), true)
 
             );
         }
@@ -1223,7 +1223,7 @@ class RecipeController extends BackendController
                 'title' => $relatedTip->getTitle(),
                 'titleEn' => $relatedTip->getTitleEn(),
                 'img' => $relatedTip->getCoverPhoto() ? '/' . $relatedTip->getCoverPhoto()->getWebPath() : '',
-                'url' =>  $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $relatedRecipe->getSlug()), true)
+                'url' =>  $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $relatedTip->getSlug()), true)
 
             );
         }
