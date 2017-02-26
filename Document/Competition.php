@@ -121,7 +121,6 @@ class Competition extends Publishable {
 
     /**
      * @Assert\Date
-     * @ExtraAssert\MinDate(limit="now")
      * @MongoDB\Date
      */
     private $expiryDate;
