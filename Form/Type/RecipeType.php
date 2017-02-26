@@ -79,7 +79,9 @@ class RecipeType extends AbstractType {
                 ;
                 }
 
-                $builder->add('chef', DocumentType::class, array('required' => false,'placeholder' => 'اختار الشيف','class' => 'IbtikarGlanceUMSBundle:Staff', 'attr' => array('data-img-method'=>'webPath','data-img-default'=>'bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg','class' => 'select-with-thumb')));
+                $builder->add('chef', DocumentType::class, array('query_builder' => function($repo) {
+                        return $repo->findstaffMemeber();
+                    },'required' => false,'placeholder' => 'اختار الشيف','class' => 'IbtikarGlanceUMSBundle:Staff', 'attr' => array('data-img-method'=>'webPath','data-img-default'=>'bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg','class' => 'select-with-thumb')));
 
                 if($options['attr']['contentType'] == 'recipe') {
                     $builder->add('country', DocumentType::class, array('required' => false,'class' => 'IbtikarGlanceUMSBundle:Country', 'query_builder' => function($repo) {
