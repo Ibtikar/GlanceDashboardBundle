@@ -287,7 +287,7 @@ class Recipe  extends Publishable {
     /**
      * @MongoDB\String
      * @Assert\Length(
-     *      max = 125,
+     *      max = 200,
      *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
      * )
      */
@@ -296,7 +296,7 @@ class Recipe  extends Publishable {
     /**
      * @MongoDB\String
      * @Assert\Length(
-     *      max = 125,
+     *      max = 200,
      *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
      * )
      */
