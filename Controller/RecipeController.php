@@ -1201,7 +1201,7 @@ class RecipeController extends BackendController
             $data['relatedRecipes'][] = array(
                 'title' => $relatedRecipe->getTitle(),
                 'titleEn' => $relatedRecipe->getTitleEn(),
-                'img' => $relatedRecipe->getCoverPhoto() ? '/' . $relatedRecipe->getCoverPhoto()->getWebPath() : '',
+                'img' => $relatedRecipe->getCoverPhoto() ? $relatedRecipe->getCoverPhoto()->getType() == 'image' ? '/' . $relatedRecipe->getCoverPhoto()->getWebPath():'https://i.ytimg.com/vi/' . $relatedRecipe->getCoverPhoto()->getVid().'/hqdefault.jpg' : '',
                 'url' =>  $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $relatedRecipe->getSlug()), true)
 
             );
@@ -1211,7 +1211,8 @@ class RecipeController extends BackendController
             $data['relatedArticles'][] = array(
                 'title' => $relatedArticle->getTitle(),
                 'titleEn' => $relatedArticle->getTitleEn(),
-                'img' => $relatedArticle->getCoverPhoto() ? '/' . $relatedArticle->getCoverPhoto()->getWebPath() : '',
+                'img' => $relatedArticle->getCoverPhoto() ? $relatedArticle->getCoverPhoto()->getType() == 'image' ? '/' . $relatedArticle->getCoverPhoto()->getWebPath():'https://i.ytimg.com/vi/' . $relatedArticle->getCoverPhoto()->getVid().'/hqdefault.jpg' : '',
+
                 'url' =>  $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $relatedArticle->getSlug()), true)
 
             );
@@ -1222,7 +1223,8 @@ class RecipeController extends BackendController
             $data['relatedTips'][] = array(
                 'title' => $relatedTip->getTitle(),
                 'titleEn' => $relatedTip->getTitleEn(),
-                'img' => $relatedTip->getCoverPhoto() ? '/' . $relatedTip->getCoverPhoto()->getWebPath() : '',
+                'img' => $relatedTip->getCoverPhoto() ? $relatedTip->getCoverPhoto()->getType() == 'image' ? '/' . $relatedTip->getCoverPhoto()->getWebPath():'https://i.ytimg.com/vi/' . $relatedTip->getCoverPhoto()->getVid().'/hqdefault.jpg' : '',
+
                 'url' =>  $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $relatedTip->getSlug()), true)
 
             );
