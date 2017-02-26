@@ -2,7 +2,7 @@
 
 namespace Ibtikar\GlanceDashboardBundle\Document;
 
-use PUGX\ExtraValidatorBundle\Validator\Constraints as ExtraAssert;
+//use PUGX\ExtraValidatorBundle\Validator\Constraints as ExtraAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 use Ibtikar\GlanceDashboardBundle\Validator\Constraints as CustomAssert;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
