@@ -29,4 +29,12 @@ class MediaRepository extends DocumentRepository {
                 ->sort('order', 'ASC')
                 ->getQuery()->execute();
     }
+
+    public function getContactMessagesMedia($ids) {
+        return $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Media')
+                        ->field('deleted')->equals(FALSE)
+                        ->field('contactMessage')->in($ids)
+                        ->sort('order', 'ASC')
+                        ->getQuery()->execute();
+    }
 }

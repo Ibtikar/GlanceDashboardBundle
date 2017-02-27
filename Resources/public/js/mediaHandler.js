@@ -71,7 +71,7 @@ function addImageToSortView(media) {
     $('.filesUploaded table tbody').append(
         imageSortTemplate
         .replace(/%image-id%/g, media.id)
-        .replace(/%image-name%|%title%/g, media.name?media.name:media.vid)
+        .replace(/%image-name%|%title%/g, media.path?media.path:media.vid)
         .replace(/%image-src%/g,media.type == "image" ? '/'+media.imageUrl + '?flushCache=' + encodeURIComponent(new Date().getTime() + Math.random()):media.imageUrl)
         .replace(/%image-caption%/g, quoteattr(media.caption))
         .replace(/%check%/g, media.cover)

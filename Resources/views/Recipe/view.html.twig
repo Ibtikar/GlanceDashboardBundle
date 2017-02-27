@@ -71,7 +71,7 @@
 
                             {% else %}
                                 {% if (is_granted('ROLE_RECIPE' ~ data['document'].getStatus()|upper ~'_ASSIGN')  or is_granted('ROLE_ADMIN') ) and  data['document'].getStatus() !='autopublish'%}
-                                    <a  tabindex="0" data-placement="top" href="javascript:void(0)" data-toggle="tooltip" title="{% trans %}AssignToMe{% endtrans %}" class="btn btn-primary heading-btn dev-assign-to-me" data-id="{{ data['document'].getId() }}" data-url="{{ path('ibtikar_glance_dashboard_recipe'~ data['document'].getStatus()|lower ~'_assign_to_me')}}" data-type="view">
+                                    <a  tabindex="0" data-placement="top" href="javascript:void(0)"  class="btn btn-primary heading-btn dev-assign-to-me" data-id="{{ data['document'].getId() }}" data-url="{{ path('ibtikar_glance_dashboard_recipe'~ data['document'].getStatus()|lower ~'_assign_to_me')}}" data-type="view">
                                         {% trans from translationDomain %}AssignToMe{% endtrans %}
                                     </a>
                                 {% endif %}
