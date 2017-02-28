@@ -643,4 +643,70 @@ class Competition extends Publishable {
         $this->setStatus($status ? self::$statuses["published"] : self::$statuses["unpublished"]);
         return $this;
     }
+
+    /**
+     * Set titleEn
+     *
+     * @param string $titleEn
+     * @return self
+     */
+    public function setTitleEn($titleEn)
+    {
+        $this->titleEn = $titleEn;
+        return $this;
+    }
+
+    /**
+     * Get titleEn
+     *
+     * @return string $titleEn
+     */
+    public function getTitleEn()
+    {
+        return $this->titleEn;
+    }
+
+    /**
+     * Set brief
+     *
+     * @param string $brief
+     * @return self
+     */
+    public function setBrief($brief)
+    {
+        $this->brief = $brief;
+        return $this;
+    }
+
+    /**
+     * Get brief
+     *
+     * @return string $brief
+     */
+    public function getBrief()
+    {
+        return $this->brief;
+    }
+
+    /**
+     * Set briefEn
+     *
+     * @param string $briefEn
+     * @return self
+     */
+    public function setBriefEn($briefEn)
+    {
+        $this->briefEn = $briefEn;
+        return $this;
+    }
+
+    /**
+     * Get briefEn
+     *
+     * @return string $briefEn
+     */
+    public function getBriefEn()
+    {
+        return $this->briefEn;
+    }
 }

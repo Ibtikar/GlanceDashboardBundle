@@ -6,10 +6,10 @@ use Ibtikar\GlanceDashboardBundle\Controller\base\BackendController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Ibtikar\GlanceDashboardBundle\Form\CompetitionType;
+use Ibtikar\GlanceDashboardBundle\Form\Type\CompetitionType;
 use Ibtikar\GlanceDashboardBundle\Document\Competition;
 use Ibtikar\GlanceDashboardBundle\Document\Question;
-use Ibtikar\UserBundle\Document\Document;
+use Ibtikar\GlanceDashboardBundle\Document\Document;
 
 /**
  * Description of CompetitionController
@@ -31,12 +31,6 @@ class CompetitionController extends BackendController {
      * @return Response
      */
     public function createAction(Request $request) {
-        $breadcrumbs = $this->get("white_october_breadcrumbs");
-        $breadcrumbs->addItem('backend-home', $this->generateUrl('backend_home'));
-        $breadcrumbs->addItem('List Competition', $this->generateUrl('competition_list'));
-        $breadcrumbs->addItem('Add new competition', $this->generateUrl('competition_create'));
-
-
         $competition = new Competition();
         $question = new Question();
         $question->addAnswer(new \Ibtikar\GlanceDashboardBundle\Document\QuestionChoiceAnswer);
@@ -44,7 +38,7 @@ class CompetitionController extends BackendController {
         $competition->getQuestions()->add($question);
 //        $competition->getQuestions()->add(new Question());
 
-        $form = $this->createForm(new CompetitionType(), $competition, array('translation_domain' => $this->translationDomain));
+        $form = $this->createForm(CompetitionType::class, $competition, array('translation_domain' => $this->translationDomain));
 
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
@@ -57,9 +51,10 @@ class CompetitionController extends BackendController {
             }
         }
 
-        return $this->render('IbtikarBackendBundle:Competition:create.html.twig', array(
+        return $this->render('IbtikarGlanceDashboardBundle:Competition:create.html.twig', array(
                     'form' => $form->createView(),
-                    'form_theme' => 'IbtikarBackendBundle:Competition:form_theme_competition.html.twig',
+                    'title' => $this->trans('Add new Competition', array(), $this->translationDomain),
+                    'form_theme' => 'IbtikarGlanceDashboardBundle:Competition:form_theme_competition.html.twig',
                     'translationDomain' => $this->translationDomain
         ));
     }
@@ -94,9 +89,9 @@ class CompetitionController extends BackendController {
             }
         }
 
-        return $this->render('IbtikarBackendBundle:Competition:edit.html.twig', array(
+        return $this->render('IbtikarGlanceDashboardBundle:Competition:edit.html.twig', array(
                     'form' => $form->createView(),
-                    'form_theme' => 'IbtikarBackendBundle:Competition:form_theme_competition.html.twig',
+                    'form_theme' => 'IbtikarGlanceDashboardBundle:Competition:form_theme_competition.html.twig',
                     'translationDomain' => $this->translationDomain
         ));
     }
@@ -150,7 +145,7 @@ class CompetitionController extends BackendController {
             $queryBuilder->field('publishedAt')->lte($fromDate->modify('+1 day'));
         }
         $this->listViewOptions->setListQueryBuilder($queryBuilder);
-        $this->listViewOptions->setTemplate("IbtikarBackendBundle:Competition:list.html.twig");
+        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Competition:list.html.twig");
     }
 
     protected function doList(Request $request) {
@@ -284,7 +279,7 @@ class CompetitionController extends BackendController {
                 $autoPublishTime = $competition->getAutoPublishDate()->format('H:i A');
             }
 
-            return $this->render('IbtikarBackendBundle::publishModal.html.twig', array(
+            return $this->render('IbtikarGlanceDashboardBundle::publishModal.html.twig', array(
                         'type'=>'competition',
                         'autoPublishDate' => $autoPublishDate,
                         'autoPublishTime' => $autoPublishTime,
@@ -441,7 +436,7 @@ class CompetitionController extends BackendController {
                     break;
             }
         }
-        return $this->render('IbtikarBackendBundle:Competition:view.html.twig', array(
+        return $this->render('IbtikarGlanceDashboardBundle:Competition:view.html.twig', array(
                 'translationDomain' => $this->translationDomain,
                 'competition' => $competition,
                 'drawChart' => $drawChart
@@ -503,6 +498,6 @@ class CompetitionController extends BackendController {
         $renderingParams['paginationData'] = $pagination->getPaginationData();
         $renderingParams['translationDomain'] = 'competition';
         $renderingParams['type'] = $type;
-        return $this->render('IbtikarBackendBundle:Competition:answersList.html.twig', $renderingParams);
+        return $this->render('IbtikarGlanceDashboardBundle:Competition:answersList.html.twig', $renderingParams);
     }
 }

@@ -1,41 +1,41 @@
-competition_list:
+ibtikar_glance_dashboard_competition_list:
     path:  /list
     defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:list }
 
-competition_change_list_columns:
+ibtikar_glance_dashboard_competition_change_list_columns:
     path:  /change-list-columns
     defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:changeListColumns }
 
-competition_create:
+ibtikar_glance_dashboard_competition_create:
     path:  /create
     defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:create }
 
-competition_edit:
+ibtikar_glance_dashboard_competition_edit:
     path:  /edit/{id}
     defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:edit }
 
-competition_updatePublish:
+ibtikar_glance_dashboard_competition_updatePublish:
     path:  /competition-update-publish
     defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:updatePublish }
 
-competition_bulk_actions:
+ibtikar_glance_dashboard_competition_bulk_actions:
     path: /bulk
     defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:bulk }
 
-competition_delete:
+ibtikar_glance_dashboard_competition_delete:
     path: /delete
     defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:delete }
 
-competition_autopublish:
+ibtikar_glance_dashboard_competition_autopublish:
     path:  /ajax/auto-publish-date
     defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:autoPublishDate }
 
 
-competition_view:
+ibtikar_glance_dashboard_competition_view:
     path:  /view/{id}
     defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:view }
 
 
-competition_answer_id:
+ibtikar_glance_dashboard_competition_answer_id:
     path:  /competition-answers-list-by-id/{id}/{type}
     defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:answerList }
