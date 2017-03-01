@@ -129,7 +129,7 @@
 
                                             <div class="timeline-row">
                                                 <div class="timeline-icon">
-                                                    <img src=""{{ asset(reply.createdBy.getWebPath()|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }} alt="">
+                                                    <img src="{{ asset(reply.createdBy.getWebPath()|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}" alt="">
                                                 </div>
 
                                                 <div class="row">
@@ -138,7 +138,7 @@
                                                             <div class="panel-body">
                                                                 <div class="row">
                                                                     <div class="col-md-12">
-                                                                        <h6 class="text-semibold no-margin-top"> {% if  reply.messageType=='2-staff-reply'%}{% trans from 'contact'%}goody user{% endtrans%}{{ reply.createdBy}}{% else %}{% endif %}</h6>
+                                                                        <h6 class="text-semibold no-margin-top"> {% if  reply.messageType=='2-staff-reply'%}{% trans from 'contact'%}goody user{% endtrans%}{% else %}{{ reply.createdBy}}{% endif %}</h6>
                                                                         <ul class="list list-unstyled">
                                                                             <li>   {{ reply.content }}</li>
                                                                         </ul>
