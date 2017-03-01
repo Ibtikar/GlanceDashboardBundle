@@ -308,9 +308,8 @@ class MessageController extends BackendController {
             return new JsonResponse(array('status' => 'login'));
         }
         if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_ANSWER') && !$securityContext->isGranted('ROLE_ADMIN')) {
-            $this->get('session')->getFlashBag()->add('error', $this->trans('You are not authorized to do this action any more'));
-            $result = array('status' => 'reload-page');
-            return new JsonResponse($result, 403);
+            $request->getSession()->getFlashBag()->add('error', $this->get('translator')->trans('You are not authorized to do this action any more'));
+            return new JsonResponse(array('status' => 'success', 'message' => $this->get('translator')->trans('You are not authorized to do this action any more')));
         }
 
         $dm = $this->get('doctrine_mongodb')->getManager();
@@ -322,7 +321,7 @@ class MessageController extends BackendController {
         }
         $message=$request->get('message');
         if(!$message){
-          $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('failed operation'));
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('failed operation'));
             return $this->getFailedResponse('failed-reload');
         }
 
