@@ -244,7 +244,7 @@ class MessageController extends BackendController {
         if (is_null($user)) {
             throw $this->createNotFoundException('Access Denied');
         }
-        $document = $dm->getRepository('IbtikarGoodyFrontendBundle:ContactMessage')->findOneBy(array('id' => $id,'createdBy.$id' =>new \MongoId($user->getId())));
+        $document = $dm->getRepository('IbtikarGoodyFrontendBundle:ContactMessage')->findOneBy(array('id' => $id));
         if (!$document || $document->getMessageType() !== ContactMessage::$messageTypes['mainThread']) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
