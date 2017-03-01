@@ -8,7 +8,7 @@
 {% block side_menu %}
     {{ include('IbtikarGlanceDashboardBundle::sidebar.html.twig') }}
 {% endblock %}
-{% block title %}{% trans from 'product' %}View One Product{% endtrans%}{% endblock%}
+{% block title %}مشاهده رساله{% endblock%}
 
 
 {% block breadCrumb %}
@@ -196,7 +196,7 @@
 
                                     </div>
                                 </div>
-                                {% if is_granted('ROLE_' ~ room ~'_ANSWER') or is_granted('ROLE_ADMIN')%}
+                                        {% if is_granted('ROLE_' ~ room|upper ~'_ANSWER') or is_granted('ROLE_ADMIN')%}
 
                                 <hr/>
                                 <!-- /timeline -->
@@ -225,6 +225,7 @@
                     </div>
 
                 </div>
+                                {% if is_granted('ROLE_' ~ room|upper ~'_ANSWER') or is_granted('ROLE_ADMIN')%}
 
                 <div class="row actionButtons">
                     <div class="col-xs-12">
@@ -235,6 +236,7 @@
 
                     </div>
                 </div>
+                            {% endif%}
 
             </div><!-- col-lg-12 tabs -->
 
@@ -299,7 +301,7 @@
                             }
                         });
                         $.ajax({
-                            url: "{{ path('ibtikar_glance_dashboard_'~room~'_reply',{'id':app.request.get('id')})}}",
+                            url: "{{ path('ibtikar_glance_dashboard_'~room|lower~'_reply',{'id':app.request.get('id')})}}",
                             method: 'POST',
                             data: {'message': $('#dev-reply-message').val()},
 
