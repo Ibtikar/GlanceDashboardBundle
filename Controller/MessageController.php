@@ -41,7 +41,7 @@ class MessageController extends BackendController {
         $queryBuilder = $dm->createQueryBuilder('IbtikarGoodyFrontendBundle:ContactMessage')
                         ->field('messageType')->equals(ContactMessage::$messageTypes['mainThread'])
                         ->field('status')->equals($this->messageStatus);
-        $this->listViewOptions->setActions(array('Answer', 'ChangeStatus'));
+        $this->listViewOptions->setActions(array('ChangeStatus','ViewOne'));
         $this->listViewOptions->setListQueryBuilder($queryBuilder);
         $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Message:messageList.html.twig");
     }
@@ -236,5 +236,108 @@ class MessageController extends BackendController {
             $data = array('status' => 'success','message' => $this->trans('done sucessfully'));
             return new JsonResponse(array_merge($data, $this->getTabCount()));
         }
+    }
+
+    public function viewAction(Request $request , $id){
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $user = $this->getUser();
+        if (is_null($user)) {
+            throw $this->createNotFoundException('Access Denied');
+        }
+        $document = $dm->getRepository('IbtikarGoodyFrontendBundle:ContactMessage')->findOneBy(array('id' => $id,'createdBy.$id' =>new \MongoId($user->getId())));
+        if (!$document || $document->getMessageType() !== ContactMessage::$messageTypes['mainThread']) {
+            throw $this->createNotFoundException($this->trans('Wrong id'));
+        }
+
+        $locale = $request->get('_locale');
+        $mediaData = array();
+        $repliesId=array();
+        $replies = $document->getReplies();
+        if ($replies) {
+            foreach ($replies as $reply) {
+                $repliesId[] = $reply->getId();
+            }
+        }
+        $contactMessagesMedia = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->getContactMessagesMedia(array_merge($repliesId,array($id)));
+        foreach ($contactMessagesMedia as $contactMessageMedia) {
+            $mediaData[$contactMessageMedia->getContactMessage()->getId()]['images'][] = $contactMessageMedia;
+        }
+        $responseBuilder = $this->container->get('response_builder');
+
+        $data['document'] = array(
+            'id' => $document->getId(),
+            'title' => $document->getMainTitle(),
+            'date' => $document->getCreatedAt()->format('d') ." ". $this->trans($document->getCreatedAt()->format('F'), array(), 'app') . ',' . $document->getCreatedAt()->format('Y'),
+            'time' => $document->getCreatedAt()->format('h:i A'),
+            'content' => $document->getContent(),
+            'type' => $this->trans($document->getContactType(), array(), 'contact'),
+            'status' => $this->trans($document->getStatus(), array(), 'contact'),
+            'trackingNumber' =>$document->getTrackingNumber() ,
+            'createdBy' =>$document->getCreatedBy() ,
+            'createdAt' =>$document->getCreatedAt() ,
+        );
+        $repliesId=array();
+        $replies = $document->getReplies();
+        if ($replies) {
+            foreach ($replies as $reply) {
+                $repliesId[] = $reply->getId();
+            }
+            $replies = $dm->createQueryBuilder('IbtikarGoodyFrontendBundle:ContactMessage')
+                            ->field('id')->in($repliesId)
+                            ->sort('createdAt', 'ASC')
+                            ->eagerCursor(true)
+                            ->getQuery()->execute();
+
+        }
+
+        return $this->render('IbtikarGlanceDashboardBundle:Message:view.html.twig', array(
+                    'translationDomain' => $this->translationDomain,
+                    'replies' => $replies,
+                    'document' => $data['document'],
+                    'room'=>$this->calledClassName,
+                    'mediaData' => $mediaData,
+        ));
+    }
+
+
+    public function replyAction(Request $request, $id)
+    {
+        $securityContext = $this->get('security.authorization_checker');
+        $loggedInUser = $this->getUser();
+        if (!$loggedInUser) {
+            return new JsonResponse(array('status' => 'login'));
+        }
+        if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_ANSWER') && !$securityContext->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', $this->trans('You are not authorized to do this action any more'));
+            $result = array('status' => 'reload-page');
+            return new JsonResponse($result, 403);
+        }
+
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $originalMessage = $dm->getRepository('IbtikarGoodyFrontendBundle:ContactMessage')->find($id);
+
+        if (!$originalMessage ){
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('failed operation'));
+            return $this->getFailedResponse('failed-reload');
+        }
+        $message=$request->get('message');
+        if(!$message){
+          $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('failed operation'));
+            return $this->getFailedResponse('failed-reload');
+        }
+
+        $contactMessage = new ContactMessage();
+        $contactMessage->setMainTitle($originalMessage->getMainTitle());
+        $contactMessage->setMessageType(ContactMessage::$messageTypes['staffReply']);
+        $contactMessage->setContactType($originalMessage->getContactType());
+        $contactMessage->setStatus(ContactMessage::$statuses['inprogress']);
+        $contactMessage->setContent($message);
+        $dm->persist($contactMessage);
+
+        $originalMessage->addReply($contactMessage);
+        $originalMessage->setStatus(ContactMessage::$statuses['inprogress']);
+        $dm->flush();
+        $request->getSession()->getFlashBag()->add('success', $this->get('translator')->trans('done sucessfully'));
+        return new JsonResponse(array('status' => 'success', 'message' => 'done sucessfully'));
     }
 }

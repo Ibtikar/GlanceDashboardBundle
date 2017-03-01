@@ -13,3 +13,11 @@ ibtikar_glance_dashboard_messageclose_change_status:
 ibtikar_glance_dashboard_messageclose_list_close_message_change_list_columns:
     path:  /close-message-change-list-columns
     defaults: { _controller: IbtikarGlanceDashboardBundle:message\Close:changeListcloseMessageColumns }
+
+ibtikar_glance_dashboard_messageclose_view:
+    path:  /view/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\Close:view }
+
+ibtikar_glance_dashboard_newmessages_reply:
+    path:  /reply/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\Close:reply }

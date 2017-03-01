@@ -17,3 +17,11 @@ ibtikar_glance_dashboard_messagenew_change_status:
 ibtikar_glance_dashboard_messagenew_list_new_message_change_list_columns:
     path:  /new-message-change-list-columns
     defaults: { _controller: IbtikarGlanceDashboardBundle:message\New:changeListNewMessageColumns }
+
+ibtikar_glance_dashboard_messagenew_view:
+    path:  /view/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\New:view }
+
+ibtikar_glance_dashboard_messagenew_reply:
+    path:  /reply/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\New:reply }

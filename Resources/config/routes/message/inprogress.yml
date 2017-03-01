@@ -14,7 +14,13 @@ ibtikar_glance_dashboard_messageinprogress_list_inprogress_message_change_list_c
     path:  /inprogress-message-change-list-columns
     defaults: { _controller: IbtikarGlanceDashboardBundle:message\Inprogress:changeListInprogressMessageColumns }
 
+ibtikar_glance_dashboard_messageinprogress_view:
+    path:  /view/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\Inprogress:view }
 
+ibtikar_glance_dashboard_messageinprogress_reply:
+    path:  /reply/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:message\Inprogress:reply }
 
 
 
