@@ -25,7 +25,7 @@ class Competition extends Publishable {
         'nobody' => 'nobody',
     );
     public static $allowedVoters = array(
-        'visitors' => 'visitors',
+        'all-users' => 'all users',
         'registered-users' => 'registered users'
     );
     public static $statuses = array(
@@ -72,6 +72,30 @@ class Competition extends Publishable {
      * )
      */
     private $titleEn;
+
+    /**
+     * @Assert\NotBlank
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 3,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 150,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $secondaryTitle;
+
+    /**
+     * @Assert\NotBlank
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 3,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 150,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $secondaryTitleEn;
 
     /**
      * @Assert\NotBlank
@@ -708,5 +732,49 @@ class Competition extends Publishable {
     public function getBriefEn()
     {
         return $this->briefEn;
+    }
+
+    /**
+     * Set secondaryTitle
+     *
+     * @param string $secondaryTitle
+     * @return self
+     */
+    public function setSecondaryTitle($secondaryTitle)
+    {
+        $this->secondaryTitle = $secondaryTitle;
+        return $this;
+    }
+
+    /**
+     * Get secondaryTitle
+     *
+     * @return string $secondaryTitle
+     */
+    public function getSecondaryTitle()
+    {
+        return $this->secondaryTitle;
+    }
+
+    /**
+     * Set secondaryTitleEn
+     *
+     * @param string $secondaryTitleEn
+     * @return self
+     */
+    public function setSecondaryTitleEn($secondaryTitleEn)
+    {
+        $this->secondaryTitleEn = $secondaryTitleEn;
+        return $this;
+    }
+
+    /**
+     * Get secondaryTitleEn
+     *
+     * @return string $secondaryTitleEn
+     */
+    public function getSecondaryTitleEn()
+    {
+        return $this->secondaryTitleEn;
     }
 }

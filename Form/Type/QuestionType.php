@@ -15,8 +15,8 @@ class QuestionType extends AbstractType {
                 ->add('question', formType\TextType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 330, 'required' => '')))
                 ->add('answerImportance', formType\ChoiceType::class, array('choices' => \Ibtikar\GlanceDashboardBundle\Document\Question::$answerImportanceType, 'expanded' => true))
                 ->add('questionType', formType\ChoiceType::class, array('expanded' => false,'choices' => \Ibtikar\GlanceDashboardBundle\Document\Question::$questionTypes,'attr'  => array('data-form-group-class' => 'bgGrey')))
-                ->add('answerDisplay', formType\ChoiceType::class, array('choices' => \Ibtikar\GlanceDashboardBundle\Document\Question::$answerDisplayType, 'expanded' => true))
-                ->add('resultDisplay', formType\ChoiceType::class, array('choices' => \Ibtikar\GlanceDashboardBundle\Document\Question::$resultDisplayType, 'expanded' => true))
+//                ->add('answerDisplay', formType\ChoiceType::class, array('choices' => \Ibtikar\GlanceDashboardBundle\Document\Question::$answerDisplayType, 'expanded' => true))
+//                ->add('resultDisplay', formType\ChoiceType::class, array('choices' => \Ibtikar\GlanceDashboardBundle\Document\Question::$resultDisplayType, 'expanded' => true))
                 ->add('answers', formType\CollectionType::class, array('entry_type' => QuestionChoiceAnswerType::class, 'allow_add' => true, 'allow_delete' => true, 'by_reference' => true, 'attr' => array('class' => 'voteAnswer')));
     }
 

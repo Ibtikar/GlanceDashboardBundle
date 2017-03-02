@@ -38,7 +38,8 @@ class CompetitionController extends BackendController {
         $competition->getQuestions()->add($question);
 //        $competition->getQuestions()->add(new Question());
 
-        $form = $this->createForm(CompetitionType::class, $competition, array('translation_domain' => $this->translationDomain));
+        $form = $this->createForm(CompetitionType::class, $competition, array('translation_domain' => $this->translationDomain,
+                'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
 
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);

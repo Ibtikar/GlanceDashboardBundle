@@ -12,7 +12,7 @@ class QuestionChoiceAnswerType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
                 ->add('id', formType\HiddenType::class)
-                ->add('answer', formType\TextType::class, array('attr' => array('data-rule-minlength' => 2,'data-rule-maxlength' => 330)));
+                ->add('answer', formType\TextType::class, array('attr' => array('data-rule-minlength' => 2,'data-rule-maxlength' => 330,'data-error-after-selector' => '.dev-question-answer-container')));
     }
 
     public function configureOptions(OptionsResolver $resolver) {

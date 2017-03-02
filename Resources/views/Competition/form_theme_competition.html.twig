@@ -14,20 +14,27 @@
 {%- endblock choice_widget_options %}
 
 {%- block form_widget_compound -%}
+    {% if form.vars.unique_block_prefix == '_competition_questions_entry' %}
+        {% set attr = attr|merge({class: (attr.class|default(' panel panel-flat '))|trim}) %}
+    {% endif %}
     <div {{ block('widget_container_attributes') }}>
         {%- if form.parent is empty -%}
             {{ form_errors(form) }}
         {% elseif prototype is defined %}
-            {# poll answers add button render #}
+            {# question answers add button render #}
             <div class="dev-add-question-answer-container">
             </div>
         {% endif %}
-{#        {{dump(form.vars)}}#}
-{#        {% if form.vars.id == 'competition_questions' %}<hr/>{% endif %}#}
         {% if form.vars.unique_block_prefix == '_competition_questions_entry' %}
-            <a class="btn btn-primary DeleteBTN pull-left deleteQuestion dev-remove-competition-question hide" style="position:relative;z-index:1;">
+            <div class="panel-heading">
+                <h5 class="panel-title"> اضف السؤال</h5>
+                <div class="heading-elements">
+                    <button class="btn btn-danger dev-remove-competition-question " type="button">مسح السؤال</button>
+                </div>
+            </div>
+{#            <a class="btn btn-primary DeleteBTN pull-left deleteQuestion dev-remove-competition-question hide" style="position:relative;z-index:1;">
                 <i class="fa fa-times"></i>
-            </a>
+            </a>#}
         {% endif %}
 
         {{- block('form_rows') -}}
@@ -38,21 +45,21 @@
 {% block form_row %}
     {% set allowLabelElm = ['_competition_questions_entry_answers','_competition_questions_entry_answerDisplay','_competition_questions_entry_answerImportance','_competition_questions_entry_resultDisplay'] %}
     {% if form.parent.parent.parent is defined %}
-        {% if form.vars.name == "question" %}<hr/>{% endif %}
+{#        {% if form.vars.name == "question" %}<hr/>{% endif %}#}
         {% if form.children | length == 0 or form.vars.unique_block_prefix in allowLabelElm %}
-        <div class="form-group{% if "answer" == form.vars.name %} inputBody noMargin dev-poll-answer-container{% endif %}{% if form.vars.errors|length > 0 %} has-error{% endif %}{% if form.vars.unique_block_prefix in ['_competition_questions_entry_answers','_competition_questions_entry_answerDisplay'] %} dependant-fields{% endif %}" {% if "answer" == form.vars.name %}style="margin-left:-15px !important;"{% endif %}>
+        <div class="{% if "answer" == form.vars.name %} input-group inputBody noMargin dev-question-answer-container marginBottom-20 {% else %} form-group {% endif %}{% if form.vars.errors|length > 0 %} has-error{% endif %}{% if form.vars.unique_block_prefix in ['_competition_questions_entry_answers','_competition_questions_entry_answerDisplay'] %} dependant-fields{% endif %}">
             {% if "_answer" not in form.vars.id or form.vars.unique_block_prefix in allowLabelElm %}
                 {{ form_label(form)  }}
-            <div class="col-md-6">
+            <div class="col-md-10">
                 {{ form_widget(form) }}
                 {{ form_errors(form) }}
             </div>
             {% else %}
-                <span class="deleteAnswer dev-remove-poll-answer">
-                <i class="fa fa-times"></i>
-                </span>
-                <span class="sameRadio"></span>
                 {{ form_widget(form) }}
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default deleteAnswer dev-remove-question-answer"><i class="icon-cancel-circle2"></i></button>
+{#                    <button type="button" class="btn btn-default"><i class="icon-plus2"></i></button>#}
+                </div>
                 {{ form_errors(form) }}
             {% endif %}
 
@@ -61,11 +68,11 @@
             {{ form_widget(form) }}
         {% endif %}
     {% else %}
-{% if form.vars.id == 'poll_questions' %}<hr/>{% endif %}
+{% if form.vars.id == 'question_questions' %}<hr/>{% endif %}
         <div class="form-group{% if form.vars.name == "sponsors"%} inputBody noMargin dev-event-sponsor-container{% endif %}{% if attr['data-form-group-class'] is defined %} {{ attr['data-form-group-class'] }}{% endif %}{% if form.vars.errors|length > 0 or (form.phone is defined and form.phone.vars.errors|length > 0) %} has-error{% endif %}{%  if "_media" in form.vars.id %} hide{% endif %}">
             {% if form.vars.name != "sponsors" %}
                 {{ form_label(form)  }}
-                <div class="{% if form.vars.type is defined and form.vars.type == 'datetime' %}{% else %}col-md-{{form.vars.compound and form.vars.name not in ["resultsVisibility","allowedToVote"]?"12":"6"}}{% endif %}">
+                <div class="{% if form.vars.type is defined and form.vars.type == 'datetime' %}{% else %}col-md-{{form.vars.compound and form.vars.name not in ["resultsVisibility","allowedToVote"]?"12":"10"}}{% endif %}">
 {#                    {{dump(form.vars)}}#}
                     {{ form_widget(form) }}
                     {{ form_errors(form) }}

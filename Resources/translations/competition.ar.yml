@@ -1,0 +1,39 @@
+# #############Labels############
+'Title': 'العنوان'
+'Title en': 'العنوان بالإنجليزية'
+'Secondary title': 'العنوان الفرعي'
+'Secondary title en': 'العنوان الفرعي  بالإنجليزية'
+'Brief': 'النبذة'
+'Brief en': 'النبذة بالإنجليزية'
+'Question': 'السؤال'
+'Answer importance': 'أهمية السؤال'
+'mandatory': 'إجباري'
+'non mandatory': 'إختياري'
+'Answers': 'الاجابات'
+'Question type': 'نوع الاجابه'
+'Expiry date': 'تاريخ الأنتهاء'
+'Allowed to vote': 'المسموح لهم بالمشاركة'
+'all users': 'زائرين و أعضاء'
+'registered users': 'أعضاء'
+'single-answer': 'إجابة واحدة'
+'multiple-answer': 'إجابات متعددة'
+'input': 'مدخل'
+'text': 'نص'
+'phone': 'رقم هاتف'
+'email': 'بريد اليكتروني'
+'date': 'تاريخ'
+'textarea': 'نص كبير'
+'image': 'صورة'
+'video': 'فيديو'
+'Add Question': 'إضافة سؤال'
+# ############Messages############
+'You must add only from 2 to 5 answers': 'عدد الاجابات المسموح بها يتراوح من 2 الى 5 اجابات'
+# ############Titles############
+'Add new Competition': 'إضافة مسابقة'
+
+# ############Buttons############
+
+
+# #############General############
+
+
