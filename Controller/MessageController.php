@@ -344,7 +344,7 @@ class MessageController extends BackendController {
             '%answer%',
             '%trackingNumber%',
             ), array(
-            $originalMessage->getCreatedBy()->__toString(),
+            $originalMessage->getCreatedBy()->__toString()?$originalMessage->getCreatedBy()->__toString():$originalMessage->getCreatedBy()->getFullname(),
             $contactMessage->getContent(),
             $originalMessage->getTrackingNumber(),
             ), str_replace('%message%', $emailTemplate->getTemplate(), $this->get('frontend_base_email')->getBaseRender2($originalMessage->getCreatedBy()->getPersonTitle(), false))
