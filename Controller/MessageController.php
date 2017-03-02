@@ -334,9 +334,30 @@ class MessageController extends BackendController {
         $dm->persist($contactMessage);
 
         $originalMessage->addReply($contactMessage);
+        $originalMessageStatus=$originalMessage->getStatus();
         $originalMessage->setStatus(ContactMessage::$statuses['inprogress']);
         $dm->flush();
-        $request->getSession()->getFlashBag()->add('success', $this->get('translator')->trans('done sucessfully'));
+        $emailTemplate = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:EmailTemplate')->findOneBy(array('name' => 'reply on your request'));
+        $body = str_replace(
+            array(
+            '%user-name%',
+            '%answer%',
+            '%trackingNumber%',
+            ), array(
+            $originalMessage->getCreatedBy()->__toString(),
+            $contactMessage->getContent(),
+            $originalMessage->getTrackingNumber(),
+            ), str_replace('%message%', $emailTemplate->getTemplate(), $this->get('frontend_base_email')->getBaseRender2($originalMessage->getCreatedBy()->getPersonTitle(), false))
+        );
+        $mailer = $this->get('swiftmailer.mailer.spool_mailer');
+        $message = \Swift_Message::newInstance()
+            ->setSubject($emailTemplate->getSubject())
+            ->setFrom($this->container->getParameter('mailer_user'))
+            ->setTo($originalMessage->getCreatedBy()->getEmail())
+            ->setBody($body, 'text/html')
+        ;
+        $mailer->send($message);
+        $request->getSession()->getFlashBag()->add('success',  in_array($originalMessageStatus, array(ContactMessage::$statuses['new'],ContactMessage::$statuses['close'])) ?$this->get('translator')->trans('change status',array(),  $this->translationDomain):$this->get('translator')->trans('done sucessfully'));
         return new JsonResponse(array('status' => 'success', 'message' => 'done sucessfully'));
     }
 }
