@@ -372,7 +372,7 @@ $(document).on("click",'.dev-add-related-material',function(){
                                 objArray.push({
                                     'id':$(this).attr('data-related-material-id'),
                                     'text':$(this).find('.media-body b').text().trim(),
-                                    'img':"/"+$(this).find('img').attr('src')
+                                    'img':$(this).find('img').attr('src')
                                 });
                             });
                             $('#recipe_related').val(JSON.stringify(objArray));

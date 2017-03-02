@@ -300,7 +300,10 @@ class Media extends Document {
 
         } else if ($this->getRecipe()) {
             $uploadDirectory .= "/".strtolower($this->collectionType)."-file/" . $this->getRecipe()->getId();
-        } else if ($this->getMagazine()) {
+        } else if ($this->getContactMessage()) {
+            $uploadDirectory .= "/".strtolower($this->collectionType)."-file/" . $this->getContactMessage()->getId();
+        }
+        else if ($this->getMagazine()) {
             $uploadDirectory .= '/magazine-file/' . $this->getMagazine()->getId();
         } else {
             if (!$this->getCreatedBy()) {
