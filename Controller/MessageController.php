@@ -357,7 +357,7 @@ class MessageController extends BackendController {
             ->setBody($body, 'text/html')
         ;
         $mailer->send($message);
-        $request->getSession()->getFlashBag()->add('success',  in_array($originalMessageStatus, array(ContactMessage::$statuses['new'],ContactMessage::$statuses['close'])) ?$this->get('translator')->trans('change status',array(),  $this->translationDomain):$this->get('translator')->trans('done sucessfully'));
+        $request->getSession()->getFlashBag()->add('success',  in_array($originalMessageStatus, array(ContactMessage::$statuses['new'],ContactMessage::$statuses['close'])) ?$this->get('translator')->trans('message change status',array(),  $this->translationDomain):$this->get('translator')->trans('done sucessfully'));
         return new JsonResponse(array('status' => 'success', 'message' => 'done sucessfully'));
     }
 }
