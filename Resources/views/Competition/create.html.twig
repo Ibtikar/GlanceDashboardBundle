@@ -26,8 +26,13 @@
 
                 {{ form_row(form.brief) }}
 
+                {{ form_row(form.questions) }}
 {#                {{ form_row(form.images) }}#}
-
+        <div class="col-9 clearfix">
+            <div class="col-md-9">
+                <a class="btn btn-lg btn-primary pull-left addQuestion dev-add-competition-questions">{% trans from translationDomain %}Add Question{% endtrans %}</a>
+            </div>
+        </div>
             </div><!-- arabic end -->
 
             <div class="tab-pane" id="english">
@@ -39,18 +44,16 @@
 
                 {{ form_row(form.briefEn) }}
 
-
-
+                {{ form_row(form.questionsEn) }}
+        <div class="col-9 clearfix">
+            <div class="col-md-9">
+                <a class="btn btn-lg btn-primary pull-left addQuestionEn dev-add-competition-questionsEn">{% trans from translationDomain %}Add Question{% endtrans %}</a>
+            </div>
+        </div>
             </div><!-- english end -->
 
         </div>
     </div>
-        {{ form_row(form.questions) }}
-        <div class="col-9 clearfix">
-            <div class="col-md-9">
-                <a class="btn btn-lg btn-primary pull-left addQuestion dev-add-competition-question">{% trans from translationDomain %}Add Question{% endtrans %}</a>
-            </div>
-        </div>
         <hr/>
     {{ form_end(form) }}
 
@@ -95,7 +98,6 @@
     <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/date/moment-lang.js')}}" type="text/javascript"></script>
     <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/date/bootstrap-datetimepicker.min.js')}}" type="text/javascript"></script>
     <script>
-        var dateToday = new Date();
             var months$2 = [
                 'يناير',
                 'فبراير',
@@ -118,7 +120,8 @@
                 weekdaysMin: 'ح_ن_ث_ر_خ_ج_س'.split('_'),
             })
             moment.locale("en");
-            $('#competition_expiryDate').datetimepicker({minDate: dateToday,
+            $('#competition_expiryDate').datetimepicker({
+                minDate: moment($('#stars_birthDate').attr("data-min-date"))
             });
 
     </script>
@@ -131,22 +134,38 @@
         $('select').select2();
 
         var questionNextId = 1;
-        $(document).on('click', '.dev-add-competition-question', function() {
-            var $questionContainer = $('#competition_questions');
-            var prototype = $questionContainer.data('prototype').replace(/questions___name__/g, "questions_"+questionNextId).replace(/\[questions\]\[__name__\]/g, "[questions]["+questionNextId+"]");
+        var questionNextIdEn = 1;
+        $(document).on('click', '.dev-add-competition-questions,.dev-add-competition-questionsEn', function() {
+            var identifier = $(this).attr('class').split(' ').pop().replace('dev-add-competition-','');
+            var lang = identifier=="questions"?"ar":"en";
+            var $questionContainer = $('#competition_'+identifier);
+            var prototype = $questionContainer.data('prototype').replace('/'+identifier+'___name__/g', identifier+"_"+lang=="ar"?questionNextId:questionNextIdEn).replace("/\["+identifier+"\]\[__name__\]/g", "["+identifier+"]["+lang=="ar"?questionNextId:questionNextIdEn+"]");
             $questionContainer.append(prototype);
-            questionNextId++;
-            addNewAnswer($('.voteAnswer:last'));
-            addNewAnswer($('.voteAnswer:last'));
+            if(lang=="ar"){
+                questionNextId++;
+            }else{
+                questionNextIdEn++;
+            }
+            addNewAnswer($questionContainer.find('.voteAnswer:last'));
+            addNewAnswer($questionContainer.find('.voteAnswer:last'));
             $('[id$="_answerDisplay"]:last input[type="radio"]:first').prop('checked',true);
             $('[id$="_resultDisplay"]:last input[type="radio"]:first').prop('checked',true);
             $('[id$="_answerImportance"]:last input[type="radio"]:first').prop('checked',true);
-{#            initSelect2();#}
+
+            $questionContainer.find("[type='radio']").uniform({
+                radioClass: 'choice'
+            });
+            $questionContainer.find('select').select2();
     });
 
     $(document).on('click', '.dev-remove-competition-question', function() {
             $(this).parents('[id^="competition_questions_"]').remove();
-            checkIfLastQuestion();
+            checkIfLastQuestion($('#arabic'));
+    });
+
+    $(document).on('click', '.dev-remove-competition-questionEn', function() {
+            $(this).parents('[id^="competition_questionsEn_"]').remove();
+            checkIfLastQuestion($('#english'));
     });
 
     /////////////////////////////////////////////////////
@@ -155,12 +174,15 @@
     var nextId = 1;
 
 
-function  checkIfLastQuestion() {
-    $questionsLength = $('.competitionQuestion').children('[id^="competition_questions_"]').length;
+function  checkIfLastQuestion(parent) {
+    if(typeof prefix == 'undefined'){
+        prefix = '';
+    }
+    $questionsLength = $(parent).find('.competitionQuestion').children('[id^="competition_questions_"]').length;
     if($questionsLength < 2){
-        $('.dev-remove-competition-question').addClass('hide');
+        $(parent).find('.dev-remove-competition-question').addClass('hide');
     } else {
-        $('.dev-remove-competition-question').removeClass('hide');
+        $(parent).find('.dev-remove-competition-question').removeClass('hide');
     }
 }
 
@@ -189,7 +211,6 @@ function correctlyPositionAddButton(parent) {
 
 function addNewAnswer(elm) {
         var parent = $(elm).hasClass('voteAnswer')?elm:$(elm).parents('.voteAnswer');
-
         var answersCount = parent.find('input[id^="'+parent.attr('id')+'_"]:visible').length;
         if(answersCount < 5) {
             var $answersContainer = parent;
@@ -200,13 +221,14 @@ function addNewAnswer(elm) {
         } else {
             addAnswersErrorMessage(parent);
         }
-        checkIfLastQuestion();
+        checkIfLastQuestion(parent.parents('.tab-pane'));
         correctlyPositionAddButton(parent);
 }
 
 
 jQuery(document).ready(function ($) {
-    correctlyPositionAddButton($('.competitionQuestion:eq(0)'));
+    correctlyPositionAddButton($('#competition_questions'));
+    correctlyPositionAddButton($('#competition_questionsEn'));
 
     $('[id$="question_answers_"]input').each(function () {
         var id = parseInt($(this).attr('id').replace('question_answers_', '').replace('_answer', ''));
