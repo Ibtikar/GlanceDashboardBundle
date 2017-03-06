@@ -1,0 +1,24 @@
+ibtikar_glance_dashboard_competitionnew_list_new_competition:
+    path:  /list-new-competition
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\New:listNewCompetition }
+
+ibtikar_glance_dashboard_competitionnew_view:
+    path:  /view/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\New:view }
+
+ibtikar_glance_dashboard_competitionnew_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\New:edit }
+
+ibtikar_glance_dashboard_competitionnew_list_new_competition_change_list_columns:
+    path:  /new-competition-change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\New:changeListNewCompetitionColumns }
+
+ibtikar_glance_dashboard_competitionnew_bulk_actions:
+    path:  /bulk
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\New:bulk }
+
+ibtikar_glance_dashboard_competitionnew_delete:
+    path:  /delete
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\New:delete }
+

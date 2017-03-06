@@ -30,10 +30,8 @@ class Competition extends Publishable {
     );
     public static $statuses = array(
         "new" => "new",
-        "autopublish" => "autopublish",
-        "unpublished" => "unpublished",
-        "published" => "published",
-        'deleted'=>'deleted'
+        "unpublish" => "unpublish",
+        "publish" => "publish",
     );
 
     static $COMPETITION_ANSWER_Highlighted_COLORS = array(

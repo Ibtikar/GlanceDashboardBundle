@@ -26,10 +26,36 @@
 'image': 'صورة'
 'video': 'فيديو'
 'Add Question': 'إضافة سؤال'
+'title': 'العنوان'
+'questionsCount': 'عدد الاسئله'
+'Questions count': 'عدد الاسئله'
+'expiryDate': 'تاريخ الأنتهاء'
+'createdAt': تاريخ الإنشاء
+'Created at': تاريخ الإنشاء
+'noOfAnswer': 'عدد الاجوبه'
+'No of answer': 'عدد الاجوبه'
 # ############Messages############
 'You must add only from 2 to 5 answers': 'عدد الاجابات المسموح بها يتراوح من 2 الى 5 اجابات'
 # ############Titles############
 'Add new Competition': 'إضافة مسابقة'
+'new competition': 'الجديده'
+'publish competition': 'المنشوره'
+'unpublish competition': 'الغير منشوره'
+'List Competition': 'مسابقه مطبخ قودى'
+'List competition': 'مسابقه مطبخ قودى'
+'Edit competitionnew': 'تعديل'
+'View One competitionnew': 'عرض'
+'Delete competitionnew': 'حذف'
+'publish Competitionnew': 'نشر'
+'Edit competitionpublish': 'تعديل'
+'View One competitionpublish': 'عرض'
+'Delete competitionpublish': 'حذف'
+'publish Competitionunpublish': 'نشر'
+'Edit Competitionunpublish': 'تعديل'
+'View One competitionunpublish': 'عرض'
+'Delete Competitionunpublish': 'حذف'
+'unpublish Competitionpublish': 'ايقاف نشر'
+'StopResume Competitionpublish': 'ايقاف الاجوبه'
 
 # ############Buttons############
 
