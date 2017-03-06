@@ -1,0 +1,25 @@
+ibtikar_glance_dashboard_competitionpublish_list_publish_competition:
+    path:  /list-publish-competition
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\Publish:listPublishCompetition }
+
+ibtikar_glance_dashboard_competitionpublish_view:
+    path:  /view/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\Publish:view }
+
+ibtikar_glance_dashboard_competitionpublish_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\Publish:edit }
+
+ibtikar_glance_dashboard_competitionpublish_list_publish_competition_change_list_columns:
+    path:  /publish-competition-change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\Publish:changeListPublishCompetitionColumns }
+
+ibtikar_glance_dashboard_competitionpublish_bulk_actions:
+    path:  /bulk
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\Publish:bulk }
+
+ibtikar_glance_dashboard_competitionpublish_delete:
+    path:  /delete
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\Publish:delete }
+
+

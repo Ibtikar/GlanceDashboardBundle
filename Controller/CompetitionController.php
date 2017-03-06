@@ -19,7 +19,6 @@ use Ibtikar\GlanceDashboardBundle\Document\Document;
 class CompetitionController extends BackendController {
 
     protected $translationDomain = 'competition';
-    protected $calledClassName = 'Competition';
 
     protected function getObjectShortName() {
         return 'IbtikarGlanceDashboardBundle:' . $this->calledClassName;
@@ -100,75 +99,50 @@ class CompetitionController extends BackendController {
     protected function configureListColumns() {
         $this->allListColumns = array(
             "title" => array(),
-            "expiryDate" => array("type" => "date"),
-            "createdBy" => array("isSortable" => false),
             "createdAt" => array("type" => "date"),
-            "status" => array("type" => "translated"),
-            "publishedAt" => array("type" => "date"),
-            "publishedBy" => array("isSortable" => false),
+            "questionsCount" => array(),
+            "expiryDate" => array("type" => "date"),
+            'noOfAnswer' => array(),
         );
         $this->defaultListColumns = array(
             "title",
-            "expiryDate",
-            "createdBy",
             "createdAt",
-            "status",
-            "publishedAt",
-            "publishedBy",
+            "questionsCount",
         );
+        $this->listViewOptions->setBundlePrefix("ibtikar_glance_dashboard_");
+
     }
 
     protected function configureListParameters(Request $request) {
-        $queryBuilder = $this->createQueryBuilder("IbtikarGlanceDashboardBundle")
-                        ->field('deleted')->equals(false);
+        $queryBuilder = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder("IbtikarGlanceDashboardBundle:Competition")
+                ->field('status')->equals($this->status)
+                ->field('deleted')->equals(false);
         $this->listViewOptions->setDefaultSortBy("createdAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
-        $this->listViewOptions->setActions(array('Add','Search', 'Publish_Unpublish','Delete','AutoPublish','AutoPublishControl', 'Edit','ViewOne'));
-        $this->listViewOptions->setBulkActions(array("Delete"));
-        if ($request->get('title')) {
-            $queryBuilder = $queryBuilder->field('title')->equals(new \MongoRegex(('/' . preg_quote(trim($request->get('title'))) . '/i')));
-        }
-        if ($request->get('status')) {
-            $queryBuilder = $queryBuilder->field('status')->equals($request->get('status'));
-        }
-        if ($request->get('createdBy')) {
-            $queryBuilder->field('createdBy')->equals($this->getStaffByFullname($request->get('createdBy')));
-        }
-        if ($request->get('publishedBy')) {
-            $queryBuilder->field('publishedBy')->equals($this->getStaffByFullname($request->get('publishedBy')));
-        }
 
-        if ($request->get('from') && (bool) strtotime($request->get('from'))) {
-            $queryBuilder = $queryBuilder->field('publishedAt')->gte(new \DateTime($request->get('from')));
-        }
-        if ($request->get('to') && (bool) strtotime($request->get('to'))) {
-            $fromDate = new \DateTime($request->get('to'));
-            $queryBuilder->field('publishedAt')->lte($fromDate->modify('+1 day'));
-        }
         $this->listViewOptions->setListQueryBuilder($queryBuilder);
         $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Competition:list.html.twig");
     }
 
-    protected function doList(Request $request) {
-        $renderingParams = parent::doList($request);
-
-        $dm = $this->get('doctrine_mongodb')->getManager();
-
-        $renderingParams['search'] = FALSE;
-
-        $parameters = $request->query->all();
-
-//        $renderingParams['filterLink'] = $this->generateUrl('poll_list', array('status' => '2-autopublish-poll', 'sort' => 'publishedAt', 'direction' => 'desc', 'page' => 1));
-//        $renderingParams['filterLinkToolTip'] = 'Autopublished';
-
-        if ($request->get('status') || $request->get('createdBy') || $request->get('publishedBy') || $request->get('from') || $request->get('to') || $request->get('title')) {
-            $renderingParams['search'] = TRUE;
-        }
-
-
-        return $renderingParams;
+    protected function doList(Request $message) {
+        $renderingParams = parent::doList($message);
+        return $this->getTabCount($renderingParams);
     }
 
+    public function getTabCount($renderingParams = array()) {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $renderingParams['newCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Competition')
+                        ->field('status')->equals(Competition::$statuses['new'])
+                        ->getQuery()->execute()->count();
+        $renderingParams['publishCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Competition')
+                        ->field('status')->equals(Competition::$statuses['publish'])
+                        ->getQuery()->execute()->count();
+        $renderingParams['unpublishCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Competition')
+                        ->field('status')->equals(Competition::$statuses['unpublish'])
+                        ->getQuery()->execute()->count();
+        return $renderingParams;
+    }
 
     public function updatePublishAction(Request $request) {
         $dm = $this->get('doctrine_mongodb')->getManager();

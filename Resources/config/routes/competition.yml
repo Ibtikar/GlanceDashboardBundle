@@ -1,41 +1,16 @@
-ibtikar_glance_dashboard_competition_list:
-    path:  /list
-    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:list }
-
-ibtikar_glance_dashboard_competition_change_list_columns:
-    path:  /change-list-columns
-    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:changeListColumns }
-
 ibtikar_glance_dashboard_competition_create:
     path:  /create
     defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:create }
 
-ibtikar_glance_dashboard_competition_edit:
-    path:  /edit/{id}
-    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:edit }
+ibtikar_glance_dashboard_competition_new:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/competition/new.yml"
+    prefix:   /competition-new
 
-ibtikar_glance_dashboard_competition_updatePublish:
-    path:  /competition-update-publish
-    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:updatePublish }
+ibtikar_glance_dashboard_message_inprogress:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/competition/publish.yml"
+    prefix:   /competition-publish
 
-ibtikar_glance_dashboard_competition_bulk_actions:
-    path: /bulk
-    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:bulk }
+ibtikar_glance_dashboard_message_close:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/competition/unpublish.yml"
+    prefix:   /competition-unpublish
 
-ibtikar_glance_dashboard_competition_delete:
-    path: /delete
-    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:delete }
-
-ibtikar_glance_dashboard_competition_autopublish:
-    path:  /ajax/auto-publish-date
-    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:autoPublishDate }
-
-
-ibtikar_glance_dashboard_competition_view:
-    path:  /view/{id}
-    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:view }
-
-
-ibtikar_glance_dashboard_competition_answer_id:
-    path:  /competition-answers-list-by-id/{id}/{type}
-    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:answerList }
