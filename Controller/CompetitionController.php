@@ -35,6 +35,11 @@ class CompetitionController extends BackendController {
         $question->addAnswer(new \Ibtikar\GlanceDashboardBundle\Document\QuestionChoiceAnswer);
         $question->addAnswer(new \Ibtikar\GlanceDashboardBundle\Document\QuestionChoiceAnswer);
         $competition->getQuestions()->add($question);
+
+        $questionEn = new Question();
+        $questionEn->addAnswer(new \Ibtikar\GlanceDashboardBundle\Document\QuestionChoiceAnswer);
+        $questionEn->addAnswer(new \Ibtikar\GlanceDashboardBundle\Document\QuestionChoiceAnswer);
+        $competition->getQuestionsEn()->add($questionEn);
 //        $competition->getQuestions()->add(new Question());
 
         $form = $this->createForm(CompetitionType::class, $competition, array('translation_domain' => $this->translationDomain,

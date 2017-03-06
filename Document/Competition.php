@@ -128,6 +128,12 @@ class Competition extends Publishable {
     private $questions;
 
     /**
+     * @Assert\Valid
+     * @MongoDB\EmbedMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Question")
+     */
+    private $questionsEn;
+
+    /**
      * @Assert\NotBlank
      * @Assert\Choice(callback="getValidResultsVisibilities")
      * @MongoDB\String
@@ -204,6 +210,7 @@ class Competition extends Publishable {
 
     public function __construct() {
         $this->questions = new ArrayCollection();
+        $this->questionsEn = new ArrayCollection();
         $this->participants = new ArrayCollection();
         $this->status = static::$statuses['new'];
         $this->resultsVisibility = key(static::$resultsVisibilities);
@@ -774,5 +781,35 @@ class Competition extends Publishable {
     public function getSecondaryTitleEn()
     {
         return $this->secondaryTitleEn;
+    }
+
+    /**
+     * Add questionsEn
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Question $questionsEn
+     */
+    public function addQuestionsEn(\Ibtikar\GlanceDashboardBundle\Document\Question $questionsEn)
+    {
+        $this->questionsEn[] = $questionsEn;
+    }
+
+    /**
+     * Remove questionsEn
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Question $questionsEn
+     */
+    public function removeQuestionsEn(\Ibtikar\GlanceDashboardBundle\Document\Question $questionsEn)
+    {
+        $this->questionsEn->removeElement($questionsEn);
+    }
+
+    /**
+     * Get questionsEn
+     *
+     * @return \Doctrine\Common\Collections\Collection $questionsEn
+     */
+    public function getQuestionsEn()
+    {
+        return $this->questionsEn;
     }
 }

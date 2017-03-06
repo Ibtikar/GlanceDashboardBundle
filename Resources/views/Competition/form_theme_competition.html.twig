@@ -14,22 +14,24 @@
 {%- endblock choice_widget_options %}
 
 {%- block form_widget_compound -%}
-    {% if form.vars.unique_block_prefix == '_competition_questions_entry' %}
+    {% set prefix = '_questions_' in form.vars.unique_block_prefix?'':'_questionsEn_' in form.vars.unique_block_prefix?'En':'' %}
+    {% if form.vars.unique_block_prefix in ['_competition_questions_entry','_competition_questionsEn_entry'] %}
         {% set attr = attr|merge({class: (attr.class|default(' panel panel-flat '))|trim}) %}
     {% endif %}
     <div {{ block('widget_container_attributes') }}>
         {%- if form.parent is empty -%}
             {{ form_errors(form) }}
         {% elseif prototype is defined %}
+            {% set prefix = '_questionsEn' in form.vars.id?'En':'' %}
             {# question answers add button render #}
             <div class="dev-add-question-answer-container">
             </div>
         {% endif %}
-        {% if form.vars.unique_block_prefix == '_competition_questions_entry' %}
+        {% if form.vars.unique_block_prefix in ['_competition_questions_entry','_competition_questionsEn_entry'] %}
             <div class="panel-heading">
                 <h5 class="panel-title"> اضف السؤال</h5>
                 <div class="heading-elements">
-                    <button class="btn btn-danger dev-remove-competition-question " type="button">مسح السؤال</button>
+                    <button class="btn btn-danger dev-remove-competition-question{{prefix}} " type="button">مسح السؤال</button>
                 </div>
             </div>
 {#            <a class="btn btn-primary DeleteBTN pull-left deleteQuestion dev-remove-competition-question hide" style="position:relative;z-index:1;">
@@ -43,11 +45,12 @@
 {%- endblock form_widget_compound -%}
 
 {% block form_row %}
-    {% set allowLabelElm = ['_competition_questions_entry_answers','_competition_questions_entry_answerDisplay','_competition_questions_entry_answerImportance','_competition_questions_entry_resultDisplay'] %}
+    {% set allowLabelElm = ['_competition_questions_entry_answers','_competition_questions_entry_answerDisplay','_competition_questions_entry_answerImportance','_competition_questions_entry_resultDisplay'
+,'_competition_questionsEn_entry_answers','_competition_questionsEn_entry_answerDisplay','_competition_questionsEn_entry_answerImportance','_competition_questionsEn_entry_resultDisplay'] %}
     {% if form.parent.parent.parent is defined %}
 {#        {% if form.vars.name == "question" %}<hr/>{% endif %}#}
         {% if form.children | length == 0 or form.vars.unique_block_prefix in allowLabelElm %}
-        <div class="{% if "answer" == form.vars.name %} input-group inputBody noMargin dev-question-answer-container marginBottom-20 {% else %} form-group {% endif %}{% if form.vars.errors|length > 0 %} has-error{% endif %}{% if form.vars.unique_block_prefix in ['_competition_questions_entry_answers','_competition_questions_entry_answerDisplay'] %} dependant-fields{% endif %}">
+        <div class="{% if "answer" == form.vars.name %} input-group inputBody noMargin dev-question-answer-container marginBottom-20 {% else %} form-group {% endif %}{% if form.vars.errors|length > 0 %} has-error{% endif %}{% if form.vars.unique_block_prefix in ['_competition_questions_entry_answers','_competition_questions_entry_answerDisplay','_competition_questionsEn_entry_answers','_competition_questionsEn_entry_answerDisplay'] %} dependant-fields{% endif %}">
             {% if "_answer" not in form.vars.id or form.vars.unique_block_prefix in allowLabelElm %}
                 {{ form_label(form)  }}
             <div class="col-md-10">
@@ -58,7 +61,6 @@
                 {{ form_widget(form) }}
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default deleteAnswer dev-remove-question-answer"><i class="icon-cancel-circle2"></i></button>
-{#                    <button type="button" class="btn btn-default"><i class="icon-plus2"></i></button>#}
                 </div>
                 {{ form_errors(form) }}
             {% endif %}
