@@ -51,6 +51,12 @@ class Media extends Document {
     private $magazine;
 
     /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Competition", simple=true)
+     * @KeepReference
+     */
+    private $competition;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GoodyFrontendBundle\Document\ContactMessage", simple=true)
      * @KeepReference
      */

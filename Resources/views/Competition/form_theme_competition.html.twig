@@ -74,7 +74,7 @@
         <div class="form-group{% if form.vars.name == "sponsors"%} inputBody noMargin dev-event-sponsor-container{% endif %}{% if attr['data-form-group-class'] is defined %} {{ attr['data-form-group-class'] }}{% endif %}{% if form.vars.errors|length > 0 or (form.phone is defined and form.phone.vars.errors|length > 0) %} has-error{% endif %}{%  if "_media" in form.vars.id %} hide{% endif %}">
             {% if form.vars.name != "sponsors" %}
                 {{ form_label(form)  }}
-                <div class="{% if form.vars.type is defined and form.vars.type == 'datetime' %}{% else %}col-md-{{form.vars.compound and form.vars.name not in ["resultsVisibility","allowedToVote"]?"12":"10"}}{% endif %}">
+                <div class="{% if form.vars.type is defined and form.vars.type == 'datetime' %}{% else %}col-md-{{form.vars.compound and form.vars.name not in ["resultsVisibility","allowedToVote","coverType"]?"12":"10"}}{% endif %}">
 {#                    {{dump(form.vars)}}#}
                     {{ form_widget(form) }}
                     {{ form_errors(form) }}

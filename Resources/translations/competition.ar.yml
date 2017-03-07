@@ -1,10 +1,13 @@
 # #############Labels############
+'Cover type': 'نوع الغلاف'
 'Title': 'العنوان'
 'Title en': 'العنوان بالإنجليزية'
 'Secondary title': 'العنوان الفرعي'
 'Secondary title en': 'العنوان الفرعي  بالإنجليزية'
 'Brief': 'النبذة'
 'Brief en': 'النبذة بالإنجليزية'
+'Terms and conditions': 'الأحكام والشروط'
+'Terms and conditions en': 'الأحكام والشروط بالإنجليزية'
 'Question': 'السؤال'
 'Answer importance': 'أهمية السؤال'
 'mandatory': 'إجباري'
@@ -34,6 +37,7 @@
 'Created at': تاريخ الإنشاء
 'noOfAnswer': 'عدد الاجوبه'
 'No of answer': 'عدد الاجوبه'
+'none': 'لا يوجد'
 # ############Messages############
 'You must add only from 2 to 5 answers': 'عدد الاجابات المسموح بها يتراوح من 2 الى 5 اجابات'
 # ############Titles############
