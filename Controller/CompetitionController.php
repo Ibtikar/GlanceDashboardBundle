@@ -21,7 +21,7 @@ class CompetitionController extends BackendController {
     protected $translationDomain = 'competition';
 
     protected function getObjectShortName() {
-        return 'IbtikarGlanceDashboardBundle:' . $this->calledClassName;
+        return 'IbtikarGlanceDashboardBundle:Competition';
     }
 
     /**
@@ -231,138 +231,89 @@ class CompetitionController extends BackendController {
         }
     }
 
-    protected function publish(Competition $competition, $dm) {
+//    protected function validateDelete(Document $document) {
+//        if ($document->getStatus() == Competition::$statuses['deleted']) {
+//            return $this->get('translator')->trans('failed operation');
+//        }
+//    }
 
-        $competition->setStatus(Competition::$statuses['published'])
-             ->setPublishedAt(new \DateTime())
-             ->setPublishedBy($this->getUser());
-        return true;
-    }
 
-    protected function validateDelete(Document $document) {
-        if ($document->getStatus() == Competition::$statuses['deleted']) {
-            return $this->get('translator')->trans('failed operation');
+      public function publishAction(Request $request)
+    {
+        if (!$this->getUser()) {
+            return $this->getLoginResponse();
         }
-    }
-
-
-    public function autoPublishDateAction(Request $request) {
         $dm = $this->get('doctrine_mongodb')->getManager();
         $securityContext = $this->get('security.authorization_checker');
+        $publishOperations = $this->get('recipe_operations');
+        if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_PUBLISH') && !$securityContext->isGranted('ROLE_ADMIN')) {
+
+            $result = array('status' => 'reload-table','message'=>$this->trans('You are not authorized to do this action any more'));
+            return new JsonResponse($result);
+        }
 
         if ($request->getMethod() === 'GET') {
-
-            if (!$securityContext->isGranted('ROLE_COMPETITION_AUTOPUBLISH') && !$securityContext->isGranted('ROLE_ADMIN') && $request->get('action') == "autoPublishControl" ) {
-                $this->get('session')->getFlashBag()->add('error', $this->trans('You are not authorized to do this action any more'));
-                $result = array('status' => 'reload-page');
-                return new JsonResponse($result, 403);
-            }
-        if (!$securityContext->isGranted('ROLE_COMPETITION_AUTOPUBLISH') && !$securityContext->isGranted('ROLE_ADMIN') && $request->get('action') == "autoPublish" ) {
-                $this->get('session')->getFlashBag()->add('error', $this->trans('You are not authorized to do this action any more'));
-                $result = array('status' => 'reload-page');
-                return new JsonResponse($result, 403);
-            }
-
             $id = $request->get('id');
             if (!$id) {
                 return $this->getFailedResponse();
             }
 
-            $competition = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->find($id);
+            $competition = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->findOneById($id);
             if (!$competition)
                 throw $this->createNotFoundException($this->trans('Wrong id'));
 
-
-            $autoPublishDate = '';
-            $autoPublishTime = '12:00 AM';
-            if($competition->getAutoPublishDate()) {
-                $autoPublishDate = $competition->getAutoPublishDate()->format('Y-m-d');
-                $autoPublishTime = $competition->getAutoPublishDate()->format('H:i A');
+            if ($competition->getExpiryDate() && $competition->getExpiryDate() < new \DateTime()) {
+                $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
+                return new JsonResponse($result);
             }
 
             return $this->render('IbtikarGlanceDashboardBundle::publishModal.html.twig', array(
-                        'type'=>'competition',
-                        'autoPublishDate' => $autoPublishDate,
-                        'autoPublishTime' => $autoPublishTime,
-                        'translationDomain' => $this->translationDomain,
-                        'locations' => '',
-                        'currentLocations' => '',
-                        'homeLocations' => '',
-                        'portalLocations' => '',
-                        'questionaireAutopublish'=>true
+                    'goodyStar' => $competition->getGoodyStar(),
+                    'displayGoodyStar' => TRUE,
+                    'translationDomain' => $this->translationDomain,
+                    'locations' => array(),
+                    'currentLocations' => array(),
+                    'document' => $competition
             ));
         } else if ($request->getMethod() === 'POST') {
-            $competition = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->find($request->get('pollId'));
-            $autoPublishDate = null;
-                $autoPublishDateString = $request->get('autoPublishDate', '');
-                if (strlen(trim($autoPublishDateString)) > 0) {
-                    try {
-                        $autoPublishDate = new \DateTime($autoPublishDateString);
-                    } catch (\Exception $e) {
-                        $autoPublishDate = null;
-                    }
-                }
 
-        if ($competition->getStatus() == Competition::$statuses['autopublish'] && $request->get('action') == "autoPublishControl") {
-                if (!$securityContext->isGranted('ROLE_COMPETITION_AUTOPUBLISH') && !$securityContext->isGranted('ROLE_ADMIN')) {
-                    $this->get('session')->getFlashBag()->add('error', $this->container->get('translator')->trans('Sorry no longer have permission to complete this process', array(), 'room'));
+            $competition = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->findOneById($request->get('documentId'));
+            if (!$competition) {
 
-                    $result = array('status' => 'reload-page');
-                    return new JsonResponse($result, 403);
-                }
-
-                if (!($autoPublishDate instanceof \DateTime) || $autoPublishDate < new \DateTime()) {
-                    return new JsonResponse(array('status' => 'error', 'message' => $this->container->get('translator')->trans('Please specify a publish date after today')));
-                }
-                if ($competition->getExpiryDate() && $autoPublishDate > $competition->getExpiryDate()) {
-                    return new JsonResponse(array('status' => 'error', 'message' => $this->container->get('translator')->trans('Please specify a date before expired date')));
-                }
-                $competition->setPublishedBy($this->getUser());
-
-                $competition->setAutoPublishDate($autoPublishDate);
-                $competition->setPublishedAt($autoPublishDate);
-
-//                $publishResult = $this->get('MaterialOperations')->manageAutoPublishControl($poll, $locations,new \DateTime($request->get('autoPublishDate')));
-            } elseif ($request->get('action') == "autoPublish") {
-                if (!$securityContext->isGranted('ROLE_COMPETITION_AUTOPUBLISH') && !$securityContext->isGranted('ROLE_ADMIN')) {
-                    $this->get('session')->getFlashBag()->add('error', $this->container->get('translator')->trans('Sorry no longer have permission to complete this process', array(), 'room'));
-
-                    $result = array('status' => 'reload-page');
-                    return new JsonResponse($result, 403);
-                }
-                if ($competition->getStatus() == Competition::$statuses['autopublish']) {
-                    $this->get('session')->getFlashBag()->add('error', $this->container->get('translator')->trans('Sorry this poll has already been published'));
-                    return new JsonResponse(array("status" => "success", "message" => $this->container->get('translator')->trans('Sorry this poll has already been published')));
-                }
-
-                if (!($autoPublishDate instanceof \DateTime) || $autoPublishDate < new \DateTime()) {
-                    return new JsonResponse(array('status' => 'error', 'message' => $this->container->get('translator')->trans('Please specify a publish date after today')));
-                }
-                if ($competition->getExpiryDate() && $autoPublishDate > $competition->getExpiryDate()) {
-                    return new JsonResponse(array('status' => 'error', 'message' => $this->container->get('translator')->trans('Please specify a date before expired date')));
-                }
+                $result = array('status' => 'reload-table', 'message' => $this->trans('not done'));
+                return new JsonResponse($result);
+            }
 
 
-                if ($competition->getStatus() == "new") {
-                    $competition->setStatus(Competition::$statuses['autopublish']);
+            $competittionStatus = $competition->getStatus();
+            $status = $request->get('status');
+            $goodyStar = $request->get('goodyStar');
+            if ($status != $competittionStatus) {
+                $result = array('status' => 'reload-table', 'message' => $this->trans('not done'));
+                return new JsonResponse($result);
+            }
+
+
+            switch ($competittionStatus) {
+                case 'new':
+                    $competition->setStatus(Competition::$statuses['publish']);
                     $competition->setPublishedBy($this->getUser());
-
-                    $competition->setAutoPublishDate($autoPublishDate);
-                    $competition->setPublishedAt($autoPublishDate);
-                } else {
+                    $competition->setPublishedAt(new \DateTime());
+                    $competition->setGoodyStar($goodyStar);
+                    break;
+                case 'unpublish':
                     $newCompetition = clone $competition;
                     $dm->persist($newCompetition);
-                    $newCompetition->setStatus(Competition::$statuses['autopublish']);
+                    $newCompetition->setStatus(Competition::$statuses['publish']);
                     $newCompetition->setPublishedBy($this->getUser());
-                    $newCompetition->setAutoPublishDate($autoPublishDate);
-                    $newCompetition->setPublishedAt($autoPublishDate);
-                }
+                    $newCompetition->setGoodyStar($goodyStar);
+                    $newCompetition->setPublishedAt(new \DateTime());
+                    break;
             }
             $dm->flush();
 
-            $this->get('session')->getFlashBag()->add('success', ($request->get('action') == "autoPublish" || $request->get('action') == "autoPublishControl" ? $this->get('translator')->trans(($request->get('action') == "autoPublishControl"?"new ":"").'settings saved and competition will be published at %datetime%', array('%datetime%' => $autoPublishDate->format('Y-m-d h:i A'))) : $this->get('translator')->trans('done sucessfully')));
-
-            return new JsonResponse(array("status"=>'success',"message"=>'true'));
+            $publishResult = array('status' => 'success','message'=>$this->trans('done sucessfully'));
+            return new JsonResponse(array_merge($publishResult, $this->getTabCount()));
         }
     }
 

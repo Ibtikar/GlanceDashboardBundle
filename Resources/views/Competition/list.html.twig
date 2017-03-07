@@ -57,13 +57,13 @@
                                     <ul class="nav nav-tabs nav-tabs-highlight">
                                         {% block tabs %}
                                             {% if is_granted('ROLE_COMPETITIONNEW_VIEW') or is_granted('ROLE_ADMIN')%}
-                                                <li   {% if 'list_new_competition' in app.request.attributes.get('_route') %} class="active"{% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_competitionnew_list_new_competition') }}" data-toggle="tab"><span class="badge badge-primary position-left dev-new-message">{{ newCount}}</span> {% trans from translationDomain %}new competition{% endtrans%}</a></li>
+                                                <li   {% if 'list_new_competition' in app.request.attributes.get('_route') %} class="active"{% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_competitionnew_list_new_competition') }}" data-toggle="tab"><span class="badge badge-primary position-left dev-new-comptetion">{{ newCount}}</span> {% trans from translationDomain %}new competition{% endtrans%}</a></li>
                                                 {% endif %}
                                                 {% if is_granted('ROLE_COMPETITIONPUBLISH_VIEW') or is_granted('ROLE_ADMIN') %}
-                                                <li   {% if 'list_publish_competition' in app.request.attributes.get('_route') %} class="active"{% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_competitionpublish_list_publish_competition') }}" data-toggle="tab"><span class="badge badge-primary position-left dev-inprogress-message">{{ publishCount}}</span> {% trans from translationDomain %}publish competition{% endtrans%}</a></li>
+                                                <li   {% if 'list_publish_competition' in app.request.attributes.get('_route') %} class="active"{% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_competitionpublish_list_publish_competition') }}" data-toggle="tab"><span class="badge badge-primary position-left dev-publish-comptetion">{{ publishCount}}</span> {% trans from translationDomain %}publish competition{% endtrans%}</a></li>
                                                 {%  endif %}
                                                 {% if is_granted('ROLE_COMPETITIONUNPUBLISH_VIEW') or is_granted('ROLE_ADMIN') %}
-                                                <li   {% if 'list_unpublish_competition' in app.request.attributes.get('_route') %} class="active" {% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_competitionunpublish_list_unpublish_competition') }}" data-toggle="tab"><span class="badge badge-primary position-left dev-close-message">{{ unpublishCount}}</span> {% trans from translationDomain %}unpublish competition{% endtrans%}</a></li>
+                                                <li   {% if 'list_unpublish_competition' in app.request.attributes.get('_route') %} class="active" {% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_competitionunpublish_list_unpublish_competition') }}" data-toggle="tab"><span class="badge badge-primary position-left dev-unpublish-comptetion">{{ unpublishCount}}</span> {% trans from translationDomain %}unpublish competition{% endtrans%}</a></li>
                                                 {% endif %}
                                             {% endblock %}
                                     </ul>
@@ -78,9 +78,27 @@
                                                         {% if list.hasBulkActions(listName) %}
                                                             <input type="hidden" id="dev-bulk-action" name="bulk-action" value=""/>
                                                             <span class="dev-bulk-action-container" data-list-name="{{listName|lower}}" data-href="{{ list.hasBulkActions(listName) ? path(prefixRoute|lower ~ '_bulk_actions') : '' }}" style="display: none;">
-                                                                {% for action in list.bulkActions %}{% endfor %}
+                                                                {% for action in list.bulkActions %}
+                                                                    {% if action == "Delete" and (is_granted('ROLE_'~listName|upper~'_DELETE') or is_granted('ROLE_ADMIN')) %}
+                                                                        <a data-action="{{action}}" {{popover_factory({
+                                            question : "You are about to delete (%count%) (%type%), Are you sure?",
+                                            replaceAttr : true,
+                                            buttons : [
+                                                        {
+                                                            text : "Yes",
+                                                            class : "dev-bulk-delete-btn dev-bulk-action-btn btn-danger"
+                                                        },
+                                                        {
+                                                            text : "Cancel",
+                                                            class : "btn-default"
+                                                        }
+                                                    ]
+                                            })|replace({'%type%': (oneItem~"s")|lower|trans})|raw}} class="btn btn-default btn-sm" data-placement="bottom"> <i class="icon-trash"></i> <span class="hidden-sm position-right">{{ 'delete'|trans }} {{ ((oneItem|capitalize)~"s")|trans }}</span></a>
+                                                                    {% endif %}
+                                                                {% endfor %}
                                                             </span>
                                                         {% endif %}
+
                                                     {% endblock %}
                                                 </div>
                                                 <div style="margin-top: 15px;">
@@ -150,6 +168,10 @@
                                                                     {% elseif field.type == "refrence"  %}
                                                                         <td>
                                                                             {{ property_access(object,field.arguments,field.propertyName )}}
+                                                                        </td>
+                                                                    {% elseif field.propertyName == "answersEnabled"  %}
+                                                                        <td>
+                                                                            {{   ("answer "~(object.answersEnabled))|trans({},translationDomain) }}
                                                                         </td>
                                                                     {% elseif field.propertyName == "username"  %}
                                                                         <td>
@@ -248,7 +270,7 @@
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/datatables_api.js')}}"></script>
     <script src="{{ asset('bundles/ibtikarglancedashboard/js/jquery.powertip.min.js') }}"></script>
     <script src="{{ asset('bundles/ibtikarglancedashboard/js/ajaxifyList.js') }}"></script>
-    <script src="{{ asset('bundles/ibtikarglancedashboard/js/recipeActions.js') }}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/competitionActions.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_modals.js')}}"></script>
 
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/dragula.min.js')}}"></script>
@@ -257,6 +279,10 @@
     <script>
         intializeTable();
         var list = new BaseList();
+        {% if 'list_publish_competition' not in app.request.attributes.get('_route') %}
+        var publisUrl="{{ path(prefixRoute|lower~'_publish')}}";
+        {% endif %}
+          var deleteUrl=" {{ path(prefixRoute|lower ~'_delete')}}";
     </script>
 
 

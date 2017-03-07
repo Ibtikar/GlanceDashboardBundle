@@ -22,3 +22,7 @@ ibtikar_glance_dashboard_competitionnew_delete:
     path:  /delete
     defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\New:delete }
 
+ibtikar_glance_dashboard_competitionnew_publish:
+    path:  /ajax/publish
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\New:publish }
+

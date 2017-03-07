@@ -2,14 +2,14 @@
 
 {% block modalHeader %}
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3 class="modal-title">{% if document.status=='publish'%}{{'republish'|trans({},translationDomain)}}{% else %}{{'publish'|trans({},translationDomain)}}{% endif%}</h3>
+    <h3 class="modal-title">{% if document.status=='publish'%}{{'republish'|trans}}{% else %}{{'publish'|trans}}{% endif%}</h3>
 {% endblock %}
 
 {% block modalBody %}
 
         <form method="post" id="dev-publish-modal">
 
-            انت على وشك {% if document.status=='publish'%}{{'republish'|trans({},translationDomain)}}{% else %}{{'publish'|trans({},translationDomain)}}{% endif%} ({{ document.name}}) هل تريد إتمام النشر؟
+            انت على وشك {% if document.status=='publish'%}{{'republish'|trans}}{% else %}{{'publish'|trans}}{% endif%} ({% if document.name is defined %}{{ document.name}}{%else%}{{document}}{%endif%}) هل تريد إتمام النشر؟
          <hr/>
             <div class="row">
                 <div class="col-lg-12">
@@ -22,6 +22,14 @@
                             </label>
                         </div>
                     {% endfor %}
+                    {% if displayGoodyStar is defined %}
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"   value="true" class="styled" name="goodyStar" {% if goodyStar %} checked {% endif%}>
+                                {% trans from 'publishLocations'%}publish in goodyStar{% endtrans%}
+                            </label>
+                        {% endif %}
+                </div>
 
                 </div>
             </div>

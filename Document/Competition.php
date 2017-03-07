@@ -185,6 +185,11 @@ class Competition extends Publishable {
     private $resultsVisibility;
 
     /**
+     * @MongoDB\Boolean
+     */
+    protected $goodyStar = false;
+
+    /**
      * @Assert\NotBlank
      * @Assert\Choice(callback="getValidAllowedVoters")
      * @MongoDB\String
@@ -601,27 +606,7 @@ class Competition extends Publishable {
         return $this->publishedAt;
     }
 
-    /**
-     * Set publishedBy
-     *
-     * @param Ibtikar\GlanceUMSBundle\Document\Staff $publishedBy
-     * @return self
-     */
-    public function setPublishedBy(\Ibtikar\GlanceUMSBundle\Document\Staff $publishedBy)
-    {
-        $this->publishedBy = $publishedBy;
-        return $this;
-    }
 
-    /**
-     * Get publishedBy
-     *
-     * @return Ibtikar\GlanceUMSBundle\Document\Staff $publishedBy
-     */
-    public function getPublishedBy()
-    {
-        return $this->publishedBy;
-    }
 
     /**
      * Set autoPublishDate
