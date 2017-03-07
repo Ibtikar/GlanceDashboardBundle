@@ -210,14 +210,6 @@ class CompetitionController extends BackendController {
         }
     }
 
-    protected function publish(Competition $competition, $dm) {
-
-        $competition->setStatus(Competition::$statuses['published'])
-             ->setPublishedAt(new \DateTime())
-             ->setPublishedBy($this->getUser());
-        return true;
-    }
-
     protected function validateDelete(Document $document) {
         if ($document->getStatus() == Competition::$statuses['deleted']) {
             return $this->get('translator')->trans('failed operation');
@@ -235,8 +227,6 @@ class CompetitionController extends BackendController {
         $publishOperations = $this->get('recipe_operations');
         if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_PUBLISH') && !$securityContext->isGranted('ROLE_ADMIN')) {
 
-            $this->addFlash('error', $this->trans('You are not authorized to do this action any more'));
-
             $result = array('status' => 'reload-table','message'=>$this->trans('You are not authorized to do this action any more'));
             return new JsonResponse($result);
         }
@@ -251,6 +241,11 @@ class CompetitionController extends BackendController {
             if (!$competition)
                 throw $this->createNotFoundException($this->trans('Wrong id'));
 
+            if ($competition->getExpiryDate() && $competition->getExpiryDate() < new \DateTime()) {
+                $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
+                return new JsonResponse($result);
+            }
+
             return $this->render('IbtikarGlanceDashboardBundle::publishModal.html.twig', array(
                     'goodyStar' => $competition->getGoodyStar(),
                     'displayGoodyStar' => TRUE,
@@ -261,88 +256,42 @@ class CompetitionController extends BackendController {
             ));
         } else if ($request->getMethod() === 'POST') {
 
-            $competition = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($request->get('documentId'));
+            $competition = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->findOneById($request->get('documentId'));
             if (!$competition) {
-                if ($type && $type == 'view') {
-                    $this->addFlash('error', $this->trans('not done'));
-                }
+
                 $result = array('status' => 'reload-table', 'message' => $this->trans('not done'));
                 return new JsonResponse($result);
             }
-            $locations = $request->get('publishLocation', array());
-            if (!empty($locations)) {
-                $locations = $dm->getRepository('IbtikarGlanceDashboardBundle:Location')->findBy(array('id' => array('$in' => $request->get('publishLocation'))));
-            }
 
-            $recipeStatus = $competition->getStatus();
+
+            $competittionStatus = $competition->getStatus();
             $status = $request->get('status');
             $goodyStar = $request->get('goodyStar');
-            if ($status != $recipeStatus) {
-                if ($type && $type == 'view') {
-                    $this->addFlash('error', $this->trans('not done'));
-                }
+            if ($status != $competittionStatus) {
                 $result = array('status' => 'reload-table', 'message' => $this->trans('not done'));
                 return new JsonResponse($result);
             }
 
 
-            switch ($recipeStatus) {
+            switch ($competittionStatus) {
                 case 'new':
-                    if ($request->get('publishNow')) {
-                        $publishResult = $publishOperations->publish($competition, $locations, FALSE, $goodyStar);
-                    } else if ($request->get('autoPublishDate', '')) {
-                        $autoPublishDateString = $request->get('autoPublishDate', '');
-                        if (strlen(trim($autoPublishDateString)) > 0) {
-                            try {
-                                $autoPublishDate = new \DateTime($autoPublishDateString);
-                            } catch (\Exception $e) {
-                                $autoPublishDate = null;
-                            }
-                        }
-                        $publishResult = $publishOperations->autoPublish($competition, $locations, $autoPublishDate, $goodyStar);
-                    }
+                    $competition->setStatus(Competition::$statuses['publish']);
+                    $competition->setPublishedBy($this->getUser());
+                    $competition->setPublishedAt(new \DateTime());
+                    $competition->setGoodyStar($goodyStar);
                     break;
-                case 'publish':
-                    $publishResult = $publishOperations->managePublishControl($competition, $locations, $goodyStar);
-                    break;
-                case 'deleted':
-                    if ($request->get('publishNow')) {
-                        $publishResult = $publishOperations->publish($competition, $locations, TRUE, $goodyStar);
-                    } else if ($request->get('autoPublishDate', '')) {
-                        $autoPublishDateString = $request->get('autoPublishDate', '');
-                        if (strlen(trim($autoPublishDateString)) > 0) {
-                            try {
-                                $autoPublishDate = new \DateTime($autoPublishDateString);
-                            } catch (\Exception $e) {
-                                $autoPublishDate = null;
-                            }
-                        }
-                        $publishResult = $publishOperations->autoPublish($competition, $locations, $autoPublishDate, $goodyStar);
-                    }
-                    break;
-                case 'autopublish':
-                    if ($request->get('publishNow')) {
-                        $publishResult = $publishOperations->publish($competition, $locations, FALSE, $goodyStar);
-                    } else if ($request->get('autoPublishDate', '')) {
-                        $autoPublishDateString = $request->get('autoPublishDate', '');
-                        if (strlen(trim($autoPublishDateString)) > 0) {
-                            try {
-                                $autoPublishDate = new \DateTime($autoPublishDateString);
-                            } catch (\Exception $e) {
-                                $autoPublishDate = null;
-                            }
-                        }
-                        $publishResult = $publishOperations->manageAutoPublishControl($competition, $locations, $autoPublishDate, $goodyStar);
-                    }
+                case 'unpublish':
+                    $newCompetition = clone $competition;
+                    $dm->persist($newCompetition);
+                    $newCompetition->setStatus(Competition::$statuses['publish']);
+                    $newCompetition->setPublishedBy($this->getUser());
+                    $newCompetition->setGoodyStar($goodyStar);
+                    $newCompetition->setPublishedAt(new \DateTime());
                     break;
             }
+            $dm->flush();
 
-            if ($type && $type == 'view') {
-                $this->addFlash($publishResult['status'], $publishResult['message']);
-            }
-            $this->container->get('facebook_scrape')->update($competition);
-
-
+            $publishResult = array('status' => 'success','message'=>$this->trans('done sucessfully'));
             return new JsonResponse(array_merge($publishResult, $this->getTabCount()));
         }
     }

@@ -177,19 +177,7 @@ function  showPublishModal(element) {
     basicModal.show(publisUrl + '?id=' + element.attr('data-id'), function () {
         unblockPage();
         $(".dev-save-publish-location").click(function () {
-            if (recipeStatus != "publish") {
-                if ($('#datetimepicker1 input').val() == '' && $('#publishNow').prop('checked') == false) {
-                    $('#dev-publish-modal').find('.alert.alert-danger').remove();
-                    $('#dev-publish-modal').prepend('<div class="alert alert-danger no-border"><button data-dismiss="alert" class="close" type="button">' +
-                            '<span>×</span><span class="sr-only">Close</span></button>' + publishErrorMessage
-                            + '</div>');
-                } else {
-                    savepublishLocation(basicModal, publisUrl);
-                }
-
-            } else {
                 savepublishLocation(basicModal, publisUrl);
-            }
 
         })
     });
@@ -253,11 +241,10 @@ function savepublishLocation(basicModal, url) {
                     table.ajax.reload(function () {
                         if (data.status != 'reload-table') {
                             showNotificationMsg(data.message, "", data.status);
-                            $('.dev-new-recipe').html(data.newRecipeCount);
-                            $('.dev-new-assign-recipe').html(data.assignedRecipeCount);
-                            $('.dev-autopublish-recipe').html(data.autopublishRecipeCount);
-                            $('.dev-published-recipe').html(data.publishRecipeCount);
-                            $('.dev-deleted-recipe').html(data.deletedRecipeCount);
+                            $('.dev-new-comptetion').html(data.newCount);
+                            $('.dev-publish-comptetion').html(data.publishCount);
+                            $('.dev-unpublish-comptetion').html(data.unpublishCount);
+
                         } else {
 
                             showNotificationMsg(data.message, "", 'error');
