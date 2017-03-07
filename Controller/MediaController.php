@@ -970,6 +970,7 @@ class MediaController extends BackendController
         if (!$this->getUser()) {
             return $this->getLoginResponse();
         }
+        $roomArray=  explode('?', $room);
         $dm = $this->get('doctrine_mongodb')->getManager();
         $material = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($documentId);
         if (!$material) {
@@ -977,7 +978,7 @@ class MediaController extends BackendController
         }
 
         $securityContext = $this->get('security.authorization_checker');
-        if (!$room || (!$securityContext->isGranted('ROLE_' . strtoupper($room) . '_EDIT') && !$securityContext->isGranted('ROLE_ADMIN'))) {
+        if (!$room || (!$securityContext->isGranted('ROLE_' . strtoupper($roomArray[0]) . '_EDIT') && !$securityContext->isGranted('ROLE_ADMIN'))) {
 
             return $this->getAccessDeniedResponse();
         }
