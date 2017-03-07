@@ -1,0 +1,413 @@
+{% extends 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard.html.twig' %}
+{% block header %}
+    {{ include('IbtikarGlanceDashboardBundle::header.html.twig') }}
+{% endblock %}
+{% block navbar %}
+    {{ include('IbtikarGlanceDashboardBundle::navbar.html.twig') }}
+{% endblock %}
+{% block side_menu %}
+    {{ include('IbtikarGlanceDashboardBundle::sidebar.html.twig') }}
+{% endblock %}
+{% block title %}مشاهده رساله{% endblock%}
+
+
+{% block breadCrumb %}
+{#    <a class="btn btn-link btn-float has-text" href="{{path('ibtikar_glance_dashboard_product_create')}}"><i class="icon-add"></i><span>إدخال منتج</span></a>
+    <a class="btn btn-link btn-float has-text activeLink" href="{{path('ibtikar_glance_dashboard_product_list')}}"><i class="icon-table2"></i> <span> المنتجات</span></#}a>
+
+{% endblock %}
+
+{% block body %}
+    <div class="content-wrapper">
+
+
+        <div class="row">
+            <div class="col-lg-12">
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- view roles -->
+                        <div class="panel panel-flat">
+                            <div class="panel-heading">
+                                <h5 class="panel-title"> {{ document['title']}}</h5>
+                                <div class="heading-elements">
+                                    <span class="label heading-text label-flat border-grey text-grey-600"> {{ document['type']}}</span>
+
+                                    <span class="label heading-text label-flat border-grey text-grey-600">رقم التتبع: {{ document['trackingNumber']}}</span>
+
+                                    <ul class="icons-list">
+                                        <li><a data-action="collapse"></a></li>
+                                    </ul>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="panel-body">
+                                <!-- Timeline -->
+                                <div class="timeline timeline-left">
+                                    <div class="timeline-container">
+
+
+                                        <!-- Tasks -->
+                                        <div class="timeline-row">
+                                            <div class="timeline-icon">
+                                                <img src="{{ asset(document['createdBy'].getWebPath()|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}" alt="">
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="panel border-left-lg border-left-primary timeline-content">
+                                                        <div class="panel-body bg-grey-800">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    {#													<h4 class="no-margin-top">Kitchen Name</h4>#}
+                                                                    <p class="mb-15">   {{ document['content']}}</p>
+                                                                </div>
+                                                            </div>
+
+
+                                                            {% if  mediaData[document['id']]['images'] is defined %}
+                                                                <div class="row">
+                                                                    <div class="search-results-list GoogleImages">
+                                                                        {% for image in mediaData[document['id']]['images'] %}
+                                                                            <div class="col-lg-3 col-sm-4">
+                                                                                <div class="thumbnail">
+                                                                                    <div class="thumb">
+                                                                                        <img src="{{ asset(image.getWebPath())}}" alt="{{ image.name }}">
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </div>
+                                                                        {% endfor%}
+
+
+
+
+                                                                    </div><!-- row end -->
+
+
+                                                                </div>
+                                                            {% endif%}
+
+
+
+
+
+                                                        </div>
+
+
+                                                        <div class="panel-footer panel-footer-condensed">
+                                                            <div class="heading-elements">
+                                                                <span class="heading-text">
+                                                                    <span class="status-mark border-green position-left"></span> تاريخ الطلب <span class="text-semibold">{{ document['createdAt']|date('Y/m/d h:s A')}}</span>
+                                                                </span>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <!-- /tasks -->
+
+
+                                        {#				<!-- Date stamp -->
+                                                                        <div class="timeline-date text-muted">
+                                                                                <i class="icon-calendar position-left"></i> <span class="text-semibold">Tuesday</span>, April 19
+                                                                        </div>
+                                                                        <!-- /date stamp -->
+                        #}
+
+                                        <!-- Invoices -->
+                                        {% for reply in  replies %}
+
+                                            <div class="timeline-row">
+                                                <div class="timeline-icon">
+                                                    <img src="{{ asset(reply.createdBy.getWebPath()|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}" alt="">
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="panel border-left-lg border-left-danger invoice-grid timeline-content">
+                                                            <div class="panel-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <h6 class="text-semibold no-margin-top"> {% if  reply.messageType=='2-staff-reply'%}{% trans from 'contact'%}goody user{% endtrans%}{% else %}{{ reply.createdBy}}{% endif %}</h6>
+                                                                        <ul class="list list-unstyled">
+                                                                            <li>   {{ reply.content }}</li>
+                                                                        </ul>
+                                                                    </div>
+
+
+                                                                </div>
+                                                                {% if  mediaData[reply.id]['images'] is defined %}
+                                                                    <div class="row">
+                                                                        <div class="search-results-list GoogleImages">
+                                                                            {% for image in mediaData[reply.id]['images'] %}
+                                                                                <div class="col-lg-3 col-sm-4">
+                                                                                    <div class="thumbnail">
+                                                                                        <div class="thumb">
+                                                                                            <img src="{{ asset(image.getWebPath())}}" alt="{{ image.name }}">
+                                                                                        </div>
+
+                                                                                    </div>
+                                                                                </div>
+                                                                            {% endfor%}
+
+
+
+
+                                                                        </div><!-- row end -->
+
+
+                                                                    </div>
+                                                                {% endif%}
+                                                            </div>
+
+                                                            <div class="panel-footer panel-footer-condensed">
+                                                                <div class="heading-elements">
+                                                                    <span class="heading-text">
+                                                                        <span class="status-mark border-green position-left"></span>تاريخ الرد: <span class="text-semibold">{{ reply.createdAt|date('Y/m/d h:s A')}}</span>
+                                                                    </span>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <!-- /invoices -->
+                                            </li>
+
+                                        {% endfor %}
+
+
+                                        <!-- Tasks -->
+
+                                        <!-- /tasks -->
+
+
+                                    </div>
+                                </div>
+                                        {% if is_granted('ROLE_' ~ room|upper ~'_ANSWER') or is_granted('ROLE_ADMIN')%}
+
+                                <hr/>
+                                <!-- /timeline -->
+
+                                <form autocomplete="off" novalidate="novalidate" class="dev-page-main-form dev-js-validation form-horizontal" method="post" name="form">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-2 text-semibold">اضف رد </label>
+                                            <div class="col-lg-10">
+                                                <textarea placeholder="" class="form-control" cols="5" rows="5" required="" id="dev-reply-message"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                {% endif%}
+
+                            </div>
+
+
+                        </div>
+                        <!-- /scrollable datatable -->
+
+
+
+                    </div>
+
+                </div>
+                                {% if is_granted('ROLE_' ~ room|upper ~'_ANSWER') or is_granted('ROLE_ADMIN')%}
+
+                <div class="row actionButtons">
+                    <div class="col-xs-12">
+                        <button class="btn btn-primary btn-lg dev-reply-message-submit " type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
+                        <button class="btn btn-default btn-lg dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
+
+
+
+                    </div>
+                </div>
+                            {% endif%}
+
+            </div><!-- col-lg-12 tabs -->
+
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/plugins/jquery-validation/jquery.validate.min.js')}}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/jquery.form.min.js')}}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/plugins/jquery-validation/additional-methods.min.js')}}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/plugins/jquery-validation/messages_ar.js')}}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/validation.js')}}"></script>
+
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/backend.js') }}"></script>
+    {#    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/timelines.js')}}"></script>#}
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '.dev-reply-message-submit', function (e) {
+                if (typeof $('form.dev-page-main-form').attr('ajax-running') == 'undefined' || $('form.dev-page-main-form').attr('ajax-running') != 'true') {
+                    if ($('form.dev-page-main-form').valid()) {
+                        $('form.dev-page-main-form').attr('data-form-valid', 'true');
+//            if (mainFormNeedConfirm) {
+//                if (!mainFormConfirmed) {
+//                    document.submitBtns._enable();
+//                    submitButtonConfirmFunction($this);
+//                    return;
+//                }
+//                mainFormConfirmed = false;
+//            }
+                        var cur_value = 0,
+                                progressStatus;
+
+                        // Make a loader.
+                        var loader = new PNotify({
+                            title: "يتم الحفظ",
+                            text: '<div class="progress progress-striped active" style="margin:0">\
+            <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0">\
+            <span class="sr-only">0%</span>\
+            </div>\
+            </div>',
+                            addclass: 'bg-primary',
+                            icon: 'icon-spinner4 spinner',
+                            hide: false,
+                            buttons: {
+                                closer: false,
+                                sticker: false
+                            },
+                            history: {
+                                history: false
+                            },
+//            width: "100%",
+                            cornerclass: "no-border-radius",
+                            stack: stack_bottom_right,
+                            before_open: function (PNotify) {
+                                progressStatus = PNotify.get().find("div.progress-bar");
+                                progressStatus.width(cur_value + "%").attr("aria-valuenow", cur_value).find("span").html(cur_value + "%");
+
+
+                            }
+                        });
+                        $.ajax({
+                            url: "{{ path('ibtikar_glance_dashboard_'~room|lower~'_reply',{'id':app.request.get('id')})}}",
+                            method: 'POST',
+                            data: {'message': $('#dev-reply-message').val()},
+
+                                    complete: function (jqxhr) {
+                                        if (jqxhr.status === 403) {
+                                            window.location.reload();
+                                        }
+                                        var IS_JSON = true;
+                                        try {
+                                            $.parseJSON(jqxhr.responseText);
+                                        }
+                                        catch (err) {
+                                            IS_JSON = false;
+                                        }
+                                        if (!IS_JSON) {
+                                            var state = $(jqxhr.responseText).find('.form-state').val();
+                                            if (state == 'true') {
+                                                $('body').trigger('onSuccessSubmitForm');
+                                                progressStatus.width("100%").attr("aria-valuenow", 100).find("span").html("100%");
+                                                loader.remove();
+                                            } else {
+                                                $('body').trigger('onFailSubmitForm');
+                                                loader.remove();
+                                            }
+                                        }
+                                        $('form.dev-page-main-form').attr('ajax-running', 'false');
+
+                                    },
+                            xhr: function () {
+                                var xhr = new window.XMLHttpRequest();
+                                // Upload progress
+                                xhr.upload.addEventListener("progress", function (evt) {
+
+                                    if (evt.lengthComputable) {
+                                        var percentComplete = (evt.loaded * 100) / evt.total;
+                                        progressStatus.width(percentComplete + "%").attr("aria-valuenow", percentComplete / 100).find("span").html(percentComplete + "%");
+
+                                    }
+                                }, false);
+
+                                // Download progress
+                                xhr.addEventListener("progress", function (evt) {
+                                    if (evt.lengthComputable) {
+                                        var percentComplete = (evt.loaded * 100) / evt.total;
+                                        progressStatus.width(percentComplete + "%").attr("aria-valuenow", percentComplete / 100).find("span").html(percentComplete + "%");
+                                    }
+                                }, false);
+
+                                return xhr;
+                            },
+                            success: function (data) {
+                                window.location.reload();
+
+                            }
+                        });
+                    }
+                }
+
+
+            })
+
+            $('.dev-form-reset-button').on('click', function () {
+                $('input,textarea').each(function () {
+                    $('textarea').val('');
+                    unhighlightElement($(this))
+
+                })
+
+            })
+        })
+
+        function showNotificationMsg(title, text, type) {
+
+            var notificationIcons = {
+                success: {
+                    icon: "icon-checkmark3",
+                    class: "bg-success"
+                },
+                info: {
+                    icon: "icon-info22",
+                    class: "bg-info"
+                },
+                error: {
+                    icon: "icon-blocked",
+                    class: "bg-danger"
+                }
+
+            };
+
+            type = (typeof type == "undefined" ? "success" : type);
+
+            new PNotify({
+                title: title,
+                text: text,
+                icon: notificationIcons[type]['icon'],
+                addclass: notificationIcons[type]['class'],
+                type: type,
+                buttons: {
+                    sticker: false
+                },
+                stack: {"dir1": "down", "dir2": "right", "firstpos1": 0, "firstpos2": 0}
+            });
+        }
+
+    </script>
+
+
+
+{% endblock %}

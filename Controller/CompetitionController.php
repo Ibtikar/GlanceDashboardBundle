@@ -6,10 +6,10 @@ use Ibtikar\GlanceDashboardBundle\Controller\base\BackendController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Ibtikar\GlanceDashboardBundle\Form\CompetitionType;
+use Ibtikar\GlanceDashboardBundle\Form\Type\CompetitionType;
 use Ibtikar\GlanceDashboardBundle\Document\Competition;
 use Ibtikar\GlanceDashboardBundle\Document\Question;
-use Ibtikar\UserBundle\Document\Document;
+use Ibtikar\GlanceDashboardBundle\Document\Document;
 
 /**
  * Description of CompetitionController
@@ -19,10 +19,9 @@ use Ibtikar\UserBundle\Document\Document;
 class CompetitionController extends BackendController {
 
     protected $translationDomain = 'competition';
-    protected $calledClassName = 'Competition';
 
     protected function getObjectShortName() {
-        return 'IbtikarGlanceDashboardBundle:' . $this->calledClassName;
+        return 'IbtikarGlanceDashboardBundle:Competition';
     }
 
     /**
@@ -31,20 +30,20 @@ class CompetitionController extends BackendController {
      * @return Response
      */
     public function createAction(Request $request) {
-        $breadcrumbs = $this->get("white_october_breadcrumbs");
-        $breadcrumbs->addItem('backend-home', $this->generateUrl('backend_home'));
-        $breadcrumbs->addItem('List Competition', $this->generateUrl('competition_list'));
-        $breadcrumbs->addItem('Add new competition', $this->generateUrl('competition_create'));
-
-
         $competition = new Competition();
         $question = new Question();
         $question->addAnswer(new \Ibtikar\GlanceDashboardBundle\Document\QuestionChoiceAnswer);
         $question->addAnswer(new \Ibtikar\GlanceDashboardBundle\Document\QuestionChoiceAnswer);
         $competition->getQuestions()->add($question);
+
+        $questionEn = new Question();
+        $questionEn->addAnswer(new \Ibtikar\GlanceDashboardBundle\Document\QuestionChoiceAnswer);
+        $questionEn->addAnswer(new \Ibtikar\GlanceDashboardBundle\Document\QuestionChoiceAnswer);
+        $competition->getQuestionsEn()->add($questionEn);
 //        $competition->getQuestions()->add(new Question());
 
-        $form = $this->createForm(new CompetitionType(), $competition, array('translation_domain' => $this->translationDomain));
+        $form = $this->createForm(CompetitionType::class, $competition, array('translation_domain' => $this->translationDomain,
+                'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
 
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
@@ -57,9 +56,10 @@ class CompetitionController extends BackendController {
             }
         }
 
-        return $this->render('IbtikarBackendBundle:Competition:create.html.twig', array(
+        return $this->render('IbtikarGlanceDashboardBundle:Competition:create.html.twig', array(
                     'form' => $form->createView(),
-                    'form_theme' => 'IbtikarBackendBundle:Competition:form_theme_competition.html.twig',
+                    'title' => $this->trans('Add new Competition', array(), $this->translationDomain),
+                    'form_theme' => 'IbtikarGlanceDashboardBundle:Competition:form_theme_competition.html.twig',
                     'translationDomain' => $this->translationDomain
         ));
     }
@@ -94,9 +94,9 @@ class CompetitionController extends BackendController {
             }
         }
 
-        return $this->render('IbtikarBackendBundle:Competition:edit.html.twig', array(
+        return $this->render('IbtikarGlanceDashboardBundle:Competition:edit.html.twig', array(
                     'form' => $form->createView(),
-                    'form_theme' => 'IbtikarBackendBundle:Competition:form_theme_competition.html.twig',
+                    'form_theme' => 'IbtikarGlanceDashboardBundle:Competition:form_theme_competition.html.twig',
                     'translationDomain' => $this->translationDomain
         ));
     }
@@ -104,75 +104,50 @@ class CompetitionController extends BackendController {
     protected function configureListColumns() {
         $this->allListColumns = array(
             "title" => array(),
-            "expiryDate" => array("type" => "date"),
-            "createdBy" => array("isSortable" => false),
             "createdAt" => array("type" => "date"),
-            "status" => array("type" => "translated"),
-            "publishedAt" => array("type" => "date"),
-            "publishedBy" => array("isSortable" => false),
+            "questionsCount" => array(),
+            "expiryDate" => array("type" => "date"),
+            'noOfAnswer' => array(),
         );
         $this->defaultListColumns = array(
             "title",
-            "expiryDate",
-            "createdBy",
             "createdAt",
-            "status",
-            "publishedAt",
-            "publishedBy",
+            "questionsCount",
         );
+        $this->listViewOptions->setBundlePrefix("ibtikar_glance_dashboard_");
+
     }
 
     protected function configureListParameters(Request $request) {
-        $queryBuilder = $this->createQueryBuilder("IbtikarGlanceDashboardBundle")
-                        ->field('deleted')->equals(false);
+        $queryBuilder = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder("IbtikarGlanceDashboardBundle:Competition")
+                ->field('status')->equals($this->status)
+                ->field('deleted')->equals(false);
         $this->listViewOptions->setDefaultSortBy("createdAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
-        $this->listViewOptions->setActions(array('Add','Search', 'Publish_Unpublish','Delete','AutoPublish','AutoPublishControl', 'Edit','ViewOne'));
-        $this->listViewOptions->setBulkActions(array("Delete"));
-        if ($request->get('title')) {
-            $queryBuilder = $queryBuilder->field('title')->equals(new \MongoRegex(('/' . preg_quote(trim($request->get('title'))) . '/i')));
-        }
-        if ($request->get('status')) {
-            $queryBuilder = $queryBuilder->field('status')->equals($request->get('status'));
-        }
-        if ($request->get('createdBy')) {
-            $queryBuilder->field('createdBy')->equals($this->getStaffByFullname($request->get('createdBy')));
-        }
-        if ($request->get('publishedBy')) {
-            $queryBuilder->field('publishedBy')->equals($this->getStaffByFullname($request->get('publishedBy')));
-        }
 
-        if ($request->get('from') && (bool) strtotime($request->get('from'))) {
-            $queryBuilder = $queryBuilder->field('publishedAt')->gte(new \DateTime($request->get('from')));
-        }
-        if ($request->get('to') && (bool) strtotime($request->get('to'))) {
-            $fromDate = new \DateTime($request->get('to'));
-            $queryBuilder->field('publishedAt')->lte($fromDate->modify('+1 day'));
-        }
         $this->listViewOptions->setListQueryBuilder($queryBuilder);
-        $this->listViewOptions->setTemplate("IbtikarBackendBundle:Competition:list.html.twig");
+        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Competition:list.html.twig");
     }
 
-    protected function doList(Request $request) {
-        $renderingParams = parent::doList($request);
+    protected function doList(Request $message) {
+        $renderingParams = parent::doList($message);
+        return $this->getTabCount($renderingParams);
+    }
 
+    public function getTabCount($renderingParams = array()) {
         $dm = $this->get('doctrine_mongodb')->getManager();
 
-        $renderingParams['search'] = FALSE;
-
-        $parameters = $request->query->all();
-
-//        $renderingParams['filterLink'] = $this->generateUrl('poll_list', array('status' => '2-autopublish-poll', 'sort' => 'publishedAt', 'direction' => 'desc', 'page' => 1));
-//        $renderingParams['filterLinkToolTip'] = 'Autopublished';
-
-        if ($request->get('status') || $request->get('createdBy') || $request->get('publishedBy') || $request->get('from') || $request->get('to') || $request->get('title')) {
-            $renderingParams['search'] = TRUE;
-        }
-
-
+        $renderingParams['newCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Competition')
+                        ->field('status')->equals(Competition::$statuses['new'])
+                        ->getQuery()->execute()->count();
+        $renderingParams['publishCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Competition')
+                        ->field('status')->equals(Competition::$statuses['publish'])
+                        ->getQuery()->execute()->count();
+        $renderingParams['unpublishCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Competition')
+                        ->field('status')->equals(Competition::$statuses['unpublish'])
+                        ->getQuery()->execute()->count();
         return $renderingParams;
     }
-
 
     public function updatePublishAction(Request $request) {
         $dm = $this->get('doctrine_mongodb')->getManager();
@@ -235,138 +210,89 @@ class CompetitionController extends BackendController {
         }
     }
 
-    protected function publish(Competition $competition, $dm) {
+//    protected function validateDelete(Document $document) {
+//        if ($document->getStatus() == Competition::$statuses['deleted']) {
+//            return $this->get('translator')->trans('failed operation');
+//        }
+//    }
 
-        $competition->setStatus(Competition::$statuses['published'])
-             ->setPublishedAt(new \DateTime())
-             ->setPublishedBy($this->getUser());
-        return true;
-    }
 
-    protected function validateDelete(Document $document) {
-        if ($document->getStatus() == Competition::$statuses['deleted']) {
-            return $this->get('translator')->trans('failed operation');
+      public function publishAction(Request $request)
+    {
+        if (!$this->getUser()) {
+            return $this->getLoginResponse();
         }
-    }
-
-
-    public function autoPublishDateAction(Request $request) {
         $dm = $this->get('doctrine_mongodb')->getManager();
         $securityContext = $this->get('security.authorization_checker');
+        $publishOperations = $this->get('recipe_operations');
+        if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_PUBLISH') && !$securityContext->isGranted('ROLE_ADMIN')) {
+
+            $result = array('status' => 'reload-table','message'=>$this->trans('You are not authorized to do this action any more'));
+            return new JsonResponse($result);
+        }
 
         if ($request->getMethod() === 'GET') {
-
-            if (!$securityContext->isGranted('ROLE_COMPETITION_AUTOPUBLISH') && !$securityContext->isGranted('ROLE_ADMIN') && $request->get('action') == "autoPublishControl" ) {
-                $this->get('session')->getFlashBag()->add('error', $this->trans('You are not authorized to do this action any more'));
-                $result = array('status' => 'reload-page');
-                return new JsonResponse($result, 403);
-            }
-        if (!$securityContext->isGranted('ROLE_COMPETITION_AUTOPUBLISH') && !$securityContext->isGranted('ROLE_ADMIN') && $request->get('action') == "autoPublish" ) {
-                $this->get('session')->getFlashBag()->add('error', $this->trans('You are not authorized to do this action any more'));
-                $result = array('status' => 'reload-page');
-                return new JsonResponse($result, 403);
-            }
-
             $id = $request->get('id');
             if (!$id) {
                 return $this->getFailedResponse();
             }
 
-            $competition = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->find($id);
+            $competition = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->findOneById($id);
             if (!$competition)
                 throw $this->createNotFoundException($this->trans('Wrong id'));
 
-
-            $autoPublishDate = '';
-            $autoPublishTime = '12:00 AM';
-            if($competition->getAutoPublishDate()) {
-                $autoPublishDate = $competition->getAutoPublishDate()->format('Y-m-d');
-                $autoPublishTime = $competition->getAutoPublishDate()->format('H:i A');
+            if ($competition->getExpiryDate() && $competition->getExpiryDate() < new \DateTime()) {
+                $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
+                return new JsonResponse($result);
             }
 
-            return $this->render('IbtikarBackendBundle::publishModal.html.twig', array(
-                        'type'=>'competition',
-                        'autoPublishDate' => $autoPublishDate,
-                        'autoPublishTime' => $autoPublishTime,
-                        'translationDomain' => $this->translationDomain,
-                        'locations' => '',
-                        'currentLocations' => '',
-                        'homeLocations' => '',
-                        'portalLocations' => '',
-                        'questionaireAutopublish'=>true
+            return $this->render('IbtikarGlanceDashboardBundle::publishModal.html.twig', array(
+                    'goodyStar' => $competition->getGoodyStar(),
+                    'displayGoodyStar' => TRUE,
+                    'translationDomain' => $this->translationDomain,
+                    'locations' => array(),
+                    'currentLocations' => array(),
+                    'document' => $competition
             ));
         } else if ($request->getMethod() === 'POST') {
-            $competition = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->find($request->get('pollId'));
-            $autoPublishDate = null;
-                $autoPublishDateString = $request->get('autoPublishDate', '');
-                if (strlen(trim($autoPublishDateString)) > 0) {
-                    try {
-                        $autoPublishDate = new \DateTime($autoPublishDateString);
-                    } catch (\Exception $e) {
-                        $autoPublishDate = null;
-                    }
-                }
 
-        if ($competition->getStatus() == Competition::$statuses['autopublish'] && $request->get('action') == "autoPublishControl") {
-                if (!$securityContext->isGranted('ROLE_COMPETITION_AUTOPUBLISH') && !$securityContext->isGranted('ROLE_ADMIN')) {
-                    $this->get('session')->getFlashBag()->add('error', $this->container->get('translator')->trans('Sorry no longer have permission to complete this process', array(), 'room'));
+            $competition = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->findOneById($request->get('documentId'));
+            if (!$competition) {
 
-                    $result = array('status' => 'reload-page');
-                    return new JsonResponse($result, 403);
-                }
-
-                if (!($autoPublishDate instanceof \DateTime) || $autoPublishDate < new \DateTime()) {
-                    return new JsonResponse(array('status' => 'error', 'message' => $this->container->get('translator')->trans('Please specify a publish date after today')));
-                }
-                if ($competition->getExpiryDate() && $autoPublishDate > $competition->getExpiryDate()) {
-                    return new JsonResponse(array('status' => 'error', 'message' => $this->container->get('translator')->trans('Please specify a date before expired date')));
-                }
-                $competition->setPublishedBy($this->getUser());
-
-                $competition->setAutoPublishDate($autoPublishDate);
-                $competition->setPublishedAt($autoPublishDate);
-
-//                $publishResult = $this->get('MaterialOperations')->manageAutoPublishControl($poll, $locations,new \DateTime($request->get('autoPublishDate')));
-            } elseif ($request->get('action') == "autoPublish") {
-                if (!$securityContext->isGranted('ROLE_COMPETITION_AUTOPUBLISH') && !$securityContext->isGranted('ROLE_ADMIN')) {
-                    $this->get('session')->getFlashBag()->add('error', $this->container->get('translator')->trans('Sorry no longer have permission to complete this process', array(), 'room'));
-
-                    $result = array('status' => 'reload-page');
-                    return new JsonResponse($result, 403);
-                }
-                if ($competition->getStatus() == Competition::$statuses['autopublish']) {
-                    $this->get('session')->getFlashBag()->add('error', $this->container->get('translator')->trans('Sorry this poll has already been published'));
-                    return new JsonResponse(array("status" => "success", "message" => $this->container->get('translator')->trans('Sorry this poll has already been published')));
-                }
-
-                if (!($autoPublishDate instanceof \DateTime) || $autoPublishDate < new \DateTime()) {
-                    return new JsonResponse(array('status' => 'error', 'message' => $this->container->get('translator')->trans('Please specify a publish date after today')));
-                }
-                if ($competition->getExpiryDate() && $autoPublishDate > $competition->getExpiryDate()) {
-                    return new JsonResponse(array('status' => 'error', 'message' => $this->container->get('translator')->trans('Please specify a date before expired date')));
-                }
+                $result = array('status' => 'reload-table', 'message' => $this->trans('not done'));
+                return new JsonResponse($result);
+            }
 
 
-                if ($competition->getStatus() == "new") {
-                    $competition->setStatus(Competition::$statuses['autopublish']);
+            $competittionStatus = $competition->getStatus();
+            $status = $request->get('status');
+            $goodyStar = $request->get('goodyStar');
+            if ($status != $competittionStatus) {
+                $result = array('status' => 'reload-table', 'message' => $this->trans('not done'));
+                return new JsonResponse($result);
+            }
+
+
+            switch ($competittionStatus) {
+                case 'new':
+                    $competition->setStatus(Competition::$statuses['publish']);
                     $competition->setPublishedBy($this->getUser());
-
-                    $competition->setAutoPublishDate($autoPublishDate);
-                    $competition->setPublishedAt($autoPublishDate);
-                } else {
+                    $competition->setPublishedAt(new \DateTime());
+                    $competition->setGoodyStar($goodyStar);
+                    break;
+                case 'unpublish':
                     $newCompetition = clone $competition;
                     $dm->persist($newCompetition);
-                    $newCompetition->setStatus(Competition::$statuses['autopublish']);
+                    $newCompetition->setStatus(Competition::$statuses['publish']);
                     $newCompetition->setPublishedBy($this->getUser());
-                    $newCompetition->setAutoPublishDate($autoPublishDate);
-                    $newCompetition->setPublishedAt($autoPublishDate);
-                }
+                    $newCompetition->setGoodyStar($goodyStar);
+                    $newCompetition->setPublishedAt(new \DateTime());
+                    break;
             }
             $dm->flush();
 
-            $this->get('session')->getFlashBag()->add('success', ($request->get('action') == "autoPublish" || $request->get('action') == "autoPublishControl" ? $this->get('translator')->trans(($request->get('action') == "autoPublishControl"?"new ":"").'settings saved and competition will be published at %datetime%', array('%datetime%' => $autoPublishDate->format('Y-m-d h:i A'))) : $this->get('translator')->trans('done sucessfully')));
-
-            return new JsonResponse(array("status"=>'success',"message"=>'true'));
+            $publishResult = array('status' => 'success','message'=>$this->trans('done sucessfully'));
+            return new JsonResponse(array_merge($publishResult, $this->getTabCount()));
         }
     }
 
@@ -441,7 +367,7 @@ class CompetitionController extends BackendController {
                     break;
             }
         }
-        return $this->render('IbtikarBackendBundle:Competition:view.html.twig', array(
+        return $this->render('IbtikarGlanceDashboardBundle:Competition:view.html.twig', array(
                 'translationDomain' => $this->translationDomain,
                 'competition' => $competition,
                 'drawChart' => $drawChart
@@ -503,6 +429,6 @@ class CompetitionController extends BackendController {
         $renderingParams['paginationData'] = $pagination->getPaginationData();
         $renderingParams['translationDomain'] = 'competition';
         $renderingParams['type'] = $type;
-        return $this->render('IbtikarBackendBundle:Competition:answersList.html.twig', $renderingParams);
+        return $this->render('IbtikarGlanceDashboardBundle:Competition:answersList.html.twig', $renderingParams);
     }
 }

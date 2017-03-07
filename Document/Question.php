@@ -20,7 +20,9 @@ class Question {
             'phone' => 'input phone',
             'email' => 'input email',
         ),
-        'textarea' => 'textarea'
+        'textarea' => 'textarea',
+        'image' => 'image',
+        'video' => 'video'
     );
 
     public static $answerDisplayType = array(

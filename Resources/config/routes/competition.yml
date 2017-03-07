@@ -1,0 +1,16 @@
+ibtikar_glance_dashboard_competition_create:
+    path:  /create
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:create }
+
+ibtikar_glance_dashboard_competition_new:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/competition/new.yml"
+    prefix:   /competition-new
+
+ibtikar_glance_dashboard_message_inprogress:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/competition/publish.yml"
+    prefix:   /competition-publish
+
+ibtikar_glance_dashboard_message_close:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/competition/unpublish.yml"
+    prefix:   /competition-unpublish
+

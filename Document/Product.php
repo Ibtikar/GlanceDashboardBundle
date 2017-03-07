@@ -10,7 +10,7 @@ use Doctrine\Bundle\MongoDBBundle\Validator\Constraints\Unique as MongoDBUnique;
 use Ibtikar\GlanceDashboardBundle\Document\Document;
 
 /**
- * @MongoDB\Document
+ * @MongoDB\Document(repositoryClass="Ibtikar\GlanceDashboardBundle\Document\ProductRepository")
  * @MongoDB\hasLifeCycleCallbacks
  * @MongoDB\Indexes({
  *   @MongoDB\Index(keys={"name"="asc"}),
@@ -189,6 +189,7 @@ class Product extends Document
         }
         return '';
     }
+
 
     public function setRelatedTip($tip = array())
     {

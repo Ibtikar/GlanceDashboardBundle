@@ -25,15 +25,13 @@ class Competition extends Publishable {
         'nobody' => 'nobody',
     );
     public static $allowedVoters = array(
-        'visitors' => 'visitors',
+        'all-users' => 'all users',
         'registered-users' => 'registered users'
     );
     public static $statuses = array(
         "new" => "new",
-        "autopublish" => "autopublish",
-        "unpublished" => "unpublished",
-        "published" => "published",
-        'deleted'=>'deleted'
+        "unpublish" => "unpublish",
+        "publish" => "publish",
     );
 
     static $COMPETITION_ANSWER_Highlighted_COLORS = array(
@@ -75,6 +73,30 @@ class Competition extends Publishable {
 
     /**
      * @Assert\NotBlank
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 3,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 150,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $secondaryTitle;
+
+    /**
+     * @Assert\NotBlank
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 3,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 150,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $secondaryTitleEn;
+
+    /**
+     * @Assert\NotBlank
 
      * @MongoDB\String
      * @Assert\Length(
@@ -106,11 +128,22 @@ class Competition extends Publishable {
     private $questions;
 
     /**
+     * @Assert\Valid
+     * @MongoDB\EmbedMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Question")
+     */
+    private $questionsEn;
+
+    /**
      * @Assert\NotBlank
      * @Assert\Choice(callback="getValidResultsVisibilities")
      * @MongoDB\String
      */
     private $resultsVisibility;
+
+    /**
+     * @MongoDB\Boolean
+     */
+    protected $goodyStar = false;
 
     /**
      * @Assert\NotBlank
@@ -182,6 +215,7 @@ class Competition extends Publishable {
 
     public function __construct() {
         $this->questions = new ArrayCollection();
+        $this->questionsEn = new ArrayCollection();
         $this->participants = new ArrayCollection();
         $this->status = static::$statuses['new'];
         $this->resultsVisibility = key(static::$resultsVisibilities);
@@ -528,27 +562,7 @@ class Competition extends Publishable {
         return $this->publishedAt;
     }
 
-    /**
-     * Set publishedBy
-     *
-     * @param Ibtikar\GlanceUMSBundle\Document\Staff $publishedBy
-     * @return self
-     */
-    public function setPublishedBy(\Ibtikar\GlanceUMSBundle\Document\Staff $publishedBy)
-    {
-        $this->publishedBy = $publishedBy;
-        return $this;
-    }
 
-    /**
-     * Get publishedBy
-     *
-     * @return Ibtikar\GlanceUMSBundle\Document\Staff $publishedBy
-     */
-    public function getPublishedBy()
-    {
-        return $this->publishedBy;
-    }
 
     /**
      * Set autoPublishDate
@@ -642,5 +656,167 @@ class Competition extends Publishable {
     public function setPublish($status) {
         $this->setStatus($status ? self::$statuses["published"] : self::$statuses["unpublished"]);
         return $this;
+    }
+
+    /**
+     * Set titleEn
+     *
+     * @param string $titleEn
+     * @return self
+     */
+    public function setTitleEn($titleEn)
+    {
+        $this->titleEn = $titleEn;
+        return $this;
+    }
+
+    /**
+     * Get titleEn
+     *
+     * @return string $titleEn
+     */
+    public function getTitleEn()
+    {
+        return $this->titleEn;
+    }
+
+    /**
+     * Set brief
+     *
+     * @param string $brief
+     * @return self
+     */
+    public function setBrief($brief)
+    {
+        $this->brief = $brief;
+        return $this;
+    }
+
+    /**
+     * Get brief
+     *
+     * @return string $brief
+     */
+    public function getBrief()
+    {
+        return $this->brief;
+    }
+
+    /**
+     * Set briefEn
+     *
+     * @param string $briefEn
+     * @return self
+     */
+    public function setBriefEn($briefEn)
+    {
+        $this->briefEn = $briefEn;
+        return $this;
+    }
+
+    /**
+     * Get briefEn
+     *
+     * @return string $briefEn
+     */
+    public function getBriefEn()
+    {
+        return $this->briefEn;
+    }
+
+    /**
+     * Set secondaryTitle
+     *
+     * @param string $secondaryTitle
+     * @return self
+     */
+    public function setSecondaryTitle($secondaryTitle)
+    {
+        $this->secondaryTitle = $secondaryTitle;
+        return $this;
+    }
+
+    /**
+     * Get secondaryTitle
+     *
+     * @return string $secondaryTitle
+     */
+    public function getSecondaryTitle()
+    {
+        return $this->secondaryTitle;
+    }
+
+    /**
+     * Set secondaryTitleEn
+     *
+     * @param string $secondaryTitleEn
+     * @return self
+     */
+    public function setSecondaryTitleEn($secondaryTitleEn)
+    {
+        $this->secondaryTitleEn = $secondaryTitleEn;
+        return $this;
+    }
+
+    /**
+     * Get secondaryTitleEn
+     *
+     * @return string $secondaryTitleEn
+     */
+    public function getSecondaryTitleEn()
+    {
+        return $this->secondaryTitleEn;
+    }
+
+    /**
+     * Add questionsEn
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Question $questionsEn
+     */
+    public function addQuestionsEn(\Ibtikar\GlanceDashboardBundle\Document\Question $questionsEn)
+    {
+        $this->questionsEn[] = $questionsEn;
+    }
+
+    /**
+     * Remove questionsEn
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Question $questionsEn
+     */
+    public function removeQuestionsEn(\Ibtikar\GlanceDashboardBundle\Document\Question $questionsEn)
+    {
+        $this->questionsEn->removeElement($questionsEn);
+    }
+
+    /**
+     * Get questionsEn
+     *
+     * @return \Doctrine\Common\Collections\Collection $questionsEn
+     */
+    public function getQuestionsEn()
+    {
+        return $this->questionsEn;
+    }
+
+    /**
+     * Set goodyStar
+     *
+     * @param boolean $goodyStar
+     * @return self
+     */
+    public function setGoodyStar($goodyStar)
+    {
+        $this->goodyStar = $goodyStar;
+        return $this;
+    }
+
+    /**
+     * Get goodyStar
+     *
+     * @return boolean $goodyStar
+     */
+    public function getGoodyStar()
+    {
+        return $this->goodyStar;
     }
 }

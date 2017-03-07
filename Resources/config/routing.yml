@@ -28,10 +28,13 @@ ibtikar_glance_dashboard_media:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/media.yml"
     prefix:   /
 
+ibtikar_glance_dashboard_competition:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/competition.yml"
+    prefix:   /competition
+
 ibtikar_glance_dashboard_recipe:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/recipe.yml"
     prefix:   /recipe
-
 
 ibtikar_glance_dashboard_recipe_news:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/recipe/new.yml"
