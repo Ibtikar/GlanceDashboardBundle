@@ -931,4 +931,26 @@ class Competition extends Publishable {
     {
         return $this->cover;
     }
+
+        /**
+     * Set goodyStar
+     *
+     * @param boolean $goodyStar
+     * @return self
+     */
+    public function setGoodyStar($goodyStar)
+    {
+        $this->goodyStar = $goodyStar;
+        return $this;
+    }
+
+    /**
+     * Get goodyStar
+     *
+     * @return boolean $goodyStar
+     */
+    public function getGoodyStar()
+    {
+        return $this->goodyStar;
+    }
 }
