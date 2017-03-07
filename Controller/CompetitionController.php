@@ -21,7 +21,7 @@ class CompetitionController extends BackendController {
     protected $translationDomain = 'competition';
 
     protected function getObjectShortName() {
-        return 'IbtikarGlanceDashboardBundle:' . $this->calledClassName;
+        return 'IbtikarGlanceDashboardBundle:Competition';
     }
 
     /**
@@ -210,11 +210,11 @@ class CompetitionController extends BackendController {
         }
     }
 
-    protected function validateDelete(Document $document) {
-        if ($document->getStatus() == Competition::$statuses['deleted']) {
-            return $this->get('translator')->trans('failed operation');
-        }
-    }
+//    protected function validateDelete(Document $document) {
+//        if ($document->getStatus() == Competition::$statuses['deleted']) {
+//            return $this->get('translator')->trans('failed operation');
+//        }
+//    }
 
 
       public function publishAction(Request $request)

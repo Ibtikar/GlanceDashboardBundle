@@ -53,6 +53,7 @@
 'publish Competitionunpublish': 'نشر'
 'Edit Competitionunpublish': 'تعديل'
 'View One competitionunpublish': 'عرض'
+'View One Competitionunpublish': 'عرض'
 'Delete Competitionunpublish': 'حذف'
 'unpublish Competitionpublish': 'ايقاف نشر'
 'StopResume Competitionpublish': 'ايقاف'
@@ -62,7 +63,8 @@
 'answer false': 'موقوفه'
 'answer 1': 'مفعله'
 'answer 0': 'موقوفه'
-
+'competitionnews': 'المسابقات'
+'competitionnew': 'مسابقه'
 # ############Buttons############
 
 
