@@ -21,3 +21,5 @@ You are not authorized to do this action any more: 'عذرا لم يعد لدي�
 recipe will be published at %datetime%: 'تم نقل المادة الى تبويبة النشر التلقائي  وسوف يتم نشرها في الوقت المحدد  %datetime%'
 'list Jobs': 'الوظائف'
 'pleaseSelectOneImage': 'يجب إختيار صورة واحدة علي الأقل'
+'publish': 'نشر'
+'republish': 'اعاده نشر'

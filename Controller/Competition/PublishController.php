@@ -43,9 +43,8 @@ class PublishController extends CompetitionController
         parent::configureListParameters($request);
         $this->listViewOptions->setActions(array('Edit', 'ViewOne','Delete','unPublish','StopResume'));
         $this->listViewOptions->setBulkActions(array("Delete"));
-        $this->listViewOptions->setDefaultSortBy("publishedAt");
+        $this->listViewOptions->setDefaultSortBy("createdAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
-//        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Recipe\List:new.html.twig");
     }
     public function listPublishCompetitionAction(Request $competition)
     {

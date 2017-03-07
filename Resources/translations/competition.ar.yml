@@ -55,7 +55,13 @@
 'View One competitionunpublish': 'عرض'
 'Delete Competitionunpublish': 'حذف'
 'unpublish Competitionpublish': 'ايقاف نشر'
-'StopResume Competitionpublish': 'ايقاف الاجوبه'
+'StopResume Competitionpublish': 'ايقاف'
+'Answers enabled': 'إيقاف/ تفعيل‎'
+'answersEnabled': 'إيقاف/ تفعيل‎'
+'answer true': 'مفعله'
+'answer false': 'موقوفه'
+'answer 1': 'مفعله'
+'answer 0': 'موقوفه'
 
 # ############Buttons############
 

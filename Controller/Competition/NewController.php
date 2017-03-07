@@ -27,7 +27,6 @@ class NewController extends CompetitionController
 
         $this->listViewOptions->setDefaultSortBy("createdAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
-//        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Recipe\List:new.html.twig");
     }
 
     public function listNewCompetitionAction(Request $competition)

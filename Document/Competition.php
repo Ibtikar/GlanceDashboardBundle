@@ -141,6 +141,11 @@ class Competition extends Publishable {
     private $resultsVisibility;
 
     /**
+     * @MongoDB\Boolean
+     */
+    protected $goodyStar = false;
+
+    /**
      * @Assert\NotBlank
      * @Assert\Choice(callback="getValidAllowedVoters")
      * @MongoDB\String
@@ -811,5 +816,27 @@ class Competition extends Publishable {
     public function getQuestionsEn()
     {
         return $this->questionsEn;
+    }
+
+    /**
+     * Set goodyStar
+     *
+     * @param boolean $goodyStar
+     * @return self
+     */
+    public function setGoodyStar($goodyStar)
+    {
+        $this->goodyStar = $goodyStar;
+        return $this;
+    }
+
+    /**
+     * Get goodyStar
+     *
+     * @return boolean $goodyStar
+     */
+    public function getGoodyStar()
+    {
+        return $this->goodyStar;
     }
 }

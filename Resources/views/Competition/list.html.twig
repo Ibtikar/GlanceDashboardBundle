@@ -151,6 +151,10 @@
                                                                         <td>
                                                                             {{ property_access(object,field.arguments,field.propertyName )}}
                                                                         </td>
+                                                                    {% elseif field.propertyName == "answersEnabled"  %}
+                                                                        <td>
+                                                                            {{   ("answer "~(object.answersEnabled))|trans({},translationDomain) }}
+                                                                        </td>
                                                                     {% elseif field.propertyName == "username"  %}
                                                                         <td>
                                                                             <div class="media-left media-middle">
@@ -248,7 +252,7 @@
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/datatables_api.js')}}"></script>
     <script src="{{ asset('bundles/ibtikarglancedashboard/js/jquery.powertip.min.js') }}"></script>
     <script src="{{ asset('bundles/ibtikarglancedashboard/js/ajaxifyList.js') }}"></script>
-    <script src="{{ asset('bundles/ibtikarglancedashboard/js/recipeActions.js') }}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/competitionActions.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_modals.js')}}"></script>
 
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/dragula.min.js')}}"></script>
@@ -257,6 +261,10 @@
     <script>
         intializeTable();
         var list = new BaseList();
+        {% if 'list_publish_competition' not in app.request.attributes.get('_route') %}
+        var publisUrl="{{ path(prefixRoute|lower~'_publish')}}";
+        {% endif %}
+          var deleteUrl=" {{ path(prefixRoute|lower ~'_delete')}}";
     </script>
 
 
