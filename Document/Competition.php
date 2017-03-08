@@ -167,7 +167,7 @@ class Competition extends Publishable {
 
 
     /**
-     * @Assert\Choice
+     * @Assert\Choice(callback="getValidMediaTypes")
      * @MongoDB\String
      */
     private $coverType = "none";
@@ -304,6 +304,13 @@ class Competition extends Publishable {
      */
     public static function getValidResultsVisibilities() {
         return array_keys(static::$resultsVisibilities);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getValidMediaTypes() {
+        return array_keys(static::$coverTypeChoices);
     }
 
     /**

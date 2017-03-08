@@ -32,47 +32,6 @@ function showNotificationMsg(title, text, type) {
     });
 }
 
-
-function refreshImages(){
-    $.ajax({
-            url:refreshImagesUrl,
-            success: function (data) {
-                if(data.status=='login'){
-                            window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
-                }else{
-                if (data.coverPhoto) {
-                    var media = data.coverPhoto;
-                    var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
-                            .replace(/%image-id%/g, media.id)
-                            .replace(/%name%/g, 'coverPhoto')
-                            .replace(/%arabicName%/g, imageErrorMessages.coverPhoto)
-                            .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, 'coverPhoto'));
-                    $('#dev-coverPhoto').closest('tr').replaceWith(temepelate);
-                    $('[data-popup="popover"]').popover();
-
-                    $('#form_defaultCoverPhoto').val(media.id)
-
-                    // Tooltip
-                    $('[data-popup="tooltip"]').tooltip({
-                        trigger: 'hover'
-                    });
-
-                }else{
-                     var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
-                                    .replace(/%image-id%/g, '')
-                                    .replace(/%name%/g, 'coverPhoto')
-                                    .replace(/%arabicName%/g, imageErrorMessages.coverPhoto)
-                                    .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, 'coverPhoto'));
-                             $('#dev-coverPhoto').replaceWith(temepelate);
-                }
-
-            }
-        }
-
-
-        })
-}
-
 function tdLoadingToggle(elm){
     var loaderDiv = '<div class=" btn dev-spinner-container" disabled=""><i class="spinner icon-spinner"></i></div>';
     if(!$(elm).is('td')){
@@ -88,6 +47,28 @@ function tdLoadingToggle(elm){
        }
     }
 }
+
+/**
+ * @author ahmad Gamal <a.gamal@ibtikar.net.sa>
+ */
+function valid_youtubeUrl(videoUrl) {
+    return videoUrl.match(/^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/);
+}
+
+function getIDFromURL(url){
+    var ID = '';
+    url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+    if(url[2] !== undefined) {
+      ID = url[2].split(/[^0-9a-z_\-]/i);
+      ID = ID[0];
+    }
+    else {
+      ID = url;
+    }
+      return ID;
+  }
+
+
 var uploadpopup=false;
 $(document).ready(function () {
 
@@ -211,8 +192,6 @@ $(document).ready(function () {
                     } else {
                         showNotificationMsg(imageErrorMessages.generalError, "", 'error');
                     }
-
-                    refreshImages();
                 }
             }
 
@@ -251,74 +230,69 @@ $(document).ready(function () {
     }
     });
 
-    $(document).on('onFailSubmitForm', function () {
-        refreshImages();
-    })
 
-//    $(document).on('click', '.dev-videourl-submit', function() {
-//
-//
-////////////////////////////////////////////////////////////////////////
-//            if(typeof ytXhr !== "undefined")
-//                ytXhr.abort();
-//
-//
-//            var obj = $('input.dev-recipe-videoUrl').val();
-//            var videoUrl = $.trim(obj);
-//
-//            if (videoUrl === "") {
-//                errorContainer.removeClass('has-error');
-//                $('.dev-videoUrl-overlay').hide();
-//                return;
-//            }
-//
-//            if (!valid_youtubeUrl(videoUrl)) {
-//                showNotificationMsg(messages.wrongURL,'','error');
-//                $('.dev-recipe-videoUrl').val('');
-//                return;
-//            }
-//
-//            var videoId = videoUrl.substr(videoUrl.indexOf("=") + 1);
-//
-//            if (videoId.indexOf("https://www.youtube") > -1) {
-//                showNotificationMsg(messages.wrongURL,'','error');
-//                $('.dev-recipe-videoUrl').val('');
-//                return;
-//            }
-//
-//            ytXhr = $.ajax({
-//                url: validateVideoUrl,
-//                method: 'post',
-//                data: {'videoUrl': videoUrl},
-//                success: function(data) {
-//                    if (data == 'error') {
-//                        showNotificationMsg(messages.wrongURL,'','error');
-//                    } else {
-//                            $('.dev-videourl-submit').attr('disabled','disabled');
-//                            var videos = [];
-//                            videos[0] = videoId;
-//
-//                            $.ajax({
-//                                url: youtubeUploadVideo,
-//                                method: "POST",
-//                                data: {videos: videos},
-//                                success: function(data) {
-//                                    if (data.status === 'success') {
-//                                        showNotificationMsg(data.message, "", data.status);
-//                                        $(data.video).each(function () {
-//                                            addImageToSortView(this);
-//                                        });
-//                                    }
-//
-//                                    $('.dev-recipe-videoUrl').val('');
-//                                    $('.dev-videourl-submit').removeAttr('disabled');
-//                                }
-//                            });
-//
-//                    }
-//                }
-//            });
-//    });
+    $(document).on('click', '.dev-upload-video', function() {
+
+            if(typeof ytXhr !== "undefined")
+                ytXhr.abort();
+
+
+            var obj = $('#competition_video').val();
+            var videoUrl = $.trim(obj);
+
+            if (videoUrl === "") {
+                errorContainer.removeClass('has-error');
+                return;
+            }
+
+            if (!valid_youtubeUrl(videoUrl)) {
+                showNotificationMsg(messages.wrongURL,'','error');
+                $('.dev-recipe-videoUrl').val('');
+                return;
+            }
+
+            var videoId = getIDFromURL(videoUrl);
+
+            if (videoId.indexOf("https://www.youtube") > -1) {
+                showNotificationMsg(messages.wrongURL,'','error');
+                $('.dev-recipe-videoUrl').val('');
+                return;
+            }
+
+            ytXhr = $.ajax({
+                url: validateVideoUrl,
+                method: 'post',
+                data: {'videoUrl': videoUrl},
+                success: function(data) {
+                    if (data == 'error') {
+                        showNotificationMsg(messages.wrongURL,'','error');
+                    } else {
+                            $('.dev-videourl-submit').attr('disabled','disabled');
+                            var videos = [];
+                            videos[0] = videoId;
+
+                            $.ajax({
+                                url: youtubeUploadVideo,
+                                method: "POST",
+                                data: {videos: videos},
+                                success: function(data) {
+                                    if (data.status === 'success') {
+                                        showNotificationMsg(data.message, "", data.status);
+                                        $(data.video).each(function () {
+                                            $('#dev-coverVideo img').attr('src',this.imageUrl);
+                                            $('#dev-coverVideo [data-popup="lightbox"]').attr('href',this.imageUrl);
+                                        });
+                                    }
+
+                                    $('.dev-recipe-videoUrl').val('');
+                                    $('.dev-videourl-submit').removeAttr('disabled');
+                                }
+                            });
+
+                    }
+                }
+            });
+    });
 
 
 })
