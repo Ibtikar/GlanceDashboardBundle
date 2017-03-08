@@ -395,6 +395,7 @@ function BasicModal() {
                 if (data.status == 'reload-table') {
                     $('#modal_theme_primary').modal('hide');
                     table.ajax.reload(function () {
+                        $('#modal_theme_primary').modal('hide');
                         showNotificationMsg(data.message, "", 'error');
                     }, false)
                 }
@@ -521,6 +522,17 @@ function bulkFunction() {
                     showBulkActionSelect();
 
                 }, false);
+            } else {
+
+                table.ajax.reload(function () {
+                    if (typeof listName != 'undefined' && listName == 'competitiion') {
+                        showBulkActionSelect();
+                        $('.dev-new-comptetion').html(data.count.newCount);
+                        $('.dev-publish-comptetion').html(data.count.publishCount);
+                        $('.dev-unpublish-comptetion').html(data.count.unpublishCount);
+
+                    }
+                }, false)
             }
         }
     });

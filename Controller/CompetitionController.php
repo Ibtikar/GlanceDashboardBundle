@@ -188,7 +188,7 @@ class CompetitionController extends BackendController {
         }
 
         if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_UNPUBLISH') && !$securityContext->isGranted('ROLE_ADMIN')) {
-            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
+            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'),'count'=>  $this->getDocumentCount());
             return new JsonResponse($result);
         }
         $id = $request->get('id');

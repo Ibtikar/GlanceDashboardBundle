@@ -633,7 +633,7 @@ class BackendController extends Controller {
         }
 
         if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_DELETE') && !$securityContext->isGranted('ROLE_ADMIN')) {
-            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
+            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'),'count'=>  $this->getDocumentCount());
             return new JsonResponse($result);
         }
         $id = $request->get('id');
@@ -819,7 +819,7 @@ class BackendController extends Controller {
                 $permission = 'ROLE_' . strtoupper($this->calledClassName) . '_DELETE';
 
                 if (!$securityContext->isGranted($permission) && !$securityContext->isGranted('ROLE_ADMIN')) {
-                    $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
+                    $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'),'count'=>  $this->getDocumentCount());
                     return new JsonResponse($result);
                 }
 
