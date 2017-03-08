@@ -25,8 +25,8 @@ class Competition extends Publishable {
         'nobody' => 'nobody',
     );
     public static $allowedVoters = array(
-        'all-users' => 'all users',
-        'registered-users' => 'registered users'
+        'all users' => 'all users',
+        'registered users' => 'registered users'
     );
     public static $statuses = array(
         "new" => "new",
@@ -86,7 +86,7 @@ class Competition extends Publishable {
      *      max = 150,
      *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
      * )
-     */
+sa     */
     private $secondaryTitle;
 
     /**
@@ -197,7 +197,6 @@ class Competition extends Publishable {
     private $allowedToVote;
 
     /**
-     * @Assert\Date
      * @MongoDB\Date
      */
     private $expiryDate;

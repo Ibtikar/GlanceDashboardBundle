@@ -45,7 +45,7 @@ class CompetitionType extends AbstractType {
             $builder->add('questionsEn', formType\CollectionType::class, array('label' => false,'entry_type' => QuestionType::class, 'allow_add' => true, 'allow_delete' => true, 'by_reference' => true, 'attr' => array('class' => 'competitionQuestion')));
         }
 
-        $builder->add($builder->create('expiryDate', formType\DateType::class, array('required' => false,'widget' => 'single_text', 'attr' => array('data-min-date'=>$minDate,'data-date-start-date' => isset($this->extraOptions['data-date-start-date'])?$this->extraOptions['data-date-start-date']:'+1d', 'data-rule-dateAfterToday' => '')))->addViewTransformer($transformer))
+        $builder->add($builder->create('expiryDate', formType\TextType::class, array('required' => false, 'attr' => array('data-min-date'=>$minDate,'data-date-start-date' => isset($this->extraOptions['data-date-start-date'])?$this->extraOptions['data-date-start-date']:'+1d', 'data-rule-dateAfterToday' => '')))->addViewTransformer($transformer))
                 ->add('coverType', formType\ChoiceType::class, array('choices' => Competition::$coverTypeChoices, 'expanded' => true, 'attr'  => array('data-error-after-selector' => '#competition_type_coverType')));
 
         if($this->isNew){
