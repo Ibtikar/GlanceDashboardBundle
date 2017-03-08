@@ -1,6 +1,6 @@
 <?php
 
-namespace Ibtikar\BackendBundle\Validator;
+namespace Ibtikar\GlanceDashboardBundle\Validator;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
