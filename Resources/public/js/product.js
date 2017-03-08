@@ -464,7 +464,8 @@ $(document).on("click",'.dev-add-related-material',function(){
 
 
     $('#image-cropper-modal').cropit({
-        smallImage: 'allow',
+        smallImage: 'stretch',
+        minZoomstring:'fill',
         imageBackground: true,
         imageBackgroundBorderWidth: 30,
         onImageLoaded: function () {
@@ -510,6 +511,9 @@ $(document).on("click",'.dev-add-related-material',function(){
         }
 
     })
+    $('#image-cropper-modal').cropit('previewSize', {width: 500, height: 350});
+    $('#image-cropper-modal').cropit('exportZoom', 2);
+
     $(document).on('click', '.dev-submit-image', function () {
         var imageFile = $('#image-cropper-modal').cropit('export')
         var formData = new FormData();
