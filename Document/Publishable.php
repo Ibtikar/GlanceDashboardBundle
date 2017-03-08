@@ -33,6 +33,11 @@ abstract class Publishable extends Document
     private $publishedBy;
 
     /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\Staff")
+     */
+    private $unPublishedBy;
+
+    /**
      * @MongoDB\EmbedMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\PublishLocation")
      */
     private $publishLocations;
@@ -206,7 +211,7 @@ abstract class Publishable extends Document
     {
         $this->publishLocations = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
@@ -215,5 +220,27 @@ abstract class Publishable extends Document
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set unPublishedBy
+     *
+     * @param Ibtikar\GlanceUMSBundle\Document\Staff $unPublishedBy
+     * @return self
+     */
+    public function setUnPublishedBy(\Ibtikar\GlanceUMSBundle\Document\Staff $unPublishedBy)
+    {
+        $this->unPublishedBy = $unPublishedBy;
+        return $this;
+    }
+
+    /**
+     * Get unPublishedBy
+     *
+     * @return Ibtikar\GlanceUMSBundle\Document\Staff $unPublishedBy
+     */
+    public function getUnPublishedBy()
+    {
+        return $this->unPublishedBy;
     }
 }
