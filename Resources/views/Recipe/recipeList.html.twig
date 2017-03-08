@@ -146,7 +146,7 @@
                                                     <label>{{ 'Created From'|trans({}, translationDomain) }}</label>
                                                     <div>
                                                         <div class='input-group date datepicker'>
-                                                            <input type='text' class="form-control dev-form-created open-datetimepicker"  value="{{app.request.get('from')}}"/>
+                                                            <input type='text' class="form-control dev-form-created open-datetimepicker"  value="{{app.request.get('from')}}" placeholder="{{ 'Created From'|trans({}, translationDomain) }}"/>
                                                             <span class="input-group-addon">
                                                                 <span class="glyphicon glyphicon-calendar"></span>
                                                             </span>
@@ -159,7 +159,7 @@
                                                     <label>{{ 'Created To'|trans({}, translationDomain) }}</label>
                                                     <div>
                                                         <div class='input-group date datepicker'>
-                                                            <input type='text' class="form-control dev-to-created open-datetimepicker" value="{{app.request.get('to')}}" />
+                                                            <input type='text' class="form-control dev-to-created open-datetimepicker" value="{{app.request.get('to')}}" placeholder="{{ 'Created To'|trans({}, translationDomain) }}" />
                                                             <span class="input-group-addon">
                                                                 <span class="glyphicon glyphicon-calendar"></span>
                                                             </span>
@@ -221,7 +221,7 @@
                                                     <label>{{ 'Published From'|trans({}, translationDomain) }}</label>
                                                     <div>
                                                         <div class='input-group date datepicker'>
-                                                            <input type='text' class="form-control dev-form-published open-datetimepicker"  value="{{app.request.get('pub-from')}}"/>
+                                                            <input type='text' class="form-control dev-form-published open-datetimepicker"  value="{{app.request.get('pub-from')}}" placeholder="{{ 'Published To'|trans({}, translationDomain) }}"/>
                                                             <span class="input-group-addon">
                                                                 <span class="glyphicon glyphicon-calendar"></span>
                                                             </span>
@@ -234,7 +234,7 @@
                                                     <label>{{ 'Published To'|trans({}, translationDomain) }}</label>
                                                     <div>
                                                         <div class='input-group date datepicker'>
-                                                            <input type='text' class="form-control dev-to-published open-datetimepicker" value="{{app.request.get('pub-to')}}" />
+                                                            <input type='text' class="form-control dev-to-published open-datetimepicker" value="{{app.request.get('pub-to')}}" placeholder="{{ 'Published To'|trans({}, translationDomain) }}" />
                                                             <span class="input-group-addon">
                                                                 <span class="glyphicon glyphicon-calendar"></span>
                                                             </span>
@@ -567,6 +567,10 @@
         var list = new BaseList();
 $('document').ready(function(){
 
+$('.dev-form-ingredient').select2({'placeholder':'{{ 'Ingredients'|trans({}, translationDomain) }}'})
+$('.dev-form-meal').select2({'placeholder':'{{ 'Meal'|trans({}, translationDomain) }}'})
+$('.dev-form-product').select2({'placeholder':'{{ 'Products'|trans({}, translationDomain) }}'})
+$('.dev-form-tags').select2({'placeholder':'كلمات مفتاحية'})
 
     $(function() {
         $('.datepicker').datetimepicker({
