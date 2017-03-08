@@ -279,6 +279,7 @@
     <script>
         intializeTable();
         var list = new BaseList();
+        var listName='competitiion';
         {% if 'list_publish_competition' not in app.request.attributes.get('_route') %}
         var publisUrl="{{ path(prefixRoute|lower~'_publish')}}";
         {% endif %}

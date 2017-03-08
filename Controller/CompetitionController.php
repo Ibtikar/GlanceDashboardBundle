@@ -170,7 +170,14 @@ class CompetitionController extends BackendController {
         return $renderingParams;
     }
 
-    public function updatePublishAction(Request $request) {
+    public function getDocumentCount()
+    {
+
+       return $this->getTabCount();
+    }
+
+    public function updatePublishAction(Request $request)
+    {
         $dm = $this->get('doctrine_mongodb')->getManager();
         $securityContext = $this->get('security.authorization_checker');
         $id = $request->get('id');

@@ -496,9 +496,16 @@ function bulkFunction() {
                 if (((data.success).length == numOfCheckedRecord || (data.success).length == 0) && pageNum != 1 && numOfRecords === numOfCheckedRecord) {
                     table.page(parseInt(table.page(), 10) - parseInt(1, 10));
                 }
-                $('.dev-document-count').html( data.count)
+                if (typeof listName != 'undefined' && listName == 'competitiion') {
+                    $('.dev-new-comptetion').html(data.count.newCount);
+                    $('.dev-publish-comptetion').html(data.count.publishCount);
+                    $('.dev-unpublish-comptetion').html(data.count.unpublishCount);
 
-                table.ajax.reload(function (){
+                } else {
+                    $('.dev-document-count').html(data.count)
+                }
+
+                table.ajax.reload(function () {
                     for (message in data.errors) {
                         for (index in data.errors[message]) {
                             var $tr = $('input[value="' + data.errors[message][index] + '"]').parents('tr');
@@ -617,6 +624,7 @@ $(document).ready(function () {
     });
 
     $('.dataTables_wrapper').on('click', '.dev-delete-btn', function (e) {
+
         var numOfRecords = $('tbody .dev-checkbox').length;
         var pageNum = getQueryVariable('page');
         $.ajax
@@ -637,7 +645,14 @@ $(document).ready(function () {
                                 table.page(parseInt(table.page(), 10) - parseInt(1, 10));
                             }
                         }
-                        $('.dev-document-count').html(json.count)
+                        if (typeof listName != 'undefined' && listName == 'competitiion') {
+                            $('.dev-new-comptetion').html(json.count.newCount);
+                            $('.dev-publish-comptetion').html(json.count.publishCount);
+                            $('.dev-unpublish-comptetion').html(json.count.unpublishCount);
+
+                        } else {
+                            $('.dev-document-count').html(json.count)
+                        }
                         showNotificationMsg(json.message, "", status);
                         unblockPage();
                         $('.dev-bulk-action-container').hide();
