@@ -49,7 +49,7 @@ class CompetitionType extends AbstractType {
                 ->add('coverType', formType\ChoiceType::class, array('choices' => Competition::$coverTypeChoices, 'expanded' => true, 'attr'  => array('data-error-after-selector' => '#competition_type_coverType')));
 
         if($this->isNew){
-            $builder->add('allowedToVote', formType\ChoiceType::class, array('choices' => Competition::$allowedVoters, 'expanded' => true, 'attr'  => array('data-error-after-selector' => '#competition_type_allowedToVote')));
+            $builder->add('allowedToVote', formType\ChoiceType::class, array('choices' => array_keys(Competition::$allowedVoters), 'expanded' => true, 'attr'  => array('data-error-after-selector' => '#competition_type_allowedToVote')));
 //                    ->add('resultsVisibility', 'choice', array('choices' => Poll::$resultsVisibilities, 'expanded' => true, 'attr'  => array('data-error-after-selector' => '#competition_type_resultsVisibility')));
         }
         $builder->add('save', formType\SubmitType::class);
