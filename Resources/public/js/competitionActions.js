@@ -91,13 +91,14 @@ function savepublishLocation(basicModal, url) {
                 window.location.reload(true);
 
             } else {
+                basicModal.hide();
                 if (data.status == 'error') {
                     $('.dev-save-publish-location').find('.icon-spinner6.spinner.position-right').remove();
                     $('.dev-save-publish-location').removeAttr('ajax-running');
                     $('#dev-publish-modal').find('.alert.alert-danger').remove();
                     $('#dev-publish-modal').prepend('<div class="alert alert-danger no-border"><button data-dismiss="alert" class="close" type="button">' + '<span>×</span><span class="sr-only">Close</span></button>' + data.message + '</div>');
                 } else {
-                    basicModal.hide();
+
                     table.ajax.reload(function () {
                         if (data.status != 'reload-table') {
                             showNotificationMsg(data.message, "", data.status);
