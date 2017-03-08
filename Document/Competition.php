@@ -637,17 +637,7 @@ class Competition extends Publishable {
         return $this->autoPublishDate;
     }
 
-    public function delete(DocumentManager $dm, User $user = null,  $container = null, $deleteOption = null)
-    {
-        if ($container) {
-            $this->status = Competition::$statuses['deleted'];
-        }
-        if ($user) {
-            $this->deletedBy = $user;
-        }
-        $this->autoPublishDate= null;
-        $this->deletedAt = new \DateTime();
-    }
+
 
     public function getPublish() {
         if($this->status == self::$statuses["published"]){

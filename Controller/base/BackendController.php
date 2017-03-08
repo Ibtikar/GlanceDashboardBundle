@@ -631,6 +631,7 @@ class BackendController extends Controller {
         if (!$loggedInUser) {
             return new JsonResponse(array('status' => 'login'));
         }
+
         if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_DELETE') && !$securityContext->isGranted('ROLE_ADMIN')) {
             $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
             return new JsonResponse($result);
@@ -660,8 +661,7 @@ class BackendController extends Controller {
             $dm->flush();
             $this->postDelete($id);
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
-            exit;
+
             return $this->getFailedResponse();
         }
 
@@ -672,6 +672,7 @@ class BackendController extends Controller {
 
     public function getDocumentCount()
     {
+
         $dm = $this->get('doctrine_mongodb')->getManager();
         return $dm->createQueryBuilder($this->getObjectShortName())
                 ->field('deleted')->equals(FALSE)

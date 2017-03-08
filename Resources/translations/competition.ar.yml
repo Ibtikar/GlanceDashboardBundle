@@ -51,6 +51,7 @@
 'View One competitionnew': 'عرض'
 'Delete competitionnew': 'حذف'
 'publish Competitionnew': 'نشر'
+'publish competitionnew': 'نشر'
 'Edit competitionpublish': 'تعديل'
 'View One competitionpublish': 'عرض'
 'Delete competitionpublish': 'حذف'
@@ -69,6 +70,8 @@
 'answer 0': 'موقوفه'
 'competitionnews': 'المسابقات'
 'competitionnew': 'مسابقه'
+'Date expired': 'يجب ان يكون تاريخ الانتهاء بعد تاريخ اليوم'
+
 # ############Buttons############
 
 
