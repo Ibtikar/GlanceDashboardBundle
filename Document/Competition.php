@@ -34,6 +34,12 @@ class Competition extends Publishable {
         "publish" => "publish",
     );
 
+    public static $coverTypeChoices = array(
+        "none" => "none",
+        "image" => "image",
+        "video" => "video"
+    );
+
     static $COMPETITION_ANSWER_Highlighted_COLORS = array(
         "color1" => "#3498db",
         "color2" => "#e74c3c",
@@ -122,6 +128,32 @@ class Competition extends Publishable {
     private $briefEn;
 
     /**
+     * @Assert\NotBlank
+
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 10,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 1000,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $termsAndConditions;
+
+    /**
+     * @Assert\NotBlank
+
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 10,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 1000,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $termsAndConditionsEn;
+
+    /**
      * @Assert\Valid
      * @MongoDB\EmbedMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Question")
      */
@@ -132,6 +164,18 @@ class Competition extends Publishable {
      * @MongoDB\EmbedMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Question")
      */
     private $questionsEn;
+
+
+    /**
+     * @Assert\Choice
+     * @MongoDB\String
+     */
+    private $coverType = "none";
+
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Media", simple=true)
+     */
+    private $cover;
 
     /**
      * @Assert\NotBlank
@@ -166,7 +210,7 @@ class Competition extends Publishable {
     /**
      * @MongoDB\String
      */
-    private $status;
+    private $status = "new";
 
     /**
      * @MongoDB\Int
@@ -799,6 +843,96 @@ class Competition extends Publishable {
     }
 
     /**
+     * Set termsAndConditions
+     *
+     * @param string $termsAndConditions
+     * @return self
+     */
+    public function setTermsAndConditions($termsAndConditions)
+    {
+        $this->termsAndConditions = $termsAndConditions;
+        return $this;
+    }
+
+    /**
+     * Get termsAndConditions
+     *
+     * @return string $termsAndConditions
+     */
+    public function getTermsAndConditions()
+    {
+        return $this->termsAndConditions;
+    }
+
+    /**
+     * Set termsAndConditionsEn
+     *
+     * @param string $termsAndConditionsEn
+     * @return self
+     */
+    public function setTermsAndConditionsEn($termsAndConditionsEn)
+    {
+        $this->termsAndConditionsEn = $termsAndConditionsEn;
+        return $this;
+    }
+
+    /**
+     * Get termsAndConditionsEn
+     *
+     * @return string $termsAndConditionsEn
+     */
+    public function getTermsAndConditionsEn()
+    {
+        return $this->termsAndConditionsEn;
+    }
+
+
+
+    /**
+     * Set coverType
+     *
+     * @param string $coverType
+     * @return self
+     */
+    public function setCoverType($coverType)
+    {
+        $this->coverType = $coverType;
+        return $this;
+    }
+
+    /**
+     * Get coverType
+     *
+     * @return string $coverType
+     */
+    public function getCoverType()
+    {
+        return $this->coverType;
+    }
+
+    /**
+     * Set cover
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Media $cover
+     * @return self
+     */
+    public function setCover(\Ibtikar\GlanceDashboardBundle\Document\Media $cover)
+    {
+        $this->cover = $cover;
+        return $this;
+    }
+
+    /**
+     * Get cover
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\Media $cover
+     */
+    public function getCover()
+    {
+        return $this->cover;
+    }
+
+        /**
      * Set goodyStar
      *
      * @param boolean $goodyStar

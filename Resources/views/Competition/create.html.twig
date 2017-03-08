@@ -9,7 +9,150 @@
 
 
     {{ form_start(form)}}
+    {{ form_errors(form)}}
+    {{ form_row(form.coverType) }}
 
+    <div class="dev-media-container">
+
+    <div class="row dev-image-container" style="display: none;">
+
+        <div class="col-md-12">
+
+            <h5>ادخل
+                الصوره المطلوبة
+            </h5>
+
+
+            <div class="table-responsive">
+                <table class="table table-bordered">
+
+                    <tbody>
+                        <tr id="dev-coverPhoto">
+                            <td style="width: 150px">
+
+                                <div class="thumbnail">
+                                    <div class="thumb thumb-slide">
+
+                                        {% if coverImage is not empty %}
+                                            <img src="{{ asset(coverImage.getWebPath())}}" alt="">
+
+                                        {% else %}
+                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
+
+                                        {% endif %}
+                                        <div class="caption">
+                                            <span>
+                                                {% if coverImage is not empty %}
+                                                    <a href="{{ asset(coverImage.getWebPath())}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% else %}
+                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td class="thumbnail-caption">
+                                <h4> صورة الغلاف</h4>
+                                <ul class="text-grey-300">
+                                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                                    <li> يجب ان تكون ابعاد الصورة 1000x700 </li>
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                                </ul>
+                            </td>
+                            <td style="width: 300px" data-name="coverPhoto">
+                                {% if coverImage is empty %}
+                                    <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
+                                {% endif %}
+                                <a class="btn btn-default dev-crop-images"   {% if coverImage is empty %}style="display: none"{%else%} data-image-id="{{ coverImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':coverImage.id,'collectionType':'Competition'})}}"{%endif%}   >   تغير الصورة </a>
+
+
+                            </td>
+
+                        </tr>
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row dev-video-container" style="display: none;">
+
+        <div class="col-md-12">
+
+            <h5>ادخل
+                الفيديو المطلوب
+            </h5>
+
+
+            <div class="table-responsive">
+                <table class="table table-bordered">
+
+                    <tbody>
+                        <tr id="dev-coverVideo">
+                            <td style="width: 150px">
+
+                                <div class="thumbnail">
+                                    <div class="thumb thumb-slide">
+
+                                        {% if coverVideo is not empty %}
+                                            <img src="{{ asset(coverVideo.getWebPath())}}" alt="">
+
+                                        {% else %}
+                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
+
+                                        {% endif %}
+                                        <div class="caption">
+                                            <span>
+                                                {% if coverVideo is not empty %}
+                                                    <a href="{{ asset(coverVideo.getWebPath())}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% else %}
+                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+
+
+                            <td class="thumbnail-caption">
+                                <h4>أضف رابط الفيديو</h4>
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        <input type="text" aria-invalid="true" aria-describedby="competition_title-error" aria-required="true" id="competition_video" name="competition[video]" required="required" data-rule-minlength="3" data-rule-maxlength="150" class="form-control valid">
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="width: 300px" data-name="coverVideo">
+                                {% if coverVideo is empty %}
+                                    <a class="btn btn-default dev-upload-video"  > رفع الفيديو</a>
+                                {% endif %}
+                                <a class="btn btn-default dev-upload-video"   {% if coverVideo is empty %}style="display: none"{%else%} data-video-id="{{ coverVideo.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':coverVideo.id,'collectionType':'Competition'})}}"{%endif%}   >   تغير الفيديو </a>
+
+
+                            </td>
+
+                        </tr>
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    </div>
+    <hr>
     <div class="tabbable">
         <ul class="nav nav-tabs nav-tabs-highlight">
             <li class="active"><a href="#arabic" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}" alt="arabic" width="30" height="20"/></a></li>
@@ -25,6 +168,8 @@
                 {{ form_row(form.SecondaryTitle) }}
 
                 {{ form_row(form.brief) }}
+
+                {{ form_row(form.termsAndConditions) }}
 
                 {{ form_row(form.questions) }}
 {#                {{ form_row(form.images) }}#}
@@ -43,6 +188,8 @@
                 {{ form_row(form.SecondaryTitleEn) }}
 
                 {{ form_row(form.briefEn) }}
+
+                {{ form_row(form.termsAndConditionsEn) }}
 
                 {{ form_row(form.questionsEn) }}
         <div class="col-9 clearfix">
@@ -73,6 +220,113 @@
 
 
 {% block javascripts %}
+
+    <div id="iframeModal" class="modal fade">
+       <div class="modal-dialog">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                   <h3 class="modal-title"></h3>
+               </div>
+               <div class="modal-body">
+                   <div id="iframe-loader" class="loading">
+                   </div>
+                   <iframe class="dev-iframe-auto-resize" src="" scrolling="no" width="100%" style="border: none;"></iframe>
+               </div>
+           </div><!-- /.modal-content -->
+       </div><!-- /.modal-dialog -->
+   </div><!-- /.modal -->
+    <!-- uploadImg modal -->
+    <div id="uploadImg" class="modal fade">
+        <div class="modal-dialog  modal-full">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h6 class="modal-title"> الصورة
+                    </h6>
+                </div>
+
+                <div class="modal-body">
+
+                    <div id="image-cropper-modal">
+                        <!-- This is where the preview image is displayed -->
+                        <div class="cropit-preview"></div>
+
+                        <!-- This range input controls zoom -->
+
+
+                        <div class="controls-wrapper">
+                            <div class="rotation-btns">
+                                <span class="icon-rotate-cw2 rotate-ccw-btn"></span>
+                                <span class="icon-rotate-ccw2 rotate-cw-btn"></span>
+                            </div>
+
+
+                            <!-- You can add additional elements here, e.g. the image icons -->
+                            <div class="slider-wrapper">
+                                <span class="icon icon-image2 smallIcon"></span>
+                                <input type="range" min="0" max="50" value="5" step="5" class="cropit-image-zoom-input" />
+                                <span class="icon icon-image2 bigIcon"></span>
+                            </div>
+                        </div><!-- controls-wrapper -->
+
+                        <!-- This is where user selects new image -->
+                        <input type="file" class="cropit-image-input" />
+
+                        <!-- The cropit- classes above are needed
+                             so cropit can identify these elements -->
+                    </div>
+
+                </div>
+
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-link dev-crop-spinner" style="display: none"><i class="spinner icon-spinner text-success"></i></button>
+                    <button type="button" class="btn btn-link dev-submit-image" data-url="" data-id=""><i class="icon-checkmark4 text-success"></i></button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal"><i class="icon-cross2 text-danger-400"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /uploadImg modal -->
+
+    {% set imageTempelate %}
+        <tr id="dev-%name%">
+            <td style="width: 150px">
+
+                <div class="thumbnail">
+                    <div class="thumb thumb-slide">
+                        <img src="%image-url%" alt="">
+                        <div class="caption">
+                            <span>
+                                <a href="%image-url%" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </td>
+
+            <td class="thumbnail-caption">
+                <h4> صورة الغلاف</h4>
+                <ul class="text-grey-300">
+                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                    <li> يجب ان تكون ابعاد الصورة 1000x700 </li>
+                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                </ul>
+            </td>
+
+            <td style="width: 300px" data-name="%name%">
+                %uploadButton%
+            </td>
+
+        </tr>
+
+    {% endset %}
+    {% set uploadButton %}
+        <a class="btn btn-default upload-image-modal-open dev-upload-image"  > تغير الصورة </a>
+    {% endset %}
+
+
      {{ parent() }}
 
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
@@ -127,6 +381,20 @@
     </script>
     <script>
         var answersLimitErrorMessage = '{% trans from 'competition' %}You must add only from 2 to 5 answers{% endtrans %}';
+        var cropperPluginInitialized = true;
+        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':'null','collectionType':'Competition'})}}";
+        var youtubeUploadVideo = "{{ path('ibtikar_glance_dashboard_media_youtube_upload_video',{'type':'video','documentId':'null','collectionType':'Competition'}) }}";
+
+        var imageTempelate = '{{ imageTempelate|escape('js') }}';
+        var uploadButton = '{{ uploadButton|escape('js') }}';
+        var imageErrorMessages = {
+            'imageExtension': '{% trans from 'validators'%}picture not correct.{%endtrans%}',
+            'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 1000*700{%endtrans%}',
+            'sizeError': '{% trans from 'validators'%}File size must be less than 4mb{%endtrans%}',
+            'generalError': '{% trans %}failed operation{%endtrans%}',
+            'coverPhoto': '{% trans from translationDomain %}coverPhoto{%endtrans%}',
+            'profilePhoto': '{% trans from translationDomain %}profilePhoto{%endtrans%}',
+        }
     </script>
 
     <script>
@@ -139,7 +407,9 @@
             var identifier = $(this).attr('class').split(' ').pop().replace('dev-add-competition-','');
             var lang = identifier=="questions"?"ar":"en";
             var $questionContainer = $('#competition_'+identifier);
-            var prototype = $questionContainer.data('prototype').replace('/'+identifier+'___name__/g', identifier+"_"+lang=="ar"?questionNextId:questionNextIdEn).replace("/\["+identifier+"\]\[__name__\]/g", "["+identifier+"]["+lang=="ar"?questionNextId:questionNextIdEn+"]");
+            var placeHolderRegex = new RegExp(identifier+'___name__','g');
+            var arrIndexRegex = new RegExp('\\['+identifier+'\\]\\[__name__\\]','g');
+            var prototype = $questionContainer.data('prototype').replace(placeHolderRegex, identifier+"_"+lang=="ar"?questionNextId:questionNextIdEn).replace(arrIndexRegex, "["+identifier+"]["+lang=="ar"?questionNextId:questionNextIdEn+"]");
             $questionContainer.append(prototype);
             if(lang=="ar"){
                 questionNextId++;
@@ -166,6 +436,16 @@
     $(document).on('click', '.dev-remove-competition-questionEn', function() {
             $(this).parents('[id^="competition_questionsEn_"]').remove();
             checkIfLastQuestion($('#english'));
+    });
+
+
+    $('[name="competition[coverType]"]').on('click',function(){
+        if($(this).val() == "none"){
+            $('.dev-media-container .row').slideUp();
+        }else{
+            $('.dev-media-container .row').not('.dev-'+$(this).val()+'-container').slideUp();
+            $('.dev-'+$(this).val()+'-container').slideDown();
+        }
     });
 
     /////////////////////////////////////////////////////
@@ -283,7 +563,7 @@ jQuery(document).ready(function ($) {
 
 });
 
-
     </script>
 
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/competition.js') }}"></script>
 {% endblock %}

@@ -40,7 +40,26 @@ class CompetitionController extends BackendController {
         $questionEn->addAnswer(new \Ibtikar\GlanceDashboardBundle\Document\QuestionChoiceAnswer);
         $questionEn->addAnswer(new \Ibtikar\GlanceDashboardBundle\Document\QuestionChoiceAnswer);
         $competition->getQuestionsEn()->add($questionEn);
-//        $competition->getQuestions()->add(new Question());
+
+        $coverImage = NULL;
+        $coverVideo = NULL;
+
+        $mediaList = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
+                'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                'collectionType' => 'Competition'
+            ));
+
+        foreach ($mediaList as $media){
+                if($media->getType() == 'image'){
+                       $coverImage= $media;
+                        continue;
+                }
+
+                if($media->getType() == 'video'){
+                       $coverVideo= $media;
+                        continue;
+                }
+        }
 
         $form = $this->createForm(CompetitionType::class, $competition, array('translation_domain' => $this->translationDomain,
                 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
@@ -58,6 +77,8 @@ class CompetitionController extends BackendController {
 
         return $this->render('IbtikarGlanceDashboardBundle:Competition:create.html.twig', array(
                     'form' => $form->createView(),
+                    'coverImage' => $coverImage,
+                    'coverVideo' => $coverVideo,
                     'title' => $this->trans('Add new Competition', array(), $this->translationDomain),
                     'form_theme' => 'IbtikarGlanceDashboardBundle:Competition:form_theme_competition.html.twig',
                     'translationDomain' => $this->translationDomain
