@@ -40,7 +40,7 @@
                                                                                 {% if is_granted('ROLE_' ~ listName|upper ~'_UNPUBLISH') or is_granted('ROLE_ADMIN')  %}
                                                                                         <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-action="unpublish"
                                                                                                 class="btn btn-default" data-popup="tooltip"  data-placement="bottom"  {% if object.getStatus() is defined %}data-status="{{object.getStatus()}}"{%endif%} title="{{('unpublish ' ~  listName|capitalize)|trans({},translationDomain)}}">
-                                                                                            <i class="icon-checkmark3"></i>
+                                                                                            <i class="icon-stop2"></i>
                                                                                         </button>
                                                                                 {% endif %}
                                                                             {% elseif action == "StopResume" %}
