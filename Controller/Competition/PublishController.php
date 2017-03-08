@@ -41,7 +41,7 @@ class PublishController extends CompetitionController
     protected function configureListParameters(Request $request)
     {
         parent::configureListParameters($request);
-        $this->listViewOptions->setActions(array('Edit', 'ViewOne','Delete','unPublish','StopResume'));
+        $this->listViewOptions->setActions(array('Edit', 'Delete', 'ViewOne','unPublish','StopResume'));
         $this->listViewOptions->setBulkActions(array("Delete"));
         $this->listViewOptions->setDefaultSortBy("createdAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
