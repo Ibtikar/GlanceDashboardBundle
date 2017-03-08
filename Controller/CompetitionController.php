@@ -270,7 +270,7 @@ class CompetitionController extends BackendController {
                 throw $this->createNotFoundException($this->trans('Wrong id'));
 
             if ($competition->getExpiryDate() && $competition->getExpiryDate() < new \DateTime()) {
-                $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
+                $result = array('status' => 'reload-table', 'message' => $this->trans('Date expired',array(),  $this->translationDomain));
                 return new JsonResponse($result);
             }
 

@@ -70,6 +70,8 @@
 'answer 0': 'موقوفه'
 'competitionnews': 'المسابقات'
 'competitionnew': 'مسابقه'
+'Date expired': 'يجب ان يكون تاريخ الانتهاء بعد تاريخ اليوم'
+
 # ############Buttons############
 
 
