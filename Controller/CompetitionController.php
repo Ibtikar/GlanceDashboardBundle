@@ -216,7 +216,46 @@ class CompetitionController extends BackendController {
 
         return new JsonResponse(array('status' => 'success', 'message' => $this->get('translator')->trans('done sucessfully'),'count'=>$count));
     }
-      public function publishAction(Request $request)
+
+    public function updateAnswerStatusAction(Request $request) {
+        $securityContext = $this->get('security.authorization_checker');
+        $loggedInUser = $this->getUser();
+        if (!$loggedInUser) {
+            return new JsonResponse(array('status' => 'login'));
+        }
+
+        if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_STOPRESUME') && !$securityContext->isGranted('ROLE_ADMIN')) {
+            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'),'count'=>  $this->getDocumentCount());
+            return new JsonResponse($result);
+        }
+        $id = $request->get('id');
+        $answerEnable = $request->get('status');
+
+        if (!$id || !$answerEnable) {
+            return $this->getFailedResponse();
+        }
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $document = $dm->getRepository($this->getObjectShortName())->find($id);
+        switch ($answerEnable) {
+            case 'enabled':
+                $answeToBeUpdate = true;
+                break;
+            case 'disabled':
+                $answeToBeUpdate = FALSE;
+                break;
+        }
+
+        if (!$document || $document->getDeleted() || $document->getAnswersEnabled() == $answeToBeUpdate) {
+            return new JsonResponse(array('status' => 'failed', 'message' => $this->get('translator')->trans('failed operation'), 'count' => $this->getDocumentCount()));
+        }
+        $document->setAnswersEnabled($answeToBeUpdate);
+        $dm->flush();
+        $count = $this->getDocumentCount();
+
+        return new JsonResponse(array('status' => 'success', 'message' => $this->get('translator')->trans('done sucessfully'),'count'=>$count));
+    }
+
+    public function publishAction(Request $request)
     {
         if (!$this->getUser()) {
             return $this->getLoginResponse();

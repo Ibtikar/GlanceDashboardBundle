@@ -26,3 +26,8 @@ ibtikar_glance_dashboard_competitionpublish_unpublish:
     path:  /unpublish
     defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\Publish:unpublish }
 
+ibtikar_glance_dashboard_competitionpublish_updateAnswerStatus:
+    path:  /updateAnswerStatus
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\Publish:updateAnswerStatus }
+
+

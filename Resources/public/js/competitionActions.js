@@ -50,6 +50,50 @@ $(document).ready(function () {
                 });
     });
 
+    $('.dataTables_wrapper').on('click', '.dev-resume-stop-answers-btn', function (e) {
+
+        var numOfRecords = $('tbody .dev-checkbox').length;
+        var pageNum = getQueryVariable('page');
+        $.ajax
+                ({
+                    'dataType': 'json',
+                    'url': $(this).parents('[role="tooltip"]').prev().data('href'),
+                    data:{'status': $(this).parents('[role="tooltip"]').prev().data('status')},
+                    beforeSend: function () {
+                        blockPage();
+                    },
+                    'success': function (json) {
+                        var status = "success";
+
+                        if (json.status != "success") {
+                            status = "error";
+                        }
+                        if (json.status == 'success') {
+                            if (pageNum != 1 && numOfRecords == 1) {
+                                table.page(parseInt(table.page(), 10) - parseInt(1, 10));
+                            }
+                        }
+                        if (typeof listName != 'undefined' && listName == 'competitiion') {
+                            $('.dev-new-comptetion').html(json.count.newCount);
+                            $('.dev-publish-comptetion').html(json.count.publishCount);
+                            $('.dev-unpublish-comptetion').html(json.count.unpublishCount);
+
+                        } else {
+                            $('.dev-document-count').html(json.count)
+                        }
+                        showNotificationMsg(json.message, "", status);
+                        unblockPage();
+                        $('.dev-bulk-action-container').hide();
+                        table.ajax.reload(function () {
+                            showBulkActionSelect();
+                        }, false);
+                    }
+                });
+    });
+
+
+
+
 })
 
 

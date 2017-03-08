@@ -23,7 +23,7 @@
             "buttons" :[
                 {
                     "text" : "Yes",
-                    "class" : "dev-stop-answers-btn btn-danger",
+                    "class" : "dev-resume-stop-answers-btn btn-danger",
                     "callback" : "callUrl",
                     "callback-param" : [
                         "data-href"
@@ -36,12 +36,12 @@
             ],
             "translationDomain" : null}) %}
 
-{% set conditionalResumeAnswerAttrs = popover_factory({ "question" : "You are about to resume (%title%),Are you sure?",
+{% set conditionalResumeAnswerAttrs = popover_factory({ "question" : "You are about to resume answers (%title%),Are you sure?",
             "replaceAttr" : false,
             "buttons" :[
                 {
                     "text" : "Yes",
-                    "class" : "dev-unpublish-btn btn-danger",
+                    "class" : "dev-resume-stop-answers-btn btn-danger",
                     "callback" : "callUrl",
                     "callback-param" : [
                         "data-href"
@@ -99,11 +99,14 @@
                                                                                 {% endif %}
                                                                             {% elseif action == "StopResume" %}
 
-                                                                            {% if is_granted('ROLE_' ~ listName|upper ~'_STOPRESUME') or is_granted('ROLE_ADMIN')  %}
+                                                                            {% if is_granted('ROLE_' ~ listName|upper ~'_STOPRESUME') or is_granted('ROLE_ADMIN') and object.status=='publish' %}
                                                                                 {% if object.getAnswersEnabled() %}
-                                                                                    <a class="btn btn-default"  data-href = "{{ path(prefixRoute|lower ~ '_unpublish', {'id': object.id}) }}" {{ conditionalStopAnswerAttrs|replace({'%title%': object})|raw }}><i class="icon-stop" data-popup="tooltip" title="{{('StopResume ' ~  listName|capitalize)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
-                                                                                    {% endif %}
+                                                                                    <a class="btn btn-default" data-status="disabled" data-href = "{{ path(prefixRoute|lower ~ '_updateAnswerStatus', {'id': object.id}) }}" {{ conditionalStopAnswerAttrs|replace({'%title%': object})|raw }}><i class="icon-stop" data-popup="tooltip" title="{{('stop ' ~  listName|capitalize)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
+                                                                                    {% else  %}
+                                                                                    <a class="btn btn-default"  data-status="enabled" data-href = "{{ path(prefixRoute|lower ~ '_updateAnswerStatus', {'id': object.id}) }}" {{ conditionalResumeAnswerAttrs|replace({'%title%': object})|raw }}><i class="icon-check" data-popup="tooltip" title="{{('resume ' ~  listName|capitalize)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
+
                                                                                 {% endif %}
+                                                                            {% endif %}
                                                                             {% endif %}
 
 
