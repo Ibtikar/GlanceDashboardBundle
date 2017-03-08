@@ -37,19 +37,17 @@
                                                                                 {% endif %}
                                                                             {% elseif action == "unPublish" %}
 
-                                                                                {% if is_granted('ROLE_' ~ listName|upper ~'_UNPUBLISH') or is_granted('ROLE_ADMIN')  %}
-                                                                                        <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-action="unpublish"
-                                                                                                class="btn btn-default" data-popup="tooltip"  data-placement="bottom"  {% if object.getStatus() is defined %}data-status="{{object.getStatus()}}"{%endif%} title="{{('unpublish ' ~  listName|capitalize)|trans({},translationDomain)}}">
-                                                                                            <i class="icon-blocked"></i>
-                                                                                        </button>
+                                                                            {% if is_granted('ROLE_' ~ listName|upper ~'_UNPUBLISH') or is_granted('ROLE_ADMIN')  %}
+                                                                                {% if object.getStatus() =='publish' %}
+                                                                                    <a class="btn btn-default"  data-href = "{{ path(prefixRoute|lower ~ '_unpublish', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-blocked" data-popup="tooltip" title="{{('unpublish ' ~  listName|capitalize)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
+                                                                                    {% endif %}
                                                                                 {% endif %}
                                                                             {% elseif action == "StopResume" %}
 
-                                                                                {% if is_granted('ROLE_' ~ listName|upper ~'_STOPRESUME') or is_granted('ROLE_ADMIN')  %}
-                                                                                        <button data-name="{{ object }}" data-id="{{ object.getId() }}" data-action="StopResume"
-                                                                                                class="btn btn-default" data-popup="tooltip"  data-placement="bottom"  {% if object.getStatus() is defined %}data-status="{{object.getStatus()}}"{%endif%} title="{{('StopResume ' ~  listName|capitalize)|trans({},translationDomain)}}">
-                                                                                            <i class="icon-stop"></i>
-                                                                                        </button>
+                                                                            {% if is_granted('ROLE_' ~ listName|upper ~'_STOPRESUME') or is_granted('ROLE_ADMIN')  %}
+                                                                                {% if object.getAnswersEnabled() %}
+                                                                                    <a class="btn btn-default"  data-href = "{{ path(prefixRoute|lower ~ '_unpublish', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-stop" data-popup="tooltip" title="{{('StopResume ' ~  listName|capitalize)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
+                                                                                    {% endif %}
                                                                                 {% endif %}
                                                                             {% endif %}
 
