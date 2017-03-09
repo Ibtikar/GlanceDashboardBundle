@@ -1,0 +1,401 @@
+{% extends 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard.html.twig' %}
+{% block header %}
+    {{ include('IbtikarGlanceDashboardBundle::header.html.twig') }}
+{% endblock %}
+{% block navbar %}
+    {{ include('IbtikarGlanceDashboardBundle::navbar.html.twig') }}
+{% endblock %}
+{% block side_menu %}
+    {{ include('IbtikarGlanceDashboardBundle::sidebar.html.twig') }}
+{% endblock %}
+{% block title %}{% trans from 'competition' %}View One competition{% endtrans%}{% endblock%}
+
+
+{% block breadCrumb %}
+    <a class="btn btn-link btn-float has-text" href="{{path('ibtikar_glance_dashboard_product_create')}}"><i class="icon-add"></i><span>إدخال منتج</span></a>
+    <a class="btn btn-link btn-float has-text activeLink" href="{{path('ibtikar_glance_dashboard_product_list')}}"><i class="icon-table2"></i> <span> المنتجات</span></a>
+
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12">
+
+
+
+            <!-- Add Role -->
+            <div id="NewRoleBox" class="row">
+                <div class="col-md-12">
+
+
+                    <div class="panel panel-flat sticky-parent">
+                        <div id="sticky-anchor"></div>
+
+                        <div class="panel-heading">
+                            <h5 class="panel-title"> Answers  </h5>
+                            <div class="heading-elements">
+                                <span class="label heading-text label-flat border-success text-success-600">12338 Answers</span>
+                                <a class="btn btn-primary heading-btn" href="summary.php">Account Summary</a>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="panel-body">
+
+
+                            <form class="form-horizontal" action="#">
+
+
+
+                                <div class="row">
+
+
+                                    <div class="col-md-12">
+
+
+
+                                        <div class="tabbable">
+                                            <ul class="nav nav-tabs nav-tabs-highlight">
+                                                <li class="active"><a href="#arabic" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}" alt="arabic" width="30" height="20"/></a></li>
+                                                <li><a href="#english" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}" alt="english" width="30" height="20"/></a></li>
+                                            </ul>
+
+                                            <div class="tab-content">
+
+                                                <div class="tab-pane active" id="arabic">
+                                                    {% if competition.status=='publish' %}
+                                                        {% for question in competition.questions%}
+                                                            {% set displayChart= false %}
+                                                            <h2>{{question.question}}
+                                                            </h2>
+                                                            {% if question.questionType == 'single answer' or question.questionType == 'multiple answer' %}
+                                                                <div class="row">
+
+                                                                    <div class="col-lg-4 resultsCharts">
+
+                                                                        <div class="chart-container text-center">
+                                                                            <div class="display-inline-block" id="c3-donut-chart-ar-{{loop.index}}" style="direction: ltr"></div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-lg-8">
+                                                                        {% for answer in question.answers %}
+                                                                            <div class="form-group ">
+
+                                                                                <div class="control-label col-lg-12">
+                                                                                    <span class="badge badge-primary resultsNumber">
+                                                                                        {{answer.selectionCount }}
+                                                                                    </span>
+                                                                                    {{answer.answer}}
+                                                                                </div>
+                                                                            </div>
+                                                                        {% endfor %}
+
+
+                                                                    </div>
+
+
+                                                                </div><!-- row end -->
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        {% for question in competition.questions%}
+                                                            <h2>{{question.question}}
+                                                            </h2>
+                                                            {% if question.questionType == 'single answer' or question.questionType == 'multiple answer' %}
+
+                                                                <div class="row">
+
+
+
+                                                                    <div class="col-lg-8">
+                                                                        {% for answer in question.answers %}
+                                                                            <div class="form-group ">
+
+                                                                                <div class="control-label col-lg-12">
+
+                                                                                    {{answer.answer}}
+                                                                                </div>
+                                                                            </div>
+                                                                        {% endfor %}
+
+
+
+
+
+
+
+                                                                    </div>
+
+
+                                                                </div><!-- row end -->
+                                                            {% endif %}
+                                                        {% endfor %}
+
+                                                    {% endif %}
+                                                </div><!-- arabic end -->
+
+                                                <div class="tab-pane" id="english">
+
+
+                                                    {% if competition.status=='publish' %}
+
+
+                                                        {% for question in competition.questions%}
+                                                            {% set displayChart= false %}
+                                                            <h2>{{question.question}}
+                                                            </h2>
+                                                            {% if question.questionType == 'single answer' or question.questionType == 'multiple answer' %}
+                                                                <div class="row">
+
+                                                                    <div class="col-lg-4 resultsCharts">
+
+                                                                        <div class="chart-container text-center">
+                                                                            <div class="display-inline-block" id="c3-donut-chart-{{loop.index}}" style="direction: ltr"></div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-lg-8">
+                                                                        {% for answer in question.answers %}
+                                                                            <div class="form-group ">
+
+                                                                                <div class="control-label col-lg-12">
+                                                                                    <span class="badge badge-primary resultsNumber">
+                                                                                        {{answer.selectionCount }}
+                                                                                    </span>
+                                                                                    {{answer.answer}}
+                                                                                </div>
+                                                                            </div>
+                                                                        {% endfor %}
+
+
+                                                                    </div>
+
+
+                                                                </div><!-- row end -->
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        {% for question in competition.questionsEn%}
+                                                            <h2>{{question.question}}
+                                                            </h2>
+                                                            {% if question.questionType == 'single answer' or question.questionType == 'multiple answer' %}
+
+                                                                <div class="row">
+
+
+
+                                                                    <div class="col-lg-8">
+                                                                        {% for answer in question.answers %}
+                                                                            <div class="form-group ">
+
+                                                                                <div class="control-label col-lg-12">
+
+                                                                                    {{answer.answer}}
+                                                                                </div>
+                                                                            </div>
+                                                                        {% endfor %}
+
+
+
+
+
+
+
+                                                                    </div>
+
+
+                                                                </div><!-- row end -->
+                                                            {% endif %}
+                                                        {% endfor %}
+
+                                                    {% endif %}
+
+
+                                                </div><!-- english end -->
+
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+
+
+                                </div>
+
+                                <hr/>
+
+                                <div class="row">
+
+
+                                    <div class="col-md-12">
+
+
+                                        <div class="resultBox">
+
+                                            <h4 class="bg-grey-800">الاحصائيات</h4>
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-2"> {% trans from translationDomain %}Expiry Date{% endtrans %} </label>
+                                                <div class="col-lg-10">
+                                                    <h5>  {{ competition.expiryDate|date('Y-m-d') }}   </h5>
+
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-2">  {% trans from translationDomain %}status{% endtrans %}</label>
+
+                                                <div class="col-lg-10">
+                                                    <h5>  {{ competition.status|trans({}, translationDomain)}} </h5>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-2"> {% trans from translationDomain %}createdAt{% endtrans %}  </label>
+                                                <div class="col-lg-10">
+                                                    <h5> {{ competition.createdAt|date('Y-m-d') }} </h5>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-2"> {% trans from translationDomain %}created by{% endtrans %} </label>
+                                                <div class="col-lg-10">
+                                                    <h5>   {{ competition.createdBy }} </h5>
+                                                </div>
+                                            </div>
+
+
+                                            {% if competition.status =='publish' %}
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2"> {% trans from translationDomain %}no of likes{% endtrans %}  </label>
+                                                    <div class="col-lg-10">
+                                                        <h5>  {{competition.noOfLikes}}  </h5>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2"> {% trans from translationDomain %}no of shares{% endtrans %}  </label>
+                                                    <div class="col-lg-10">
+                                                        <h5> {{competition.noOfShares}} </h5>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2"> {% trans from translationDomain %}no of answers{% endtrans %} </label>
+                                                    <div class="col-lg-10">
+                                                        <h5> {{competition.noOfAnswer}} </h5>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2"> {% trans from translationDomain %}Published at{% endtrans %} </label>
+                                                    <div class="col-lg-10">
+                                                        <h5> {% if competition.publishedAt %}{{competition.publishedAt|date('Y-m-d') }} {% else %}---
+                                                        {% endif %} </h5>
+                                                </div>
+                                            </div>
+
+
+                                            {% endif %}
+
+
+
+                                            </div><!-- resultBox end -->
+
+                                        </div>
+                                    </div>
+
+
+                                </form>
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add Role end -->
+
+
+
+
+
+            </div><!-- col-lg-9 tabs -->
+
+
+        </div>
+        {% endblock %}
+
+            {% block javascripts %}
+                {{ parent() }}
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/visualization/d3/d3.min.js')}}"></script>
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/visualization/d3/d3_tooltip.js')}}"></script>
+
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/moment/moment.min.js')}}"></script>
+                <!-- Theme JS files pie bar chart -->
+                <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/visualization/c3/c3.min.js')}}"></script>
+
+
+                <script>
+
+                    $(function () {
+                    var index = 1;
+                            var indexen = 1;
+                            var data;                    {% if competition.status=='publish' %}
+                        {% for key,pieChart in drawChart %}
+
+                                    donut_chart = c3.generate({
+                                    bindto: '#c3-donut-chart-ar-' + index,
+                                            size: {height: 300, width: 250},
+                                            color: {
+                                            pattern:{{drawChartColor[key]|raw}}
+                                            },
+                                            data: {
+                                            columns:{{ pieChart|raw }},
+                                                    type: 'donut'
+                                            }
+                                    });
+                                    index++;                        {% endfor %}
+                    {% endif %}
+
+                                // Donut chart
+                                // ------------------------------
+                                $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+
+
+                    {% if competition.status=='publish' %}
+                        {% for key,pieChart in drawChartEn %}
+
+                            donut_chart = c3.generate({
+                            bindto: '#c3-donut-chart-' + indexen,
+                                    size: {height: 300, width: 250},
+                                    color: {
+                                    pattern:{{drawChartEnColor[key]|raw}}
+                                    },
+                                    data: {
+                                    columns:{{ pieChart|raw }},
+                                            type: 'donut'
+                                    }
+                            });
+                                    indexen++;                        {% endfor %}
+                    {% endif %}
+
+                        });
+                                // Resize chart on sidebar width change
+                                $(".sidebar-control").on('click', function () {
+                        donut_chart.resize();
+                                donut_chart_en.resize();
+                        });
+                        });
+                </script>
+            {% endblock %}

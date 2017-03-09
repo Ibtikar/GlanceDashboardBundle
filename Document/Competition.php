@@ -41,11 +41,11 @@ class Competition extends Publishable {
     );
 
     static $COMPETITION_ANSWER_Highlighted_COLORS = array(
-        "color1" => "#3498db",
-        "color2" => "#e74c3c",
-        "color3" => "#1abc9c",
-        "color4" => "#34495e",
-        "color5" => "#f1c40f",
+        "color1" => "#3F51B5",
+        "color2" => "#54D582",
+        "color3" => "#53D2BA",
+        "color4" => "#00BCD4",
+        "color5" => "#F44336",
     );
 
     /**
@@ -375,7 +375,7 @@ sa     */
      * @param Ibtikar\GlanceDashboardBundle\Document\Question $question
      */
     public function removeQuestion(\Ibtikar\GlanceDashboardBundle\Document\Question $question)
-    {        
+    {
         $this->questions->removeElement($question);
     }
 

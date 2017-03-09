@@ -72,6 +72,15 @@
 'competitionnews': 'المسابقات'
 'competitionnew': 'مسابقه'
 'Date expired': 'يجب ان يكون تاريخ الانتهاء بعد تاريخ اليوم'
+'Answers': 'الاجابات'
+'Expiry Date': 'تاريخ الانتهاء'
+'no of likes': 'عدد الاعجابات'
+'no of shares': 'عدد المشاركات'
+'Published at': 'تاريخ النشر'
+'no of answers': 'عدد الاجابات'
+created by:  قام بالإنشاء
+'status': 'الحاله'
+'View One competition': 'مشاهده مسابقه'
 
 # ############Buttons############
 

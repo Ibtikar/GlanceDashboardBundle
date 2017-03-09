@@ -463,10 +463,7 @@ class CompetitionController extends BackendController {
 
     public function viewAction(Request $request,$id)
     {
-        $breadcrumbs = $this->get("white_october_breadcrumbs");
-        $breadcrumbs->addItem('backend-home', $this->generateUrl('backend_home'));
-        $breadcrumbs->addItem('List Competition', $this->generateUrl('competition_list'));
-        $breadcrumbs->addItem('view competition');
+
         $dm = $this->get('doctrine_mongodb')->getManager();
 
         $competition = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->find($id);
@@ -475,18 +472,23 @@ class CompetitionController extends BackendController {
         }
         $questions = $competition->getQuestions();
         $drawChart=array();
+        $drawChartColor=array();
         foreach ($questions as $index => $question) {
             switch ($question->getQuestionType()) {
-                case "multiple-answer":
-                case "single-answer":
+                case "multiple answer":
+                case "single answer":
                 $answerPieChart=array();
                foreach ($question->getAnswers() as $index => $answer) {
                         $key = $index + 1;
-                        $answerPieChart[] = array("value" => $answer->getPercentage(),
-                            "color" => Competition::$COMPETITION_ANSWER_Highlighted_COLORS["color$key"],
-                            "label" => $this->trans("answer $key"));
+                        $answerPieChartColor[]= Competition::$COMPETITION_ANSWER_Highlighted_COLORS["color$key"];
+
+                        $answerPieChart[] = array($answer->getAnswer(),$answer->getPercentage(),
+//                            "color" => Competition::$COMPETITION_ANSWER_Highlighted_COLORS["color$key"],
+//                            "label" => $this->trans("answer $key")
+                            );
                     }
-                    $drawChart[$question->getId()]=json_encode($answerPieChart);
+                    $drawChart[$question->getId()]=  json_encode($answerPieChart);
+                    $drawChartColor[$question->getId()]=json_encode($answerPieChartColor);
 
 
                     break;
@@ -509,33 +511,63 @@ class CompetitionController extends BackendController {
                         'placeholder' => $question->getQuestion()
                     );
                     break;
-//
-//                        $formBuilder->add('word', 'text', array('label' => $this->numberToHtmlArabicCharacters('106')." - ".'سؤال منو مفهوم' ,'required' => true, 'constraints' => array(new \Symfony\Component\Validator\Constraints\NotBlank()),
-//                               'attr' => array('placeholder' => 'سؤال منو مفهوم')
-//                            ));
-//                        $formBuilder->add('word3', 'choice', array('required' => true, 'choices' => array(
-//                           'kambosho' => 'ambosho',
-//                           'kambosho2' => 'ambosho3',
-//                           'kambosho6' => 'ambosho5',
-//                   ),'expanded' => true,
-//                                'attr' => array(
-//                                    'answers-wrapper-class' => 'horizontal-answers',
-//                                   )
-//                                ));
-//                        $formBuilder->add('wordy', 'choice', array('required' => true, 'choices' => array(
-//                           'kambosho' => 'ambosho',
-//                           'kambosho2' => 'ambosho3',
-//                           'kambosho6' => 'ambosho5',
-//                   ),'expanded' => true,'multiple' => true));
-//                   break;
+
                 default:
                     break;
             }
         }
+        $questions = $competition->getQuestionsEn();
+        $drawChartEn=array();
+        $drawChartEnColor=array();
+        foreach ($questions as $index => $question) {
+            switch ($question->getQuestionType()) {
+                case "multiple answer":
+                case "single answer":
+                $answerPieChart=array();
+               foreach ($question->getAnswers() as $index => $answer) {
+                        $key = $index + 1;
+                        $answerPieChartColor[] = Competition::$COMPETITION_ANSWER_Highlighted_COLORS["color$key"];
+
+                        $answerPieChart[] = array($answer->getAnswer(),$answer->getPercentage()
+                            );
+                    }
+                    $drawChartEn[$question->getId()]=  json_encode($answerPieChart);
+                    $drawChartEnColor[$question->getId()]=  json_encode($answerPieChartColor);
+
+
+                    break;
+
+                case "text":
+                    $elementType = "text";
+                    $elementParams['attr'] = array(
+                        'placeholder' => $question->getQuestion()
+                    );
+                case "date":
+                    $elementType = "date";
+                    break;
+                case "phone":
+                    $elementType = "phone";
+                case "email":
+                    break;
+                case "textarea":
+                    $elementType = "textarea";
+                    $elementParams['attr'] = array(
+                        'placeholder' => $question->getQuestion()
+                    );
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
         return $this->render('IbtikarGlanceDashboardBundle:Competition:view.html.twig', array(
                 'translationDomain' => $this->translationDomain,
                 'competition' => $competition,
-                'drawChart' => $drawChart
+                'drawChart' => array_values($drawChart),
+                'drawChartEn' => array_values($drawChartEn),
+                'drawChartColor' => array_values($drawChartColor),
+                'drawChartEnColor' => array_values($drawChartEnColor)
         ));
     }
 
