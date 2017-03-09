@@ -79,7 +79,7 @@ class CompetitionController extends BackendController {
                     $competition->setCover($coverImage);
                     if(isset($coverVideo)) $dm->remove($coverVideo);
                 }
-                
+
                 if($competition->getCoverType() == "video" && isset($coverVideo)){
                     $coverVideo->setCompetition($competition);
                     $competition->setCover($coverVideo);
@@ -92,7 +92,7 @@ class CompetitionController extends BackendController {
                 }
 
                 $dm->flush();
-                
+
                 $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('done sucessfully'));
                 return new JsonResponse(array('status' => 'reload-page'));
             }
@@ -122,7 +122,8 @@ class CompetitionController extends BackendController {
                 throw $this->createNotFoundException($this->trans('Wrong id'));
             }
 
-        $form = $this->createForm(CompetitionType::class, $competition, array('translation_domain' => $this->translationDomain));
+        $form = $this->createForm(CompetitionType::class, $competition, array('translation_domain' => $this->translationDomain,
+                'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
 
         $coverImage = NULL;
         $coverVideo = NULL;
@@ -143,7 +144,7 @@ class CompetitionController extends BackendController {
                         continue;
                 }
         }
-        
+
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
@@ -159,7 +160,8 @@ class CompetitionController extends BackendController {
                     'coverVideo' => $coverVideo,
                     'title' => $this->trans('Add new Competition', array(), $this->translationDomain),
                     'form_theme' => 'IbtikarGlanceDashboardBundle:Competition:form_theme_competition.html.twig',
-                    'translationDomain' => $this->translationDomain
+                    'translationDomain' => $this->translationDomain,
+                    'room' => $this->calledClassName
         ));
     }
 

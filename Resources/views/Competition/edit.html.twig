@@ -384,8 +384,8 @@
     <script>
         var answersLimitErrorMessage = '{% trans from 'competition' %}You must add only from 2 to 5 answers{% endtrans %}';
         var cropperPluginInitialized = true;
-        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':'null','collectionType':'Competition'})}}";
-        var youtubeUploadVideo = "{{ path('ibtikar_glance_dashboard_media_youtube_upload_video',{'type':'video','documentId':'null','collectionType':'Competition'}) }}";
+        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':app.request.get('id'),'collectionType':'Competition','room':room})}}";
+        var youtubeUploadVideo = "{{ path('ibtikar_glance_dashboard_media_youtube_upload_video',{'type':'video','documentId':app.request.get('id'),'collectionType':'Competition','room':room}) }}";
         var validateVideoUrl = '{{ path('youtube_validate_videoUrl') }}';
         var imageTempelate = '{{ imageTempelate|escape('js') }}';
         var uploadButton = '{{ uploadButton|escape('js') }}';
@@ -412,7 +412,7 @@
             var placeHolderRegex = new RegExp(identifier+'___name__','g');
             var arrIndexRegex = new RegExp('\\['+identifier+'\\]\\[__name__\\]','g');
             var prototype = $questionContainer.data('prototype').replace(placeHolderRegex, identifier+"_"+(lang=="ar"?questionNextId:questionNextIdEn)).replace(arrIndexRegex, "["+identifier+"]["+(lang=="ar"?questionNextId:questionNextIdEn)+"]");
-            
+
             $questionContainer.append(prototype);
             if(lang=="ar"){
                 questionNextId++;
