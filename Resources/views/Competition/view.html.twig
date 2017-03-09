@@ -33,8 +33,8 @@
                         <div class="panel-heading">
                             <h5 class="panel-title"> Answers  </h5>
                             <div class="heading-elements">
-{#                                <span class="label heading-text label-flat border-success text-success-600">12338 Answers</span>
-#}                                <a class="btn btn-primary heading-btn" href="summary.php">عرض النتائج</a>
+                                {#                                <span class="label heading-text label-flat border-success text-success-600">12338 Answers</span>
+                                #}                                <a class="btn btn-primary heading-btn" href="summary.php">عرض النتائج</a>
 
 
                             </div>
@@ -350,10 +350,10 @@
                     $(function () {
                     var index = 1;
                             var indexen = 1;
-                            var data;                    {% if competition.status =='publish' or competition.status =='unpublish' %}
-                        {% for key,pieChart in drawChart %}
+                            var data;{% if competition.status =='publish' or competition.status =='unpublish' %}
+                    {% for key,pieChart in drawChart %}
 
-                                    donut_chart = c3.generate({
+                                    donut_chart1{{loop.index}} = c3.generate({
                                     bindto: '#c3-donut-chart-ar-' + index,
                                             size: {height: 300, width: 250},
                                             color: {
@@ -364,18 +364,18 @@
                                                     type: 'donut'
                                             }
                                     });
-                                    index++;                        {% endfor %}
-                    {% endif %}
+                                    index++;{% endfor %}
+                        {% endif %}
 
                                 // Donut chart
                                 // ------------------------------
                                 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
 
-                    {% if competition.status=='publish' %}
-                        {% for key,pieChart in drawChartEn %}
+                            {% if competition.status=='publish'  or competition.status =='unpublish' %}
+                                {% for key,pieChart in drawChartEn %}
 
-                            donut_chart = c3.generate({
+                            donut_chart2{{loop.index}} = c3.generate({
                             bindto: '#c3-donut-chart-' + indexen,
                                     size: {height: 300, width: 250},
                                     color: {
@@ -386,15 +386,18 @@
                                             type: 'donut'
                                     }
                             });
-                                    indexen++;                        {% endfor %}
-                    {% endif %}
+                                    indexen++;{% endfor %}
+                                    {% endif %}
 
                         });
                                 // Resize chart on sidebar width change
                                 $(".sidebar-control").on('click', function () {
-                        donut_chart.resize();
-                                donut_chart_en.resize();
-                        });
-                        });
-                </script>
-            {% endblock %}
+                                        {% for key,pieChart in drawChart %}
+
+                                                                donut_chart1{{loop.index}}.resize();                            {% endfor %}
+                                        {% for key,pieChart in drawChartEn %}
+                                            donut_chart2{{loop.index}}.resize();                                  {% endfor %}
+                                                });
+                                                });
+                                    </script>
+                                    {% endblock %}
