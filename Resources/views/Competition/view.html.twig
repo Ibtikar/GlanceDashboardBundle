@@ -12,8 +12,7 @@
 
 
 {% block breadCrumb %}
-    <a class="btn btn-link btn-float has-text" href="{{path('ibtikar_glance_dashboard_product_create')}}"><i class="icon-add"></i><span>إدخال منتج</span></a>
-    <a class="btn btn-link btn-float has-text activeLink" href="{{path('ibtikar_glance_dashboard_product_list')}}"><i class="icon-table2"></i> <span> المنتجات</span></a>
+
 
 {% endblock %}
 
@@ -34,8 +33,8 @@
                         <div class="panel-heading">
                             <h5 class="panel-title"> Answers  </h5>
                             <div class="heading-elements">
-                                <span class="label heading-text label-flat border-success text-success-600">12338 Answers</span>
-                                <a class="btn btn-primary heading-btn" href="summary.php">Account Summary</a>
+{#                                <span class="label heading-text label-flat border-success text-success-600">12338 Answers</span>
+#}                                <a class="btn btn-primary heading-btn" href="summary.php">عرض النتائج</a>
 
 
                             </div>
@@ -65,7 +64,7 @@
                                             <div class="tab-content">
 
                                                 <div class="tab-pane active" id="arabic">
-                                                    {% if competition.status=='publish' %}
+                                                    {% if competition.status=='publish' or competition.status =='unpublish' %}
                                                         {% for question in competition.questions%}
                                                             {% set displayChart= false %}
                                                             <h2>{{question.question}}
@@ -140,7 +139,7 @@
                                                 <div class="tab-pane" id="english">
 
 
-                                                    {% if competition.status=='publish' %}
+                                                    {% if competition.status=='publish' or competition.status =='unpublish' %}
 
 
                                                         {% for question in competition.questions%}
@@ -271,7 +270,7 @@
                                             </div>
 
 
-                                            {% if competition.status =='publish' %}
+                                            {% if competition.status =='publish' or competition.status =='unpublish' %}
                                                 <div class="form-group">
                                                     <label class="control-label col-lg-2"> {% trans from translationDomain %}no of likes{% endtrans %}  </label>
                                                     <div class="col-lg-10">
@@ -351,7 +350,7 @@
                     $(function () {
                     var index = 1;
                             var indexen = 1;
-                            var data;                    {% if competition.status=='publish' %}
+                            var data;                    {% if competition.status =='publish' or competition.status =='unpublish' %}
                         {% for key,pieChart in drawChart %}
 
                                     donut_chart = c3.generate({
