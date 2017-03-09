@@ -12,7 +12,7 @@
     {{ form_errors(form)}}
     {{ form_row(form.coverType) }}
 
-    {#<div class="dev-media-container">
+    <div class="dev-media-container">
 
     <div class="row dev-image-container" style="display: none;">
 
@@ -102,7 +102,7 @@
                                     <div class="thumb thumb-slide">
 
                                         {% if coverVideo is not empty %}
-                                            <img src="{{ asset(coverVideo.getWebPath())}}" alt="">
+                                            <img src="https://i.ytimg.com/vi/{{ coverVideo.vid }}/hqdefault.jpg" alt="">
 
                                         {% else %}
                                             <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
@@ -111,7 +111,7 @@
                                         <div class="caption">
                                             <span>
                                                 {% if coverVideo is not empty %}
-                                                    <a href="{{ asset(coverVideo.getWebPath())}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                                                    <a href="https://i.ytimg.com/vi/{{ coverVideo.vid }}/hqdefault.jpg" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
 
                                                 {% else %}
                                                     <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
@@ -129,7 +129,7 @@
                                 <h4>أضف رابط الفيديو</h4>
                                 <div class="form-group">
                                     <div class="col-md-10">
-                                        <input type="text" aria-invalid="true" aria-describedby="competition_title-error" aria-required="true" id="competition_video" name="competition[video]" required="required" data-rule-minlength="3" data-rule-maxlength="150" class="form-control valid">
+                                        {{ form_widget(form.video) }}
                                     </div>
                                 </div>
                             </td>
@@ -151,7 +151,7 @@
             </div>
         </div>
     </div>
-    </div>#}
+    </div>
     <hr>
     <div class="tabbable">
         <ul class="nav nav-tabs nav-tabs-highlight">
@@ -419,9 +419,9 @@
             }
             addNewAnswer($questionContainer.find('.voteAnswer:last'));
             addNewAnswer($questionContainer.find('.voteAnswer:last'));
-            $('[id$="_answerDisplay"]:last input[type="radio"]:first').prop('checked',true);
-            $('[id$="_resultDisplay"]:last input[type="radio"]:first').prop('checked',true);
-            $('[id$="_answerImportance"]:last input[type="radio"]:first').prop('checked',true);
+            $questionContainer.find('[id$="_answerDisplay"]:last input[type="radio"]:first').prop('checked',true);
+            $questionContainer.find('[id$="_resultDisplay"]:last input[type="radio"]:first').prop('checked',true);
+            $questionContainer.find('[id$="_answerImportance"]:last input[type="radio"]:first').prop('checked',true);
 
             $questionContainer.find("[type='radio']").uniform({
                 radioClass: 'choice'
@@ -456,7 +456,6 @@
 
 
 function  checkIfLastQuestion(parent){
-    console.log(parent);
     if(typeof prefix == 'undefined'){
         prefix = '';
     }

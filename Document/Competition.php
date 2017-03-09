@@ -217,6 +217,11 @@ sa     */
     private $questionsCount = 0;
 
     /**
+     * @MongoDB\Int
+     */
+    private $questionsCountEn = 0;
+
+    /**
      * @MongoDB\ReferenceMany()
      */
     private $participants;
@@ -370,7 +375,7 @@ sa     */
      * @param Ibtikar\GlanceDashboardBundle\Document\Question $question
      */
     public function removeQuestion(\Ibtikar\GlanceDashboardBundle\Document\Question $question)
-    {
+    {        
         $this->questions->removeElement($question);
     }
 
@@ -948,5 +953,27 @@ sa     */
     public function getGoodyStar()
     {
         return $this->goodyStar;
+    }
+
+    /**
+     * Set questionsCountEn
+     *
+     * @param int $questionsCountEn
+     * @return self
+     */
+    public function setQuestionsCountEn($questionsCountEn)
+    {
+        $this->questionsCountEn = $questionsCountEn;
+        return $this;
+    }
+
+    /**
+     * Get questionsCountEn
+     *
+     * @return int $questionsCountEn
+     */
+    public function getQuestionsCountEn()
+    {
+        return $this->questionsCountEn;
     }
 }

@@ -72,9 +72,6 @@ function getIDFromURL(url){
 var uploadpopup=false;
 $(document).ready(function () {
 
-    $("form.form-horizontal").data("validator").settings.ignore = [];
-
-
     $(document).on('click','.upload-image-modal-open',function () {
         if(uploadpopup){
             uploadpopup=false;

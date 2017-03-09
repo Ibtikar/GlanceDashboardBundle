@@ -833,8 +833,20 @@ class MediaController extends BackendController
         if ($request->getMethod() === 'POST') {
             $dm = $this->get('doctrine_mongodb')->getManager();
             $videos = $request->get('videos');
+            
             foreach ($videos as $video) {
                 $videoObj = new Media();
+                if($collectionType == "Competition"){
+                    $prevVideo = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findOneBy(array(
+                        'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                        'competition' => null,
+                        'collectionType' => 'Competition',
+                        'type' => 'video'
+                    ));
+                    if($prevVideo){
+                        $videoObj = $prevVideo;
+                    }
+                }
                 $video = explode('#', $video);
                 $vid = $video[0];
                 $videoObj->setVid($vid);

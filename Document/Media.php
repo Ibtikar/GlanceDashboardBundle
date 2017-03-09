@@ -805,4 +805,26 @@ class Media extends Document {
     {
         return $this->contactMessage;
     }
+
+    /**
+     * Set competition
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Competition $competition
+     * @return self
+     */
+    public function setCompetition(\Ibtikar\GlanceDashboardBundle\Document\Competition $competition)
+    {
+        $this->competition = $competition;
+        return $this;
+    }
+
+    /**
+     * Get competition
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\Competition $competition
+     */
+    public function getCompetition()
+    {
+        return $this->competition;
+    }
 }

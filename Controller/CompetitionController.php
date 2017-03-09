@@ -46,6 +46,7 @@ class CompetitionController extends BackendController {
 
         $mediaList = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
                 'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                'competition' => null,
                 'collectionType' => 'Competition'
             ));
 
@@ -68,10 +69,32 @@ class CompetitionController extends BackendController {
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $dm = $this->get('doctrine_mongodb')->getManager();
+                $competition->setQuestionsCount(count($competition->getQuestions()));
+                $competition->setQuestionsCountEn(count($competition->getQuestionsEn()));
                 $dm->persist($competition);
                 $dm->flush();
+
+                if($competition->getCoverType() == "image" && isset($coverImage)){
+                    $coverImage->setCompetition($competition);
+                    $competition->setCover($coverImage);
+                    if(isset($coverVideo)) $dm->remove($coverVideo);
+                }
+                
+                if($competition->getCoverType() == "video" && isset($coverVideo)){
+                    $coverVideo->setCompetition($competition);
+                    $competition->setCover($coverVideo);
+                    if(isset($coverImage)) $dm->remove($coverImage);
+                }
+
+                if($competition->getCoverType() == "none"){
+                    if(isset($coverVideo)) $dm->remove($coverVideo);
+                    if(isset($coverImage)) $dm->remove($coverImage);
+                }
+
+                $dm->flush();
+                
                 $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('done sucessfully'));
-                return $this->redirect($request->getUri());
+                return new JsonResponse(array('status' => 'reload-page'));
             }
         }
 
@@ -91,11 +114,6 @@ class CompetitionController extends BackendController {
      * @return Response
      */
     public function editAction(Request $request, $id) {
-        $breadcrumbs = $this->get("white_october_breadcrumbs");
-        $breadcrumbs->addItem('backend-home', $this->generateUrl('backend_home'));
-        $breadcrumbs->addItem('List Competition', $this->generateUrl('competition_list'));
-        $breadcrumbs->addItem('edit competition', $this->generateUrl('competition_edit', array('id' => $id)));
-
 
         $dm = $this->get('doctrine_mongodb')->getManager();
         $competition = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->find($id);
@@ -104,8 +122,28 @@ class CompetitionController extends BackendController {
                 throw $this->createNotFoundException($this->trans('Wrong id'));
             }
 
-        $form = $this->createForm(new CompetitionType($competition->getStatus() == "new"?true:false), $competition, array('translation_domain' => $this->translationDomain));
+        $form = $this->createForm(CompetitionType::class, $competition, array('translation_domain' => $this->translationDomain));
 
+        $coverImage = NULL;
+        $coverVideo = NULL;
+
+        $mediaList = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
+            'competition' => $competition->getId(),
+            'collectionType' => 'Competition'
+        ));
+
+        foreach ($mediaList as $media){
+                if($media->getType() == 'image'){
+                       $coverImage= $media;
+                        continue;
+                }
+
+                if($media->getType() == 'video'){
+                       $coverVideo= $media;
+                        continue;
+                }
+        }
+        
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
@@ -117,6 +155,9 @@ class CompetitionController extends BackendController {
 
         return $this->render('IbtikarGlanceDashboardBundle:Competition:edit.html.twig', array(
                     'form' => $form->createView(),
+                    'coverImage' => $coverImage,
+                    'coverVideo' => $coverVideo,
+                    'title' => $this->trans('Add new Competition', array(), $this->translationDomain),
                     'form_theme' => 'IbtikarGlanceDashboardBundle:Competition:form_theme_competition.html.twig',
                     'translationDomain' => $this->translationDomain
         ));
