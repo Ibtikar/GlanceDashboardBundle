@@ -40,7 +40,27 @@ class CompetitionController extends BackendController {
         $questionEn->addAnswer(new \Ibtikar\GlanceDashboardBundle\Document\QuestionChoiceAnswer);
         $questionEn->addAnswer(new \Ibtikar\GlanceDashboardBundle\Document\QuestionChoiceAnswer);
         $competition->getQuestionsEn()->add($questionEn);
-//        $competition->getQuestions()->add(new Question());
+
+        $coverImage = NULL;
+        $coverVideo = NULL;
+
+        $mediaList = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
+                'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                'competition' => null,
+                'collectionType' => 'Competition'
+            ));
+
+        foreach ($mediaList as $media){
+                if($media->getType() == 'image'){
+                       $coverImage= $media;
+                        continue;
+                }
+
+                if($media->getType() == 'video'){
+                       $coverVideo= $media;
+                        continue;
+                }
+        }
 
         $form = $this->createForm(CompetitionType::class, $competition, array('translation_domain' => $this->translationDomain,
                 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
@@ -49,15 +69,39 @@ class CompetitionController extends BackendController {
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $dm = $this->get('doctrine_mongodb')->getManager();
+                $competition->setQuestionsCount(count($competition->getQuestions()));
+                $competition->setQuestionsCountEn(count($competition->getQuestionsEn()));
                 $dm->persist($competition);
                 $dm->flush();
+
+                if($competition->getCoverType() == "image" && isset($coverImage)){
+                    $coverImage->setCompetition($competition);
+                    $competition->setCover($coverImage);
+                    if(isset($coverVideo)) $dm->remove($coverVideo);
+                }
+
+                if($competition->getCoverType() == "video" && isset($coverVideo)){
+                    $coverVideo->setCompetition($competition);
+                    $competition->setCover($coverVideo);
+                    if(isset($coverImage)) $dm->remove($coverImage);
+                }
+
+                if($competition->getCoverType() == "none"){
+                    if(isset($coverVideo)) $dm->remove($coverVideo);
+                    if(isset($coverImage)) $dm->remove($coverImage);
+                }
+
+                $dm->flush();
+
                 $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('done sucessfully'));
-                return $this->redirect($request->getUri());
+                return new JsonResponse(array('status' => 'reload-page'));
             }
         }
 
         return $this->render('IbtikarGlanceDashboardBundle:Competition:create.html.twig', array(
                     'form' => $form->createView(),
+                    'coverImage' => $coverImage,
+                    'coverVideo' => $coverVideo,
                     'title' => $this->trans('Add new Competition', array(), $this->translationDomain),
                     'form_theme' => 'IbtikarGlanceDashboardBundle:Competition:form_theme_competition.html.twig',
                     'translationDomain' => $this->translationDomain
@@ -70,11 +114,6 @@ class CompetitionController extends BackendController {
      * @return Response
      */
     public function editAction(Request $request, $id) {
-        $breadcrumbs = $this->get("white_october_breadcrumbs");
-        $breadcrumbs->addItem('backend-home', $this->generateUrl('backend_home'));
-        $breadcrumbs->addItem('List Competition', $this->generateUrl('competition_list'));
-        $breadcrumbs->addItem('edit competition', $this->generateUrl('competition_edit', array('id' => $id)));
-
 
         $dm = $this->get('doctrine_mongodb')->getManager();
         $competition = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->find($id);
@@ -83,7 +122,28 @@ class CompetitionController extends BackendController {
                 throw $this->createNotFoundException($this->trans('Wrong id'));
             }
 
-        $form = $this->createForm(new CompetitionType($competition->getStatus() == "new"?true:false), $competition, array('translation_domain' => $this->translationDomain));
+        $form = $this->createForm(CompetitionType::class, $competition, array('translation_domain' => $this->translationDomain,
+                'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
+
+        $coverImage = NULL;
+        $coverVideo = NULL;
+
+        $mediaList = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
+            'competition' => $competition->getId(),
+            'collectionType' => 'Competition'
+        ));
+
+        foreach ($mediaList as $media){
+                if($media->getType() == 'image'){
+                       $coverImage= $media;
+                        continue;
+                }
+
+                if($media->getType() == 'video'){
+                       $coverVideo= $media;
+                        continue;
+                }
+        }
 
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
@@ -96,8 +156,12 @@ class CompetitionController extends BackendController {
 
         return $this->render('IbtikarGlanceDashboardBundle:Competition:edit.html.twig', array(
                     'form' => $form->createView(),
+                    'coverImage' => $coverImage,
+                    'coverVideo' => $coverVideo,
+                    'title' => $this->trans('Add new Competition', array(), $this->translationDomain),
                     'form_theme' => 'IbtikarGlanceDashboardBundle:Competition:form_theme_competition.html.twig',
-                    'translationDomain' => $this->translationDomain
+                    'translationDomain' => $this->translationDomain,
+                    'room' => $this->calledClassName
         ));
     }
 
@@ -149,75 +213,92 @@ class CompetitionController extends BackendController {
         return $renderingParams;
     }
 
-    public function updatePublishAction(Request $request) {
-        $dm = $this->get('doctrine_mongodb')->getManager();
+    public function getDocumentCount()
+    {
+
+       return $this->getTabCount();
+    }
+
+
+
+
+
+    public function unpublishAction(Request $request) {
         $securityContext = $this->get('security.authorization_checker');
+        $loggedInUser = $this->getUser();
+        if (!$loggedInUser) {
+            return new JsonResponse(array('status' => 'login'));
+        }
+
+        if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_UNPUBLISH') && !$securityContext->isGranted('ROLE_ADMIN')) {
+            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'),'count'=>  $this->getDocumentCount());
+            return new JsonResponse($result);
+        }
         $id = $request->get('id');
         if (!$id) {
             return $this->getFailedResponse();
         }
-        $publish = $request->get('publish');
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $document = $dm->getRepository($this->getObjectShortName())->find($id);
 
-        if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_PUBLISH_UNPUBLISH') && !$securityContext->isGranted('ROLE_ADMIN')) {
-            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('You are not authorized to do this action any more'));
-            return new JsonResponse(array('status' => 'reload-page'), 403);
-        }
-
-        $competition = $dm->getRepository($this->getObjectShortName())->findOneBy(array('id' => $id, 'deleted' => false));
-        if (!$competition) {
-            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('failed operation'));
-            return $this->getFailedResponse('failed-reload');
-        }
-        if ($publish === 'true') {
-            $setPublish = true;
-            $errorMessage = $this->validatePublish($competition, $publish);
-        } else {
-            $setPublish = false;
-            $errorMessage = $this->validateUnpublish($competition, $publish);
+        if (!$document || $document->getDeleted() || $document->getStatus()==  Competition::$statuses['unpublish']) {
+            return new JsonResponse(array('status' => 'failed', 'message' => $this->get('translator')->trans('failed operation'),'count'=>  $this->getDocumentCount()));
 
         }
-        if ($errorMessage) {
-            return $this->getFailedAlertResponse($errorMessage);
+        try {
+            $document->setStatus(Competition::$statuses['unpublish']);
+            $document->setUnpublishedAt(new \DateTime());
+            $document->setUnPublishedBy($this->getUser());
+            $dm->flush();
+        } catch (\Exception $e) {
+
+            return $this->getFailedResponse();
         }
-        if ($setPublish) {
-            if ($competition->getStatus() == "new") {
-                $this->publish($competition, $dm);
-            } else if ($competition->getStatus() == "autopublish") {
-                $competition->setAutoPublishDate(null);
-                $this->publish($competition, $dm);
-            } else {
-                $newCompetition = clone $competition;
-                $dm->persist($newCompetition);
-                $this->publish($newCompetition, $dm);
-            }
-        } else {
-            $this->changePublish($competition, $setPublish);
+
+        $count = $this->getDocumentCount();
+
+        return new JsonResponse(array('status' => 'success', 'message' => $this->get('translator')->trans('done sucessfully'),'count'=>$count));
+    }
+
+    public function updateAnswerStatusAction(Request $request) {
+        $securityContext = $this->get('security.authorization_checker');
+        $loggedInUser = $this->getUser();
+        if (!$loggedInUser) {
+            return new JsonResponse(array('status' => 'login'));
         }
+
+        if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_STOPRESUME') && !$securityContext->isGranted('ROLE_ADMIN')) {
+            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'),'count'=>  $this->getDocumentCount());
+            return new JsonResponse($result);
+        }
+        $id = $request->get('id');
+        $answerEnable = $request->get('status');
+
+        if (!$id || !$answerEnable) {
+            return $this->getFailedResponse();
+        }
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $document = $dm->getRepository($this->getObjectShortName())->find($id);
+        switch ($answerEnable) {
+            case 'enabled':
+                $answeToBeUpdate = true;
+                break;
+            case 'disabled':
+                $answeToBeUpdate = FALSE;
+                break;
+        }
+
+        if (!$document || $document->getDeleted() || $document->getAnswersEnabled() == $answeToBeUpdate) {
+            return new JsonResponse(array('status' => 'failed', 'message' => $this->get('translator')->trans('failed operation'), 'count' => $this->getDocumentCount()));
+        }
+        $document->setAnswersEnabled($answeToBeUpdate);
         $dm->flush();
+        $count = $this->getDocumentCount();
 
-        $successMessage = $this->get('translator')->trans('done sucessfully');
-        $this->get('session')->getFlashBag()->add('success', $successMessage);
-        return new JsonResponse(array('status' => 'success', 'message' => $successMessage));
+        return new JsonResponse(array('status' => 'success', 'message' => $this->get('translator')->trans('done sucessfully'),'count'=>$count));
     }
 
-
-    protected function validatePublish(Document $document, $publish) {
-        if ($document->getStatus() == 'published' && $publish === 'true') {
-            return $this->trans('Already published');
-        }
-        if ($document->getExpiryDate() && $document->getExpiryDate() < new \DateTime()) {
-            return $this->trans('Date expired');
-        }
-    }
-
-//    protected function validateDelete(Document $document) {
-//        if ($document->getStatus() == Competition::$statuses['deleted']) {
-//            return $this->get('translator')->trans('failed operation');
-//        }
-//    }
-
-
-      public function publishAction(Request $request)
+    public function publishAction(Request $request)
     {
         if (!$this->getUser()) {
             return $this->getLoginResponse();
@@ -242,7 +323,7 @@ class CompetitionController extends BackendController {
                 throw $this->createNotFoundException($this->trans('Wrong id'));
 
             if ($competition->getExpiryDate() && $competition->getExpiryDate() < new \DateTime()) {
-                $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
+                $result = array('status' => 'reload-table', 'message' => $this->trans('Date expired',array(),  $this->translationDomain));
                 return new JsonResponse($result);
             }
 
@@ -294,6 +375,90 @@ class CompetitionController extends BackendController {
             $publishResult = array('status' => 'success','message'=>$this->trans('done sucessfully'));
             return new JsonResponse(array_merge($publishResult, $this->getTabCount()));
         }
+    }
+
+    public function getListJsonData($request,$renderingParams)
+    {
+        $documentObjects = array();
+        foreach ($renderingParams['pagination'] as $document) {
+            $templateVars = array_merge(array('object' => $document), $renderingParams);
+            $oneDocument = array();
+
+            foreach ($renderingParams['columnArray'] as $value) {
+                if ($value == 'id') {
+                    $oneDocument['id'] = '<div class="form-group">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="ids[]" class="styled dev-checkbox" value="' . $document->getId() . '">
+                                    </label>
+                              </div>';
+                    continue;
+                }
+                if ($value == 'actions') {
+                    $security = $this->container->get('security.authorization_checker');
+                    if ($this->listViewOptions->hasActionsColumn($this->calledClassName)) {
+                        $oneDocument['actions'] = $this->renderView('IbtikarGlanceDashboardBundle:Competition:_listActions.html.twig', $templateVars);
+                        continue;
+                    }
+                }
+                $getfunction = "get" . ucfirst($value);
+                if ($value == 'name' && $document instanceof \Ibtikar\GlanceUMSBundle\Document\Role) {
+                    $oneDocument[$value] = '<a class="dev-role-getPermision" href="javascript:void(0)" data-id="' . $document->getId() . '">' . $document->$getfunction() . '</a>';
+                }
+                elseif ($value == 'username') {
+                    $image = $document->getWebPath();
+                    if (!$image) {
+                        $image = 'bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg';
+                    }
+                    $oneDocument[$value] = '<div class="media-left media-middle">'
+                        . '<img src="/' . $image . '" class="img-circle img-lg" alt=""></div>
+                                                <div class="media-body">
+                                                    <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">  ' . $document->$getfunction() . ' </a>
+                                                </div>';
+                }
+                elseif ($value == 'answersEnabled') {
+                    $oneDocument[$value] = $this->trans('answer '.strtolower($document->$getfunction()), array(), $this->translationDomain);
+                }
+                elseif ($value == 'email' && !method_exists($document, 'get' . ucfirst($value))) {
+                    $oneDocument[$value] = $this->get('app.twig.property_accessor')->propertyAccess($document, 'createdBy', $value);
+                } elseif ($value == 'status') {
+                    $oneDocument[$value] = $this->trans($document->$getfunction(), array(), $this->translationDomain);
+                } elseif ($value == 'slug') {
+                    $request->setLocale('ar');
+                    $oneDocument[$value] = '<a href="' . $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $document->$getfunction()), UrlGeneratorInterface::ABSOLUTE_URL) . '" target="_blank">' . $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $document->$getfunction()), UrlGeneratorInterface::ABSOLUTE_URL) . ' </a>';
+                } elseif ($value == 'profilePhoto' || $value == 'coverPhoto') {
+                    $image = $document->$getfunction();
+                    if (!$image) {
+                        $image = 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg';
+                    } else {
+                        $image = $image->getWebPath();
+                    }
+                    $oneDocument[$value] = '<div class="thumbnail small-thumbnail"><div class="thumb thumb-slide"><img alt="" src="/' . $image . '">
+                            <div class="caption"><span> <a data-popup="lightbox" class="btn btn-primary btn-icon" href="/' . $image . '"><i class="icon-zoomin3"></i></a>
+                                </span> </div>  </div> </div>';
+                } elseif ($document->$getfunction() instanceof \DateTime) {
+                    $oneDocument[$value] = $document->$getfunction() ? $document->$getfunction()->format('Y-m-d') : null;
+                } elseif (is_array($document->$getfunction()) || $document->$getfunction() instanceof \Traversable) {
+                    $elementsArray = array();
+                    foreach ($document->$getfunction() as $element) {
+                        if ($value == 'course') {
+                            $elementsArray[] = is_object($element) ? $element->__toString() : $this->trans($element, array(), $this->translationDomain);
+                            continue;
+                        }
+                        $elementsArray[] = is_object($element) ? $element->__toString() : $element;
+                    }
+                    $oneDocument[$value] = implode(',', $elementsArray);
+                } else {
+                    $fieldData = $document->$getfunction();
+                    $oneDocument[$value] = is_object($fieldData) ? $fieldData->__toString() : $this->getShortDescriptionString($fieldData);
+                }
+            }
+
+            $documentObjects[] = $oneDocument;
+        }
+        $rowsHeader=$this->getColumnHeaderAndSort($request);
+        return new JsonResponse(array('status' => 'success','data' => $documentObjects, "draw" => 0, 'sEcho' => 0,'columns'=>$rowsHeader['columnHeader'],
+            "recordsTotal" => $renderingParams['total'],
+            "recordsFiltered" => $renderingParams['total']));
     }
 
     public function viewAction(Request $request,$id)

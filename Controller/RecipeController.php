@@ -97,10 +97,10 @@ class RecipeController extends BackendController
         }
 
         if ($request->get('from') && (bool) strtotime($request->get('from'))) {
-            $queryBuilder = $queryBuilder->field('createdAt')->gte(\DateTime::createFromFormat('d/m/Y',$request->get('from')));
+            $queryBuilder = $queryBuilder->field('createdAt')->gte(new \DateTime($request->get('from')));
         }
         if ($request->get('to') && (bool) strtotime($request->get('to'))) {
-            $fromDate = \DateTime::createFromFormat('d/m/Y',$request->get('to'));
+            $fromDate = new \DateTime($request->get('to'));
             $queryBuilder->field('createdAt')->lte($fromDate->modify('+1 day'));
         }
         if ($request->get('tags')) {
@@ -134,10 +134,10 @@ class RecipeController extends BackendController
 
         if($this->listStatus == 'list_publish_recipe'){
             if ($request->get('pub-from') && (bool) strtotime($request->get('pub-from'))) {
-                $queryBuilder = $queryBuilder->field('publishedAt')->gte(\DateTime::createFromFormat('d/m/Y',$request->get('pub-from')));
+                $queryBuilder = $queryBuilder->field('publishedAt')->gte(new \DateTime($request->get('pub-from')));
             }
             if ($request->get('pub-to') && (bool) strtotime($request->get('pub-to'))) {
-                $fromDate = \DateTime::createFromFormat('d/m/Y',$request->get('pub-to'));
+                $fromDate = new \DateTime($request->get('pub-to'));
                 $queryBuilder->field('publishedAt')->lte($fromDate->modify('+1 day'));
             }
         }

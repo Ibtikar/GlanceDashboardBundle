@@ -23,7 +23,12 @@
             <div class="heading-elemnts">
 
                 <div class="heading-btn-group">
-                    {% block breadCrumb %}
+                     {% block breadCrumb %}
+                        {% if is_granted('ROLE_COMPETITION_CREATE') or is_granted('ROLE_ADMIN') %}
+                        <a class="btn btn-link btn-float has-text" href="{{ path('ibtikar_glance_dashboard_competition_create')}}"><i class="icon-add"></i><span>إدخال مسابقه</span></a>
+                                {#                        <a class="btn btn-link btn-float has-text activeLink" href="Role-view.php"><i class="icon-table2"></i> <span>مشاهدة الادوار</span></a>
+                                #}
+                        {% endif %}
 
                     {% endblock %}
                 </div>
@@ -279,6 +284,7 @@
     <script>
         intializeTable();
         var list = new BaseList();
+        var listName='competitiion';
         {% if 'list_publish_competition' not in app.request.attributes.get('_route') %}
         var publisUrl="{{ path(prefixRoute|lower~'_publish')}}";
         {% endif %}

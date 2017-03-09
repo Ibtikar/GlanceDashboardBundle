@@ -1,10 +1,13 @@
 # #############Labels############
+'Cover type': 'نوع الغلاف'
 'Title': 'العنوان'
 'Title en': 'العنوان بالإنجليزية'
 'Secondary title': 'العنوان الفرعي'
 'Secondary title en': 'العنوان الفرعي  بالإنجليزية'
 'Brief': 'النبذة'
 'Brief en': 'النبذة بالإنجليزية'
+'Terms and conditions': 'الأحكام والشروط'
+'Terms and conditions en': 'الأحكام والشروط بالإنجليزية'
 'Question': 'السؤال'
 'Answer importance': 'أهمية السؤال'
 'mandatory': 'إجباري'
@@ -34,6 +37,7 @@
 'Created at': تاريخ الإنشاء
 'noOfAnswer': 'عدد الاجوبه'
 'No of answer': 'عدد الاجوبه'
+'none': 'لا يوجد'
 # ############Messages############
 'You must add only from 2 to 5 answers': 'عدد الاجابات المسموح بها يتراوح من 2 الى 5 اجابات'
 # ############Titles############
@@ -47,6 +51,7 @@
 'View One competitionnew': 'عرض'
 'Delete competitionnew': 'حذف'
 'publish Competitionnew': 'نشر'
+'publish competitionnew': 'نشر'
 'Edit competitionpublish': 'تعديل'
 'View One competitionpublish': 'عرض'
 'Delete competitionpublish': 'حذف'
@@ -56,7 +61,8 @@
 'View One Competitionunpublish': 'عرض'
 'Delete Competitionunpublish': 'حذف'
 'unpublish Competitionpublish': 'ايقاف نشر'
-'StopResume Competitionpublish': 'ايقاف'
+'stop Competitionpublish': 'ايقاف الاجوبه'
+'resume Competitionpublish': 'تشغيل الاجوبه'
 'Answers enabled': 'إيقاف/ تفعيل‎'
 'answersEnabled': 'إيقاف/ تفعيل‎'
 'answer true': 'مفعله'
@@ -65,6 +71,8 @@
 'answer 0': 'موقوفه'
 'competitionnews': 'المسابقات'
 'competitionnew': 'مسابقه'
+'Date expired': 'يجب ان يكون تاريخ الانتهاء بعد تاريخ اليوم'
+
 # ############Buttons############
 
 

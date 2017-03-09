@@ -638,7 +638,6 @@ jQuery(document).ready(function($) {
         }
 
         if (selectedVideos.length == 0 && $('#video-tab1 .searchItem').length != 0) {
-            console.log('hnaa')
             $('#video-tab1 .help-error').remove();
             $('<div class="help-block help-error" style="margin-bottom: 10px;color:#a94442">'+messages.pleaseSelectOneVideo+'</div>').insertAfter('#youtube-hr');
         } else if (selectedVideos.length == 0 && $('#video-tab1 .searchItem').length == 0) {

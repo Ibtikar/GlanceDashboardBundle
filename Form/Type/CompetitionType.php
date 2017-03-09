@@ -36,17 +36,21 @@ class CompetitionType extends AbstractType {
                 ->add('SecondaryTitle', formType\TextType::class, array('attr' => array('data-rule-minlength' => 3,'data-rule-maxlength' => 150)))
                 ->add('SecondaryTitleEn', formType\TextType::class, array('attr' => array('data-rule-minlength' => 3,'data-rule-maxlength' => 150)))
                 ->add('brief', formType\TextareaType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 1000)))
-                ->add('briefEn', formType\TextareaType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 1000)));
+                ->add('briefEn', formType\TextareaType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 1000)))
+                ->add('termsAndConditions', formType\TextareaType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 1000)))
+                ->add('termsAndConditionsEn', formType\TextareaType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 1000)))
+                ->add('video', formType\TextType::class, array('mapped'=>FALSE,'required'=>FALSE));
 
         if($this->isNew){
             $builder->add('questions', formType\CollectionType::class, array('label' => false,'entry_type' => QuestionType::class, 'allow_add' => true, 'allow_delete' => true, 'by_reference' => true, 'attr' => array('class' => 'competitionQuestion')));
             $builder->add('questionsEn', formType\CollectionType::class, array('label' => false,'entry_type' => QuestionType::class, 'allow_add' => true, 'allow_delete' => true, 'by_reference' => true, 'attr' => array('class' => 'competitionQuestion')));
         }
 
-        $builder->add($builder->create('expiryDate', formType\DateType::class, array('required' => false,'widget' => 'single_text', 'attr' => array('data-min-date'=>$minDate,'data-date-start-date' => isset($this->extraOptions['data-date-start-date'])?$this->extraOptions['data-date-start-date']:'+1d', 'data-rule-dateAfterToday' => '')))->addViewTransformer($transformer));
+        $builder->add($builder->create('expiryDate', formType\TextType::class, array('required' => false, 'attr' => array('data-min-date'=>$minDate,'data-date-start-date' => isset($this->extraOptions['data-date-start-date'])?$this->extraOptions['data-date-start-date']:'+1d', 'data-rule-dateAfterToday' => '')))->addViewTransformer($transformer))
+                ->add('coverType', formType\ChoiceType::class, array('choices' => Competition::$coverTypeChoices, 'expanded' => true, 'attr'  => array('data-error-after-selector' => '#competition_type_coverType')));
 
         if($this->isNew){
-            $builder->add('allowedToVote', formType\ChoiceType::class, array('choices' => Competition::$allowedVoters, 'expanded' => true, 'attr'  => array('data-error-after-selector' => '#competition_type_allowedToVote')));
+            $builder->add('allowedToVote', formType\ChoiceType::class, array('choices' => array_keys(Competition::$allowedVoters), 'expanded' => true, 'attr'  => array('data-error-after-selector' => '#competition_type_allowedToVote')));
 //                    ->add('resultsVisibility', 'choice', array('choices' => Poll::$resultsVisibilities, 'expanded' => true, 'attr'  => array('data-error-after-selector' => '#competition_type_resultsVisibility')));
         }
         $builder->add('save', formType\SubmitType::class);

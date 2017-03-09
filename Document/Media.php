@@ -51,6 +51,12 @@ class Media extends Document {
     private $magazine;
 
     /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Competition", simple=true)
+     * @KeepReference
+     */
+    private $competition;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GoodyFrontendBundle\Document\ContactMessage", simple=true)
      * @KeepReference
      */
@@ -798,5 +804,27 @@ class Media extends Document {
     public function getContactMessage()
     {
         return $this->contactMessage;
+    }
+
+    /**
+     * Set competition
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Competition $competition
+     * @return self
+     */
+    public function setCompetition(\Ibtikar\GlanceDashboardBundle\Document\Competition $competition)
+    {
+        $this->competition = $competition;
+        return $this;
+    }
+
+    /**
+     * Get competition
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\Competition $competition
+     */
+    public function getCompetition()
+    {
+        return $this->competition;
     }
 }

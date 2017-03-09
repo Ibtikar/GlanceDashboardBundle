@@ -15,16 +15,9 @@ class DateTimeTransformer implements DataTransformerInterface {
     }
 
     public function transform($value) {
-        if($value) {
-            return implode('-', array_map(function($datePart) {
-                $fmt = numfmt_create('en', \NumberFormatter::TYPE_INT32);
-                $dateNumber = numfmt_parse($fmt, $datePart);
-                if($dateNumber < 10) {
-                    $dateNumber = 0 . $dateNumber;
-                }
-                return $dateNumber;
-            }, explode('-', $value)));
+        if($value && is_object($value)) {
+            return $value->format('d/m/Y g:i A');
         }
+        return $value;
     }
-
 }

@@ -85,6 +85,16 @@ class MediaController extends BackendController
                     return $response;
                 }
                 $fieldUpdate='Recipe';
+            } elseif ($collectionType === 'Competition') {
+                $document = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->find($documentId);
+                if (!$document) {
+                    throw $this->createNotFoundException($this->trans('Wrong id'));
+                }
+                $response = $this->getInvalidResponseForCompetition($documentId, $this->container->get('request_stack')->getCurrentRequest()->get('room'));
+                if ($response) {
+                    return $response;
+                }
+                $fieldUpdate='Competition';
             }
 
         } else {
@@ -833,8 +843,26 @@ class MediaController extends BackendController
         if ($request->getMethod() === 'POST') {
             $dm = $this->get('doctrine_mongodb')->getManager();
             $videos = $request->get('videos');
+
             foreach ($videos as $video) {
                 $videoObj = new Media();
+                if($collectionType == "Competition"){
+                    $objId = null;
+                    if($documentId && $documentId != 'null'){
+                        $objId = $documentId;
+                    }
+                    $prevVideo = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findOneBy(array(
+                        'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                        'competition' => $objId,
+                        'collectionType' => 'Competition',
+                        'type' => 'video'
+                    ));
+                    if($prevVideo){
+                        $videoObj = $prevVideo;
+                    }else{
+                        $videoObj->setCompetition($dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->find($documentId));
+                    }
+                }
                 $video = explode('#', $video);
                 $vid = $video[0];
                 $videoObj->setVid($vid);
@@ -861,6 +889,16 @@ class MediaController extends BackendController
                         }
                         $videoObj->setOrder($order);
                         $videoObj->setRecipe($recipe);
+                    } elseif($request->get('collectionType') == 'Competition') {
+
+                        $competition = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->find($documentId);
+                        if (!$competition) {
+                            throw $this->createNotFoundException($this->trans('Wrong id'));
+                        }
+                        $reponse = $this->getInvalidResponseForCompetition($documentId, $this->container->get('request_stack')->getCurrentRequest()->get('room'));
+                        if ($reponse) {
+                            return $reponse;
+                        }
                     } else {
                         $task = $dm->getRepository('IbtikarBackendBundle:Task')->find($documentId);
                         $lastVideo = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder($this->getObjectShortName())
@@ -973,6 +1011,25 @@ class MediaController extends BackendController
         $roomArray=  explode('?', $room);
         $dm = $this->get('doctrine_mongodb')->getManager();
         $material = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($documentId);
+        if (!$material) {
+            throw $this->createNotFoundException($this->trans('Wrong id'));
+        }
+
+        $securityContext = $this->get('security.authorization_checker');
+        if (!$room || (!$securityContext->isGranted('ROLE_' . strtoupper($roomArray[0]) . '_EDIT') && !$securityContext->isGranted('ROLE_ADMIN'))) {
+
+            return $this->getAccessDeniedResponse();
+        }
+
+    }
+
+    public function getInvalidResponseForCompetition($documentId, $room) {
+        if (!$this->getUser()) {
+            return $this->getLoginResponse();
+        }
+        $roomArray=  explode('?', $room);
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $material = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->find($documentId);
         if (!$material) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }

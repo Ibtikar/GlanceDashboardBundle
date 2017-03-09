@@ -16,6 +16,6 @@ class ExpireBeforePublish extends Constraint
     }
 
     public function validatedBy() {
-        return "expire-before-publish";
+        return "Ibtikar\GlanceDashboardBundle\Validator\ExpireBeforePublishValidator";
     }
 }
