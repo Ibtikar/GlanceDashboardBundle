@@ -85,6 +85,16 @@ class MediaController extends BackendController
                     return $response;
                 }
                 $fieldUpdate='Recipe';
+            } elseif ($collectionType === 'Competition') {
+                $document = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->find($documentId);
+                if (!$document) {
+                    throw $this->createNotFoundException($this->trans('Wrong id'));
+                }
+                $response = $this->getInvalidResponseForCompetition($documentId, $this->container->get('request_stack')->getCurrentRequest()->get('room'));
+                if ($response) {
+                    return $response;
+                }
+                $fieldUpdate='Competition';
             }
 
         } else {
@@ -833,7 +843,7 @@ class MediaController extends BackendController
         if ($request->getMethod() === 'POST') {
             $dm = $this->get('doctrine_mongodb')->getManager();
             $videos = $request->get('videos');
-            
+
             foreach ($videos as $video) {
                 $videoObj = new Media();
                 if($collectionType == "Competition"){
@@ -880,7 +890,7 @@ class MediaController extends BackendController
                         $videoObj->setOrder($order);
                         $videoObj->setRecipe($recipe);
                     } elseif($request->get('collectionType') == 'Competition') {
-                        
+
                         $competition = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->find($documentId);
                         if (!$competition) {
                             throw $this->createNotFoundException($this->trans('Wrong id'));
