@@ -17,12 +17,10 @@ class CompetitionType extends AbstractType {
     private $extraOptions = array();
     private $isNew;
 
-    public function __construct($new = true,$extraOptions = array()) {
-        $this->isNew = $new;
-        $this->extraOptions = $extraOptions;
-    }
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
+
+        $this->isNew = $options['isNew'];
 
         $transformer = new DateTimeTransformer();
 
@@ -39,7 +37,7 @@ class CompetitionType extends AbstractType {
                 ->add('briefEn', formType\TextareaType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 1000)))
                 ->add('termsAndConditions', formType\TextareaType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 1000)))
                 ->add('termsAndConditionsEn', formType\TextareaType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 1000)))
-                ->add('video', formType\TextType::class, array('mapped'=>FALSE,'required'=>FALSE));
+                ->add('video', formType\TextType::class, array('mapped'=>FALSE,'required'=>FALSE,'attr'=>array('data-rule-youtube'=>'data-rule-youtube')));
 
         if($this->isNew){
             $builder->add('questions', formType\CollectionType::class, array('label' => false,'entry_type' => QuestionType::class, 'allow_add' => true, 'allow_delete' => true, 'by_reference' => true, 'attr' => array('class' => 'competitionQuestion')));
@@ -60,4 +58,13 @@ class CompetitionType extends AbstractType {
         return 'competition_type';
     }
 
+/**
+ * {@inheritdoc}
+ */
+public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
+{
+    $resolver->setDefaults(array(
+        'isNew' => 'new',
+    ));
+}
 }

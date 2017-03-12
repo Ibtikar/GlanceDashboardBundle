@@ -23,6 +23,11 @@ class QuestionAnswer extends Document  {
     /**
      * @MongoDB\String
      */
+    private $type;
+
+    /**
+     * @MongoDB\String
+     */
     private $answer;
 
     /**
@@ -74,4 +79,26 @@ class QuestionAnswer extends Document  {
         return $this->answer;
     }
 
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return self
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string $type
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 }

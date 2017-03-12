@@ -123,6 +123,7 @@ class CompetitionController extends BackendController {
             }
 
         $form = $this->createForm(CompetitionType::class, $competition, array('translation_domain' => $this->translationDomain,
+            'isNew' => $competition->getStatus() == "new"?true:false,
                 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
 
         $coverImage = NULL;
@@ -158,7 +159,7 @@ class CompetitionController extends BackendController {
                     'form' => $form->createView(),
                     'coverImage' => $coverImage,
                     'coverVideo' => $coverVideo,
-                    'title' => $this->trans('Add new Competition', array(), $this->translationDomain),
+                    'title' => $this->trans('Edit Competition', array(), $this->translationDomain),
                     'form_theme' => 'IbtikarGlanceDashboardBundle:Competition:form_theme_competition.html.twig',
                     'translationDomain' => $this->translationDomain,
                     'room' => $this->calledClassName

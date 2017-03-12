@@ -859,7 +859,7 @@ class MediaController extends BackendController
                     ));
                     if($prevVideo){
                         $videoObj = $prevVideo;
-                    }else{
+                    }elseif($documentId && $documentId != 'null'){
                         $videoObj->setCompetition($dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->find($documentId));
                     }
                 }
