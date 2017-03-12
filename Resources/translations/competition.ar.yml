@@ -81,6 +81,9 @@
 created by:  قام بالإنشاء
 'status': 'الحاله'
 'View One competition': 'مشاهده مسابقه'
+'publish': 'منشوره'
+'unpublish': 'الغير منشوره'
+'new': 'جديدة'
 
 # ############Buttons############
 

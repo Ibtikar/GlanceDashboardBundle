@@ -478,6 +478,7 @@ class CompetitionController extends BackendController {
                 case "multiple answer":
                 case "single answer":
                 $answerPieChart=array();
+                $answerPieChartColor=array();
                foreach ($question->getAnswers() as $index => $answer) {
                         $key = $index + 1;
                         $answerPieChartColor[]= Competition::$COMPETITION_ANSWER_Highlighted_COLORS["color$key"];
@@ -524,6 +525,7 @@ class CompetitionController extends BackendController {
                 case "multiple answer":
                 case "single answer":
                 $answerPieChart=array();
+                $answerPieChartColor=array();
                foreach ($question->getAnswers() as $index => $answer) {
                         $key = $index + 1;
                         $answerPieChartColor[] = Competition::$COMPETITION_ANSWER_Highlighted_COLORS["color$key"];
