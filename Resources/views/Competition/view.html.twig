@@ -33,10 +33,11 @@
                         <div class="panel-heading">
                             <h5 class="panel-title"> مشاهده مسابقة  </h5>
                             <div class="heading-elements">
-                                {#                                <span class="label heading-text label-flat border-success text-success-600">12338 Answers</span>
-                                #}                                <a class="btn btn-primary heading-btn" href="summary.php">عرض النتائج</a>
+{#                                <span class="label heading-text label-flat border-success text-success-600">12338 Answers</span>#}
+                                {% if competition.status=='publish' or competition.status =='unpublish' %}
+                                    <a class="btn btn-primary heading-btn" href="{{ path('ibtikar_glance_dashboard_competitionunpublish_viewAnswers',{'id':app.request.get('id')})}}">عرض النتائج</a>
 
-
+                                {% endif %}
                             </div>
                         </div>
 
@@ -280,12 +281,12 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group">
+                                      {#      <div class="form-group">
                                                 <label class="control-label col-lg-2"> {% trans from translationDomain %}created by{% endtrans %} </label>
                                                 <div class="col-lg-10">
                                                     <h5>   {{ competition.createdBy }} </h5>
                                                 </div>
-                                            </div>
+                                            </div>#}
 
 
                                             {% if competition.status =='publish' or competition.status =='unpublish' %}
