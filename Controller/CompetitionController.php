@@ -123,6 +123,7 @@ class CompetitionController extends BackendController {
             }
 
         $form = $this->createForm(CompetitionType::class, $competition, array('translation_domain' => $this->translationDomain,
+            'isNew' => $competition->getStatus() == "new"?true:false,
                 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
 
         $coverImage = NULL;

@@ -17,12 +17,10 @@ class CompetitionType extends AbstractType {
     private $extraOptions = array();
     private $isNew;
 
-    public function __construct($new = true,$extraOptions = array()) {
-        $this->isNew = $new;
-        $this->extraOptions = $extraOptions;
-    }
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
+
+        $this->isNew = $options['isNew'];
 
         $transformer = new DateTimeTransformer();
 
@@ -60,4 +58,13 @@ class CompetitionType extends AbstractType {
         return 'competition_type';
     }
 
+/**
+ * {@inheritdoc}
+ */
+public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
+{
+    $resolver->setDefaults(array(
+        'isNew' => 'new',
+    ));
+}
 }
