@@ -42,6 +42,7 @@
 'You must add only from 2 to 5 answers': 'عدد الاجابات المسموح بها يتراوح من 2 الى 5 اجابات'
 # ############Titles############
 'Add new Competition': 'إضافة مسابقة'
+'Edit Competition': 'تعديل مسابقة'
 'new competition': 'الجديده'
 'publish competition': 'المنشوره'
 'unpublish competition': 'الغير منشوره'
