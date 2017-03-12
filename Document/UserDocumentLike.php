@@ -20,7 +20,7 @@ class UserDocumentLike extends Document
     private $id;
 
     /**
-     * @MongoDB\ReferenceOne(discriminatorField="type", discriminatorMap={"recipe"="Ibtikar\GlanceDashboardBundle\Document\Recipe"})
+     * @MongoDB\ReferenceOne(discriminatorField="type", discriminatorMap={"recipe"="Ibtikar\GlanceDashboardBundle\Document\Recipe","competition"="Ibtikar\GlanceDashboardBundle\Document\Competition"})
      */
     private $document;
 

@@ -410,7 +410,7 @@
             var placeHolderRegex = new RegExp(identifier+'___name__','g');
             var arrIndexRegex = new RegExp('\\['+identifier+'\\]\\[__name__\\]','g');
             var prototype = $questionContainer.data('prototype').replace(placeHolderRegex, identifier+"_"+(lang=="ar"?questionNextId:questionNextIdEn)).replace(arrIndexRegex, "["+identifier+"]["+(lang=="ar"?questionNextId:questionNextIdEn)+"]");
-            
+
             $questionContainer.append(prototype);
             if(lang=="ar"){
                 questionNextId++;
@@ -521,7 +521,7 @@ jQuery(document).ready(function ($) {
     });
 
     $('body').on('change','select[id$="_questionType"]',function(e){
-        var parent = $(this).parents('[id^="competition_questions"]');
+        var parent = $(this).parents('.panel.panel-flat').eq(0);
         if($(this).val() != "single answer" && $(this).val() != "multiple answer"){
             parent.find('.dependant-fields').addClass('hide');
         }else{

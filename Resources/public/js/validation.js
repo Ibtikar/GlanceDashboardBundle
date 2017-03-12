@@ -14,7 +14,9 @@ $.validator.addMethod('mobile', function (value, element) {
   }
   return true;
 }, 'phone must be in the right format');
-
+    $.validator.addMethod('youtube', function (value, element) {
+        return value == "" || value.match(/^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/);
+    });
 // Add check for birthdate entry. Validation doesn't seem to like a required hidden field.
 jQuery.validator.addMethod('RequiredBirthdate',function(value, element) {
     var valid = false;

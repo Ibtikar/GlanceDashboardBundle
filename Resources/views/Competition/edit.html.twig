@@ -523,7 +523,7 @@ jQuery(document).ready(function ($) {
     });
 
     $('body').on('change','select[id$="_questionType"]',function(e){
-        var parent = $(this).parents('[id^="competition_questions"]');
+        var parent = $(this).parents('.panel.panel-flat').eq(0);
         if($(this).val() != "single answer" && $(this).val() != "multiple answer"){
             parent.find('.dependant-fields').addClass('hide');
         }else{
@@ -538,7 +538,7 @@ jQuery(document).ready(function ($) {
         $('select[id$="_questionType"]').each(function(){
             $(this).trigger('change');
         });
-        $('.dependant-fields').removeClass('hide');
+{#        $('.dependant-fields').removeClass('hide');#}
     });
 
     $('body').on('preAjaxCallback', function() {
