@@ -534,6 +534,20 @@ jQuery(document).ready(function ($) {
         $('.voteAnswer').each(function(){
             correctlyPositionAddButton($(this));
         });
+        $.each($('[name="competition[coverType]"]'),function(index,value){
+
+
+  if($(value).prop('checked'))
+  {
+      if($(value).val() == "none"){
+            $('.dev-media-container .row').slideUp();
+        }else{
+            $('.dev-media-container .row').not('.dev-'+$(value).val()+'-container').slideUp();
+            $('.dev-'+$(value).val()+'-container').slideDown();
+        }
+  }
+})
+
         $('select[id$="_questionType"]').each(function(){
             $(this).trigger('change');
         });
