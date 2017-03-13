@@ -16,7 +16,7 @@ class DateTimeTransformer implements DataTransformerInterface {
 
     public function transform($value) {
         if($value && is_object($value)) {
-            return $value->format('d/m/Y g:i A');
+            return $value->format('m/d/Y g:i A');
         }
         return $value;
     }
