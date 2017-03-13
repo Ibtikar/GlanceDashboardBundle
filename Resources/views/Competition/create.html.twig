@@ -547,6 +547,10 @@ jQuery(document).ready(function ($) {
         }
   }
 })
+        $('#competition_expiryDate').datetimepicker({
+                format: 'MM/DD/YYYY',
+                minDate: moment($('#stars_birthDate').attr("data-min-date"))
+            });
 
         $('select[id$="_questionType"]').each(function(){
             $(this).trigger('change');
