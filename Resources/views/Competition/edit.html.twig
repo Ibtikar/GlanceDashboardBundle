@@ -380,10 +380,10 @@
             moment.locale("en");
             var currentDate = $('#competition_expiryDate').val();
             $('#competition_expiryDate').datetimepicker({
-                format: 'DD/MM/YYYY',
+                format: 'MM/DD/YYYY',
                 minDate: moment($('#stars_birthDate').attr("data-min-date"))
             });
-            $('#competition_expiryDate').data('DateTimePicker').date(moment(currentDate,'DD/MM/YYYY hh:mm:ss a'));
+            $('#competition_expiryDate').data('DateTimePicker').date(moment(currentDate,'MM/DD/YYYY hh:mm:ss a'));
 
     </script>
     <script>
