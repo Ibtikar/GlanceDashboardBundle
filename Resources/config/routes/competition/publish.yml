@@ -30,4 +30,7 @@ ibtikar_glance_dashboard_competitionpublish_updateAnswerStatus:
     path:  /updateAnswerStatus
     defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\Publish:updateAnswerStatus }
 
+ibtikar_glance_dashboard_competitionpublish_viewAnswers:
+    path:  /view-answers
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\CompetitionAnswer:list }
 

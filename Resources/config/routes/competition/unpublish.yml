@@ -26,4 +26,8 @@ ibtikar_glance_dashboard_competitionunpublish_publish:
     path:  /ajax/publish
     defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\Unpublish:publish }
 
+ibtikar_glance_dashboard_competitionunpublish_viewAnswers:
+    path:  /view-answers
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\CompetitionAnswer:list }
+
 
