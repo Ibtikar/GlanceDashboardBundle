@@ -567,6 +567,7 @@ class CompetitionController extends BackendController {
         return $this->render('IbtikarGlanceDashboardBundle:Competition:view.html.twig', array(
                 'translationDomain' => $this->translationDomain,
                 'competition' => $competition,
+                'competition' => $competition,
                 'drawChart' => array_values($drawChart),
                 'drawChartEn' => array_values($drawChartEn),
                 'drawChartColor' => array_values($drawChartColor),

@@ -52,6 +52,7 @@ class CompetitionAnswerController extends CompetitionController
                 ->field('deleted')->equals(false);
         $this->listViewOptions->setDefaultSortBy("createdAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
+        $this->listViewOptions->setActions(array('ViewAnswerOne'));
 
         $this->listViewOptions->setListQueryBuilder($queryBuilder);
 
@@ -74,5 +75,22 @@ class CompetitionAnswerController extends CompetitionController
         $renderingParams['competition'] = $competition;
 
         return $renderingParams;
+    }
+
+    public function viewAction(Request $request, $id)
+    {
+
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $competitionAnswer = $dm->getRepository('IbtikarGlanceDashboardBundle:CompetitionAnswer')->find($id);
+        if (!$competitionAnswer) {
+            throw $this->createNotFoundException($this->trans('Wrong id'));
+        }
+
+        return $this->render('IbtikarGlanceDashboardBundle:Competition:viewOneAnswer.html.twig', array(
+                'translationDomain' => $this->translationDomain,
+                'competitionAnswer' => $competitionAnswer,
+
+        ));
     }
 }

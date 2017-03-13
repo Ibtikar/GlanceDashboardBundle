@@ -4,118 +4,128 @@
 {% block statistic %}
     <span class="label bg-number heading-text"><span class="dev-document-count">{{total}}</span> {% trans from translationDomain %}subproducts{% endtrans %}</span>
 {% endblock %}
-    {% block breadCrumb %}
-                        {% if is_granted('ROLE_COMPETITION_CREATE') or is_granted('ROLE_ADMIN') %}
-                        <a class="btn btn-link btn-float has-text" href="{{ path('ibtikar_glance_dashboard_competition_create')}}"><i class="icon-add"></i><span>إدخال مسابقه</span></a>
-                                {#                        <a class="btn btn-link btn-float has-text activeLink" href="Role-view.php"><i class="icon-table2"></i> <span>مشاهدة الادوار</span></a>
-                                #}
-                        {% endif %}
+{% block breadCrumb %}
+    {% if is_granted('ROLE_COMPETITION_CREATE') or is_granted('ROLE_ADMIN') %}
+        <a class="btn btn-link btn-float has-text" href="{{ path('ibtikar_glance_dashboard_competition_create')}}"><i class="icon-add"></i><span>إدخال مسابقه</span></a>
+                {#                        <a class="btn btn-link btn-float has-text activeLink" href="Role-view.php"><i class="icon-table2"></i> <span>مشاهدة الادوار</span></a>
+                #}
+            {% endif %}
 
-                    {% endblock %}
+{% endblock %}
 
-                {% block statisctic %}
-                                        <div class="row">
+{% block statisctic %}
+    <div class="row">
+        <div class="col-lg-12">
 
-                        <div class="col-lg-12">
+
+            <div class="row">
+
+                <div class="col-lg-12">
 
 
-                                    <form class="form-horizontal">
-                                        <!-- Navigation -->
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <h5 class="panel-title">عرض الاجوبه </h5>
+                    <form class="form-horizontal">
+                        <!-- Navigation -->
+                        <div class="panel panel-flat">
+                            <div class="panel-heading">
+                                <h5 class="panel-title">عرض الاجوبة </h5>
+                                <div class="heading-elements">
+
+                                </div>
+                                <a class="heading-elements-toggle"><i class="icon-more"></i></a></div>
+
+                            <div class="panel-body">
+
+                                <div class="tabbable">
+                                    <ul class="nav nav-tabs nav-tabs-highlight">
+                                        <li class="active"><a href="#arabic" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}" alt="arabic" width="30" height="20"/></a></li>
+                                        <li><a href="#english" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}" alt="english" width="30" height="20"/></a></li>
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="arabic">
+
+
+                                            <div class="form-group has-feedback">
+                                                <label class="control-label col-lg-2">   {% trans from translationDomain%}name{%endtrans%} </label>
+                                                <div class="control-label col-lg-10">
+                                                    {#                                                       {{ product.name}}#}
+                                                </div>
                                             </div>
 
-                                            <div class="panel-body">
 
 
-
-
-
-
-                                        <div class="tabbable">
-                                            <ul class="nav nav-tabs nav-tabs-highlight">
-                                                <li class="active"><a href="#arabic" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}" alt="arabic" width="30" height="20"/></a></li>
-                                                <li><a href="#english" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}" alt="english" width="30" height="20"/></a></li>
-                                            </ul>
-
-                                            <div class="tab-content">
-                                                <div class="tab-pane active" id="arabic">
-
-
-                                                    <div class="form-group has-feedback">
-                                                        <label class="control-label col-lg-2">   {% trans from translationDomain%}name{%endtrans%} </label>
-                                                        <div class="control-label col-lg-10">
-{#                                                       {{ product.name}}#}
-                                                        </div>
-                                                    </div>
-
-
-
-                                                    <div class="form-group">
-                                                        <label class="control-label col-lg-2">{% trans from translationDomain%}description{%endtrans%} </label>
-                                                        <div class="control-label col-lg-10">
-{#                                                      {{ product.description}}#}
-                                                        </div>
-                                                    </div>
-
-
-
-                                                </div><!-- arabic end -->
-
-                                                <div class="tab-pane" id="english">
-
-
-                                                    <div class="form-group has-feedback">
-                                                        <label class="control-label col-lg-2">{% trans from translationDomain%}nameEn{%endtrans%}</label>
-                                                        <div class="control-label col-lg-10">
-{#                                                          {{ product.nameEn}}#}
-                                                        </div>
-                                                    </div>
-
-
-
-                                                    <div class="form-group">
-                                                        <label class="control-label col-lg-2">{% trans from translationDomain%}descriptionEn{%endtrans%}</label>
-                                                        <div class="control-label col-lg-10">
-{#                                                        {{ product.descriptionEn}}#}
-                                                        </div>
-                                                    </div>
-
-
-                                                </div><!-- english end -->
-
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-2">{% trans from translationDomain%}description{%endtrans%} </label>
+                                                <div class="control-label col-lg-10">
+                                                    {#                                                      {{ product.description}}#}
+                                                </div>
                                             </div>
-                                        </div>
-
-
-                                                                                                            <hr>
 
 
 
+                                        </div><!-- arabic end -->
+
+                                        <div class="tab-pane" id="english">
+
+
+                                            <div class="form-group has-feedback">
+                                                <label class="control-label col-lg-2">{% trans from translationDomain%}nameEn{%endtrans%}</label>
+                                                <div class="control-label col-lg-10">
+                                                    {#                                                          {{ product.nameEn}}#}
+                                                </div>
+                                            </div>
 
 
 
-                                            </div><!-- panel-body end -->
-                                        </div><!-- panel end -->
-                                    </form>
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-2">{% trans from translationDomain%}descriptionEn{%endtrans%}</label>
+                                                <div class="control-label col-lg-10">
+                                                    {#                                                        {{ product.descriptionEn}}#}
+                                                </div>
+                                            </div>
+
+
+                                        </div><!-- english end -->
+
+                                    </div>
+                                </div>
+
+
+                                <hr>
 
 
 
-                        </div><!-- col-lg-12 -->
-                    </div><!-- row end -->
 
-                {% endblock %}
-                {% block actions %}
 
-                {% endblock%}
+
+                            </div><!-- panel-body end -->
+                        </div><!-- panel end -->
+                    </form>
+
+
+
+                </div><!-- col-lg-12 -->
+            </div><!-- row end -->
+
+
+
+
+        </div><!-- col-lg-12 tabs -->
+
+
+    </div>
+
+{% endblock %}
+{% block actions %}
+
+{% endblock%}
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/media/fancybox.min.js')}}"></script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_thumbnails.js')}}"></script>
 
     <script>
-        var parameterNotRemoved= 'id='+'{{app.request.get('id')}}'
+        var parameterNotRemoved = 'id=' + '{{app.request.get('id')}}'
     </script>
 
 {% endblock %}
