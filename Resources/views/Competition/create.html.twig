@@ -375,6 +375,7 @@
             })
             moment.locale("en");
             $('#competition_expiryDate').datetimepicker({
+                format: 'DD/MM/YYYY',
                 minDate: moment($('#stars_birthDate').attr("data-min-date"))
             });
 
