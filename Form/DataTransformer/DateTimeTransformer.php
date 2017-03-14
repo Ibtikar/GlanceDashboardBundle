@@ -11,12 +11,12 @@ class DateTimeTransformer implements DataTransformerInterface {
 
 
     public function reverseTransform($value) {
-        return $value;
+        return \DateTime::createFromFormat('d/m/Y', $value)->modify('+24 hours')->modify('midnight');
     }
 
     public function transform($value) {
         if($value && is_object($value)) {
-            return $value->format('d/m/Y g:i A');
+            return $value->modify('-24 hours')->modify('midnight')->format('d/m/Y');
         }
         return $value;
     }

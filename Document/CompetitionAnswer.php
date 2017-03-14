@@ -32,6 +32,11 @@ class CompetitionAnswer extends Document {
     private $uid;
 
     /**
+     * @MongoDB\String
+     */
+    private $locale;
+
+    /**
      * @Assert\NotBlank
      * @MongoDB\String
      */
@@ -301,5 +306,27 @@ class CompetitionAnswer extends Document {
     public function getAnswers()
     {
         return $this->answers;
+    }
+
+    /**
+     * Set locale
+     *
+     * @param string $locale
+     * @return self
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+        return $this;
+    }
+
+    /**
+     * Get locale
+     *
+     * @return string $locale
+     */
+    public function getLocale()
+    {
+        return $this->locale;
     }
 }
