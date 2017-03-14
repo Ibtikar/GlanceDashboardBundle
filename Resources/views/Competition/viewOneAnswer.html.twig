@@ -37,6 +37,13 @@
 
                             <div class="panel-body">
                                 <div class="form-group">
+                                    <label class="control-label col-lg-2">تاريخ الاجابة </label>
+                                    <div class="col-lg-10">
+                                        <h5>  {{ competitionAnswer.createdAt|date('Y-m-d h:i A')}}</h5>
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="control-label col-lg-2">{% trans from translationDomain %}fullName{% endtrans%} </label>
                                     <div class="col-lg-10">
                                         <h5>  {{ competitionAnswer.fullName}}</h5>
