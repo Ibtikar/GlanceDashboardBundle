@@ -309,6 +309,11 @@ sa     */
         $this->noOfShares = 0;
         $this->noOfAnswer = 0;
         $this->noOfViews = 0;
+        $this->noOfMale = 0;
+        $this->noOfFemale = 0;
+        $this->noOfRegistered = 0;
+        $this->noOfNonRegistered = 0;
+        $this->countryCount = new ArrayCollection();
 
         $tempQuestions = $this->questions;
 

@@ -23,7 +23,7 @@ class CompetitionAnswerController extends CompetitionController
             "fullName" => array(),
             "email" => array(),
 //            "description" => array(),
-            "phone" => array(),
+            "phone" => array('type'=>'phone','class'=>'phoneNumberLtr'),
 //            "profilePhoto" => array("type" => "refereceImage", 'isSortable' => FALSE),
             "createdAt" => array("type"=>"date"),
 //            "updatedAt"=> array("type"=>"date")
@@ -73,6 +73,11 @@ class CompetitionAnswerController extends CompetitionController
         }
 
         $renderingParams['competition'] = $competition;
+        $countryArray=array();
+        foreach ($competition->getCountryCount() as $country) {
+          $countryArray[]=array('country'=>$country->getCountry()->getCountryName(),'frequency'=> $country->getCount()/$competition->getNoOfAnswer())  ;
+        }
+        $renderingParams['competitionCountry'] = json_encode($countryArray);
 
         return $renderingParams;
     }

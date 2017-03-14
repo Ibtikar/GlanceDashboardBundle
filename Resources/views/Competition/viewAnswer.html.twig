@@ -1,8 +1,8 @@
 {% extends  'IbtikarGlanceDashboardBundle:List:baseList.html.twig' %}
 
-{% block title %}{% trans from 'product' %}View One Product{% endtrans%}{% endblock%}
+{% block title %}{% trans from translationDomain %}List competitionanswer{% endtrans%}{% endblock%}
 {% block statistic %}
-    <span class="label bg-number heading-text"><span class="dev-document-count">{{total}}</span> {% trans from translationDomain %}subproducts{% endtrans %}</span>
+    <span class="label bg-number heading-text"><span class="dev-document-count">{{total}}</span> {% trans from translationDomain %}answers{% endtrans %}</span>
 {% endblock %}
 {% block breadCrumb %}
     {% if is_granted('ROLE_COMPETITION_CREATE') or is_granted('ROLE_ADMIN') %}
@@ -23,91 +23,92 @@
                 <div class="col-lg-12">
 
 
-                    <form class="form-horizontal">
-                        <!-- Navigation -->
-                        <div class="panel panel-flat">
-                            <div class="panel-heading">
-                                <h5 class="panel-title">عرض الاجوبة </h5>
-                                <div class="heading-elements">
 
-                                </div>
-                                <a class="heading-elements-toggle"><i class="icon-more"></i></a></div>
+                    <!-- Navigation -->
+                    <div class="panel panel-flat">
+                        <div class="panel-heading">
+                            <h5 class="panel-title">بيانات </h5>
 
-                            <div class="panel-body">
+                        </div>
 
-                                <div class="tabbable">
-                                    <ul class="nav nav-tabs nav-tabs-highlight">
-                                        <li class="active"><a href="#arabic" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}" alt="arabic" width="30" height="20"/></a></li>
-                                        <li><a href="#english" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}" alt="english" width="30" height="20"/></a></li>
-                                    </ul>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                {% if competition.noOfAnswer > 0 %}
+                                <div class="row">
 
-                                    <div class="tab-content">
-                                        <div class="tab-pane active" id="arabic">
+                                    <div class="col-lg-6">
 
-
-                                            <div class="form-group has-feedback">
-                                                <label class="control-label col-lg-2">   {% trans from translationDomain%}name{%endtrans%} </label>
-                                                <div class="control-label col-lg-10">
-                                                    {#                                                       {{ product.name}}#}
-                                                </div>
+                                        <!-- Sales stats -->
+                                        <div class="panel panel-flat">
+                                            <div class="panel-heading">
+                                                <h6 class="panel-title">البلد</h6>
+			<div class="chart-container">
+							<div class="chart" id="d3-bar-tooltip"></div>
+						</div>
                                             </div>
 
 
-
-                                            <div class="form-group">
-                                                <label class="control-label col-lg-2">{% trans from translationDomain%}description{%endtrans%} </label>
-                                                <div class="control-label col-lg-10">
-                                                    {#                                                      {{ product.description}}#}
-                                                </div>
-                                            </div>
-
-
-
-                                        </div><!-- arabic end -->
-
-                                        <div class="tab-pane" id="english">
-
-
-                                            <div class="form-group has-feedback">
-                                                <label class="control-label col-lg-2">{% trans from translationDomain%}nameEn{%endtrans%}</label>
-                                                <div class="control-label col-lg-10">
-                                                    {#                                                          {{ product.nameEn}}#}
-                                                </div>
-                                            </div>
-
-
-
-                                            <div class="form-group">
-                                                <label class="control-label col-lg-2">{% trans from translationDomain%}descriptionEn{%endtrans%}</label>
-                                                <div class="control-label col-lg-10">
-                                                    {#                                                        {{ product.descriptionEn}}#}
-                                                </div>
-                                            </div>
-
-
-                                        </div><!-- english end -->
+                                            <div class="chart content-group-sm" id="app_sales"></div>
+                                        </div>
+                                        <!-- /sales stats -->
 
                                     </div>
+
+
+                                    <div class="col-lg-3">
+                                        <!-- Kitchens -->
+                                        <div class="panel panel-flat">
+                                            <div class="panel-heading">
+                                                <h6 class="panel-title">النوع</h6>
+                                            </div>
+
+
+                                            <div class="chart-container text-center">
+                                                <div class="display-inline-block" id="c3-donut-chart" style="direction: ltr"></div>
+                                            </div>
+
+                                        </div>
+                                        <!-- /Kitchens -->
+
+
+                                    </div>
+
+
+                                    <div class="col-lg-3">
+                                        <!-- Kitchens -->
+                                        <div class="panel panel-flat">
+                                            <div class="panel-heading">
+                                                <h6 class="panel-title">المسموح لهم بالمشاركة</h6>
+                                            </div>
+
+
+                                            <div class="chart-container text-center">
+                                                <div class="display-inline-block" id="c3-donut-chart1" style="direction: ltr"></div>
+                                            </div>
+
+                                        </div>
+                                        <!-- /Kitchens -->
+
+
+                                    </div>
+
                                 </div>
+                                {% else %}
+                                    <img src="{{ asset('bundles/ibtikarglancedashboard/images/noResult.png')}}" />
+                                {% endif %}
+                            </div>
 
 
-                                <hr>
 
 
+                        </div><!-- panel-body end -->
+                    </div><!-- panel end -->
 
-
-
-
-                            </div><!-- panel-body end -->
-                        </div><!-- panel end -->
-                    </form>
 
 
 
                 </div><!-- col-lg-12 -->
             </div><!-- row end -->
-
-
 
 
         </div><!-- col-lg-12 tabs -->
@@ -123,9 +124,300 @@
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/media/fancybox.min.js')}}"></script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_thumbnails.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/visualization/d3/d3.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/visualization/d3/d3_tooltip.js')}}"></script>
+
+
+    <!-- Theme JS files pie bar chart -->
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/visualization/c3/c3.min.js')}}"></script>
 
     <script>
         var parameterNotRemoved = 'id=' + '{{app.request.get('id')}}'
     </script>
+    <script>
+
+
+
+
+
+    $(function() {
+
+        // Select2 selects
+        $('.select').select2();
+    });
+
+
+
+
+
+
+
+
+
+
+
+$(function () {
+    {% if competition.noOfAnswer > 0 %}
+
+    // Initialize chart
+    barTooltip('#d3-bar-tooltip', 310);
+    {% endif %}
+
+    // Chart setup
+    function barTooltip(element, height) {
+
+
+        // Basic setup
+        // ------------------------------
+
+        // Define main variables
+        var d3Container = d3.select(element),
+            margin = {top: 5, right: 10, bottom: 20, left: 40},
+            width = d3Container.node().getBoundingClientRect().width - margin.left - margin.right,
+            height = height - margin.top - margin.bottom - 5;
+
+
+
+        // Construct scales
+        // ------------------------------
+
+        // Horizontal
+        var x = d3.scale.ordinal()
+            .rangeRoundBands([0, width], .1, .5);
+
+        // Vertical
+        var y = d3.scale.linear()
+            .range([height, 0]);
+
+        // Color
+        var color = d3.scale.category20c();
+
+
+
+        // Create axes
+        // ------------------------------
+
+        // Horizontal
+        var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom");
+
+        // Vertical
+        var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left")
+            .ticks(10, "%");
+
+
+
+        // Create chart
+        // ------------------------------
+
+        // Add SVG element
+        var container = d3Container.append("svg");
+
+        // Add SVG group
+        var svg = container
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+
+        // Create tooltip
+        // ------------------------------
+
+        // Create tooltip
+        var tip = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-10, 0])
+            .html(function(d) {
+                return parseFloat(d.frequency,10)*100 +"%";
+            });
+
+        // Initialize tooltip
+        svg.call(tip);
+
+
+var data= {{ competitionCountry|raw }}
+
+
+
+        // Load data
+        // ------------------------------
+
+{#        d3.json("/bundles/ibtikarshareeconomydashboarddesign/js/demo_data/d3/bars/bars_hierarchical.json", function(error, data) {#}
+
+
+            // Pull out values
+            data.forEach(function(d) {
+                d.frequency = +d.frequency;
+            });
+
+
+            // Set input domains
+            // ------------------------------
+
+            // Horizontal
+            x.domain(data.map(function(d) { return d.country; }));
+            // Vertical
+            y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+
+
+            //
+            // Append chart elements
+            //
+
+            // Append axes
+            // ------------------------------
+
+            // Horizontal
+            svg.append("g")
+                .attr("class", "d3-axis d3-axis-horizontal d3-axis-strong")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+            // Vertical
+            var verticalAxis = svg.append("g")
+                .attr("class", "d3-axis d3-axis-vertical d3-axis-strong")
+                .call(yAxis);
+
+            // Add text label
+            verticalAxis.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 10)
+                .attr("dy", ".71em")
+                .style("text-anchor", "end")
+                .style("fill", "#999")
+                .style("font-size", 12)
+                .text("العدد");
+
+
+            // Append bars
+            svg.selectAll(".d3-bar")
+                .data(data)
+                .enter()
+                .append("rect")
+                    .attr("class", "d3-bar")
+                    .style("fill", function(d) { return color(d.country); })
+                    .attr("x", function(d) { return x(d.country); })
+                    .attr("width", x.rangeBand())
+                    .attr("y", function(d) { return y(d.frequency); })
+                    .attr("height", function(d) { return height - y(d.frequency); })
+                    .on('mouseover', tip.attr('class', 'tooltip-inner in').show)
+                    .on('mouseout', tip.hide);
+{#        });#}
+
+
+
+        // Resize chart
+        // ------------------------------
+
+        // Call function on window resize
+        $(window).on('resize', resize);
+
+        // Call function on sidebar width change
+        $('.sidebar-control').on('click', resize);
+
+        // Resize function
+        //
+        // Since D3 doesn't support SVG resize by default,
+        // we need to manually specify parts of the graph that need to
+        // be updated on window resize
+        function resize() {
+
+            // Layout variables
+            width = d3Container.node().getBoundingClientRect().width - margin.left - margin.right;
+
+
+            // Layout
+            // -------------------------
+
+            // Main svg width
+            container.attr("width", width + margin.left + margin.right);
+
+            // Width of appended group
+            svg.attr("width", width + margin.left + margin.right);
+
+
+            // Axes
+            // -------------------------
+
+            // Horizontal range
+            x.rangeRoundBands([0, width], .1, .5);
+
+            // Horizontal axis
+            svg.selectAll('.d3-axis-horizontal').call(xAxis);
+
+
+            // Chart elements
+            // -------------------------
+
+            // Bars
+            svg.selectAll('.d3-bar').attr("x", function(d) { return x(d.country); }).attr("width", x.rangeBand());
+        }
+    }
+});
+
+
+
+
+</script>
+
+
+<script>
+
+
+$(function () {
+
+    // Donut chart
+    // ------------------------------
+
+
+    // Generate chart
+    donut_chart = c3.generate({
+        bindto: '#c3-donut-chart',
+         size: { height: 300 , width :200},
+        color: {
+            pattern: ['#3F51B5', '#54D582']
+        },
+        data: {
+            columns: [
+                ['ذكر', "{{ competition.noOfMale}}"],
+                ['انثى', "{{ competition.noOfFemale}}"],
+            ],
+            type : 'donut'
+        }
+    });
+
+
+    // Generate chart
+    donut_chart1 = c3.generate({
+        bindto: '#c3-donut-chart1',
+         size: { height: 300 , width :200},
+        color: {
+            pattern: ['#3F51B5', '#54D582', '#53D2BA', '#00BCD4', '#F44336']
+        },
+        data: {
+            columns: [
+                ['زائرين و أعضاء', "{{ competition.noOfNonRegistered}}"],
+                ['أعضاء ', "{{ competition.noOfRegistered}}"],
+
+            ],
+            type : 'donut'
+        }
+    });
+
+
+    // Resize chart on sidebar width change
+    $(".sidebar-control").on('click', function() {
+        donut_chart.resize();
+       donut_chart1.resize();
+    });
+
+
+});
+</script>
 
 {% endblock %}

@@ -177,7 +177,7 @@ class BackendController extends Controller {
             $index++;
         }
         foreach ($this->listViewOptions->getFields() as $name => $value) {
-            $column = array('data' => $name, 'orderable' => $value->isSortable,'data-name'=>$name,'title'=>  $this->trans($name,array(),  $this->translationDomain));
+            $column = array('data' => $name, 'orderable' => $value->isSortable,'class'=>$value->class,'data-name'=>$name,'title'=>  $this->trans($name,array(),  $this->translationDomain));
             $prepareColumns[] = $column;
             $columnArray[]=$name;
             if ($sortBy == $name) {
@@ -585,7 +585,7 @@ class BackendController extends Controller {
             $index++;
         }
         foreach ($this->listViewOptions->getFields() as $name => $value) {
-            $column = array('data' => $name, 'orderable' => $value->isSortable,'class'=>'', 'title' => $this->trans($name, array(), $this->translationDomain), 'name' => $name);
+            $column = array('data' => $name, 'orderable' => $value->isSortable,'class'=>$value->class, 'title' => $this->trans($name, array(), $this->translationDomain), 'name' => $name);
             $prepareColumns[] = $column;
             if ($this->listViewOptions->getDefaultSortBy() == $name) {
                 $sortIndex = $index;
