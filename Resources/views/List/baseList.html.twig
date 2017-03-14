@@ -193,6 +193,10 @@
                                                         <td>
                                                             {{ attribute(object, field.propertyName)|trans({},translationDomain)}}
                                                         </td>
+                                                    {% elseif field.type == "phone"  %}
+                                                        <td class="phoneNumberLtr">
+                                                      {{ attribute(object, field.propertyName)|trans({},translationDomain)}}
+                                                        </td>
                                                     {% elseif field.type == "slug"  %}
                                                         <td>
                                                             <a href="{{ url('ibtikar_goody_frontend_view',{'slug': attribute(object, field.propertyName) ,'_locale':'ar'})}}" target="_blank">

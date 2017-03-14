@@ -22,7 +22,7 @@ class UnpublishController extends CompetitionController
     protected function configureListParameters(Request $request)
     {
         parent::configureListParameters($request);
-        $this->listViewOptions->setActions(array('Edit', 'Delete', 'Publish', 'ViewOne'));
+        $this->listViewOptions->setActions(array('Edit', 'Delete', 'Publish', 'ViewOne','ViewAnswers'));
         $this->listViewOptions->setBulkActions(array("Delete"));
         $this->listViewOptions->setDefaultSortBy("createdAt");
         $this->listViewOptions->setDefaultSortOrder("desc");

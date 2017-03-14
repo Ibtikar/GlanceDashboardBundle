@@ -365,6 +365,30 @@ class CompetitionController extends BackendController {
                 case 'unpublish':
                     $newCompetition = clone $competition;
                     $dm->persist($newCompetition);
+                    $dm->flush();
+
+                    $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
+                        'competition' => $competition->getId(),
+                        'collectionType' => 'Competition'
+                    ));
+
+                    if (count($images) > 0) {
+                        $newCoverPhoto = clone $images[0];
+                        $dm->persist($newCoverPhoto);
+                        $newCoverPhoto->setCompetition($newCompetition);
+                        if ($images[0]->getType() == 'image') {
+                            $this->oldDir = $images[0]->getUploadRootDir();
+
+                            $newDir = substr($this->oldDir, 0, strrpos($this->oldDir, "/")) . "/" . $newCompetition->getId();
+                            if (!file_exists($newDir)) {
+                                @mkdir($newDir);
+                            }
+                            $oldFilePath = $this->oldDir . "/" . $images[0]->getPath();
+                            $newFilePath = $newDir . "/" . $images[0]->getPath();
+
+                            copy($oldFilePath, $newFilePath);
+                        }
+                    }
                     $newCompetition->setStatus(Competition::$statuses['publish']);
                     $newCompetition->setPublishedBy($this->getUser());
                     $newCompetition->setGoodyStar($goodyStar);
@@ -566,6 +590,7 @@ class CompetitionController extends BackendController {
 
         return $this->render('IbtikarGlanceDashboardBundle:Competition:view.html.twig', array(
                 'translationDomain' => $this->translationDomain,
+                'competition' => $competition,
                 'competition' => $competition,
                 'drawChart' => array_values($drawChart),
                 'drawChartEn' => array_values($drawChartEn),
