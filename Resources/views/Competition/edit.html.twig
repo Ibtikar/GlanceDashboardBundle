@@ -383,7 +383,11 @@
                 format: 'MM/DD/YYYY',
                 minDate: moment($('#stars_birthDate').attr("data-min-date"))
             });
-            $('#competition_expiryDate').data('DateTimePicker').date(moment(currentDate,'MM/DD/YYYY hh:mm:ss a'));
+console.log(currentDate);
+            if(currentDate != ""){
+                $('#competition_expiryDate').data('DateTimePicker').date($('#competition_expiryDate').data('DateTimePicker').getMoment());
+                $('#competition_expiryDate').data('DateTimePicker').date(moment(currentDate,'MM/DD/YYYY'));
+            }
 
     </script>
     <script>
@@ -558,7 +562,7 @@ jQuery(document).ready(function ($) {
                 format: 'MM/DD/YYYY',
                 minDate: moment($('#stars_birthDate').attr("data-min-date"))
             });
-            
+
         $('select[id$="_questionType"]').each(function(){
             $(this).trigger('change');
         });
