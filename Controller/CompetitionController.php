@@ -74,22 +74,45 @@ class CompetitionController extends BackendController {
                 $dm->persist($competition);
                 $dm->flush();
 
-                if($competition->getCoverType() == "image" && isset($coverImage)){
+
+
+                if (count($mediaList) > 0) {
+
+                    $firstImg = $mediaList[0];
+
+                    $this->oldDir = $firstImg->getUploadRootDir();
+                    $newDir = substr($this->oldDir, 0, strrpos($this->oldDir, "/")) . "/" . $competition->getId();
+                    if (!file_exists($newDir)) {
+                        @mkdir($newDir);
+                    }
+                }
+                foreach ($mediaList as $image) {
+                    $oldFilePath = $this->oldDir . "/" . $image->getPath();
+                    $newFilePath = $newDir . "/" . $image->getPath();
+                    @rename($oldFilePath, $newFilePath);
+                }
+                if ($competition->getCoverType() == "image" && isset($coverImage)) {
                     $coverImage->setCompetition($competition);
                     $competition->setCover($coverImage);
-                    if(isset($coverVideo)) $dm->remove($coverVideo);
+                    if (isset($coverVideo))
+                        $dm->remove($coverVideo);
                 }
 
-                if($competition->getCoverType() == "video" && isset($coverVideo)){
+                if ($competition->getCoverType() == "video" && isset($coverVideo)) {
                     $coverVideo->setCompetition($competition);
                     $competition->setCover($coverVideo);
-                    if(isset($coverImage)) $dm->remove($coverImage);
+                    if (isset($coverImage))
+                        $dm->remove($coverImage);
                 }
 
-                if($competition->getCoverType() == "none"){
-                    if(isset($coverVideo)) $dm->remove($coverVideo);
-                    if(isset($coverImage)) $dm->remove($coverImage);
+
+                if ($competition->getCoverType() == "none") {
+                    if (isset($coverVideo))
+                        $dm->remove($coverVideo);
+                    if (isset($coverImage))
+                        $dm->remove($coverImage);
                 }
+
 
                 $dm->flush();
 
