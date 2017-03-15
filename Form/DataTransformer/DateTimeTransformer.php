@@ -10,8 +10,12 @@ use Symfony\Component\Form\DataTransformerInterface;
 class DateTimeTransformer implements DataTransformerInterface {
 
 
-    public function reverseTransform($value) {
-        return \DateTime::createFromFormat('d/m/Y', $value)->modify('+24 hours')->modify('midnight');
+    public function reverseTransform($value)
+    {
+        if ($value) {
+            return \DateTime::createFromFormat('d/m/Y', $value)->modify('+24 hours')->modify('midnight');
+        }
+        return $value;
     }
 
     public function transform($value) {
