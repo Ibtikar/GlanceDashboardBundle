@@ -504,7 +504,12 @@ sa     */
      */
     public function setExpiryDate($expiryDate)
     {
-        $this->expiryDate = $expiryDate;
+        if($expiryDate == ""){
+            $this->expiryDate = null;
+        }else{
+            $this->expiryDate = $expiryDate;
+        }
+
         return $this;
     }
 
