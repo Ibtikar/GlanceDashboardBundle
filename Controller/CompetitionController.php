@@ -151,7 +151,7 @@ class CompetitionController extends BackendController {
             if ($form->isValid()) {
                 $dm->flush();
                 $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('done sucessfully'));
-                return $this->redirect($request->getUri());
+                return new JsonResponse(array('status' => 'reload-page'));
             }
         }
 
