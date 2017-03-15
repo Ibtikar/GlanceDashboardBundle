@@ -109,6 +109,7 @@ class MediaController extends BackendController
                             'recipe' => null,
                             'contactMessage' => null,
                             'magazine' => null,
+                            'competition' => null,
                             'collectionType' => $collectionType,
                             'ProfilePhoto' => TRUE
                         ));
@@ -122,6 +123,7 @@ class MediaController extends BackendController
                             'subproduct' => null,
                             'recipe' => null,
                             'magazine' => null,
+                            'competition' => null,
                             'collectionType' => $collectionType,
                             'coverPhoto' => TRUE
                         ));
