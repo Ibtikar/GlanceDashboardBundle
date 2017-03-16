@@ -83,7 +83,11 @@
                                 </div>
 
                                 <hr/>
-                                {% set questions=competitionAnswer.getCompetition().questions%}
+                                {% if competitionAnswer.getLocale()=='ar' %}
+                                    {% set questions=competitionAnswer.getCompetition().questions%}
+                                {% else %}
+                                    {% set questions=competitionAnswer.getCompetition().questionsEn%}
+                                {% endif %}
 
                                 {% set answerType=null %}
                                 {% for answer in competitionAnswer.answers%}
@@ -94,7 +98,7 @@
 
                                                     {{question}}
                                                 {% if question.answerImportance=='mandatory' %}
-                                                    <span style="font-size:75%;color:red;">&star;</span>
+                                                    <span style="font-size:75%;color:red;">*</span>
                                                 {% endif %}
                                             {% endif %}
 
@@ -103,7 +107,7 @@
                                     <div class="row">
 
 
-                                        <div class="col-lg-8">
+                                        <div class="{% if  answerType !='image' %}col-lg-8{% endif %}">
 
                                             <div class="form-group ">
 
@@ -112,7 +116,32 @@
                                                     {% if answerType=='input phone'%}
                                                         <h5 style="direction: ltr; text-align: right;"> {{answer.answer}}</h5>
                                                     {% elseif answerType =='image' %}
+                                                         <div class="row">
+                                                                    <div class="search-results-list GoogleImages">
+
+
+                                                                         {% for image in (answer.answer|unserialize) %}
+                                                                            <div class="col-lg-2 col-sm-4">
+                                                                                <div class="thumbnail">
+                                                                                    <div class="thumb">
+                                                                                        <img src="{{ asset(image)}}" alt="{{ image }}">
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </div>
+                                                                        {% endfor%}
+
+
+
+
+                                                                    </div><!-- row end -->
+
+
+                                                                </div>
+
                                                     {% elseif answerType=='video'  %}
+                                        <iframe id="player{{loop.index-1}}" style="width:300px;height: 220px;" class="yt_players" src="//www.youtube.com/embed/{{answer.answer}}?enablejsapi=1;"></iframe>
+
                                                     {% else %}
                                                         {{answer.answer}}
                                                     {% endif %}
@@ -156,4 +185,58 @@
 
 
     </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="//www.youtube.com/player_api"></script>
+    <script>
+                players = new Array();
+        function onYouTubeIframeAPIReady() {
+            var temp = $("iframe.yt_players");
+            for (var i = 0; i < temp.length; i++) {
+                if($(temp[i]).attr('id')=='player0'){
+                   var t = new YT.Player('player0', {
+                    events: {
+                      'onReady': onPlayerReady,
+                      'onStateChange': onPlayerStateChange
+                    }
+                  });
+                }else{
+                       var t = new YT.Player($(temp[i]).attr('id'), {
+                    events: {
+                        onStateChange: onPlayerStateChange
+                    }
+                });
+                }
+
+                players.push(t);
+            }
+
+
+        }
+
+        function onPlayerReady(event) {
+             event.target.playVideo();
+            jQuery(".cssload-zenith").fadeOut();
+        //will fade out the whole DIV that covers the website.
+             jQuery(".cssload-container").delay(0).fadeOut("slow");
+        }
+
+        function onPlayerStateChange(event) {
+
+            if (event.data == YT.PlayerState.PLAYING) {
+                //alert(event.target.getVideoUrl());
+                // alert(players[0].getVideoUrl());
+                var temp = event.target.getVideoUrl();
+                var tempPlayers = $("iframe.myt_players");
+                for (var i = 0; i < players.length; i++) {
+                    if (players[i].getVideoUrl() != temp)
+                        players[i].stopVideo();
+                }
+            }
+        }
+
+    </script>
 {% endblock %}
