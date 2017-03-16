@@ -38,7 +38,7 @@
         unique: "غير متاح",
         filesize: $.validator.format('يجب الا يزيد حجم الصوره عن {0} ميجا'),
         dimensions: 'يجب الا تقل ابعاد الصورة عن 200*200',
-        youtube: 'الرابط الذى ادخلته غير صحيح'
+        youtube: 'The URL is invalid'
     });
 
 }));

@@ -130,6 +130,16 @@ class Media extends Document {
     private $vid;
 
     /**
+     * @MongoDB\String
+     */
+    private $extraInfo;
+
+    /**
+     * @MongoDB\String
+     */
+    private $uniqueId;
+
+    /**
      * @Assert\Image(maxSize="4194304", maxSizeMessage="Image size must be less than 4mb", minWidth=819, maxWidth = 819, minHeight=1091,maxHeight = 1091, minWidthMessage="Image dimension must than 819*1091", minHeightMessage="Image dimension must than 819*1091", minWidthMessage="Image dimension must than 819*1091", minHeightMessage="Image dimension must than 819*1091", mimeTypes={"image/jpeg", "image/pjpeg", "image/png", "image/gif"}, mimeTypesMessage="picture extension not correct.", groups={"Magazine"})
      * @Assert\Image(maxSize="2097152", maxSizeMessage="Image size must be less than 2mb", minWidth=200,  minHeight=200, minWidthMessage="Image dimension must than 200*200", minHeightMessage="Image dimension must than 200*200", mimeTypes={"image/jpeg", "image/pjpeg", "image/png", "image/gif"}, mimeTypesMessage="picture extension not correct.", groups={"contactMessage"})
      * @Assert\File(maxSize="4194304", maxSizeMessage="File size must be less than 4mb", mimeTypes={"application/pdf", "application/vnd.ms-office", "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/excel", "application/x-excel", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword", "application/zip", "application/x-zip", "application/x-zip-compressed"}, mimeTypesMessage="file not correct.", groups={"file"})
@@ -830,5 +840,49 @@ class Media extends Document {
     public function getCompetition()
     {
         return $this->competition;
+    }
+
+    /**
+     * Set extraInfo
+     *
+     * @param string $extraInfo
+     * @return self
+     */
+    public function setExtraInfo($extraInfo)
+    {
+        $this->extraInfo = $extraInfo;
+        return $this;
+    }
+
+    /**
+     * Get extraInfo
+     *
+     * @return string $extraInfo
+     */
+    public function getExtraInfo()
+    {
+        return $this->extraInfo;
+    }
+
+    /**
+     * Set uniqueId
+     *
+     * @param string $uniqueId
+     * @return self
+     */
+    public function setUniqueId($uniqueId)
+    {
+        $this->uniqueId = $uniqueId;
+        return $this;
+    }
+
+    /**
+     * Get uniqueId
+     *
+     * @return string $uniqueId
+     */
+    public function getUniqueId()
+    {
+        return $this->uniqueId;
     }
 }
