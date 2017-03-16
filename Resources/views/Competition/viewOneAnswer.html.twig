@@ -1,0 +1,159 @@
+{% extends 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard.html.twig' %}
+{% block header %}
+    {{ include('IbtikarGlanceDashboardBundle::header.html.twig') }}
+{% endblock %}
+{% block navbar %}
+    {{ include('IbtikarGlanceDashboardBundle::navbar.html.twig') }}
+{% endblock %}
+{% block side_menu %}
+    {{ include('IbtikarGlanceDashboardBundle::sidebar.html.twig') }}
+{% endblock %}
+{% block title %}{% trans from translationDomain %}View One answer{% endtrans%}{% endblock%}
+
+
+{% block breadCrumb %}
+    <a class="btn btn-link btn-float has-text" href="{{path('ibtikar_glance_dashboard_product_create')}}"><i class="icon-add"></i><span>إدخال منتج</span></a>
+    <a class="btn btn-link btn-float has-text activeLink" href="{{path('ibtikar_glance_dashboard_product_list')}}"><i class="icon-table2"></i> <span> المنتجات</span></a>
+
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12">
+
+
+            <div class="row">
+
+                <div class="col-lg-12">
+
+
+                    <form class="form-horizontal">
+                        <!-- Navigation -->
+                        <div class="panel panel-flat">
+                            <div class="panel-heading">
+{#                                <h5 class="panel-title">بيانات </h5>#}
+
+                                <a class="heading-elements-toggle"><i class="icon-more"></i></a></div>
+
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="control-label col-lg-2">تاريخ الاجابة </label>
+                                    <div class="col-lg-10">
+                                        <h5>  {{ competitionAnswer.createdAt|date('Y-m-d h:i A')}}</h5>
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-lg-2">{% trans from translationDomain %}fullName{% endtrans%} </label>
+                                    <div class="col-lg-10">
+                                        <h5>  {{ competitionAnswer.fullName}}</h5>
+
+                                    </div>
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <label class="control-label col-lg-2"> البلد </label>
+                                    <div class="col-lg-10">
+                                        <h5>      {{ competitionAnswer.country}} </h5>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="control-label col-lg-2">المدينه   </label>
+                                    <div class="col-lg-10">
+                                        <h5>{{ competitionAnswer.city}} </h5>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="control-label col-lg-2"> رقم الهاتف  </label>
+                                    <div class="col-lg-10">
+                                        <h5 style="direction: ltr; text-align: right;">  {{ competitionAnswer.phone }}  </h5>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-lg-2"> النوع  </label>
+                                    <div class="col-lg-10">
+                                        <h5>  {{ competitionAnswer.gender|trans({},translationDomain)}}  </h5>
+                                    </div>
+                                </div>
+
+                                <hr/>
+                                {% set questions=competitionAnswer.getCompetition().questions%}
+
+                                {% set answerType=null %}
+                                {% for answer in competitionAnswer.answers%}
+                                    <h2><span class="questionNumber badge-primary"> {{loop.index}} </span>
+                                        {% for question in questions %}
+                                            {% if question.id ==answer.question.id %}
+                                                {% set answerType=question.questionType %}
+
+                                                    {{question}}
+                                                {% if question.answerImportance=='mandatory' %}
+                                                    <span style="font-size:75%;color:red;">&star;</span>
+                                                {% endif %}
+                                            {% endif %}
+
+                                        {% endfor%}
+                                    </h2>
+                                    <div class="row">
+
+
+                                        <div class="col-lg-8">
+
+                                            <div class="form-group ">
+
+                                                <div class="control-label col-lg-12">
+
+                                                    {% if answerType=='input phone'%}
+                                                        <h5 style="direction: ltr; text-align: right;"> {{answer.answer}}</h5>
+                                                    {% elseif answerType =='image' %}
+                                                    {% elseif answerType=='video'  %}
+                                                    {% else %}
+                                                        {{answer.answer}}
+                                                    {% endif %}
+
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+
+
+                                    </div><!-- row end -->
+                                    <hr/>
+                                {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+                            </div><!-- panel-body end -->
+                        </div><!-- panel end -->
+                    </form>
+
+
+
+                </div><!-- col-lg-12 -->
+            </div><!-- row end -->
+
+
+
+
+        </div><!-- col-lg-12 tabs -->
+
+
+    </div>
+{% endblock %}

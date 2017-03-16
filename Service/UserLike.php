@@ -36,7 +36,11 @@ class UserLike {
         $documentLike = new UserDocumentLike();
         $documentLike->setUser($user);
         $documentLike->setDocument($document);
-        $documentLike->setType($document->getType());
+        if(method_exists($document, 'getType')){
+            $documentLike->setType($document->getType());
+        }else{
+            $documentLike->setType(get_class($document), strrpos(get_class($document), '\\') + 1);
+        }
         $this->dm->persist($documentLike);
         $document->setNoOfLikes($document->getNoOfLikes() + 1);
         $this->dm->flush();

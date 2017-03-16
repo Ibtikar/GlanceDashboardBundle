@@ -20,6 +20,14 @@
                         <i class="icon-eye" data-popup="tooltip"  data-placement="right" title="{{('View One ' ~  listName|capitalize)|trans({},translationDomain)}}" ></i>
                     </a>
                 {% endif %}
+                {% elseif action == "ViewAnswerOne" %}
+
+                {% if is_granted('ROLE_' ~ listName|upper ~'_VIEWANSWERONE') or is_granted('ROLE_ADMIN')  %}
+
+                    <a href="{{ path(prefixRoute|lower~'_viewanswerone', {'id': object.id}) }}" class="btn btn-default">
+                        <i class="icon-eye" data-popup="tooltip"  data-placement="right" title="{{('View One ' ~  listName|capitalize)|trans({},translationDomain)}}" ></i>
+                    </a>
+                {% endif %}
             {% elseif action == "Publish" %}
                 {% if is_granted('ROLE_' ~ listName|upper ~'_PUBLISH') or is_granted('ROLE_ADMIN')%}
                     <a href="javascript:void(0)" data-toggle="modal"  class="btn btn-default dev-publish-document" data-id="{{ object.getId() }}"><i class="icon-share" data-placement="right"  data-popup="tooltip" title="{{('publish ' ~  sublistName)|trans({},translationDomain)}}"></i></a>

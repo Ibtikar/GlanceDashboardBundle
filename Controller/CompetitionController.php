@@ -74,22 +74,45 @@ class CompetitionController extends BackendController {
                 $dm->persist($competition);
                 $dm->flush();
 
-                if($competition->getCoverType() == "image" && isset($coverImage)){
+
+
+                if (count($mediaList) > 0) {
+
+                    $firstImg = $mediaList[0];
+
+                    $this->oldDir = $firstImg->getUploadRootDir();
+                    $newDir = substr($this->oldDir, 0, strrpos($this->oldDir, "/")) . "/" . $competition->getId();
+                    if (!file_exists($newDir)) {
+                        @mkdir($newDir);
+                    }
+                }
+                foreach ($mediaList as $image) {
+                    $oldFilePath = $this->oldDir . "/" . $image->getPath();
+                    $newFilePath = $newDir . "/" . $image->getPath();
+                    @rename($oldFilePath, $newFilePath);
+                }
+                if ($competition->getCoverType() == "image" && isset($coverImage)) {
                     $coverImage->setCompetition($competition);
                     $competition->setCover($coverImage);
-                    if(isset($coverVideo)) $dm->remove($coverVideo);
+                    if (isset($coverVideo))
+                        $dm->remove($coverVideo);
                 }
 
-                if($competition->getCoverType() == "video" && isset($coverVideo)){
+                if ($competition->getCoverType() == "video" && isset($coverVideo)) {
                     $coverVideo->setCompetition($competition);
                     $competition->setCover($coverVideo);
-                    if(isset($coverImage)) $dm->remove($coverImage);
+                    if (isset($coverImage))
+                        $dm->remove($coverImage);
                 }
 
-                if($competition->getCoverType() == "none"){
-                    if(isset($coverVideo)) $dm->remove($coverVideo);
-                    if(isset($coverImage)) $dm->remove($coverImage);
+
+                if ($competition->getCoverType() == "none") {
+                    if (isset($coverVideo))
+                        $dm->remove($coverVideo);
+                    if (isset($coverImage))
+                        $dm->remove($coverImage);
                 }
+
 
                 $dm->flush();
 
@@ -123,6 +146,7 @@ class CompetitionController extends BackendController {
             }
 
         $form = $this->createForm(CompetitionType::class, $competition, array('translation_domain' => $this->translationDomain,
+            'isNew' => $competition->getStatus() == "new"?true:false,
                 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
 
         $coverImage = NULL;
@@ -150,7 +174,7 @@ class CompetitionController extends BackendController {
             if ($form->isValid()) {
                 $dm->flush();
                 $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('done sucessfully'));
-                return $this->redirect($request->getUri());
+                return new JsonResponse(array('status' => 'reload-page'));
             }
         }
 
@@ -158,7 +182,7 @@ class CompetitionController extends BackendController {
                     'form' => $form->createView(),
                     'coverImage' => $coverImage,
                     'coverVideo' => $coverVideo,
-                    'title' => $this->trans('Add new Competition', array(), $this->translationDomain),
+                    'title' => $this->trans('Edit Competition', array(), $this->translationDomain),
                     'form_theme' => 'IbtikarGlanceDashboardBundle:Competition:form_theme_competition.html.twig',
                     'translationDomain' => $this->translationDomain,
                     'room' => $this->calledClassName
@@ -364,6 +388,30 @@ class CompetitionController extends BackendController {
                 case 'unpublish':
                     $newCompetition = clone $competition;
                     $dm->persist($newCompetition);
+                    $dm->flush();
+
+                    $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
+                        'competition' => $competition->getId(),
+                        'collectionType' => 'Competition'
+                    ));
+
+                    if (count($images) > 0) {
+                        $newCoverPhoto = clone $images[0];
+                        $dm->persist($newCoverPhoto);
+                        $newCoverPhoto->setCompetition($newCompetition);
+                        if ($images[0]->getType() == 'image') {
+                            $this->oldDir = $images[0]->getUploadRootDir();
+
+                            $newDir = substr($this->oldDir, 0, strrpos($this->oldDir, "/")) . "/" . $newCompetition->getId();
+                            if (!file_exists($newDir)) {
+                                @mkdir($newDir);
+                            }
+                            $oldFilePath = $this->oldDir . "/" . $images[0]->getPath();
+                            $newFilePath = $newDir . "/" . $images[0]->getPath();
+
+                            copy($oldFilePath, $newFilePath);
+                        }
+                    }
                     $newCompetition->setStatus(Competition::$statuses['publish']);
                     $newCompetition->setPublishedBy($this->getUser());
                     $newCompetition->setGoodyStar($goodyStar);
@@ -414,11 +462,13 @@ class CompetitionController extends BackendController {
                                                 <div class="media-body">
                                                     <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">  ' . $document->$getfunction() . ' </a>
                                                 </div>';
-                }
-                elseif ($value == 'answersEnabled') {
-                    $oneDocument[$value] = $this->trans('answer '.strtolower($document->$getfunction()), array(), $this->translationDomain);
-                }
-                elseif ($value == 'email' && !method_exists($document, 'get' . ucfirst($value))) {
+                } elseif ($value == 'answersEnabled') {
+                    if ($document->$getfunction()) {
+                        $oneDocument[$value] = $this->trans('answer ' . strtolower($document->$getfunction()), array(), $this->translationDomain);
+                    } else {
+                        $oneDocument[$value] = $this->trans('answer false', array(), $this->translationDomain);
+                    }
+                } elseif ($value == 'email' && !method_exists($document, 'get' . ucfirst($value))) {
                     $oneDocument[$value] = $this->get('app.twig.property_accessor')->propertyAccess($document, 'createdBy', $value);
                 } elseif ($value == 'status') {
                     $oneDocument[$value] = $this->trans($document->$getfunction(), array(), $this->translationDomain);
@@ -463,10 +513,7 @@ class CompetitionController extends BackendController {
 
     public function viewAction(Request $request,$id)
     {
-        $breadcrumbs = $this->get("white_october_breadcrumbs");
-        $breadcrumbs->addItem('backend-home', $this->generateUrl('backend_home'));
-        $breadcrumbs->addItem('List Competition', $this->generateUrl('competition_list'));
-        $breadcrumbs->addItem('view competition');
+
         $dm = $this->get('doctrine_mongodb')->getManager();
 
         $competition = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->find($id);
@@ -475,18 +522,24 @@ class CompetitionController extends BackendController {
         }
         $questions = $competition->getQuestions();
         $drawChart=array();
+        $drawChartColor=array();
         foreach ($questions as $index => $question) {
             switch ($question->getQuestionType()) {
-                case "multiple-answer":
-                case "single-answer":
+                case "multiple answer":
+                case "single answer":
                 $answerPieChart=array();
+                $answerPieChartColor=array();
                foreach ($question->getAnswers() as $index => $answer) {
                         $key = $index + 1;
-                        $answerPieChart[] = array("value" => $answer->getPercentage(),
-                            "color" => Competition::$COMPETITION_ANSWER_Highlighted_COLORS["color$key"],
-                            "label" => $this->trans("answer $key"));
+                        $answerPieChartColor[]= Competition::$COMPETITION_ANSWER_Highlighted_COLORS["color$key"];
+
+                        $answerPieChart[] = array($answer->getAnswer(),$answer->getPercentage(),
+//                            "color" => Competition::$COMPETITION_ANSWER_Highlighted_COLORS["color$key"],
+//                            "label" => $this->trans("answer $key")
+                            );
                     }
-                    $drawChart[$question->getId()]=json_encode($answerPieChart);
+                    $drawChart[$question->getId()]=  json_encode($answerPieChart);
+                    $drawChartColor[$question->getId()]=json_encode($answerPieChartColor);
 
 
                     break;
@@ -509,33 +562,65 @@ class CompetitionController extends BackendController {
                         'placeholder' => $question->getQuestion()
                     );
                     break;
-//
-//                        $formBuilder->add('word', 'text', array('label' => $this->numberToHtmlArabicCharacters('106')." - ".'سؤال منو مفهوم' ,'required' => true, 'constraints' => array(new \Symfony\Component\Validator\Constraints\NotBlank()),
-//                               'attr' => array('placeholder' => 'سؤال منو مفهوم')
-//                            ));
-//                        $formBuilder->add('word3', 'choice', array('required' => true, 'choices' => array(
-//                           'kambosho' => 'ambosho',
-//                           'kambosho2' => 'ambosho3',
-//                           'kambosho6' => 'ambosho5',
-//                   ),'expanded' => true,
-//                                'attr' => array(
-//                                    'answers-wrapper-class' => 'horizontal-answers',
-//                                   )
-//                                ));
-//                        $formBuilder->add('wordy', 'choice', array('required' => true, 'choices' => array(
-//                           'kambosho' => 'ambosho',
-//                           'kambosho2' => 'ambosho3',
-//                           'kambosho6' => 'ambosho5',
-//                   ),'expanded' => true,'multiple' => true));
-//                   break;
+
                 default:
                     break;
             }
         }
+        $questions = $competition->getQuestionsEn();
+        $drawChartEn=array();
+        $drawChartEnColor=array();
+        foreach ($questions as $index => $question) {
+            switch ($question->getQuestionType()) {
+                case "multiple answer":
+                case "single answer":
+                $answerPieChart=array();
+                $answerPieChartColor=array();
+               foreach ($question->getAnswers() as $index => $answer) {
+                        $key = $index + 1;
+                        $answerPieChartColor[] = Competition::$COMPETITION_ANSWER_Highlighted_COLORS["color$key"];
+
+                        $answerPieChart[] = array($answer->getAnswer(),$answer->getPercentage()
+                            );
+                    }
+                    $drawChartEn[$question->getId()]=  json_encode($answerPieChart);
+                    $drawChartEnColor[$question->getId()]=  json_encode($answerPieChartColor);
+
+
+                    break;
+
+                case "text":
+                    $elementType = "text";
+                    $elementParams['attr'] = array(
+                        'placeholder' => $question->getQuestion()
+                    );
+                case "date":
+                    $elementType = "date";
+                    break;
+                case "phone":
+                    $elementType = "phone";
+                case "email":
+                    break;
+                case "textarea":
+                    $elementType = "textarea";
+                    $elementParams['attr'] = array(
+                        'placeholder' => $question->getQuestion()
+                    );
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
         return $this->render('IbtikarGlanceDashboardBundle:Competition:view.html.twig', array(
                 'translationDomain' => $this->translationDomain,
                 'competition' => $competition,
-                'drawChart' => $drawChart
+                'competition' => $competition,
+                'drawChart' => array_values($drawChart),
+                'drawChartEn' => array_values($drawChartEn),
+                'drawChartColor' => array_values($drawChartColor),
+                'drawChartEnColor' => array_values($drawChartEnColor)
         ));
     }
 

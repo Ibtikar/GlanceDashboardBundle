@@ -176,7 +176,12 @@
                                                                         </td>
                                                                     {% elseif field.propertyName == "answersEnabled"  %}
                                                                         <td>
+                                                                            {% if object.answersEnabled %}
                                                                             {{   ("answer "~(object.answersEnabled))|trans({},translationDomain) }}
+                                                                            {% else %}
+                                                                            {{   ("answer false")|trans({},translationDomain) }}
+
+                                                                            {% endif %}
                                                                         </td>
                                                                     {% elseif field.propertyName == "username"  %}
                                                                         <td>

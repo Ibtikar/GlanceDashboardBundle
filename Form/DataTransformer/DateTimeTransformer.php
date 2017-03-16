@@ -10,13 +10,17 @@ use Symfony\Component\Form\DataTransformerInterface;
 class DateTimeTransformer implements DataTransformerInterface {
 
 
-    public function reverseTransform($value) {
+    public function reverseTransform($value)
+    {
+        if ($value) {
+            return \DateTime::createFromFormat('m/d/Y', $value)->modify('midnight');
+        }
         return $value;
     }
 
     public function transform($value) {
         if($value && is_object($value)) {
-            return $value->format('d/m/Y g:i A');
+            return $value->modify('midnight')->format('m/d/Y');
         }
         return $value;
     }

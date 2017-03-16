@@ -42,6 +42,7 @@
 'You must add only from 2 to 5 answers': 'عدد الاجابات المسموح بها يتراوح من 2 الى 5 اجابات'
 # ############Titles############
 'Add new Competition': 'إضافة مسابقة'
+'Edit Competition': 'تعديل مسابقة'
 'new competition': 'الجديده'
 'publish competition': 'المنشوره'
 'unpublish competition': 'الغير منشوره'
@@ -72,7 +73,23 @@
 'competitionnews': 'المسابقات'
 'competitionnew': 'مسابقه'
 'Date expired': 'يجب ان يكون تاريخ الانتهاء بعد تاريخ اليوم'
-
+'Answers': 'الاجابات'
+'Expiry Date': 'تاريخ الانتهاء'
+'no of likes': 'عدد الاعجابات'
+'no of shares': 'عدد المشاركات'
+'Published at': 'تاريخ النشر'
+'no of answers': 'عدد الاجابات'
+created by:  قام بالإنشاء
+'status': 'الحاله'
+'View One competition': 'مشاهده مسابقه'
+'publish': 'منشوره'
+'unpublish': 'الغير منشوره'
+'new': 'جديدة'
+'List competitionanswer': 'عرض الاجوبة'
+'answers': 'اجوبة'
+'fullName': 'الاسم'
+'View One Competitionanswer': 'عرض التفاصيل'
+'View One answer': 'عرض التفاصيل'
 # ############Buttons############
 
 

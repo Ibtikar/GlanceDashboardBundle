@@ -41,11 +41,11 @@ class Competition extends Publishable {
     );
 
     static $COMPETITION_ANSWER_Highlighted_COLORS = array(
-        "color1" => "#3498db",
-        "color2" => "#e74c3c",
-        "color3" => "#1abc9c",
-        "color4" => "#34495e",
-        "color5" => "#f1c40f",
+        "color1" => "#3F51B5",
+        "color2" => "#54D582",
+        "color3" => "#53D2BA",
+        "color4" => "#00BCD4",
+        "color5" => "#F44336",
     );
 
     /**
@@ -261,10 +261,38 @@ sa     */
      */
     private $noOfAnswer = 0;
 
+    /**
+     * @MongoDB\Increment
+     */
+    private $noOfMale = 0;
+
+    /**
+     * @MongoDB\Increment
+     */
+    private $noOfFemale = 0;
+
+    /**
+     * @MongoDB\Increment
+     */
+    private $noOfRegistered = 0;
+
+    /**
+     * @MongoDB\Increment
+     */
+    private $noOfNonRegistered = 0;
+
+    /**
+     * @MongoDB\EmbedMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\CountryAnswerCount")
+     */
+    private $countryCount;
+
+
+
     public function __construct() {
         $this->questions = new ArrayCollection();
         $this->questionsEn = new ArrayCollection();
         $this->participants = new ArrayCollection();
+        $this->countryCount = new ArrayCollection();
         $this->status = static::$statuses['new'];
         $this->resultsVisibility = key(static::$resultsVisibilities);
         $this->allowedToVote = key(static::$allowedVoters);
@@ -281,6 +309,11 @@ sa     */
         $this->noOfShares = 0;
         $this->noOfAnswer = 0;
         $this->noOfViews = 0;
+        $this->noOfMale = 0;
+        $this->noOfFemale = 0;
+        $this->noOfRegistered = 0;
+        $this->noOfNonRegistered = 0;
+        $this->countryCount = new ArrayCollection();
 
         $tempQuestions = $this->questions;
 
@@ -375,7 +408,7 @@ sa     */
      * @param Ibtikar\GlanceDashboardBundle\Document\Question $question
      */
     public function removeQuestion(\Ibtikar\GlanceDashboardBundle\Document\Question $question)
-    {        
+    {
         $this->questions->removeElement($question);
     }
 
@@ -471,7 +504,12 @@ sa     */
      */
     public function setExpiryDate($expiryDate)
     {
-        $this->expiryDate = $expiryDate;
+        if($expiryDate == ""){
+            $this->expiryDate = null;
+        }else{
+            $this->expiryDate = $expiryDate;
+        }
+
         return $this;
     }
 
@@ -975,5 +1013,123 @@ sa     */
     public function getQuestionsCountEn()
     {
         return $this->questionsCountEn;
+    }
+
+    /**
+     * Set noOfMale
+     *
+     * @param increment $noOfMale
+     * @return self
+     */
+    public function setNoOfMale($noOfMale)
+    {
+        $this->noOfMale = $noOfMale;
+        return $this;
+    }
+
+    /**
+     * Get noOfMale
+     *
+     * @return increment $noOfMale
+     */
+    public function getNoOfMale()
+    {
+        return $this->noOfMale;
+    }
+
+    /**
+     * Set noOfFemale
+     *
+     * @param increment $noOfFemale
+     * @return self
+     */
+    public function setNoOfFemale($noOfFemale)
+    {
+        $this->noOfFemale = $noOfFemale;
+        return $this;
+    }
+
+    /**
+     * Get noOfFemale
+     *
+     * @return increment $noOfFemale
+     */
+    public function getNoOfFemale()
+    {
+        return $this->noOfFemale;
+    }
+
+    /**
+     * Set noOfRegistered
+     *
+     * @param increment $noOfRegistered
+     * @return self
+     */
+    public function setNoOfRegistered($noOfRegistered)
+    {
+        $this->noOfRegistered = $noOfRegistered;
+        return $this;
+    }
+
+    /**
+     * Get noOfRegistered
+     *
+     * @return increment $noOfRegistered
+     */
+    public function getNoOfRegistered()
+    {
+        return $this->noOfRegistered;
+    }
+
+    /**
+     * Set noOfNonRegistered
+     *
+     * @param increment $noOfNonRegistered
+     * @return self
+     */
+    public function setNoOfNonRegistered($noOfNonRegistered)
+    {
+        $this->noOfNonRegistered = $noOfNonRegistered;
+        return $this;
+    }
+
+    /**
+     * Get noOfNonRegistered
+     *
+     * @return increment $noOfNonRegistered
+     */
+    public function getNoOfNonRegistered()
+    {
+        return $this->noOfNonRegistered;
+    }
+
+    /**
+     * Add countryCount
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\CountryAnswerCount $countryCount
+     */
+    public function addCountryCount(\Ibtikar\GlanceDashboardBundle\Document\CountryAnswerCount $countryCount)
+    {
+        $this->countryCount[] = $countryCount;
+    }
+
+    /**
+     * Remove countryCount
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\CountryAnswerCount $countryCount
+     */
+    public function removeCountryCount(\Ibtikar\GlanceDashboardBundle\Document\CountryAnswerCount $countryCount)
+    {
+        $this->countryCount->removeElement($countryCount);
+    }
+
+    /**
+     * Get countryCount
+     *
+     * @return \Doctrine\Common\Collections\Collection $countryCount
+     */
+    public function getCountryCount()
+    {
+        return $this->countryCount;
     }
 }

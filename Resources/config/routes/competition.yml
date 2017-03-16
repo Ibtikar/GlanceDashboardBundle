@@ -14,3 +14,16 @@ ibtikar_glance_dashboard_message_close:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/competition/unpublish.yml"
     prefix:   /competition-unpublish
 
+ibtikar_glance_dashboard_competitionanswer_list:
+    path: /list
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\CompetitionAnswer:list }
+
+
+ibtikar_glance_dashboard_competitionanswer_change_list_columns:
+    path:  /change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\CompetitionAnswer:changeListColumns }
+
+ibtikar_glance_dashboard_competitionanswer_viewanswerone:
+    path:  /view-answer-one/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\CompetitionAnswer:view }
+

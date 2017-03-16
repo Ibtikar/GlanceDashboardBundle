@@ -107,6 +107,14 @@
 
                                                                                 {% endif %}
                                                                             {% endif %}
+                                                                            {% elseif action == "ViewAnswers" %}
+
+                                                                                {% if is_granted('ROLE_' ~ listName|upper ~'_VIEWONEANSWER') or is_granted('ROLE_ADMIN')  %}
+
+                                                                                    <a href="{{ path(prefixRoute|lower~'_viewAnswers', {'id': object.id}) }}" class="btn btn-default">
+                                                                                        <i class="icon-list" data-popup="tooltip"  data-placement="right" title="{{('List competitionanswer')|trans({},translationDomain)}}" ></i>
+                                                                                    </a>
+                                                                            {% endif %}
                                                                             {% endif %}
 
 

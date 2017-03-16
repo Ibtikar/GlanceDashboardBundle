@@ -59,8 +59,8 @@
                                 <h4> صورة الغلاف</h4>
                                 <ul class="text-grey-300">
                                     <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
-                                    <li> يجب ان تكون ابعاد الصورة 1000x700 </li>
-                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                                    <li> يجب ان تكون ابعاد الصورة 700*1000 </li>
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG او GIF </li>
                                 </ul>
                             </td>
                             <td style="width: 300px" data-name="coverPhoto">
@@ -375,6 +375,7 @@
             })
             moment.locale("en");
             $('#competition_expiryDate').datetimepicker({
+                format: 'MM/DD/YYYY',
                 minDate: moment($('#stars_birthDate').attr("data-min-date"))
             });
 
@@ -410,7 +411,7 @@
             var placeHolderRegex = new RegExp(identifier+'___name__','g');
             var arrIndexRegex = new RegExp('\\['+identifier+'\\]\\[__name__\\]','g');
             var prototype = $questionContainer.data('prototype').replace(placeHolderRegex, identifier+"_"+(lang=="ar"?questionNextId:questionNextIdEn)).replace(arrIndexRegex, "["+identifier+"]["+(lang=="ar"?questionNextId:questionNextIdEn)+"]");
-            
+
             $questionContainer.append(prototype);
             if(lang=="ar"){
                 questionNextId++;
@@ -521,7 +522,7 @@ jQuery(document).ready(function ($) {
     });
 
     $('body').on('change','select[id$="_questionType"]',function(e){
-        var parent = $(this).parents('[id^="competition_questions"]');
+        var parent = $(this).parents('.panel.panel-flat').eq(0);
         if($(this).val() != "single answer" && $(this).val() != "multiple answer"){
             parent.find('.dependant-fields').addClass('hide');
         }else{
@@ -533,6 +534,24 @@ jQuery(document).ready(function ($) {
         $('.voteAnswer').each(function(){
             correctlyPositionAddButton($(this));
         });
+        $.each($('[name="competition[coverType]"]'),function(index,value){
+
+
+  if($(value).prop('checked'))
+  {
+      if($(value).val() == "none"){
+            $('.dev-media-container .row').slideUp();
+        }else{
+            $('.dev-media-container .row').not('.dev-'+$(value).val()+'-container').slideUp();
+            $('.dev-'+$(value).val()+'-container').slideDown();
+        }
+  }
+})
+        $('#competition_expiryDate').datetimepicker({
+                format: 'MM/DD/YYYY',
+                minDate: moment($('#stars_birthDate').attr("data-min-date"))
+            });
+
         $('select[id$="_questionType"]').each(function(){
             $(this).trigger('change');
         });
