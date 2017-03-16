@@ -324,8 +324,10 @@ class Media extends Document {
         }
         else if ($this->getCompetition()) {
             $uploadDirectory .= '/competition-file/' . $this->getCompetition()->getId();
-        }
-        else {
+    } else if($this->getUniqueId()){
+            $uploadDirectory .= '/competition-file/' . $this->getUniqueId();
+    }
+        else {  
             if (!$this->getCreatedBy()) {
                 throw new \Exception('Please set the created by user.');
             }
