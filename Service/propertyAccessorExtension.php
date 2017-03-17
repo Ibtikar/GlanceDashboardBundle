@@ -21,12 +21,24 @@ class propertyAccessorExtension extends \Twig_Extension
         );
     }
 
+     public function getFilters()
+    {
+        return array(
+            new \Twig_SimpleFilter('unserialize', array($this, 'unserializeFilter')),
+        );
+    }
+
     public function propertyAccess($object,$functionName,$fieldAccess)
     {
        $functionToBeCalled='get'.ucfirst($functionName);
        $functionToAccessField='get'.ucfirst($fieldAccess);
        $calledObject=$object->$functionToBeCalled();
        return $object->$functionToBeCalled()?method_exists($object->$functionToBeCalled(),$functionToAccessField)?$object->$functionToBeCalled()->$functionToAccessField():$object->$functionToBeCalled()->__toString() :'';
+    }
+
+    public function unserializeFilter($string)
+    {
+        return unserialize($string);
     }
 
 }
