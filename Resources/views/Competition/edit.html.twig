@@ -412,8 +412,8 @@ console.log(currentDate);
 
         $('select').select2();
 
-        var questionNextId = 1;
-        var questionNextIdEn = 1;
+        var questionNextId = $('#competition_questions .panel-flat').length;
+        var questionNextIdEn = $('#competition_questionsEn .panel-flat').length;
         $(document).on('click', '.dev-add-competition-questions,.dev-add-competition-questionsEn', function() {
             var identifier = $(this).attr('class').split(' ').pop().replace('dev-add-competition-','');
             var lang = identifier=="questions"?"ar":"en";
