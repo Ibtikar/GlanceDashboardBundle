@@ -472,9 +472,9 @@ function  checkIfLastQuestion(parent){
     }
     $questionsLength = $(parent).find('.competitionQuestion').children('[id^="competition_questions"]').length;
     if($questionsLength < 2){
-        $(parent).find('.dev-remove-competition-question,dev-remove-competition-questionEn').addClass('hide');
+        $(parent).find('.dev-remove-competition-question,.dev-remove-competition-questionEn').addClass('hide');
     } else {
-        $(parent).find('.dev-remove-competition-question,dev-remove-competition-questionEn').removeClass('hide');
+        $(parent).find('.dev-remove-competition-question,.dev-remove-competition-questionEn').removeClass('hide');
     }
 }
 
@@ -507,8 +507,7 @@ function addNewAnswer(elm) {
         if(answersCount < 5) {
             var $answersContainer = parent;
             var prototype = $answersContainer.data('prototype');
-            $answersContainer.append(prototype.replace(/__name__/g, nextId));
-            nextId++;
+            $answersContainer.append(prototype.replace(/__name__/g, answersCount));
             removeAnswersErrorMessage(parent);
         } else {
             addAnswersErrorMessage(parent);
