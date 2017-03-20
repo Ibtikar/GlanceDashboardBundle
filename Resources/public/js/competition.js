@@ -71,7 +71,7 @@ function getIDFromURL(url){
 
 var uploadpopup=false;
 $(document).ready(function () {
-    $("form.form-horizontal").data("validator").settings.ignore = [];
+    $("form.form-horizontal").data("validator").settings.ignore = '[id^="competition_questions"]:hidden';
 
     $(document).on('click','.upload-image-modal-open',function () {
         if(uploadpopup){
