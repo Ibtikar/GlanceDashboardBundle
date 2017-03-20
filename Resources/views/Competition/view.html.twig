@@ -156,7 +156,7 @@
                                                     {% if competition.status=='publish' or competition.status =='unpublish' %}
 
 
-                                                        {% for question in competition.questions%}
+                                                        {% for question in competition.questionsEn%}
                                                             {% set displayChart= false %}
                                                             <h2><span class="questionNumber badge-primary"> {{loop.index}} </span>{{question.question}}
                                                             </h2>
