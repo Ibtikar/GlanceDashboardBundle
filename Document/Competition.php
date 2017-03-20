@@ -102,8 +102,6 @@ sa     */
     private $secondaryTitleEn;
 
     /**
-     * @Assert\NotBlank
-
      * @MongoDB\String
      * @Assert\Length(
      *      min = 10,
@@ -115,8 +113,6 @@ sa     */
     private $brief;
 
     /**
-     * @Assert\NotBlank
-
      * @MongoDB\String
      * @Assert\Length(
      *      min = 10,

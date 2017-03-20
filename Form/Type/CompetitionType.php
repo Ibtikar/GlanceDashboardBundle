@@ -33,8 +33,8 @@ class CompetitionType extends AbstractType {
                 ->add('titleEn', formType\TextType::class, array('attr' => array('data-rule-minlength' => 3,'data-rule-maxlength' => 150)))
                 ->add('SecondaryTitle', formType\TextType::class, array('attr' => array('data-rule-minlength' => 3,'data-rule-maxlength' => 150)))
                 ->add('SecondaryTitleEn', formType\TextType::class, array('attr' => array('data-rule-minlength' => 3,'data-rule-maxlength' => 150)))
-                ->add('brief', formType\TextareaType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 1000)))
-                ->add('briefEn', formType\TextareaType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 1000)))
+                ->add('brief', formType\TextareaType::class, array('required'=>FALSE,'attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 1000)))
+                ->add('briefEn', formType\TextareaType::class, array('required'=>FALSE,'attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 1000)))
                 ->add('termsAndConditions', formType\TextareaType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 1000)))
                 ->add('termsAndConditionsEn', formType\TextareaType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 1000)))
                 ->add('video', formType\TextType::class, array('mapped'=>FALSE,'required'=>FALSE,'attr'=>array('data-rule-youtube'=>'data-rule-youtube')));
