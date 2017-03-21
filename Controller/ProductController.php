@@ -101,12 +101,12 @@ class ProductController extends BackendController {
                 'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related', 'ajax-url-var' => 'relatedMaterialSearchUrl')
             ))
             ->add('related', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
-            ->add('relatedTip', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
+            ->add('relatedArticle', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
                 'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related_tip', 'ajax-url-var' => 'relatedTipSearchUrl')
             ))
             ->add('relatedKitchen911', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
                 'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related_kitchen911', 'ajax-url-var' => 'relatedKitchen911SearchUrl')))
-            ->add('related_tip', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
+            ->add('related_article', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
             ->add('related_kitchen911', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
             ->add('minimumRelatedRecipe', formType\HiddenType::class, array('required' => true, 'attr' => array('data-msg-required' => ' '), 'mapped' => FALSE))
 
@@ -126,8 +126,8 @@ class ProductController extends BackendController {
                     $this->updateRelatedRecipe($product, $formData['related_kitchen911'], $dm,'kitchen911');
                 }
 
-                if ($formData['related_tip']) {
-                    $this->updateRelatedRecipe($product, $formData['related_tip'], $dm,'tip');
+                if ($formData['related_article']) {
+                    $this->updateRelatedRecipe($product, $formData['related_article'], $dm,'article');
                 }
 
                 $dm->persist($product);
@@ -213,12 +213,12 @@ class ProductController extends BackendController {
                 'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related', 'ajax-url-var' => 'relatedMaterialSearchUrl')
             ))
             ->add('related', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
-            ->add('relatedTip', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
+            ->add('relatedArticle', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
                 'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related_tip', 'ajax-url-var' => 'relatedTipSearchUrl')
             ))
             ->add('relatedKitchen911', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
                 'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related_kitchen911', 'ajax-url-var' => 'relatedKitchen911SearchUrl')))
-            ->add('related_tip', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
+            ->add('related_article', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
             ->add('related_kitchen911', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
             ->add('minimumRelatedRecipe', formType\HiddenType::class, array('required' => true, 'attr' => array('data-msg-required' => ' '), 'mapped' => FALSE))
             ->add('submitButton', formType\HiddenType::class, array('required' => FALSE, "mapped" => false))
@@ -240,8 +240,8 @@ class ProductController extends BackendController {
                     $this->updateRelatedRecipe($product, $formData['related_kitchen911'], $dm,'kitchen911');
                 }
 
-                if ($formData['related_tip']) {
-                    $this->updateRelatedRecipe($product, $formData['related_tip'], $dm,'tip');
+                if ($formData['related_article']) {
+                    $this->updateRelatedRecipe($product, $formData['related_article'], $dm,'article');
                 }
 
                 $dm->flush();

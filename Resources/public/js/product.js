@@ -83,8 +83,8 @@ function updateRelatedMaterial() {
 
 }
 function updateMinRelated() {
-    if ($('.dev-related-list').length > 0 || $('.dev-related-tip-list').length > 0 || $('.dev-related-kitchen911-list').length > 0) {
-        if (($('.dev-related-list li').length != 0 && $('.dev-related-list li').length < 2) || ($('.dev-related-tip-list li').length != 0 && $('.dev-related-tip-list li').length < 2) || ($('.dev-related-kitchen911-list li').length != 0 && $('.dev-related-kitchen911-list li').length < 2))
+    if ($('.dev-related-list').length > 0 || $('.dev-related-article-list').length > 0 || $('.dev-related-kitchen911-list').length > 0) {
+        if (($('.dev-related-list li').length != 0 && $('.dev-related-list li').length < 2) || ($('.dev-related-article-list li').length != 0 && $('.dev-related-article-list li').length < 2) || ($('.dev-related-kitchen911-list li').length != 0 && $('.dev-related-kitchen911-list li').length < 2))
         {
             $('#form_minimumRelatedRecipe').val('')
         } else {
@@ -118,23 +118,23 @@ function updateRelatedKitchen911(){
 }
 
 function updateRelatedTip(){
-    if($('#form_related_tip').length > 0){
-        var data = JSON.parse($('#form_related_tip').val());
+    if($('#form_related_article').length > 0){
+        var data = JSON.parse($('#form_related_article').val());
         RelatedTipObj = data;
-//        $('.dev-related-tip-list').html("");
+//        $('.dev-related-article-list').html("");
 
-        var tips = '<label class="control-label col-lg-2 dev-related-tip-list" for="form_relatedTip"></label><div class="col-lg-12" style="padding: 0;"><ul class="dev-related-tip-list media-list width-350 notificationList">';
+        var tips = '<label class="control-label col-lg-2 dev-related-article-list" for="form_relatedArticle"></label><div class="col-lg-12" style="padding: 0;"><ul class="dev-related-article-list media-list width-350 notificationList">';
         $(data).each(function(){
             tips += '<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="'+this.img+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-tip-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>';
-//            $('.dev-related-tip-list').append('<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="/'+(this.img).replace(/^\/+/g,'')+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>');
+//            $('.dev-related-article-list').append('<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="/'+(this.img).replace(/^\/+/g,'')+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>');
 //            $('.dev-related-list').append('<li class="media dev-related-item"><div class="media-body"><a href="'+$('base').attr('href')+this.slug+'" target="_blank">'+this.title+'</a>  </div><div class="dev-delete-related-material media-right" data-related-material-id="'+this.id+'" data-related-material-slug="'+this.slug+'"><i class="icon icon-cross2"></i></div></li>');
         });
         tips += "</ul></div></div>"
-        if($('#form_relatedTip').parent().find('.dev-related-tip-list').length > 0) {
-           $('label.dev-related-tip-list').remove();
-           $('.dev-related-tip-list').parent().remove();
+        if($('#form_relatedArticle').parent().find('.dev-related-article-list').length > 0) {
+           $('label.dev-related-article-list').remove();
+           $('.dev-related-article-list').parent().remove();
         }
-        $('#form_relatedTip').parent().append(tips);
+        $('#form_relatedArticle').parent().append(tips);
         updateMinRelated();
 
     }
@@ -158,7 +158,7 @@ function addRelatedTip(data) {
         'text':data.text,
         'img':data.img
     });
-    $('#form_related_tip').val(JSON.stringify(RelatedTipObj));
+    $('#form_related_article').val(JSON.stringify(RelatedTipObj));
     updateRelatedTip();
 }
 
@@ -266,7 +266,7 @@ $('#form_relatedKitchen911').on('select2:select',function(e){
     addRelatedKitchen911s(e.params.data);
     $(this).val(null).trigger("change");
 });
-$('#form_relatedTip').on('select2:select',function(e){
+$('#form_relatedArticle').on('select2:select',function(e){
     addRelatedTip(e.params.data);
     $(this).val(null).trigger("change");
 });
@@ -419,7 +419,7 @@ $(document).on("click",'.dev-add-related-material',function(){
                 $this.parents('li').remove();
                 var objArray = [];
                 var objectElement;
-                $.each($('.dev-related-tip-list .media'),function(){
+                $.each($('.dev-related-article-list .media'),function(){
                   objectElement=$(this)
                     objArray.push({
                         'id':objectElement.attr('data-related-material-id'),
@@ -427,7 +427,7 @@ $(document).on("click",'.dev-add-related-material',function(){
                         'img':objectElement.find('img').attr('src')
                     });
                 });
-                $('#form_related_tip').val(JSON.stringify(objArray));
+                $('#form_related_article').val(JSON.stringify(objArray));
                 RelatedTipObj = objArray;
                 updateMinRelated();
 

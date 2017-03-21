@@ -105,6 +105,11 @@ class Product extends Document
      * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe" , simple=true)
      */
     private $relatedTip;
+    
+    /**
+     * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe" , simple=true)
+     */
+    private $relatedArticle;
 
     /**
      * @MongoDB\String
@@ -532,5 +537,35 @@ class Product extends Document
     public function getSlugEn()
     {
         return $this->slugEn;
+    }
+
+    /**
+     * Add relatedArticle
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle
+     */
+    public function addRelatedArticle(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle)
+    {
+        $this->relatedArticle[] = $relatedArticle;
+    }
+
+    /**
+     * Remove relatedArticle
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle
+     */
+    public function removeRelatedArticle(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle)
+    {
+        $this->relatedArticle->removeElement($relatedArticle);
+    }
+
+    /**
+     * Get relatedArticle
+     *
+     * @return \Doctrine\Common\Collections\Collection $relatedArticle
+     */
+    public function getRelatedArticle()
+    {
+        return $this->relatedArticle;
     }
 }
