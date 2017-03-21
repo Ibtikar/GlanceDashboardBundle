@@ -68,23 +68,30 @@
                                                 <div class="tab-pane active" id="arabic">
                                                     <h1>{{ competition.title}}</h1>
                                                     <hr/>
+                                                    {% set questionCount= 0 %}
+
                                                     {% if competition.status=='publish' or competition.status =='unpublish' %}
                                                         {% for question in competition.questions%}
                                                             {% set displayChart= false %}
+                                                            {% set break = false %}
+
                                                             <h2><span class="questionNumber badge-primary"> {{loop.index}} </span>{{question.question}}
                                                             </h2>
                                                             {% if question.questionType == 'single answer' or question.questionType == 'multiple answer' %}
                                                                 <div class="row">
-                                                                    {% for answer in question.answers %}
+                                                                    {% for answer in question.answers if not break  %}
                                                                         {% if answer.getPercentage() != 0 %}
+                                                                        {% set questionCount= questionCount+1 %}
+
                                                                             {% set displayChart= true %}
+                                                                            {% set break = true %}
                                                                         {% endif %}
                                                                     {% endfor%}
                                                                     {% if displayChart %}
                                                                         <div class="col-lg-4 resultsCharts">
 
                                                                             <div class="chart-container text-center">
-                                                                                <div class="display-inline-block" id="c3-donut-chart-ar-{{loop.index}}" style="direction: ltr"></div>
+                                                                                <div class="display-inline-block" id="c3-donut-chart-ar-{{questionCount}}" style="direction: ltr"></div>
                                                                             </div>
                                                                         </div>
                                                                     {% endif%}
@@ -155,23 +162,27 @@
                                                     <hr/>
                                                     {% if competition.status=='publish' or competition.status =='unpublish' %}
 
-
+  {% set questionEnglishCount= 0 %}
                                                         {% for question in competition.questionsEn%}
                                                             {% set displayChart= false %}
+                                                             {% set breaken = false %}
                                                             <h2><span class="questionNumber badge-primary"> {{loop.index}} </span>{{question.question}}
                                                             </h2>
                                                             {% if question.questionType == 'single answer' or question.questionType == 'multiple answer' %}
                                                                 <div class="row">
-                                                                    {% for answer in question.answers %}
+                                                                    {% for answer in question.answers if not breaken %}
                                                                         {% if answer.getPercentage() != 0 %}
+                                                                              {% set questionEnglishCount= questionEnglishCount+1 %}
+
                                                                             {% set displayChart= true %}
+                                                                            {% set breaken= true %}
                                                                         {% endif %}
                                                                     {% endfor%}
                                                                     {% if displayChart %}
                                                                         <div class="col-lg-4 resultsCharts">
 
                                                                             <div class="chart-container text-center">
-                                                                                <div class="display-inline-block" id="c3-donut-chart-{{loop.index}}" style="direction: ltr"></div>
+                                                                                <div class="display-inline-block" id="c3-donut-chart-{{questionEnglishCount}}" style="direction: ltr"></div>
                                                                             </div>
                                                                         </div>
                                                                     {% endif %}
