@@ -9,7 +9,7 @@ use Ibtikar\GlanceDashboardBundle\Document\CompetitionAnswer;
 class CompetitionAnswerController extends CompetitionController
 {
 
-    protected $translationDomain = 'competition';
+    protected $translationDomain = 'anwser';
 
     public function __construct()
     {

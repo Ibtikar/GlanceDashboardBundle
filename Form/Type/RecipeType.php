@@ -73,9 +73,9 @@ class RecipeType extends AbstractType {
 
                 if($options['attr']['contentType'] == 'recipe') {
                     $builder->add('ingredients',  CKEditorType::class, array('required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
-                        ->add('ingredientsEn',CKEditorType::class, array('required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
+                        ->add('ingredientsEn',CKEditorType::class, array('required' => TRUE,'config' => array('contentsLangDirection' => 'ltr'),'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
                         ->add('method',  CKEditorType::class, array('required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
-                        ->add('methodEn',CKEditorType::class, array('required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
+                        ->add('methodEn',CKEditorType::class, array('required' => TRUE,'config' => array('contentsLangDirection' => 'ltr'),'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
                 ;
                 }
 
