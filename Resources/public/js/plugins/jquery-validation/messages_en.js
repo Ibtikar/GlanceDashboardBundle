@@ -24,8 +24,8 @@
         creditcard: "رجاء إدخال رقم بطاقة ائتمان صحيح",
         equalTo: "رجاء إدخال نفس القيمة",
         extension: "رجاء إدخال ملف بامتداد موافق عليه",
-        maxlength: $.validator.format("الحد الأقصى لعدد الحروف هو {0}"),
-        minlength: $.validator.format('يجب أن تكون عدد الحروف {0} أو أكثر'),
+        maxlength: $.validator.format("The filed accept less than {0} characters "),
+        minlength: $.validator.format('The field accept {0} characters or longer'),
         ckmin: $.validator.format('يجب أن تكون عدد الحروف {0} أو أكثر'),
         RequiredBirthdate: 'Please enter a value',
         rangelength: $.validator.format("عدد الحروف يجب أن يكون بين {0} و {1}"),
@@ -38,7 +38,7 @@
         unique: "غير متاح",
         filesize: $.validator.format('يجب الا يزيد حجم الصوره عن {0} ميجا'),
         dimensions: 'يجب الا تقل ابعاد الصورة عن 200*200',
-        youtube: 'The URL is invalid'
+        youtube: 'You should enter a youtube link'
     });
 
 }));
