@@ -1,5 +1,5 @@
 var RelatedRecipeObj = [];
-var RelatedKitchen911Obj = [];
+var RelatedArticleObj = [];
 var RelatedTipObj = [];
 function showNotificationMsg(title, text, type) {
 
@@ -83,8 +83,8 @@ function updateRelatedMaterial() {
 
 }
 function updateMinRelated() {
-    if ($('.dev-related-list').length > 0 || $('.dev-related-article-list').length > 0 || $('.dev-related-kitchen911-list').length > 0) {
-        if (($('.dev-related-list li').length != 0 && $('.dev-related-list li').length < 2) || ($('.dev-related-article-list li').length != 0 && $('.dev-related-article-list li').length < 2) || ($('.dev-related-kitchen911-list li').length != 0 && $('.dev-related-kitchen911-list li').length < 2))
+    if ($('.dev-related-list').length > 0 || $('.dev-related-tip-list').length > 0 || $('.dev-related-article-list').length > 0) {
+        if (($('.dev-related-list li').length != 0 && $('.dev-related-list li').length < 2) || ($('.dev-related-tip-list li').length != 0 && $('.dev-related-tip-list li').length < 2) || ($('.dev-related-article-list li').length != 0 && $('.dev-related-article-list li').length < 2))
         {
             $('#form_minimumRelatedRecipe').val('')
         } else {
@@ -95,59 +95,59 @@ function updateMinRelated() {
     }
 }
 
-function updateRelatedKitchen911(){
-    if($('#form_related_kitchen911').length > 0){
-        var data = JSON.parse($('#form_related_kitchen911').val());
-        RelatedKitchen911Obj = data;
-//        $('.dev-related-kitchen911-list').html("");
-        var kitchen911s = '<label class="control-label col-lg-2 dev-related-kitchen911-list" for="form_relatedKitchen911"></label><div class="col-lg-12" style="padding: 0;"><ul class="dev-related-kitchen911-list media-list width-350 notificationList">';
+function updateRelatedArticle(){
+    if($('#form_related_article').length > 0){
+        var data = JSON.parse($('#form_related_article').val());
+        RelatedArticleObj = data;
+//        $('.dev-related-article-list').html("");
+        var articles = '<label class="control-label col-lg-2 dev-related-article-list" for="form_relatedArticle"></label><div class="col-lg-12" style="padding: 0;"><ul class="dev-related-article-list media-list width-350 notificationList">';
         $(data).each(function(){
-            kitchen911s += '<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="'+this.img+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-kitchen911-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>';
+            articles += '<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="'+this.img+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-article-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>';
 //            $('.dev-related-list').append('<li class="media dev-related-item"><div class="media-body"><a href="'+$('base').attr('href')+this.slug+'" target="_blank">'+this.title+'</a>  </div><div class="dev-delete-related-material media-right" data-related-material-id="'+this.id+'" data-related-material-slug="'+this.slug+'"><i class="icon icon-cross2"></i></div></li>');
         });
-        kitchen911s += "</ul></div></div>"
+        articles += "</ul></div></div>"
 
-        if($('#form_relatedKitchen911').parent().find('.dev-related-kitchen911-list').length > 0) {
-            $('label.dev-related-kitchen911-list').remove();
-            $('.dev-related-kitchen911-list').parent().remove();
+        if($('#form_relatedArticle').parent().find('.dev-related-article-list').length > 0) {
+            $('label.dev-related-article-list').remove();
+            $('.dev-related-article-list').parent().remove();
         }
-        $('#form_relatedKitchen911').parent().append(kitchen911s);
+        $('#form_relatedArticle').parent().append(articles);
         updateMinRelated();
 
     }
 }
 
 function updateRelatedTip(){
-    if($('#form_related_article').length > 0){
-        var data = JSON.parse($('#form_related_article').val());
+    if($('#form_related_tip').length > 0){
+        var data = JSON.parse($('#form_related_tip').val());
         RelatedTipObj = data;
-//        $('.dev-related-article-list').html("");
+//        $('.dev-related-tip-list').html("");
 
-        var tips = '<label class="control-label col-lg-2 dev-related-article-list" for="form_relatedArticle"></label><div class="col-lg-12" style="padding: 0;"><ul class="dev-related-article-list media-list width-350 notificationList">';
+        var tips = '<label class="control-label col-lg-2 dev-related-tip-list" for="form_relatedTip"></label><div class="col-lg-12" style="padding: 0;"><ul class="dev-related-tip-list media-list width-350 notificationList">';
         $(data).each(function(){
             tips += '<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="'+this.img+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-tip-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>';
-//            $('.dev-related-article-list').append('<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="/'+(this.img).replace(/^\/+/g,'')+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>');
+//            $('.dev-related-tip-list').append('<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="/'+(this.img).replace(/^\/+/g,'')+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>');
 //            $('.dev-related-list').append('<li class="media dev-related-item"><div class="media-body"><a href="'+$('base').attr('href')+this.slug+'" target="_blank">'+this.title+'</a>  </div><div class="dev-delete-related-material media-right" data-related-material-id="'+this.id+'" data-related-material-slug="'+this.slug+'"><i class="icon icon-cross2"></i></div></li>');
         });
         tips += "</ul></div></div>"
-        if($('#form_relatedArticle').parent().find('.dev-related-article-list').length > 0) {
-           $('label.dev-related-article-list').remove();
-           $('.dev-related-article-list').parent().remove();
+        if($('#form_relatedTip').parent().find('.dev-related-tip-list').length > 0) {
+           $('label.dev-related-tip-list').remove();
+           $('.dev-related-tip-list').parent().remove();
         }
-        $('#form_relatedArticle').parent().append(tips);
+        $('#form_relatedTip').parent().append(tips);
         updateMinRelated();
 
     }
 }
 
-function addRelatedKitchen911s(data) {
-    RelatedKitchen911Obj.unshift({
+function addRelatedArticles(data) {
+    RelatedArticleObj.unshift({
         'id':data.id,
         'text':data.text,
         'img':data.img
     });
-    $('#form_related_kitchen911').val(JSON.stringify(RelatedKitchen911Obj));
-    updateRelatedKitchen911();
+    $('#form_related_article').val(JSON.stringify(RelatedArticleObj));
+    updateRelatedArticle();
 
 //    checkPublishedValidation(element);
 }
@@ -158,7 +158,7 @@ function addRelatedTip(data) {
         'text':data.text,
         'img':data.img
     });
-    $('#form_related_article').val(JSON.stringify(RelatedTipObj));
+    $('#form_related_tip').val(JSON.stringify(RelatedTipObj));
     updateRelatedTip();
 }
 
@@ -262,11 +262,11 @@ $('#form_relatedRecipe').on('select2:select',function(e){
     addRelatedMaterial(e.params.data);
     $(this).val(null).trigger("change");
 });
-$('#form_relatedKitchen911').on('select2:select',function(e){
-    addRelatedKitchen911s(e.params.data);
+$('#form_relatedArticle').on('select2:select',function(e){
+    addRelatedArticles(e.params.data);
     $(this).val(null).trigger("change");
 });
-$('#form_relatedArticle').on('select2:select',function(e){
+$('#form_relatedTip').on('select2:select',function(e){
     addRelatedTip(e.params.data);
     $(this).val(null).trigger("change");
 });
@@ -340,54 +340,7 @@ $(document).on("click",'.dev-add-related-material',function(){
 
     });
 
-    $(document).on('click', '.dev-related-kitchen911-delete', function(e) {
-        e.preventDefault();
-            var $this = $(this);
-
-//            if(document.location.pathname.indexOf('edit') >= 0){
-//                $.ajax({
-//                    url: relatedMaterialDeleteUrl,
-//                    method: 'POST',
-//                    data:{parent:requestId,child:$this.attr('data-related-material-id')},
-//                    success: function(data) {
-//                        if(data.status == "success"){
-//                            $this.parents('li').remove();
-//                            var objArray = [];
-//                            $.each($('.dev-related-list .media'),function(){
-//                                objArray.push({
-//                                    'id':$(this).attr('data-related-material-id'),
-//                                    'text':$(this).find('.media-body b').text().trim(),
-//                                    'img':$(this).find('img').attr('src')
-//                                });
-//                            });
-//                            $('#form_related').val(JSON.stringify(objArray));
-//                            updateRelatedMaterial();
-//                        }
-//
-//                        showNotificationMsg(data.message,"");
-//
-//                    }
-//                });
-//            }else{
-                $this.parents('li').remove();
-                var objArray = [];
-                var objectElement;
-                $.each($('.dev-related-kitchen911-list .media'),function(){
-                  objectElement=$(this)
-                    objArray.push({
-                        'id':objectElement.attr('data-related-material-id'),
-                        'text':objectElement.find('.media-body b').text().trim(),
-                        'img':objectElement.find('img').attr('src')
-                    });
-                });
-                $('#form_related_kitchen911').val(JSON.stringify(objArray));
-                RelatedKitchen911Obj = objArray;
-                updateMinRelated();
-
-//            }
-    });
-
-    $(document).on('click', '.dev-related-tip-delete', function(e) {
+    $(document).on('click', '.dev-related-article-delete', function(e) {
         e.preventDefault();
             var $this = $(this);
 
@@ -428,6 +381,53 @@ $(document).on("click",'.dev-add-related-material',function(){
                     });
                 });
                 $('#form_related_article').val(JSON.stringify(objArray));
+                RelatedArticleObj = objArray;
+                updateMinRelated();
+
+//            }
+    });
+
+    $(document).on('click', '.dev-related-tip-delete', function(e) {
+        e.preventDefault();
+            var $this = $(this);
+
+//            if(document.location.pathname.indexOf('edit') >= 0){
+//                $.ajax({
+//                    url: relatedMaterialDeleteUrl,
+//                    method: 'POST',
+//                    data:{parent:requestId,child:$this.attr('data-related-material-id')},
+//                    success: function(data) {
+//                        if(data.status == "success"){
+//                            $this.parents('li').remove();
+//                            var objArray = [];
+//                            $.each($('.dev-related-list .media'),function(){
+//                                objArray.push({
+//                                    'id':$(this).attr('data-related-material-id'),
+//                                    'text':$(this).find('.media-body b').text().trim(),
+//                                    'img':$(this).find('img').attr('src')
+//                                });
+//                            });
+//                            $('#form_related').val(JSON.stringify(objArray));
+//                            updateRelatedMaterial();
+//                        }
+//
+//                        showNotificationMsg(data.message,"");
+//
+//                    }
+//                });
+//            }else{
+                $this.parents('li').remove();
+                var objArray = [];
+                var objectElement;
+                $.each($('.dev-related-tip-list .media'),function(){
+                  objectElement=$(this)
+                    objArray.push({
+                        'id':objectElement.attr('data-related-material-id'),
+                        'text':objectElement.find('.media-body b').text().trim(),
+                        'img':objectElement.find('img').attr('src')
+                    });
+                });
+                $('#form_related_tip').val(JSON.stringify(objArray));
                 RelatedTipObj = objArray;
                 updateMinRelated();
 

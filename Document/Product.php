@@ -72,6 +72,28 @@ class Product extends Document
     private $descriptionEn;
 
     /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 10,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 1000,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $about;
+
+    /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 10,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 1000,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $aboutEn;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Media", simple=true)
      */
     private $coverPhoto;
@@ -105,7 +127,7 @@ class Product extends Document
      * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe" , simple=true)
      */
     private $relatedTip;
-    
+
     /**
      * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe" , simple=true)
      */
@@ -155,6 +177,21 @@ class Product extends Document
         $array = array();
         if ($this->getRelatedKitchen911()) {
             foreach ($this->getRelatedKitchen911() as $article) {
+                $array[] = array(
+                    'id' => $article->getId(),
+                    'text' => $article->getTitle(),
+                    'img' => $this->getDefaultCoverPhoto($article)
+
+                );
+            }
+        }
+        return $array;
+    }
+    public function getRelatedArticleJson()
+    {
+        $array = array();
+        if ($this->getRelatedArticle()) {
+            foreach ($this->getRelatedArticle() as $article) {
                 $array[] = array(
                     'id' => $article->getId(),
                     'text' => $article->getTitle(),
@@ -567,5 +604,49 @@ class Product extends Document
     public function getRelatedArticle()
     {
         return $this->relatedArticle;
+    }
+
+    /**
+     * Set about
+     *
+     * @param string $about
+     * @return self
+     */
+    public function setAbout($about)
+    {
+        $this->about = $about;
+        return $this;
+    }
+
+    /**
+     * Get about
+     *
+     * @return string $about
+     */
+    public function getAbout()
+    {
+        return $this->about;
+    }
+
+    /**
+     * Set aboutEn
+     *
+     * @param string $aboutEn
+     * @return self
+     */
+    public function setAboutEn($aboutEn)
+    {
+        $this->aboutEn = $aboutEn;
+        return $this;
+    }
+
+    /**
+     * Get aboutEn
+     *
+     * @return string $aboutEn
+     */
+    public function getAboutEn()
+    {
+        return $this->aboutEn;
     }
 }

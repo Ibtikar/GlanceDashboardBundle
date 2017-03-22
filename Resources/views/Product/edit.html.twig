@@ -310,8 +310,8 @@
         var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':app.request.get('id'),'collectionType':'Product'})}}";
         var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'image','documentId':app.request.get('id'),'collectionType':'Product'})}}";
         var relatedMaterialSearchUrl = "{{ path('ibtikar_glance_dashboard_product_related_material_search', {'collectionType':'recipe'})}}";
-        var relatedKitchen911SearchUrl = "{{ path('ibtikar_glance_dashboard_product_related_material_search', {'collectionType': 'kitchen911'})}}";
-        var relatedTipSearchUrl = "{{ path('ibtikar_glance_dashboard_product_related_material_search', {'collectionType': 'article'})}}";
+        var relatedArticleSearchUrl = "{{ path('ibtikar_glance_dashboard_product_related_material_search', {'collectionType': 'article'})}}";
+        var relatedTipSearchUrl = "{{ path('ibtikar_glance_dashboard_product_related_material_search', {'collectionType': 'tip'})}}";
         var relatedMaterialDeleteUrl = '{{ path('ibtikar_glance_dashboard_producte_related_material_delete') }}';
         var relatedMaterialAddUrl = '{{ path('ibtikar_glance_dashboard_producte_related_material_add') }}';
 
@@ -341,10 +341,10 @@
 
         }
 
-        RelatedKitchen911Obj = '{{product.getRelatedKitchen911Json()|json_encode|raw}}';
-        $('#form_related_kitchen911').val(RelatedKitchen911Obj);
-        if($('#form_related_kitchen911').val()!=''){
-        updateRelatedKitchen911();
+        RelatedArticleObj = '{{product.getRelatedArticleJson()|json_encode|raw}}';
+        $('#form_related_article').val(RelatedArticleObj);
+        if($('#form_related_article').val()!=''){
+        updateRelatedArticle();
     }
     </script>
 
