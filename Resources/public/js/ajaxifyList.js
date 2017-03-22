@@ -275,7 +275,7 @@ function BaseList() {
         thisObject.showColumnOptionsModal();
     });
 
-   $('div.panel-flat').on('click','.dev-role-getPermision',function(){
+   $('div.panel-flat').on('click','a.dev-role-getPermision',function(){
     thisObject.showPermisionModal($(this))
     })
 

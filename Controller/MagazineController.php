@@ -17,6 +17,12 @@ class MagazineController extends BackendController {
     protected $translationDomain = 'magazine';
     public $oneItem = 'magazine';
 
+
+    protected function getObjectShortName()
+    {
+        return 'IbtikarGlanceDashboardBundle:Magazine';
+    }
+
     protected function configureListColumns() {
         $this->allListColumns = array(
             "name" => array(),
