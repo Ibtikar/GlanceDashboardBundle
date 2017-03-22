@@ -626,7 +626,7 @@ $(document).on("click",'.dev-add-related-material',function(){
 
         updateMinRelated();
         if($('#form_minimumRelatedRecipe').val()==''){
-            showNotificationMsg("يجب الا تقل الوصفات والنصائح ومطبخ ذات صله عن 2", "", "error");
+            showNotificationMsg("يجب الا تقل الوصفات والنصائح والمقالات عن 2", "", "error");
             return false;
         }
 
