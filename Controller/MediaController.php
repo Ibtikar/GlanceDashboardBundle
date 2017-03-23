@@ -319,7 +319,7 @@ class MediaController extends BackendController
      */
     public function deleteFileAction(Request $request, $id,$collectionType)
     {
-        if (!$this->getUser()) {
+        if (!$this->getUser() && $collectionType != "Competition") {
             return $this->getLoginResponse();
         }
         $dm = $this->get('doctrine_mongodb')->getManager();
