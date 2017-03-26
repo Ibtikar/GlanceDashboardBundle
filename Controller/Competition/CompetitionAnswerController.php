@@ -102,6 +102,12 @@ class CompetitionAnswerController extends CompetitionController
         if (!$competitionAnswer) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
+        $premission = 'ROLE_COMPETITION'.strtoupper($competitionAnswer->getCompetition()->getStatus()).'_VIEWONEANSWER';
+
+        $securityContext = $this->get('security.authorization_checker');
+        if (!$securityContext->isGranted($premission) && !$securityContext->isGranted('ROLE_ADMIN')) {
+            return $this->getAccessDeniedResponse();
+        }
 
         return $this->render('IbtikarGlanceDashboardBundle:Competition:viewOneAnswer.html.twig', array(
                 'translationDomain' => $this->translationDomain,
