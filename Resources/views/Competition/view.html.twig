@@ -35,7 +35,7 @@
                             <div class="heading-elements">
 {#                                <span class="label heading-text label-flat border-success text-success-600">12338 Answers</span>#}
                                 {% if competition.status=='publish' or competition.status =='unpublish' %}
-                                {% if is_granted('ROLE_COMPETITION' ~ (competition.status)|upper ~'_VIEWANSWERONE') or is_granted('ROLE_ADMIN')  %}
+                                {% if is_granted('ROLE_COMPETITION' ~ (competition.status)|upper ~'_VIEWONEANSWER') or is_granted('ROLE_ADMIN')  %}
                                     <a class="btn btn-primary heading-btn" href="{{ path('ibtikar_glance_dashboard_competition'~(competition.status)|lower~'_viewAnswers',{'id':app.request.get('id')})}}">عرض النتائج</a>
                                 {% endif %}
                                 {% endif %}
