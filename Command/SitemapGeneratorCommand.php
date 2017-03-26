@@ -105,6 +105,7 @@ class SitemapGeneratorCommand extends ContainerAwareCommand {
 
     protected function addLinkNormal($routePrefix) {
         $arr = array(
+            
                 'loc' => $this->generateURL($routePrefix.(substr($routePrefix, -1) == "_"?$this->locale:""),array('_locale' => $this->locale)),
                 'changefreq' => "monthly", //always, hourly, daily, weekly, monthly, yearly, never
                 'priority' => "0.8"
