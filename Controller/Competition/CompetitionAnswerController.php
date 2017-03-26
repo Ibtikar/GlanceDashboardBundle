@@ -52,7 +52,7 @@ class CompetitionAnswerController extends CompetitionController
                 ->field('deleted')->equals(false);
         $this->listViewOptions->setDefaultSortBy("createdAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
-        $this->listViewOptions->setActions(array('ViewAnswerOne'));
+        $this->listViewOptions->setActions(array('ViewOneAnswer'));
 
         $this->listViewOptions->setListQueryBuilder($queryBuilder);
 
@@ -66,6 +66,17 @@ class CompetitionAnswerController extends CompetitionController
         if (!$id) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
+        $route = $this->container->get('request_stack')->getCurrentRequest()->get('_route');
+        if ($route == 'ibtikar_glance_dashboard_competitionpublish_viewAnswers') {
+            $premission = 'ROLE_COMPETITIONPUBLISH_VIEWONEANSWER';
+        } else {
+            $premission = 'ROLE_COMPETITIONUNPUBLISH_VIEWONEANSWER';
+        }
+        $securityContext = $this->get('security.authorization_checker');
+        if (!$securityContext->isGranted($premission) && !$securityContext->isGranted('ROLE_ADMIN')) {
+            return $this->getAccessDeniedResponse();
+        }
+
         $dm = $this->get('doctrine_mongodb')->getManager();
         $competition = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->findOneById($id);
         if (!$competition) {
