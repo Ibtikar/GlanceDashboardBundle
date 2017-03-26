@@ -135,6 +135,7 @@
         var parameterNotRemoved = 'id=' + '{{app.request.get('id')}}'
     </script>
     <script>
+     ajaxData = '{{path('ibtikar_glance_dashboard_competition'~competition.getStatus()|lower~"_viewAnswers")}}';
 
 
 
