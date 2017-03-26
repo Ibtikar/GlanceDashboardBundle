@@ -17,6 +17,9 @@ $.validator.addMethod('mobile', function (value, element) {
     $.validator.addMethod('youtube', function (value, element) {
         return value == "" || value.match(/^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/);
     });
+    $.validator.addMethod('uploadrequired', function (value, element) {
+        return $(element).parents('.fileupload-buttonbar').next('.uploader-wrapper').find('[data-type="DELETE"]').length > 0;
+    });
 // Add check for birthdate entry. Validation doesn't seem to like a required hidden field.
 jQuery.validator.addMethod('RequiredBirthdate',function(value, element) {
     var valid = false;
@@ -396,7 +399,7 @@ function initFormValidation(form_selector) {
         form_selector = 'form.dev-page-main-form,form.dev-js-validation';
     }
     $(form_selector).each(function () {
-        var ignoredElementsSelector = ':reset,:hidden:not(select#stars_birthDate_year,select#stars_birthDate_month,select#stars_birthDate_day,#keycode,.nice-select,textarea[id^="recipe_"],textarea[id^="form_benefits"]),.select-input,input.contact_subject_dev,.dev-ignore-validation';
+        var ignoredElementsSelector = ':reset,:hidden:not([dev-required-image="true"],select#stars_birthDate_year,select#stars_birthDate_month,select#stars_birthDate_day,#keycode,.nice-select,textarea[id^="recipe_"],textarea[id^="form_benefits"]),.select-input,input.contact_subject_dev,.dev-ignore-validation';
         var $form = $(this);
         var $resetButtons = $form.find(':reset');
         $resetButtons.each(function() {
