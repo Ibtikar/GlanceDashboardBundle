@@ -848,7 +848,7 @@ class MediaController extends BackendController
 
             foreach ($videos as $video) {
                 $videoObj = new Media();
-                if($collectionType == "Competition"){
+                if($collectionType == "Competition" || $collectionType == "Product"){
                     $objId = null;
                     if($documentId && $documentId != 'null'){
                         $objId = $documentId;
@@ -856,13 +856,14 @@ class MediaController extends BackendController
                     $prevVideo = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findOneBy(array(
                         'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                         'competition' => $objId,
-                        'collectionType' => 'Competition',
+                        'collectionType' => $collectionType,
                         'type' => 'video'
                     ));
                     if($prevVideo){
                         $videoObj = $prevVideo;
                     }elseif($documentId && $documentId != 'null'){
-                        $videoObj->setCompetition($dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->find($documentId));
+                        $method = "set".$collectionType;
+                        $videoObj->$method($dm->getRepository('IbtikarGlanceDashboardBundle:'.$collectionType)->find($documentId));
                     }
                 }
                 $video = explode('#', $video);
@@ -901,6 +902,12 @@ class MediaController extends BackendController
                         if ($reponse) {
                             return $reponse;
                         }
+                    } elseif($request->get('collectionType') == 'Product') {
+
+                        $product = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($documentId);
+                        if (!$product) {
+                            throw $this->createNotFoundException($this->trans('Wrong id'));
+                        }
                     } else {
                         $task = $dm->getRepository('IbtikarBackendBundle:Task')->find($documentId);
                         $lastVideo = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder($this->getObjectShortName())
@@ -915,6 +922,11 @@ class MediaController extends BackendController
                         $videoObj->setTask($task);
                     }
                 }
+
+                if($request->get('imageType')){
+                    $videoObj->setCoverPhoto($request->get('imageType'));
+                }
+
                 $videoObj->setCreatedBy($this->getUser());
                 $videoObj->setType($type);
                 $dm->persist($videoObj);

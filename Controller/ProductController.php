@@ -72,27 +72,32 @@ class ProductController extends BackendController {
         $dm = $this->get('doctrine_mongodb')->getManager();
         $profileImage=NULL;
         $coverImage=NULL;
+        $coverVideo = NULL;
         $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
-                'type' => 'image',
                 'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                 'product' => null,
                 'subproduct' => null,
                 'collectionType' => 'Product'
             ));
-         foreach ($images as $image){
-                    if($image->getCoverPhoto()){
-                       $coverImage= $image;
-                        continue;
+         foreach ($images as $media){
+                    if($media->getType() == 'image'){
+                       if($media->getCoverPhoto()){
+                              $coverImage= $media;
+                               continue;
 
-                }
-                if($image->getProfilePhoto()){
-                       $profileImage= $image;
-                        continue;
+                       }
+                       if($media->getProfilePhoto()){
+                              $profileImage= $media;
+                               continue;
 
-                }
+                       }
+                    }elseif($media->getType() == 'video' && $media->getCoverPhoto()){
+                        $coverVideo= $media;
+                    }
                 }
         $product = new Product();
         $form = $this->createFormBuilder($product, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
+            ->add('coverType', formType\ChoiceType::class, array('choices' => Product::$coverTypeChoices, 'expanded' => true, 'attr'  => array('data-error-after-selector' => '#product_type_coverType')))
             ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
             ->add('nameEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
             ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
@@ -100,6 +105,7 @@ class ProductController extends BackendController {
             ->add('about', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
             ->add('aboutEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
 
+            ->add('video', formType\TextType::class, array('mapped'=>FALSE,'required'=>FALSE,'attr'=>array('data-rule-youtube'=>'data-rule-youtube')))
             ->add('relatedRecipe', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
                 'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related', 'ajax-url-var' => 'relatedMaterialSearchUrl')
             ))
@@ -136,7 +142,7 @@ class ProductController extends BackendController {
                 $dm->persist($product);
                 $this->slugifier($product);
                 $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
-                    'type' => 'image',
+//                    'type' => 'image',
                     'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                     'product' => null,
                     'collectionType' => 'Product'
@@ -183,6 +189,7 @@ class ProductController extends BackendController {
                 'breadcrumb' => $breadCrumbArray,
                 'profileImage' => $profileImage,
                 'coverImage' => $coverImage,
+                'coverVideo' => $coverVideo,
                 'deletePopoverConfig'=>array("question" => "You are about to delete %title%,Are you sure?"),
                 'title' => $this->trans('Add new Product', array(), $this->translationDomain),
                 'translationDomain' => $this->translationDomain
@@ -205,9 +212,31 @@ class ProductController extends BackendController {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
         $profileImage=$product->getProfilePhoto();
-        $coverImage=$product->getCoverPhoto();
+
+        $coverImage = NULL;
+        $coverVideo = NULL;
+
+        $mediaList = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
+            'product' => $product->getId(),
+            'collectionType' => 'Product',
+            'coverPhoto' => true
+        ));
+
+        foreach ($mediaList as $media){
+                if($media->getType() == 'image'){
+                       $coverImage= $media;
+                        continue;
+                }
+
+                if($media->getType() == 'video'){
+                       $coverVideo= $media;
+                        continue;
+                }
+        }
 
        $form = $this->createFormBuilder($product, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
+            ->add('coverType', formType\ChoiceType::class, array('choices' => Product::$coverTypeChoices, 'expanded' => true, 'attr'  => array('data-error-after-selector' => '#product_type_coverType')))
+            ->add('video', formType\TextType::class, array('mapped'=>FALSE,'required'=>FALSE,'attr'=>array('data-rule-youtube'=>'data-rule-youtube')))
             ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
             ->add('nameEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
             ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
@@ -268,6 +297,7 @@ class ProductController extends BackendController {
                 'breadcrumb' => $breadCrumbArray,
                 'product' => $product,
                 'profileImage' => $profileImage,
+                'coverVideo' => $coverVideo,
                 'coverImage' => $coverImage,
                 'deletePopoverConfig' => array("question" => "You are about to delete %title%,Are you sure?"),
                 'title' => $this->trans('edit Product', array(), $this->translationDomain),

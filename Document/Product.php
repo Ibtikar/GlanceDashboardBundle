@@ -151,6 +151,17 @@ class Product extends Document
      */
     private $slugEn;
 
+    /**
+     * @Assert\Choice(callback="getValidMediaTypes")
+     * @MongoDB\String
+     */
+    private $coverType = "image";
+
+    public static $coverTypeChoices = array(
+        "image" => "image",
+        "video" => "video"
+    );
+
     public function __toString()
     {
         return (string) $this->name;
@@ -649,4 +660,35 @@ class Product extends Document
     {
         return $this->aboutEn;
     }
+
+    /**
+     * Set coverType
+     *
+     * @param string $coverType
+     * @return self
+     */
+    public function setCoverType($coverType)
+    {
+        $this->coverType = $coverType;
+        return $this;
+    }
+
+    /**
+     * Get coverType
+     *
+     * @return string $coverType
+     */
+    public function getCoverType()
+    {
+        return $this->coverType;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getValidMediaTypes() {
+        return array_keys(static::$coverTypeChoices);
+    }
+
+
 }
