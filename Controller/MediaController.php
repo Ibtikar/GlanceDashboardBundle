@@ -338,7 +338,9 @@ class MediaController extends BackendController
             }
             if ($document->getProduct()) {
                 if ($document->getCoverPhoto()) {
-                    $document->getProduct()->setCoverPhoto(NULL);
+
+                    $cover = $document->getProduct()->getCoverPhoto();
+                    $cover->setPath(NULL);
                 }
                 if ($document->getProfilePhoto()) {
                     $document->getProduct()->setProfilePhoto(NULL);
