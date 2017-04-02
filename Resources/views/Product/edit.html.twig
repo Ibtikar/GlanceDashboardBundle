@@ -410,7 +410,8 @@
             $('#dev-coverVideo').show();
             $('#dev-coverPhoto').hide();
         }
-    }).trigger('click');
+    });
+        $('[name="form[coverType]"]:checked').trigger('click');
         $(document).on('click', '.dev-upload-video', function() {
 
             if(typeof ytXhr !== "undefined")
@@ -424,7 +425,7 @@
                 errorContainer.removeClass('has-error');
                 return;
             }
-            
+
             if (!valid_youtubeUrl(videoUrl)) {
                 showNotificationMsg(messages.wrongURL,'','error');
                 $('.dev-recipe-videoUrl').val('');
