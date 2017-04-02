@@ -72,6 +72,28 @@ class Product extends Document
     private $descriptionEn;
 
     /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 10,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 1000,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $about;
+
+    /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 10,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 1000,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $aboutEn;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Media", simple=true)
      */
     private $coverPhoto;
@@ -107,6 +129,11 @@ class Product extends Document
     private $relatedTip;
 
     /**
+     * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe" , simple=true)
+     */
+    private $relatedArticle;
+
+    /**
      * @MongoDB\String
      * @Assert\Length(
      *      max = 125,
@@ -123,6 +150,17 @@ class Product extends Document
      * )
      */
     private $slugEn;
+
+    /**
+     * @Assert\Choice(callback="getValidMediaTypes")
+     * @MongoDB\String
+     */
+    private $coverType = "image";
+
+    public static $coverTypeChoices = array(
+        "image" => "image",
+        "video" => "video"
+    );
 
     public function __toString()
     {
@@ -150,6 +188,21 @@ class Product extends Document
         $array = array();
         if ($this->getRelatedKitchen911()) {
             foreach ($this->getRelatedKitchen911() as $article) {
+                $array[] = array(
+                    'id' => $article->getId(),
+                    'text' => $article->getTitle(),
+                    'img' => $this->getDefaultCoverPhoto($article)
+
+                );
+            }
+        }
+        return $array;
+    }
+    public function getRelatedArticleJson()
+    {
+        $array = array();
+        if ($this->getRelatedArticle()) {
+            foreach ($this->getRelatedArticle() as $article) {
                 $array[] = array(
                     'id' => $article->getId(),
                     'text' => $article->getTitle(),
@@ -533,4 +586,109 @@ class Product extends Document
     {
         return $this->slugEn;
     }
+
+    /**
+     * Add relatedArticle
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle
+     */
+    public function addRelatedArticle(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle)
+    {
+        $this->relatedArticle[] = $relatedArticle;
+    }
+
+    /**
+     * Remove relatedArticle
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle
+     */
+    public function removeRelatedArticle(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle)
+    {
+        $this->relatedArticle->removeElement($relatedArticle);
+    }
+
+    /**
+     * Get relatedArticle
+     *
+     * @return \Doctrine\Common\Collections\Collection $relatedArticle
+     */
+    public function getRelatedArticle()
+    {
+        return $this->relatedArticle;
+    }
+
+    /**
+     * Set about
+     *
+     * @param string $about
+     * @return self
+     */
+    public function setAbout($about)
+    {
+        $this->about = $about;
+        return $this;
+    }
+
+    /**
+     * Get about
+     *
+     * @return string $about
+     */
+    public function getAbout()
+    {
+        return $this->about;
+    }
+
+    /**
+     * Set aboutEn
+     *
+     * @param string $aboutEn
+     * @return self
+     */
+    public function setAboutEn($aboutEn)
+    {
+        $this->aboutEn = $aboutEn;
+        return $this;
+    }
+
+    /**
+     * Get aboutEn
+     *
+     * @return string $aboutEn
+     */
+    public function getAboutEn()
+    {
+        return $this->aboutEn;
+    }
+
+    /**
+     * Set coverType
+     *
+     * @param string $coverType
+     * @return self
+     */
+    public function setCoverType($coverType)
+    {
+        $this->coverType = $coverType;
+        return $this;
+    }
+
+    /**
+     * Get coverType
+     *
+     * @return string $coverType
+     */
+    public function getCoverType()
+    {
+        return $this->coverType;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getValidMediaTypes() {
+        return array_keys(static::$coverTypeChoices);
+    }
+
+
 }

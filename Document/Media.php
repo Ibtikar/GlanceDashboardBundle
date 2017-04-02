@@ -321,13 +321,11 @@ class Media extends Document {
         }
         else if ($this->getMagazine()) {
             $uploadDirectory .= '/magazine-file/' . $this->getMagazine()->getId();
-        }
-        else if ($this->getCompetition()) {
-            $uploadDirectory .= '/competition-file/' . $this->getCompetition()->getId();
-    } else if($this->getUniqueId()){
+        } else if ($this->getUniqueId()) {
             $uploadDirectory .= '/competition-file/' . $this->getUniqueId();
-    }
-        else {  
+        } else if ($this->getCompetition()) {
+            $uploadDirectory .= '/competition-file/' . $this->getCompetition()->getId();
+        } else {
             if (!$this->getCreatedBy()) {
                 throw new \Exception('Please set the created by user.');
             }

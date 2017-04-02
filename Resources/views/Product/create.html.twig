@@ -9,6 +9,7 @@
 
     {{ form_start(form)}}
 
+    {{ form_row(form.coverType) }}
 
 
     <div class="row">
@@ -25,6 +26,97 @@
                 <table class="table table-bordered">
 
                     <tbody>
+                        <tr id="dev-coverPhoto">
+                            <td style="width: 150px">
+                                <div class="thumbnail">
+                                    <div class="thumb thumb-slide">
+                                        {% if coverImage is not empty %}
+                                            <img src="{{ asset(coverImage.getWebPath())}}" alt="">
+                                        {% else %}
+                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
+
+                                        {% endif %}
+                                        <div class="caption">
+                                            <span>
+                                                {% if coverImage is not empty %}
+                                                    <a href="{{ asset(coverImage.getWebPath())}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% else %}
+                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% endif %}                                                                                </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </td>
+                            <td class="thumbnail-caption">
+                                <h4>  صورة الغلاف</h4>
+                                <ul class="text-grey-300">
+                                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                                    <li> يجب الا تقل ابعاد الصورة عن 200*200 </li>
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                                </ul>
+                            </td>
+                            <td style="width: 300px" data-name="coverPhoto">
+                                {% if coverImage is empty %}
+                                <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
+                                 {% endif %}
+                                 <a class="btn btn-default  dev-crop-images"   {% if coverImage is empty %}style="display: none"{%else %} data-image-id="{{ coverImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':coverImage.id,'collectionType':'Product'})}}"{%endif%}  >  رفع الصورة </a>
+                                <a class="btn btn-default dev-trash-image" {% if coverImage is empty %}style="display: none" {%else %} data-image-id="{{ coverImage.id }}"   data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': coverImage.id,'collectionType':'Product'}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%}> <i class="icon-trash"></i></a>
+
+
+                            </td>
+                        </tr>
+                        <tr id="dev-coverVideo" style="display: none;">
+                            <td style="width: 150px">
+
+                                <div class="thumbnail">
+                                    <div class="thumb thumb-slide">
+
+                                        {% if coverVideo is not empty %}
+                                            <img src="https://i.ytimg.com/vi/{{ coverVideo.vid }}/hqdefault.jpg" alt="">
+
+                                        {% else %}
+                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
+
+                                        {% endif %}
+                                        <div class="caption">
+                                            <span>
+                                                {% if coverVideo is not empty %}
+                                                    <a href="https://i.ytimg.com/vi/{{ coverVideo.vid }}/hqdefault.jpg" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% else %}
+                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+
+
+                            <td class="thumbnail-caption">
+                                <h4>أضف رابط الفيديو</h4>
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        {{ form_widget(form.video) }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="width: 300px" data-name="coverVideo">
+                                {% if coverVideo is empty %}
+                                    <a class="btn btn-default dev-upload-video"  > رفع الفيديو</a>
+                                {% endif %}
+                                <a class="btn btn-default dev-upload-video"   {% if coverVideo is empty %}style="display: none"{%else%} data-video-id="{{ coverVideo.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':coverVideo.id,'collectionType':'Competition'})}}"{%endif%}   >   تغير الفيديو </a>
+
+
+                            </td>
+
+                        </tr>
                         <tr id="dev-profilePhoto">
                             <td style="width: 150px">
 
@@ -72,51 +164,6 @@
                             </td>
 
                         </tr>
-
-                        <tr id="dev-coverPhoto">
-                            <td style="width: 150px">
-                                <div class="thumbnail">
-                                    <div class="thumb thumb-slide">
-                                        {% if coverImage is not empty %}
-                                            <img src="{{ asset(coverImage.getWebPath())}}" alt="">
-                                        {% else %}
-                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
-
-                                        {% endif %}
-                                        <div class="caption">
-                                            <span>
-                                                {% if coverImage is not empty %}
-                                                    <a href="{{ asset(coverImage.getWebPath())}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
-
-                                                {% else %}
-                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
-
-                                                {% endif %}                                                                                </span>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </td>
-                            <td class="thumbnail-caption">
-                                <h4>  صورة الغلاف</h4>
-                                <ul class="text-grey-300">
-                                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
-                                    <li> يجب الا تقل ابعاد الصورة عن 200*200 </li>
-                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
-                                </ul>
-                            </td>
-                            <td style="width: 300px" data-name="coverPhoto">
-                                {% if coverImage is empty %}
-                                <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
-                                 {% endif %}
-                                 <a class="btn btn-default  dev-crop-images"   {% if coverImage is empty %}style="display: none"{%else %} data-image-id="{{ coverImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':coverImage.id,'collectionType':'Product'})}}"{%endif%}  >  رفع الصورة </a>
-                                <a class="btn btn-default dev-trash-image" {% if coverImage is empty %}style="display: none" {%else %} data-image-id="{{ coverImage.id }}"   data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': coverImage.id,'collectionType':'Product'}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%}> <i class="icon-trash"></i></a>
-
-
-                            </td>
-                        </tr>
-
                     </tbody>
                 </table>
             </div>
@@ -140,6 +187,7 @@
 
 
                 {{ form_row(form.description) }}
+                {{ form_row(form.about) }}
 
 {#                {{ form_row(form.images) }}#}
 
@@ -153,6 +201,9 @@
 
 
                 {{ form_row(form.descriptionEn) }}
+
+                {{ form_row(form.aboutEn) }}
+
 
 
             </div><!-- english end -->
@@ -307,9 +358,11 @@
         var uploadButton = '{{ uploadButton|escape('js') }}';
         var cropperPluginInitialized = false;
         var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':'null','collectionType':'Product'})}}";
+        var youtubeUploadVideo = "{{ path('ibtikar_glance_dashboard_media_youtube_upload_video',{'type':'video','documentId':'null','collectionType':'Product'}) }}?imageType=coverPhoto";
+        var validateVideoUrl = '{{ path('youtube_validate_videoUrl') }}';
         var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'image','documentId':'null','collectionType':'Product'})}}";
         var relatedMaterialSearchUrl = "{{ path('ibtikar_glance_dashboard_product_related_material_search', {'collectionType':'recipe'})}}";
-        var relatedKitchen911SearchUrl = "{{ path('ibtikar_glance_dashboard_product_related_material_search', {'collectionType': 'kitchen911'})}}";
+        var relatedArticleSearchUrl = "{{ path('ibtikar_glance_dashboard_product_related_material_search', {'collectionType': 'article'})}}";
         var relatedTipSearchUrl = "{{ path('ibtikar_glance_dashboard_product_related_material_search', {'collectionType': 'tip'})}}";
 
         var element;
@@ -322,8 +375,100 @@
             'generalError': '{% trans %}failed operation{%endtrans%}',
             'coverPhoto': '{% trans from translationDomain %}coverPhoto{%endtrans%}',
             'profilePhoto': '{% trans from translationDomain %}profilePhoto{%endtrans%}',
-        }
+        };
 
+
+    /**
+     * @author ahmad Gamal <a.gamal@ibtikar.net.sa>
+     */
+    function valid_youtubeUrl(videoUrl) {
+        return videoUrl.match(/^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/);
+    }
+
+    function getIDFromURL(url){
+        var ID = '';
+        url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+        if(url[2] !== undefined) {
+          ID = url[2].split(/[^0-9a-z_\-]/i);
+          ID = ID[0];
+        }
+        else {
+          ID = url;
+        }
+          return ID;
+      }
+
+    $('[name="form[coverType]"]').on('click',function(){
+        if($(this).val() == "image"){
+            $('#dev-coverPhoto').show();
+            $('#dev-coverVideo').hide();
+        }else if($(this).val() == "video"){
+            $('#dev-coverVideo').show();
+            $('#dev-coverPhoto').hide();
+        }
+    });
+        $(document).on('click', '.dev-upload-video', function() {
+
+            if(typeof ytXhr !== "undefined")
+                ytXhr.abort();
+
+
+            var obj = $('#form_video').val();
+            var videoUrl = $.trim(obj);
+
+            if (videoUrl === "") {
+                errorContainer.removeClass('has-error');
+                return;
+            }
+
+            if (!valid_youtubeUrl(videoUrl)) {
+                showNotificationMsg(messages.wrongURL,'','error');
+                $('.dev-recipe-videoUrl').val('');
+                return;
+            }
+
+            var videoId = getIDFromURL(videoUrl);
+
+            if (videoId.indexOf("https://www.youtube") > -1) {
+                showNotificationMsg(messages.wrongURL,'','error');
+                $('.dev-recipe-videoUrl').val('');
+                return;
+            }
+
+            ytXhr = $.ajax({
+                url: validateVideoUrl,
+                method: 'post',
+                data: {'videoUrl': videoUrl},
+                success: function(data) {
+                    if (data == 'error') {
+                        showNotificationMsg(messages.wrongURL,'','error');
+                    } else {
+                            $('.dev-videourl-submit').attr('disabled','disabled');
+                            var videos = [];
+                            videos[0] = videoId;
+
+                            $.ajax({
+                                url: youtubeUploadVideo,
+                                method: "POST",
+                                data: {videos: videos},
+                                success: function(data) {
+                                    if (data.status === 'success') {
+                                        showNotificationMsg(data.message, "", data.status);
+                                        $(data.video).each(function () {
+                                            $('#dev-coverVideo img').attr('src',this.imageUrl);
+                                            $('#dev-coverVideo [data-popup="lightbox"]').attr('href',this.imageUrl);
+                                        });
+                                    }
+
+                                    $('.dev-recipe-videoUrl').val('');
+                                    $('.dev-videourl-submit').removeAttr('disabled');
+                                }
+                            });
+
+                    }
+                }
+            });
+    });
     </script>
     <script src="{{ asset('bundles/ibtikarglancedashboard/js/product.js') }}"></script>
 

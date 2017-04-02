@@ -383,7 +383,9 @@ class CompetitionController extends BackendController {
                     $competition->setStatus(Competition::$statuses['publish']);
                     $competition->setPublishedBy($this->getUser());
                     $competition->setPublishedAt(new \DateTime());
+                    if($goodyStar){
                     $competition->setGoodyStar($goodyStar);
+                    }
                     break;
                 case 'unpublish':
                     $newCompetition = clone $competition;

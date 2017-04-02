@@ -55,6 +55,7 @@ class CompetitionAnswer extends Document {
     private $phone;
 
     /**
+     * @Assert\NotBlank
      * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceUMSBundle\Document\Country", simple=true)
      */
     protected $country;

@@ -135,6 +135,7 @@
         var parameterNotRemoved = 'id=' + '{{app.request.get('id')}}'
     </script>
     <script>
+     ajaxData = '{{path('ibtikar_glance_dashboard_competition'~competition.getStatus()|lower~"_viewAnswers")}}';
 
 
 
@@ -401,7 +402,7 @@ $(function () {
         },
         data: {
             columns: [
-                ['زائرين و أعضاء', "{{ competition.noOfNonRegistered}}"],
+                ['زائرين ', "{{ competition.noOfNonRegistered}}"],
                 ['أعضاء ', "{{ competition.noOfRegistered}}"],
 
             ],
