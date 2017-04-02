@@ -13,6 +13,7 @@ class RecipeOperations extends PublishOperations
     static $TIME_OUT = "time out";
     static $ASSIGN_TO_OTHER_USER = "assign to other user";
     static $ASSIGN_TO_ME = "assign to me";
+    static $DRAFT = "draft";
     protected $container;
     protected $dm;
 
@@ -48,6 +49,26 @@ class RecipeOperations extends PublishOperations
         $this->assignRecipeToUser($recipe, $token->getUser());
 //        $this->container->get('notify_user')->notifyUser($log);
         return self::$ASSIGN_TO_ME;
+    }
+
+    public function draft($recipe, $status)
+    {
+        $recipe = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                ->field('id')->equals($recipe)
+                ->field('deleted')->equals(false)
+                ->getQuery()->getSingleResult();
+        if (!$recipe) {
+            return self::$TIME_OUT;
+        }
+        if ($recipe->getStatus() != $status) {
+            return self::$TIME_OUT;
+        }
+        $recipe->setAssignedTo(null);
+        $recipe->setStatus(Recipe::$statuses['draft']);
+        $this->dm->flush();
+
+
+        return self::$DRAFT;
     }
 
     public function assignRecipeToUser($recipe, $user)

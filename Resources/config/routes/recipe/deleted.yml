@@ -12,10 +12,17 @@ ibtikar_glance_dashboard_recipedeleted_edit:
     path:  /edit/{id}
     defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Deleted:edit }
 
+ibtikar_glance_dashboard_recipedeleted_count:
+    path:  /content-count
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Deleted:contentCount }
+
 ibtikar_glance_dashboard_recipedeleted_publish:
     path:  /ajax/publish
     defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Deleted:publish }
 
+ibtikar_glance_dashboard_recipedeleted_draft:
+    path:  /ajax/draft
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Deleted:draft }
 
 ibtikar_glance_dashboard_recipedeleted_bulk_actions:
     path:  /bulk

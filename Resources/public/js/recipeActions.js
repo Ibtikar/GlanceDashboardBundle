@@ -12,6 +12,11 @@ $(document).ready(function () {
         blockPage();
         assignToMe($(this));
     });
+    $(document).on('click', '.dev-recipes-draft', function (e) {
+        e.preventDefault();
+        blockPage();
+        draft($(this));
+    });
 
     $('div.panel-flat').on('click', '.dev-publish-recipe', function () {
         $('[data-popup="tooltip"]').tooltip("hide");
@@ -61,6 +66,10 @@ function showDeleteModal(clickedElement) {
                                 $('.dev-autopublish-recipe').html(data.autopublishRecipeCount);
                                 $('.dev-published-recipe').html(data.publishRecipeCount);
                                 $('.dev-deleted-recipe').html(data.deletedRecipeCount);
+                                $('.dev-draft-recipe').html(data.draftRecipeCount);
+                                modifyNoAccordingToSearch();
+
+
                             } else {
                                 showNotificationMsg(data.message, "", 'error');
                             }
@@ -162,6 +171,10 @@ function recipeBulkFunction() {
                     $('.dev-autopublish-recipe').html(data.autopublishRecipeCount);
                     $('.dev-published-recipe').html(data.publishRecipeCount);
                     $('.dev-deleted-recipe').html(data.deletedRecipeCount);
+                    $('.dev-draft-recipe').html(data.draftRecipeCount);
+                    modifyNoAccordingToSearch();
+
+
                     for (message in data.errors) {
                         for (index in data.errors[message]) {
                             var $tr = $('input[value="' + data.errors[message][index] + '"]').parents('tr');
@@ -229,6 +242,45 @@ function  assignToMe(clickedElement) {
                         $('.dev-autopublish-recipe').html(data.autopublishRecipeCount);
                         $('.dev-published-recipe').html(data.publishRecipeCount);
                         $('.dev-deleted-recipe').html(data.deletedRecipeCount);
+                        $('.dev-draft-recipe').html(data.draftRecipeCount);
+                        modifyNoAccordingToSearch();
+
+
+                    } else {
+                        showNotificationMsg(data.message, "", 'error');
+                    }
+                }, false)
+
+            }
+
+        });
+    }
+
+}
+
+function  draft(clickedElement) {
+    var Params = {recipeId: clickedElement.attr("data-id"),'status':clickedElement.attr("data-status") };
+    if (assign) {
+        assign = false;
+        $.ajax({
+            url: clickedElement.attr("data-url"),
+            data: Params,
+            method: 'post',
+            success: function (data) {
+                assign = true;
+                table.ajax.reload(function () {
+                    if (data.status != 'reload-table') {
+                        showNotificationMsg(data.message, "", data.status);
+                        $('.dev-new-recipe').html(data.newRecipeCount);
+                        $('.dev-new-assign-recipe').html(data.assignedRecipeCount);
+                        $('.dev-autopublish-recipe').html(data.autopublishRecipeCount);
+                        $('.dev-published-recipe').html(data.publishRecipeCount);
+                        $('.dev-deleted-recipe').html(data.deletedRecipeCount);
+                        $('.dev-draft-recipe').html(data.draftRecipeCount);
+
+                        modifyNoAccordingToSearch();
+
+
                     } else {
                         showNotificationMsg(data.message, "", 'error');
                     }
@@ -274,6 +326,10 @@ function savepublishLocation(basicModal, url) {
                             $('.dev-autopublish-recipe').html(data.autopublishRecipeCount);
                             $('.dev-published-recipe').html(data.publishRecipeCount);
                             $('.dev-deleted-recipe').html(data.deletedRecipeCount);
+                            $('.dev-draft-recipe').html(data.draftRecipeCount);
+                            modifyNoAccordingToSearch();
+
+
                         } else {
 
                             showNotificationMsg(data.message, "", 'error');

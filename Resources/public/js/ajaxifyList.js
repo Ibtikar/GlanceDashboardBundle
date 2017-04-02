@@ -184,6 +184,9 @@ function reIntaializeTable(data) {
     }
     pushNewState(null, null, url);
     table = $('.datatable-column-search-inputs').DataTable(datatableSetting);
+    if (typeof parameterNotRemoved != 'undefined') {
+        table.ajax.reload(function () {})
+    }
 }
 
 
