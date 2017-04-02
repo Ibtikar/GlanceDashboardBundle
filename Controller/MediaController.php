@@ -853,12 +853,18 @@ class MediaController extends BackendController
                     if($documentId && $documentId != 'null'){
                         $objId = $documentId;
                     }
-                    $prevVideo = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findOneBy(array(
+
+                    $findBy = array(
                         'createdBy.$id' => new \MongoId($this->getUser()->getId()),
-                        'competition' => $objId,
+                        strtolower($collectionType) => $objId,
                         'collectionType' => $collectionType,
-                        'type' => 'video'
-                    ));
+                    );
+
+                    if($collectionType !== "Product"){
+                        $findBy['type'] = 'video';
+                    }
+
+                    $prevVideo = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findOneBy($findBy);
                     if($prevVideo){
                         $videoObj = $prevVideo;
                     }elseif($documentId && $documentId != 'null'){
