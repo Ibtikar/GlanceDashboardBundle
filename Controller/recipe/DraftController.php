@@ -31,7 +31,7 @@ class DraftController extends RecipeController
         );
         $this->defaultListColumns = array(
             "title",
-            "publishedAt",
+            "updatedAt",
             "createdAt",
             "chef",
         );
@@ -41,7 +41,7 @@ class DraftController extends RecipeController
     protected function configureListParameters(Request $request)
     {
         parent::configureListParameters($request);
-        $this->listViewOptions->setDefaultSortBy("createdAt");
+        $this->listViewOptions->setDefaultSortBy("updatedAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
 //        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Recipe\List:new.html.twig");
     }
