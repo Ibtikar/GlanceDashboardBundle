@@ -64,6 +64,11 @@ class RecipeOperations extends PublishOperations
             return self::$TIME_OUT;
         }
         $recipe->setAssignedTo(null);
+        $recipe->setAutoPublishDate(null);
+        $recipe->setGoodyStar(FALSE);
+        foreach ($recipe->getPublishLocations() as $publishlocation) {
+           $recipe->removePublishLocation($publishlocation);
+        }
         $recipe->setStatus(Recipe::$statuses['draft']);
         $this->dm->flush();
 
