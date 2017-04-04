@@ -174,7 +174,7 @@ class SitemapGeneratorCommand extends ContainerAwareCommand {
         $this->sitemapXml->addAttribute('xmlns:xsi:schemaLocation', 'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.google.com/schemas/sitemap-news/0.9 http://www.google.com/schemas/sitemap-news/0.9/sitemap-news.xsd');
         $this->sitemapXml->addAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
         $this->sitemapXml->addAttribute('xmlns:xmlns:news', 'http://www.google.com/schemas/sitemap-news/0.9');
-        $this->sitemapXml->addAttribute('xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
+        $this->sitemapXml->addAttribute('xmlns:xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
 
         $this->sitemapXml->addAttribute('encoding', 'UTF-8');
         $this->xmlOutputFile = $this->saveLocation;
