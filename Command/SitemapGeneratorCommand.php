@@ -96,16 +96,16 @@ class SitemapGeneratorCommand extends ContainerAwareCommand {
                 );
 
 
-//        if($material->getUpdatedAt()){
-//            $arr['lastmod'] = $material->getUpdatedAt()->format('Y-m-d');
-//        }
+        if($material->getUpdatedAt()){
+            $arr['lastmod'] = $material->getUpdatedAt()->format('Y-m-d');
+        }
         $this->links[] = $arr;
     }
 
 
     protected function addLinkNormal($routePrefix) {
         $arr = array(
-            
+
                 'loc' => $this->generateURL($routePrefix.(substr($routePrefix, -1) == "_"?$this->locale:""),array('_locale' => $this->locale)),
                 'changefreq' => "monthly", //always, hourly, daily, weekly, monthly, yearly, never
                 'priority' => "0.8"
@@ -132,9 +132,14 @@ class SitemapGeneratorCommand extends ContainerAwareCommand {
      */
     protected function addRow(\SimpleXMLElement $xmlElement, array $array){
         $record = $xmlElement->addChild('url');
-        $record->addChild('loc', htmlspecialchars($array['loc']));
+        $record->addChild('loc', str_replace('m.', '',htmlspecialchars($array['loc'])));
         $record->addChild('changefreq', $array['changefreq']);
         $record->addChild('priority', $array['priority']);
+
+        $link = $record->addChild('xhtml:xhtml:link',null);
+
+        $link->addAttribute("rel","alternate");
+        $link->addAttribute("href",htmlspecialchars($array['loc']));
 
         return $xmlElement;
     }
@@ -163,6 +168,8 @@ class SitemapGeneratorCommand extends ContainerAwareCommand {
         $this->sitemapXml->addAttribute('xmlns:xsi:schemaLocation', 'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.google.com/schemas/sitemap-news/0.9 http://www.google.com/schemas/sitemap-news/0.9/sitemap-news.xsd');
         $this->sitemapXml->addAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
         $this->sitemapXml->addAttribute('xmlns:xmlns:news', 'http://www.google.com/schemas/sitemap-news/0.9');
+        $this->sitemapXml->addAttribute('xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
+
         $this->sitemapXml->addAttribute('encoding', 'UTF-8');
         $this->xmlOutputFile = $this->saveLocation;
     }
