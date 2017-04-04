@@ -92,6 +92,7 @@ class SitemapGeneratorCommand extends ContainerAwareCommand {
     protected function addLink($material, $lastmod = null, $changefreq = "daily", $priority = "0.8") {
         if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE && ($material->getSlugEn() == "" || $material->getSlug() == "")) {
             $this->output->writeln("bad content (".$material->getTitle().") slug : ".$material->getSlug().", en slug : ".$material->getSlugEn());
+            return;
         }
         $arr = array(
                 'loc' => $this->generateURL('ibtikar_goody_frontend_view',array('slug' => $this->locale == "en"?$material->getSlugEn():$material->getSlug(),'_locale'=>$this->locale)),
