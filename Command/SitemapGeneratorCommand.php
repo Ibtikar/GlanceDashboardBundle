@@ -21,6 +21,7 @@ class SitemapGeneratorCommand extends ContainerAwareCommand {
     private $xmlOutputFile;
     private $sitemapXml;
     private $locale="en";
+    private $output;
 
     protected function configure() {
         $this
@@ -40,6 +41,7 @@ class SitemapGeneratorCommand extends ContainerAwareCommand {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output){
+        $this->output = $output;
         $locale = $input->getArgument('locale');
         if($locale){
             $this->locale = $locale;
@@ -88,6 +90,9 @@ class SitemapGeneratorCommand extends ContainerAwareCommand {
     }
 
     protected function addLink($material, $lastmod = null, $changefreq = "daily", $priority = "0.8") {
+        if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE && ($material->getSlugEn() == "" || $material->getSlug() == "")) {
+            $this->output->writeln("bad content slug : ".$material->getSlug().", en slug : ".$material->getSlugEn());
+        }
         $arr = array(
                 'loc' => $this->generateURL('ibtikar_goody_frontend_view',array('slug' => $this->locale == "en"?$material->getSlugEn():$material->getSlug(),'_locale'=>$this->locale)),
                 'changefreq' => "monthly", //always, hourly, daily, weekly, monthly, yearly, never
