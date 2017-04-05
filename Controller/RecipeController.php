@@ -786,7 +786,7 @@ class RecipeController extends BackendController
         $dm = $this->get('doctrine_mongodb')->getManager();
         if ($id) {
             $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($id);
-            if (!$recipe) {
+            if (!$recipe || $recipe->getStatus()==Recipe::$statuses['deleted']) {
                 throw $this->createNotFoundException($this->trans('Wrong id'));
             }
         }
