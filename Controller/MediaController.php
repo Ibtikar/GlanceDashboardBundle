@@ -864,6 +864,7 @@ class MediaController extends BackendController
 
                     if($collectionType !== "Product"){
                         $findBy['type'] = 'video';
+                        $findBy['coverPhoto'] = true;
                     }
 
                     $prevVideo = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findOneBy($findBy);
