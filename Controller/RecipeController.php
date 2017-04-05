@@ -18,7 +18,7 @@ class RecipeController extends BackendController
 {
 
     protected $translationDomain = 'recipe';
-    protected $recipeStatus = 'new';
+    protected $recipeStatus = 'draft';
     protected $listName;
     protected $listStatus;
     protected $sublistName = 'New';
@@ -58,28 +58,38 @@ class RecipeController extends BackendController
                     ->field('assignedTo.$id')->equals(new \MongoId($this->getUser()->getId()))
                     ->field('status')->equals(Recipe::$statuses['new'])
                     ->field('deleted')->equals(false);
-            $this->listViewOptions->setActions(array('Edit', 'Delete', 'Publish', 'ViewOne'));
+            $this->listViewOptions->setActions(array('Edit', 'Delete', 'Publish', 'ViewOne','draft'));
             $this->listViewOptions->setBulkActions(array("Delete"));
         } else if ($this->listStatus == 'list_deleted_recipe') {
             $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                     ->field('status')->equals($this->recipeStatus)
                     ->field('deleted')->equals(false);
-            $this->listViewOptions->setActions(array('Edit', 'Publish', 'ViewOne'));
+            $this->listViewOptions->setActions(array('Edit', 'Publish', 'ViewOne','draft'));
         } else if ($this->listStatus == 'list_autopublish_recipe') {
             $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                     ->field('status')->equals(Recipe::$statuses['autopublish'])
                     ->field('deleted')->equals(false);
-            $this->listViewOptions->setActions(array('Edit', 'Delete', 'Publish', 'ViewOne'));
+            $this->listViewOptions->setActions(array('Edit', 'Delete', 'Publish', 'ViewOne','draft'));
             $this->listViewOptions->setBulkActions(array("Delete"));
             $this->listViewOptions->setDefaultSortBy("autoPublishDate");
             $this->listViewOptions->setDefaultSortOrder("desc");
-        } else if ($this->listStatus == 'list_publish_recipe') {
+        }
+        else if ($this->listStatus == 'list_publish_recipe') {
             $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                     ->field('status')->equals(Recipe::$statuses['publish'])
                     ->field('deleted')->equals(false);
-            $this->listViewOptions->setActions(array('Edit', 'Delete', 'Publish', 'ViewOne'));
+            $this->listViewOptions->setActions(array('Edit', 'Delete', 'Publish', 'ViewOne','draft'));
             $this->listViewOptions->setBulkActions(array("Delete"));
             $this->listViewOptions->setDefaultSortBy("publishedAt");
+            $this->listViewOptions->setDefaultSortOrder("desc");
+        }
+        else if ($this->listStatus == 'list_draft_recipe') {
+            $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('status')->equals(Recipe::$statuses['draft'])
+                    ->field('deleted')->equals(false);
+            $this->listViewOptions->setActions(array('Edit', 'Delete', 'Publish', 'ViewOne'));
+            $this->listViewOptions->setBulkActions(array("Delete"));
+            $this->listViewOptions->setDefaultSortBy("createdAt");
             $this->listViewOptions->setDefaultSortOrder("desc");
         }
 
@@ -125,6 +135,10 @@ class RecipeController extends BackendController
             foreach ($ingredients as $ingredient) {
                 $queryBuilder->field('keyIngredient.'.$ingredient)->exists(true);
             }
+        }
+
+        if ($request->get('type')) {
+            $queryBuilder->field('type')->in($request->get('type'));
         }
 
         if ($request->get('products')) {
@@ -186,6 +200,13 @@ class RecipeController extends BackendController
         return parent::listAction($request);
     }
 
+    public function listDraftRecipeAction(Request $request)
+    {
+        $this->listStatus = 'list_draft_recipe';
+        $this->listName = 'recipe' . $this->recipeStatus . '_' . $this->listStatus;
+        return parent::listAction($request);
+    }
+
     public function changeListNewRecipeColumnsAction(Request $request)
     {
         $this->listStatus = 'list_new_recipe';
@@ -215,6 +236,13 @@ class RecipeController extends BackendController
     public function changeListPublishRecipeColumnsAction(Request $request)
     {
         $this->listStatus = 'list_publish_recipe';
+        $this->listName = 'recipe' . $this->recipeStatus . '_' . $this->listStatus;
+        return parent::changeListColumnsAction($request);
+    }
+
+    public function changeListDraftRecipeColumnsAction(Request $request)
+    {
+        $this->listStatus = 'list_draft_recipe';
         $this->listName = 'recipe' . $this->recipeStatus . '_' . $this->listStatus;
         return parent::changeListColumnsAction($request);
     }
@@ -251,6 +279,92 @@ class RecipeController extends BackendController
     }
 
 
+    public function contentCountAction(Request $request)
+    {
+        $renderingParams['draftRecipeCountRecipe'] = $this->buildQueryBuilder($request)->field('type')->equals(Recipe::$types['recipe'])->getQuery()->execute()->count();
+        $renderingParams['draftRecipeCountArticle'] = $this->buildQueryBuilder($request)->field('type')->equals(Recipe::$types['article'])->getQuery()->execute()->count();
+        $renderingParams['draftRecipeCountTip'] = $this->buildQueryBuilder($request)->field('type')->equals(Recipe::$types['tip'])->getQuery()->execute()->count();
+        $renderingParams['draftRecipeCountkitchen'] = $this->buildQueryBuilder($request)->field('type')->equals(Recipe::$types['kitchen911'])->getQuery()->execute()->count();
+        return new JsonResponse($renderingParams);
+    }
+
+    public function buildQueryBuilder(Request $request){
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')->field('deleted')->equals(false)->field('status')->equals($this->recipeStatus);
+        if ($request->get('status') && $request->get('status') == 'assigned') {
+            $queryBuilder->field('assignedTo.$id')->equals(new \MongoId($this->getUser()->getId()));
+        } else {
+            if($this->recipeStatus=='new'){
+                $queryBuilder->field('assignedTo')->exists(FALSE);
+
+            }
+        }
+
+        //search parameters query
+        if ($request->get('title')) {
+            $queryBuilder->addAnd($queryBuilder->expr()->addOr(
+                        $queryBuilder->expr()->field('title')->equals(new \MongoRegex(('/' .  preg_quote($request->get('title')) . '/i')))
+                        )->addOr(
+                        $queryBuilder->expr()->field('titleEn')->equals(new \MongoRegex(('/' .  preg_quote($request->get('title')) . '/i')))
+                        )
+                    );
+        }
+        if ($request->get('chef')) {
+            $queryBuilder = $queryBuilder->field('chef.$id')->equals(new \MongoId($request->get('chef')));
+        }
+
+        if ($request->get('from') && (bool) strtotime($request->get('from'))) {
+            $queryBuilder = $queryBuilder->field('createdAt')->gte(new \DateTime($request->get('from')));
+        }
+        if ($request->get('to') && (bool) strtotime($request->get('to'))) {
+            $fromDate = new \DateTime($request->get('to'));
+            $queryBuilder->field('createdAt')->lte($fromDate->modify('+1 day'));
+        }
+        if ($request->get('tags')) {
+            $tags = explode(',', $request->get('tags'));
+            $queryBuilder->addAnd($queryBuilder->expr()->addOr(
+                        $queryBuilder->expr()->field('tags')->all($tags)
+                        )->addOr(
+                        $queryBuilder->expr()->field('tagsEn')->all($tags)
+                        )
+                    );
+        }
+
+        if ($request->get('meals')) {
+            $meals = explode(',', $request->get('meals'));
+            foreach ($meals as $meal) {
+                $queryBuilder->field('meal.'.$meal)->exists(true);
+            }
+        }
+
+        if ($request->get('ingredients')) {
+            $ingredients = explode(',', $request->get('ingredients'));
+            foreach ($ingredients as $ingredient) {
+                $queryBuilder->field('keyIngredient.'.$ingredient)->exists(true);
+            }
+        }
+
+        if ($request->get('type')) {
+            $queryBuilder->field('type')->in($request->get('type'));
+        }
+
+        if ($request->get('products')) {
+            $products = explode(',', $request->get('products'));
+            $queryBuilder->field('products')->all($products);
+        }
+
+        if($this->listStatus == 'list_publish_recipe'){
+            if ($request->get('pub-from') && (bool) strtotime($request->get('pub-from'))) {
+                $queryBuilder = $queryBuilder->field('publishedAt')->gte(new \DateTime($request->get('pub-from')));
+            }
+            if ($request->get('pub-to') && (bool) strtotime($request->get('pub-to'))) {
+                $fromDate = new \DateTime($request->get('pub-to'));
+                $queryBuilder->field('publishedAt')->lte($fromDate->modify('+1 day'));
+            }
+        }
+        return $queryBuilder;
+    }
+
     public function assignToMeAction(Request $request)
     {
         if (!$this->getUser()) {
@@ -277,6 +391,35 @@ class RecipeController extends BackendController
             }
             return new JsonResponse(array_merge(array('status' => 'error', 'message' => $this->get('translator')->trans('sorry this recipe assign to other user', array(), $this->translationDomain)), $this->getTabCount()));
         } elseif ($status == RecipeOperations::$ASSIGN_TO_ME) {
+            $successMessage = $this->get('translator')->trans('done sucessfully');
+            if ($type && $type == 'view') {
+                $this->addFlash('success', $successMessage);
+            }
+            return new JsonResponse(array_merge(array('status' => 'success', 'message' => $successMessage), $this->getTabCount()));
+        }
+    }
+
+    public function draftAction(Request $request)
+    {
+        if (!$this->getUser()) {
+            return $this->getLoginResponse();
+        }
+        $securityContext = $this->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_DRAFT') && !$securityContext->isGranted('ROLE_ADMIN')) {
+            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
+            return new JsonResponse($result);
+        }
+        $recipeId = $request->get('recipeId');
+        $status = $this->get('recipe_operations')->draft($recipeId,$request->get('status') );
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $type = $request->get('type');
+
+        if ($status == RecipeOperations::$TIME_OUT) {
+            if ($type && $type == 'view') {
+                $this->addFlash('error', $this->trans('failed operation'));
+            }
+            return new JsonResponse(array_merge(array('status' => 'error', 'message' => $this->get('translator')->trans('failed operation')), $this->getTabCount()));
+        } elseif ($status == RecipeOperations::$DRAFT) {
             $successMessage = $this->get('translator')->trans('done sucessfully');
             if ($type && $type == 'view') {
                 $this->addFlash('success', $successMessage);
@@ -371,6 +514,7 @@ class RecipeController extends BackendController
 
             switch ($recipeStatus) {
                 case 'new':
+                case 'draft':
                     if ($request->get('publishNow')) {
                         $publishResult = $publishOperations->publish($recipe, $locations, FALSE, $goodyStar);
                     } else if ($request->get('autoPublishDate', '')) {
@@ -430,7 +574,7 @@ class RecipeController extends BackendController
         }
     }
 
-     public function getTabCount($renderingParams = array())
+    public function getTabCount($renderingParams = array())
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
 
@@ -456,6 +600,83 @@ class RecipeController extends BackendController
                 ->field('status')->equals(Recipe::$statuses['new'])
                 ->field('deleted')->equals(false)
                 ->getQuery()->execute()->count();
+        $renderingParams['draftRecipeCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                ->field('status')->equals(Recipe::$statuses['draft'])
+                ->field('deleted')->equals(false)
+                ->getQuery()->execute()->count();
+        if ($this->listStatus == 'list_assigned_recipe') {
+            $renderingParams['draftRecipeCountRecipe'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('status')->equals($this->recipeStatus)
+                    ->field('assignedTo.$id')->equals(new \MongoId($this->getUser()->getId()))
+                    ->field('type')->equals(Recipe::$types['recipe'])
+                    ->field('deleted')->equals(false)
+                    ->getQuery()->execute()->count();
+            $renderingParams['draftRecipeCountArticle'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('status')->equals($this->recipeStatus)
+                    ->field('assignedTo.$id')->equals(new \MongoId($this->getUser()->getId()))
+                    ->field('type')->equals(Recipe::$types['article'])
+                    ->field('deleted')->equals(false)
+                    ->getQuery()->execute()->count();
+            $renderingParams['draftRecipeCountTip'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('status')->equals($this->recipeStatus)
+                    ->field('assignedTo.$id')->equals(new \MongoId($this->getUser()->getId()))
+                    ->field('type')->equals(Recipe::$types['tip'])
+                    ->field('deleted')->equals(false)
+                    ->getQuery()->execute()->count();
+            $renderingParams['draftRecipeCountkitchen'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('status')->equals($this->recipeStatus)
+                    ->field('assignedTo.$id')->equals(new \MongoId($this->getUser()->getId()))
+                    ->field('type')->equals(Recipe::$types['kitchen911'])
+                    ->field('deleted')->equals(false)
+                    ->getQuery()->execute()->count();
+        } elseif ($this->listStatus == 'list_new_recipe') {
+
+            $renderingParams['draftRecipeCountRecipe'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('status')->equals($this->recipeStatus)
+                    ->field('type')->equals(Recipe::$types['recipe'])
+                    ->field('assignedTo')->exists(FALSE)
+                    ->field('deleted')->equals(false)
+                    ->getQuery()->execute()->count();
+            $renderingParams['draftRecipeCountArticle'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('status')->equals($this->recipeStatus)
+                    ->field('type')->equals(Recipe::$types['article'])
+                    ->field('assignedTo')->exists(FALSE)
+                    ->field('deleted')->equals(false)
+                    ->getQuery()->execute()->count();
+            $renderingParams['draftRecipeCountTip'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('status')->equals($this->recipeStatus)
+                    ->field('type')->equals(Recipe::$types['tip'])
+                    ->field('assignedTo')->exists(FALSE)
+                    ->field('deleted')->equals(false)
+                    ->getQuery()->execute()->count();
+            $renderingParams['draftRecipeCountkitchen'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('status')->equals($this->recipeStatus)
+                    ->field('assignedTo')->exists(FALSE)
+                    ->field('type')->equals(Recipe::$types['kitchen911'])
+                    ->field('deleted')->equals(false)
+                    ->getQuery()->execute()->count();
+        } else {
+            $renderingParams['draftRecipeCountRecipe'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('status')->equals($this->recipeStatus)
+                    ->field('type')->equals(Recipe::$types['recipe'])
+                    ->field('deleted')->equals(false)
+                    ->getQuery()->execute()->count();
+            $renderingParams['draftRecipeCountArticle'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('status')->equals($this->recipeStatus)
+                    ->field('type')->equals(Recipe::$types['article'])
+                    ->field('deleted')->equals(false)
+                    ->getQuery()->execute()->count();
+            $renderingParams['draftRecipeCountTip'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('status')->equals($this->recipeStatus)
+                    ->field('type')->equals(Recipe::$types['tip'])
+                    ->field('deleted')->equals(false)
+                    ->getQuery()->execute()->count();
+            $renderingParams['draftRecipeCountkitchen'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('status')->equals($this->recipeStatus)
+                    ->field('type')->equals(Recipe::$types['kitchen911'])
+                    ->field('deleted')->equals(false)
+                    ->getQuery()->execute()->count();
+        }
         return $renderingParams;
     }
 
@@ -565,7 +786,7 @@ class RecipeController extends BackendController
         $dm = $this->get('doctrine_mongodb')->getManager();
         if ($id) {
             $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->find($id);
-            if (!$recipe) {
+            if (!$recipe || $recipe->getStatus()==Recipe::$statuses['deleted']) {
                 throw $this->createNotFoundException($this->trans('Wrong id'));
             }
         }
@@ -923,9 +1144,13 @@ class RecipeController extends BackendController
                                 $actionTd.= '<a class="btn btn-default"  href = "' . $this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_view', array('id' => $document->getId())) . '" ><i class="icon-eye" data-popup="tooltip"  title="' . $this->trans('View One ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '"  data-placement="right" ></i></a>';
                             } elseif ($action == 'Assign' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_ASSIGN'))) {
                                 $actionTd.= '<a class="btn btn-default dev-assign-to-me" href="javascript:void(0);"  data-url="'.$this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_assign_to_me').'" data-id="'.$document->getId().'"><i class="icon-user"  title="' . $this->trans('AssignToMe', array(), $this->translationDomain) . '"  data-popup="tooltip" data-placement="right"></i></a>';
-                            } elseif ($action == 'Publish' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_PUBLISH'))) {
+                            }
+                            elseif ($action == 'Publish' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_PUBLISH'))) {
                                 $actionTd.= '<a href="javascript:void(0)" data-toggle="modal"  class="btn btn-default dev-publish-recipe" data-id="'.$document->getId().'"><i class="icon-share" data-placement="right"  data-popup="tooltip" title="' . $this->trans('publish ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '"></i></a>
 ';
+                            }
+                            elseif ($action == 'draft' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_DRAFT'))) {
+                                $actionTd.= '<a   href="javascript:void(0);"   class="btn btn-default dev-recipes-draft"  data-status="'.$document->getStatus().'"  data-id="'.$document->getId().'" data-url="'.$this->generateUrl($this->listViewOptions->getBundlePrefix() . strtolower($this->calledClassName) . '_draft').'"><i class="icon-file-text" data-popup="tooltip"  data-placement="right" title="' . $this->trans('draft', array(), $this->translationDomain) . '"></i></a>';
                             }
 //                            elseif ($action == 'AutoPublish' && ($security->isGranted('ROLE_ADMIN') || $security->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_AUTOPUBLISH'))) {
 //                                $actionTd.= '<a class="btn btn-default" href="javascript:void(0);" title="'  . $this->trans('autopublish ' . ucfirst($this->calledClassName), array(), $this->translationDomain) . '" data-popup="tooltip"  data-placement="bottom" ><i class="icon-checkmark3"></i></a>';

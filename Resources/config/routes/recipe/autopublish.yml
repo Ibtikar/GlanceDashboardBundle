@@ -16,6 +16,9 @@ ibtikar_glance_dashboard_recipeautopublish_publish:
     path:  /ajax/publish
     defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Autopublish:publish }
 
+ibtikar_glance_dashboard_recipeautopublish_draft:
+    path:  /ajax/draft
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Autopublish:draft }
 
 ibtikar_glance_dashboard_recipeautopublish_bulk_actions:
     path:  /bulk
@@ -24,6 +27,10 @@ ibtikar_glance_dashboard_recipeautopublish_bulk_actions:
 ibtikar_glance_dashboard_recipeautopublish_delete:
     path:  /delete
     defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Autopublish:delete }
+
+ibtikar_glance_dashboard_recipeautopublish_count:
+    path:  /content-count
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Autopublish:contentCount }
 
 
 

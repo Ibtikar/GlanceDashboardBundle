@@ -1,0 +1,42 @@
+ibtikar_glance_dashboard_recipedraft_list_draft_recipe:
+    path:  /list-draft-recipe
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Draft:listDraftRecipe }
+
+
+
+ibtikar_glance_dashboard_recipedraft_view:
+    path:  /view/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Draft:view }
+
+ibtikar_glance_dashboard_recipedraft_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Draft:edit }
+
+ibtikar_glance_dashboard_recipedraft_publish:
+    path:  /ajax/publish
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Draft:publish }
+
+
+ibtikar_glance_dashboard_recipedraft_bulk_actions:
+    path:  /bulk
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Draft:bulk }
+
+ibtikar_glance_dashboard_recipedraft_delete:
+    path:  /delete
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Draft:delete }
+
+ibtikar_glance_dashboard_recipedraft_count:
+    path:  /content-count
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Draft:contentCount }
+
+
+ibtikar_glance_dashboard_recipedraft_list_draft_recipe_change_list_columns:
+    path:  /draft-recipe-change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\Draft:changeListDraftRecipeColumns }
+
+
+
+
+
+
+

@@ -91,6 +91,10 @@
 
                                                     <li {% if 'recipenew_list_assigned_' in app.request.attributes.get('_route') %} class="active"    {% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_recipenew_list_assigned_recipe') }}" data-toggle="tab"> <span class="badge badge-primary position-left dev-new-assign-recipe">{{assignedRecipeCount}}</span> {% trans from translationDomain %}recipes assigned to me{% endtrans%} </a></li>
                                                     {% endif %}
+                                                    {% if is_granted('ROLE_RECIPEDRAFT_VIEW') or is_granted('ROLE_ADMIN')%}
+
+                                                    <li {% if 'recipedraft_list_draft_' in app.request.attributes.get('_route') %} class="active"    {% endif %}><a data-href="{{ path('ibtikar_glance_dashboard_recipedraft_list_draft_recipe') }}" data-toggle="tab"> <span class="badge badge-primary position-left dev-draft-recipe">{{draftRecipeCount}}</span> {% trans from translationDomain %}recipes draft{% endtrans%} </a></li>
+                                                    {% endif %}
                                                 {% endblock %}
                                         </ul>
 
@@ -103,9 +107,7 @@
 
                                                         {% block actions %}
                                                             <a data-placement="bottom" title="" data-popup="tooltip"  data-toggle="modal"  href="javascript:void(0)" class="btn btn-default btn-sm dev-change-columns" type="button" data-original-title="خانات الجدول"><i class="icon-table2 "></i> <span class="hidden-sm"> </span></a>
-
                                                             <a id="advanced-search-Btn" data-placement="bottom" title="" data-popup="tooltip"  data-toggle="modal"  href="javascript:void(0)" class="btn btn-default btn-sm" type="button" data-original-title="البحث"><i class="icon-search4"></i> <span class="hidden-sm"> </span></a>
-
                                                             {% if list.hasBulkActions(listName) %}
                                                                 <input type="hidden" id="dev-bulk-action" name="bulk-action" value=""/>
                                                                 <span class="dev-bulk-action-container" data-list-name="{{listName|lower}}" data-href="{{ list.hasBulkActions(listName) ? path(prefixRoute|lower ~ '_bulk_actions') : '' }}" style="display: none;">
@@ -116,11 +118,33 @@
                                                                     {% endfor %}
                                                                 </span>
                                                             {% endif %}
+                                                              <ul class="LibraryFilter " style="border:none;display: inline-block;margin: 2px;padding: 0px">
+                                                                  <li class="{% if app.request.get('type') ==null or 'recipe'  in app.request.get('type') %}filterActive{% endif %} imagesFilter" data-value='recipe'>
+                                                                      <span><span class="dev-draftRecipeCountRecipe">{{draftRecipeCountRecipe}}</span> وصفه</span>
 
+                                                                  </li>
+                                                                  <li class="{% if app.request.get('type') ==null or 'article'  in app.request.get('type') %}filterActive{% endif %} imagesFilter" data-value='article'>
+
+                                                                      <span> <span class="dev-draftRecipeCountArticle">{{draftRecipeCountArticle}}</span> مقال</span>
+
+                                                                  </li>
+
+                                                                  <li class="{% if app.request.get('type') ==null or 'tip'  in app.request.get('type') %}filterActive{% endif %} imagesFilter" data-value='tip'>
+
+                                                                      <span ><span class="dev-draftRecipeCountTip">{{ draftRecipeCountTip}}</span> نصيحة</span>
+
+                                                                  </li>
+                                                                  <li class="{% if app.request.get('type') ==null or 'kitchen911'  in app.request.get('type') %}filterActive{% endif %} imagesFilter" data-value='kitchen911'>
+
+                                                                      <span ><span class="dev-draftRecipeCountkitchen">{{ draftRecipeCountkitchen}}</span> مطبخ الطوارى911</span>
+
+                                                                  </li>
+
+                                                              </ul>
 
                                                         {% endblock %}
                 {% block searchList %}
-                    <div class='advanced-search {% if not search %}searchhidden{% endif %}'>
+                    <div class='advanced-search {% if not search or 'recipedraft_list_draft_' in app.request.attributes.get('_route') %}searchhidden{% endif %}'>
 
                         <div id="search-form">
                                         <div class="row">
@@ -394,6 +418,12 @@
                                                                                         <i class="icon-user" data-popup="tooltip"  data-placement="right" title="{% trans from translationDomain %}AssignToMe{% endtrans %}"  ></i>
                                                                                     </a>
                                                                                 {% endif %}
+                                                                            {% elseif action == "draft" %}
+                                                                                {% if is_granted('ROLE_' ~ listName|upper ~'_DRAFT') or is_granted('ROLE_ADMIN')%}
+                                                                                    <a href="javascript:void(0);"   class="btn btn-default dev-recipes-draft"   data-id="{{ object.getId() }}" data-status="{{ object.getStatus() }}" data-url="{{ path(prefixRoute|lower ~'_draft')}}"  >
+                                                                                        <i class="icon-file-text" data-popup="tooltip"  data-placement="right" title="{% trans from translationDomain %}draft{% endtrans %}"  ></i>
+                                                                                    </a>
+                                                                                {% endif %}
 
 
                                                                             {% elseif action == "Publish" %}
@@ -504,6 +534,7 @@
     <script>
         var loginUrl = "{{ path('ibtikar_glance_ums_staff_login')}}";
         var notFoundUrl = "{{ path('ibtikar_glance_dashboard_not_found')}}";
+        var status='';
         var accessDeniedUrl = '{{ path('access_denied') }}';
 
         var publishErrorMessage= "{% trans from translationDomain%}you must change time{% endtrans %}"
@@ -533,9 +564,15 @@
             var changeListColumnsUrl = "{{path(prefixRoute|lower~changeListColumnType~'_change_list_columns')}}";
         {% endif %}
 
+        {% if 'recipedraft_list_draft' in app.request.attributes.get('_route') %}
+            var ajaxData = '{{ path(prefixRoute|lower~'_list_draft_recipe') }}';
+            var changeListColumnsUrl = "{{path(prefixRoute|lower~changeListColumnType~'_change_list_columns')}}";
+        {% endif %}
+
         {% if '_recipenew_list_assigned_recipe' in app.request.attributes.get('_route') %}
             var ajaxData = '{{ path('ibtikar_glance_dashboard_recipenew_list_assigned_recipe') }}';
             var changeListColumnsUrl = "{{path('ibtikar_glance_dashboard_recipenew_list_assigned_recipe_change_list_columns')}}";
+            status='assigned';
         {% endif %}
         {% if 'recipenew_list_new' not in app.request.attributes.get('_route') %}
         var publisUrl="{{ path(prefixRoute|lower~'_publish')}}";
@@ -543,6 +580,7 @@
         {% if 'recipedeleted_list_deleted' not in app.request.attributes.get('_route') %}
           var deleteUrl=" {{ path(prefixRoute|lower ~'_delete')}}";
         {% endif %}
+          var contentCountUrl= "{{ path(prefixRoute|lower~'_count')}}";
 
     </script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/layout_sidebar_sticky_custom.js')}}"></script>
@@ -565,7 +603,23 @@
     <script>
         intializeTable();
         var list = new BaseList();
+        var query='';
+        var queryStringFlag1=false;
 $('document').ready(function(){
+
+   if($('.filterActive').length> 0){
+        $('.imagesFilter').each(function(index,value){
+        if($(value).hasClass('filterActive')){
+            query += (queryStringFlag1) ? "&" : "";
+            query += 'type[]=' + $(this).attr('data-value');
+            queryStringFlag1 = true;
+        }
+        })
+    }else{
+        query += (queryStringFlag1) ? "&" : "";
+        query += 'type[]= null' ;
+    }
+    parameterNotRemoved = query;
 
 $('.dev-form-ingredient').select2({'placeholder':'{{ 'Ingredients'|trans({}, translationDomain) }}'})
 $('.dev-form-meal').select2({'placeholder':'{{ 'Meal'|trans({}, translationDomain) }}'})
@@ -597,9 +651,8 @@ $('.dev-form-tags').select2({'placeholder':'كلمات مفتاحية'})
         }
 
     });
-
     $(document).on('click', '.dev-search-submit', function () {
-        parameterNotRemoved = "";
+    parameterNotRemoved = "";
     var url = window.location.pathname;
     var qs = "";
     var queryStringFlag = false;
@@ -683,29 +736,83 @@ $('.dev-form-tags').select2({'placeholder':'كلمات مفتاحية'})
         url += qs;
         queryStringFlag = true;
     }
-
+   if($('.filterActive').length> 0){
+        $('.imagesFilter').each(function(index,value){
+        if($(value).hasClass('filterActive')){
+            qs += (queryStringFlag) ? "&" : "";
+            qs += 'type[]=' + $(this).attr('data-value');
+            url += qs;
+            queryStringFlag = true;
+        }
+        })
+    }else{
+           qs += (queryStringFlag) ? "&" : "";
+            qs += 'type[]= null' ;
+    }
     parameterNotRemoved = qs;
     if(queryStringFlag){
         parameterNotRemoved+="&search=true"
     }
         table.ajax.reload(function () {
-//            showBulkActionSelect();
+        modifyNoAccordingToSearch();
         });
 });
+    $('.imagesFilter').on('click', function() {
+        $(this).toggleClass('filterActive');
+        $('.dev-search-submit').trigger('click');
+
+    });
+
 
 $(document).on('click', '.dev-search-clear', function () {
-        parameterNotRemoved = "";
+    parameterNotRemoved = "";
+    var url = window.location.pathname;
+    var qs = "";
+    var queryStringFlag = false;
         $("#advanced-search-Btn").click();
         $('.advanced-search input').val('');
         $('.advanced-search select').val(null).trigger("change");
-
+   if($('.filterActive').length> 0){
+        $('.imagesFilter').each(function(index,value){
+        if($(value).hasClass('filterActive')){
+            qs += (queryStringFlag) ? "&" : "";
+            qs += 'type[]=' + $(this).attr('data-value');
+            url += qs;
+            queryStringFlag = true;
+        }
+        })
+    }else{
+           qs += (queryStringFlag) ? "&" : "";
+            qs += 'type[]= null' ;
+    }
+    parameterNotRemoved = qs;
         table.ajax.reload(function () {
-//            showBulkActionSelect();
+        modifyNoAccordingToSearch();
         }, false);
 });
 
 
 });
+function modifyNoAccordingToSearch(){
+    var search =window.location.search;
+    if(search.indexOf("?") != -1){
+        search += search+'&status='+status;
+    }else{
+        search += search+'?status='+status;
+    }
+
+    $.ajax({
+        url: contentCountUrl+search,
+        success: function (data) {
+                    $('.dev-draft-recipe').html(data.draftRecipeCount);
+                    $('.dev-draftRecipeCountRecipe').html(data.draftRecipeCountRecipe);
+                    $('.dev-draftRecipeCountArticle').html(data.draftRecipeCountArticle);
+                    $('.dev-draftRecipeCountTip').html(data.draftRecipeCountTip);
+                    $('.dev-draftRecipeCountkitchen').html(data.draftRecipeCountkitchen);
+        }
+
+        });
+}
     </script>
 
 

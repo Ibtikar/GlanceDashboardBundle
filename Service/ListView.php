@@ -122,16 +122,8 @@ class ListView {
                 $action = 'Manage';
                 $listName = 'subcategory';
             }
-            if ($listName == 'Poll' && $action == 'AutoPublish') {
-                if (in_array($action, array("Edit", "Delete", "Activate_Deactivate", "Publish_Unpublish", 'Publish', 'AutoPublish', 'Backward', "Assign", "AssignTo", "History", "Reassign", "Show", "Forward", 'ViewOne', 'Unpublish', 'PublishControl', 'AutoPublishControl', 'ManageOne', 'Manage', 'StopResume', 'Viewcomment', 'ViewPlaces', 'AddPlaces','Resendmail')) && $this->securityContext->isGranted('ROLE_' . strtoupper($listName) . '_' . strtoupper('autopublished'))) {
-                    return TRUE;
-                }
-            }
-            if ($listName == 'Poll' && $action == 'AutoPublishControl') {
-                if (in_array($action, array("Edit", "Delete", "Activate_Deactivate", "Publish_Unpublish", 'Publish', 'AutoPublish', 'Backward', "Assign", "AssignTo", "History", "Reassign", "Show", "Forward", 'ViewOne', 'Unpublish', 'PublishControl', 'AutoPublishControl', 'ManageOne', 'Manage', 'StopResume', 'Viewcomment', 'ViewPlaces', 'AddPlaces','Resendmail')) && $this->securityContext->isGranted('ROLE_' . strtoupper($listName) . '_' . strtoupper('autopublishedControl'))) {
-                    return TRUE;
-                }
-            }
+
+
            if(strtoupper($listName)=='COMPETITIONANSWER'){
              $route=  $this->container->get('request_stack')->getCurrentRequest()->get('_route');
 
@@ -142,7 +134,7 @@ class ListView {
              }
 
            }
-            if (in_array($action, array("Approve","Reject","Edit", "Delete", "Activate_Deactivate", "Publish_Unpublish", 'Publish', 'AutoPublish', 'Backward', "Assign", "AssignTo", "History", "Reassign", "Show", "Forward", 'ViewOne', 'Unpublish', 'PublishControl', 'AutoPublishControl', 'ManageOne', 'Manage', 'StopResume', 'Viewcomment', 'ViewPlaces', 'AddPlaces','Resendmail','Favorite_Unfavorite','ChangeStatus','ViewOneAnswer','ViewAnswers')) && $this->securityContext->isGranted('ROLE_' . strtoupper($listName) . '_' . strtoupper($action))) {
+            if (in_array($action, array("Approve","Reject","Edit", "Delete", "Activate_Deactivate", "Publish_Unpublish", 'Publish', 'AutoPublish', 'Backward', "Assign", "AssignTo", "History", "Reassign", "Show", "Forward", 'ViewOne', 'Unpublish', 'PublishControl', 'AutoPublishControl', 'ManageOne', 'Manage', 'StopResume', 'Viewcomment', 'ViewPlaces', 'AddPlaces','Resendmail','Favorite_Unfavorite','ChangeStatus','ViewOneAnswer','ViewAnswers','draft')) && $this->securityContext->isGranted('ROLE_' . strtoupper($listName) . '_' . strtoupper($action))) {
                 return TRUE;
             }
             if ($action == "Addcontact" && $this->securityContext->isGranted('ROLE_CONTACT_CREATE')) {

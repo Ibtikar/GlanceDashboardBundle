@@ -129,6 +129,12 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 'Delete recipedeleted': حذف
 'Delete recipeautopublish': حذف
 'Delete Recipeautopublish': حذف
+'Edit recipedraft': 'تعديل'
+'Edit Recipedraft': 'تعديل'
+'Delete recipedraft': حذف
+'Delete Recipedraft': حذف
+'publish Recipedraft': 'نشر'
+'View One Recipedraft': 'مشاهده'
 'List Recipe': 'المحتوى'
 'Hide english content': 'اخفاء المحتوى الانجليزى'
 'new': 'جديده'
@@ -162,6 +168,8 @@ sorry this recipe assign to other user: عذراً، هذه الوصفه  مسن
 'recipe must less than 10': 'لا يمكن اختيار اكتر من 10 وصفات'
 'article must less than 10': 'لا يمكن اختيار اكتر من 10 مقالات'
 'tip must less than 10': 'لا يمكن اختيار اكتر من 10 نصائح'
+'recipes draft': 'مسودة'
+'draft': 'مسودة'
 
 
 # #############General############

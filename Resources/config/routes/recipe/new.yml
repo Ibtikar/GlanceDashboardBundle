@@ -16,6 +16,14 @@ ibtikar_glance_dashboard_recipenew_publish:
     path:  /ajax/publish
     defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:publish }
 
+ibtikar_glance_dashboard_recipenew_count:
+    path:  /content-count
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:contentCount }
+
+ibtikar_glance_dashboard_recipenew_draft:
+    path:  /ajax/draft
+    defaults: { _controller: IbtikarGlanceDashboardBundle:recipe\New:draft }
+
 
 ibtikar_glance_dashboard_recipenew_bulk_actions:
     path:  /bulk

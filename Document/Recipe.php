@@ -51,7 +51,8 @@ class Recipe  extends Publishable {
         "new" => "new",
         "deleted" => "deleted",
         "publish" => "publish",
-        "autopublish" => "autopublish"
+        "autopublish" => "autopublish",
+        "draft" => "draft"
     );
 
     public static $types = array(
