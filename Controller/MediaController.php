@@ -864,6 +864,7 @@ class MediaController extends BackendController
 
                     if($collectionType !== "Product"){
                         $findBy['type'] = 'video';
+                    }else{
                         $findBy['coverPhoto'] = true;
                     }
 
