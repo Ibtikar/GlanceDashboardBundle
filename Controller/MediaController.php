@@ -867,11 +867,16 @@ class MediaController extends BackendController
                     }
 
                     $prevVideo = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findOneBy($findBy);
+                    $obj = $dm->getRepository('IbtikarGlanceDashboardBundle:'.$collectionType)->find($documentId);
+
                     if($prevVideo){
                         $videoObj = $prevVideo;
                     }elseif($documentId && $documentId != 'null'){
                         $method = "set".$collectionType;
-                        $videoObj->$method($dm->getRepository('IbtikarGlanceDashboardBundle:'.$collectionType)->find($documentId));
+                        $videoObj->$method($obj);
+                        if(method_exists($obj, 'setCoverPhoto')){
+                            $obj->setCoverPhoto($videoObj);
+                        }
                     }
                 }
                 $video = explode('#', $video);
