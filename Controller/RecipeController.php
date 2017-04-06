@@ -502,7 +502,7 @@ class RecipeController extends BackendController
 
             $recipeStatus = $recipe->getStatus();
             $status = $request->get('status');
-            $goodyStar = $request->get('goodyStar');
+            $goodyStar = $request->get('goodyStar',false);
             if ($status != $recipeStatus) {
                 if ($type && $type == 'view') {
                     $this->addFlash('error', $this->trans('not done'));
