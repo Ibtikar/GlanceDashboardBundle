@@ -707,7 +707,11 @@ class Media extends Document {
     }
 
     public function __toString() {
-        return $this->getWebPath();
+        if($this->type == "video"){
+            return $this->getVid();
+        }else{
+            return $this->getWebPath();
+        }
     }
 
     /**
