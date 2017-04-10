@@ -105,6 +105,7 @@
 var recipeValue='';
     $(".select-ajax").select2({
         ajax: {
+          method:'POST',
           url: function(){
               return eval($(this).attr('ajax-url-var'));
           },
