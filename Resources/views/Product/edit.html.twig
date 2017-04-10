@@ -75,7 +75,7 @@
                                 <div class="thumbnail">
                                     <div class="thumb thumb-slide">
 
-                                        {% if coverVideo is not empty %}
+                                        {% if coverVideo %}
                                             <img src="https://i.ytimg.com/vi/{{ coverVideo.vid }}/hqdefault.jpg" alt="">
 
                                         {% else %}
@@ -84,7 +84,7 @@
                                         {% endif %}
                                         <div class="caption">
                                             <span>
-                                                {% if coverVideo is not empty %}
+                                                {% if coverVideo %}
                                                     <a href="https://i.ytimg.com/vi/{{ coverVideo.vid }}/hqdefault.jpg" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
 
                                                 {% else %}
