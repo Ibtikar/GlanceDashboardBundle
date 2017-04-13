@@ -18,6 +18,6 @@ ibtikar_glance_dashboard_messageclose_view:
     path:  /view/{id}
     defaults: { _controller: IbtikarGlanceDashboardBundle:message\Close:view }
 
-ibtikar_glance_dashboard_newmessages_reply:
+ibtikar_glance_dashboard_messageclose_reply:
     path:  /reply/{id}
     defaults: { _controller: IbtikarGlanceDashboardBundle:message\Close:reply }
