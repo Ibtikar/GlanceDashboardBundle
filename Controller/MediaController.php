@@ -585,6 +585,16 @@ class MediaController extends BackendController
                         'coverPhoto' => TRUE
                     ));
                     break;
+                case 'bannerPhoto':
+                    $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                        'type' => 'image',
+                        'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                        'product' => null,
+                        'product' => new \MongoId($documentId),
+                        'collectionType' => 'Product',
+                        'bannerPhoto' => TRUE
+                    ));
+                    break;
             }
             if ($document && $type=='upload') {
                 return new JsonResponse(array('status' => 'reload'));

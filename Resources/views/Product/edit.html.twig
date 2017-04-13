@@ -164,13 +164,61 @@
 
                             </td>
                         </tr>
+    <tr id="dev-bannerPhoto">
+                            <td style="width: 150px">
 
+                                <div class="thumbnail">
+                                    <div class="thumb thumb-slide">
+
+                                        {% if bannerImage is not empty %}
+                                            <img src="{{ asset(bannerImage.getWebPath())}}" alt="">
+
+                                        {% else %}
+                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
+
+                                        {% endif %}
+                                        <div class="caption">
+                                            <span>
+                                                {% if bannerImage is not empty %}
+                                                    <a href="{{ asset(bannerImage.getWebPath())}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% else %}
+                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td class="thumbnail-caption">
+                                <h4>  صورة الاعلان</h4>
+                                <ul class="text-grey-300">
+                                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                                    <li> يجب الا تقل ابعاد الصورة عن 300*100 </li>
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                                </ul>
+                            </td>
+                            <td style="width: 300px" data-name="bannerPhoto">
+                                {% if bannerImage is empty %}
+                                    <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
+                                {% endif %}
+                                <a class="btn btn-default dev-crop-images"   {% if bannerImage is empty %}style="display: none"{%else%} data-image-id="{{ bannerImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':bannerImage.id,'collectionType':'Product'})}}"{%endif%}   >  رفع الصورة </a>
+                                <a class="btn btn-default dev-trash-image" {% if bannerImage is empty %}style="display: none" {%else%}  data-image-id="{{ bannerImage.id }}"  data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': bannerImage.id,'collectionType':'Product'}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%} > <i class="icon-trash"></i></a>
+
+
+                            </td>
+
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+    <hr>
 
+                {{ form_row(form.bannerUrl) }}
 
     <hr>
     <div class="tabbable">
@@ -306,7 +354,7 @@
                                 <h4>   %arabicName%</h4>
                                 <ul class="text-grey-300">
                                     <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
-                                    <li> يجب الا تقل ابعاد الصورة عن 200*200 </li>
+                                    <li>  %errorDimission%  </li>
                                     <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
                                 </ul>
                             </td>
@@ -372,13 +420,16 @@
         var element;
         var name;
         var type;
-        var imageErrorMessages={
+         var imageErrorMessages={
             'imageExtension': '{% trans from 'validators'%}picture not correct.{%endtrans%}',
             'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 200*200{%endtrans%}',
+            'BannerimageDimension': '{% trans from 'validators'%}Image dimension must be more than 300*100{%endtrans%}',
             'sizeError': '{% trans from 'validators'%}File size must be less than 4mb{%endtrans%}',
             'generalError': '{% trans %}failed operation{%endtrans%}',
             'coverPhoto': '{% trans from translationDomain %}coverPhoto{%endtrans%}',
             'profilePhoto': '{% trans from translationDomain %}profilePhoto{%endtrans%}',
+            'bannerPhoto': '{% trans from translationDomain %}bannerPhoto{%endtrans%}',
+            'bannerImage': '{% trans from translationDomain %}bannerPhoto{%endtrans%}',
         };
 
 
