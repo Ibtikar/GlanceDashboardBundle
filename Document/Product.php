@@ -104,6 +104,16 @@ class Product extends Document
     private $profilePhoto;
 
     /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Media", simple=true)
+     */
+    private $bannerPhoto;
+
+    /**
+     * @MongoDB\String
+     */
+    private $bannerUrl;
+
+    /**
      * @MongoDB\Increment
      */
     private $subproductNo = 0;
@@ -691,4 +701,48 @@ class Product extends Document
     }
 
 
+
+    /**
+     * Set bannerPhoto
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Media $bannerPhoto
+     * @return self
+     */
+    public function setBannerPhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $bannerPhoto)
+    {
+        $this->bannerPhoto = $bannerPhoto;
+        return $this;
+    }
+
+    /**
+     * Get bannerPhoto
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\Media $bannerPhoto
+     */
+    public function getBannerPhoto()
+    {
+        return $this->bannerPhoto;
+    }
+
+    /**
+     * Set bannerUrl
+     *
+     * @param string $bannerUrl
+     * @return self
+     */
+    public function setBannerUrl($bannerUrl)
+    {
+        $this->bannerUrl = $bannerUrl;
+        return $this;
+    }
+
+    /**
+     * Get bannerUrl
+     *
+     * @return string $bannerUrl
+     */
+    public function getBannerUrl()
+    {
+        return $this->bannerUrl;
+    }
 }

@@ -17,6 +17,7 @@
 'image': 'الصوره'
 'coverPhoto': 'صورة الغلاف'
 'profilePhoto': 'صورة المنتج'
+'bannerPhoto': 'صورة الاعلان'
 'Profile photo': 'صورة المنتج'
 'Products': 'المنتجات'
 'products': 'المنتجات'
@@ -68,3 +69,4 @@ Delete SubProduct: حذف منتج فرعى
 'defaultProfilePhoto': 'صوره البروفايل'
 'Save': 'حفظ'
 'Save and add': 'حفظ و اضافة مناطق'
+'Banner url': 'رابط الاعلان'

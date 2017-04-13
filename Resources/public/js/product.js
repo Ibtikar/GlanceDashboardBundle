@@ -30,7 +30,7 @@ function showNotificationMsg(title, text, type) {
         buttons: {
             sticker: false
         },
-        stack:  {"dir1": "down", "dir2": "right", "firstpos1": 0, "firstpos2": 0}
+        stack: {"dir1": "down", "dir2": "right", "firstpos1": 0, "firstpos2": 0}
     });
 }
 
@@ -66,7 +66,7 @@ function updateRelatedMaterial() {
         RelatedRecipeObj = data;
         var recipes = '<label class="control-label col-lg-2 dev-related-recipe-list" for="form_relatedRecipe"></label><div class="col-lg-12" style="padding: 0;"><ul class="dev-related-list media-list width-350 notificationList">';
         $(data).each(function () {
-            recipes += '<li class="media" data-related-material-id="' + this.id + '"><div class="media-left"><img src="' + this.img+ '" class="img-circle" alt=""></div><div class="media-body"><b> ' + this.text + '</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="' + this.id + '"><i class="icon icon-cross2"></i></a></div></li>';
+            recipes += '<li class="media" data-related-material-id="' + this.id + '"><div class="media-left"><img src="' + this.img + '" class="img-circle" alt=""></div><div class="media-body"><b> ' + this.text + '</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="' + this.id + '"><i class="icon icon-cross2"></i></a></div></li>';
         });
         recipes += "</ul></div></div>"
         $('.dev-related-list').html("");
@@ -95,19 +95,19 @@ function updateMinRelated() {
     }
 }
 
-function updateRelatedArticle(){
-    if($('#form_related_article').length > 0){
+function updateRelatedArticle() {
+    if ($('#form_related_article').length > 0) {
         var data = JSON.parse($('#form_related_article').val());
         RelatedArticleObj = data;
 //        $('.dev-related-article-list').html("");
         var articles = '<label class="control-label col-lg-2 dev-related-article-list" for="form_relatedArticle"></label><div class="col-lg-12" style="padding: 0;"><ul class="dev-related-article-list media-list width-350 notificationList">';
-        $(data).each(function(){
-            articles += '<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="'+this.img+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-article-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>';
+        $(data).each(function () {
+            articles += '<li class="media" data-related-material-id="' + this.id + '"><div class="media-left"><img src="' + this.img + '" class="img-circle" alt=""></div><div class="media-body"><b> ' + this.text + '</b></div><div class="media-right"><a class="dev-related-article-delete" href="#" data-related-material-id="' + this.id + '"><i class="icon icon-cross2"></i></a></div></li>';
 //            $('.dev-related-list').append('<li class="media dev-related-item"><div class="media-body"><a href="'+$('base').attr('href')+this.slug+'" target="_blank">'+this.title+'</a>  </div><div class="dev-delete-related-material media-right" data-related-material-id="'+this.id+'" data-related-material-slug="'+this.slug+'"><i class="icon icon-cross2"></i></div></li>');
         });
         articles += "</ul></div></div>"
 
-        if($('#form_relatedArticle').parent().find('.dev-related-article-list').length > 0) {
+        if ($('#form_relatedArticle').parent().find('.dev-related-article-list').length > 0) {
             $('label.dev-related-article-list').remove();
             $('.dev-related-article-list').parent().remove();
         }
@@ -117,22 +117,22 @@ function updateRelatedArticle(){
     }
 }
 
-function updateRelatedTip(){
-    if($('#form_related_tip').length > 0){
+function updateRelatedTip() {
+    if ($('#form_related_tip').length > 0) {
         var data = JSON.parse($('#form_related_tip').val());
         RelatedTipObj = data;
 //        $('.dev-related-tip-list').html("");
 
         var tips = '<label class="control-label col-lg-2 dev-related-tip-list" for="form_relatedTip"></label><div class="col-lg-12" style="padding: 0;"><ul class="dev-related-tip-list media-list width-350 notificationList">';
-        $(data).each(function(){
-            tips += '<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="'+this.img+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-tip-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>';
+        $(data).each(function () {
+            tips += '<li class="media" data-related-material-id="' + this.id + '"><div class="media-left"><img src="' + this.img + '" class="img-circle" alt=""></div><div class="media-body"><b> ' + this.text + '</b></div><div class="media-right"><a class="dev-related-tip-delete" href="#" data-related-material-id="' + this.id + '"><i class="icon icon-cross2"></i></a></div></li>';
 //            $('.dev-related-tip-list').append('<li class="media" data-related-material-id="'+this.id+'"><div class="media-left"><img src="/'+(this.img).replace(/^\/+/g,'')+'" class="img-circle" alt=""></div><div class="media-body"><b> '+this.text+'</b></div><div class="media-right"><a class="dev-related-delete" href="#" data-related-material-id="'+this.id+'"><i class="icon icon-cross2"></i></a></div></li>');
 //            $('.dev-related-list').append('<li class="media dev-related-item"><div class="media-body"><a href="'+$('base').attr('href')+this.slug+'" target="_blank">'+this.title+'</a>  </div><div class="dev-delete-related-material media-right" data-related-material-id="'+this.id+'" data-related-material-slug="'+this.slug+'"><i class="icon icon-cross2"></i></div></li>');
         });
         tips += "</ul></div></div>"
-        if($('#form_relatedTip').parent().find('.dev-related-tip-list').length > 0) {
-           $('label.dev-related-tip-list').remove();
-           $('.dev-related-tip-list').parent().remove();
+        if ($('#form_relatedTip').parent().find('.dev-related-tip-list').length > 0) {
+            $('label.dev-related-tip-list').remove();
+            $('.dev-related-tip-list').parent().remove();
         }
         $('#form_relatedTip').parent().append(tips);
         updateMinRelated();
@@ -142,9 +142,9 @@ function updateRelatedTip(){
 
 function addRelatedArticles(data) {
     RelatedArticleObj.unshift({
-        'id':data.id,
-        'text':data.text,
-        'img':data.img
+        'id': data.id,
+        'text': data.text,
+        'img': data.img
     });
     $('#form_related_article').val(JSON.stringify(RelatedArticleObj));
     updateRelatedArticle();
@@ -154,27 +154,28 @@ function addRelatedArticles(data) {
 
 function addRelatedTip(data) {
     RelatedTipObj.unshift({
-        'id':data.id,
-        'text':data.text,
-        'img':data.img
+        'id': data.id,
+        'text': data.text,
+        'img': data.img
     });
     $('#form_related_tip').val(JSON.stringify(RelatedTipObj));
     updateRelatedTip();
 }
 
-function refreshImages(){
+function refreshImages() {
     $.ajax({
-            url:refreshImagesUrl,
-            success: function (data) {
-                if(data.status=='login'){
-                            window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
-                }else{
+        url: refreshImagesUrl,
+        success: function (data) {
+            if (data.status == 'login') {
+                window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
+            } else {
                 if (data.coverPhoto) {
                     var media = data.coverPhoto;
                     var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
                             .replace(/%image-id%/g, media.id)
                             .replace(/%name%/g, 'coverPhoto')
                             .replace(/%arabicName%/g, imageErrorMessages.coverPhoto)
+                            .replace(/%errorDimission%/g, imageErrorMessages.imageDimension)
                             .replace(/%image-delete-url%/g, media.deleteUrl)
                             .replace(/%uploadButton%/g, '')
                             .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
@@ -188,15 +189,16 @@ function refreshImages(){
                         trigger: 'hover'
                     });
 
-                }else{
-                     var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
-                                    .replace(/%image-id%/g, '')
-                                    .replace(/%name%/g, 'coverPhoto')
-                                    .replace(/%arabicName%/g, imageErrorMessages.coverPhoto)
-                                    .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, 'coverPhoto'))
-                                    .replace(/%cropButton%/g, '')
-                                    .replace(/%deleteButton%/g, '');
-                             $('#dev-coverPhoto').replaceWith(temepelate);
+                } else {
+                    var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
+                            .replace(/%image-id%/g, '')
+                            .replace(/%name%/g, 'coverPhoto')
+                            .replace(/%arabicName%/g, imageErrorMessages.coverPhoto)
+                            .replace(/%errorDimission%/g, imageErrorMessages.imageDimension)
+                            .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, 'coverPhoto'))
+                            .replace(/%cropButton%/g, '')
+                            .replace(/%deleteButton%/g, '');
+                    $('#dev-coverPhoto').replaceWith(temepelate);
                 }
                 if (data.profilePhoto) {
                     var media = data.profilePhoto;
@@ -204,7 +206,7 @@ function refreshImages(){
                             .replace(/%image-id%/g, media.id)
                             .replace(/%name%/g, 'profilePhoto')
                             .replace(/%arabicName%/g, imageErrorMessages.profilePhoto)
-
+                            .replace(/%errorDimission%/g, imageErrorMessages.imageDimension)
                             .replace(/%image-delete-url%/g, media.deleteUrl)
                             .replace(/%uploadButton%/g, '')
                             .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
@@ -218,15 +220,47 @@ function refreshImages(){
                         trigger: 'hover'
                     });
 
-                }else{
-                     var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
-                                    .replace(/%image-id%/g, '')
-                                    .replace(/%name%/g, 'profilePhoto')
-                                    .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, 'profilePhoto'))
-                                    .replace(/%arabicName%/g, imageErrorMessages.profilePhoto)
-                                    .replace(/%cropButton%/g, '')
-                                    .replace(/%deleteButton%/g, '');
-                             $('#dev-profilePhoto').replaceWith(temepelate);
+                } else {
+                    var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
+                            .replace(/%image-id%/g, '')
+                            .replace(/%name%/g, 'profilePhoto')
+                            .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, 'profilePhoto'))
+                            .replace(/%arabicName%/g, imageErrorMessages.profilePhoto)
+                            .replace(/%errorDimission%/g, imageErrorMessages.imageDimension)
+                            .replace(/%cropButton%/g, '')
+                            .replace(/%deleteButton%/g, '');
+                    $('#dev-profilePhoto').replaceWith(temepelate);
+                }
+                if (data.bannerPhoto) {
+                    var media = data.bannerPhoto;
+                    var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
+                            .replace(/%image-id%/g, media.id)
+                            .replace(/%name%/g, 'bannerPhoto')
+                            .replace(/%arabicName%/g, imageErrorMessages.bannerPhoto)
+                            .replace(/%errorDimission%/g, imageErrorMessages.BannerimageDimension)
+                            .replace(/%image-delete-url%/g, media.deleteUrl)
+                            .replace(/%uploadButton%/g, '')
+                            .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
+                            .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
+                    $('#dev-bannerPhoto').closest('tr').replaceWith(temepelate);
+                    $('[data-popup="popover"]').popover();
+
+
+                    // Tooltip
+                    $('[data-popup="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    });
+
+                } else {
+                    var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
+                            .replace(/%image-id%/g, '')
+                            .replace(/%name%/g, 'bannerPhoto')
+                            .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, 'bannerPhoto'))
+                            .replace(/%errorDimission%/g, imageErrorMessages.BannerimageDimension)
+                            .replace(/%arabicName%/g, imageErrorMessages.bannerPhoto)
+                            .replace(/%cropButton%/g, '')
+                            .replace(/%deleteButton%/g, '');
+                    $('#dev-bannerPhoto').replaceWith(temepelate);
                 }
             }
         }
@@ -477,6 +511,14 @@ $(document).on("click",'.dev-add-related-material',function(){
                 $('.dev-submit-image').attr('data-id', element.attr('id'))
 
             }
+            var elementDimessionWidth=200;
+            var elementDimessionHeight=200;
+            var errorDimension=imageErrorMessages.imageDimension;
+            if($(element).closest('td').attr('data-name')=='bannerPhoto'){
+             elementDimessionWidth=300;
+             elementDimessionHeight=100;
+             errorDimension=imageErrorMessages.BannerimageDimension;
+            }
             var elementObject = $('#uploadImg .cropit-image-input');
             if (elementObject.val()) {
 
@@ -491,9 +533,9 @@ $(document).on("click",'.dev-add-related-material',function(){
 
                     showNotificationMsg(imageErrorMessages.sizeError, "", 'error');
 
-                } else if ($('#image-cropper-modal').cropit('imageSize').width < 200 || $('#image-cropper-modal').cropit('imageSize').height < 200) {
+                } else if ($('#image-cropper-modal').cropit('imageSize').width < elementDimessionWidth || $('#image-cropper-modal').cropit('imageSize').height < elementDimessionHeight) {
 
-                    showNotificationMsg(imageErrorMessages.imageDimension, "", 'error');
+                    showNotificationMsg(errorDimension, "", 'error');
 
                 } else {
 
@@ -533,12 +575,18 @@ $(document).on("click",'.dev-add-related-material',function(){
                             window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
                 }
                 else if (data.status == 'success') {
+                    console.log(name)
+                    var errorDimission = imageErrorMessages.imageDimension;
+                    if (name == 'bannerPhoto') {
+                        errorDimission = imageErrorMessages.BannerimageDimension;
+                    }
                     var media = data.media;
                     var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
                             .replace(/%image-id%/g, media.id)
                             .replace(/%name%/g, name)
                             .replace(/%image-delete-url%/g, media.deleteUrl)
                             .replace(/%arabicName%/g, imageErrorMessages[name])
+                            .replace(/%errorDimission%/g, errorDimission)
                             .replace(/%uploadButton%/g, '')
                             .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
                             .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
@@ -575,14 +623,19 @@ $(document).on("click",'.dev-add-related-material',function(){
                     'dataType': 'json',
                     'url': $this.parents('[role="tooltip"]').prev().data('href'),
                     'success': function (data) {
+                        var errorDimission = imageErrorMessages.imageDimension;
                         if(data.status=='login'){
                             window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
                         }
                         else if (data.type == 'success') {
+                            if ((closestTr.attr('id')).replace(/dev-/g, '') == 'bannerPhoto') {
+                                errorDimission = imageErrorMessages.BannerimageDimension;
+                            }
                             var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
                                     .replace(/%image-id%/g, '')
                                     .replace(/%name%/g, (closestTr.attr('id')).replace(/dev-/g,''))
                                     .replace(/%arabicName%/g, imageErrorMessages[(closestTr.attr('id')).replace(/dev-/g,'')])
+                                    .replace(/%errorDimission%/g, errorDimission)
                                     .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, (closestTr.attr('id')).replace(/dev-/g,'')))
                                     .replace(/%cropButton%/g, '')
                                     .replace(/%deleteButton%/g, '');

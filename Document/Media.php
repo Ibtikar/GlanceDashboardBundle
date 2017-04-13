@@ -125,6 +125,11 @@ class Media extends Document {
     private $ProfilePhoto = false;
 
     /**
+     * @MongoDB\Boolean
+     */
+    private $bannerPhoto = false;
+
+    /**
      * @MongoDB\String
      */
     private $vid;
@@ -888,5 +893,27 @@ class Media extends Document {
     public function getUniqueId()
     {
         return $this->uniqueId;
+    }
+
+    /**
+     * Set bannerPhoto
+     *
+     * @param boolean $bannerPhoto
+     * @return self
+     */
+    public function setBannerPhoto($bannerPhoto)
+    {
+        $this->bannerPhoto = $bannerPhoto;
+        return $this;
+    }
+
+    /**
+     * Get bannerPhoto
+     *
+     * @return boolean $bannerPhoto
+     */
+    public function getBannerPhoto()
+    {
+        return $this->bannerPhoto;
     }
 }

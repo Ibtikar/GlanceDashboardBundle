@@ -128,6 +128,20 @@ class MediaController extends BackendController
                             'coverPhoto' => TRUE
                         ));
                         break;
+                    case 'bannerPhoto':
+                        $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                            'type' => $type,
+                            'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                            'product' => null,
+                            'contactMessage' => null,
+                            'subproduct' => null,
+                            'recipe' => null,
+                            'magazine' => null,
+                            'competition' => null,
+                            'collectionType' => $collectionType,
+                            'bannerPhoto' => TRUE
+                        ));
+                        break;
                 }
                 if ($document) {
                     return new JsonResponse(array('status' => 'reload'));
@@ -173,6 +187,14 @@ class MediaController extends BackendController
                             if ($documentId && $documentId != 'null') {
                                 $functionName = "get$fieldUpdate";
                                 $media->$functionName()->setProfilePhoto($media);
+                            }
+
+                            break;
+                        case 'bannerPhoto':
+                            $media->setBannerPhoto(TRUE);
+                            if ($documentId && $documentId != 'null') {
+                                $functionName = "get$fieldUpdate";
+                                $media->$functionName()->setBannerPhoto($media);
                             }
 
                             break;

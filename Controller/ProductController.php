@@ -73,33 +73,37 @@ class ProductController extends BackendController {
         $profileImage=NULL;
         $coverImage=NULL;
         $coverVideo = NULL;
+        $bannerImage = NULL;
         $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
                 'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                 'product' => null,
                 'subproduct' => null,
                 'collectionType' => 'Product'
             ));
-         foreach ($images as $media){
-                    if($media->getType() == 'image'){
-                       if($media->getCoverPhoto()){
-                              $coverImage= $media;
-                               continue;
-
-                       }
-                       if($media->getProfilePhoto()){
-                              $profileImage= $media;
-                               continue;
-
-                       }
-                    }elseif($media->getType() == 'video' && $media->getCoverPhoto()){
-                        $coverVideo= $media;
-                    }
+         foreach ($images as $media) {
+            if ($media->getType() == 'image') {
+                if ($media->getCoverPhoto()) {
+                    $coverImage = $media;
+                    continue;
                 }
+                if ($media->getBannerPhoto()) {
+                    $bannerImage = $media;
+                    continue;
+                }
+                if ($media->getProfilePhoto()) {
+                    $profileImage = $media;
+                    continue;
+                }
+            } elseif ($media->getType() == 'video' && $media->getCoverPhoto()) {
+                $coverVideo = $media;
+            }
+        }
         $product = new Product();
         $form = $this->createFormBuilder($product, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
             ->add('coverType', formType\ChoiceType::class, array('choices' => Product::$coverTypeChoices, 'expanded' => true, 'attr'  => array('data-error-after-selector' => '#product_type_coverType')))
             ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
             ->add('nameEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
+            ->add('bannerUrl', formType\TextType::class, array('required' => FALSE))
 //            ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
 //            ->add('descriptionEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
             ->add('about', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
@@ -128,9 +132,9 @@ class ProductController extends BackendController {
             if ($form->isValid()) {
                 $formData = $request->get('form');
 
-                if ($formData['related']) {
-                    $this->updateRelatedRecipe($product, $formData['related'], $dm,'recipe');
-                }
+//                if ($formData['related']) {
+//                    $this->updateRelatedRecipe($product, $formData['related'], $dm,'recipe');
+//                }
                 if ($formData['related_article']) {
                     $this->updateRelatedRecipe($product, $formData['related_article'], $dm,'article');
                 }
@@ -171,6 +175,11 @@ class ProductController extends BackendController {
                         $image->setProduct($product);
                         continue;
                     }
+                    if ($image->getBannerPhoto()) {
+                        $product->setBannerPhoto($image);
+                        $image->setProduct($product);
+                        continue;
+                    }
                 }
 
                 $dm->flush();
@@ -189,6 +198,7 @@ class ProductController extends BackendController {
                 'breadcrumb' => $breadCrumbArray,
                 'profileImage' => $profileImage,
                 'coverImage' => $coverImage,
+                'bannerImage' => $bannerImage,
                 'coverVideo' => $coverVideo,
                 'deletePopoverConfig'=>array("question" => "You are about to delete %title%,Are you sure?"),
                 'title' => $this->trans('Add new Product', array(), $this->translationDomain),
@@ -239,7 +249,9 @@ class ProductController extends BackendController {
             ->add('video', formType\TextType::class, array('mapped'=>FALSE,'required'=>FALSE,'attr'=>array('data-rule-youtube'=>'data-rule-youtube')))
             ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
             ->add('nameEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
-//            ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+            ->add('bannerUrl', formType\TextType::class, array('required' => FALSE))
+
+//               ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
 //            ->add('descriptionEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
 
             ->add('about', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
@@ -269,9 +281,9 @@ class ProductController extends BackendController {
 
             if ($form->isValid()) {
                 $formData = $request->get('form');
-                      if ($formData['related']) {
-                    $this->updateRelatedRecipe($product, $formData['related'], $dm,'recipe');
-                }
+//                      if ($formData['related']) {
+//                    $this->updateRelatedRecipe($product, $formData['related'], $dm,'recipe');
+//                }
                 if ($formData['related_article']) {
                     $this->updateRelatedRecipe($product, $formData['related_article'], $dm,'article');
                 }
