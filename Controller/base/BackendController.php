@@ -934,20 +934,10 @@ class BackendController extends Controller {
                         'message' => $this->trans($type . ' must less than 3', array(), $this->translationDomain))
                 ));
             }
-            if (count($oldvalue) >= 6 && $type == 'tip') {
-                return new JsonResponse(array(array(
-                        'message' => $this->trans($type . ' must less than 6', array(), $this->translationDomain))
-                ));
-            }
-            if (count($oldvalue) >= 6 && $type == 'article') {
-                return new JsonResponse(array(array(
-                        'message' => $this->trans($type . ' must less than 6', array(), $this->translationDomain))
-                ));
-            }
         }
         if (count($oldvalue) >= 10) {
             return new JsonResponse(array(array(
-                'message' => $this->trans($type.' must less than 10',array(),  $this->translationDomain))
+                    'message' => $this->trans($type . ' must less than 10', array(), $this->translationDomain))
             ));
         }
 

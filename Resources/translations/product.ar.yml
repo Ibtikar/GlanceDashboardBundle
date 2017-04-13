@@ -54,6 +54,8 @@ Delete SubProduct: حذف منتج فرعى
 'tip must less than 3': 'الحد الأقصى هو 3 عناصر'
 'tip must less than 6': 'الحد الأقصى هو 6 عناصر'
 'article must less than 6': 'الحد الأقصى هو 6 عناصر'
+'tip must less than 10': 'الحد الأقصى هو 10 عناصر'
+'article must less than 10': 'الحد الأقصى هو 10 عناصر'
 'Slug': 'الرابط'
 "Slug en": 'الرابط بالانجليزى'
 'slug': 'الرابط'
