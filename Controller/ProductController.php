@@ -222,6 +222,7 @@ class ProductController extends BackendController {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
         $profileImage=$product->getProfilePhoto();
+        $bannerImage=$product->getBannerPhoto();
 
         $coverImage = NULL;
         $coverVideo = NULL;
@@ -309,6 +310,7 @@ class ProductController extends BackendController {
                 'breadcrumb' => $breadCrumbArray,
                 'product' => $product,
                 'profileImage' => $profileImage,
+                'bannerImage' => $bannerImage,
                 'coverVideo' => $coverVideo,
                 'coverImage' => $coverImage,
                 'deletePopoverConfig' => array("question" => "You are about to delete %title%,Are you sure?"),
