@@ -102,14 +102,14 @@ class ProductController extends BackendController {
             ->add('nameEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
             ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
             ->add('descriptionEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
-            ->add('about', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
-            ->add('aboutEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+//            ->add('about', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+//            ->add('aboutEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
 
             ->add('video', formType\TextType::class, array('mapped'=>FALSE,'required'=>FALSE,'attr'=>array('data-rule-youtube'=>'data-rule-youtube')))
-            ->add('relatedRecipe', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
-                'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related', 'ajax-url-var' => 'relatedMaterialSearchUrl')
-            ))
-            ->add('related', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
+//            ->add('relatedRecipe', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
+//                'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related', 'ajax-url-var' => 'relatedMaterialSearchUrl')
+//            ))
+//            ->add('related', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
             ->add('relatedTip', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
                 'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related_tip', 'ajax-url-var' => 'relatedTipSearchUrl')
             ))
@@ -239,16 +239,16 @@ class ProductController extends BackendController {
             ->add('video', formType\TextType::class, array('mapped'=>FALSE,'required'=>FALSE,'attr'=>array('data-rule-youtube'=>'data-rule-youtube')))
             ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
             ->add('nameEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
-            ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
-            ->add('descriptionEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+//            ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+//            ->add('descriptionEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
 
             ->add('about', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
             ->add('aboutEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
 
-           ->add('relatedRecipe', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
-                'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related', 'ajax-url-var' => 'relatedMaterialSearchUrl')
-            ))
-            ->add('related', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
+//           ->add('relatedRecipe', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
+//                'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related', 'ajax-url-var' => 'relatedMaterialSearchUrl')
+//            ))
+//            ->add('related', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
             ->add('relatedTip', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
                 'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related_tip', 'ajax-url-var' => 'relatedTipSearchUrl')
             ))
