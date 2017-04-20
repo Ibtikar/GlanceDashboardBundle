@@ -531,7 +531,7 @@ class BackendController extends Controller {
                 }
                 elseif ($value == 'email' && !method_exists($document, 'get' . ucfirst($value))) {
                     $oneDocument[$value] = $this->get('app.twig.property_accessor')->propertyAccess($document, 'createdBy', $value);
-                } elseif ($value == 'status') {
+                } elseif ($value == 'status' || $value == 'gender') {
                     $oneDocument[$value] = $this->trans($document->$getfunction(), array(), $this->translationDomain);
                 } elseif ($value == 'slug') {
                     $request->setLocale('ar');
