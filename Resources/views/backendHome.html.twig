@@ -2,6 +2,13 @@
 
 {% block title %}{% trans  %}Welcome{% endtrans %} {{ app.user }}{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {% if is_granted('ROLE_ADMIN') %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('/bundles/ibtikarglancedashboard/css/daterangepicker.css') }}" />
+    {% endif %}
+{% endblock %}
+
 {% block header %}
     {{ include('IbtikarGlanceDashboardBundle::header.html.twig') }}
 {% endblock %}
@@ -12,7 +19,122 @@
     {{ include('IbtikarGlanceDashboardBundle::sidebar.html.twig') }}
 {% endblock %}
 {% block body %}
-    <h1>{{ block('title') }}</h1>
+    {% if is_granted('ROLE_ADMIN') %}
+        <div id="embed-api-auth-container"></div>
+
+        <br/>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <label for="date-range-selector" style="width: 60px;font-size: 12px">التاريخ</label>
+                <input type="text" name="daterange" id="date-range-selector" style="direction:ltr;width:197px;padding-left: 10px;"/>
+            </div>
+        </div>
+
+        <br/>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="view-selector-container"></div>
+            </div>
+        </div>
+
+        <div id="date-range-selector-container" style="display: none;"></div>
+
+        <hr/>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <h4>الجلسات من مختلف دول العالم</h4> <h6>(يمكنك اختيار مدينة لمشاهدة جلساتها فى الرسم البيانى التالي)</h6>
+                <div id="users-and-sessions-country-table-container"></div>
+            </div>
+            <div class="col-sm-6">
+                <h4 id="users-and-sessions-by-country-chart-title"></h4>
+                <div class="chart-container text-center">
+                    <div id="users-and-sessions-by-country-chart-container" style="width:100%"></div>
+                </div>
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <h4>الجلسات من مدن المملكة</h4>
+                <div id="users-and-sessions-ksa-city-table-container"></div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="chart-container text-center">
+                    <div id="users-and-sessions-ksa-city-map-container"></div>
+                </div>
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <h4>الجلسات من الشبكات الإجتماعية</h4>
+                <div id="social-trafic-table-container"></div>
+            </div>
+            <div class="col-sm-6">
+                <div class="chart-container text-center">
+                    <div id="social-trafic-column-chart-container"></div>
+                </div>
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <h4>الصفحات الأكثر مشاهدة</h4>
+                <div id="top-viewed-pages-container"></div>
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <h4>أكثر الكلمات بحثاً اليوم </h4>
+                <div id="most-used-search-words-table-container"></div>
+            </div>
+            <div class="col-sm-6">
+                <h4>إحصائيات الشيف</h4>
+                <div id="chef-published-materials-table-container"></div>
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <h4>إحصائيات الوصفات</h4>
+                <div id="recipe-statistics-table-container"></div>
+            </div>
+            <div class="col-sm-6">
+                <h4>إحصائيات المقالات</h4>
+                <div id="article-statistics-table-container"></div>
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <h4>إحصائيات النصائح</h4>
+                <div id="tip-statistics-table-container"></div>
+            </div>
+            <div class="col-sm-6">
+                <h4>إحصائيات مطبخ الطوارئ</h4>
+                <div id="kitchen911-statistics-table-container"></div>
+            </div>
+        </div>
+    {% else %}
+        <h1>{{ block('title') }}</h1>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}
@@ -28,5 +150,38 @@
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_notifications_pnotify.js')}}"></script>
     <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/app.js') }}"></script>#}
 
+    {% if is_granted('ROLE_ADMIN') %}
+    <script type="text/javascript" src="//www.gstatic.com/charts/loader.js?key=AIzaSyApQw6CkbrR4A3vuK6iCLjIBv6g0KbCzks"></script>
+    <script type="text/javascript" src="//www.google.com/jsapi?key=AIzaSyApQw6CkbrR4A3vuK6iCLjIBv6g0KbCzks"></script>
+    <script type="text/javascript">
+        var recipeTypes = [{% for type in recipeTypes %}'{{ type }}'{% if not loop.last %}{{ ', ' }}{% endif %}{% endfor %}];
+        var recipeStatisticsUrl = '{{ url('ibtikar_glance_dashboard_recipe_statistics') }}';
+        var chefsStatisticsUrl = '{{ url('ibtikar_glance_dashboard_recipe_chef_statistics') }}';
+        {#var commentsStatistics = '{{ url('api_tableau_comments_statistics_compared_to_previous_year') }}';
+        var staffCommentsStatistics = '{{ url('api_tableau_staff_comments_statistics') }}';
+        var usersStatistics = '{{ url('api_tableau_users_statistics') }}';#}
+        // Load the Visualization API and the corechart package.
+        google.charts.load('current',{'packages':['corechart', 'table', 'geochart'],'language': 'ar'});
+        var CLIENT_ID = '{{ googleClientId }}';
+        (function (w, d, s, g, js, fjs) {
+            g = w.gapi || (w.gapi = {});
+            g.analytics = {q: [], ready: function (cb) {
+                    this.q.push(cb);
+                }};
+            js = d.createElement(s);
+            fjs = d.getElementsByTagName(s)[0];
+            js.src = 'https://apis.google.com/js/platform.js?key=AIzaSyApQw6CkbrR4A3vuK6iCLjIBv6g0KbCzks';
+            fjs.parentNode.insertBefore(js, fjs);
+            js.onload = function () {
+                g.load('analytics');
+            };
+        }(window, document, 'script'));
+    </script>
+    <script src="{{ asset('/bundles/ibtikarglancedashboard/js/moment.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/bundles/ibtikarglancedashboard/js/daterangepicker.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/bundles/ibtikarglancedashboard/js/google/javascript/embed-api/components/date-range-selector.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/bundles/ibtikarglancedashboard/js/dashboard.js') }}" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('/bundles/ibtikarglancedashboard/css/dashboard.css') }}" />
+    {% endif %}
 
 {% endblock %}

@@ -54,3 +54,10 @@ ibtikar_glance_dashboard_recipe_related_material_add:
     path: /related-material-add
     defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:relatedMaterialAdd }
 
+ibtikar_glance_dashboard_recipe_statistics:
+    path: /ajax/recipe-statistics
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:recipeStatistics }
+
+ibtikar_glance_dashboard_recipe_chef_statistics:
+    path: /ajax/chef-statistics
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:chefStatistics }
