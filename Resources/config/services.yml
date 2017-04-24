@@ -2,6 +2,8 @@ parameters:
     per_page_items: 10
     autoCompelet_display_item: 5
     router.request_context.host: %site_domain%
+    xls_fixture_absolute_path: "%kernel.root_dir%/fixture/file.xls"
+    xls_temp_path            : "%kernel.root_dir%/temp/"
 
 services:
 
@@ -20,6 +22,10 @@ services:
     list_view:
         class: Ibtikar\GlanceDashboardBundle\Service\ListView
         arguments: ["@service_container" ]
+
+    create_excel:
+        class: Ibtikar\GlanceDashboardBundle\Service\CreateExcel
+        arguments: [ "@service_container" ]
 
     base_email:
         class: Ibtikar\GlanceDashboardBundle\Service\BaseEmail
