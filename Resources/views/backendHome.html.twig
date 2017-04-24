@@ -151,8 +151,9 @@
     <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/core/app.js') }}"></script>#}
 
     {% if is_granted('ROLE_ADMIN') %}
-    <script type="text/javascript" src="//www.gstatic.com/charts/loader.js?key=AIzaSyApQw6CkbrR4A3vuK6iCLjIBv6g0KbCzks"></script>
-    <script type="text/javascript" src="//www.google.com/jsapi?key=AIzaSyApQw6CkbrR4A3vuK6iCLjIBv6g0KbCzks"></script>
+    <script type="text/javascript" src="//www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="//www.google.com/jsapi"></script>
+    <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key={{ googleAPIKey }}" async="" defer="defer"></script>
     <script type="text/javascript">
         var recipeTypes = [{% for type in recipeTypes %}'{{ type }}'{% if not loop.last %}{{ ', ' }}{% endif %}{% endfor %}];
         var recipeStatisticsUrl = '{{ url('ibtikar_glance_dashboard_recipe_statistics') }}';
@@ -170,7 +171,7 @@
                 }};
             js = d.createElement(s);
             fjs = d.getElementsByTagName(s)[0];
-            js.src = 'https://apis.google.com/js/platform.js?key=AIzaSyApQw6CkbrR4A3vuK6iCLjIBv6g0KbCzks';
+            js.src = 'https://apis.google.com/js/platform.js';
             fjs.parentNode.insertBefore(js, fjs);
             js.onload = function () {
                 g.load('analytics');

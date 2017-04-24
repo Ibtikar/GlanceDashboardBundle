@@ -492,6 +492,7 @@ class BackendController extends Controller {
     public function homeAction() {
         return $this->render('IbtikarGlanceDashboardBundle::backendHome.html.twig', array(
             'googleClientId' => $this->getParameter('google_application_settings.id'),
+            'googleAPIKey' => $this->getParameter('google_application_settings.key'),
             'recipeTypes' => Recipe::$types
         ));
     }
