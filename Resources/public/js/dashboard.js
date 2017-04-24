@@ -26,7 +26,8 @@ var translationMessages = {
     'apply': 'تنفيذ',
     'cancel': 'إلغاء',
     'publishedRecipes': 'الوصفات المنشورة',
-    'publishedArticles': 'المقالات المنشورة'
+    'publishedArticles': 'المقالات المنشورة',
+    'answers': 'الإجابات'
 };
 
 var googleApiColumnsNames = {
@@ -207,6 +208,30 @@ function getRecipesStatistics(fromDate, toDate, type) {
     });
 }
 
+/**
+ * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
+ * @param {string} fromDate
+ * @param {string} toDate
+ * @returns {void}
+ */
+function getCompetitionStatistics(fromDate, toDate) {
+    $.ajax({
+        url: competitionStatisticsUrl + '?from=' + encodeURIComponent(fromDate) + '&to=' + encodeURIComponent(toDate),
+        success: function (data, textStatus, jqXHR) {
+            if (jqXHR.status === 200 && typeof jqXHR.responseJSON === 'object' && typeof jqXHR.responseJSON.code !== 'undefined' && jqXHR.responseJSON.code === 200) {
+                var dataTableData = {cols: [], rows: []};
+                dataTableData.cols.push({id: '1', label: translationMessages.statusNew, type: 'number'});
+                dataTableData.cols.push({id: '2', label: translationMessages.statusPublished, type: 'number'});
+                dataTableData.cols.push({id: '3', label: translationMessages.answers, type: 'number'});
+                dataTableData.rows.push({c: [{v: data.counts.newCount}, {v: data.counts.publishedCount}, {v: data.counts.answersCount}]});
+                var recipesDataTable = new google.visualization.DataTable(dataTableData);
+                new google.visualization.Table(document.getElementById('competition-statistics-table-container')).
+                        draw(recipesDataTable, {'width': '100%', 'showRowNumber': true, 'page': true, 'cssClassNames': cssClassNames});
+            }
+        }
+    });
+}
+
 google.charts.setOnLoadCallback(function () {
     gapi.analytics.ready(function () {
 
@@ -251,6 +276,7 @@ google.charts.setOnLoadCallback(function () {
             $('#date-range-selector-container').find('input:last').val(end.format('YYYY-MM-DD')).trigger('change');
         });
 
+        getCompetitionStatistics(dateRangeSelector['start-date'], dateRangeSelector['end-date']);
         getChefsStatistics(dateRangeSelector['start-date'], dateRangeSelector['end-date']);
         for (var i = 0; i < recipeTypes.length; i++) {
             getRecipesStatistics(dateRangeSelector['start-date'], dateRangeSelector['end-date'], recipeTypes[i]);
@@ -381,6 +407,7 @@ google.charts.setOnLoadCallback(function () {
             saudiArabiaCitiesTableData.set({query: data}).execute();
             socialTrafficTableData.set({query: data}).execute();
             topViewedPagesTableData.set({query: data}).execute();
+            getCompetitionStatistics(data['start-date'], data['end-date']);
             getChefsStatistics(data['start-date'], data['end-date']);
             for (var i = 0; i < recipeTypes.length; i++) {
                 getRecipesStatistics(dateRangeSelector['start-date'], dateRangeSelector['end-date'], recipeTypes[i]);

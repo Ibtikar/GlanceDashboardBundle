@@ -132,6 +132,17 @@
                 <div id="kitchen911-statistics-table-container"></div>
             </div>
         </div>
+
+        <hr/>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <h4>إحصائيات مسابقة جودى</h4>
+                <div id="competition-statistics-table-container"></div>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
     {% else %}
         <h1>{{ block('title') }}</h1>
     {% endif %}
@@ -158,9 +169,7 @@
         var recipeTypes = [{% for type in recipeTypes %}'{{ type }}'{% if not loop.last %}{{ ', ' }}{% endif %}{% endfor %}];
         var recipeStatisticsUrl = '{{ url('ibtikar_glance_dashboard_recipe_statistics') }}';
         var chefsStatisticsUrl = '{{ url('ibtikar_glance_dashboard_recipe_chef_statistics') }}';
-        {#var commentsStatistics = '{{ url('api_tableau_comments_statistics_compared_to_previous_year') }}';
-        var staffCommentsStatistics = '{{ url('api_tableau_staff_comments_statistics') }}';
-        var usersStatistics = '{{ url('api_tableau_users_statistics') }}';#}
+        var competitionStatisticsUrl = '{{ url('ibtikar_glance_dashboard_competition_statistics') }}';
         // Load the Visualization API and the corechart package.
         google.charts.load('current',{'packages':['corechart', 'table', 'geochart'],'language': 'ar'});
         var CLIENT_ID = '{{ googleClientId }}';
