@@ -61,7 +61,7 @@ class ExportExcelCommand extends ContainerAwareCommand implements SingleRunComma
         $this->output = $output;
 
         $exportQuery = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Export');
-        $output->writeln("Removing 2 days old files.");
+        $output->writeln("Removing 100 days old files.");
         $this->removeOldFiles();
 
         $result = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Export')
@@ -249,7 +249,7 @@ class ExportExcelCommand extends ContainerAwareCommand implements SingleRunComma
             $emailTemplate->getExtraInfo(),
             $this->container->getParameter('themeColor'),
             $emailTemplate->getMessage(),
-            $this->generateUrl('ibtikar_glance_ums_export_download', array('filename' => $filename, 'filesavename' => $this->container->get('translator')->trans('excel exported file', array(), 'visitor')),UrlGeneratorInterface::ABSOLUTE_URL),
+            $this->generateUrl('ibtikar_glance_ums_export_download', array('id'=>$user->getId(),'filename' => $filename, 'filesavename' => $this->container->get('translator')->trans('excel exported file', array(), 'visitor')),UrlGeneratorInterface::ABSOLUTE_URL),
             $filesavename
             )
             , str_replace('%extra_content%', $emailTemplate->getTemplate(), $this->container->get('base_email')->getBaseRender($user->getPersonTitle())));
