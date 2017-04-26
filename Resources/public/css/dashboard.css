@@ -1,0 +1,119 @@
+.chart-container {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    direction: ltr;
+}
+#view-selector-container table{
+    float: right;
+    margin-bottom: 5px;
+    margin-left: 20px;
+}
+#date-range-selector-container{
+    clear: both;
+}
+.google-visualization-table-page-numbers{
+    float: right;
+}
+.dcs-a-dcs-fc-dcs-gb-dcs-cb{
+    width: 200px;
+}
+.google-visualization-formatters-bars{
+    float: right;
+}
+.table-header{
+    background: #363636;
+}
+.grey-background,.hoverRow{
+    background:#F5F5F5 ;
+}
+.hoverSelected{
+    background: #c5e0fa;
+}
+.google-visualization-table-table th.dark-cell{
+    background: #363636;
+    border:1px solid #2c2c2c !important;
+    padding: 5px;
+    font-size: 12px;
+    line-height: 32px;
+    color: #fff;
+}
+.numberCell{
+    background:  #41CCC0;
+    color: #fff;
+    text-align: center;
+}
+.google-visualization-table-div-page{
+    background: transparent;
+}
+.google-visualization-table-page-number.current{
+    background-color: #41ccc0;
+    border:1px solid #41ccc0;
+    color: #fff;
+    cursor: default;
+    z-index: 2;
+}
+.google-visualization-table-page-number {
+    border-radius: 0px;
+    display: inline-block;
+    font-size: 14px;
+    margin: 2px;
+    min-width: 10px;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: #428bca;
+    float: right;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    position: relative;
+    text-decoration: none;
+
+}
+.google-visualization-table-page-number.current {
+    border-style: none;
+    font-size: 14px;
+}
+.google-visualization-table-page-number{
+    color: #428bca;
+}
+.google-visualization-table-page-number:hover {
+    background-color: #eee;
+    border: 1px solid #ddd;
+    color: #2a6496;
+}
+.goog-inline-block{
+    display: none;
+}
+#ssIFrame_google{
+    left:9999px !important;
+}
+#date-range-selector {
+    direction: ltr;
+}
+.google-visualization-table-sortind{
+    position: absolute;
+    padding-right: 8px;
+    font-size: 10px;
+}
+.dark-cell:hover .google-visualization-table-sortind{
+    display: inline-block !important;
+}
+.dark-cell:hover .google-visualization-table-sortind::after {
+    content: "\25b2";
+}
+.dark-cell:hover{
+    cursor: pointer;
+}
+.gapi-analytics-auth-styles-signinbutton{
+    width: 262px;
+}
+.dbNumber{
+    display: inline-block;
+    margin-bottom: 10px;
+    padding:10px 15px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: 0.1em;
+}

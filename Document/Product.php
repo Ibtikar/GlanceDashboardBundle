@@ -269,6 +269,11 @@ class Product extends Document
         $this->relatedRecipe = array();
     }
 
+    public function setRelatedArticle($recipe = array())
+    {
+        $this->relatedArticle = array();
+    }
+
     /**
      * Get id
      *

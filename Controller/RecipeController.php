@@ -1495,4 +1495,89 @@ class RecipeController extends BackendController
         ));
     }
 
+    /**
+     * Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function chefStatisticsAction(Request $request) {
+        $requestedDates = $this->getRequiredFromToDatesOrInvalidResponseFromCurrentRequest($request);
+        if ($requestedDates instanceof JsonResponse) {
+            return $requestedDates;
+        }
+        $responseData = array('status' => 'success', 'code' => 200, 'chefs' => array());
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $recipeRepo = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe');
+        $chefsData = $recipeRepo->createQueryBuilder()
+                        ->field('publishedAt')->gte($requestedDates['from'])
+                        ->field('publishedAt')->lte($requestedDates['to'])
+                        ->field('type')->in(array(Recipe::$types['recipe'], Recipe::$types['article']))
+                        ->distinct('chef')
+                        ->getQuery()->execute();
+        $chefsIds = array();
+        foreach ($chefsData as $chefData) {
+            $chefsIds [] = $chefData['$id'];
+        }
+        if (count($chefsIds) > 0) {
+            $chefs = $dm->getRepository('IbtikarGlanceUMSBundle:Staff')->findBy(array('id' => array('$in' => $chefsIds)));
+            foreach ($chefs as $chef) {
+                $responseData['chefs'] [] = array(
+                    'name' => $chef->__toString(),
+                    'publishedRecipesCount' => $recipeRepo->createQueryBuilder()
+                            ->field('chef')->references($chef)
+                            ->field('publishedAt')->gte($requestedDates['from'])
+                            ->field('publishedAt')->lte($requestedDates['to'])
+                            ->field('type')->equals(Recipe::$types['recipe'])
+                            ->getQuery()->count(),
+                    'publishedArticlesCount' => $recipeRepo->createQueryBuilder()
+                            ->field('chef')->references($chef)
+                            ->field('publishedAt')->gte($requestedDates['from'])
+                            ->field('publishedAt')->lte($requestedDates['to'])
+                            ->field('type')->equals(Recipe::$types['article'])
+                            ->getQuery()->count()
+                );
+            }
+        }
+        return new JsonResponse($responseData);
+    }
+
+    /**
+     * Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function recipeStatisticsAction(Request $request) {
+        $requestedDates = $this->getRequiredFromToDatesOrInvalidResponseFromCurrentRequest($request);
+        if ($requestedDates instanceof JsonResponse) {
+            return $requestedDates;
+        }
+        $type = trim($request->get('type'));
+        if (!$type) {
+            return new JsonResponse(array('status' => 'error', 'message' => 'missing type parameter.'));
+        }
+        if (!in_array($type, Recipe::$types)) {
+            return new JsonResponse(array('status' => 'error', 'message' => 'invalid type.'));
+        }
+        $responseData = array('status' => 'success', 'code' => 200, 'counts' => array());
+        $recipeRepo = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Recipe');
+        $responseData['counts']['publishedCount'] = $recipeRepo->createQueryBuilder()
+                        ->field('publishedAt')->gte($requestedDates['from'])
+                        ->field('publishedAt')->lte($requestedDates['to'])
+                        ->field('status')->equals(Recipe::$statuses['publish'])
+                        ->field('type')->equals($type)
+                        ->getQuery()->count();
+        $responseData['counts']['deletedCount'] = $recipeRepo->createQueryBuilder()
+                        ->field('deletedAt')->gte($requestedDates['from'])
+                        ->field('deletedAt')->lte($requestedDates['to'])
+                        ->field('status')->equals(Recipe::$statuses['deleted'])
+                        ->field('type')->equals($type)
+                        ->getQuery()->count();
+        $responseData['counts']['newCount'] = $recipeRepo->createQueryBuilder()
+                        ->field('createdAt')->gte($requestedDates['from'])
+                        ->field('createdAt')->lte($requestedDates['to'])
+                        ->field('type')->equals($type)
+                        ->getQuery()->count();
+        return new JsonResponse($responseData);
+    }
+
 }

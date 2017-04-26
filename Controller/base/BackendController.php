@@ -447,9 +447,53 @@ class BackendController extends Controller {
     }
 
 
-    public function homeAction() {
 
+    /**
+     * Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
+     * @param Request $request
+     * @return JsonResponse|array
+     */
+    public function getRequiredFromToDatesOrInvalidResponseFromCurrentRequest(Request $request) {
+        $fromDateObject = null;
+        $fromString = trim($request->get('from'));
+        if ($fromString) {
+            try {
+                $fromDateObject = new \DateTime($fromString);
+            } catch (\Exception $e) {
+            }
+        }
+        if(!$fromDateObject instanceof \DateTime) {
+            return new JsonResponse(array('status' => 'error', 'message' => 'from date is missing or invalid.'));
+        }
+        $toDateObject = null;
+        $toString = trim($request->get('to'));
+        if ($toString) {
+            try {
+                $toDateObject = new \DateTime($toString);
+            } catch (\Exception $e) {
+            }
+        }
+        if(!$toDateObject instanceof \DateTime) {
+            return new JsonResponse(array('status' => 'error', 'message' => 'to date is missing or invalid.'));
+        }
+        if ($fromDateObject > $toDateObject) {
+            return new JsonResponse(array('status' => 'error', 'message' => '"from" must be less than or equal to "to".'));
+        }
+        if ($fromDateObject == $toDateObject) {
+            $toDateObject->modify('+1 day');
+        }
+        return array('from' => $fromDateObject, 'to' => $toDateObject);
+    }
+
+    /**
+     * Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
+     * @return Response
+     */
+    public function homeAction() {
         return $this->render('IbtikarGlanceDashboardBundle::backendHome.html.twig', array(
+            'googleClientId' => $this->getParameter('google_application_settings.id'),
+            'googleAPIKey' => $this->getParameter('google_application_settings.key'),
+            'recipeTypes' => Recipe::$types
         ));
     }
 

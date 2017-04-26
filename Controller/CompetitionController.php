@@ -683,4 +683,34 @@ class CompetitionController extends BackendController {
         $renderingParams['type'] = $type;
         return $this->render('IbtikarGlanceDashboardBundle:Competition:answersList.html.twig', $renderingParams);
     }
+
+    /**
+     * Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function competitionStatisticsAction(Request $request) {
+        $requestedDates = $this->getRequiredFromToDatesOrInvalidResponseFromCurrentRequest($request);
+        if ($requestedDates instanceof JsonResponse) {
+            return $requestedDates;
+        }
+        $responseData = array('status' => 'success', 'code' => 200, 'counts' => array());
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $competitionRepo = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition');
+        $responseData['counts']['publishedCount'] = $competitionRepo->createQueryBuilder()
+                        ->field('publishedAt')->gte($requestedDates['from'])
+                        ->field('publishedAt')->lte($requestedDates['to'])
+                        ->field('status')->equals(Competition::$statuses['publish'])
+                        ->getQuery()->count();
+        $responseData['counts']['newCount'] = $competitionRepo->createQueryBuilder()
+                        ->field('createdAt')->gte($requestedDates['from'])
+                        ->field('createdAt')->lte($requestedDates['to'])
+                        ->getQuery()->count();
+        $responseData['counts']['answersCount'] = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:QuestionAnswer')
+                        ->field('createdAt')->gte($requestedDates['from'])
+                        ->field('createdAt')->lte($requestedDates['to'])
+                        ->getQuery()->count();
+        return new JsonResponse($responseData);
+    }
+
 }

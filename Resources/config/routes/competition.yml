@@ -27,3 +27,6 @@ ibtikar_glance_dashboard_competitionanswer_viewanswerone:
     path:  /view-answer-one/{id}
     defaults: { _controller: IbtikarGlanceDashboardBundle:Competition\CompetitionAnswer:view }
 
+ibtikar_glance_dashboard_competition_statistics:
+    path: /ajax/competition-statistics
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Competition:competitionStatistics }
