@@ -25,6 +25,7 @@ class MigrationUsersCommand extends ContainerAwareCommand {
         ;
     }
 
+    
     protected function execute(InputInterface $input, OutputInterface $output) {
         $this->time = new \DateTime();
         $total = 5873;
