@@ -9,6 +9,7 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Question\Question;
 use Ibtikar\GlanceUMSBundle\Document\Visitor;
 use Ibtikar\GlanceDashboardBundle\Document\Slug;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MigrationUsersCommand extends ContainerAwareCommand {
 
@@ -25,7 +26,7 @@ class MigrationUsersCommand extends ContainerAwareCommand {
         ;
     }
 
-    
+
     protected function execute(InputInterface $input, OutputInterface $output) {
         $this->time = new \DateTime();
         $total = 5873;
@@ -53,25 +54,32 @@ class MigrationUsersCommand extends ContainerAwareCommand {
 
             $readFromFile = fopen($filePath, 'r');
 
-       while (!feof($readFromFile) && $i < $answer + $offset - 1) {
-           $i++;
-            $contactInfo = fgetcsv($readFromFile);
-            $email = $contactInfo[3];
+            while (!feof($readFromFile) && $i < $answer + $offset - 1) {
+                $i++;
+                $contactInfo = fgetcsv($readFromFile);
+                $email = $contactInfo[3];
 
-            $visitor = new Visitor();
+                $existVisitor = $this->dm->getRepository('IbtikarGlanceUMSBundle:Visitor')->findBy(array('email'=>  strtolower($email)));
+                if (count($existVisitor) == 0) {
 
-            $visitor->setNickName(trim(str_replace('_', '-', $contactInfo[2]),"-"));
-            $visitor->setUsername(trim(str_replace('_', '-', $contactInfo[2]),"-"));
-            $visitor->setEmail($contactInfo[3]);
-            $visitor->setUserPassword($this->generatePassword(10));
-            $visitor->setMustChangePassword(true);
+                    $visitor = new Visitor();
 
-            $visitor->setMigrated(true);
+                    $visitor->setNickName(trim(str_replace('_', '-', $contactInfo[2]), "-"));
+                    $visitor->setUsername(trim(str_replace('_', '-', $contactInfo[2]), "-"));
+                    $visitor->setEmail($contactInfo[3]);
+                    $oldPass = $this->generatePassword(10);
+                    $visitor->setUserPassword($oldPass);
+                    $visitor->setMustChangePassword(true);
 
-            $this->dm->persist($visitor);
-            $this->dm->flush();
+                    $visitor->setMigrated(true);
 
-            $this->getContainer()->get('Signup')->sendWelcomeMail($visitor, $this->getContainer()->get('router')->generate('login',array(),TRUE), true, true);
+                    $this->dm->persist($visitor);
+                    $this->dm->flush();
+                    $this->sendMail($visitor, $oldPass);
+                    $progress->advance(1);
+
+//            $this->getContainer()->get('Signup')->sendWelcomeMail($visitor, $this->getContainer()->get('router')->generate('login',array(),TRUE), true, true);
+                }
 //            try{
 //        $errorsObjects = $this->getContainer()->get('validator')->validate($visitor,null,array('visitorSignup'));
 //            } catch (\Exception $e){
@@ -82,30 +90,57 @@ class MigrationUsersCommand extends ContainerAwareCommand {
 //                die(var_dump($visitor->getUsername(),$error->getPropertyPath(),$error->getMessage()));
 //            }
 //        }
-
-            $progress->advance(1);
-        }
-        fclose($readFromFile);
+            }
+            fclose($readFromFile);
 
 //            $this->dm->flush();
 
             $output->writeln(PHP_EOL . $answer . " Users were added.");
-
         } else {
             $output->writeln(array("      (Wrong Answer)", "(ノಠ益ಠ)ノ"));
         }
     }
 
-    private function generatePassword($length = 8) {
-    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@!_-';
-    $count = mb_strlen($chars);
+    private function sendMail($visitor, $oldPass)
+    {
+        $emailTemplate = $this->dm->getRepository('IbtikarGlanceDashboardBundle:EmailTemplate')->findOneByName('add frontent user');
 
-    for ($i = 0, $result = ''; $i < $length; $i++) {
-        $index = rand(0, $count - 1);
-        $result .= mb_substr($chars, $index, 1);
+        $body = str_replace(
+            array(
+            '%user-name%',
+            '%email%',
+            '%password%',
+            '%loginUrlAr%',
+            '%loginUrlEn%',
+            ), array(
+            $visitor->getNickName(),
+            $visitor->getEmail(),
+            $oldPass,
+            $this->getContainer()->get('router')->generate('ibtikar_goody_frontend_login', array('_locale' => 'ar'), UrlGeneratorInterface::ABSOLUTE_URL),
+            $this->getContainer()->get('router')->generate('ibtikar_goody_frontend_login', array('_locale' => 'en'), UrlGeneratorInterface::ABSOLUTE_URL),
+            ), str_replace('%message%', $emailTemplate->getTemplate(), $this->getContainer()->get('frontend_base_email')->getBaseRender2($visitor->getPersonTitle(), false))
+        );
+        $mailer = $this->getContainer()->get('swiftmailer.mailer.spool_mailer');
+        $message = \Swift_Message::newInstance()
+            ->setSubject($emailTemplate->getSubject())
+            ->setFrom($this->getContainer()->getParameter('mailer_user'))
+            ->setTo($visitor->getEmail())
+            ->setBody($body, 'text/html')
+        ;
+        $mailer->send($message);
     }
 
-    return $result;
-}
+    private function generatePassword($length = 8)
+    {
 
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@!_-';
+        $count = mb_strlen($chars);
+
+        for ($i = 0, $result = ''; $i < $length; $i++) {
+            $index = rand(0, $count - 1);
+            $result .= mb_substr($chars, $index, 1);
+        }
+
+        return $result;
+    }
 }
