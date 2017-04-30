@@ -140,7 +140,7 @@
                                                                 </div>
 
                                                     {% elseif answerType=='video'  %}
-                                        <iframe id="player{{loop.index-1}}" style="width:300px;height: 220px;" class="yt_players" src="//www.youtube.com/embed/{{answer.answer}}?enablejsapi=1;"></iframe>
+                                        <iframe id="player{{loop.index-1}}" style="width:300px;height: 220px;" class="yt_players" src="//www.youtube.com/embed/{{answer.answer}}?enablejsapi=1&rel=0"></iframe>
 
                                                     {% else %}
                                                         {{answer.answer}}
