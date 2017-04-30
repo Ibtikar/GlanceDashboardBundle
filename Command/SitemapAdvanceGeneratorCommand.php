@@ -71,7 +71,7 @@ class SitemapAdvanceGeneratorCommand extends ContainerAwareCommand {
 
         $currentDate = new \DateTime();
 
-        $fileHandler = @fopen($this->siteMapFolderAbsolutePath.'sitmap-'.$this->locale.'.xml', 'w');
+        $fileHandler = @fopen($this->siteMapFolderAbsolutePath.'sitemap-'.$this->locale.'.xml', 'w');
 
         $mainSiteMapContent = str_replace(
                 array(
@@ -86,7 +86,7 @@ class SitemapAdvanceGeneratorCommand extends ContainerAwareCommand {
                 ),
                 file_get_contents($this->siteMapFolderAbsolutePath.'sitemap.xml.tpl'));
 
-        file_put_contents($this->siteMapFolderAbsolutePath.'sitmap-'.$this->locale.'.xml', $mainSiteMapContent);
+        file_put_contents($this->siteMapFolderAbsolutePath.'sitemap-'.$this->locale.'.xml', $mainSiteMapContent);
 
         $this->router = $this->getContainer()->get('router');
 
@@ -279,6 +279,7 @@ class SitemapAdvanceGeneratorCommand extends ContainerAwareCommand {
         $link = $record->addChild('xhtml:xhtml:link',null);
 
         $link->addAttribute("rel","alternate");
+        $link->addAttribute("media","handheld");
         $link->addAttribute("href",htmlspecialchars($array['loc']));
 
         return $xmlElement;
@@ -304,10 +305,9 @@ class SitemapAdvanceGeneratorCommand extends ContainerAwareCommand {
      */
     private function initAppXmlObj(){
         $this->sitemapXml = new \SimpleXMLElement('<urlset/>');
-        $this->sitemapXml->addAttribute('xmlns:xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-        $this->sitemapXml->addAttribute('xmlns:xsi:schemaLocation', 'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.google.com/schemas/sitemap-news/0.9 http://www.google.com/schemas/sitemap-news/0.9/sitemap-news.xsd');
+//        $this->sitemapXml->addAttribute('xmlns:xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+//        $this->sitemapXml->addAttribute('xmlns:xsi:schemaLocation', 'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd');
         $this->sitemapXml->addAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
-        $this->sitemapXml->addAttribute('xmlns:xmlns:news', 'http://www.google.com/schemas/sitemap-news/0.9');
         $this->sitemapXml->addAttribute('xmlns:xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
 
         $this->sitemapXml->addAttribute('encoding', 'UTF-8');
