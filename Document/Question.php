@@ -103,7 +103,7 @@ class Question {
         $tempAnswers = $this->answers;
         $this->answers = new ArrayCollection();
 
-        if(in_array($this->questionType, array('single-answer','multiple-answer'))){
+        if(in_array($this->questionType, array('single-answer','multiple-answer','single answer','multiple answer'))){
             foreach ($tempAnswers as $answers) {
                 $this->answers[] = clone $answers;
             }
