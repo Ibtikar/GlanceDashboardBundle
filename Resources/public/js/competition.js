@@ -180,7 +180,7 @@ $(document).ready(function () {
                             .replace(/%name%/g, name)
                             .replace(/%image-delete-url%/g, media.deleteUrl)
                             .replace(/%arabicName%/g, imageErrorMessages[name])
-                            .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, 'coverPhoto'));
+                            .replace(/%uploadButton%/g, uploadButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
                     element.closest('tr').replaceWith(temepelate);
                     showNotificationMsg(data.message, "", data.status);
                     $('#form_defaultCoverPhoto').val(media.id)
