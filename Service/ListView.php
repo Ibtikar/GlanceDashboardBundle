@@ -134,7 +134,7 @@ class ListView {
              }
 
            }
-            if (in_array($action, array("Approve","Reject","Edit", "Delete", "Activate_Deactivate", "Publish_Unpublish", 'Publish', 'AutoPublish', 'Backward', "Assign", "AssignTo", "History", "Reassign", "Show", "Forward", 'ViewOne', 'Unpublish', 'PublishControl', 'AutoPublishControl', 'ManageOne', 'Manage', 'StopResume', 'Viewcomment', 'ViewPlaces', 'AddPlaces','Resendmail','Favorite_Unfavorite','ChangeStatus','ViewOneAnswer','ViewAnswers','draft')) && $this->securityContext->isGranted('ROLE_' . strtoupper($listName) . '_' . strtoupper($action))) {
+            if (in_array($action, array("Approve","Reject","Edit", "Delete", "Activate_Deactivate", "Publish_Unpublish", 'Publish', 'AutoPublish', 'Backward', "Assign", "AssignTo", "History", "Reassign", "Show", "Forward", 'ViewOne', 'Unpublish', 'PublishControl', 'AutoPublishControl', 'ManageOne', 'Manage', 'StopResume', 'Viewcomment', 'ViewPlaces', 'AddPlaces','Resendmail','Favorite_Unfavorite','ChangeStatus','ViewOneAnswer','ViewAnswers','draft','Export')) && $this->securityContext->isGranted('ROLE_' . strtoupper($listName) . '_' . strtoupper($action))) {
                 return TRUE;
             }
             if ($action == "Addcontact" && $this->securityContext->isGranted('ROLE_CONTACT_CREATE')) {

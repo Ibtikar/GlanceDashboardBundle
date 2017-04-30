@@ -353,14 +353,12 @@ class RecipeController extends BackendController
             $queryBuilder->field('products')->all($products);
         }
 
-        if($this->listStatus == 'list_publish_recipe'){
-            if ($request->get('pub-from') && (bool) strtotime($request->get('pub-from'))) {
-                $queryBuilder = $queryBuilder->field('publishedAt')->gte(new \DateTime($request->get('pub-from')));
-            }
-            if ($request->get('pub-to') && (bool) strtotime($request->get('pub-to'))) {
-                $fromDate = new \DateTime($request->get('pub-to'));
-                $queryBuilder->field('publishedAt')->lte($fromDate->modify('+1 day'));
-            }
+        if ($request->get('pub-from') && (bool) strtotime($request->get('pub-from'))) {
+            $queryBuilder = $queryBuilder->field('publishedAt')->gte(new \DateTime($request->get('pub-from')));
+        }
+        if ($request->get('pub-to') && (bool) strtotime($request->get('pub-to'))) {
+            $fromDate = new \DateTime($request->get('pub-to'));
+            $queryBuilder->field('publishedAt')->lte($fromDate->modify('+1 day'));
         }
         return $queryBuilder;
     }
