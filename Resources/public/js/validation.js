@@ -15,7 +15,7 @@ $.validator.addMethod('mobile', function (value, element) {
   return true;
 }, 'phone must be in the right format');
     $.validator.addMethod('youtube', function (value, element) {
-        return value == "" || value.match(/^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/);
+        return value == "" || value.match(/^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/) || value.match(/^(?:https?:\/\/)?(?:www\.)?m\.youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/);
     });
     $.validator.addMethod('uploadrequired', function (value, element) {
         return $(element).parents('.fileupload-buttonbar').next('.uploader-wrapper').find('[data-type="DELETE"]').length > 0;
