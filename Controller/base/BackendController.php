@@ -1094,8 +1094,8 @@ class BackendController extends Controller {
      */
     public function slugifier($recipe) {
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $slugAr = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($recipe->getTitle(),100)."-".  date('ymdHis'));
-        $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringEn($recipe->getTitleEn(),100)."-".date('ymdHis'));
+        $slugAr = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($recipe->getTitle(),100));
+        $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringEn($recipe->getTitleEn(),100));
 
         $recipe->setSlug($slugAr);
         $recipe->setSlugEn($slugEn);
