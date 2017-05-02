@@ -402,6 +402,9 @@
 
         $('select').select2();
 
+    $(document).on('onFailSubmitForm', function () {
+        $('select').select2();
+    })
         var questionNextId = 1;
         var questionNextIdEn = 1;
         $(document).on('click', '.dev-add-competition-questions,.dev-add-competition-questionsEn', function() {

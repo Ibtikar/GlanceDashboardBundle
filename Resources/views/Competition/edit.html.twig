@@ -414,6 +414,9 @@ console.log(currentDate);
 
         $('select').select2();
 
+   $(document).on('onFailSubmitForm', function () {
+        $('select').select2();
+    })
         var questionNextId = $('#competition_questions .panel-flat').length;
         var questionNextIdEn = $('#competition_questionsEn .panel-flat').length;
         $(document).on('click', '.dev-add-competition-questions,.dev-add-competition-questionsEn', function() {
