@@ -110,7 +110,7 @@ var recipeValue='';
               return eval($(this).attr('ajax-url-var'));
           },
     dataType: 'json',
-    delay: 1000,
+{#    delay: 1000,#}
     data: function (params) {
       return {
         q: params.term,
@@ -122,7 +122,8 @@ var recipeValue='';
         results: data
       };
     },
-    cache: true
+
+    cache: false
   },
   escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
   minimumInputLength: 1,
@@ -162,7 +163,6 @@ var recipeValue='';
     }
 
     function addUserPic(opt) {
-
 
         if (!opt.id) {
             if(!opt.text){
