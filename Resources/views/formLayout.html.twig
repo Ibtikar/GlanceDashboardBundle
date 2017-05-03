@@ -104,6 +104,7 @@
 
 var recipeValue='';
     $(".select-ajax").select2({
+        'ajax--cache': false,
         ajax: {
           method:'POST',
           url: function(){
@@ -134,11 +135,27 @@ var recipeValue='';
       return "من فضلك ادخل حرف او اكثر";
     }
 ,
+
  "noResults": function(){
            return "نأسف  لا توجد نتائج";
        }},
   templateResult: addUserPic
-});
+})
+{#    .on("select2:selecting", function (e) {#}
+         {#   var tagId = '';
+            if (e.choice.isNew) {
+                self.AddTagToDatabase(e.choice.text);
+            } else {
+                var isValidTag = true;
+                $(config.element[0] + ' ul li').find('div').each(function (index, item) {
+                    if ($(item).html().toLowerCase().trim() == e.choice.text.toLowerCase().trim()) {
+                        isValidTag = false;
+                        e.choice.text = '';
+                        return;
+                    }
+                });
+            }#}
+{#        });#}
     $('[id$="Time"],[id$="Count"]').TouchSpin({
                 min: 0,
                 max: 1000,
