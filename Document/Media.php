@@ -262,7 +262,13 @@ class Media extends Document {
             // you must throw an exception here if the file cannot be moved
             // so that the document is not persisted to the database
             // which the UploadedFile move() method does
-            $this->file->move($this->getUploadRootDir(), $this->path);
+
+            if($this->file->guessExtension() == "png"){
+                $this->convertImage($this->file->getPathname(),$this->getUploadRootDir()."/".$this->path, 85);
+            }else{
+                $this->file->move($this->getUploadRootDir(), $this->path);
+            }
+
             // remove the file as you do not need it any more
             $this->file = NULL;
         }
@@ -915,5 +921,17 @@ class Media extends Document {
     public function getBannerPhoto()
     {
         return $this->bannerPhoto;
+    }
+
+    function convertImage($originalImage, $outputImage, $quality){
+        $exploded = explode('.',$originalImage);
+        $ext = $exploded[count($exploded) - 1];
+        if (preg_match('/png/i',$ext)){$imageTmp=imagecreatefrompng($originalImage);}
+        else    {    return false;}
+        // quality is a value from 0 (worst) to 100 (best)
+        imagejpeg($imageTmp, $outputImage, $quality);
+        imagedestroy($imageTmp);
+        unlink($originalImage);
+        return true;
     }
 }
