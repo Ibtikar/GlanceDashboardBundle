@@ -8,6 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
@@ -35,11 +36,16 @@ class PngToJpegCommand extends ContainerAwareCommand {
                     ->in(__DIR__.'/../../../../web/uploads');
 
         $output->writeln("Found ".count($files)." PNGs to be converted");
+
+        $question = new Question('How many pngs to convert?[' . count($files) . ']: ', $total);
+        $answer = $helper->ask($input, $output, $question);
         $i = 0;
         foreach ($files as $file) {
+            $i++;
+            if($answer > $i){ break; }
             try{
                 $daPath = $file->getPathname();
-                $output->writeln("Convert image ".$file->getRelativePathName().' jpeg');
+                $output->writeln("Convert image ".$file->getRelativePathName().' to jpeg');
                 $this->convertImage($daPath, str_replace('png','jpeg',$daPath), 85);
 
                 $cachePath = str_replace('/web/', '/web/media/compressor/', $daPath);
@@ -65,10 +71,16 @@ class PngToJpegCommand extends ContainerAwareCommand {
         $exploded = explode('.',$originalImage);
         $ext = $exploded[count($exploded) - 1];
         $imageTmp=imagecreatefrompng($originalImage);
+
+        if($imageTmp){
+            imagejpeg($imageTmp, $outputImage, $quality);
+            imagedestroy($imageTmp);
+            unlink($originalImage);
+        }else {
+            $output->writeln("Image failed". $imageTmp);
+        }
+
         // quality is a value from 0 (worst) to 100 (best)
-        imagejpeg($imageTmp, $outputImage, $quality);
-        imagedestroy($imageTmp);
-        unlink($originalImage);
         return true;
     }
 
