@@ -229,7 +229,7 @@ class SitemapAdvanceGeneratorCommand extends ContainerAwareCommand {
             return;
         }
         $arr = array(
-                'loc' => $this->generateURL('ibtikar_goody_frontend_view',array('slug' => $this->locale == "en"?$material->getSlugEn():$material->getSlug(),'_locale'=>$this->locale)),
+                'loc' => $this->generateURL('ibtikar_goody_frontend_'.$material->getType().'_view',array('slug' => $this->locale == "en"?$material->getSlugEn():$material->getSlug(),'_locale'=>$this->locale)),
                 'changefreq' => "monthly", //always, hourly, daily, weekly, monthly, yearly, never
                 'priority' => "0.8",
                 'title' =>$material->$nameMethod(),

@@ -36,7 +36,7 @@ class FaceBookDocumentUpdateCommand extends ContainerAwareCommand {
                     ->getQuery()->execute();
 
             foreach ($documents as $document) {
-                $data = array('id' => $this->getContainer()->get('router')->generate('ibtikar_goody_frontend_view', array('slug' => $document->getDocument()->getSlug(), '_locale'=> 'ar'), true), 'scrape' => TRUE);
+                $data = array('id' => $this->getContainer()->get('router')->generate('ibtikar_goody_frontend_'.$document->getType().'_view', array('slug' => $document->getDocument()->getSlug(), '_locale'=> 'ar'), true), 'scrape' => TRUE);
                 $ch = curl_init("https://graph.facebook.com");
 
                 curl_setopt_array($ch, array(

@@ -25,12 +25,62 @@ class UpdateOldStyleSlugsCommand extends ContainerAwareCommand {
         $redirect = $this->getContainer()->get('redirect');
         $changed = 0;
         $unchanged = 0;
+        $output->writeln("starting with recipe");
 
         foreach ($posts as $post) {
 
-            if($changed == 1){
-                break;
+//            if($changed == 1){
+//                break;
+//            }
+
+            // check of slug contain number
+            $newSlugAr = preg_replace('/\-\d+/', "", $post->getSlug());
+            $newSlugEn = preg_replace('/\-\d+/', "", $post->getSlugEn());
+
+            if($newSlugAr != $post->getSlug()){ // assume one check is enough
+                $changed++;
+
+                $oldSlugAr = $post->getSlug();
+                $oldSlugEn = $post->getSlugEn();
+
+                $output->writeln("Change arabic slug '$oldSlugAr' to '$newSlugAr'");
+                $output->writeln("Change english slug '$oldSlugEn' to '$newSlugEn'");
+
+                $slug = $dm->getRepository('IbtikarGlanceDashboardBundle:Slug')->findOneBy(array('referenceId' => $post->getId()));
+
+                if($slug){
+                    $slug->setSlugAr($newSlugAr);
+                    $slug->setSlugEn($newSlugEn);
+                }
+
+                $post->setSlug($newSlugAr);
+                $post->setSlugEn($newSlugEn);
+
+                $redirect->addPermanentRedirect($router->generate('ibtikar_goody_frontend_view', array('slug' => $oldSlugAr, '_locale' => 'ar')), $router->generate('ibtikar_goody_frontend_'.$post->getType().'_view', array('slug' => $newSlugAr, '_locale' => 'ar')));
+                $redirect->addPermanentRedirect($router->generate('ibtikar_goody_frontend_view', array('slug' => $oldSlugEn, '_locale' => 'en')), $router->generate('ibtikar_goody_frontend_'.$post->getType().'_view', array('slug' => $newSlugEn, '_locale' => 'en')));
+            } else {
+                $unchanged++;
             }
+        }
+
+        $dm->flush();
+        //product
+
+        $posts = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->findBy(array('deleted'=>false));
+
+
+        $changed = 0;
+        $unchanged = 0;
+        $output->writeln("Changed '$changed', Already fixed '$unchanged'");
+
+        $output->writeln("starting with product");
+
+
+        foreach ($posts as $post) {
+
+//            if($changed == 1){
+//                break;
+//            }
 
             // check of slug contain number
             $newSlugAr = preg_replace('/\-\d+/', "", $post->getSlug());
@@ -61,9 +111,9 @@ class UpdateOldStyleSlugsCommand extends ContainerAwareCommand {
                 $unchanged++;
             }
         }
-
         $dm->flush();
-        
+
+
         $output->writeln("Changed '$changed', Already fixed '$unchanged'");
 
     }
