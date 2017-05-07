@@ -42,7 +42,8 @@ class PngToJpegCommand extends ContainerAwareCommand {
         $i = 0;
         foreach ($files as $file) {
             $i++;
-            if($answer > $i){ break; }
+            die(var_dump($answer,$i));
+            if($answer <= $i){ break; }
             try{
                 $daPath = $file->getPathname();
                 $output->writeln("Convert image ".$file->getRelativePathName().' to jpeg');
