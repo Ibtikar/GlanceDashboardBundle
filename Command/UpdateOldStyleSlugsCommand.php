@@ -37,11 +37,13 @@ class UpdateOldStyleSlugsCommand extends ContainerAwareCommand {
             $newSlugAr = preg_replace('/\-\d+/', "", $post->getSlug());
             $newSlugEn = preg_replace('/\-\d+/', "", $post->getSlugEn());
 
+            $oldSlugAr = $post->getSlug();
+            $oldSlugEn = $post->getSlugEn();
+
+
             if($newSlugAr != $post->getSlug()){ // assume one check is enough
                 $changed++;
 
-                $oldSlugAr = $post->getSlug();
-                $oldSlugEn = $post->getSlugEn();
 
                 $output->writeln("Change arabic slug '$oldSlugAr' to '$newSlugAr'");
                 $output->writeln("Change english slug '$oldSlugEn' to '$newSlugEn'");
