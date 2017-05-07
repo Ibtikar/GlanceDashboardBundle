@@ -57,11 +57,37 @@ class PngToJpegCommand extends ContainerAwareCommand {
                     $output->writeln("No cached image found");
                 }
                 $output->writeln(" ");
+
             } catch (\Exception $e){
                 $output->writeln("An error occured while deleting this image");
                 $output->writeln($e->getMessage());
             }
         }
+
+        $dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
+
+        $medias = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array('type' => 'image','deleted' => false));
+        $output->writeln("Updating media");
+        foreach($medias as $media){
+            if(strpos($media->getPath(),'png')){
+                $media->setPath(str_replace('png', 'jpeg', $media->getPath()));
+                $media->setName(str_replace('png', 'jpeg', $media->getName()));
+            }
+        }
+
+        $dm->flush();
+
+        $output->writeln("Updating recipes");
+
+        $recipes = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findBy('');
+
+        foreach($recipes as $recipe){
+            if(strpos($recipe->getDefaultCoverPhoto(),'png')){
+                $recipe->setDefaultCoverPhoto(str_replace('png', 'jpeg', $recipe->getDefaultCoverPhoto()));
+            }
+        }
+
+        $dm->flush();
 
         $output->writeln("Command Finished");
 
