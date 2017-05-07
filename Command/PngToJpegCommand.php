@@ -42,7 +42,6 @@ class PngToJpegCommand extends ContainerAwareCommand {
         $i = 0;
         foreach ($files as $file) {
             $i++;
-            die(var_dump($answer,$i));
             if($answer <= $i){ break; }
             try{
                 $daPath = $file->getPathname();
