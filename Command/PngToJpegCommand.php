@@ -79,7 +79,7 @@ class PngToJpegCommand extends ContainerAwareCommand {
 
         $output->writeln("Updating recipes");
 
-        $recipes = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findBy('');
+        $recipes = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findBy(array('defaultCoverPhoto' => array('$exists' => true),'deleted' => false));
 
         foreach($recipes as $recipe){
             if(strpos($recipe->getDefaultCoverPhoto(),'png')){
