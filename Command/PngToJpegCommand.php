@@ -38,7 +38,7 @@ class PngToJpegCommand extends ContainerAwareCommand {
         $output->writeln("Found ".count($files)." PNGs to be converted");
 
         $question = new Question('How many pngs to convert?[' . count($files) . ']: ', count($files));
-        $answer = $helper->ask($input, $output, $question);
+        $answer = $this->getHelper('question')->ask($input, $output, $question);
         $i = 0;
         foreach ($files as $file) {
             $i++;
