@@ -33,9 +33,9 @@ class Redirect {
         $requestedUrl = $event->getRequest()->getPathInfo();
 
         // The redirect listener should not work on all routes it should check for the route name before selecting from database`
-        if (!in_array($this->container->get('request_stack')->getCurrentRequest()->get('_route'), array('ibtikar_goody_frontend_shorturl'))) {
-            return;
-        }
+//        if (!in_array($this->container->get('request_stack')->getCurrentRequest()->get('_route'), array('ibtikar_goody_frontend_shorturl'))) {
+//            return;
+//        }
 
         $dm = $this->container->get('doctrine_mongodb')->getManager();
         $redirect = $dm->getRepository('IbtikarGlanceDashboardBundle:Redirect')->findOneByOldUrl($requestedUrl);
