@@ -121,6 +121,8 @@ class Redirect {
         $redirectRepo = $dm->getRepository('IbtikarGlanceDashboardBundle:Redirect');
         $checkOldRedirect = $redirectRepo->findOneByOldUrl($oldUrl);
         if ($checkOldRedirect) {
+            var_dump('Old url ' . $oldUrl . ' is already redirecting to another url ' . $checkOldRedirect->getRedirectToUrl() . ' please remove it first.');
+            return;
             throw new \Exception('Old url ' . $oldUrl . ' is already redirecting to another url ' . $checkOldRedirect->getRedirectToUrl() . ' please remove it first.');
         }
         if (!$ignoreOldUrlsUpdate) {
