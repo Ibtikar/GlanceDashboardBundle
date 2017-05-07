@@ -37,12 +37,12 @@ class PngToJpegCommand extends ContainerAwareCommand {
 
         $output->writeln("Found ".count($files)." PNGs to be converted");
 
-        $question = new Question('How many pngs to convert?[' . count($files) . ']: ', $total);
-        $answer = $helper->ask($input, $output, $question);
+        $question = new Question('How many pngs to convert?[' . count($files) . ']: ', count($files));
+        $answer = $this->getHelper('question')->ask($input, $output, $question);
         $i = 0;
         foreach ($files as $file) {
             $i++;
-            if($answer > $i){ break; }
+            if($answer <= $i){ break; }
             try{
                 $daPath = $file->getPathname();
                 $output->writeln("Convert image ".$file->getRelativePathName().' to jpeg');
@@ -67,7 +67,7 @@ class PngToJpegCommand extends ContainerAwareCommand {
 
     }
 
-    function convertImage($originalImage, $outputImage, $quality){
+    function convertImage($originalImage, $outputImage  , $quality){
         $exploded = explode('.',$originalImage);
         $ext = $exploded[count($exploded) - 1];
         $imageTmp=imagecreatefrompng($originalImage);
