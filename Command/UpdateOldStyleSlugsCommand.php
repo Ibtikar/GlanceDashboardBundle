@@ -60,9 +60,11 @@ class UpdateOldStyleSlugsCommand extends ContainerAwareCommand {
             } else {
                 $unchanged++;
             }
+            if ($post->getSlug()) {
 
-            $redirect->addPermanentRedirect($router->generate('ibtikar_goody_frontend_view', array('slug' => $oldSlugAr, '_locale' => 'ar')), $router->generate('ibtikar_goody_frontend_' . $post->getType() . '_view', array('slug' => $newSlugAr, '_locale' => 'ar')));
-            $redirect->addPermanentRedirect($router->generate('ibtikar_goody_frontend_view', array('slug' => $oldSlugEn, '_locale' => 'en')), $router->generate('ibtikar_goody_frontend_' . $post->getType() . '_view', array('slug' => $newSlugEn, '_locale' => 'en')));
+                $redirect->addPermanentRedirect($router->generate('ibtikar_goody_frontend_view', array('slug' => $oldSlugAr, '_locale' => 'ar')), $router->generate('ibtikar_goody_frontend_' . $post->getType() . '_view', array('slug' => $newSlugAr, '_locale' => 'ar')));
+                $redirect->addPermanentRedirect($router->generate('ibtikar_goody_frontend_view', array('slug' => $oldSlugEn, '_locale' => 'en')), $router->generate('ibtikar_goody_frontend_' . $post->getType() . '_view', array('slug' => $newSlugEn, '_locale' => 'en')));
+            }
         }
 
         $dm->flush();
