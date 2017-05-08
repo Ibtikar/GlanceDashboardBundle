@@ -14,7 +14,9 @@ use Ibtikar\GlanceDashboardBundle\Document\Document;
  * @MongoDB\hasLifeCycleCallbacks
  * @MongoDB\Indexes({
  *   @MongoDB\Index(keys={"name"="asc"}),
- *   @MongoDB\Index(keys={"nameEn"="asc"})
+ *   @MongoDB\Index(keys={"nameEn"="asc"}),
+ *   @MongoDB\Index(keys={"slugEn"="asc","deleted"="asc"}, options={"name"="get product by english slug"}),
+ *   @MongoDB\Index(keys={"slug"="asc", "deleted"="asc"}, options={"name"="get product by arabic slug"}),
  * })
  */
 class Product extends Document

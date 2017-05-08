@@ -11,8 +11,13 @@ use Ibtikar\GlanceDashboardBundle\Document\Publishable;
 /**
  * @MongoDB\hasLifeCycleCallbacks
  * @MongoDB\Document(repositoryClass="Ibtikar\GlanceDashboardBundle\Document\RecipeRepository")
+ * @MongoDB\Indexes({
+ *   @MongoDB\Index(keys={"status"="asc", "slugEn"="asc", "type"="asc", "deleted"="asc"}, options={"name"="get content by english slug"}),
+ *   @MongoDB\Index(keys={"status"="asc", "slug"="asc", "type"="asc", "deleted"="asc"}, options={"name"="get content by arabic slug"}),
+ * })
  */
-class Recipe  extends Publishable {
+class Recipe extends Publishable
+{
 
     public static $difficultyMap = array(
         0 => 'easy',
