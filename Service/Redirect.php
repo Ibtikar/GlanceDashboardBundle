@@ -145,6 +145,7 @@ class Redirect {
         $redirect->setRedirectToUrl($redirectToUrl);
         $dm->persist($redirect);
         $dm->flush();
+        var_dump($redirect->getId());
     }
 
 }

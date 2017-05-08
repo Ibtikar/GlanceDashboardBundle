@@ -45,8 +45,6 @@ class UpdateOldStyleSlugsCommand extends ContainerAwareCommand {
                 $changed++;
 
 
-                $output->writeln("Change arabic slug '$oldSlugAr' to '$newSlugAr'");
-                $output->writeln("Change english slug '$oldSlugEn' to '$newSlugEn'");
 
                 $slug = $dm->getRepository('IbtikarGlanceDashboardBundle:Slug')->findOneBy(array('referenceId' => $post->getId()));
 
@@ -62,6 +60,8 @@ class UpdateOldStyleSlugsCommand extends ContainerAwareCommand {
             }
             if ($post->getSlug()) {
 
+                $output->writeln("Change arabic slug '$oldSlugAr' to '$newSlugAr'");
+                $output->writeln("Change english slug '$oldSlugEn' to '$newSlugEn'");
                 $redirect->addPermanentRedirect($router->generate('ibtikar_goody_frontend_view', array('slug' => $oldSlugAr, '_locale' => 'ar')), $router->generate('ibtikar_goody_frontend_' . $post->getType() . '_view', array('slug' => $newSlugAr, '_locale' => 'ar')));
                 $redirect->addPermanentRedirect($router->generate('ibtikar_goody_frontend_view', array('slug' => $oldSlugEn, '_locale' => 'en')), $router->generate('ibtikar_goody_frontend_' . $post->getType() . '_view', array('slug' => $newSlugEn, '_locale' => 'en')));
             }
