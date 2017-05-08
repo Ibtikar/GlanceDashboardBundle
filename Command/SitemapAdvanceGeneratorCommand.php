@@ -196,7 +196,7 @@ class SitemapAdvanceGeneratorCommand extends ContainerAwareCommand {
                 $products = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Product')->findBy(array('deleted' => false));
 
                 foreach($products as $post){
-                    $this->addLink($post);
+                    $this->addLink($post,'product');
                 }
                 break;
             case 'article':
@@ -216,11 +216,11 @@ class SitemapAdvanceGeneratorCommand extends ContainerAwareCommand {
     protected function getLinks($type = 'recipe'){
         $posts = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findBy(array('type' => $type,'status'=>'publish','deleted'=>false));
         foreach($posts as $post){
-            $this->addLink($post);
+            $this->addLink($post,$type);
         }
     }
 
-    protected function addLink($material, $lastmod = null, $changefreq = "daily", $priority = "0.8") {
+    protected function addLink($material,$type , $lastmod = null) {
 
         $nameMethod = (method_exists($material, 'getSlug'.($this->locale == "en"?"En":""))?'getSlug':'getName').($this->locale == "en"?"En":"");
 
@@ -229,7 +229,7 @@ class SitemapAdvanceGeneratorCommand extends ContainerAwareCommand {
             return;
         }
         $arr = array(
-                'loc' => $this->generateURL('ibtikar_goody_frontend_'.$material->getType().'_view',array('slug' => $this->locale == "en"?$material->getSlugEn():$material->getSlug(),'_locale'=>$this->locale)),
+                'loc' => $this->generateURL('ibtikar_goody_frontend_'.($type != 'product'?$material->getType().'_':'').'view',array('slug' => $this->locale == "en"?$material->getSlugEn():$material->getSlug(),'_locale'=>$this->locale)),
                 'changefreq' => "monthly", //always, hourly, daily, weekly, monthly, yearly, never
                 'priority' => "0.8",
                 'title' =>$material->$nameMethod(),
@@ -276,11 +276,11 @@ class SitemapAdvanceGeneratorCommand extends ContainerAwareCommand {
         $record->addChild('changefreq', $array['changefreq']);
         $record->addChild('priority', $array['priority']);
 
-        $link = $record->addChild('xhtml:xhtml:link',null);
+//        $link = $record->addChild('xhtml:xhtml:link',null);
 
-        $link->addAttribute("rel","alternate");
-        $link->addAttribute("media","handheld");
-        $link->addAttribute("href",htmlspecialchars($array['loc']));
+//        $link->addAttribute("rel","alternate");
+//        $link->addAttribute("media","handheld");
+//        $link->addAttribute("href",htmlspecialchars($array['loc']));
 
         return $xmlElement;
     }
@@ -305,10 +305,10 @@ class SitemapAdvanceGeneratorCommand extends ContainerAwareCommand {
      */
     private function initAppXmlObj(){
         $this->sitemapXml = new \SimpleXMLElement('<urlset/>');
-//        $this->sitemapXml->addAttribute('xmlns:xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-//        $this->sitemapXml->addAttribute('xmlns:xsi:schemaLocation', 'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd');
+        $this->sitemapXml->addAttribute('xmlns:xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+        $this->sitemapXml->addAttribute('xmlns:xsi:schemaLocation', 'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.google.com/schemas/sitemap-news/0.9 http://www.google.com/schemas/sitemap-news/0.9/sitemap-news.xsd');
         $this->sitemapXml->addAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
-        $this->sitemapXml->addAttribute('xmlns:xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
+        $this->sitemapXml->addAttribute('xmlns:xmlns:news', 'http://www.google.com/schemas/sitemap-news/0.9');
 
         $this->sitemapXml->addAttribute('encoding', 'UTF-8');
         $this->xmlOutputFile = $this->saveLocation;
