@@ -121,8 +121,10 @@ class Redirect {
         $redirectRepo = $dm->getRepository('IbtikarGlanceDashboardBundle:Redirect');
         $checkOldRedirect = $redirectRepo->findOneByOldUrl($oldUrl);
         if ($checkOldRedirect) {
-            var_dump('Old url ' . $oldUrl . ' is already redirecting to another url ' . $checkOldRedirect->getRedirectToUrl() . ' please remove it first.');
-            return;
+            if (php_sapi_name() === 'cli') {
+                var_dump('Old url ' . $oldUrl . ' is already redirecting to another url ' . $checkOldRedirect->getRedirectToUrl() . ' please remove it first.');
+                return;
+            }
             throw new \Exception('Old url ' . $oldUrl . ' is already redirecting to another url ' . $checkOldRedirect->getRedirectToUrl() . ' please remove it first.');
         }
         if (!$ignoreOldUrlsUpdate) {
@@ -145,7 +147,9 @@ class Redirect {
         $redirect->setRedirectToUrl($redirectToUrl);
         $dm->persist($redirect);
         $dm->flush();
-        var_dump($redirect->getId());
+        if (php_sapi_name() === 'cli') {
+            var_dump($redirect->getId());
+        }
     }
 
 }
