@@ -42,13 +42,13 @@ class UpdateOldStyleSlugsCommand extends ContainerAwareCommand {
 
             $arabicCount = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                     ->field('deleted')->equals(FALSE)
-                    ->field('slug')->equals($oldSlugAr)
+                    ->field('slug')->equals($newSlugAr)
                     ->field('id')->notEqual($post->getId())->
                     getQuery()->execute()->count();
 
             $englishCount = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
                     ->field('deleted')->equals(FALSE)
-                    ->field('slugEn')->equals($oldSlugEn)
+                    ->field('slugEn')->equals($newSlugEn)
                     ->field('id')->notEqual($post->getId())->
                     getQuery()->execute()->count();
 
