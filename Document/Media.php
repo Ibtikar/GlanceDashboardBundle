@@ -263,7 +263,7 @@ class Media extends Document {
             // so that the document is not persisted to the database
             // which the UploadedFile move() method does
 
-            if($this->file->guessExtension() == "png"){
+            if($this->file->guessExtension() == $this->file->getExtension() && $this->file->getExtension() == "png"){
                 $this->convertImage($this->file->getPathname(),$this->getUploadRootDir()."/".$this->path, 85);
             }else{
                 $this->file->move($this->getUploadRootDir(), $this->path);
