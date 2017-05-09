@@ -771,6 +771,43 @@ class RecipeController extends BackendController
         ));
     }
 
+    public function slugifier($recipe)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $slugAr = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($recipe->getTitle(), 100));
+        $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringEn($recipe->getTitleEn(), 100));
+
+        $arabicCount = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                ->field('deleted')->equals(FALSE)
+                ->field('slug')->equals($slugAr)
+                ->field('id')->notEqual($recipe->getId())->
+                getQuery()->execute()->count();
+
+        $englishCount = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                ->field('deleted')->equals(FALSE)
+                ->field('slugEn')->equals($slugEn)
+                ->field('id')->notEqual($recipe->getId())->
+                getQuery()->execute()->count();
+        if ($arabicCount != 0) {
+            $slugAr = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($recipe->getTitle(), 100) . "-" . date('ymdHis'));
+        }
+        if ($englishCount != 0) {
+            $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringEn($recipe->getTitleEn(), 100) . "-" . date('ymdHis'));
+        }
+        $recipe->setSlug($slugAr);
+        $recipe->setSlugEn($slugEn);
+
+        $type = strtoupper('type_' . $recipe->getType());
+
+        $slug = new Slug();
+        $slug->setReferenceId($recipe->getId());
+        $slug->setType(Slug::$$type);
+        $slug->setSlugAr($slugAr);
+        $slug->setSlugEn($slugEn);
+        $dm->persist($slug);
+        $dm->flush();
+    }
+
     /**
      * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
      * @param \Symfony\Component\HttpFoundation\Request $request

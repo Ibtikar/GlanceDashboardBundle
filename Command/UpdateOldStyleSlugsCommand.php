@@ -40,29 +40,51 @@ class UpdateOldStyleSlugsCommand extends ContainerAwareCommand {
             $oldSlugAr = $post->getSlug();
             $oldSlugEn = $post->getSlugEn();
 
+            $arabicCount = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('deleted')->equals(FALSE)
+                    ->field('slug')->equals($oldSlugAr)
+                    ->field('id')->notEqual($post->getId())->
+                    getQuery()->execute()->count();
 
-            if($newSlugAr != $post->getSlug()){ // assume one check is enough
+            $englishCount = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('deleted')->equals(FALSE)
+                    ->field('slugEn')->equals($oldSlugEn)
+                    ->field('id')->notEqual($post->getId())->
+                    getQuery()->execute()->count();
+
+            if ($newSlugAr != $post->getSlug()) { // assume one check is enough
                 $changed++;
-
-
-
                 $slug = $dm->getRepository('IbtikarGlanceDashboardBundle:Slug')->findOneBy(array('referenceId' => $post->getId()));
 
-                if($slug){
-                    $slug->setSlugAr($newSlugAr);
-                    $slug->setSlugEn($newSlugEn);
+                if ($slug) {
+                    if ($arabicCount == 0) {
+                        $slug->setSlugAr($newSlugAr);
+                    }
+                    if ($englishCount == 0) {
+                        $slug->setSlugEn($newSlugEn);
+                    }
                 }
+                if ($arabicCount == 0) {
 
-                $post->setSlug($newSlugAr);
-                $post->setSlugEn($newSlugEn);
+                    $post->setSlug($newSlugAr);
+                }
+                if ($englishCount == 0) {
+
+                    $post->setSlugEn($newSlugEn);
+                }
             } else {
                 $unchanged++;
             }
             if ($post->getSlug()) {
-
+                if ($arabicCount != 0) {
+                    $newSlugAr = $oldSlugAr;
+                }
+                if ($englishCount != 0) {
+                    $newSlugEn = $oldSlugEn;
+                }
                 $output->writeln("Change arabic slug '$oldSlugAr' to '$newSlugAr'");
                 $output->writeln("Change english slug '$oldSlugEn' to '$newSlugEn'");
-                $redirect->addPermanentRedirect($router->generate('ibtikar_goody_frontend_view', array('slug' => $oldSlugAr, '_locale' => 'ar')), $router->generate('ibtikar_goody_frontend_' .trim($post->getType()) . '_view', array('slug' => $newSlugAr, '_locale' => 'ar')));
+                $redirect->addPermanentRedirect($router->generate('ibtikar_goody_frontend_view', array('slug' => $oldSlugAr, '_locale' => 'ar')), $router->generate('ibtikar_goody_frontend_' . trim($post->getType()) . '_view', array('slug' => $newSlugAr, '_locale' => 'ar')));
                 $redirect->addPermanentRedirect($router->generate('ibtikar_goody_frontend_view', array('slug' => $oldSlugEn, '_locale' => 'en')), $router->generate('ibtikar_goody_frontend_' . trim($post->getType()) . '_view', array('slug' => $newSlugEn, '_locale' => 'en')));
             }
         }
