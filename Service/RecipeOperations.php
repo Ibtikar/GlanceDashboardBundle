@@ -87,43 +87,64 @@ class RecipeOperations extends PublishOperations
 
     }
 
-    public function publish(Publishable $document, array $locations, $rePublish = false,$goodyStar=FALSE,$migrated=FALSE)
+    public function publish(Publishable $document, array $locations, $rePublish = false, $goodyStar = FALSE, $migrated = FALSE)
     {
         $error = $this->validateToPublish($document, $locations, true);
 
         if ($error) {
             return $error;
         }
-
-        $currentLocations = array();
-        foreach ($this->getAllowedLocations($document) as $location) {
-            $currentLocations[] = $location->getId();
-        }
-        foreach ($locations as $slocation) {
-            if (!in_array($slocation->getId(), $currentLocations))
-                return array("status" => "error", "message" => "wronge locations");
-        }
-
-//        if (php_sapi_name() !== 'cli') {
-//            // merge selected locations by user with the default publishing locations
-//            $locations = array_merge($locations, $this->getAllowedLocations($document, false)->toArray());
-//        }
         $user = null;
         if (php_sapi_name() === 'cli') {
             $user = $document->getPublishedBy();
         } else {
-            $user = $this->getUser()?$this->getUser():$document->getPublishedBy();
+            $user = $this->getUser() ? $this->getUser() : $document->getPublishedBy();
         }
-
+        $newLocationsSections = array();
         foreach ($locations as $location) {
-            if (!$rePublish || $location->getIsSelectable()) {
-                $this->publishInLocation($document, $location->getPublishedLocationObject($user), $location->getMaxNumberOfMaterials());
+            $newLocationsSections[] = $location->getSection();
+        }
+        $oldPublishLocations = $document->getPublishLocations();
+        $oldLocationsSections = array();
+        foreach ($oldPublishLocations as $publishLocation) {
+            $locationInfo = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Location')->findBy(array('section' => $publishLocation->getSection()));
+            $location = $locationInfo[0];
+
+            //this condition to ignore the locations that's selected by default
+            if ($location->getIsSelectable()) {
+                $oldLocationsSections[] = $publishLocation->getSection();
             }
         }
 
+        $removedLocationsSections = array_diff($oldLocationsSections, $newLocationsSections);
+        $adddedLocationsSections = array_diff($newLocationsSections, $oldLocationsSections);
+
+        foreach ($removedLocationsSections as $section) {
+            $targetLocationObject;
+            foreach ($oldPublishLocations as $location) {
+                if ($location->getSection() == $section)
+                    $targetLocationObject = $location;
+            }
+            $this->unpublishFromLocation($document, $targetLocationObject);
+        }
+
+        foreach ($adddedLocationsSections as $section) {
+
+            $locationInfo = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Location')->findBy(array('section' => $section));
+
+            $location = $locationInfo[0];
+
+            $publishLocation = $location->getPublishedLocationObject($this->getUser());
+
+            $this->publishInLocation($document, $location->getPublishedLocationObject($user), $location->getMaxNumberOfMaterials());
+        }
+
+
+
+
 //        if(!$document->getMigrated()){
-           $document->setPublishedAt(new \DateTime());
-           $document->setPublishedBy($user);
+        $document->setPublishedAt(new \DateTime());
+        $document->setPublishedBy($user);
 //        }
 
         $document->setStatus(Recipe::$statuses['publish']);
