@@ -103,7 +103,7 @@ class PngToJpegCommand extends ContainerAwareCommand {
             imagedestroy($imageTmp);
             unlink($originalImage);
         }else {
-            $output->writeln("Image failed". $imageTmp);
+            $this->output->writeln("Image failed". $imageTmp);
         }
 
         // quality is a value from 0 (worst) to 100 (best)
