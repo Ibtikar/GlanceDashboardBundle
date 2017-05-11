@@ -73,8 +73,8 @@ class RecipeRepository extends DocumentRepository
                         ->field('deleted')->equals(FALSE)
                         ->field('coverPhoto')->prime(true);
 
-        $queryBuilder->addOr($queryBuilder->expr()->field('tags')->equals($tagId));
-        $queryBuilder->addOr($queryBuilder->expr()->field('tagsEn')->equals($tagId));
+        $queryBuilder->addOr($queryBuilder->expr()->field('tags')->in($tagId));
+        $queryBuilder->addOr($queryBuilder->expr()->field('tagsEn')->in($tagId));
         if (!(is_object($user) && $user->getStar())) {
             $queryBuilder->field('goodyStar')->equals(FALSE);
         }
@@ -98,8 +98,8 @@ class RecipeRepository extends DocumentRepository
                         ->field('status')->equals(Recipe::$statuses['publish'])
                         ->field('deleted')->equals(FALSE);
 
-        $queryBuilder->addOr($queryBuilder->expr()->field('tags')->equals($tagId));
-        $queryBuilder->addOr($queryBuilder->expr()->field('tagsEn')->equals($tagId));
+        $queryBuilder->addOr($queryBuilder->expr()->field('tags')->in($tagId));
+        $queryBuilder->addOr($queryBuilder->expr()->field('tagsEn')->in($tagId));
           if (!(is_object($user) && $user->getStar())) {
             $queryBuilder->field('goodyStar')->equals(FALSE);
         }
