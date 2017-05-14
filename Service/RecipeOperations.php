@@ -87,7 +87,91 @@ class RecipeOperations extends PublishOperations
 
     }
 
-    public function publish(Publishable $document, array $locations, $rePublish = false,$goodyStar=FALSE,$migrated=FALSE)
+    public function publish(Publishable $document, array $locations, $rePublish = false, $goodyStar = FALSE, $migrated = FALSE)
+    {
+        $error = $this->validateToPublish($document, $locations, true);
+
+        if ($error) {
+            return $error;
+        }
+        $user = null;
+        if (php_sapi_name() === 'cli') {
+            $user = $document->getPublishedBy();
+        } else {
+            $user = $this->getUser() ? $this->getUser() : $document->getPublishedBy();
+        }
+        $newLocationsSections = array();
+        foreach ($locations as $location) {
+            $newLocationsSections[] = $location->getSection();
+        }
+        $oldPublishLocations = $document->getPublishLocations();
+        $oldLocationsSections = array();
+        foreach ($oldPublishLocations as $publishLocation) {
+            $location = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Location')->findOneBy(array('section' => $publishLocation->getSection()));
+            $oldLocationsSections[] = $publishLocation->getSection();
+        }
+
+        $removedLocationsSections = array_diff($oldLocationsSections, $newLocationsSections);
+        $adddedLocationsSections = array_diff($newLocationsSections, $oldLocationsSections);
+
+        foreach ($removedLocationsSections as $section) {
+            $targetLocationObject;
+            foreach ($oldPublishLocations as $location) {
+                if ($location->getSection() == $section)
+                    $targetLocationObject = $location;
+            }
+            $this->unpublishFromLocation($document, $targetLocationObject);
+        }
+
+        foreach ($adddedLocationsSections as $section) {
+
+            $location = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Location')->findOneBy(array('section' => $section));
+            $oldDocuments = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('status')->equals('publish')
+                    ->field('publishLocations.section')->equals($location->getSection())
+                    ->field('publishLocations.page')->equals($location->getPage())
+                    ->getQuery()->execute();
+
+            if (count($oldDocuments) >= $location->getMaxNumberOfMaterials()) {
+                foreach ($oldDocuments as $oldestDocument) {
+                    foreach ($oldestDocument->getPublishLocations() as $publishLocation) {
+                        if ($publishLocation->getSection() == $location->getSection()) {
+                            $this->unpublishFromLocation($oldestDocument, $publishLocation);
+                        }
+                    }
+                }
+            }
+            if (php_sapi_name() !== 'cli') {
+                $document->addPublishLocation($location->getPublishedLocationObject($this->getUser()));
+            }
+            if ($location->getSection() == 'Daily-solution') {
+                $document->setDailysolutionDate(new \DateTime());
+            }
+        }
+//        if(!$document->getMigrated()){
+        $document->setPublishedAt(new \DateTime());
+        $document->setPublishedBy($user);
+//        }
+
+        $document->setStatus(Recipe::$statuses['publish']);
+        $document->setAssignedTo(null);
+        $document->setGoodyStar($goodyStar);
+
+
+        if (!$rePublish) {
+            $this->showFrontEndUrl($document);
+        }
+//        if (php_sapi_name() !== 'cli') {
+        if ($document instanceof \Ibtikar\GlanceDashboardBundle\Document\Recipe) {
+            $document->setAutoPublishDate(null);
+            $document->setAssignedTo(null);
+        }
+//        }
+
+        $this->dm->flush();
+        return array("status" => 'success', "message" => $this->translator->trans('done sucessfully'));
+    }
+    public function publishAutopublish(Publishable $document, array $locations, $rePublish = false, $goodyStar = FALSE, $migrated = FALSE)
     {
         $error = $this->validateToPublish($document, $locations, true);
 
@@ -103,41 +187,40 @@ class RecipeOperations extends PublishOperations
             if (!in_array($slocation->getId(), $currentLocations))
                 return array("status" => "error", "message" => "wronge locations");
         }
-
-//        if (php_sapi_name() !== 'cli') {
-//            // merge selected locations by user with the default publishing locations
-//            $locations = array_merge($locations, $this->getAllowedLocations($document, false)->toArray());
-//        }
-        $user = null;
-        if (php_sapi_name() === 'cli') {
             $user = $document->getPublishedBy();
-        } else {
-            $user = $this->getUser()?$this->getUser():$document->getPublishedBy();
-        }
+
 
         foreach ($locations as $location) {
-            if (!$rePublish || $location->getIsSelectable()) {
-                $this->publishInLocation($document, $location->getPublishedLocationObject($user), $location->getMaxNumberOfMaterials());
+            if ($location->getSection() == 'Daily-solution') {
+                $document->setDailysolutionDate(new \DateTime());
+                $oldDocuments = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                        ->field('status')->equals('publish')
+                        ->field('publishLocations.section')->equals($location->getSection())
+                        ->field('publishLocations.page')->equals($location->getPage())
+                        ->getQuery()->execute();
+
+                if (count($oldDocuments) >= $location->getMaxNumberOfMaterials()) {
+                    foreach ($oldDocuments as $oldestDocument) {
+                        foreach ($oldestDocument->getPublishLocations() as $publishLocation) {
+                            if ($publishLocation->getSection() == $location->getSection()) {
+                                $this->unpublishFromLocation($oldestDocument, $publishLocation);
+                            }
+                        }
+                    }
+                }
             }
         }
-
-//        if(!$document->getMigrated()){
-           $document->setPublishedAt(new \DateTime());
-           $document->setPublishedBy($user);
-//        }
-
+        $document->setPublishedAt(new \DateTime());
+        $document->setPublishedBy($user);
         $document->setStatus(Recipe::$statuses['publish']);
-        $document->setAssignedTo(null);
-        $document->setGoodyStar($goodyStar);
 
 
         if (!$rePublish) {
             $this->showFrontEndUrl($document);
         }
 //        if (php_sapi_name() !== 'cli') {
-        if ($document instanceof \Ibtikar\GlanceDashboardBundle\Document\Recipe) {
+        if ($document instanceof \Ibtikar\GlanceDashboardBundle\Document\Recipe && $document->getStatus() == 'autopublish') {
             $document->setAutoPublishDate(null);
-            $document->setAssignedTo(null);
         }
 //        }
 
@@ -172,7 +255,7 @@ class RecipeOperations extends PublishOperations
 //        $locations = array_merge($locations, $this->getAllowedLocations($document, false)->toArray());
 
         foreach ($locations as $location) {
-            $this->addPublishLocation($document, $location->getPublishedLocationObject($this->getUser(), $autoPublishDate));
+            $this->addPublishLocation($document, $location->getPublishedLocationObject($this->getUser()));
         }
 
         $document->setPublishedBy($this->getUser());

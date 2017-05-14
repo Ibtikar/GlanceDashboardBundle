@@ -37,7 +37,7 @@ class AutoPublishRecipeCommand extends ContainerAwareCommand
                 }
             }
 
-            $publishResult = $this->getContainer()->get('recipe_operations')->publish($recipe, $locations);
+            $publishResult = $this->getContainer()->get('recipe_operations')->publishAutopublish($recipe, $locations);
             if ($publishResult['status'] === 'error') {
                 $failCount++;
             } else {
