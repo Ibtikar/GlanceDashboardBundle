@@ -107,13 +107,8 @@ class RecipeOperations extends PublishOperations
         $oldPublishLocations = $document->getPublishLocations();
         $oldLocationsSections = array();
         foreach ($oldPublishLocations as $publishLocation) {
-            $locationInfo = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Location')->findBy(array('section' => $publishLocation->getSection()));
-            $location = $locationInfo[0];
-
-            //this condition to ignore the locations that's selected by default
-            if ($location->getIsSelectable()) {
-                $oldLocationsSections[] = $publishLocation->getSection();
-            }
+            $location = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Location')->findOneBy(array('section' => $publishLocation->getSection()));
+            $oldLocationsSections[] = $publishLocation->getSection();
         }
 
         $removedLocationsSections = array_diff($oldLocationsSections, $newLocationsSections);
@@ -170,6 +165,62 @@ class RecipeOperations extends PublishOperations
         if ($document instanceof \Ibtikar\GlanceDashboardBundle\Document\Recipe) {
             $document->setAutoPublishDate(null);
             $document->setAssignedTo(null);
+        }
+//        }
+
+        $this->dm->flush();
+        return array("status" => 'success', "message" => $this->translator->trans('done sucessfully'));
+    }
+    public function publishAutopublish(Publishable $document, array $locations, $rePublish = false, $goodyStar = FALSE, $migrated = FALSE)
+    {
+        $error = $this->validateToPublish($document, $locations, true);
+
+        if ($error) {
+            return $error;
+        }
+
+        $currentLocations = array();
+        foreach ($this->getAllowedLocations($document) as $location) {
+            $currentLocations[] = $location->getId();
+        }
+        foreach ($locations as $slocation) {
+            if (!in_array($slocation->getId(), $currentLocations))
+                return array("status" => "error", "message" => "wronge locations");
+        }
+            $user = $document->getPublishedBy();
+
+
+        foreach ($locations as $location) {
+            if ($location->getSection() == 'Daily-solution') {
+                $document->setDailysolutionDate(new \DateTime());
+                $oldDocuments = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                        ->field('status')->equals('publish')
+                        ->field('publishLocations.section')->equals($location->getSection())
+                        ->field('publishLocations.page')->equals($location->getPage())
+                        ->getQuery()->execute();
+
+                if (count($oldDocuments) >= $location->getMaxNumberOfMaterials()) {
+                    foreach ($oldDocuments as $oldestDocument) {
+                        foreach ($oldestDocument->getPublishLocations() as $publishLocation) {
+                            if ($publishLocation->getSection() == $location->getSection()) {
+                                $this->unpublishFromLocation($oldestDocument, $publishLocation);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        $document->setPublishedAt(new \DateTime());
+        $document->setPublishedBy($user);
+        $document->setStatus(Recipe::$statuses['publish']);
+
+
+        if (!$rePublish) {
+            $this->showFrontEndUrl($document);
+        }
+//        if (php_sapi_name() !== 'cli') {
+        if ($document instanceof \Ibtikar\GlanceDashboardBundle\Document\Recipe && $document->getStatus() == 'autopublish') {
+            $document->setAutoPublishDate(null);
         }
 //        }
 
