@@ -258,22 +258,34 @@ class Product extends Document
 
     public function setRelatedTip($tip = array())
     {
-        $this->relatedTip = array();
+        if(!is_array($tip)){
+            $tip = array();
+        }
+        $this->relatedTip = $tip;
     }
 
     public function setRelatedKitchen911($kitchen = array())
     {
-        $this->relatedKitchen911 = array();
+        if(!is_array($kitchen)){
+            $kitchen = array();
+        }
+        $this->relatedKitchen911 = $kitchen;
     }
 
     public function setRelatedRecipe($recipe = array())
     {
-        $this->relatedRecipe = array();
+        if(!is_array($recipe)){
+            $recipe = array();
+        }
+        $this->relatedRecipe = $recipe;
     }
 
     public function setRelatedArticle($recipe = array())
     {
-        $this->relatedArticle = array();
+        if(!is_array($recipe)){
+            $recipe = array();
+        }
+        $this->relatedArticle = $recipe;
     }
 
     /**
