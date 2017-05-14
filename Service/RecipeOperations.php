@@ -130,18 +130,29 @@ class RecipeOperations extends PublishOperations
 
         foreach ($adddedLocationsSections as $section) {
 
-            $locationInfo = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Location')->findBy(array('section' => $section));
+            $location = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Location')->findOneBy(array('section' => $section));
+            $oldDocuments = $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Recipe')
+                    ->field('status')->equals('publish')
+                    ->field('publishLocations.section')->equals($location->getSection())
+                    ->field('publishLocations.page')->equals($location->getPage())
+                    ->getQuery()->execute();
 
-            $location = $locationInfo[0];
-
-            $publishLocation = $location->getPublishedLocationObject($this->getUser());
-
-            $this->publishInLocation($document, $location->getPublishedLocationObject($user), $location->getMaxNumberOfMaterials());
+            if (count($oldDocuments) >= $location->getMaxNumberOfMaterials()) {
+                foreach ($oldDocuments as $oldestDocument) {
+                    foreach ($oldestDocument->getPublishLocations() as $publishLocation) {
+                        if ($publishLocation->getSection() == $location->getSection()) {
+                            $this->unpublishFromLocation($oldestDocument, $publishLocation);
+                        }
+                    }
+                }
+            }
+            if (php_sapi_name() !== 'cli') {
+                $document->addPublishLocation($location->getPublishedLocationObject($this->getUser()));
+            }
+            if ($location->getSection() == 'Daily-solution') {
+                $document->setDailysolutionDate(new \DateTime());
+            }
         }
-
-
-
-
 //        if(!$document->getMigrated()){
         $document->setPublishedAt(new \DateTime());
         $document->setPublishedBy($user);
@@ -193,7 +204,7 @@ class RecipeOperations extends PublishOperations
 //        $locations = array_merge($locations, $this->getAllowedLocations($document, false)->toArray());
 
         foreach ($locations as $location) {
-            $this->addPublishLocation($document, $location->getPublishedLocationObject($this->getUser(), $autoPublishDate));
+            $this->addPublishLocation($document, $location->getPublishedLocationObject($this->getUser()));
         }
 
         $document->setPublishedBy($this->getUser());
