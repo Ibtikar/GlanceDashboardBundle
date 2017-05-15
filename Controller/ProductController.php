@@ -336,8 +336,25 @@ class ProductController extends BackendController {
 
     public function slugifier($product) {
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $slugAr = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($product->getName(),100));
-        $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringEn($product->getNameEn(),100));
+        $slugAr = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($product->getName(), 100));
+        $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringEn($product->getNameEn(), 100));
+        $arabicCount = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Product')
+                ->field('deleted')->equals(FALSE)
+                ->field('slug')->equals($slugAr)
+                ->field('id')->notEqual($product->getId())->
+                getQuery()->execute()->count();
+
+        $englishCount = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Product')
+                ->field('deleted')->equals(FALSE)
+                ->field('slugEn')->equals($slugEn)
+                ->field('id')->notEqual($product->getId())->
+                getQuery()->execute()->count();
+        if ($arabicCount != 0) {
+            $slugAr = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($product->getName(), 100) . "-" . date('ymdHis'));
+        }
+        if ($englishCount != 0) {
+            $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringEn($product->getNameEn(), 100) . "-" . date('ymdHis'));
+        }
 
         $product->setSlug($slugAr);
         $product->setSlugEn($slugEn);
