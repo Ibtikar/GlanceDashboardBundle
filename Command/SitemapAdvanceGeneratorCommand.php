@@ -35,7 +35,7 @@ class SitemapAdvanceGeneratorCommand extends ContainerAwareCommand {
         'article',
         'tip',
         'kitchen911',
-        'magazine',
+        'tag',
     );
 
     protected function configure() {
@@ -208,6 +208,9 @@ class SitemapAdvanceGeneratorCommand extends ContainerAwareCommand {
             case 'kitchen911':
                 $this->getLinks('kitchen911');
                 break;
+            case 'tag':
+                $this->getTagLinks('kitchen911');
+                break;
         }
 
 //      $this->getLinks();
@@ -217,6 +220,13 @@ class SitemapAdvanceGeneratorCommand extends ContainerAwareCommand {
         $posts = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findBy(array('type' => $type,'status'=>'publish','deleted'=>false));
         foreach($posts as $post){
             $this->addLink($post,$type);
+        }
+    }
+
+    protected function getTagLinks(){
+        $tags = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findBy(array('deleted'=>false));
+        foreach($tags as $tag){
+            $this->addLinkNormal('ibtikar_goody_frontend_search_tag',array('tag' => $tag->getSlug()));
         }
     }
 
