@@ -217,7 +217,7 @@ class MediaController extends BackendController
 
 
 
-                return new JsonResponse(array('status' => 'success', 'media' => $this->prepareMedia($media,$collectionType), 'message' => $this->trans('upload successfuly')));
+                return new JsonResponse(array('status' => 'success', 'media' => $this->prepareMedia($media,$collectionType,  TRUE), 'message' => $this->trans('upload successfuly')));
             } else {
 
                 $tempPath = $media->getTempPath();
@@ -235,11 +235,14 @@ class MediaController extends BackendController
         return new JsonResponse(array('error' => $error), 400);
     }
 
-    private function prepareMedia($media,$collectionType)
+    private function prepareMedia($media,$collectionType,$flushData=FALSE)
     {
         $getCollection = $collectionType == 'Blog' ? 'Recipe' : $collectionType;
         $getCollection = 'get'.$getCollection;
-
+        if($flushData){
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $dm->flush();
+        }
         return array(
             'imageUrl' => $media->getWebPath(),
             'path' => $media->getPath(),
@@ -327,7 +330,7 @@ class MediaController extends BackendController
                         $fileSystem = new Filesystem();
                         $fileSystem->remove($tempUrlPath);
                     }
-                    return new JsonResponse(array('status' => 'success', 'media' => $this->prepareMedia($media,$collectionType), 'message' => $this->trans('upload successfuly')));
+                    return new JsonResponse(array('status' => 'success', 'media' => $this->prepareMedia($media,$collectionType,TRUE), 'message' => $this->trans('upload successfuly')));
                 }
             }
         }
