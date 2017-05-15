@@ -72,7 +72,7 @@ services:
     redirect:
         class: Ibtikar\GlanceDashboardBundle\Service\Redirect
         tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 255 }
         arguments: [ "@service_container" ,"%httpProtocol%://%site_domain%/"  ]
 
     short_url:

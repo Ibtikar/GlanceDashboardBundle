@@ -30,7 +30,7 @@ class Redirect {
      * @param GetResponseEvent $event
      */
     public function onKernelRequest(GetResponseEvent $event) {
-        $requestedUrl = $event->getRequest()->getPathInfo();
+        $requestedUrl = urldecode($event->getRequest()->getPathInfo());
 
         // The redirect listener should not work on all routes it should check for the route name before selecting from database`
 //        if (!in_array($this->container->get('request_stack')->getCurrentRequest()->get('_route'), array('ibtikar_goody_frontend_shorturl'))) {
