@@ -721,7 +721,7 @@ class RecipeController extends BackendController
                     foreach ($tagsArray as $tag) {
                         $tag = trim($tag);
                         if (mb_strlen($tag, 'UTF-8') <= 330) {
-                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('name' => $tag));
+                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tag' => $tag));
                             if (!$tagObject) {
                                 $NewTag = new Tag();
                                 $NewTag->setName($tag);
@@ -740,7 +740,7 @@ class RecipeController extends BackendController
                     foreach ($tagsArray as $tag) {
                         $tag = trim($tag);
                         if (mb_strlen($tag, 'UTF-8') <= 330) {
-                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('name' => $tag));
+                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tagEn' => $tag));
                             if (!$tagObject) {
                                 $NewTag = new Tag();
                                 $NewTag->setName($tag);
@@ -873,7 +873,7 @@ class RecipeController extends BackendController
                     foreach ($tagsArray as $tag) {
                         $tag = trim($tag);
                         if (mb_strlen($tag, 'UTF-8') <= 330) {
-                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('name' => $tag));
+                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tag' => $tag));
                             if (!$tagObject) {
                                 $NewTag = new Tag();
                                 $NewTag->setName($tag);
@@ -892,7 +892,7 @@ class RecipeController extends BackendController
                     foreach ($tagsArray as $tag) {
                         $tag = trim($tag);
                         if (mb_strlen($tag, 'UTF-8') <= 330) {
-                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('name' => $tag));
+                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tagEn' => $tag));
                             if (!$tagObject) {
                                 $NewTag = new Tag();
                                 $NewTag->setName($tag);

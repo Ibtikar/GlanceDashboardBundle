@@ -63,10 +63,11 @@ class BlogController extends BackendController
                     foreach ($tagsArray as $tag) {
                         $tag = trim($tag);
                         if (mb_strlen($tag, 'UTF-8') <= 330) {
-                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('name' => $tag));
-                            if (!$tagObject) {
+                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tag' => $tag));
+                               if (!$tagObject) {
                                 $NewTag = new Tag();
                                 $NewTag->setName($tag);
+                                $NewTag->setTag($tag);
                                 $dm->persist($NewTag);
                                 $recipe->addTag($NewTag);
                             } else {
@@ -81,10 +82,11 @@ class BlogController extends BackendController
                     foreach ($tagsArray as $tag) {
                         $tag = trim($tag);
                         if (mb_strlen($tag, 'UTF-8') <= 330) {
-                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('name' => $tag));
+                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tagEn' => $tag));
                             if (!$tagObject) {
                                 $NewTag = new Tag();
                                 $NewTag->setName($tag);
+                                $NewTag->setTagEn($tag);
                                 $dm->persist($NewTag);
                                 $recipe->addTagEn($NewTag);
                             } else {
