@@ -725,6 +725,7 @@ class RecipeController extends BackendController
                             if (!$tagObject) {
                                 $NewTag = new Tag();
                                 $NewTag->setName($tag);
+                                $NewTag->setTag($tag);
                                 $dm->persist($NewTag);
                                 $recipe->addTag($NewTag);
                             } else {
@@ -743,6 +744,7 @@ class RecipeController extends BackendController
                             if (!$tagObject) {
                                 $NewTag = new Tag();
                                 $NewTag->setName($tag);
+                                $NewTag->setTagEn($tag);
                                 $dm->persist($NewTag);
                                 $recipe->addTagEn($NewTag);
                             } else {
@@ -875,6 +877,7 @@ class RecipeController extends BackendController
                             if (!$tagObject) {
                                 $NewTag = new Tag();
                                 $NewTag->setName($tag);
+                                $NewTag->setTag($tag);
                                 $dm->persist($NewTag);
                                 $recipe->addTag($NewTag);
                             } else {
@@ -893,6 +896,7 @@ class RecipeController extends BackendController
                             if (!$tagObject) {
                                 $NewTag = new Tag();
                                 $NewTag->setName($tag);
+                                $NewTag->setTagEn($tag);
                                 $dm->persist($NewTag);
                                 $recipe->addTagEn($NewTag);
                             } else {
