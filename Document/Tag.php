@@ -33,6 +33,24 @@ class Tag extends Document {
 
     /**
      * @MongoDB\String
+     * @Assert\Length(
+     *      max = 330,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $tag;
+
+    /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      max = 330,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $tagEn;
+
+    /**
+     * @MongoDB\String
      */
     private $slug;
 
@@ -145,5 +163,49 @@ class Tag extends Document {
     public function getDefaultLocation()
     {
         return $this->defaultLocation;
+    }
+
+    /**
+     * Set tag
+     *
+     * @param string $tag
+     * @return self
+     */
+    public function setTag($tag)
+    {
+        $this->tag = $tag;
+        return $this;
+    }
+
+    /**
+     * Get tag
+     *
+     * @return string $tag
+     */
+        public function getTag()
+    {
+        return $this->tag;
+    }
+
+    /**
+     * Set tagEn
+     *
+     * @param string $tagEn
+     * @return self
+     */
+    public function setTagEn($tagEn)
+    {
+        $this->tagEn = $tagEn;
+        return $this;
+    }
+
+    /**
+     * Get tagEn
+     *
+     * @return string $tagEn
+     */
+    public function getTagEn()
+    {
+        return $this->tagEn;
     }
 }
