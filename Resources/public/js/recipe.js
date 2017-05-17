@@ -702,10 +702,11 @@ var fileName='';
     function uploadImageToServer(imageFile, url) {
         var formData = new FormData();
         formData.append("media[file]", imageFile);
+        formData.append("fileName", fileName);
         $('.dev-crop-spinner').show();
         $('.dev-submit-image').hide();
         $.ajax({
-            url: url+'?fileName='+fileName ,
+            url: url ,
             type: 'POST',
             data: formData,
 //            async: false,
