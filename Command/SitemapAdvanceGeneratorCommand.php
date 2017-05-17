@@ -224,7 +224,7 @@ class SitemapAdvanceGeneratorCommand extends ContainerAwareCommand {
     }
 
     protected function getTagLinks(){
-        $tags = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findBy(array('deleted'=>false));
+        $tags = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findBy(array('deleted'=>false,'tag'.($this->locale == "en"?"En":"")=>array('$exists' => true)));
         foreach($tags as $tag){
             $this->addLinkNormal('ibtikar_goody_frontend_search_tag',array('tag' => $tag->getSlug()));
         }

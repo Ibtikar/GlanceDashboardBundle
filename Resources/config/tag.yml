@@ -1,0 +1,19 @@
+ibtikar_glance_dashboard_recipetag_create:
+    path:  /create
+    defaults: { _controller: IbtikarGlanceDashboardBundle:RecipeTag:create }
+
+ibtikar_glance_dashboard_recipetag_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:RecipeTag:edit}
+
+ibtikar_glance_dashboard_recipetag_list:
+    path: /list
+    defaults: { _controller: IbtikarGlanceDashboardBundle:RecipeTag:list }
+
+ibtikar_glance_dashboard_recipetag_check_field_unique:
+    path: /checkfieldUnique
+    defaults: { _controller: IbtikarGlanceDashboardBundle:RecipeTag:checkFieldUnique }
+
+ibtikar_glance_dashboard_recipetag_change_list_columns:
+    path:  /change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:RecipeTag:changeListColumns }
