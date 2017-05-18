@@ -225,6 +225,11 @@ class Recipe extends Publishable
     private $servingCount;
 
     /**
+     * @MongoDB\Int
+     */
+    private $order;
+
+    /**
      * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Product" , simple=true)
      */
     private $products;
@@ -1501,5 +1506,27 @@ class Recipe extends Publishable
     public function getGoodyStar()
     {
         return $this->goodyStar;
+    }
+
+    /**
+     * Set order
+     *
+     * @param int $order
+     * @return self
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+        return $this;
+    }
+
+    /**
+     * Get order
+     *
+     * @return int $order
+     */
+    public function getOrder()
+    {
+        return $this->order;
     }
 }
