@@ -264,10 +264,16 @@ class Media extends Document {
             // which the UploadedFile move() method does
 
             if ($this->file->guessExtension() == $this->file->getExtension() && $this->file->getExtension() == "png") {
-                $this->convertImage($this->file->getPathname(), $this->getUploadRootDir() . "/" . str_replace('png', 'jpeg', $this->path), 85);
-                $this->setPath(str_replace('png', 'jpeg', $this->path)) ;
+                $this->convertImage($this->file->getPathname(), $this->getUploadRootDir() . "/" . str_replace('png', 'jpg', $this->path), 85);
+                $this->setPath(str_replace('png', 'jpg', $this->path));
             } else {
-                $this->file->move($this->getUploadRootDir(), $this->path);
+                if ($this->file->guessExtension() == 'png' && in_array($this->file->getExtension(), array('jpg', "jpeg"))) {
+                    $imageTmp = imagecreatefrompng($this->file->getPathname());
+                    imagejpeg($imageTmp, $this->getUploadRootDir() . "/" .  $this->path, 85);
+                    imagedestroy($imageTmp);
+                } else {
+                    $this->file->move($this->getUploadRootDir(), $this->path);
+                }
             }
 
             // remove the file as you do not need it any more
