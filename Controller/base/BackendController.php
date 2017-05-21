@@ -1053,9 +1053,9 @@ class BackendController extends Controller {
         }
 
         $array = json_decode($relatedJson, true);
-
-        $setMethod = "setRelated" . ucfirst($type);
-
+        if (is_array($array)) {
+            $setMethod = "setRelated" . ucfirst($type);
+        }
         if (method_exists($document, $setMethod)) {
             $document->$setMethod();
         }
