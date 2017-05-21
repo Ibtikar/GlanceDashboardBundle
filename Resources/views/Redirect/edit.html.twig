@@ -10,17 +10,7 @@
     {{ form_errors(form)}}
     {{ form_end(form) }}
 
-    <table class="table table-bordered">
-        <tr><td>id</td><td>from</td><td>to</td><td>Actions</td></tr>
-        {% for rdrct in redirects %}
-            <tr>
-                <td>{{rdrct.getId }}</td>
-                <td style='text-align: left;direction:ltr'>{{rdrct.oldUrl}}</td>
-                <td style='text-align: left;direction:ltr'>{{rdrct.redirectToUrl}}</td>
-                <td style='text-align: left;direction:ltr'><a href="{{path('ibtikar_glance_redirect_edit',{'id':rdrct.getId}) }}">edit</a></td>
-            </tr>
-        {% endfor %}
-    </table>
+    
 {% endblock %}
 {% block form_buttons %}
     <div class="row actionButtons">

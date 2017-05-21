@@ -23,47 +23,6 @@ class RedirectController extends BackendController {
         return 'IbtikarGlanceDashboardBundle:SeoRedirect';
     }
 
-    protected function configureListColumns() {
-        $this->allListColumns = array(
-            "name" => array(),
-            "coverPhoto" => array("type" => "refereceImage", 'isSortable' => FALSE),
-            "createdAt" => array("type" => "date"),
-            "updatedAt" => array("type" => "date"),
-            "status"=>array("type"=>"translated"),
-            "createdBy" => array("isSortable" => false),
-            "updatedBy" => array("isSortable" => false)
-        );
-        $this->defaultListColumns = array(
-            "name",
-            'coverPhoto',
-            'createdAt'
-        );
-        $this->listViewOptions->setBundlePrefix("ibtikar_glance_dashboard_");
-
-    }
-
-    protected function configureListParameters(Request $request)
-    {
-        $this->listViewOptions->setDefaultSortBy("updatedAt");
-        $this->listViewOptions->setDefaultSortOrder("desc");
-        $this->listViewOptions->setActions(array( "Edit","Delete","Publish"));
-        $this->listViewOptions->setBulkActions(array("Delete"));
-        $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Magazine:list.html.twig");
-    }
-
-    protected function doList(Request $request)
-    {
-        $configParams = parent::doList($request);
-        $configParams['deleteMsgConditionAttr'] = 'subproductNo';
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $configParams['magazinePage'] = $dm->getRepository('IbtikarGlanceDashboardBundle:Page')->findOneByTitle('magazine page');
-        $configParams['conditionalDeletePopoverConfig'] = array(
-            "question" => "Cant deleted,it contain subproduct",
-            "translationDomain" => $this->translationDomain
-        );
-        return $configParams;
-    }
-
     /**
      * @author Ola <ola.ali@ibtikar.net.sa>
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -98,6 +57,43 @@ class RedirectController extends BackendController {
                 'translationDomain' => $this->translationDomain
         ));
     }
+    /**
+     * @author Ola <ola.ali@ibtikar.net.sa>
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     */
+    public function batchInsertAction(Request $request)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $redirects = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:SeoRedirect')->sort('createdAt', 'DESC')->getQuery()->execute();
+
+        $form = $this->createFormBuilder(null, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
+            ->add('batch_text', formType\TextareaType::class, array('required' => true, 'attr' => array('data-validate-element' => true,'style' => 'text-align: left;direction:ltr')))
+            ->add('save', formType\SubmitType::class)
+            ->getForm();
+
+        if ($request->getMethod() === 'POST') {
+
+            foreach(explode(PHP_EOL, $request->get('form')['batch_text']) as $redirectLine){
+                $redirectResult = explode(',', $redirectLine);
+                $redirect = new SeoRedirect();
+                $redirect->setOldUrl($redirectResult[0]);
+                $redirect->setRedirectToUrl($redirectResult[1]);
+                $dm->persist($redirect);
+            }
+
+            $dm->flush();
+
+                $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
+                return new JsonResponse(array('status' => 'redirect', 'url' => $request->getUri()));
+        }
+
+        return $this->render('IbtikarGlanceDashboardBundle:Redirect:create.html.twig', array(
+                'form' => $form->createView(),
+                'title' => $this->trans('Add new redirect', array(), $this->translationDomain),
+                'redirects' => $redirects,
+                'translationDomain' => $this->translationDomain
+        ));
+    }
 
     /**
      * @author Ola <ola.ali@ibtikar.net.sa>
@@ -106,21 +102,15 @@ class RedirectController extends BackendController {
     public function editAction(Request $request, $id)
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $magazine = $dm->getRepository('IbtikarGlanceDashboardBundle:Magazine')->find($id);
-        if (!$magazine) {
+        $redirect = $dm->getRepository('IbtikarGlanceDashboardBundle:SeoRedirect')->find($id);
+
+        if (!$redirect) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
 
-        $magazinePage = $dm->getRepository('IbtikarGlanceDashboardBundle:Page')->findOneByTitle('magazine page');
-        $menus = array(array('type' => 'create', 'active' => FALSE, 'linkType' => 'add', 'title' => 'Add new magazine', 'link' => $this->generateUrl('ibtikar_glance_dashboard_magazine_create')),
-            array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'list Magazine'), array('type' => 'list', 'active' => FALSE, 'linkType' => 'list', 'title' => 'Edit Magazine section page', 'link' => $this->generateUrl('ibtikar_glance_dashboard_magazine_editPage', array('id' => $magazinePage->getId())))
-        );
-        $breadCrumbArray = $this->preparedMenu($menus);
-        $form = $this->createFormBuilder($magazine, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
-            ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
-            ->add('nameEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
-            ->add('link', formType\TextType::class, array('required' => FALSE, 'attr' => array()))
-            ->add('defaultCoverPhoto', formType\HiddenType::class, array('required' => true, 'attr' => array('data-msg-required' => ' '), 'mapped' => FALSE))
+        $form = $this->createFormBuilder($redirect, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
+            ->add('oldUrl', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true,'style' => 'text-align: left;direction:ltr')))
+            ->add('redirectToUrl', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true,'style' => 'text-align: left;direction:ltr')))
             ->add('save', formType\SubmitType::class)
             ->getForm();
 
@@ -133,17 +123,16 @@ class RedirectController extends BackendController {
                 $dm->flush();
                 $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
 
-                return $this->redirect($request->getUri());
+                return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_redirect_create')));
             }
         }
 
-        return $this->render('IbtikarGlanceDashboardBundle:Magazine:edit.html.twig', array(
+        return $this->render('IbtikarGlanceDashboardBundle:Redirect:edit.html.twig', array(
                 'form' => $form->createView(),
-                'breadcrumb' => $breadCrumbArray,
-                'coverImage' => $magazine->getCoverPhoto(),
-                'title' => $this->trans('edit magazine', array(), $this->translationDomain),
+                'title' => $this->trans('Edit redirect', array(), $this->translationDomain),
                 'translationDomain' => $this->translationDomain
         ));
+
     }
 
     public function editMagazinePageAction(Request $request, $id)

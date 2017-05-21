@@ -11,6 +11,13 @@ ibtikar_glance_redirect_create:
     path:  /redirect
     defaults: { _controller: IbtikarGlanceDashboardBundle:Redirect:create }
 
+ibtikar_glance_redirect_batch:
+    path:  /redirect/batch
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Redirect:batchInsert }
+
+ibtikar_glance_redirect_edit:
+    path:  /redirect/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Redirect:edit }
 
 ibtikar_glance_dashboard_product:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/product.yml"
@@ -23,7 +30,7 @@ ibtikar_glance_dashboard_subproduct:
 ibtikar_glance_dashboard_magazine:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/magazine.yml"
     prefix:   /magazine
-    
+
 ibtikar_glance_dashboard_tag:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/tag.yml"
     prefix:   /tag
