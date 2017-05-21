@@ -526,6 +526,28 @@
             });
 
     });
+
+    $(document).on('onFailSubmitForm', function () {
+        RelatedRecipeObj = '{{product.getRelatedRecipeJson|json_encode|raw}}';
+        $('#form_related').val(RelatedRecipeObj);
+        if($('#form_related').val()!=''){
+            updateRelatedMaterial();
+        }
+
+        RelatedTipObj = '{{product.relatedTipJson|json_encode|raw}}';
+        $('#form_related_tip').val(RelatedTipObj);
+        if($('#form_related_tip').val()!=''){
+            updateRelatedTip();
+
+        }
+
+        RelatedArticleObj = '{{product.getRelatedArticleJson()|json_encode|raw}}';
+        $('#form_related_article').val(RelatedArticleObj);
+        if($('#form_related_article').val()!=''){
+             updateRelatedArticle();
+        }
+
+    })
      RelatedRecipeObj = '{{product.getRelatedRecipeJson|json_encode|raw}}';
         $('#form_related').val(RelatedRecipeObj);
            if($('#form_related').val()!=''){
