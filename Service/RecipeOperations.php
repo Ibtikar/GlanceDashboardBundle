@@ -70,6 +70,11 @@ class RecipeOperations extends PublishOperations
            $recipe->removePublishLocation($publishlocation);
         }
         $recipe->setStatus(Recipe::$statuses['draft']);
+        if ($recipe->getStatus() == 'publish') {
+            $this->container->get('redirect')->removeRedirect($this->getFrontEndUrl($recipe));
+            $this->container->get('redirect')->removeRedirect($this->getFrontEndUrlEn($recipe));
+            $this->hideFrontEndUrl($recipe);
+        }
         $this->dm->flush();
 
 
@@ -158,9 +163,8 @@ class RecipeOperations extends PublishOperations
         $document->setGoodyStar($goodyStar);
 
 
-        if (!$rePublish) {
-            $this->showFrontEndUrl($document);
-        }
+        $this->showFrontEndUrl($document);
+        $this->showFrontEndUrlEn($document);
 //        if (php_sapi_name() !== 'cli') {
         if ($document instanceof \Ibtikar\GlanceDashboardBundle\Document\Recipe) {
             $document->setAutoPublishDate(null);

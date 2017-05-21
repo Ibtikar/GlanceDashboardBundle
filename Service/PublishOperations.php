@@ -87,7 +87,13 @@ abstract class PublishOperations
     public function getFrontEndUrl(Publishable $document)
     {
         // only routes used in onKernelRequest function in Redirect listener is allowed
-//        return $this->router->generate('app_view', array('slug' => $document->getSlug()));
+        return $this->router->generate('ibtikar_goody_frontend_'.  trim($document->getType()).'_view', array('slug' => $document->getSlug(),'_locale'=>'ar'));
+    }
+
+    public function getFrontEndUrlEn(Publishable $document)
+    {
+        // only routes used in onKernelRequest function in Redirect listener is allowed
+        return $this->router->generate('ibtikar_goody_frontend_'.  trim($document->getType()).'_view', array('slug' => $document->getSlugEn(),'_locale'=>'en'));
     }
 
     /**
@@ -101,7 +107,22 @@ abstract class PublishOperations
 //            $slug->setPublish(false);
 //            $this->dm->flush($slug);
 //        }
-//        $this->redirect->addTemporaryRedirect($this->getFrontEndUrl($document), null, TRUE);
+        switch (trim($document->getType())){
+            case 'tip':
+                $type='_tips';
+                break;
+            case 'recipe':
+                $type='_recipes';
+                break;
+            case 'article':
+                $type='_articles';
+                break;
+            case 'kitchen911':
+                $type='_kitchen911';
+                break;
+        }
+        $this->redirect->addTemporaryRedirect($this->getFrontEndUrl($document), $this->container->get('router')->generate('ibtikar_goody_frontend'.$type.'_ar',array('_locale'=>'ar')), TRUE);
+        $this->redirect->addTemporaryRedirect($this->getFrontEndUrlEn($document), $this->container->get('router')->generate('ibtikar_goody_frontend'.$type.'_en',array('_locale'=>'en')), TRUE);
     }
 
     /**
@@ -110,12 +131,13 @@ abstract class PublishOperations
      */
     public function showFrontEndUrl(Publishable $document)
     {
-//        $slug = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Slug')->findOneBy(array('referenceId' => $document->getId()));
-//        if ($slug) {
-//            $slug->setPublish(true);
-//            $this->dm->flush($slug);
-//        }
-//        $this->redirect->removeRedirect($this->getFrontEndUrl($document));
+
+        $this->redirect->removeRedirect($this->getFrontEndUrl($document));
+    }
+    public function showFrontEndUrlEn(Publishable $document)
+    {
+
+        $this->redirect->removeRedirect($this->getFrontEndUrlEn($document));
     }
 
     /**
@@ -163,9 +185,8 @@ abstract class PublishOperations
         $document->setStatus(Recipe::$statuses['publish']);
 
 
-        if (!$rePublish) {
-            $this->showFrontEndUrl($document);
-        }
+        $this->showFrontEndUrl($document);
+        $this->showFrontEndUrlEn($document);
 //        if (php_sapi_name() !== 'cli') {
         if ($document instanceof \Ibtikar\GlanceDashboardBundle\Document\Recipe && $document->getStatus() == 'autopublish') {
             $document->setAutoPublishDate(null);
@@ -470,7 +491,7 @@ abstract class PublishOperations
                 ->setDeletedBy($userFrom)
                 ->setAssignedTo(NULL)
                 ->setReason($reason);
-            if ($recipe->getStatus() == 'published') {
+            if ($recipe->getStatus() == 'publish') {
                 $this->container->get('redirect')->removeRedirect($this->getFrontEndUrl($recipe));
                 $this->hideFrontEndUrl($recipe);
             }

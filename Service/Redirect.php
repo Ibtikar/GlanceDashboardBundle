@@ -30,15 +30,17 @@ class Redirect {
      * @param GetResponseEvent $event
      */
     public function onKernelRequest(GetResponseEvent $event) {
-        $requestedUrl = urldecode($event->getRequest()->getPathInfo());
-
+        $dm = $this->container->get('doctrine_mongodb')->getManager();
+        $redirect = $dm->getRepository('IbtikarGlanceDashboardBundle:Redirect')->findOneByOldUrl($event->getRequest()->getPathInfo());
+        if (!$redirect) {
+            $requestedUrl = urldecode($event->getRequest()->getPathInfo());
+            $redirect = $dm->getRepository('IbtikarGlanceDashboardBundle:Redirect')->findOneByOldUrl($requestedUrl);
+        }
         // The redirect listener should not work on all routes it should check for the route name before selecting from database`
 //        if (!in_array($this->container->get('request_stack')->getCurrentRequest()->get('_route'), array('ibtikar_goody_frontend_shorturl'))) {
 //            return;
 //        }
 
-        $dm = $this->container->get('doctrine_mongodb')->getManager();
-        $redirect = $dm->getRepository('IbtikarGlanceDashboardBundle:Redirect')->findOneByOldUrl($requestedUrl);
         if ($redirect) {
             $redirect->setAccessCount($redirect->getAccessCount() + 1);
             $redirect->setLastAccessedAt(new \DateTime());
@@ -56,13 +58,13 @@ class Redirect {
      */
     public function removeRedirect($url) {
         $user = null;
-        $token = $this->container->get('security.context')->getToken();
+        $token = $this->container->get('security.token_storage')->getToken();
         if ($token && is_object($token->getUser())) {
             $user = $token->getUser();
         }
         $dm = $this->container->get('doctrine_mongodb')->getManager();
-        if ($this->container->isScopeActive('request')) {
-        $scriptName = $this->container->get('request')->getScriptName();
+        if ($this->container->get('request_stack')->getCurrentRequest()) {
+        $scriptName = $this->container->get('request_stack')->getCurrentRequest()->getScriptName();
         $url = str_replace($scriptName, '', $url);
         }
         $url= str_replace($this->shortUrlBase, '/', $url);
@@ -102,7 +104,7 @@ class Redirect {
             throw new \Exception('please set old url.');
         }
         if (is_null($redirectToUrl)) {
-            $redirectToUrl = $this->container->get('router')->generate('ibtikar_goody_frontend_homepage');
+            $redirectToUrl = $this->container->get('router')->generate('ibtikar_goody_frontend_homepage',array('_locale'=>'ar'));
         }
 
         $request = $this->container->get('request_stack')->getCurrentRequest();
@@ -114,6 +116,7 @@ class Redirect {
         }
         $oldUrl= str_replace($this->shortUrlBase, '/', $oldUrl);
         $redirectToUrl= str_replace($this->shortUrlBase, '/', $redirectToUrl);
+
         if ($oldUrl === $redirectToUrl) {
             throw new \Exception('You can not set a redirect loop for the url ' . $redirectToUrl);
         }
