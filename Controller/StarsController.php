@@ -241,14 +241,16 @@ class StarsController extends BackendController {
 
         $dm->flush();
 
-        $this->statusChangeEmail($status);
+        $this->statusChangeEmail($status,$document->getUser());
 
         return new JsonResponse($this->getTabCount(array('status' => 'success', 'message' => $this->get('translator')->trans('done sucessfully'))));
     }
 
-    private function statusChangeEmail($status) {
-                $user = $this->getUser();
-                $emailTemplate = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:EmailTemplate')->findOneBy(array('name' => $status == "approved"?'join stars':'reject stars'));
+    private function statusChangeEmail($status ,$user=NULL) {
+        if (!$user) {
+            $user = $this->getUser();
+        }
+        $emailTemplate = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:EmailTemplate')->findOneBy(array('name' => $status == "approved"?'join stars':'reject stars'));
                 $body = str_replace(
                         array(
                     '%user-name%',
