@@ -27,16 +27,20 @@ class FixBugRediectCommand extends ContainerAwareCommand
             'publishedAt' => array('$exists' => true)
         ));
 
-        $output->write("count recipes ".count($recipes));
+        $output->writeln("count recipes ".count($recipes));
 
 
         foreach ($recipes as $recipe) {
             if ($recipe->getSlug()) {
-                var_dump($recipe->getId());
-                var_dump($recipe->getSlug());
+
+                $output->writeln("recipe slug ".$recipe->getSlug());
+                $output->writeln("recipe id ".$recipe->getId());
+
                 $this->getContainer()->get('redirect')->removeRedirect($this->getContainer()->get('recipe_operations')->getFrontEndUrl($recipe));
                 $this->getContainer()->get('redirect')->removeRedirect($this->getContainer()->get('recipe_operations')->getFrontEndUrlEn($recipe));
                 $this->getContainer()->get('recipe_operations')->hideFrontEndUrl($recipe);
+                $output->writeln("############################################################");
+
             } else {
                 var_dump($recipe->getId());
             }
