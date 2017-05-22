@@ -663,7 +663,7 @@ var fileName='';
 
                     showNotificationMsg(imageErrorMessages.sizeError, "", 'error');
 
-                } else if ($('#image-cropper-modal').cropit('imageSize').width < 1000 || $('#image-cropper-modal').cropit('imageSize').height < 700) {
+                } else if ($('#image-cropper-modal').cropit('imageSize').width < 1170 || $('#image-cropper-modal').cropit('imageSize').height < 600) {
 
                     showNotificationMsg(imageErrorMessages.imageDimension, "", 'error');
 
@@ -688,7 +688,7 @@ var fileName='';
 
     });
 
-    $('#image-cropper-modal').cropit('previewSize', {width: 500, height: 350});
+    $('#image-cropper-modal').cropit('previewSize', {width: 585, height: 300});
     $('#image-cropper-modal').cropit('exportZoom', 2);
 
 

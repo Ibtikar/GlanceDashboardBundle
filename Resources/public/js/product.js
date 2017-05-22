@@ -511,8 +511,8 @@ $(document).on("click",'.dev-add-related-material',function(){
                 $('.dev-submit-image').attr('data-id', element.attr('id'))
 
             }
-            var elementDimessionWidth=200;
-            var elementDimessionHeight=200;
+            var elementDimessionWidth=1170;
+            var elementDimessionHeight=600;
             var errorDimension=imageErrorMessages.imageDimension;
             if($(element).closest('td').attr('data-name')=='bannerPhoto'){
              elementDimessionWidth=300;
@@ -553,7 +553,7 @@ $(document).on("click",'.dev-add-related-material',function(){
         }
 
     })
-    $('#image-cropper-modal').cropit('previewSize', {width: 500, height: 350});
+    $('#image-cropper-modal').cropit('previewSize', {width: 585, height: 300});
     $('#image-cropper-modal').cropit('exportZoom', 2);
 
     $(document).on('click', '.dev-submit-image', function () {

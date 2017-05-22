@@ -675,7 +675,7 @@ class MediaController extends BackendController
             return new Response($responseContent);
         }
 
-        if ($imagesize[0] < 1000 || $imagesize[1] < 700) {
+        if ($imagesize[0] < 1170 || $imagesize[1] < 600) {
             $responseContent = "errorImageSize";
             return new Response($responseContent);
         }
