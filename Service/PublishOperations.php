@@ -485,16 +485,17 @@ abstract class PublishOperations
             if ($recipe->getStatus() == 'publish' || $recipe->getStatus() == 'autopublish') {
                 $this->container->get('recipe_operations')->unpublish($recipe);
             }
+            if ($recipe->getStatus() == 'publish') {
+                $this->container->get('redirect')->removeRedirect($this->getFrontEndUrl($recipe));
+                $this->hideFrontEndUrl($recipe);
+            }
             $recipe
                 ->setStatus('deleted')
                 ->setDeletedAt(new \DateTime())
                 ->setDeletedBy($userFrom)
                 ->setAssignedTo(NULL)
                 ->setReason($reason);
-            if ($recipe->getStatus() == 'publish') {
-                $this->container->get('redirect')->removeRedirect($this->getFrontEndUrl($recipe));
-                $this->hideFrontEndUrl($recipe);
-            }
+
             $this->dm->flush();
         }
         return $isValid;

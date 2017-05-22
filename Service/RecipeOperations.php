@@ -63,6 +63,11 @@ class RecipeOperations extends PublishOperations
         if ($recipe->getStatus() != $status) {
             return self::$TIME_OUT;
         }
+        if ($recipe->getStatus() == 'publish') {
+            $this->container->get('redirect')->removeRedirect($this->getFrontEndUrl($recipe));
+            $this->container->get('redirect')->removeRedirect($this->getFrontEndUrlEn($recipe));
+            $this->hideFrontEndUrl($recipe);
+        }
         $recipe->setAssignedTo(null);
         $recipe->setAutoPublishDate(null);
         $recipe->setGoodyStar(FALSE);
@@ -70,11 +75,7 @@ class RecipeOperations extends PublishOperations
            $recipe->removePublishLocation($publishlocation);
         }
         $recipe->setStatus(Recipe::$statuses['draft']);
-        if ($recipe->getStatus() == 'publish') {
-            $this->container->get('redirect')->removeRedirect($this->getFrontEndUrl($recipe));
-            $this->container->get('redirect')->removeRedirect($this->getFrontEndUrlEn($recipe));
-            $this->hideFrontEndUrl($recipe);
-        }
+
         $this->dm->flush();
 
 
