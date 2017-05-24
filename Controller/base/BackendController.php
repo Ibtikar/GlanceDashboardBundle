@@ -515,7 +515,7 @@ class BackendController extends Controller {
         $fieledValue = $request->get('fieldValue');
         $id = $request->get('id');
         $em = $this->get('doctrine_mongodb')->getManager();
-        if ($fieledName == 'email') {
+        if ($fieledName == 'email'|| $fieledName == 'slugEn') {
             $fieledValue = strtolower($fieledValue);
         }
         $count = $em->createQueryBuilder($this->getObjectShortName())

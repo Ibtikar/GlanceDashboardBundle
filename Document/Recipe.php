@@ -180,6 +180,11 @@ class Recipe extends Publishable
     private $tags;
 
     /**
+     * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\RecipeTag" , simple=true)
+     */
+    private $recipeTags;
+
+    /**
      * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Tag" , simple=true)
      */
     private $tagsEn;
@@ -1348,17 +1353,17 @@ class Recipe extends Publishable
 
     public function setRelatedTip($tip=array())
     {
-       $this->relatedTip= array();
+       $this->relatedTip= $tip;
     }
 
     public function setRelatedArticle($article=array())
     {
-       $this->relatedArticle= array();
+       $this->relatedArticle= $article;
     }
 
     public function setRelatedRecipe($recipe=array())
     {
-       $this->relatedRecipe= array();
+       $this->relatedRecipe= $recipe;
     }
 
     /**
@@ -1508,6 +1513,35 @@ class Recipe extends Publishable
         return $this->goodyStar;
     }
 
+    /**
+     * Add recipeTag
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\RecipeTag $recipeTag
+     */
+    public function addRecipeTag(\Ibtikar\GlanceDashboardBundle\Document\RecipeTag $recipeTag)
+    {
+        $this->recipeTags[] = $recipeTag;
+    }
+
+    /**
+     * Remove recipeTag
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\RecipeTag $recipeTag
+     */
+    public function removeRecipeTag(\Ibtikar\GlanceDashboardBundle\Document\RecipeTag $recipeTag)
+    {
+        $this->recipeTags->removeElement($recipeTag);
+    }
+
+    /**
+     * Get recipeTags
+     *
+     * @return \Doctrine\Common\Collections\Collection $recipeTags
+     */
+    public function getRecipeTags()
+    {
+        return $this->recipeTags;
+    }
     /**
      * Set order
      *
