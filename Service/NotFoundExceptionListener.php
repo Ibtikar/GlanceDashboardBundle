@@ -32,7 +32,10 @@ class NotFoundExceptionListener
             } else {
 //                \Doctrine\Common\Util\Debug::dump($this->context->getToken());
 //                exit;
-                $event->setResponse(new RedirectResponse($this->router->generate('ibtikar_goody_frontend_error_404')));
+//                $event->setResponse(new RedirectResponse($this->router->generate('ibtikar_goody_frontend_error_404')));
+                $response = $this->templating->renderResponse('IbtikarGoodyFrontendBundle:Exception:error.html.twig');
+                $event->setResponse($response);
+
             }
         }
         if ($event->getException() instanceof \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException) {
