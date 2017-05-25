@@ -219,10 +219,8 @@ class RecipeOperations extends PublishOperations
         $document->setPublishedBy($user);
         $document->setStatus(Recipe::$statuses['publish']);
 
-
-        if (!$rePublish) {
-            $this->showFrontEndUrl($document);
-        }
+        $this->showFrontEndUrl($document);
+        $this->showFrontEndUrlEn($document);
 //        if (php_sapi_name() !== 'cli') {
         if ($document instanceof \Ibtikar\GlanceDashboardBundle\Document\Recipe && $document->getStatus() == 'autopublish') {
             $document->setAutoPublishDate(null);
