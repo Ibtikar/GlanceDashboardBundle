@@ -29,7 +29,7 @@ class FixTagsContentCommand extends ContainerAwareCommand
             $tagArabicName = array();
             $tagEnglishName = array();
             $tagsName = array();
-            $tags=array();
+            $tagsId=array();
             $tagsObject = array();
 
             $tagsAr = $recipe->getTags();
@@ -42,9 +42,10 @@ class FixTagsContentCommand extends ContainerAwareCommand
 
                 $newTagsAr = $dm->getRepository('IbtikarGlanceDashboardBundle:RecipeTag')->findBy(array(
                     'name' => array('$in' => $tagArabicName)));
+
                 foreach ($newTagsAr as $newTagAr) {
-                    if (!in_array($newTagAr, $tags)) {
-                        $tags[] = $newTagAr->getId();
+                    if (!in_array($newTagAr->getId(), $tagsId)) {
+                        $tagsId[] = $newTagAr->getId();
                         $tagsName[] = $newTagAr->getName();
 
                         $tagsObject[] = $newTagAr;
@@ -59,11 +60,11 @@ class FixTagsContentCommand extends ContainerAwareCommand
 
 
                 $newTagsEn = $dm->getRepository('IbtikarGlanceDashboardBundle:RecipeTag')->findBy(array(
-                    'name' => array('$in' => $tagEnglishName)));
+                    'nameEn' => array('$in' => $tagEnglishName)));
 
                 foreach ($newTagsEn as $newTagEn) {
-                    if (!in_array($newTagEn, $tags)) {
-                        $tags[] = $newTagEn->getId();
+                    if (!in_array($newTagEn->getId(), $tagsId)) {
+                        $tagsId[] = $newTagEn->getId();
                         $tagsName[] = $newTagEn->getName();
                         $tagsObject[] = $newTagEn;
                     }
