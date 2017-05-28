@@ -132,6 +132,27 @@ class ProductController extends BackendController {
             if ($form->isValid()) {
                 $formData = $request->get('form');
 
+                $coverPhotoType = $formData['coverType'];
+
+                $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
+                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                    'product' => null,
+                    'subproduct' => null,
+                    'collectionType' => 'Product'
+                ));
+
+                foreach ($images as $media) {
+                    if ($coverPhotoType == 'image' && $media->getType() == 'image' && $media->getCoverPhoto()) {
+                        $product->setCoverPhoto($media);
+                        continue;
+                    }
+
+                    if ($coverPhotoType == 'video' && $media->getType() == 'video' && $media->getCoverPhoto()) {
+                        $product->setCoverPhoto($media);
+                        continue;
+                    }
+                }
+
 //                if ($formData['related']) {
 //                    $this->updateRelatedRecipe($product, $formData['related'], $dm,'recipe');
 //                }
@@ -285,6 +306,25 @@ class ProductController extends BackendController {
 //                      if ($formData['related']) {
 //                    $this->updateRelatedRecipe($product, $formData['related'], $dm,'recipe');
 //                }
+                $coverPhotoType = $formData['coverType'];
+
+                $mediaList = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
+                    'product' => $product->getId(),
+                    'collectionType' => 'Product',
+                    'coverPhoto' => true
+                ));
+
+                foreach ($mediaList as $media) {
+                    if ($coverPhotoType == 'image' && $media->getType() == 'image' && $media->getCoverPhoto()) {
+                        $product->setCoverPhoto($media);
+                        continue;
+                    }
+
+                    if ($coverPhotoType == 'video' && $media->getType() == 'video' && $media->getCoverPhoto()) {
+                        $product->setCoverPhoto($media);
+                        continue;
+                    }
+                }
                 if ($formData['related_article']) {
                     $this->updateRelatedRecipe($product, $formData['related_article'], $dm,'article');
                 }
