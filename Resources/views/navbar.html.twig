@@ -72,11 +72,11 @@
                                 <li><a href="{{ path('ibtikar_glance_dashboard_recipedraft_list_draft_recipe') }}" {% if 'recipe' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/content.png')}}" class=" position-left"/> {% trans from 'recipe'%}List Recipe{% endtrans %}</a></li>
                                 {% endif %}
 
-                        {#        {% if is_granted('ROLE_RECIPETAG_VIEW') or is_granted('ROLE_ADMIN')%}
+                                {% if is_granted('ROLE_RECIPETAG_VIEW') or is_granted('ROLE_ADMIN')%}
                                     <li><a href="{{ path('ibtikar_glance_dashboard_recipetag_list') }}" {% if 'recipetag' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/content.png')}}" class=" position-left"/>
 الكلمات المفتاحية
                                         </a></li>
-                                {% endif %}#}
+                                {% endif %}
                                 {% if is_granted('ROLE_PRODUCT_VIEW') or is_granted('ROLE_ADMIN')%}
                                     <li><a href="{{ path('ibtikar_glance_dashboard_product_list') }}" {% if 'product' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/products.png')}}" class=" position-left"/>
 {#                                            {% trans from 'product'%}List Product{% endtrans %}#}
