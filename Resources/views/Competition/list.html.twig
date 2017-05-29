@@ -192,6 +192,12 @@
                                                                                 <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">   {{ attribute(object, field.propertyName|humanize|title|replace({' ':''}))}} </a>
                                                                             </div>
                                                                         </td>
+                                                                    {% elseif field.type == "slug"  %}
+                                                                        <td>
+                                                                            <a href="{{ url('ibtikar_goody_competition_view_ar',{'slug': attribute(object, field.propertyName) ,'_locale':'ar'})}}" target="_blank">
+                                                                                {{ url('ibtikar_goody_competition_view_ar',{'slug': attribute(object, field.propertyName) ,'_locale':'ar'})}}
+                                                                            </a>
+                                                                        </td>
                                                                     {% else %}
                                                                         <td >
                                                                             {% if field.isClickable %}

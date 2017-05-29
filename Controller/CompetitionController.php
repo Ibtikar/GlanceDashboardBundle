@@ -10,6 +10,8 @@ use Ibtikar\GlanceDashboardBundle\Form\Type\CompetitionType;
 use Ibtikar\GlanceDashboardBundle\Document\Competition;
 use Ibtikar\GlanceDashboardBundle\Document\Question;
 use Ibtikar\GlanceDashboardBundle\Document\Document;
+use Ibtikar\GlanceDashboardBundle\Service\ArabicMongoRegex;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Description of CompetitionController
@@ -72,6 +74,8 @@ class CompetitionController extends BackendController {
                 $competition->setQuestionsCount(count($competition->getQuestions()));
                 $competition->setQuestionsCountEn(count($competition->getQuestionsEn()));
                 $dm->persist($competition);
+                $this->slugifier($competition);
+
                 $dm->flush();
 
 
@@ -194,6 +198,7 @@ class CompetitionController extends BackendController {
             "title" => array(),
             "createdAt" => array("type" => "date"),
             "questionsCount" => array(),
+            "slug" => array('type' => 'slug'),
             "expiryDate" => array("type" => "date"),
             'noOfAnswer' => array(),
         );
@@ -390,6 +395,7 @@ class CompetitionController extends BackendController {
                 case 'unpublish':
                     $newCompetition = clone $competition;
                     $dm->persist($newCompetition);
+                    $this->slugifier($newCompetition);
                     $dm->flush();
 
                     $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
@@ -476,7 +482,7 @@ class CompetitionController extends BackendController {
                     $oneDocument[$value] = $this->trans($document->$getfunction(), array(), $this->translationDomain);
                 } elseif ($value == 'slug') {
                     $request->setLocale('ar');
-                    $oneDocument[$value] = '<a href="' . $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $document->$getfunction()), UrlGeneratorInterface::ABSOLUTE_URL) . '" target="_blank">' . $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $document->$getfunction()), UrlGeneratorInterface::ABSOLUTE_URL) . ' </a>';
+                    $oneDocument[$value] = '<a href="' . $this->generateUrl('ibtikar_goody_competition_view_ar', array('slug' => $document->getSlug()), UrlGeneratorInterface::ABSOLUTE_URL) . '" target="_blank">' . $this->generateUrl('ibtikar_goody_competition_view_ar', array('slug' => $document->$getfunction()), UrlGeneratorInterface::ABSOLUTE_URL) . ' </a>';
                 } elseif ($value == 'profilePhoto' || $value == 'coverPhoto') {
                     $image = $document->$getfunction();
                     if (!$image) {
@@ -713,4 +719,34 @@ class CompetitionController extends BackendController {
         return new JsonResponse($responseData);
     }
 
+
+    public function slugifier($competition)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $slugAr = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($competition->getTitle(), 100));
+        $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringEn($competition->getTitleEn(), 100));
+
+        $arabicCount = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Competition')
+                ->field('deleted')->equals(FALSE)
+                ->field('slug')->equals($slugAr)
+                ->field('id')->notEqual($competition->getId())->
+                getQuery()->execute()->count();
+
+        $englishCount = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Competition')
+                ->field('deleted')->equals(FALSE)
+                ->field('slugEn')->equals($slugEn)
+                ->field('id')->notEqual($competition->getId())->
+                getQuery()->execute()->count();
+        if ($arabicCount != 0) {
+            $slugAr = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($competition->getTitle(), 100) . "-" . date('ymdHis'));
+        }
+        if ($englishCount != 0) {
+            $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringEn($competition->getTitleEn(), 100) . "-" . date('ymdHis'));
+        }
+        $competition->setSlug($slugAr);
+        $competition->setSlugEn($slugEn);
+
+
+        $dm->flush();
+    }
 }

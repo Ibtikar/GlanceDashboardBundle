@@ -282,7 +282,23 @@ sa     */
      */
     private $countryCount;
 
+    /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      max = 200,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $slug;
 
+    /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      max = 200,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $slugEn;
 
     public function __construct() {
         $this->questions = new ArrayCollection();
@@ -351,11 +367,6 @@ sa     */
      */
     public static function getValidAllowedVoters() {
         return array_keys(static::$allowedVoters);
-    }
-
-
-    public function getSlug() {
-
     }
 
     /**
@@ -1127,5 +1138,49 @@ sa     */
     public function getCountryCount()
     {
         return $this->countryCount;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string $slug
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return self
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
+    /**
+     * Set slugEn
+     *
+     * @param string $slugEn
+     * @return self
+     */
+    public function setSlugEn($slugEn)
+    {
+        $this->slugEn = $slugEn;
+        return $this;
+    }
+
+    /**
+     * Get slugEn
+     *
+     * @return string $slugEn
+     */
+    public function getSlugEn()
+    {
+        return $this->slugEn;
     }
 }

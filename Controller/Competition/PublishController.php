@@ -24,6 +24,7 @@ class PublishController extends CompetitionController
             "title" => array(),
             "createdAt" => array("type" => "date"),
             "questionsCount" => array(),
+            "slug" => array('type' => 'slug'),
             "expiryDate" => array("type" => "date"),
             'noOfAnswer' => array(),
             'answersEnabled' => array(),
