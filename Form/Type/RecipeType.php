@@ -78,7 +78,7 @@ class RecipeType extends AbstractType {
                         ->add('methodEn',CKEditorType::class, array('required' => TRUE,'config' => array('contentsLangDirection' => 'ltr'),'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
                 ;
                 }
-//                $builder->add('recipeTags', DocumentType::class, array('required' => false,'multiple' => 'multiple','placeholder' => 'Choose tag','class' => 'IbtikarGlanceDashboardBundle:RecipeTag', 'attr' => array('data-maximum-selection-length'=> 10,'class' => 'select-multiple')));
+                $builder->add('recipeTags', DocumentType::class, array('required' => false,'multiple' => 'multiple','placeholder' => 'Choose tag','class' => 'IbtikarGlanceDashboardBundle:RecipeTag', 'attr' => array('data-maximum-selection-length'=> 10,'class' => 'select-multiple')));
 
                 $builder->add('chef', DocumentType::class, array('query_builder' => function($repo) {
                         return $repo->findstaffMemeber();
