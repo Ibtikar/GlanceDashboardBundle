@@ -23,6 +23,10 @@ ibtikar_glance_dashboard_product:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/product.yml"
     prefix:   /product
 
+ibtikar_glance_dashboard_banner:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/homebanner.yml"
+    prefix:   /banner
+
 ibtikar_glance_dashboard_subproduct:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/subproduct.yml"
     prefix:   /subproduct

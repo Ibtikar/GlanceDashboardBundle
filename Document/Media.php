@@ -33,6 +33,12 @@ class Media extends Document {
     private $product;
 
     /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\HomeBanner", simple=true)
+     * @KeepReference
+     */
+    private $banner;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\SubProduct", simple=true)
      * @KeepReference
      */
@@ -940,5 +946,27 @@ class Media extends Document {
         imagedestroy($imageTmp);
         unlink($originalImage);
         return true;
+    }
+
+    /**
+     * Set banner
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\HomeBanner $banner
+     * @return self
+     */
+    public function setBanner(\Ibtikar\GlanceDashboardBundle\Document\HomeBanner $banner)
+    {
+        $this->banner = $banner;
+        return $this;
+    }
+
+    /**
+     * Get banner
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\HomeBanner $banner
+     */
+    public function getBanner()
+    {
+        return $this->banner;
     }
 }

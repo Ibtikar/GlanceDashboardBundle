@@ -87,7 +87,7 @@
                     </li>
      {% endif %}
 
-         {% if  is_granted('ROLE_CATEGORY_VIEW')  or is_granted('ROLE_MAGAZINE_VIEW') or is_granted('ROLE_STARS_EDIT') or is_granted('ROLE_ADMIN')%}
+         {% if  is_granted('ROLE_CATEGORY_VIEW')  or is_granted('ROLE_MAGAZINE_VIEW') or is_granted('ROLE_STARS_EDIT') or is_granted('ROLE_ADMIN') or is_granted('ROLE_STAFF')%}
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                           <img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/sections.png')}}" class=" position-left"/>
@@ -105,6 +105,11 @@
                                 {% if is_granted('ROLE_STARS_EDIT') or is_granted('ROLE_ADMIN')%}
                                     <li><a href="{{ path('ibtikar_glance_dashboard_stars_edit') }}" {% if 'stars' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><i class="icon-star-empty3"></i>
  نجمات مطبخ قودي
+                                        </a></li>
+                                {% endif %}
+                                {% if is_granted('ROLE_STAFF') or is_granted('ROLE_ADMIN')%}
+                                    <li><a href="{{ path('ibtikar_glance_dashboard_banner_edit') }}" {% if 'banner' in app.request.attributes.get('_route') %}class="highlight"{% endif %}> <img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/categories.png')}}" class=" position-left"/> 
+اعلان الصفحة الرئيسية
                                         </a></li>
                                 {% endif %}
                             </ul>

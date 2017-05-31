@@ -1,0 +1,4 @@
+ibtikar_glance_dashboard_banner_edit:
+    path:  /edit
+    defaults: { _controller: IbtikarGlanceDashboardBundle:HomeBanner:edit}
+

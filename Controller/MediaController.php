@@ -95,8 +95,14 @@ class MediaController extends BackendController
                     return $response;
                 }
                 $fieldUpdate='Competition';
-            }
+            } elseif ($collectionType === 'HomeBanner') {
+                $document = $dm->getRepository('IbtikarGlanceDashboardBundle:HomeBanner')->find($documentId);
+                if (!$document) {
+                    throw $this->createNotFoundException($this->trans('Wrong id'));
+                }
 
+                $fieldUpdate = 'Banner';
+            }
         } else {
             if ($imageType && $imageType!='undefined') {
                 switch ($imageType) {
@@ -137,6 +143,7 @@ class MediaController extends BackendController
                             'subproduct' => null,
                             'recipe' => null,
                             'magazine' => null,
+                            'banner' => null,
                             'competition' => null,
                             'collectionType' => $collectionType,
                             'bannerPhoto' => TRUE
@@ -482,6 +489,14 @@ class MediaController extends BackendController
                     'product' => null,
                     'collectionType' => $collectionType
                 ),array('order' => 'ASC'));
+            } elseif ($collectionType === 'HomeBanner') {
+
+                $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                    'type' => 'image',
+//                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                    'banner' => new \MongoId($documentId),
+                    'collectionType' => $collectionType
+                    ), array('order' => 'ASC'));
             }
         } else {
             $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
@@ -500,6 +515,7 @@ class MediaController extends BackendController
         $files = array();
         $coverPhoto = '';
         $profilePhoto = '';
+        $bannerPhoto = '';
 
         /* @var $document Media */
         foreach ($documents as $document) {
@@ -511,6 +527,10 @@ class MediaController extends BackendController
                 $profilePhoto = $this->prepareMedia($document,$collectionType);
                 continue;
             }
+            if ($document->getBannerPhoto()) {
+                $bannerPhoto = $this->prepareMedia($document,$collectionType);
+                continue;
+            }
             if($document->getType()=='video'){
                 $files [] = $this->getVideoArray($document, $documentId, $collectionType);
 
@@ -520,7 +540,7 @@ class MediaController extends BackendController
             }
         }
 
-        return new JsonResponse(array('images' => $files, 'coverPhoto' => $coverPhoto, 'profilePhoto' => $profilePhoto));
+        return new JsonResponse(array('images' => $files, 'coverPhoto' => $coverPhoto, 'profilePhoto' => $profilePhoto,'bannerPhoto'=>$bannerPhoto));
     }
 
     /**
