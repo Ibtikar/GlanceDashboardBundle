@@ -474,4 +474,25 @@ class ProductController extends BackendController {
         }
 
     }
+
+    public function updateRelatedRecipe($document,$relatedJson,$dm = null,$type='recipe') {
+        if (!$dm) {
+            $dm = $this->get('doctrine_mongodb')->getManager();
+        }
+
+        $array = json_decode($relatedJson, true);
+        foreach($array as $relatedRecipe){
+            $material = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($relatedRecipe['id']);
+
+            $contentType = $material->getType();
+            $addMethod = "addRelated".ucfirst($contentType);
+            $getMethod = "getRelated".ucfirst($contentType);
+
+            if($this->validToRelate($material, $document) && count($document->$getMethod()) < 10){
+                $document->$addMethod($material);
+            }
+        }
+    }
+
+
 }
