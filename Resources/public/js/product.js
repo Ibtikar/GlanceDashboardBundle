@@ -410,18 +410,18 @@ $(document).on("click",'.dev-add-related-material',function(){
                     method: 'POST',
                     data:{parent:requestId,child:$this.attr('data-related-material-id')},
                     success: function(data) {
-                        if(data.status == "success"){
+                         if(data.status == "success"){
                             $this.parents('li').remove();
                             var objArray = [];
-                            $.each($('.dev-related-list .media'),function(){
+                            $.each($('.dev-related-article-list .media'),function(){
                                 objArray.push({
                                     'id':$(this).attr('data-related-material-id'),
                                     'text':$(this).find('.media-body b').text().trim(),
                                     'img':$(this).find('img').attr('src')
                                 });
                             });
-                            $('#form_related').val(JSON.stringify(objArray));
-                            updateRelatedMaterial();
+                            $('#form_related_article').val(JSON.stringify(objArray));
+                                updateRelatedArticle();
                         }
 
                         showNotificationMsg(data.message,"");
@@ -460,15 +460,15 @@ $(document).on("click",'.dev-add-related-material',function(){
                         if(data.status == "success"){
                             $this.parents('li').remove();
                             var objArray = [];
-                            $.each($('.dev-related-list .media'),function(){
+                            $.each($('.dev-related-tip-list .media'),function(){
                                 objArray.push({
                                     'id':$(this).attr('data-related-material-id'),
                                     'text':$(this).find('.media-body b').text().trim(),
                                     'img':$(this).find('img').attr('src')
                                 });
                             });
-                            $('#form_related').val(JSON.stringify(objArray));
-                            updateRelatedMaterial();
+                            $('#form_related_tip').val(JSON.stringify(objArray));
+                                updateRelatedTip();
                         }
 
                         showNotificationMsg(data.message,"");
