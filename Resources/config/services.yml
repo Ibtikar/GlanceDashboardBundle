@@ -78,6 +78,10 @@ services:
     short_url:
             class: Ibtikar\GlanceDashboardBundle\Service\ShortUrl
             arguments: [ "@doctrine_mongodb", "@redirect", "%httpProtocol%://%site_domain%/", "@service_container" ]
+            
+    history_logger:
+        class: Ibtikar\GlanceDashboardBundle\Service\HistoryLogger
+        arguments: [ "@doctrine_mongodb","@security.authorization_checker" ]        
 
     app.twig.popover_factory_extension:
         class: Ibtikar\GlanceDashboardBundle\Service\PopoverFactoryExtension

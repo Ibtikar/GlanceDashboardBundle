@@ -5,6 +5,7 @@ namespace Ibtikar\GlanceDashboardBundle\Service;
 use Ibtikar\GlanceDashboardBundle\Service\PublishOperations;
 use Ibtikar\GlanceDashboardBundle\Document\Publishable;
 use Ibtikar\GlanceDashboardBundle\Document\Recipe;
+use Ibtikar\GlanceDashboardBundle\Document\History;
 
 
 class RecipeOperations extends PublishOperations
@@ -47,6 +48,8 @@ class RecipeOperations extends PublishOperations
 //        $log = $this->container->get('history_logger')->log($recipe, History::$ASSIGN, $recipe->getRoom());
 
         $this->assignRecipeToUser($recipe, $token->getUser());
+        $this->container->get('history_logger')->log($recipe, History::$ASSIGN );
+
 //        $this->container->get('notify_user')->notifyUser($log);
         return self::$ASSIGN_TO_ME;
     }
@@ -75,6 +78,7 @@ class RecipeOperations extends PublishOperations
            $recipe->removePublishLocation($publishlocation);
         }
         $recipe->setStatus(Recipe::$statuses['draft']);
+        $this->container->get('history_logger')->log($recipe, History::$DRAFT );
 
         $this->dm->flush();
 
@@ -172,6 +176,7 @@ class RecipeOperations extends PublishOperations
             $document->setAssignedTo(null);
         }
 //        }
+        $this->container->get('history_logger')->log($document, History::$PUBLISH);
 
         $this->dm->flush();
         return array("status" => 'success', "message" => $this->translator->trans('done sucessfully'));
@@ -267,6 +272,7 @@ class RecipeOperations extends PublishOperations
         $document->setStatus(Recipe::$statuses['autopublish']);
         $document->setAssignedTo(null);
         $document->setGoodyStar($goodyStar);
+        $this->container->get('history_logger')->log($document, History::$AUTOPUBLISH);
 
         $this->dm->flush();
         return array("status" => 'success', "message" => $this->translator->trans('recipe will be published at %datetime%', array('%datetime%' => $document->getAutoPublishDate()->format('Y-m-d h:i A'))));

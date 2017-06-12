@@ -13,6 +13,7 @@ use Ibtikar\GlanceDashboardBundle\Document\Slug;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 use Ibtikar\GlanceDashboardBundle\Document\Document;
 use Ibtikar\GlanceDashboardBundle\Document\Recipe;
+use Ibtikar\GlanceDashboardBundle\Document\History;
 
 class BlogController extends BackendController
 {
@@ -97,6 +98,7 @@ class BlogController extends BackendController
                 }
                 $dm->persist($recipe);
                 $this->slugifier($recipe);
+                $this->get('history_logger')->log($recipe, History::$ADD);
 
                 $dm->flush();
 

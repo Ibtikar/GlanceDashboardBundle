@@ -1,0 +1,128 @@
+{% extends 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard.html.twig' %}
+{% block header %}
+    {{ include('IbtikarGlanceDashboardBundle::header.html.twig') }}
+{% endblock %}
+{% block navbar %}
+    {{ include('IbtikarGlanceDashboardBundle::navbar.html.twig') }}
+{% endblock %}
+{% block side_menu %}
+    {{ include('IbtikarGlanceDashboardBundle::sidebar.html.twig') }}
+{% endblock %}
+{% block title %}{% trans from 'product' %}View History{% endtrans%}{% endblock%}
+
+
+{% block breadCrumb %}
+
+{% endblock %}
+
+{% block body %}
+    <div class="content-wrapper">
+
+
+        <!-- Basic button -->
+
+        <!-- /basic button -->
+
+
+
+        <!-- Dashboard content -->
+        <div class="row">
+            <div class="col-lg-12">
+
+
+                <div class="row">
+
+
+                    <div class="col-lg-12">
+
+
+                        <form class="form-horizontal">
+                            <!-- Navigation -->
+                            <div class="panel panel-flat">
+
+                                <div class="panel-heading">
+                                    <h5 class="panel-title"></h5>
+                                    <div class="heading-elements">
+
+
+                                    </div>
+                                    <a class="heading-elements-toggle"><i class="icon-more"></i></a></div>
+
+
+
+                                <div class="panel-body">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        <div class="form-group">
+                                            <div class="col-lg-10">
+                                                <ul class="dev-related-list media-list width-350 notificationList">
+                                                    {% for his in history %}
+                                                        <li  class="media">
+
+
+                                                            <div class="media-body">
+                                                                {% if his.action =="add related"  %}
+                                                                    {{ his.createdBy}} <b>{{ his.message}} {{his.recipe}} </b> to   "{{ his.document}}" at {{ his.createdAt|date('Y-m-d h:i')}} 
+                                                                {% elseif  his.action =="remove related" %}
+                                                                    {{ his.createdBy}} <b>{{ his.message}} {{his.recipe}} </b> from   "{{ his.document}}" at {{ his.createdAt|date('Y-m-d h:i')}} 
+
+                                                                {% else %}
+                                                                    {{ his.createdBy}} <b>{{ his.action}} </b> "{{ his.document}}" at {{ his.createdAt|date('Y-m-d h:i')}} {{ his.message}}
+                                                                {% endif %}
+                                                            </div>
+
+                                                        </li>
+                                                    {% endfor  %}
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                
+
+
+
+
+
+
+
+
+                                </div>
+
+
+
+                            </div><!-- panel end -->
+                        </form>
+
+
+
+                    </div><!-- col-lg-12 -->
+                </div><!-- row end -->
+
+
+
+
+            </div><!-- col-lg-12 tabs -->
+
+
+        </div>
+        <!-- /dashboard content -->
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}

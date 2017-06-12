@@ -61,3 +61,7 @@ ibtikar_glance_dashboard_recipe_statistics:
 ibtikar_glance_dashboard_recipe_chef_statistics:
     path: /ajax/chef-statistics
     defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:chefStatistics }
+    
+ibtikar_glance_dashboard_history_view:
+    path:  /history/{offset}/{limit}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Recipe:history , offset:0 ,limit:30 }    

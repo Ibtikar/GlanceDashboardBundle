@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Ibtikar\GlanceDashboardBundle\Document\Slug;
 use Symfony\Component\Form\Extension\Core\Type as formType;
 use Ibtikar\GlanceDashboardBundle\Service\ArabicMongoRegex;
+use Ibtikar\GlanceDashboardBundle\Document\History;
 
 class ProductController extends BackendController {
 
@@ -202,6 +203,7 @@ class ProductController extends BackendController {
                         continue;
                     }
                 }
+                $this->get('history_logger')->log($product, History::$ADD);
 
                 $dm->flush();
 
@@ -332,6 +334,7 @@ class ProductController extends BackendController {
                 if ($formData['related_tip']) {
                     $this->updateRelatedRecipe($product, $formData['related_tip'], $dm,'tip');
                 }
+                $this->get('history_logger')->log($product, History::$EDIT);
 
                 $dm->flush();
 
@@ -424,6 +427,8 @@ class ProductController extends BackendController {
         $getMethod = "getRelated".ucfirst($contentType);
         if($materialParent && $materialChild && $materialParent->$getMethod()->contains($materialChild)){
             $materialParent->$removeMethod($materialChild);
+            $this->get('history_logger')->log($materialParent, History::$REMOVERELATED,"remove related ".ucfirst($contentType),$materialChild );
+
             $dm->flush();
         }
             $response = array('status' => 'success','message' => $this->trans('done sucessfully'));
@@ -451,6 +456,8 @@ class ProductController extends BackendController {
         if ($this->validToRelate($materialChild, $materialParent) && count($materialParent->$getMethod()) < 10) {
 
             $materialParent->$addMethod($materialChild);
+            $this->get('history_logger')->log($materialParent, History::$ADDRELATED,"add related ".ucfirst($contentType), $materialChild );
+
             $dm->flush();
         }
         $response = array('status' => 'success', 'message' => $this->trans('done sucessfully'));
@@ -488,11 +495,11 @@ class ProductController extends BackendController {
             $addMethod = "addRelated".ucfirst($contentType);
             $getMethod = "getRelated".ucfirst($contentType);
 
-            if($this->validToRelate($material, $document) && count($document->$getMethod()) < 10){
+            if ($this->validToRelate($material, $document) && count($document->$getMethod()) < 10) {
                 $document->$addMethod($material);
+                $this->get('history_logger')->log($document, History::$ADDRELATED, "add related " . ucfirst($contentType) ,$material);
             }
         }
     }
-
 
 }

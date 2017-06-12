@@ -13,6 +13,7 @@ use Ibtikar\GlanceDashboardBundle\Service\ArabicMongoRegex;
 use Ibtikar\GlanceDashboardBundle\Document\Slug;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 use Ibtikar\GlanceDashboardBundle\Document\Document;
+use Ibtikar\GlanceDashboardBundle\Document\History;
 
 class RecipeController extends BackendController
 {
@@ -755,6 +756,7 @@ class RecipeController extends BackendController
                 }
                 $dm->persist($recipe);
                 $this->slugifier($recipe);
+                $this->get('history_logger')->log($recipe, History::$ADD);
 
                 $dm->flush();
 
@@ -905,6 +907,7 @@ class RecipeController extends BackendController
                         }
                     }
                 }
+                $this->get('history_logger')->log($recipe, History::$EDIT);
 
                 $dm->flush();
 
@@ -1532,6 +1535,32 @@ class RecipeController extends BackendController
         return $this->render('IbtikarGlanceDashboardBundle:Recipe:view.html.twig', array(
                     'translationDomain' => $this->translationDomain,
                     'data' => $data,
+
+        ));
+    }
+    
+    public function HistoryAction(Request $request, $offset=0,$limit=30) {
+
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        if(!is_numeric($offset)){
+         $offset=0;   
+        }
+        if(!is_numeric($limit)){
+          $limit=30;  
+        }
+        $history = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:History')
+                        ->skip($offset)->limit($limit)
+                        ->sort('createdAt', 'ASC')
+                        ->getQuery()->execute();
+
+
+
+
+     
+
+        return $this->render('IbtikarGlanceDashboardBundle:Recipe:history.html.twig', array(
+                    'translationDomain' => $this->translationDomain,
+                    'history' => $history,
 
         ));
     }

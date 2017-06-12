@@ -12,6 +12,7 @@ use Ibtikar\GlanceUMSBundle\Document\Staff;
 use Ibtikar\GlanceDashboardBundle\Service\Redirect;
 use Ibtikar\GlanceDashboardBundle\Document\Recipe;
 use Ibtikar\GlanceDashboardBundle\Document\Magazine;
+use Ibtikar\GlanceDashboardBundle\Document\History;
 
 /**
  * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
@@ -495,6 +496,7 @@ abstract class PublishOperations
                 ->setDeletedBy($userFrom)
                 ->setAssignedTo(NULL)
                 ->setReason($reason);
+        $this->container->get('history_logger')->log($recipe, History::$DELETE);
 
             $this->dm->flush();
         }
