@@ -73,6 +73,7 @@
 
 
                                                             <div class="media-body">
+                                                                {{ dump(his.id)}}
                                                                 {% if his.action =="add related"  %}
                                                                     {{ his.createdBy}} <b>{{ his.message}} {{his.recipe}} </b> to   "{{ his.document}}" at {{ his.createdAt|date('Y-m-d h:i')}} 
                                                                 {% elseif  his.action =="remove related" %}
