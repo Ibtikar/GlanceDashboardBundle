@@ -1,9 +1,9 @@
 {% extends 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard.html.twig' %}
 {% block header %}
-{#    {{ include('IbtikarGlanceDashboardBundle::header.html.twig') }}#}
+    {{ include('IbtikarGlanceDashboardBundle::header.html.twig') }}
 {% endblock %}
 {% block navbar %}
-{#    {{ include('IbtikarGlanceDashboardBundle::navbar.html.twig') }}#}
+    {{ include('IbtikarGlanceDashboardBundle::navbar.html.twig') }}
 {% endblock %}
 {% block side_menu %}
     {{ include('IbtikarGlanceDashboardBundle::sidebar.html.twig') }}
@@ -73,7 +73,6 @@
 
 
                                                             <div class="media-body">
-                                                                {{ dump(his.id)}}
                                                                 {% if his.action =="add related"  %}
                                                                     {{ his.createdBy}} <b>{{ his.message}} {{his.recipe}} </b> to   "{{ his.document}}" at {{ his.createdAt|date('Y-m-d h:i')}} 
                                                                 {% elseif  his.action =="remove related" %}

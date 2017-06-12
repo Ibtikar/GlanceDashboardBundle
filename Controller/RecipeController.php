@@ -1548,6 +1548,8 @@ class RecipeController extends BackendController
         if(!is_numeric($limit)){
           $limit=30;  
         }
+        $dm->getFilterCollection()->disable('soft_delete');
+
         $history = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:History')
                         ->skip($offset)->limit($limit)
                         ->sort('createdAt', 'ASC')
