@@ -497,10 +497,10 @@ class Product extends Document
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedRecipe
      */
-    public function removeRelatedRecipe(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedRecipe)
-    {
-        $this->relatedRecipe->removeElement($relatedRecipe);
-    }
+//    public function removeRelatedRecipe(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedRecipe)
+//    {
+//        $this->relatedRecipe->removeElement($relatedRecipe);
+//    }
 
     /**
      * Get relatedRecipe
@@ -527,10 +527,10 @@ class Product extends Document
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedKitchen911
      */
-    public function removeRelatedKitchen911(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedKitchen911)
-    {
-        $this->relatedKitchen911->removeElement($relatedKitchen911);
-    }
+//    public function removeRelatedKitchen911(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedKitchen911)
+//    {
+//        $this->relatedKitchen911->removeElement($relatedKitchen911);
+//    }
 
     /**
      * Get relatedKitchen911
@@ -557,10 +557,10 @@ class Product extends Document
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip
      */
-    public function removeRelatedTip(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip)
-    {
-        $this->relatedTip->removeElement($relatedTip);
-    }
+//    public function removeRelatedTip(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip)
+//    {
+//        $this->relatedTip->removeElement($relatedTip);
+//    }
 
     /**
      * Get relatedTip
@@ -631,10 +631,10 @@ class Product extends Document
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle
      */
-    public function removeRelatedArticle(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle)
-    {
-        $this->relatedArticle->removeElement($relatedArticle);
-    }
+//    public function removeRelatedArticle(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle)
+//    {
+//        $this->relatedArticle->removeElement($relatedArticle);
+//    }
 
     /**
      * Get relatedArticle
