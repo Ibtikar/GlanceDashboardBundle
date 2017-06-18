@@ -42,8 +42,8 @@ class RecipeType extends AbstractType {
                 ->add('hideEnglishContent', formType\CheckboxType::class, array('required' => false,'attr'=>array('class'=>'styled')))
                 ->add('brief',  formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 300,'data-rule-minlength' => 3)))
                 ->add('briefEn',formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 300,'data-rule-minlength' => 3)))
-                ->add('tags', formType\TextType::class, array('mapped' => false, 'required' => FALSE, 'attr' => array('data-tag-input'=>true,'data-rule-taglength' => 330),'label_attr' => array()))
-                ->add('tagsEn', formType\TextType::class, array('mapped' => false, 'required' => FALSE, 'attr' => array('data-tag-input'=>null,'data-rule-taglength' => 330),'label_attr' => array()))
+//                ->add('tags', formType\TextType::class, array('mapped' => false, 'required' => FALSE, 'attr' => array('data-tag-input'=>true,'data-rule-taglength' => 330),'label_attr' => array()))
+//                ->add('tagsEn', formType\TextType::class, array('mapped' => false, 'required' => FALSE, 'attr' => array('data-tag-input'=>null,'data-rule-taglength' => 330),'label_attr' => array()))
                 ;
 
 

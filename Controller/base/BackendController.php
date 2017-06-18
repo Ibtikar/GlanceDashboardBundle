@@ -947,7 +947,7 @@ class BackendController extends Controller {
     }
 
     public function getTagsAction() {
-        $tags = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Tag')->findAll();
+        $tags = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:RecipeTag')->findAll();
         $responseContent = array();
         foreach ($tags as $tag) {
 //            $responseContent[] = array("id"=>$tag->getId(),"text"=>$tag->getName());

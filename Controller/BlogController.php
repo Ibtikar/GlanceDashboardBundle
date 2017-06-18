@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Ibtikar\GlanceDashboardBundle\Form\Type\RecipeType;
 use Ibtikar\GlanceDashboardBundle\Document\Blog;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Ibtikar\GlanceDashboardBundle\Document\Tag;
+use Ibtikar\GlanceDashboardBundle\Document\RecipeTag;
 use Ibtikar\GlanceDashboardBundle\Service\ArabicMongoRegex;
 use Ibtikar\GlanceDashboardBundle\Document\Slug;
 use Doctrine\ODM\MongoDB\DocumentRepository;
@@ -52,50 +52,50 @@ class BlogController extends BackendController
                     $this->updateRelatedRecipe($recipe, $formData['related_tip'],$dm,'tip');
                 }
 
-                $tags = $formData['tags'];
-                $tagsEn = $formData['tagsEn'];
+//                $tags = $formData['tags'];
+//                $tagsEn = $formData['tagsEn'];
+//
+//                $recipe->setTags();
+//                $recipe->setTagsEn();
 
-                $recipe->setTags();
-                $recipe->setTagsEn();
-
-                if ($tags) {
-                    $tagsArray = explode(',', $tags);
-                    $tagsArray = array_unique($tagsArray);
-                    foreach ($tagsArray as $tag) {
-                        $tag = trim($tag);
-                        if (mb_strlen($tag, 'UTF-8') <= 330) {
-                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tag' => $tag));
-                               if (!$tagObject) {
-                                $NewTag = new Tag();
-                                $NewTag->setName($tag);
-                                $NewTag->setTag($tag);
-                                $dm->persist($NewTag);
-                                $recipe->addTag($NewTag);
-                            } else {
-                                $recipe->addTag($tagObject);
-                            }
-                        }
-                    }
-                }
-                if ($tagsEn) {
-                    $tagsArray = explode(',', $tagsEn);
-                    $tagsArray = array_unique($tagsArray);
-                    foreach ($tagsArray as $tag) {
-                        $tag = trim($tag);
-                        if (mb_strlen($tag, 'UTF-8') <= 330) {
-                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tagEn' => $tag));
-                            if (!$tagObject) {
-                                $NewTag = new Tag();
-                                $NewTag->setName($tag);
-                                $NewTag->setTagEn($tag);
-                                $dm->persist($NewTag);
-                                $recipe->addTagEn($NewTag);
-                            } else {
-                                $recipe->addTagEn($tagObject);
-                            }
-                        }
-                    }
-                }
+//                if ($tags) {
+//                    $tagsArray = explode(',', $tags);
+//                    $tagsArray = array_unique($tagsArray);
+//                    foreach ($tagsArray as $tag) {
+//                        $tag = trim($tag);
+//                        if (mb_strlen($tag, 'UTF-8') <= 330) {
+//                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tag' => $tag));
+//                               if (!$tagObject) {
+//                                $NewTag = new Tag();
+//                                $NewTag->setName($tag);
+//                                $NewTag->setTag($tag);
+//                                $dm->persist($NewTag);
+//                                $recipe->addTag($NewTag);
+//                            } else {
+//                                $recipe->addTag($tagObject);
+//                            }
+//                        }
+//                    }
+//                }
+//                if ($tagsEn) {
+//                    $tagsArray = explode(',', $tagsEn);
+//                    $tagsArray = array_unique($tagsArray);
+//                    foreach ($tagsArray as $tag) {
+//                        $tag = trim($tag);
+//                        if (mb_strlen($tag, 'UTF-8') <= 330) {
+//                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tagEn' => $tag));
+//                            if (!$tagObject) {
+//                                $NewTag = new Tag();
+//                                $NewTag->setName($tag);
+//                                $NewTag->setTagEn($tag);
+//                                $dm->persist($NewTag);
+//                                $recipe->addTagEn($NewTag);
+//                            } else {
+//                                $recipe->addTagEn($tagObject);
+//                            }
+//                        }
+//                    }
+//                }
                 $dm->persist($recipe);
                 $this->slugifier($recipe);
                 $this->get('history_logger')->log($recipe, History::$ADD);

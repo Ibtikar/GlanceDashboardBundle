@@ -8,7 +8,7 @@ use Ibtikar\GlanceDashboardBundle\Form\Type\RecipeType;
 use Ibtikar\GlanceDashboardBundle\Document\Recipe;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Ibtikar\GlanceDashboardBundle\Service\RecipeOperations;
-use Ibtikar\GlanceDashboardBundle\Document\Tag;
+use Ibtikar\GlanceDashboardBundle\Document\RecipeTag;
 use Ibtikar\GlanceDashboardBundle\Service\ArabicMongoRegex;
 use Ibtikar\GlanceDashboardBundle\Document\Slug;
 use Doctrine\ODM\MongoDB\DocumentRepository;
@@ -117,9 +117,7 @@ class RecipeController extends BackendController
         if ($request->get('tags')) {
             $tags = explode(',', $request->get('tags'));
             $queryBuilder->addAnd($queryBuilder->expr()->addOr(
-                        $queryBuilder->expr()->field('tags')->all($tags)
-                        )->addOr(
-                        $queryBuilder->expr()->field('tagsEn')->all($tags)
+                        $queryBuilder->expr()->field('recipeTags')->all($tags)
                         )
                     );
         }
@@ -272,7 +270,7 @@ class RecipeController extends BackendController
         }
 
         $renderingParams['chefs'] = $dm->getRepository('IbtikarGlanceUMSBundle:Staff')->findAll();
-        $renderingParams['tags'] = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findAll();
+        $renderingParams['tags'] = $dm->getRepository('IbtikarGlanceDashboardBundle:RecipeTag')->findAll();
         $renderingParams['meals'] = Recipe::$mealMap;
         $renderingParams['ingredients'] = Recipe::$keyIngredientMap;
         $renderingParams['products'] = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->findAll();
@@ -324,9 +322,7 @@ class RecipeController extends BackendController
         if ($request->get('tags')) {
             $tags = explode(',', $request->get('tags'));
             $queryBuilder->addAnd($queryBuilder->expr()->addOr(
-                        $queryBuilder->expr()->field('tags')->all($tags)
-                        )->addOr(
-                        $queryBuilder->expr()->field('tagsEn')->all($tags)
+                        $queryBuilder->expr()->field('recipeTags')->all($tags)
                         )
                     );
         }
@@ -710,50 +706,50 @@ class RecipeController extends BackendController
                     $this->updateRelatedRecipe($recipe, $formData['related'],$dm,'recipe');
                 }
 
-                $tags = $formData['tags'];
-                $tagsEn = $formData['tagsEn'];
+//                $tags = $formData['tags'];
+//                $tagsEn = $formData['tagsEn'];
+//
+//                $recipe->setTags();
+//                $recipe->setTagsEn();
 
-                $recipe->setTags();
-                $recipe->setTagsEn();
-
-                if ($tags) {
-                    $tagsArray = explode(',', $tags);
-                    $tagsArray = array_unique($tagsArray);
-                    foreach ($tagsArray as $tag) {
-                        $tag = trim($tag);
-                        if (mb_strlen($tag, 'UTF-8') <= 330) {
-                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tag' => $tag));
-                            if (!$tagObject) {
-                                $NewTag = new Tag();
-                                $NewTag->setName($tag);
-                                $NewTag->setTag($tag);
-                                $dm->persist($NewTag);
-                                $recipe->addTag($NewTag);
-                            } else {
-                                $recipe->addTag($tagObject);
-                            }
-                        }
-                    }
-                }
-                if ($tagsEn) {
-                    $tagsArray = explode(',', $tagsEn);
-                    $tagsArray = array_unique($tagsArray);
-                    foreach ($tagsArray as $tag) {
-                        $tag = trim($tag);
-                        if (mb_strlen($tag, 'UTF-8') <= 330) {
-                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tagEn' => $tag));
-                            if (!$tagObject) {
-                                $NewTag = new Tag();
-                                $NewTag->setName($tag);
-                                $NewTag->setTagEn($tag);
-                                $dm->persist($NewTag);
-                                $recipe->addTagEn($NewTag);
-                            } else {
-                                $recipe->addTagEn($tagObject);
-                            }
-                        }
-                    }
-                }
+//                if ($tags) {
+//                    $tagsArray = explode(',', $tags);
+//                    $tagsArray = array_unique($tagsArray);
+//                    foreach ($tagsArray as $tag) {
+//                        $tag = trim($tag);
+//                        if (mb_strlen($tag, 'UTF-8') <= 330) {
+//                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tag' => $tag));
+//                            if (!$tagObject) {
+//                                $NewTag = new Tag();
+//                                $NewTag->setName($tag);
+//                                $NewTag->setTag($tag);
+//                                $dm->persist($NewTag);
+//                                $recipe->addTag($NewTag);
+//                            } else {
+//                                $recipe->addTag($tagObject);
+//                            }
+//                        }
+//                    }
+//                }
+//                if ($tagsEn) {
+//                    $tagsArray = explode(',', $tagsEn);
+//                    $tagsArray = array_unique($tagsArray);
+//                    foreach ($tagsArray as $tag) {
+//                        $tag = trim($tag);
+//                        if (mb_strlen($tag, 'UTF-8') <= 330) {
+//                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tagEn' => $tag));
+//                            if (!$tagObject) {
+//                                $NewTag = new Tag();
+//                                $NewTag->setName($tag);
+//                                $NewTag->setTagEn($tag);
+//                                $dm->persist($NewTag);
+//                                $recipe->addTagEn($NewTag);
+//                            } else {
+//                                $recipe->addTagEn($tagObject);
+//                            }
+//                        }
+//                    }
+//                }
                 $dm->persist($recipe);
                 $this->slugifier($recipe);
                 $this->get('history_logger')->log($recipe, History::$ADD);
@@ -832,13 +828,13 @@ class RecipeController extends BackendController
 
         $contentType =  $recipe->getType() == Recipe::$types['recipe'] ? 'Recipe' : 'Blog';
 
-        $tagSelected = $this->getTagsForDocument($recipe);
-        $tagSelectedEn = $this->getTagsForDocument($recipe, "en");
+//        $tagSelected = $this->getTagsForDocument($recipe);
+//        $tagSelectedEn = $this->getTagsForDocument($recipe, "en");
 
         $form = $this->createForm(RecipeType::class, $recipe, array('translation_domain' => $this->translationDomain, 'attr' => array('contentType' => strtolower($contentType), 'type' => 'edit', 'class' => 'dev-page-main-form dev-js-validation form-horizontal')));
-
-        $form->get('tags')->setData($tagSelected);
-        $form->get('tagsEn')->setData($tagSelectedEn);
+//
+//        $form->get('tags')->setData($tagSelected);
+//        $form->get('tagsEn')->setData($tagSelectedEn);
 
 
         if ($request->getMethod() === 'POST') {
@@ -863,50 +859,50 @@ class RecipeController extends BackendController
 
                 $this->updateMaterialGallary($recipe, $formData['media'], $dm);
 
-                $tags = $formData['tags'];
-                $tagsEn = $formData['tagsEn'];
+//                $tags = $formData['tags'];
+//                $tagsEn = $formData['tagsEn'];
+//
+//                $recipe->setTags();
+//                $recipe->setTagsEn();
 
-                $recipe->setTags();
-                $recipe->setTagsEn();
-
-                if ($tags) {
-                    $tagsArray = explode(',', $tags);
-                    $tagsArray = array_unique($tagsArray);
-                    foreach ($tagsArray as $tag) {
-                        $tag = trim($tag);
-                        if (mb_strlen($tag, 'UTF-8') <= 330) {
-                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tag' => $tag));
-                            if (!$tagObject) {
-                                $NewTag = new Tag();
-                                $NewTag->setName($tag);
-                                $NewTag->setTag($tag);
-                                $dm->persist($NewTag);
-                                $recipe->addTag($NewTag);
-                            } else {
-                                $recipe->addTag($tagObject);
-                            }
-                        }
-                    }
-                }
-                if ($tagsEn) {
-                    $tagsArray = explode(',', $tagsEn);
-                    $tagsArray = array_unique($tagsArray);
-                    foreach ($tagsArray as $tag) {
-                        $tag = trim($tag);
-                        if (mb_strlen($tag, 'UTF-8') <= 330) {
-                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tagEn' => $tag));
-                            if (!$tagObject) {
-                                $NewTag = new Tag();
-                                $NewTag->setName($tag);
-                                $NewTag->setTagEn($tag);
-                                $dm->persist($NewTag);
-                                $recipe->addTagEn($NewTag);
-                            } else {
-                                $recipe->addTagEn($tagObject);
-                            }
-                        }
-                    }
-                }
+//                if ($tags) {
+//                    $tagsArray = explode(',', $tags);
+//                    $tagsArray = array_unique($tagsArray);
+//                    foreach ($tagsArray as $tag) {
+//                        $tag = trim($tag);
+//                        if (mb_strlen($tag, 'UTF-8') <= 330) {
+//                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tag' => $tag));
+//                            if (!$tagObject) {
+//                                $NewTag = new Tag();
+//                                $NewTag->setName($tag);
+//                                $NewTag->setTag($tag);
+//                                $dm->persist($NewTag);
+//                                $recipe->addTag($NewTag);
+//                            } else {
+//                                $recipe->addTag($tagObject);
+//                            }
+//                        }
+//                    }
+//                }
+//                if ($tagsEn) {
+//                    $tagsArray = explode(',', $tagsEn);
+//                    $tagsArray = array_unique($tagsArray);
+//                    foreach ($tagsArray as $tag) {
+//                        $tag = trim($tag);
+//                        if (mb_strlen($tag, 'UTF-8') <= 330) {
+//                            $tagObject = $dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findOneBy(array('tagEn' => $tag));
+//                            if (!$tagObject) {
+//                                $NewTag = new Tag();
+//                                $NewTag->setName($tag);
+//                                $NewTag->setTagEn($tag);
+//                                $dm->persist($NewTag);
+//                                $recipe->addTagEn($NewTag);
+//                            } else {
+//                                $recipe->addTagEn($tagObject);
+//                            }
+//                        }
+//                    }
+//                }
                 $this->get('history_logger')->log($recipe, History::$EDIT);
 
                 $dm->flush();

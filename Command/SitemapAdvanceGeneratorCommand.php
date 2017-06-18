@@ -224,9 +224,9 @@ class SitemapAdvanceGeneratorCommand extends ContainerAwareCommand {
     }
 
     protected function getTagLinks(){
-        $tags = $this->dm->getRepository('IbtikarGlanceDashboardBundle:Tag')->findBy(array('deleted'=>false,'tag'.($this->locale == "en"?"En":"")=>array('$exists' => true)));
+        $tags = $this->dm->getRepository('IbtikarGlanceDashboardBundle:RecipeTag')->findBy(array('deleted'=>false));
         foreach($tags as $tag){
-            $this->addLinkNormal('ibtikar_goody_frontend_search_tag',array('tag' => $tag->getSlug()));
+            $this->addLinkNormal('ibtikar_goody_frontend_search_tag',array('tag' => $this->locale == "en"?$tag->getSlugEn():$tag->getSlug()));
         }
     }
 
