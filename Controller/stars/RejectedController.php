@@ -22,6 +22,6 @@ class RejectedController extends StarsController
         parent::configureListParameters($request);
         $this->listViewOptions->setDefaultSortBy("createdAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
-        $this->listViewOptions->setActions(array('Approve'));
+        $this->listViewOptions->setActions(array('Approve','ViewOne'));
     }
 }

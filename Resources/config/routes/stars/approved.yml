@@ -5,6 +5,10 @@ ibtikar_glance_dashboard_starsapproved_list_approved_stars:
 ibtikar_glance_dashboard_starsapproved_reject:
     path:  /reject/{id}
     defaults: { _controller: IbtikarGlanceDashboardBundle:stars\Approved:reject }
+    
+ibtikar_glance_dashboard_starsapproved_view:
+    path:  /view/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:stars\Approved:view }
 
 ibtikar_glance_dashboard_starsapproved_list_approved_stars_change_list_columns:
     path:  /approve-stars-change-list-columns

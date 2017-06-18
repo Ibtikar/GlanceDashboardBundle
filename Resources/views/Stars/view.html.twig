@@ -1,0 +1,163 @@
+{% extends 'IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard.html.twig' %}
+{% block header %}
+    {{ include('IbtikarGlanceDashboardBundle::header.html.twig') }}
+{% endblock %}
+{% block navbar %}
+    {{ include('IbtikarGlanceDashboardBundle::navbar.html.twig') }}
+{% endblock %}
+{% block side_menu %}
+    {{ include('IbtikarGlanceDashboardBundle::sidebar.html.twig') }}
+{% endblock %}
+{% block title %}{% trans from 'star' %}View One star{% endtrans%}{% endblock%}
+
+
+{% block breadCrumb %}
+    {# <a class="btn btn-link btn-float has-text" href="{{path('ibtikar_glance_dashboard_product_create')}}"><i class="icon-add"></i><span>إدخال منتج</span></a>
+     <a class="btn btn-link btn-float has-text activeLink" href="{{path('ibtikar_glance_dashboard_product_list')}}"><i class="icon-table2"></i> <span> المنتجات</span></a>
+ #}
+{% endblock %}
+
+{% block body %}
+    <div class="content-wrapper">
+
+
+        <!-- Basic button -->
+
+        <!-- /basic button -->
+
+
+
+        <!-- Dashboard content -->
+        <div class="row">
+            <div class="col-lg-12">
+
+
+                <div class="row">
+
+
+                    <div class="col-lg-12">
+
+
+                        <form class="form-horizontal">
+                            <!-- Navigation -->
+                            <div class="panel panel-flat">
+
+
+
+
+
+                                <div class="panel-body">
+                                    <div style="margin-top: 15px;">
+                                        <div class="col-md-12">
+
+
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                    <hr>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2"> {% trans from translationDomain %}Full Name{%endtrans%}  </label>
+                                        <div class="col-lg-10">
+                                            <h5> {{ star.name}} </h5>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2"> {% trans from translationDomain %}Phone number{%endtrans%}  </label>
+                                        <div class="col-lg-10">
+                                            <h5 style="direction:ltr;text-align:right;"> {{ star.mobile}} </h5>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2"> {% trans from translationDomain %}City{%endtrans%}  </label>
+                                        <div class="col-lg-10">
+                                            <h5> {{ star.city}} </h5>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2"> {% trans from translationDomain %}Your birth date{%endtrans%}  </label>
+                                        <div class="col-lg-10">
+                                            <h5> {{ star.birthDate|date('y-m-d')}} </h5>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2"> {% trans from translationDomain %}Do you have children?{%endtrans%}  </label>
+                                        <div class="col-lg-10">
+                                            <h5> {{ star.children ? 'نعم': 'لا'}} </h5>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2"> {% trans from translationDomain %}Are you an employee?{%endtrans%}  </label>
+                                        <div class="col-lg-10">
+                                            <h5> {{ star.employee ? 'نعم': 'لا'}} </h5>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2"> {% trans from translationDomain %}What is different about you, what made you want to join “Goody Kitchen Stars”?{%endtrans%}  </label>
+                                        <div class="col-lg-10">
+                                            <h5> {{ star.qualities}} </h5>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2"> {% trans from  translationDomain %}How do expect “Goody Kitchen Stars” would help you to become a STAR?{%endtrans%}  </label>
+                                        <div class="col-lg-10">
+                                            <h5> {{ star.howTo}}  </h5>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2"> {% trans from  translationDomain %}What does the “Kitchen” mean to you?{%endtrans%}  </label>
+                                        <div class="col-lg-10">
+                                            <h5> {{ star.meaning }}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2"> {% trans from translationDomain %}Which dishes / food are you famous for its perfection among your family and friends?{%endtrans%}  </label>
+                                        <div class="col-lg-10">
+                                            <h5> {{ star.famousDish }} </h5>
+                                        </div>
+                                    </div>
+
+
+
+
+
+
+
+
+
+                                </div>
+
+
+
+                            </div><!-- panel end -->
+                        </form>
+
+
+
+                    </div><!-- col-lg-12 -->
+                </div><!-- row end -->
+
+
+
+
+            </div><!-- col-lg-12 tabs -->
+
+
+        </div>
+        <!-- /dashboard content -->
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+</script>
+
+{% endblock %}

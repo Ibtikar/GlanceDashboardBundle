@@ -267,5 +267,22 @@ class StarsController extends BackendController {
                 ;
                 $mailer->send($message);
     }
+    
+        public function viewAction(Request $request, $id)
+    {
+
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $star = $dm->getRepository('IbtikarGlanceDashboardBundle:Stars')->find($id);
+        if (!$star) {
+            throw $this->createNotFoundException($this->trans('Wrong id'));
+        }
+
+        return $this->render('IbtikarGlanceDashboardBundle:Stars:view.html.twig', array(
+                'translationDomain' => 'stars',
+                'star' => $star,
+
+        ));
+    }
 
 }

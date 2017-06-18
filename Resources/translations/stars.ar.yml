@@ -37,6 +37,11 @@
 'Reject starsnew': 'رفض الطلب'
 'Approve starsrejected': 'قبول الطلب'
 'Reject starsapproved': 'رفض الطلب'
+'View One star': 'مشاهده نجمه قودى'
+'View One Starsnew': 'مشاهده'
+'View One Starsapproved': 'مشاهده'
+'View One Starsrejected': 'مشاهده'
+
 # ############Messages############
 
 # ############Titles############
