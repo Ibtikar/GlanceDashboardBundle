@@ -23,7 +23,7 @@ class StarsController extends BackendController {
     {
         $this->allListColumns = array(
             "name" => array("searchFieldType" => "input"),
-            "mobile" => array("isSortable" => false),
+            "mobile" => array("isSortable" => false,'class'=>'phoneNumberLtr'),
             "email" => array("isSortable" => false, 'type' => 'refrence', 'getterArguments' => 'createdBy'),
             "createdAt" => array("type" => "date"),
         );
