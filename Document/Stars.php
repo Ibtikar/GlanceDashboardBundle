@@ -74,19 +74,19 @@ class Stars extends Document
 
     /**
      * @Assert\NotBlank
-     * @MongoDB\Boolean
+     * @MongoDB\String
      */
     private $married;
 
     /**
      * @Assert\NotBlank
-     * @MongoDB\Boolean
+     * @MongoDB\String
      */
     private $children;
 
     /**
      * @Assert\NotBlank
-     * @MongoDB\Boolean
+     * @MongoDB\String
      */
     private $employee;
 
