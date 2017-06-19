@@ -557,10 +557,10 @@ class Product extends Document
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip
      */
-//    public function removeRelatedTip(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip)
-//    {
-//        $this->relatedTip->removeElement($relatedTip);
-//    }
+    public function removeRelatedTip(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip)
+    {
+        $this->relatedTip->removeElement($relatedTip);
+    }
 
     /**
      * Get relatedTip
@@ -631,10 +631,10 @@ class Product extends Document
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle
      */
-//    public function removeRelatedArticle(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle)
-//    {
-//        $this->relatedArticle->removeElement($relatedArticle);
-//    }
+    public function removeRelatedArticle(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle)
+    {
+        $this->relatedArticle->removeElement($relatedArticle);
+    }
 
     /**
      * Get relatedArticle

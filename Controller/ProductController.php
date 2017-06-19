@@ -8,9 +8,11 @@ use Ibtikar\GlanceDashboardBundle\Document\Product;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Ibtikar\GlanceDashboardBundle\Document\Slug;
+use Ibtikar\GlanceDashboardBundle\Document\Related;
 use Symfony\Component\Form\Extension\Core\Type as formType;
 use Ibtikar\GlanceDashboardBundle\Service\ArabicMongoRegex;
 use Ibtikar\GlanceDashboardBundle\Document\History;
+use Ibtikar\GlanceDashboardBundle\Document\Recipe;
 
 class ProductController extends BackendController {
 
@@ -256,19 +258,43 @@ class ProductController extends BackendController {
             'coverPhoto' => true
         ));
 
-        foreach ($mediaList as $media){
-                if($media->getType() == 'image'){
-                       $coverImage= $media;
-                        continue;
-                }
+        foreach ($mediaList as $media) {
+            if ($media->getType() == 'image') {
+                $coverImage = $media;
+                continue;
+            }
 
-                if($media->getType() == 'video'){
-                       $coverVideo= $media;
-                        continue;
-                }
+            if ($media->getType() == 'video') {
+                $coverVideo = $media;
+                continue;
+            }
         }
+        $flushObject = FALSE;
+        $relatedArticle = $product->getRelatedArticle();
+        if (count($relatedArticle) == 0) {
+            $relatedExist = $dm->getRepository('IbtikarGlanceDashboardBundle:Related')->findBy(array('product' => $product->getId(), 'type' => Recipe::$types['article']));
+            if (count($relatedExist) > 0) {
+                foreach ($relatedExist as $related) {
+                    $product->addRelatedArticle($related->getRecipe());
+                }
+                $flushObject = TRUE;
+            }
+        }
+        $relatedTip = $product->getRelatedTip();
 
-       $form = $this->createFormBuilder($product, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
+        if (count($relatedTip) == 0) {
+            $relatedExist = $dm->getRepository('IbtikarGlanceDashboardBundle:Related')->findBy(array('product' => $product->getId(), 'type' => Recipe::$types['tip']));
+            if (count($relatedExist) > 0) {
+                foreach ($relatedExist as $related) {
+                    $product->addRelatedTip($related->getRecipe());
+                }
+                $flushObject = TRUE;
+            }
+        }
+        if ($flushObject) {
+            $dm->flush();
+        }
+        $form = $this->createFormBuilder($product, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
             ->add('coverType', formType\ChoiceType::class, array('choices' => Product::$coverTypeChoices, 'expanded' => true, 'attr'  => array('data-error-after-selector' => '#product_type_coverType')))
             ->add('video', formType\TextType::class, array('mapped'=>FALSE,'required'=>FALSE,'attr'=>array('data-rule-youtube'=>'data-rule-youtube')))
             ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
@@ -427,6 +453,10 @@ class ProductController extends BackendController {
         $getMethod = "getRelated".ucfirst($contentType);
         if($materialParent && $materialChild && $materialParent->$getMethod()->contains($materialChild)){
             $materialParent->$removeMethod($materialChild);
+            $relatedExist = $dm->getRepository('IbtikarGlanceDashboardBundle:Related')->findOneBy(array('product' => $materialParent->getId(), 'recipe' => $materialChild->getId()));
+            if ($relatedExist) {
+                $relatedExist->delete($dm);
+            }
             $this->get('history_logger')->log($materialParent, History::$REMOVERELATED,"remove related ".ucfirst($contentType),$materialChild );
 
             $dm->flush();
@@ -456,6 +486,15 @@ class ProductController extends BackendController {
         if ($this->validToRelate($materialChild, $materialParent) && count($materialParent->$getMethod()) < 10) {
 
             $materialParent->$addMethod($materialChild);
+            $relatedExist = $dm->getRepository('IbtikarGlanceDashboardBundle:Related')->findBy(array('product'=>$materialParent->getId(),'recipe'=>$materialChild->getId()));
+            if (!$relatedExist) {
+                $related = new Related();
+                $related->setProduct($materialParent);
+                $related->setRecipe($materialChild);
+                $related->setType($materialChild->getType());
+                $dm->persist($related);
+            }
+
             $this->get('history_logger')->log($materialParent, History::$ADDRELATED,"add related ".ucfirst($contentType), $materialChild );
 
             $dm->flush();
@@ -497,6 +536,14 @@ class ProductController extends BackendController {
 
             if ($this->validToRelate($material, $document) && count($document->$getMethod()) < 10) {
                 $document->$addMethod($material);
+                $relatedExist = $dm->getRepository('IbtikarGlanceDashboardBundle:Related')->findBy(array('product' => $materialParent->getId(), 'recipe' => $materialChild->getId()));
+                if (!$relatedExist) {
+                    $related = new Related();
+                    $related->setProduct($materialParent);
+                    $related->setRecipe($materialChild);
+                    $related->setType($materialChild->getType());
+                    $dm->persist($related);
+                }
                 $this->get('history_logger')->log($document, History::$ADDRELATED, "add related " . ucfirst($contentType) ,$material);
             }
         }
