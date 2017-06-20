@@ -298,7 +298,7 @@ class StarsController extends BackendController {
         $export = new Export();
         $export->setName(uniqid("star-"));
         $export->setParams($params);
-        $export->setExtension('csv');
+        $export->setExtension('xls');
         $export->setFields($this->getCurrentColumns('ibtikar_glance_dashboard_'. strtolower($this->calledClassName).'export'));
         $export->setState(Export::READY);
         $export->setType(Export::STARS);

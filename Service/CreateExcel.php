@@ -118,8 +118,7 @@ function getFileName(){
                         }elseif(is_object($value)){
                             $value = $value->__toString();
                         }
-                        $sheet->setCellValueExplicit(current($col) . ($i+2) , $value);
-
+                        $sheet->setCellValueExplicit(current($col) . ($i+2) , addslashes($value));
                     }else{
                         $j=0;
                         $conatctGroups =  $iterableResult->current()->$methods[$field]();
@@ -204,7 +203,7 @@ function getFileName(){
                         $j++;
                     }
                 }
-                $sheet->setCellValueExplicit(current($col) . ($i + 2), $value);
+                $sheet->setCellValueExplicit(current($col) . ($i + 2),addslashes($value) );
                 next($col);
             }
             reset($col);
