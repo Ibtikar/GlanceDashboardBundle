@@ -20,8 +20,14 @@ class RejectedController extends StarsController
     protected function configureListParameters(Request $request)
     {
         parent::configureListParameters($request);
+        $dm = $this->get('doctrine_mongodb')->getManager();
         $this->listViewOptions->setDefaultSortBy("createdAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
-        $this->listViewOptions->setActions(array('Approve','ViewOne'));
+        $this->listViewOptions->setActions(array('Approve', 'ViewOne'));
+        $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Stars')
+                        ->field('status')->equals($this->starsStatus)
+                        ->field('deleted')->equals(false);
+        if (isset($queryBuilder))
+            $this->listViewOptions->setListQueryBuilder($queryBuilder);
     }
 }

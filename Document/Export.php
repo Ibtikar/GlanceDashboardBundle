@@ -19,7 +19,7 @@ class Export extends Document {
     const FINISHED    = "2";
 
     const VISITORS          = "1";
-    const CONTACT           = "2";
+    const STARS           = "2";
     const CONTACTGROUP      = "3";
 
     /**

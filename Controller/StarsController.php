@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Form\Extension\Core\Type as formType;
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Ibtikar\GlanceDashboardBundle\Document\Stars;
+use Ibtikar\GlanceDashboardBundle\Document\Export;
 
 class StarsController extends BackendController {
 
@@ -39,28 +40,7 @@ class StarsController extends BackendController {
     protected function configureListParameters(Request $request)
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
-        if ($this->listStatus == 'list_new_stars') {
-            $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Stars')
-                    ->field('status')->equals(Stars::$statuses['new'])
-                    ->field('assignedTo')->exists(FALSE)
-                    ->field('deleted')->equals(false);
-            $this->listViewOptions->setActions(array('Assign', 'ViewOne'));
-        } else if ($this->listStatus == 'list_rejected_stars') {
-            $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Stars')
-                    ->field('status')->equals($this->starsStatus)
-                    ->field('deleted')->equals(false);
-            $this->listViewOptions->setActions(array('Edit', 'Publish', 'ViewOne'));
-
-        } else if ($this->listStatus == 'list_approved_stars') {
-
-            $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Stars')
-                    ->field('status')->equals($this->starsStatus)
-                    ->field('deleted')->equals(false);
-            $this->listViewOptions->setActions(array('Edit', 'Publish', 'ViewOne'));
-        }
-
-        if (isset($queryBuilder))
-            $this->listViewOptions->setListQueryBuilder($queryBuilder);
+        $this->listViewOptions->setBulkActions(array("Export"));
         $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Stars:list.html.twig");
     }
 
@@ -283,6 +263,51 @@ class StarsController extends BackendController {
                 'star' => $star,
 
         ));
+    }
+    
+      public function exportAction(Request $request)
+    {
+
+
+        $this->listViewOptions = $this->get("list_view");
+        $this->listViewOptions->setListType("list");
+        $renderingParams = $this->doList($request);
+        $securityContext = $this->container->get('security.authorization_checker');
+
+        $loggedInUser = $this->getUser();
+        if (!$loggedInUser) {
+            return new JsonResponse(array('status' => 'login'));
+        }
+
+        if (!$securityContext->isGranted('ROLE_ADMIN') && !$securityContext->isGranted('ROLE_'. strtoupper($this->calledClassName).'_EXPORT')) {
+            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'));
+            return new JsonResponse($result);
+        }
+
+        $ids = $request->get('ids', array());
+
+        $params = $request->query->all();
+        if (!empty($ids)) {
+            $params['ids'] = $ids;
+        }
+        $params['status']=$this->starsStatus;
+//
+//        $ext = $params['ext'];
+//        unset($params['ext']);
+
+        $export = new Export();
+        $export->setName(uniqid("star-"));
+        $export->setParams($params);
+        $export->setExtension('csv');
+        $export->setFields($this->getCurrentColumns('ibtikar_glance_dashboard_'. strtolower($this->calledClassName).'export'));
+        $export->setState(Export::READY);
+        $export->setType(Export::STARS);
+
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $dm->persist($export);
+        $dm->flush();
+
+        return new JsonResponse(array('status' => 'success', 'message' => $this->get('translator')->trans('file export will take sometime', array(), $this->translationDomain)));
     }
 
 }

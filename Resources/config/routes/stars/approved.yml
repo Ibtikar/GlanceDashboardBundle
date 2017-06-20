@@ -9,6 +9,14 @@ ibtikar_glance_dashboard_starsapproved_reject:
 ibtikar_glance_dashboard_starsapproved_view:
     path:  /view/{id}
     defaults: { _controller: IbtikarGlanceDashboardBundle:stars\Approved:view }
+    
+ibtikar_glance_dashboard_starsapproved_export:
+    path: /export-approved-stars
+    defaults: { _controller: IbtikarGlanceDashboardBundle:stars\Approved:export }    
+    
+ibtikar_glance_dashboard_starsapproved_bulk_actions:
+    path: /bulk
+    defaults: { _controller: IbtikarGlanceDashboardBundle:stars\Approved:bulk}          
 
 ibtikar_glance_dashboard_starsapproved_list_approved_stars_change_list_columns:
     path:  /approve-stars-change-list-columns

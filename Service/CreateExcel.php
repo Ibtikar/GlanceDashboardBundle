@@ -84,28 +84,39 @@ function getFileName(){
 
             $sheet = $phpExcelObject->setActiveSheetIndex(0);
 
-            foreach($this->fields as $field){
-                $methods[$field] = "get".ucfirst($field);
-
-                $sheet->setCellValue(current($col) . "1", $this->container->get('translator')->trans($field, array(), $this->translationDomain));
-                next($col);
-            }
-            reset($col);
+            foreach ($this->fields as $field) {
+                    $methods[$field] = "get" . ucfirst($field);
+                    $sheet->setCellValue(current($col) . "1", $this->container->get('translator')->trans($field, array(), $this->translationDomain));
+                    next($col);
+                }
+                reset($col);
 
 
             for($i = 0;$i < $limit;$i++){
                 foreach($this->fields as $field){
     //                    var_dump($field);
-                    if($field!='group'){
-                        $value = $iterableResult->current()->$methods[$field]();
-                        if(is_null($value)){
+                        if ($field != 'group') {
+                            if ($field == 'email' && !method_exists(current($this->collection), $methods[$field])) {
+                                $value = $iterableResult->current()->getCreatedBy()->$methods[$field]();
+                            } elseif ($field == 'married') {
+                                $value = $iterableResult->current()->$methods[$field]() == 'Married' ? 'متزوجة' : 'آنسة';
+                            } elseif ($field == 'children') {
+                                $value = $iterableResult->current()->$methods[$field]() == 'No' ? 'لا' : 'نعم';
+                            } elseif ($field == 'employee') {
+                                $value = $iterableResult->current()->$methods[$field]() == 'No' ? 'لا' : 'نعم';
+                            } elseif ($field == "gender") {
+                                $value = $this->container->get('translator')->trans(current($this->collection)->$methods[$field]());
+                            } else {
+                                $value = $iterableResult->current()->$methods[$field]();
+                            }
+
+
+                            if(is_null($value)){
                             $value = "";
                         }elseif($value instanceof \DateTime){
                             $value = $value->format('Y-m-d');
                         }elseif(is_object($value)){
                             $value = $value->__toString();
-                        }elseif($field == "gender"){
-                            $value = $this->container->get('translator')->trans(current($this->collection)->$methods[$field]());
                         }
                         $sheet->setCellValueExplicit(current($col) . ($i+2) , $value);
 
@@ -160,30 +171,40 @@ function getFileName(){
         for ($i=0;$i < count($this->collection);$i++) {
             foreach($this->fields as $field){
 
-             if($field!='group'){
-                $value = current($this->collection)->$methods[$field]();
-                    if(is_null($value)){
-                    $value = "";
-                }elseif($value instanceof \DateTime){
-                    $value = $value->format('Y-m-d');
-                }elseif(is_object($value)){
-                    $value = $value->__toString();
-                }elseif($field == "gender"){
-                    $value = $this->container->get('translator')->trans(current($this->collection)->$methods[$field]());
-                }
-             }else {
-                $j=0;
-                  $conatctGroups = current($this->collection)->$methods[$field]();
+             if ($field != 'group') {
+                    if ($field == 'email' && !method_exists(current($this->collection), $methods[$field])) {
+                        $value = current($this->collection)->getCreatedBy()->$methods[$field]();
+                    } elseif ($field == 'married') {
+                        $value = current($this->collection)->$methods[$field]() == 'Married' ? 'متزوجة' : 'آنسة';
+                    } elseif ($field == 'children') {
+                        $value = current($this->collection)->$methods[$field]() == 'No' ? 'لا' : 'نعم';
+                    } elseif ($field == 'employee') {
+                        $value = current($this->collection)->$methods[$field]() == 'No' ? 'لا' : 'نعم';
+                    } elseif ($field == "gender") {
+                        $value = $this->container->get('translator')->trans(current($this->collection)->$methods[$field]());
+                    } else {
+                        $value = current($this->collection)->$methods[$field]();
+                    }
+                    if (is_null($value)) {
+                        $value = "";
+                    } elseif ($value instanceof \DateTime) {
+                        $value = $value->format('Y-m-d');
+                    } elseif (is_object($value)) {
+                        $value = $value->__toString();
+                    }
+                } else {
+                    $j = 0;
+                    $conatctGroups = current($this->collection)->$methods[$field]();
                     foreach ($conatctGroups as $conatctGroup) {
                         if ($j == 0) {
                             $value = $conatctGroup->__toString();
                         } else {
-                            $value .=',' . $conatctGroup->__toString();
+                            $value .= ',' . $conatctGroup->__toString();
                         }
                         $j++;
                     }
                 }
-                $sheet->setCellValueExplicit(current($col) . ($i+2) , $value);
+                $sheet->setCellValueExplicit(current($col) . ($i + 2), $value);
                 next($col);
             }
             reset($col);

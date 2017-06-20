@@ -13,6 +13,14 @@ ibtikar_glance_dashboard_starsnew_reject:
 ibtikar_glance_dashboard_starsnew_view:
     path:  /view/{id}
     defaults: { _controller: IbtikarGlanceDashboardBundle:stars\New:view }
+    
+ibtikar_glance_dashboard_starsnew_export:
+    path: /export-new-stars
+    defaults: { _controller: IbtikarGlanceDashboardBundle:stars\New:export }    
+    
+ibtikar_glance_dashboard_starsnew_bulk_actions:
+    path: /bulk
+    defaults: { _controller: IbtikarGlanceDashboardBundle:stars\New:bulk}        
 
 ibtikar_glance_dashboard_starsnew_list_new_stars_change_list_columns:
     path:  /new-stars-change-list-columns

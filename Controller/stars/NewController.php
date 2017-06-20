@@ -20,11 +20,16 @@ class NewController extends StarsController
     protected function configureListParameters(Request $request)
     {
         parent::configureListParameters($request);
+        $dm = $this->get('doctrine_mongodb')->getManager();
         $this->listViewOptions->setDefaultSortBy("createdAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
-        $this->listViewOptions->setActions(array('Approve','Reject','ViewOne'));
+        $this->listViewOptions->setActions(array('Approve', 'Reject', 'ViewOne'));
+        $queryBuilder = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Stars')
+                        ->field('status')->equals(Stars::$statuses['new'])
+                        ->field('assignedTo')->exists(FALSE)
+                        ->field('deleted')->equals(false);
+        if (isset($queryBuilder))
+            $this->listViewOptions->setListQueryBuilder($queryBuilder);
     }
-
-
 
 }

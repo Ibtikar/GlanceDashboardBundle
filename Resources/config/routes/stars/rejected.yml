@@ -10,6 +10,15 @@ ibtikar_glance_dashboard_starsrejected_view:
     path:  /view/{id}
     defaults: { _controller: IbtikarGlanceDashboardBundle:stars\Rejected:view }
 
+ibtikar_glance_dashboard_starsrejected_export:
+    path: /export-rejected-stars
+    defaults: { _controller: IbtikarGlanceDashboardBundle:stars\Rejected:export }    
+    
+ibtikar_glance_dashboard_starsrejected_bulk_actions:
+    path: /bulk
+    defaults: { _controller: IbtikarGlanceDashboardBundle:stars\Rejected:bulk}    
+
+
 ibtikar_glance_dashboard_starsrejected_list_rejected_stars_change_list_columns:
     path:  /rejected-stars-change-list-columns
     defaults: { _controller: IbtikarGlanceDashboardBundle:stars\Rejected:changeListRejectedStarsColumns }
