@@ -39,6 +39,20 @@ class HomeBanner extends Document
      * @MongoDB\String
      */
     private $name;
+    
+    /**
+     * @MongoDB\String
+     */
+    private $shortName;
+    
+    /**
+     * @MongoDB\String
+     */
+    private $description;
+    /**
+     * @MongoDB\String
+     */
+    private $descriptionEn;
 
     /**
      * Get id
@@ -56,7 +70,7 @@ class HomeBanner extends Document
      * @param Ibtikar\GlanceDashboardBundle\Document\Media $bannerPhoto
      * @return self
      */
-    public function setBannerPhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $bannerPhoto)
+    public function setBannerPhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $bannerPhoto= Null)
     {
         $this->bannerPhoto = $bannerPhoto;
         return $this;
@@ -136,5 +150,71 @@ class HomeBanner extends Document
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set shortName
+     *
+     * @param string $shortName
+     * @return self
+     */
+    public function setShortName($shortName)
+    {
+        $this->shortName = $shortName;
+        return $this;
+    }
+
+    /**
+     * Get shortName
+     *
+     * @return string $shortName
+     */
+    public function getShortName()
+    {
+        return $this->shortName;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return self
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string $description
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set descriptionEn
+     *
+     * @param string $descriptionEn
+     * @return self
+     */
+    public function setDescriptionEn($descriptionEn)
+    {
+        $this->descriptionEn = $descriptionEn;
+        return $this;
+    }
+
+    /**
+     * Get descriptionEn
+     *
+     * @return string $descriptionEn
+     */
+    public function getDescriptionEn()
+    {
+        return $this->descriptionEn;
     }
 }

@@ -102,6 +102,13 @@ class MediaController extends BackendController
                 }
 
                 $fieldUpdate = 'Banner';
+            } else {
+                $document = $dm->getRepository('IbtikarGlanceDashboardBundle:HomeBanner')->find($documentId);
+                if (!$document) {
+                    throw $this->createNotFoundException($this->trans('Wrong id'));
+                }
+
+                $fieldUpdate = 'Banner';
             }
         } else {
             if ($imageType && $imageType!='undefined') {
@@ -391,6 +398,16 @@ class MediaController extends BackendController
                 }
             }
         }
+        
+        if (strpos(strtolower($collectionType), 'bannar') !==FALSE && $document->getBanner()) {
+      
+            if ($document->getBanner()) {
+
+                if ($document->getBanner()) {
+                    $document->getBanner()->setBannerPhoto(NULL);
+                }
+            }
+        }
 
         if (in_array($collectionType, ['Recipe', 'Blog']) && $document->getRecipe()) {
 //            $response = $this->getInvalidResponseForRecipe($document->getRecipe()->getId(), $request->get('room'));
@@ -490,6 +507,15 @@ class MediaController extends BackendController
                     'collectionType' => $collectionType
                 ),array('order' => 'ASC'));
             } elseif ($collectionType === 'HomeBanner') {
+
+                $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                    'type' => 'image',
+//                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                    'banner' => new \MongoId($documentId),
+                    'collectionType' => $collectionType
+                    ), array('order' => 'ASC'));
+            }
+            else {
 
                 $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
                     'type' => 'image',

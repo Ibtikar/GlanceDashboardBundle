@@ -15,28 +15,21 @@ use \Ibtikar\GlanceDashboardBundle\Document\HomeBanner;
 class HomeBannerController extends BackendController
 {
 
-    protected $translationDomain = 'product';
+    protected $translationDomain = 'bannar';
 
-    public function editAction(Request $request)
+    public function editAction(Request $request,$id)
     {
 
         $dm = $this->get('doctrine_mongodb')->getManager();
 
-        $banners = $dm->getRepository('IbtikarGlanceDashboardBundle:HomeBanner')->findAll();
+        $banners = $dm->getRepository('IbtikarGlanceDashboardBundle:HomeBanner')->find($id);
         if (count($banners) == 0) {
             $banner = new HomeBanner();
             $bannerImage = '';
         } else {
-            $banner = $banners[0];
+            $banner = $banners;
             $bannerImage = $banner->getBannerPhoto();
         }
-
-
-        $mediaList = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
-            'homebanner' => $banner->getId(),
-            'collectionType' => 'HomeBanner',
-        ));
-
 
         $form = $this->createFormBuilder($banner, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
             ->add('show', formType\CheckboxType::class, array('required' => FALSE, 'attr' => array('class' => 'styled')))
@@ -68,4 +61,53 @@ class HomeBannerController extends BackendController
                 'translationDomain' => $this->translationDomain
         ));
     }
+    
+
+    public function editPageContentAction(Request $request,$id)
+    {
+
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $banner = $dm->getRepository('IbtikarGlanceDashboardBundle:HomeBanner')->find($id);
+        if(!$banner){
+            throw $this->createNotFoundException($this->trans('Wrong id'));
+        }
+
+        $bannerImage = $banner->getBannerPhoto();
+
+
+        $form = $this->createForm(\Ibtikar\GlanceDashboardBundle\Form\Type\PageType::class, $banner, array('translation_domain' => $this->translationDomain,
+                'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal','shortName' => $banner->getShortName())));
+
+
+
+
+        //handle form submission
+        if ($request->getMethod() === 'POST') {
+
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $dm->persist($banner);
+                $dm->flush();
+
+                $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
+            }
+        }
+
+        
+
+        return $this->render('IbtikarGlanceDashboardBundle:Page:edit.html.twig', array(
+                'form' => $form->createView(),
+                'bannerImage' => $bannerImage,
+                'page' => $banner->getShortName(),
+                'id' => $banner->getId()? $banner->getId(): 'null',
+                'deletePopoverConfig' => array("question" => "You are about to delete %title%,Are you sure?"),
+                'title' => $this->trans('edit '.$banner->getShortName(), array(), $this->translationDomain),
+                'translationDomain' => $this->translationDomain
+        ));
+    }
+    
+    
+    
 }

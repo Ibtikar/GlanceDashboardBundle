@@ -88,6 +88,12 @@ services:
         arguments: ["@translator"]
         tags:
             - { name: twig.extension }
+            
+    app.twig.page_extension:
+        class: Ibtikar\GlanceDashboardBundle\Service\PageExtension
+        arguments: ["@doctrine_mongodb"]
+        tags:
+            - { name: twig.extension }
 
     app.twig.property_accessor:
         class: Ibtikar\GlanceDashboardBundle\Service\propertyAccessorExtension

@@ -1,0 +1,40 @@
+# #############Labels############
+'Cover type': 'نوع الغلاف'
+
+'Description': 'الوصف بالعربية'
+'Description en': 'الوصف بالإنجليزية'
+'description': 'الوصف بالعربية'
+'descriptionEn': 'الوصف بالإنجليزية'
+'image': 'الصوره'
+'coverPhoto': 'صورة الغلاف'
+'profilePhoto': 'صورة المنتج'
+'bannerPhoto': 'صورة الاعلان'
+'edit MagazineBannar': 'إدارة صفحه المجلات'
+'MagazineBannar': 'إدارة  صفحه المجلات'
+'edit RecipeBannar': 'إدارة صفحه الوصفات'
+'RecipeBannar': 'إدارة  صفحه الوصفات'
+'edit TipsBannar': 'إدارة صفحه النصائح'
+'TipsBannar':  'إدارة  صفحه النصائح'
+'ArticleBannar':  'إدارة  صفحه المقالات'
+'edit ArticleBannar': 'إدارة صفحه المقالات'
+'Kitchen911Bannar':  'إدارة  صفحه مطبخ الطوارى'
+'edit Kitchen911Bannar': 'إدارة صفحه مطبخ الطوارى'
+'ProductBannar': 'إدارة  صفحه المنتجات'
+'edit ProductBannar': 'إدارة صفحه المنتجات'
+
+
+# ############Messages############
+
+# ############Titles############
+
+
+# ############Buttons############
+
+
+# #############General############
+
+'defaultCoverPhoto': 'صوره الغلاف'
+'defaultProfilePhoto': 'صوره البروفايل'
+'Save': 'حفظ'
+'Save and add': 'حفظ و اضافة مناطق'
+'Banner url': 'رابط الاعلان'
