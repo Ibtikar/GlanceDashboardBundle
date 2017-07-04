@@ -1,0 +1,72 @@
+{% extends 'IbtikarGlanceDashboardBundle::formLayout.html.twig' %}
+
+
+
+{% block form_container %}
+ {% form_theme form   'IbtikarGlanceDashboardBundle::form_theme_recipe.html.twig' %}
+
+
+
+    {{ form_start(form)}}
+
+
+
+
+                <div class="tabbable">
+        <ul class="nav nav-tabs nav-tabs-highlight">
+            <li class="active"><a href="#arabic" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}" alt="arabic" width="30" height="20"/></a></li>
+            <li><a href="#english" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}" alt="english" width="30" height="20"/></a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="arabic">
+
+
+                {{ form_row(form.title) }}
+                {{ form_row(form.brief) }}
+
+
+
+
+{#                {{ form_row(form.images) }}#}
+
+            </div><!-- arabic end -->
+
+            <div class="tab-pane" id="english">
+
+
+                {{ form_row(form.titleEn) }}
+                {{ form_row(form.briefEn) }}
+
+
+
+
+
+
+            </div><!-- english end -->
+
+        </div>
+    </div>
+
+    <hr>
+
+    {{ form_end(form) }}
+
+
+{% endblock %}
+{% block form_buttons %}
+    <div class="row actionButtons">
+        <div class="col-xs-12">
+            <button class="btn btn-primary  dev-form-submit-btn dev-save" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
+            <button class="btn btn-default dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
+
+
+
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
