@@ -25,7 +25,7 @@ ibtikar_glance_dashboard_product:
 
 ibtikar_glance_dashboard_banner:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/homebanner.yml"
-    prefix:   /banner
+    prefix:   /bannar
 
 ibtikar_glance_dashboard_subproduct:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/subproduct.yml"
@@ -45,6 +45,10 @@ ibtikar_glance_dashboard_category:
 
 ibtikar_glance_dashboard_media:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/media.yml"
+    prefix:   /
+    
+ibtikar_glance_dashboard_page:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/page.yml"
     prefix:   /
 
 ibtikar_glance_dashboard_competition:

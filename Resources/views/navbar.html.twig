@@ -108,6 +108,9 @@
                                         </a></li>
                                 {% endif %}
                                 {% if is_granted('ROLE_STAFF') or is_granted('ROLE_ADMIN')%}
+                                     <li><a href="{{ path('ibtikar_glance_dashboard_aboutus') }}" {% if 'banner' in app.request.attributes.get('_route') %}class="highlight"{% endif %}> <img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/categories.png')}}" class=" position-left"/> 
+                                                 عن مطبخ قودى
+                                    </a></li>
                                     {% set pageData= get_page_data()  %}
                                     {% for pageinfo in pageData %}
                                         {% if pageinfo.shortName=='HomeBanner'%}

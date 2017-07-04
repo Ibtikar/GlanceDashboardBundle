@@ -1,0 +1,5 @@
+ibtikar_glance_dashboard_aboutus:
+    path:  /aboutus
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Page:editAboutUs}
+
+
