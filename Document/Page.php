@@ -20,10 +20,21 @@ class Page extends Document
     private $id;
 
     /**
+     * @MongoDB\String
+     */
+    private $name;
+    
+    /**
      * @Assert\NotBlank
      * @MongoDB\String
      */
     private $title;
+    
+    /**
+     * @Assert\NotBlank
+     * @MongoDB\String
+     */
+    private $titleEn;
 
     /**
      * @Assert\NotBlank
@@ -51,8 +62,6 @@ class Page extends Document
     private $briefEn;
 
     /**
-     * @Assert\NotBlank
-
      * @MongoDB\String
      */
     private $url;
@@ -158,5 +167,49 @@ class Page extends Document
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set titleEn
+     *
+     * @param string $titleEn
+     * @return self
+     */
+    public function setTitleEn($titleEn)
+    {
+        $this->titleEn = $titleEn;
+        return $this;
+    }
+
+    /**
+     * Get titleEn
+     *
+     * @return string $titleEn
+     */
+    public function getTitleEn()
+    {
+        return $this->titleEn;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return self
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string $name
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }
