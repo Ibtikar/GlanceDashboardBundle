@@ -17,12 +17,12 @@ class HomeBannerController extends BackendController
 
     protected $translationDomain = 'bannar';
 
-    public function editAction(Request $request,$id)
+    public function editAction(Request $request)
     {
 
         $dm = $this->get('doctrine_mongodb')->getManager();
 
-        $banners = $dm->getRepository('IbtikarGlanceDashboardBundle:HomeBanner')->find($id);
+        $banners = $dm->getRepository('IbtikarGlanceDashboardBundle:HomeBanner')->findOneBy(array('shortName'=>'HomeBanner'));
         if (count($banners) == 0) {
             $banner = new HomeBanner();
             $bannerImage = '';
