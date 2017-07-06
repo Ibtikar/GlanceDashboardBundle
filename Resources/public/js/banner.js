@@ -151,8 +151,8 @@ $(document).ready(function () {
             var elementDimessionHeight = 600;
             var errorDimension = imageErrorMessages.imageDimension;
             if ($(element).closest('td').attr('data-name') == 'bannerPhoto') {
-                elementDimessionWidth = 300;
-                elementDimessionHeight = 100;
+                elementDimessionWidth = 1170;
+                elementDimessionHeight = 600;
                 errorDimension = imageErrorMessages.BannerimageDimension;
             }
             var elementObject = $('#uploadImg .cropit-image-input');
