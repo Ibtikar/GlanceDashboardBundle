@@ -399,7 +399,7 @@ class MediaController extends BackendController
             }
         }
         
-        if (strpos(strtolower($collectionType), 'bannar') !==FALSE && $document->getBanner()) {
+        if (strpos(strtolower($collectionType), 'bannar') !==FALSE && $document->getBanner() || strpos(strtolower($collectionType), 'banner') !==FALSE && $document->getBanner()) {
       
             if ($document->getBanner()) {
 
