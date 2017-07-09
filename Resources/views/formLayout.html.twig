@@ -175,7 +175,15 @@ var recipeValue='';
                     }
                 });
             }
-
+                if($('#media-list-target-right-activity').length > 0){
+                    drakeActivty = dragula([document.getElementById('media-list-target-right-activity')], {
+                    mirrorContainer: document.querySelector('.media-list-container-activity'),
+                    moves: function (el, container, handle) {
+                        return handle.classList.contains('dragula-handle');
+                    }
+                });     
+            }
+            
             $(document).trigger('form-plugin-init');
     }
 

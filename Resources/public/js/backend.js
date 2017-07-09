@@ -225,14 +225,14 @@ jQuery(document).ready(function($) {
     $('.dev-form-submit-btn').on('click', function () {
         if (typeof $('form.dev-page-main-form').attr('ajax-running') == 'undefined' || $('form.dev-page-main-form').attr('ajax-running') != 'true') {
             if ($(this).hasClass('dev-save-add')) {
-                if ($('#form_submitButton').length > 0) {
-                    $('#form_submitButton').val('add_save');
+                if ($('#product_submitButton').length > 0) {
+                    $('#product_submitButton').val('add_save');
 
                 }
             }
             if ($(this).hasClass('dev-save')) {
-                if ($('#form_submitButton').length > 0) {
-                    $('#form_submitButton').val('save');
+                if ($('#product_submitButton').length > 0) {
+                    $('#product_submitButton').val('save');
                 }
             }
             ajaxSubmitClickHandler();

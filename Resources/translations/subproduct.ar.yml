@@ -29,11 +29,15 @@
 'Subproducts': 'منتجات فرعيه'
 Delete SubProduct: حذف منتج فرعى
 'subproducts': 'منتجات فرعيه'
+'Weight': 'الوزن'
+'Size': 'المقاس'
 
 # ############Messages############
 
 # ############Titles############
 Add new subProduct: 'إدخال منتج فرعى جديد'
+'Related article': 'مقالات ذات صلة'
+'Related tip': 'نصائح ذات صلة'
 
 
 # ############Buttons############

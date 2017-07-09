@@ -121,6 +121,7 @@ function makeRequest(q, googleStart) {
             'fileType': 'jpg,png,gif',
             'num': 10, // max 10 items per page
             'filter': 0,
+            'imgSize': "xxlarge",
             'start': googleStartIndex
         }
         );
@@ -153,7 +154,7 @@ function sendRequestToGoogleImageApi() {
         googleStartIndex = 1;
         googleSearch = $('#dev-search-gimage-box').val().trim();
         if ($("#google-field").hasClass('has-error')) {
-            $('#error').remove();
+            $('.error').remove();
             $("#google-field").removeClass('has-error');
         }
         if (googleStopSearch) {
@@ -169,7 +170,7 @@ function sendRequestToGoogleImageApi() {
             $('#choose-error').remove();
         }
         if ($("#google-field").hasClass('has-error')) {
-            $('#error').remove();
+            $('.error').remove();
             $("#google-field").removeClass('has-error');
         }
         $("#google-field").addClass('has-error');
@@ -435,7 +436,7 @@ var YT = {
     },
     removeError: function() {
         $('#video-tab1 .help-error').remove();
-        $('#error').remove();
+        $('.error').remove();
         $("#dev-search-gvideo-box").parent().removeClass('has-error');
     },
     getIDFromURL: function(url){
@@ -571,6 +572,28 @@ jQuery(document).ready(function($) {
         },0);
     });
 
+    $('ul.dropdown-menu').on('click', function (event) {
+        var events = $._data(document, 'events') || {};
+        events = events.click || [];
+        for (var i = 0; i < events.length; i++) {
+            if (events[i].selector) {
+
+                //Check if the clicked element matches the event selector
+                if ($(event.target).is(events[i].selector)) {
+                    events[i].handler.call(event.target, event);
+                }
+
+                // Check if any of the clicked element parents matches the 
+                // delegated event selector (Emulating propagation)
+                $(event.target).parents(events[i].selector).each(function () {
+                    events[i].handler.call(this, event);
+                });
+            }
+        }
+        event.stopPropagation(); //Always stop propagation
+    });
+
+
     $(document).on('change', '.dev-cover-img', function() {
         if($(this).is(':checked')){
             $('[id$="_defaultCoverPhoto"]').val($(this).val());
@@ -633,7 +656,7 @@ jQuery(document).ready(function($) {
         var selectedVideos = YT.checked();
 
         if ($("#dev-search-gvideo-box").parent().hasClass('has-error')) {
-            $('#error').remove();
+            $('.error').remove();
             $("#dev-search-gvideo-box").parent().removeClass('has-error');
         }
 
@@ -681,16 +704,23 @@ jQuery(document).ready(function($) {
         }
     });
 
-    $('.click-on-enter').on('keyup',function(e) {
-                if (e.which === 13) {
-                    $(this).parent().next().find('button').trigger('click');
-                    return false;
-                }
-           });
+    $('.click-on-enter').on('keyup', function (e) {
+        if (e.which === 13) {
+            $(this).parent().next().find('button').trigger('click');
+            return false;
+        }
+    });
+    $('.input').bind('keypress keydown keyup', function (e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+        }
+    });
     $(document).on('click', '#search-img-btn-small', function() {
         if ($('#dev-search-gimage-box-small').val().trim() != "") {
             $('#dev-search-gimage-box').val($('#dev-search-gimage-box-small').val());
             sendRequestToGoogleImageApi();
+        }else{
+            $('#dev-search-gimage-box-small').trigger('keyup');
         }
     });
 
@@ -698,6 +728,8 @@ jQuery(document).ready(function($) {
         if ($('#dev-search-gvideo-box-small').val().trim() != "") {
             $('#dev-search-gvideo-box').val($('#dev-search-gvideo-box-small').val());
             $('#search-vid-btn').trigger('click');
+        }else{
+          $('#dev-search-gvideo-box-small').trigger('keyup');  
         }
     });
 
@@ -711,24 +743,26 @@ jQuery(document).ready(function($) {
 $(document).on('submit','.main-search',function() {
   return false;
 });
-    $(document).on('keyup', '#dev-search-gimage-box,#dev-search-gimage-box-small,#dev-search-gvideo-box,#dev-search-gvideo-box-small', function (e) {
+ 
+$(document).on('keyup', '.dev-recipe-imgeUrl-activity,.dev-recipe-imgeUrl,.dev-recipe-videoUrl,#dev-search-gimage-box,#dev-search-gimage-box-small,#dev-search-gvideo-box,#dev-search-gvideo-box-small', function (e) {
         e.preventDefault();
 
         var parentElm = $(this).parents(".input-group");
         if ($(this).val().trim() != "") {
             if (parentElm.hasClass('has-error')) {
                 parentElm.removeClass('has-error');
-                $("#error").remove();
+                parentElm.siblings('.error').remove();
             }
         } else {
             if (parentElm.hasClass('has-error')) {
-                $("#error").remove();
+                parentElm.siblings('.error').remove();
                 parentElm.removeClass('has-error');
             }
             parentElm.addClass('has-error');
-            parentElm.after('<div class="help-block help-error redText" id="error">'+messages.NotBlank+'</div>')
+            parentElm.after('<div class="help-block help-error redText error">' + messages.NotBlank + '</div>')
         }
-    });
+});
+
 
     $(document).on('click', '.dev-delete-btn', function (e) {
         var $this = $(this);
@@ -846,12 +880,14 @@ $(document).on('submit','.main-search',function() {
                 });
 
             }
+        }else{
+            $('.dev-recipe-imgeUrl').trigger('keyup');
         }
     });
 ///////////////////////////////////
 
     $(document).on('click', '.dev-videourl-submit', function() {
-
+            errorContainer= $('.dev-videourl-submit').closest('.input-group')
 
 //////////////////////////////////////////////////////////////////////
             if(typeof ytXhr !== "undefined")

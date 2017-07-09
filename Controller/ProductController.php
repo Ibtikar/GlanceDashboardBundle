@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type as formType;
 use Ibtikar\GlanceDashboardBundle\Service\ArabicMongoRegex;
 use Ibtikar\GlanceDashboardBundle\Document\History;
 use Ibtikar\GlanceDashboardBundle\Document\Recipe;
+use Ibtikar\GlanceDashboardBundle\Form\Type\ProductType;
 
 class ProductController extends BackendController {
 
@@ -85,10 +86,7 @@ class ProductController extends BackendController {
             ));
          foreach ($images as $media) {
             if ($media->getType() == 'image') {
-                if ($media->getCoverPhoto()) {
-                    $coverImage = $media;
-                    continue;
-                }
+ 
                 if ($media->getBannerPhoto()) {
                     $bannerImage = $media;
                     continue;
@@ -97,77 +95,27 @@ class ProductController extends BackendController {
                     $profileImage = $media;
                     continue;
                 }
-            } elseif ($media->getType() == 'video' && $media->getCoverPhoto()) {
-                $coverVideo = $media;
-            }
+            } 
         }
         $product = new Product();
-        $form = $this->createFormBuilder($product, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
-            ->add('coverType', formType\ChoiceType::class, array('choices' => Product::$coverTypeChoices, 'expanded' => true, 'attr'  => array('data-error-after-selector' => '#product_type_coverType')))
-            ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
-            ->add('nameEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
-            ->add('bannerUrl', formType\TextType::class, array('required' => FALSE))
-//            ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
-//            ->add('descriptionEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
-            ->add('about', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
-            ->add('aboutEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+        $form = $this->createForm(\Ibtikar\GlanceDashboardBundle\Form\Type\ProductType::class,$product, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
 
-            ->add('video', formType\TextType::class, array('mapped'=>FALSE,'required'=>FALSE,'attr'=>array('data-rule-youtube'=>'data-rule-youtube')))
-//            ->add('relatedRecipe', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
-//                'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related', 'ajax-url-var' => 'relatedMaterialSearchUrl')
-//            ))
-//            ->add('related', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
-            ->add('relatedTip', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
-                'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related_tip', 'ajax-url-var' => 'relatedTipSearchUrl')
-            ))
-            ->add('relatedArticle', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
-                'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related_article', 'ajax-url-var' => 'relatedArticleSearchUrl')))
-            ->add('related_tip', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
-            ->add('related_article', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
-            ->add('minimumRelatedRecipe', formType\HiddenType::class, array('required' => true, 'attr' => array('data-msg-required' => ' '), 'mapped' => FALSE))
-
-            ->add('submitButton', formType\HiddenType::class, array('required' => FALSE, "mapped" => false))
-            ->add('save', formType\SubmitType::class)
-            ->getForm();
 
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $formData = $request->get('form');
+                $formData = $request->get('product');
 
-                $coverPhotoType = $formData['coverType'];
-
-                $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
-                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
-                    'product' => null,
-                    'subproduct' => null,
-                    'collectionType' => 'Product'
-                ));
-
-                foreach ($images as $media) {
-                    if ($coverPhotoType == 'image' && $media->getType() == 'image' && $media->getCoverPhoto()) {
-                        $product->setCoverPhoto($media);
-                        continue;
-                    }
-
-                    if ($coverPhotoType == 'video' && $media->getType() == 'video' && $media->getCoverPhoto()) {
-                        $product->setCoverPhoto($media);
-                        continue;
-                    }
-                }
-
-//                if ($formData['related']) {
-//                    $this->updateRelatedRecipe($product, $formData['related'], $dm,'recipe');
-//                }
+       
+                $dm->persist($product);
                 if ($formData['related_article']) {
-                    $this->updateRelatedRecipe($product, $formData['related_article'], $dm,'article');
+                    $this->updateRelatedRecipe($product, $formData['related_article'], $dm, 'article');
                 }
 
                 if ($formData['related_tip']) {
-                    $this->updateRelatedRecipe($product, $formData['related_tip'], $dm,'tip');
+                    $this->updateRelatedRecipe($product, $formData['related_tip'], $dm, 'tip');
                 }
 
-                $dm->persist($product);
                 $this->slugifier($product);
                 $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
 //                    'type' => 'image',
@@ -189,11 +137,6 @@ class ProductController extends BackendController {
                     $oldFilePath = $this->oldDir . "/" . $image->getPath();
                     $newFilePath = $newDir . "/" . $image->getPath();
                     @rename($oldFilePath, $newFilePath);
-                    if ($image->getCoverPhoto()) {
-                        $product->setCoverPhoto($image);
-                        $image->setProduct($product);
-                        continue;
-                    }
                     if ($image->getProfilePhoto()) {
                         $product->setProfilePhoto($image);
                         $image->setProduct($product);
@@ -208,6 +151,7 @@ class ProductController extends BackendController {
                 $this->get('history_logger')->log($product, History::$ADD);
 
                 $dm->flush();
+                $this->updateMaterialGallary($product, $formData['media'], $dm);
 
             $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
                 if ($formData['submitButton'] == 'add_save') {
@@ -224,7 +168,6 @@ class ProductController extends BackendController {
                 'profileImage' => $profileImage,
                 'coverImage' => $coverImage,
                 'bannerImage' => $bannerImage,
-                'coverVideo' => $coverVideo,
                 'deletePopoverConfig'=>array("question" => "You are about to delete %title%,Are you sure?"),
                 'title' => $this->trans('Add new Product', array(), $this->translationDomain),
                 'translationDomain' => $this->translationDomain
@@ -294,34 +237,8 @@ class ProductController extends BackendController {
         if ($flushObject) {
             $dm->flush();
         }
-        $form = $this->createFormBuilder($product, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
-            ->add('coverType', formType\ChoiceType::class, array('choices' => Product::$coverTypeChoices, 'expanded' => true, 'attr'  => array('data-error-after-selector' => '#product_type_coverType')))
-            ->add('video', formType\TextType::class, array('mapped'=>FALSE,'required'=>FALSE,'attr'=>array('data-rule-youtube'=>'data-rule-youtube')))
-            ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
-            ->add('nameEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
-            ->add('bannerUrl', formType\TextType::class, array('required' => FALSE))
+        $form = $this->createForm(\Ibtikar\GlanceDashboardBundle\Form\Type\ProductType::class,$product, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
 
-//               ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
-//            ->add('descriptionEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
-
-            ->add('about', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
-            ->add('aboutEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
-
-//           ->add('relatedRecipe', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
-//                'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related', 'ajax-url-var' => 'relatedMaterialSearchUrl')
-//            ))
-//            ->add('related', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
-            ->add('relatedTip', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
-                'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related_tip', 'ajax-url-var' => 'relatedTipSearchUrl')
-            ))
-            ->add('relatedArticle', formType\ChoiceType::class, array('multiple' => true, 'required' => FALSE, 'mapped' => FALSE,
-                'choice_translation_domain' => 'recipe', 'attr' => array('class' => 'select-ajax', 'data_related_container' => 'form_related_article', 'ajax-url-var' => 'relatedArticleSearchUrl')))
-            ->add('related_tip', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
-            ->add('related_article', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
-            ->add('minimumRelatedRecipe', formType\HiddenType::class, array('required' => true, 'attr' => array('data-msg-required' => ' '), 'mapped' => FALSE))
-            ->add('submitButton', formType\HiddenType::class, array('required' => FALSE, "mapped" => false))
-            ->add('save', formType\SubmitType::class)
-            ->getForm();
 
 
         //handle form submission
@@ -330,29 +247,8 @@ class ProductController extends BackendController {
             $form->handleRequest($request);
 
             if ($form->isValid()) {
-                $formData = $request->get('form');
-//                      if ($formData['related']) {
-//                    $this->updateRelatedRecipe($product, $formData['related'], $dm,'recipe');
-//                }
-                $coverPhotoType = $formData['coverType'];
-
-                $mediaList = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
-                    'product' => $product->getId(),
-                    'collectionType' => 'Product',
-                    'coverPhoto' => true
-                ));
-
-                foreach ($mediaList as $media) {
-                    if ($coverPhotoType == 'image' && $media->getType() == 'image' && $media->getCoverPhoto()) {
-                        $product->setCoverPhoto($media);
-                        continue;
-                    }
-
-                    if ($coverPhotoType == 'video' && $media->getType() == 'video' && $media->getCoverPhoto()) {
-                        $product->setCoverPhoto($media);
-                        continue;
-                    }
-                }
+                $formData = $request->get('product');
+            
                 if ($formData['related_article']) {
                     $this->updateRelatedRecipe($product, $formData['related_article'], $dm,'article');
                 }
@@ -363,6 +259,7 @@ class ProductController extends BackendController {
                 $this->get('history_logger')->log($product, History::$EDIT);
 
                 $dm->flush();
+                $this->updateMaterialGallary($product, $formData['media'], $dm);
 
                 $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
                 if ($formData['submitButton'] == 'add_save') {
@@ -528,25 +425,79 @@ class ProductController extends BackendController {
 
         $array = json_decode($relatedJson, true);
         foreach($array as $relatedRecipe){
-            $material = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($relatedRecipe['id']);
-
-            $contentType = $material->getType();
+            $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($relatedRecipe['id']);
+       
+            $contentType = $recipe->getType();
             $addMethod = "addRelated".ucfirst($contentType);
             $getMethod = "getRelated".ucfirst($contentType);
-
-            if ($this->validToRelate($material, $document) && count($document->$getMethod()) < 10) {
-                $document->$addMethod($material);
-                $relatedExist = $dm->getRepository('IbtikarGlanceDashboardBundle:Related')->findBy(array('product' => $materialParent->getId(), 'recipe' => $materialChild->getId()));
+   
+            if ($this->validToRelate($recipe, $document) && count($document->$getMethod()) < 10) {
+                $document->$addMethod($recipe);
+        
+                $relatedExist = $dm->getRepository('IbtikarGlanceDashboardBundle:Related')->findBy(array('product' => $document->getId(), 'recipe' => $recipe->getId()));
                 if (!$relatedExist) {
                     $related = new Related();
-                    $related->setProduct($materialParent);
-                    $related->setRecipe($materialChild);
-                    $related->setType($materialChild->getType());
+                    $related->setProduct($document);
+                    $related->setRecipe($recipe);
+                    $related->setType($recipe->getType());
                     $dm->persist($related);
+                    
                 }
-                $this->get('history_logger')->log($document, History::$ADDRELATED, "add related " . ucfirst($contentType) ,$material);
-            }
+                $dm->flush();
+                $this->get('history_logger')->log($document, History::$ADDRELATED, "add related " . ucfirst($contentType) ,$recipe);
+           
+                
+                }
         }
     }
 
+    public function updateMaterialGallary($document, $gallary, $dm = null) {
+        if (!$dm) {
+            $dm = $this->get('doctrine_mongodb')->getManager();
+        }
+
+        $gallary = json_decode($gallary,true);
+
+        if (isset($gallary[0]) && is_array($gallary[0])) {
+
+                $imagesIds = array();
+                $imagesData = array();
+                foreach ($gallary as $galleryImageData) {
+                    $imagesIds [] = $galleryImageData['id'];
+                $imagesData[$galleryImageData['id']] = $galleryImageData;
+            }
+            $images = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array('id' => array('$in' => $imagesIds)));
+            if (count($images) > 0) {
+                $firstImg = $images[0];
+                $this->oldDir = $firstImg->getUploadRootDir();
+                $newDir = substr($this->oldDir, 0, strrpos($this->oldDir, "/")) . "/" . $document->getId();
+                if (!file_exists($newDir)) {
+                    @mkdir($newDir);
+                }
+            }
+            $documentImages = 0;
+
+            $documentImages = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array('product' => $document->getId(), 'coverPhoto' => false));
+
+            $count = count($documentImages);
+            $coverExist = FALSE;
+
+            foreach ($images as $mediaObj) {
+                $image = $imagesData[$mediaObj->getId()];
+                $oldFilePath = $this->oldDir . "/" . $mediaObj->getPath();
+                $newFilePath = $newDir . "/" . $mediaObj->getPath();
+                @rename($oldFilePath, $newFilePath);
+                $mediaObj->setProduct($document);
+                $mediaObj->setOrder($image['order']);
+                $mediaObj->setCaptionAr($image['captionAr']);
+                $mediaObj->setCaptionEn($image['captionEn']);
+            }
+//            
+            $dm->flush();
+        }
+
+        $dm->flush();
+    }
+ 
+    
 }

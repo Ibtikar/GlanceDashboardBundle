@@ -134,6 +134,11 @@ class Media extends Document {
      * @MongoDB\Boolean
      */
     private $bannerPhoto = false;
+    
+    /**
+     * @MongoDB\Boolean
+     */
+    private $activityPhoto = false;
 
     /**
      * @MongoDB\String
@@ -968,5 +973,27 @@ class Media extends Document {
     public function getBanner()
     {
         return $this->banner;
+    }
+
+    /**
+     * Set activityPhoto
+     *
+     * @param boolean $activityPhoto
+     * @return self
+     */
+    public function setActivityPhoto($activityPhoto)
+    {
+        $this->activityPhoto = $activityPhoto;
+        return $this;
+    }
+
+    /**
+     * Get activityPhoto
+     *
+     * @return boolean $activityPhoto
+     */
+    public function getActivityPhoto()
+    {
+        return $this->activityPhoto;
     }
 }

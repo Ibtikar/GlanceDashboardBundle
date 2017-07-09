@@ -66,8 +66,83 @@ class SubProductController extends BackendController {
         if (!$product) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
+        $medias = $dm->getRepository('IbtikarGlanceDashboardBundle:media')->findBy(array('product'=>$product->getId()));
+        $coverPhotos=array();
+        $activityPhotos=array();
+        $relatedTips=array();
+        $relatedArticles=array();
+        foreach ($medias as $media) {
+            if($media->getCoverPhoto()){
+            if ($media->getType() == 'image') {
+
+                $coverPhotos [] = array(
+                    'type' => $media->getType(),
+                    'img' => '/'.$media->getWebPath(),
+                    'caption' =>  $media->getCaptionAr(),
+                    'captionEn' =>  $media->getCaptionEn(),
+                );
+            } else {
+
+                $coverPhotos [] = array(
+                    'type' => $media->getType(),
+                    'videoCode' => $media->getVid(),
+                    'caption' =>  $media->getCaptionAr(),
+                    'captionEn' =>  $media->getCaptionEn() ,
+                );
+            }
+              continue;
+            }
+            if ($media->getActivityPhoto()) {
+                if ($media->getType() == 'image') {
+
+                    $activityPhotos [] = array(
+                        'type' => $media->getType(),
+                        'img' => '/' . $media->getWebPath(),
+                        'caption' => $media->getCaptionAr(),
+                        'captionEn' => $media->getCaptionEn(),
+                    );
+                } else {
+
+                    $activityPhotos [] = array(
+                        'type' => $media->getType(),
+                        'videoCode' => $media->getVid(),
+                        'caption' => $media->getCaptionAr(),
+                        'captionEn' => $media->getCaptionEn(),
+                    );
+                }
+                continue;
+            }
+        }
+        
+        
+        foreach ($product->getRelatedArticle() as $relatedArticle) {
+            $relatedArticles[] = array(
+                'title' => $relatedArticle->getTitle(),
+                'titleEn' => $relatedArticle->getTitleEn(),
+                'img' => $relatedArticle->getCoverPhoto() ? $relatedArticle->getCoverPhoto()->getType() == 'image' ? '/' . $relatedArticle->getCoverPhoto()->getWebPath():'https://i.ytimg.com/vi/' . $relatedArticle->getCoverPhoto()->getVid().'/hqdefault.jpg' : '',
+
+                'url' =>  $this->generateUrl('ibtikar_goody_frontend_'.trim($relatedArticle->getType()).'_view', array('slug' => $relatedArticle->getSlug()), true)
+
+            );
+        }
+
+
+        foreach ($product->getRelatedTip() as $relatedTip) {
+            $relatedTips[] = array(
+                'title' => $relatedTip->getTitle(),
+                'titleEn' => $relatedTip->getTitleEn(),
+                'img' => $relatedTip->getCoverPhoto() ? $relatedTip->getCoverPhoto()->getType() == 'image' ? '/' . $relatedTip->getCoverPhoto()->getWebPath():'https://i.ytimg.com/vi/' . $relatedTip->getCoverPhoto()->getVid().'/hqdefault.jpg' : '',
+
+                'url' =>  $this->generateUrl('ibtikar_goody_frontend_'.trim($relatedTip->getType()).'_view', array('slug' => $relatedTip->getSlug()), true)
+
+            );
+        }
 
         $renderingParams['product']= $product;
+        $renderingParams['coverPhotos']= $coverPhotos;
+        $renderingParams['activityPhotos']= $activityPhotos;
+        $renderingParams['relatedTips']= $relatedTips;
+        $renderingParams['relatedArticles']= $relatedArticles;
 
         return $renderingParams;
     }
@@ -115,6 +190,8 @@ class SubProductController extends BackendController {
 //        ))
                 ->add('description',  formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 5)))
                 ->add('descriptionEn',formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 5)))
+                ->add('weight', formType\NumberType::class, array('scale' => 3,'required' => FALSE,'attr' => array()))
+                ->add('size',formType\NumberType::class, array('scale' => 3,'required' => FALSE,'attr' => array()))
                 ->add('save', formType\SubmitType::class)
                 ->getForm();
 

@@ -84,6 +84,14 @@ class SubProduct extends Document {
      * @MongoDB\Date
      */
     protected $editAt;
+    /**
+     * @MongoDB\Field(type="float")
+     */
+    protected $weight;
+    /**
+     * @MongoDB\Field(type="float")
+     */
+    protected $size;
 
     public function __toString()
     {
@@ -260,5 +268,50 @@ class SubProduct extends Document {
     public function getEditAt()
     {
         return $this->editAt;
+    }
+
+
+    /**
+     * Set weight
+     *
+     * @param float $weight
+     * @return self
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
+        return $this;
+    }
+
+    /**
+     * Get weight
+     *
+     * @return float $weight
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
+    /**
+     * Set size
+     *
+     * @param float $size
+     * @return self
+     */
+    public function setSize($size)
+    {
+        $this->size = $size;
+        return $this;
+    }
+
+    /**
+     * Get size
+     *
+     * @return float $size
+     */
+    public function getSize()
+    {
+        return $this->size;
     }
 }

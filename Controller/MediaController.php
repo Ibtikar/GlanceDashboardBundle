@@ -43,7 +43,10 @@ class MediaController extends BackendController
         $fieldUpdate='';
 
         $dm = $this->get('doctrine_mongodb')->getManager();
-
+        $media = new Media();
+        $media->setType($type);
+        $media->setCollectionType($collectionType);
+        $media->setOrder(99);
         if ($documentId && $documentId != 'null') {
             if ($collectionType === 'SubProduct') {
                 $document = $dm->getRepository('IbtikarGlanceDashboardBundle:SubProduct')->find($documentId);
@@ -126,6 +129,10 @@ class MediaController extends BackendController
                             'collectionType' => $collectionType,
                             'ProfilePhoto' => TRUE
                         ));
+                        $media->setProfilePhoto(TRUE);
+                        if ($document) {
+                            return new JsonResponse(array('status' => 'reload'));
+                        }
                         break;
                     case 'coverPhoto':
                         $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
@@ -140,6 +147,7 @@ class MediaController extends BackendController
                             'collectionType' => $collectionType,
                             'coverPhoto' => TRUE
                         ));
+                        $media->setCoverPhoto(TRUE);
                         break;
                     case 'bannerPhoto':
                         $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
@@ -155,18 +163,35 @@ class MediaController extends BackendController
                             'collectionType' => $collectionType,
                             'bannerPhoto' => TRUE
                         ));
+                        $media->setBannerPhoto(TRUE);
+                        if ($document) {
+                            return new JsonResponse(array('status' => 'reload'));
+                        }
+                        break;
+                    case 'activityPhoto':
+                        $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                            'type' => $type,
+                            'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                            'product' => null,
+                            'contactMessage' => null,
+                            'subproduct' => null,
+                            'recipe' => null,
+                            'magazine' => null,
+                            'banner' => null,
+                            'competition' => null,
+                            'collectionType' => $collectionType,
+                            'activityPhoto' => TRUE
+                        ));
+                        $media->setActivityPhoto(TRUE);
                         break;
                 }
-                if ($document) {
-                    return new JsonResponse(array('status' => 'reload'));
-                }
+       
             }
 
 
         }
-        $media = new Media();
-        $media->setType($type);
-        $media->setCollectionType($collectionType);
+
+       
 
         $media->setCreatedBy($this->getUser());
         if ($documentId && $documentId != 'null' && $fieldUpdate) {
@@ -217,7 +242,12 @@ class MediaController extends BackendController
                             if ($documentId && $documentId != 'null') {
                                 $functionName = "get$fieldUpdate";
                                 $media->$functionName()->setCoverPhoto($media);
-                            }
+                        }
+                        break;
+                        case 'activityPhoto':
+                            $media->setActivityPhoto(TRUE);
+                            break;
+                      
                     }
                 }
                 $tempPath = $media->getTempPath();
@@ -264,6 +294,7 @@ class MediaController extends BackendController
             'type' => $media->getType(),
             'name' => $media->getName(),
             'coverPhoto' => $media->getCoverPhoto(),
+            'activityPhoto' => $media->getActivityPhoto(),
             'changeCoverUrl' => method_exists($media,$getCollection) && $media->$getCollection() ? $this->generateUrl('ibtikar_glance_dashboard_media_change_defaultcover', array('imageId' => $media->getId(), 'documentId' => $media->$getCollection()->getId(), 'collectionType'=>$collectionType)) : '',
             'captionAr' => $media->getCaptionAr()?$media->getCaptionAr():'',
             'caption' => $media->getCaptionAr()?$media->getCaptionAr():'',
@@ -358,6 +389,7 @@ class MediaController extends BackendController
      */
     public function deleteFileAction(Request $request, $id,$collectionType)
     {
+      
         if (!$this->getUser() && $collectionType != "Competition") {
             return $this->getLoginResponse();
         }
@@ -376,13 +408,11 @@ class MediaController extends BackendController
                 return $reponse;
             }
             if ($document->getProduct()) {
-                if ($document->getCoverPhoto()) {
-
-                    $cover = $document->getProduct()->getCoverPhoto();
-                    $cover->setPath(NULL);
-                }
                 if ($document->getProfilePhoto()) {
                     $document->getProduct()->setProfilePhoto(NULL);
+                }
+                if ($document->getBannerPhoto()) {
+                    $document->getProduct()->setBannerPhoto(NULL);
                 }
             }
         }
@@ -448,12 +478,12 @@ class MediaController extends BackendController
                     return $reponse;
                 }
                 $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
-                    'type' => $type,
+                    'type' => $type == "all" ? array('$in' => array('image', 'video')) : $type,
 //                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                     'product' => new \MongoId($documentId),
                     'subproduct' => null,
                     'collectionType' => $collectionType
-                ));
+                ), array('order' => 'ASC'));
             } elseif ($collectionType === 'SubProduct') {
                 $reponse = $this->getInvalidResponseForSubProduct(new \MongoId($documentId), '', 'list');
                 if ($reponse) {
@@ -465,7 +495,7 @@ class MediaController extends BackendController
                     'subproduct' => new \MongoId($documentId),
                     'product' => null,
                     'collectionType' => $collectionType
-                ));
+                ), array('order' => 'ASC'));
             } elseif ($collectionType === 'Recipe') {
                 $reponse = $this->getInvalidResponseForRecipe($documentId, $this->container->get('request_stack')->getCurrentRequest()->get('room'));
                 if ($reponse) {
@@ -545,10 +575,10 @@ class MediaController extends BackendController
 
         /* @var $document Media */
         foreach ($documents as $document) {
-            if ($document->getCoverPhoto() && !in_array($collectionType, ['Recipe', 'Blog'])) {
-                $coverPhoto = $this->prepareMedia($document,$collectionType);
-                continue;
-            }
+//            if ($document->getCoverPhoto() && !in_array($collectionType, ['Recipe', 'Blog','Product'])) {
+//                $coverPhoto = $this->prepareMedia($document,$collectionType);
+//                continue;
+//            }
             if ($document->getProfilePhoto()) {
                 $profilePhoto = $this->prepareMedia($document,$collectionType);
                 continue;
@@ -594,6 +624,8 @@ class MediaController extends BackendController
             'name' => $media->getName(),
             'type' => $media->getType(),
             'cover'=>$media->getCoverPhoto()?'checked':'',
+            'activityPhoto'=>$media->getActivityPhoto(),
+            'coverPhoto'=>$media->getCoverPhoto(),
             'changeCoverUrl' => $this->generateUrl('ibtikar_glance_dashboard_media_change_defaultcover', array('imageId' => $media->getId(), 'documentId' => $documentId, 'collectionType'=>$collectionType)),
         );
         return $data;
@@ -624,16 +656,6 @@ class MediaController extends BackendController
                         'ProfilePhoto' => TRUE
                     ));
                     break;
-                case 'coverPhoto':
-                    $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
-                        'type' => 'image',
-                        'createdBy.$id' => new \MongoId($this->getUser()->getId()),
-                        'product' => null,
-                        'product' => new \MongoId($documentId),
-                        'collectionType' => 'Product',
-                        'coverPhoto' => TRUE
-                    ));
-                    break;
                 case 'bannerPhoto':
                     $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
                         'type' => 'image',
@@ -645,7 +667,7 @@ class MediaController extends BackendController
                     ));
                     break;
             }
-            if ($document && $type=='upload') {
+            if (isset($document) && $document && $type=='upload') {
                 return new JsonResponse(array('status' => 'reload'));
             }
         }
@@ -931,7 +953,7 @@ class MediaController extends BackendController
 
             foreach ($videos as $video) {
                 $videoObj = new Media();
-                if($collectionType == "Competition" || $collectionType == "Product"){
+                if($collectionType == "Competition"){
                     $objId = null;
                     if($documentId && $documentId != 'null'){
                         $objId = $documentId;
@@ -1018,9 +1040,21 @@ class MediaController extends BackendController
                         $videoObj->setTask($task);
                     }
                 }
+                $imageType = $request->get('imageType');
 
-                if($request->get('imageType')){
-                    $videoObj->setCoverPhoto($request->get('imageType'));
+                if ($imageType) {
+                    if ($imageType && $imageType != 'undefined') {
+                        switch ($imageType) {
+                            case 'activityPhoto':
+                                $videoObj->setActivityPhoto(TRUE);
+
+                                break;
+                            case 'coverPhoto':
+                                $videoObj->setCoverPhoto(TRUE);
+
+                                break;
+                        }
+                    }
                 }
 
                 $videoObj->setCreatedBy($this->getUser());
@@ -1049,6 +1083,8 @@ class MediaController extends BackendController
             'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_video_delete', $routeParameters),
             'type' => $video->getType(),
             'cover'=>$video->getCoverPhoto()?'checked':'',
+            'activityPhoto'=>$video->getActivityPhoto(),
+            'coverPhoto'=>$video->getCoverPhoto(),
             'changeCoverUrl' => $documentId ? $this->generateUrl('ibtikar_glance_dashboard_media_change_defaultcover', array('imageId' => $video->getId(), 'documentId' => $documentId, 'collectionType'=>$collectionType)) : '',
         );
         return $data;

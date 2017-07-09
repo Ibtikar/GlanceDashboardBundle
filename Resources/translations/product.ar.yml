@@ -33,6 +33,8 @@ products list: 'منتجات'
 'video': 'فيديو'
 'edit Banner': 'اعلان الرئيسية'
 'Show': 'اظهار الاعلان'
+'Related article': 'مقالات ذات صلة'
+'Related tip': 'نصائح ذات صلة'
 # ############Messages############
 'Cant deleted,it contain subproduct': '!ﻻ يمكن حذف المنتج  ﻷنها تحتوى على منتجات فرعية، هل تريد حذف المنتج والمنتجات الفرعية '
 
