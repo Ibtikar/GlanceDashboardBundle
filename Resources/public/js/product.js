@@ -404,7 +404,7 @@ $(document).ready(function () {
                         file = value.toLowerCase(),
                         extension = file.substring(file.lastIndexOf('.') + 1);
 
-                if ($.inArray(extension, ['jpeg', 'jpg', 'png']) == -1) {
+                if ($.inArray(extension, ['jpeg', 'jpg', 'png','gif']) == -1) {
                     showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
                     $('#uploadImg').modal('hide');
                     return ;
