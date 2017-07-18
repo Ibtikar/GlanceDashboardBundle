@@ -188,7 +188,7 @@ jQuery(document).ready(function($) {
 //                }
             }
 
-            
+
 
         if ($('form.dev-page-main-form').valid()) {
             $('form.dev-page-main-form').attr('data-form-valid', 'true');
@@ -229,10 +229,13 @@ jQuery(document).ready(function($) {
                     $('#product_submitButton').val('add_save');
 
                 }
-            }
-            if ($(this).hasClass('dev-save')) {
+            }else if ($(this).hasClass('dev-save')) {
                 if ($('#product_submitButton').length > 0) {
                     $('#product_submitButton').val('save');
+                }
+            }else if ($(this).hasClass('dev-save-add-activity')) {
+                if ($('#product_submitButton').length > 0) {
+                    $('#product_submitButton').val('dev-save-add-activity');
                 }
             }
             ajaxSubmitClickHandler();

@@ -45,6 +45,12 @@ class Media extends Document {
     private $subproduct;
 
     /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\SubProduct", simple=true)
+     * @KeepReference
+     */
+    private $activity;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe", simple=true)
      * @KeepReference
      */
@@ -134,7 +140,7 @@ class Media extends Document {
      * @MongoDB\Boolean
      */
     private $bannerPhoto = false;
-    
+
     /**
      * @MongoDB\Boolean
      */
@@ -343,8 +349,10 @@ class Media extends Document {
         } else if ($this->getSubproduct()) {
             $uploadDirectory .= '/subproduct-file/' . $this->getSubproduct()->getId();
 
+        } else if ($this->getActivity()) {
+            $uploadDirectory .= '/activity-file/' . $this->getActivity()->getId();
         } else if ($this->getRecipe()) {
-            $uploadDirectory .= "/".strtolower($this->collectionType)."-file/" . $this->getRecipe()->getId();
+            $uploadDirectory .= "/" . strtolower($this->collectionType) . "-file/" . $this->getRecipe()->getId();
         } else if ($this->getContactMessage()) {
             $uploadDirectory .= "/".strtolower($this->collectionType)."-file/" . $this->getContactMessage()->getId();
         }
@@ -995,5 +1003,28 @@ class Media extends Document {
     public function getActivityPhoto()
     {
         return $this->activityPhoto;
+    }
+
+
+    /**
+     * Set activity
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\SubProduct $activity
+     * @return self
+     */
+    public function setActivity(\Ibtikar\GlanceDashboardBundle\Document\SubProduct $activity)
+    {
+        $this->activity = $activity;
+        return $this;
+    }
+
+    /**
+     * Get activity
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\SubProduct $activity
+     */
+    public function getActivity()
+    {
+        return $this->activity;
     }
 }

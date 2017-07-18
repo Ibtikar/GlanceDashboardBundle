@@ -18,6 +18,11 @@ use Ibtikar\GlanceDashboardBundle\Document\Document;
  */
 class SubProduct extends Document {
 
+    public static $profileTypeChoices = array(
+        "image" => "image",
+        "video" => "video"
+    );
+
     /**
      * @MongoDB\Id
      */
@@ -93,17 +98,37 @@ class SubProduct extends Document {
      */
     protected $size;
 
-    public function __toString()
-    {
+    /**
+     * @MongoDB\String
+     */
+    private $url;
+
+    /**
+     * @MongoDB\String
+     */
+    private $type = 'subproduct';
+
+    /**
+     * @MongoDB\String
+     */
+    private $profileType = "image";
+
+    public function __toString() {
         return (string) $this->name;
     }
-
 
     public function updateReferencesCounts($value) {
         $product = $this->getProduct();
         if ($product) {
             $product->setSubproductNo($product->getSubproductNo() + $value);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public static function getValidMediaTypes() {
+        return array_keys(static::$profileTypeChoices);
     }
 
     /**
@@ -313,5 +338,71 @@ class SubProduct extends Document {
     public function getSize()
     {
         return $this->size;
+    }
+
+    /**
+     * Set url
+     *
+     * @param string $url
+     * @return self
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+        return $this;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string $url
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return self
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string $type
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set profileType
+     *
+     * @param string $profileType
+     * @return self
+     */
+    public function setProfileType($profileType)
+    {
+        $this->profileType = $profileType;
+        return $this;
+    }
+
+    /**
+     * Get profileType
+     *
+     * @return string $profileType
+     */
+    public function getProfileType()
+    {
+        return $this->profileType;
     }
 }

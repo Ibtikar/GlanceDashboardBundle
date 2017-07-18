@@ -230,8 +230,9 @@
                                                 {% endfor %}
 
                                                 {% if list.hasActionsColumn(listName) %}
-                                                    {{ include('IbtikarGlanceDashboardBundle:List:_listActions.html.twig') }}
-
+                                                    {% block actionView %}
+                                                        {{ include('IbtikarGlanceDashboardBundle:List:_listActions.html.twig') }}
+                                                    {% endblock %}
                                                 {% endif  %}
 
                                             </tr>

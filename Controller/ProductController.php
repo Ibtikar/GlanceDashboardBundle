@@ -86,7 +86,7 @@ class ProductController extends BackendController {
             ));
          foreach ($images as $media) {
             if ($media->getType() == 'image') {
- 
+
                 if ($media->getBannerPhoto()) {
                     $bannerImage = $media;
                     continue;
@@ -95,7 +95,7 @@ class ProductController extends BackendController {
                     $profileImage = $media;
                     continue;
                 }
-            } 
+            }
         }
         $product = new Product();
         $form = $this->createForm(\Ibtikar\GlanceDashboardBundle\Form\Type\ProductType::class,$product, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
@@ -106,7 +106,7 @@ class ProductController extends BackendController {
             if ($form->isValid()) {
                 $formData = $request->get('product');
 
-       
+
                 $dm->persist($product);
                 if ($formData['related_article']) {
                     $this->updateRelatedRecipe($product, $formData['related_article'], $dm, 'article');
@@ -156,6 +156,8 @@ class ProductController extends BackendController {
             $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
                 if ($formData['submitButton'] == 'add_save') {
                     return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_subproduct_create', array('productId' => $product->getId()))));
+                } elseif ($formData['submitButton'] == 'dev-save-add-activity') {
+                    return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_activity_create', array('productId' => $product->getId()))));
                 } else {
                     return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_product_list'), array(), true));
                 }
@@ -248,7 +250,7 @@ class ProductController extends BackendController {
 
             if ($form->isValid()) {
                 $formData = $request->get('product');
-            
+
                 if ($formData['related_article']) {
                     $this->updateRelatedRecipe($product, $formData['related_article'], $dm,'article');
                 }
@@ -264,6 +266,8 @@ class ProductController extends BackendController {
                 $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
                 if ($formData['submitButton'] == 'add_save') {
                     return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_subproduct_create', array('productId' => $product->getId()))));
+                } elseif ($formData['submitButton'] == 'dev-save-add-activity') {
+                    return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_activity_create', array('productId' => $product->getId()))));
                 } else {
                     return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_product_list'), array(), true));
                 }
@@ -426,14 +430,14 @@ class ProductController extends BackendController {
         $array = json_decode($relatedJson, true);
         foreach($array as $relatedRecipe){
             $recipe = $dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findOneById($relatedRecipe['id']);
-       
+
             $contentType = $recipe->getType();
             $addMethod = "addRelated".ucfirst($contentType);
             $getMethod = "getRelated".ucfirst($contentType);
-   
+
             if ($this->validToRelate($recipe, $document) && count($document->$getMethod()) < 10) {
                 $document->$addMethod($recipe);
-        
+
                 $relatedExist = $dm->getRepository('IbtikarGlanceDashboardBundle:Related')->findBy(array('product' => $document->getId(), 'recipe' => $recipe->getId()));
                 if (!$relatedExist) {
                     $related = new Related();
@@ -441,12 +445,12 @@ class ProductController extends BackendController {
                     $related->setRecipe($recipe);
                     $related->setType($recipe->getType());
                     $dm->persist($related);
-                    
+
                 }
                 $dm->flush();
                 $this->get('history_logger')->log($document, History::$ADDRELATED, "add related " . ucfirst($contentType) ,$recipe);
-           
-                
+
+
                 }
         }
     }
@@ -492,12 +496,12 @@ class ProductController extends BackendController {
                 $mediaObj->setCaptionAr($image['captionAr']);
                 $mediaObj->setCaptionEn($image['captionEn']);
             }
-//            
+//
             $dm->flush();
         }
 
         $dm->flush();
     }
- 
-    
+
+
 }

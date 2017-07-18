@@ -122,6 +122,7 @@ class MediaController extends BackendController
                             'createdBy.$id' => new \MongoId($this->getUser()->getId()),
                             'product' => null,
                             'subproduct' => null,
+                            'activity' => null,
                             'recipe' => null,
                             'contactMessage' => null,
                             'magazine' => null,
@@ -185,13 +186,13 @@ class MediaController extends BackendController
                         $media->setActivityPhoto(TRUE);
                         break;
                 }
-       
+
             }
 
 
         }
 
-       
+
 
         $media->setCreatedBy($this->getUser());
         if ($documentId && $documentId != 'null' && $fieldUpdate) {
@@ -247,7 +248,7 @@ class MediaController extends BackendController
                         case 'activityPhoto':
                             $media->setActivityPhoto(TRUE);
                             break;
-                      
+
                     }
                 }
                 $tempPath = $media->getTempPath();
@@ -389,7 +390,7 @@ class MediaController extends BackendController
      */
     public function deleteFileAction(Request $request, $id,$collectionType)
     {
-      
+
         if (!$this->getUser() && $collectionType != "Competition") {
             return $this->getLoginResponse();
         }
@@ -428,9 +429,9 @@ class MediaController extends BackendController
                 }
             }
         }
-        
+
         if (strpos(strtolower($collectionType), 'bannar') !==FALSE && $document->getBanner() || strpos(strtolower($collectionType), 'banner') !==FALSE && $document->getBanner()) {
-      
+
             if ($document->getBanner()) {
 
                 if ($document->getBanner()) {
@@ -564,6 +565,7 @@ class MediaController extends BackendController
                 'contactMessage' => null,
                 'magazine' => null,
                 'subproduct' => null,
+                'activity' => null,
                 'collectionType' => $collectionType
             ));
         }
@@ -1047,11 +1049,13 @@ class MediaController extends BackendController
                         switch ($imageType) {
                             case 'activityPhoto':
                                 $videoObj->setActivityPhoto(TRUE);
-
                                 break;
                             case 'coverPhoto':
                                 $videoObj->setCoverPhoto(TRUE);
 
+                                break;
+                            case 'profilePhoto':
+                                $videoObj->setProfilePhoto(TRUE);
                                 break;
                         }
                     }

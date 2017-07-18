@@ -20,13 +20,14 @@ class SubProductController extends BackendController {
             "nameEn" => array(),
 //            "description" => array(),
 //            "descriptionEn" => array(),
-            "profilePhoto" => array("type"=>"refereceImage",'isSortable'=>FALSE),
-//            "createdAt" => array("type"=>"date"),
+            "profilePhoto" => array("type" => "refereceImage", 'isSortable' => FALSE),
+            "type" => array("type" => "translated"),
 //            "updatedAt"=> array("type"=>"date")
         );
         $this->defaultListColumns = array(
             "name",
             "nameEn",
+            'type',
 //            "description",
 //            "descriptionEn",
             'profilePhoto',
@@ -113,8 +114,8 @@ class SubProductController extends BackendController {
                 continue;
             }
         }
-        
-        
+
+
         foreach ($product->getRelatedArticle() as $relatedArticle) {
             $relatedArticles[] = array(
                 'title' => $relatedArticle->getTitle(),
@@ -295,5 +296,85 @@ class SubProductController extends BackendController {
         ));
     }
 
+
+    public function getListJsonData($request, $renderingParams) {
+        $documentObjects = array();
+        foreach ($renderingParams['pagination'] as $document) {
+            $templateVars = array_merge(array('object' => $document), $renderingParams);
+            $oneDocument = array();
+
+            foreach ($renderingParams['columnArray'] as $value) {
+                if ($value == 'id') {
+                    $oneDocument['id'] = '<div class="form-group">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="ids[]" class="styled dev-checkbox" value="' . $document->getId() . '">
+                                    </label>
+                              </div>';
+                    continue;
+                }
+                if ($value == 'actions') {
+                    $security = $this->container->get('security.authorization_checker');
+                    if ($this->listViewOptions->hasActionsColumn($this->calledClassName)) {
+                        $oneDocument['actions'] = $this->renderView('IbtikarGlanceDashboardBundle:SubProduct:_listActions.html.twig', $templateVars);
+                        continue;
+                    }
+                }
+                $getfunction = "get" . ucfirst($value);
+                if ($value == 'name' && $document instanceof \Ibtikar\GlanceUMSBundle\Document\Role) {
+                    $oneDocument[$value] = '<a class="dev-role-getPermision" href="javascript:void(0)" data-id="' . $document->getId() . '">' . $document->$getfunction() . '</a>';
+                } elseif ($value == 'username') {
+                    $image = $document->getWebPath();
+                    if (!$image) {
+                        $image = 'bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg';
+                    }
+                    $oneDocument[$value] = '<div class="media-left media-middle">'
+                            . '<img src="/' . $image . '" class="img-circle img-lg" alt=""></div>
+                                                <div class="media-body">
+                                                    <a href="javascript:void(0);" class="display-inline-block text-default text-semibold letter-icon-title">  ' . $document->$getfunction() . ' </a>
+                                                </div>';
+                } elseif ($value == 'answersEnabled') {
+                    $oneDocument[$value] = $this->trans('answer ' . strtolower($document->$getfunction()), array(), $this->translationDomain);
+                } elseif ($value == 'email' && !method_exists($document, 'get' . ucfirst($value))) {
+                    $oneDocument[$value] = $this->get('app.twig.property_accessor')->propertyAccess($document, 'createdBy', $value);
+                } elseif ($value == 'status' || $value == 'type') {
+                    $oneDocument[$value] = $this->trans($document->$getfunction(), array(), $this->translationDomain);
+                } elseif ($value == 'slug') {
+                    $request->setLocale('ar');
+                    $oneDocument[$value] = '<a href="' . $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $document->$getfunction()), UrlGeneratorInterface::ABSOLUTE_URL) . '" target="_blank">' . $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $document->$getfunction()), UrlGeneratorInterface::ABSOLUTE_URL) . ' </a>';
+                } elseif ($value == 'profilePhoto' || $value == 'coverPhoto') {
+                    $image = $document->$getfunction();
+                    if (!$image) {
+                        $image = 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg';
+                    } else {
+                        $image = $image->getWebPath();
+                    }
+                    $oneDocument[$value] = '<div class="thumbnail small-thumbnail"><div class="thumb thumb-slide"><img alt="" src="/' . $image . '">
+                            <div class="caption"><span> <a data-popup="lightbox" class="btn btn-primary btn-icon" href="/' . $image . '"><i class="icon-zoomin3"></i></a>
+                                </span> </div>  </div> </div>';
+                } elseif ($document->$getfunction() instanceof \DateTime) {
+                    $oneDocument[$value] = $document->$getfunction() ? $document->$getfunction()->format('Y-m-d') : null;
+                } elseif (is_array($document->$getfunction()) || $document->$getfunction() instanceof \Traversable) {
+                    $elementsArray = array();
+                    foreach ($document->$getfunction() as $element) {
+                        if ($value == 'course') {
+                            $elementsArray[] = is_object($element) ? $element->__toString() : $this->trans($element, array(), $this->translationDomain);
+                            continue;
+                        }
+                        $elementsArray[] = is_object($element) ? $element->__toString() : $element;
+                    }
+                    $oneDocument[$value] = implode(',', $elementsArray);
+                } else {
+                    $fieldData = $document->$getfunction();
+                    $oneDocument[$value] = is_object($fieldData) ? $fieldData->__toString() : $this->getShortDescriptionString($fieldData);
+                }
+            }
+
+            $documentObjects[] = $oneDocument;
+        }
+        $rowsHeader = $this->getColumnHeaderAndSort($request);
+        return new JsonResponse(array('status' => 'success', 'data' => $documentObjects, "draw" => 0, 'sEcho' => 0, 'columns' => $rowsHeader['columnHeader'],
+            "recordsTotal" => $renderingParams['total'],
+            "recordsFiltered" => $renderingParams['total']));
+    }
 
 }

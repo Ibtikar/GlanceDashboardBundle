@@ -1,0 +1,22 @@
+{% set deleteAttrs = popover_factory(deletePopoverConfig is defined?deletePopoverConfig:[]) %}
+{% set conditionalDeleteAttrs = popover_factory(conditionalDeletePopoverConfig is defined?conditionalDeletePopoverConfig:[]) %}
+<td  style="white-space: nowrap;">
+    {% if  object.getNotModified() is not defined  or  object.getNotModified()== false %}
+        {% for action in list.actions %}
+            {% if action == "Edit" %}
+                {% if is_granted('ROLE_' ~ listName|upper ~'_EDIT') or is_granted('ROLE_ADMIN') %}
+
+                    <a class="btn btn-default"  href = "{{ path('ibtikar_glance_dashboard_'~object.type|lower ~ '_edit', {'id': object.id}) }}"  ><i class="icon-pencil" data-popup="tooltip"  data-placement="right" title="{{ ('Edit')|trans({},translationDomain)}}"></i></a>
+                    {% endif %}
+                {% elseif action == "Delete" %}
+                    {% if is_granted('ROLE_' ~ listName|upper ~'_DELETE') or is_granted('ROLE_ADMIN')%}
+                    <a class="btn btn-default"  data-href = "{{ path('ibtikar_glance_dashboard_'~object.type|lower ~ '_delete', {'id': object.id}) }}" {{ ((deleteMsgConditionAttr is defined and attribute(object,deleteMsgConditionAttr) is defined and attribute(object,deleteMsgConditionAttr) > 0)?conditionalDeleteAttrs:deleteAttrs)|replace({'%title%': object})|raw }}><i class="icon-trash" data-popup="tooltip" title="{{ ('Delete ' ~  sublistName)|trans({},translationDomain)}}" data-placement="right"  ></i></a>
+                    {% endif %}
+
+            {% endif %}
+
+        {% endfor %}
+
+
+    {% endif  %}
+</td>

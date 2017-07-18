@@ -2,7 +2,7 @@
 
 {% block title %}{% trans from 'product' %}View One Product{% endtrans%}{% endblock%}
 {% block statistic %}
-    <span class="label bg-number heading-text"><span class="dev-document-count">{{total}}</span> {% trans from translationDomain %}subproducts{% endtrans %}</span>
+    <span class="label bg-number heading-text"><span class="dev-document-count">{{total}}</span> {% trans from translationDomain %}subproducts and activity{% endtrans %}</span>
 {% endblock %}
 
 {% block breadCrumb %}
@@ -82,7 +82,7 @@
 
                         </tr>
 
-                    
+
 
                                                         </tbody>
                                                     </table>
@@ -257,7 +257,7 @@
                                                 </div><!-- english end -->
 
                                             </div>
-                                                        
+
                                                                                                                         {% if relatedArticles|length > 0 %}
 
                         <div class="form-group">
@@ -421,7 +421,7 @@
 
                                                                                                             <hr>
 
-                          
+
 
 
 
@@ -461,6 +461,9 @@
                     </span>
                     {% endif %}
                 {% endblock%}
+                {% block actionView %}
+    {{ include('IbtikarGlanceDashboardBundle:SubProduct:_listActions.html.twig') }}
+{% endblock %}
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/media/fancybox.min.js')}}"></script>

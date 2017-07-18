@@ -26,7 +26,7 @@
                 <table class="table table-bordered">
 
                     <tbody>
-          
+
                         <tr id="dev-profilePhoto">
                             <td style="width: 150px">
 
@@ -131,134 +131,7 @@
 
                 {{ form_row(form.bannerUrl) }}
 
-    <hr>
-    <h5>   صور الغلاف</h5>
 
-    
-    <div class="actions">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-labeled btn-labeled-left dropdown-toggle" data-toggle="dropdown"><b><i class="icon-image2"></i></b> رفع الصور <span class="caret"></span></button>
-                    <ul class="dropdown-menu dropdown-menu-left libraryDrop">
-                        <li>
-
-                            {#                            <input type="file" class="multiUploadImgBtn" multiple>#}
-                            <button class="dev-upload-recipe-img">
-                                رفع الصور
-                            </button>
-
-                        </li>
-                        <li class="divider"></li>
-                        <li>  بحث جوجل
-
-
-                            <div class="input-group content-group">
-                                <div class="has-feedback">
-                                    <input id="dev-search-gimage-box-small" class="form-control input-xs click-on-enter" value="" type="text">
-                                </div>
-
-                                <div class="input-group-btn">
-                                    <button type="button" class="btn btn-primary btn-xs" id="search-img-btn-small" >بحث</button>
-                                </div>
-                            </div>
-
-
-                        </li>
-                        <li class="divider"></li>
-                        <li>  رابط مباشر
-
-
-                            <div class="input-group content-group">
-                                <div class="has-feedback">
-                                    <input class="form-control input-xs dev-recipe-imgeUrl click-on-enter" value=" " type="text">
-                                </div>
-
-                                <div class="input-group-btn">
-                                    <button type="submit" class="btn btn-primary btn-xs dev-imageurl-submit">أضف</button>
-                                </div>
-                            </div>
-
-
-                        </li>
-                    </ul>
-                </div><!-- btn-group -->
-
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-labeled btn-labeled-left dropdown-toggle" data-toggle="dropdown"><b><i class="icon-video-camera"></i></b> رفع الفيديوهات <span class="caret"></span></button>
-                    <ul class="dropdown-menu dropdown-menu-left libraryDrop">
-                        <li>  بحث يوتيوب
-
-
-                            <div class="input-group content-group">
-                                <div class="has-feedback">
-                                    <input id="dev-search-gvideo-box-small" class="form-control input-xs click-on-enter" value="" type="text">
-                                </div>
-
-                                <div class="input-group-btn">
-                                    <button type="button" class="btn btn-primary btn-xs" id="search-vid-btn-small" >بحث</button>
-                                </div>
-                            </div>
-
-
-                        </li>
-                        <li class="divider"></li>
-                        <li>  رابط مباشر
-
-
-                            <div class="input-group content-group">
-                                <div class="has-feedback">
-                                    <input class="form-control input-xs dev-recipe-videoUrl" value=" " type="text">
-                                </div>
-
-                                <div class="input-group-btn">
-                                    <button type="submit" class="btn btn-primary btn-xs dev-videourl-submit">أضف</button>
-                                </div>
-                            </div>
-
-
-                        </li>
-                    </ul>
-                </div><!-- btn-group -->
-            </div>
-            </div>
-    </div>
-    <div class="panel-body">
-
-
-
-        <div class="row">
-
-            <div class="col-md-12">
-
-                <ul class="LibraryFilter">
-                    <li class="filterActive imagesFilter">
-                        <span><span class="dev-image-count">0</span> صورة</span>
-
-                    </li>
-                    <li class="filterActive videosFilter">
-
-                        <span><span class="dev-video-count">0</span> فيديو</span>
-
-                    </li>
-
-                </ul>
-
-                <div class="noFilterSelected">
-                    لا يوجد ملفات مختارة
-                </div>
-                <div class="table-responsive filesUploaded">
-
-                    <table class="table table-bordered">
-                        <tbody class="media-list media-list-container" id="media-list-target-right">
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    
                             <hr/>
     <div class="tabbable">
         <ul class="nav nav-tabs nav-tabs-highlight">
@@ -473,10 +346,11 @@
     </div>
 {% endblock %}
 {% block form_extras %}
-    <hr/>
-    <h5 style="margin-right: 10px">   صور الانشطه</h5>
+    <hr>
+    <h5 style="margin-right: 10px;">   صور الغلاف</h5>
 
-        <div class="actions">
+
+    <div class="actions">
         <div class="row">
             <div class="col-md-6">
                 <div class="btn-group">
@@ -485,7 +359,7 @@
                         <li>
 
                             {#                            <input type="file" class="multiUploadImgBtn" multiple>#}
-                            <button class="dev-upload-activity-img">
+                            <button class="dev-upload-recipe-img">
                                 رفع الصور
                             </button>
 
@@ -496,11 +370,11 @@
 
                             <div class="input-group content-group">
                                 <div class="has-feedback">
-                                    <input id="dev-search-gimage-box-small-activity" class="form-control input-xs click-on-enter" value="" type="text">
+                                    <input id="dev-search-gimage-box-small" class="form-control input-xs click-on-enter" value="" type="text">
                                 </div>
 
                                 <div class="input-group-btn">
-                                    <button type="button" class="btn btn-primary btn-xs" id="search-img-btn-small-activity" >بحث</button>
+                                    <button type="button" class="btn btn-primary btn-xs" id="search-img-btn-small" >بحث</button>
                                 </div>
                             </div>
 
@@ -512,11 +386,11 @@
 
                             <div class="input-group content-group">
                                 <div class="has-feedback">
-                                    <input class="form-control input-xs dev-recipe-imgeUrl-activity click-on-enter" value=" " type="text">
+                                    <input class="form-control input-xs dev-recipe-imgeUrl click-on-enter" value=" " type="text">
                                 </div>
 
                                 <div class="input-group-btn">
-                                    <button type="submit" class="btn btn-primary btn-xs dev-imageurl-submit-activity">أضف</button>
+                                    <button type="submit" class="btn btn-primary btn-xs dev-imageurl-submit">أضف</button>
                                 </div>
                             </div>
 
@@ -533,11 +407,11 @@
 
                             <div class="input-group content-group">
                                 <div class="has-feedback">
-                                    <input id="dev-search-gvideo-box-small-activity" class="form-control input-xs click-on-enter" value="" type="text">
+                                    <input id="dev-search-gvideo-box-small" class="form-control input-xs click-on-enter" value="" type="text">
                                 </div>
 
                                 <div class="input-group-btn">
-                                    <button type="button" class="btn btn-primary btn-xs" id="search-vid-btn-small-activity" >بحث</button>
+                                    <button type="button" class="btn btn-primary btn-xs" id="search-vid-btn-small" >بحث</button>
                                 </div>
                             </div>
 
@@ -549,11 +423,11 @@
 
                             <div class="input-group content-group">
                                 <div class="has-feedback">
-                                    <input class="form-control input-xs dev-recipe-videoUrl-activity" value=" " type="text">
+                                    <input class="form-control input-xs dev-recipe-videoUrl" value=" " type="text">
                                 </div>
 
                                 <div class="input-group-btn">
-                                    <button type="submit" class="btn btn-primary btn-xs dev-videourl-submit-activity">أضف</button>
+                                    <button type="submit" class="btn btn-primary btn-xs dev-videourl-submit">أضف</button>
                                 </div>
                             </div>
 
@@ -574,12 +448,12 @@
 
                 <ul class="LibraryFilter">
                     <li class="filterActive imagesFilter">
-                        <span><span class="dev-image-count-activity">0</span> صورة</span>
+                        <span><span class="dev-image-count">0</span> صورة</span>
 
                     </li>
                     <li class="filterActive videosFilter">
 
-                        <span><span class="dev-video-count-activity">0</span> فيديو</span>
+                        <span><span class="dev-video-count">0</span> فيديو</span>
 
                     </li>
 
@@ -588,10 +462,10 @@
                 <div class="noFilterSelected">
                     لا يوجد ملفات مختارة
                 </div>
-                <div class="table-responsive filesActivityUploaded">
+                <div class="table-responsive filesUploaded">
 
                     <table class="table table-bordered">
-                        <tbody class="media-list media-list-container-activity" id="media-list-target-right-activity">
+                        <tbody class="media-list media-list-container" id="media-list-target-right">
                         </tbody>
                     </table>
                 </div>
@@ -599,12 +473,9 @@
             </div>
         </div>
     </div>
-    
-    
-    
-    
-    
-    
+
+
+
 {% endblock %}
 
 {% set imageSortTemplate %}
@@ -641,7 +512,7 @@
                 </div>
             </div>
 
-         
+
         </td>
         <td style="width: 120px">
 
@@ -681,7 +552,7 @@
 
             </div>
 
-         
+
         </td>
         <td style="width: 120px">
 
@@ -732,8 +603,9 @@
     <div class="row actionButtons">
         <div class="col-xs-12">
             <button class="btn btn-primary  dev-form-submit-btn dev-save" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
-              {% if app.user  and (is_granted('ROLE_SUBPRODUCT_CREATE') or is_granted('ROLE_ADMIN')) %}
+            {% if app.user  and (is_granted('ROLE_SUBPRODUCT_CREATE') or is_granted('ROLE_ADMIN')) %}
             <button  class="btn btn-primary dev-form-submit-btn dev-save-add" type="button">حفظ و اضافة منتج فرعي<i class="icon-plus2 position-right"></i></button>
+            <button  class="btn btn-primary dev-form-submit-btn dev-save-add-activity" type="button">حفظ و اضافة نشاط<i class="icon-plus2 position-right"></i></button>
             {% endif %}
 
             <button class="btn btn-default dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
@@ -904,9 +776,7 @@
         };
 
 
-    /**
-     * @author ahmad Gamal <a.gamal@ibtikar.net.sa>
-     */
+
     function valid_youtubeUrl(videoUrl) {
         return videoUrl.match(/^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/);
     }
