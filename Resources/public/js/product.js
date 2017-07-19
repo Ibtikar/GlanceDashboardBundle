@@ -179,6 +179,15 @@ function refreshImages() {
                             .replace(/%deleteButton%/g, '');
                     $('#dev-profilePhoto').replaceWith(temepelate);
                 }
+                $('[name="form[profileType]"]').each(function(){
+                    if ($(this).val() == "image" && $(this).prop("checked")) {
+                                 $('#dev-profilePhoto').show();
+                                 $('#dev-profileVideo').hide();
+                             } else if ($(this).val() == "video" && $(this).prop("checked")) {
+                                 $('#dev-profileVideo').show();
+                                 $('#dev-profilePhoto').hide();
+                             }
+                })
                 if (data.bannerPhoto) {
                     var media = data.bannerPhoto;
                     var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)

@@ -8,6 +8,7 @@
 
     {{ form_start(form)}}
 
+    {{ form_row(form.profileType) }}
 
 
     <div class="row">
@@ -23,7 +24,7 @@
       <div class="table-responsive">
                 <table class="table table-bordered">
                  <tbody>
-                        <tr id="dev-profilePhoto">
+                     <tr id="dev-profilePhoto" {% if profileType =='video' %}style="display: none;"{%endif%}>
                             <td style="width: 150px">
                                 <div class="thumbnail">
                                     <div class="thumb thumb-slide">
@@ -66,7 +67,7 @@
 
                             </td>
                         </tr>
-                        <tr id="dev-profileVideo" style="display: none;">
+                        <tr id="dev-profileVideo"  {% if profileType =='image' %}style="display: none;"{%endif%}>
                             <td style="width: 150px">
 
                                 <div class="thumbnail">
@@ -327,6 +328,7 @@
                 $(".alert.alert-success").slideUp(500);
             });
 
+   })
 
 
             $('[name="form[profileType]"]').on('click', function () {
@@ -347,6 +349,7 @@
 
                 var obj = $('#form_video').val();
                 var videoUrl = $.trim(obj);
+                errorContainer=$('#form_video').closest('form-group')
 
                 if (videoUrl === "") {
                     errorContainer.removeClass('has-error');
@@ -401,7 +404,7 @@
                     }
                 });
             });
-        })
+
         function valid_youtubeUrl(videoUrl) {
             return videoUrl.match(/^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/);
         }

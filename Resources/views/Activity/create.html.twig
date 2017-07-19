@@ -324,8 +324,18 @@
         $(document).ready(function(){
                 $(".alert.alert-success").fadeTo(5000, 500).slideUp(500, function () {
                 $(".alert.alert-success").slideUp(500);
-            });
-
+       });
+        $('body').on('ajaxCallback', function () {
+            $('[name="form[profileType]"]').on('click',function(){
+           if($(this).val() == "image"){
+               $('#dev-profilePhoto').show();
+               $('#dev-profileVideo').hide();
+           }else if($(this).val() == "video"){
+               $('#dev-profileVideo').show();
+               $('#dev-profilePhoto').hide();
+           }
+        });
+           })
 
 
     $('[name="form[profileType]"]').on('click',function(){
@@ -402,6 +412,7 @@
             });
     });
         })
+
     function valid_youtubeUrl(videoUrl) {
         return videoUrl.match(/^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/);
     }

@@ -48,7 +48,7 @@ class MediaController extends BackendController
         $media->setCollectionType($collectionType);
         $media->setOrder(99);
         if ($documentId && $documentId != 'null') {
-            if ($collectionType === 'SubProduct') {
+            if ($collectionType === 'SubProduct' || $collectionType === 'Activity') {
                 $document = $dm->getRepository('IbtikarGlanceDashboardBundle:SubProduct')->find($documentId);
                 if (!$document) {
                     throw $this->createNotFoundException($this->trans('Wrong id'));
@@ -58,6 +58,9 @@ class MediaController extends BackendController
                     return $response;
                 }
                 $fieldUpdate='Subproduct';
+                if($collectionType === 'Activity'){
+                   $fieldUpdate='Activity';
+                }
             }elseif ($collectionType === 'Product') {
                 $document = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($documentId);
                 if (!$document) {
@@ -497,7 +500,19 @@ class MediaController extends BackendController
                     'product' => null,
                     'collectionType' => $collectionType
                 ), array('order' => 'ASC'));
-            } elseif ($collectionType === 'Recipe') {
+            }elseif ($collectionType === 'Activity') {
+                $reponse = $this->getInvalidResponseForSubProduct(new \MongoId($documentId), '', 'list');
+                if ($reponse) {
+                    return $reponse;
+                }
+                $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                    'type' => $type,
+//                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                    'activity' => new \MongoId($documentId),
+                    'product' => null,
+                    'collectionType' => $collectionType
+                ), array('order' => 'ASC'));
+            }elseif ($collectionType === 'Recipe') {
                 $reponse = $this->getInvalidResponseForRecipe($documentId, $this->container->get('request_stack')->getCurrentRequest()->get('room'));
                 if ($reponse) {
                     return $reponse;
@@ -564,6 +579,7 @@ class MediaController extends BackendController
                 'blog' => null,
                 'contactMessage' => null,
                 'magazine' => null,
+                'activity' => null,
                 'subproduct' => null,
                 'activity' => null,
                 'collectionType' => $collectionType
@@ -955,7 +971,7 @@ class MediaController extends BackendController
 
             foreach ($videos as $video) {
                 $videoObj = new Media();
-                if($collectionType == "Competition"){
+                if($collectionType == "Competition" || $collectionType == "Activity" ){
                     $objId = null;
                     if($documentId && $documentId != 'null'){
                         $objId = $documentId;
@@ -974,17 +990,24 @@ class MediaController extends BackendController
                     }
 
                     $prevVideo = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findOneBy($findBy);
-                    $obj = $dm->getRepository('IbtikarGlanceDashboardBundle:'.$collectionType)->find($documentId);
+                    if ($collectionType == "Activity") {
+                        $obj = $dm->getRepository('IbtikarGlanceDashboardBundle:SubProduct')->find($documentId);
+                    } else {
+                        $obj = $dm->getRepository('IbtikarGlanceDashboardBundle:' . $collectionType)->find($documentId);
+                    }
 
                     if($prevVideo){
                         $videoObj = $prevVideo;
-                    }elseif($documentId && $documentId != 'null'){
-                        $method = "set".$collectionType;
-                        $videoObj->$method($obj);
-                        if(method_exists($obj, 'setCoverPhoto')){
-                            $obj->setCoverPhoto($videoObj);
-                        }
                     }
+//                    elseif ($documentId && $documentId != 'null') {
+//                        $method = "set" . $collectionType;
+//                        $videoObj->$method($obj);
+//                        if ($collectionType == "Competition") {
+//                            if (method_exists($obj, 'setCoverPhoto')) {
+//                                $obj->setCoverPhoto($videoObj);
+//                            }
+//                        }
+//                    }
                 }
                 $video = explode('#', $video);
                 $vid = $video[0];
@@ -1024,11 +1047,19 @@ class MediaController extends BackendController
                         }
                     } elseif($request->get('collectionType') == 'Product') {
 
-                        $product = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($documentId);
-                        if (!$product) {
+                        $subproduct = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($documentId);
+                        if (!$subproduct) {
                             throw $this->createNotFoundException($this->trans('Wrong id'));
                         }
-                    } else {
+                    }
+                     elseif($request->get('collectionType') == 'Activity') {
+
+                        $subproduct = $dm->getRepository('IbtikarGlanceDashboardBundle:SubProduct')->find($documentId);
+                        if (!$subproduct) {
+                            throw $this->createNotFoundException($this->trans('Wrong id'));
+                        }
+                    }
+                    else {
                         $task = $dm->getRepository('IbtikarBackendBundle:Task')->find($documentId);
                         $lastVideo = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder($this->getObjectShortName())
                                 ->field('task')->equals($documentId)

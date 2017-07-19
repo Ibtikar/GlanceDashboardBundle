@@ -40,7 +40,7 @@ class ActivityController extends BackendController {
         $this->listViewOptions->setBundlePrefix("ibtikar_glance_dashboard_");
     }
 
-      
+
 
     protected function configureListParameters(Request $request) {
         $id = $request->get('id');
@@ -161,7 +161,7 @@ class ActivityController extends BackendController {
             'subproduct' => null,
             'activity' => null,
             'product' => null,
-            'profilePhoto' => true,
+            'ProfilePhoto' => true,
             'collectionType' => 'Activity'
         ));
         foreach ($medias as $media) {
@@ -174,7 +174,6 @@ class ActivityController extends BackendController {
                 $profileVideo = $media;
             }
         }
-
         $product = '';
         if ($request->get('productId')) {
             $product = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($request->get('productId'));
@@ -182,7 +181,7 @@ class ActivityController extends BackendController {
         if (!$product) {
             throw $this->createNotFoundException();
         }
-        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Activity', 'link' => $this->generateUrl('ibtikar_glance_dashboard_activity_create', array('productId' => $product->getId())))
+        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new subProduct','link'=>  $this->generateUrl('ibtikar_glance_dashboard_subproduct_create',array('productId'=>$product->getId()))),array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Activity', 'link' => $this->generateUrl('ibtikar_glance_dashboard_activity_create', array('productId' => $product->getId())))
         );
         $breadCrumbArray = $this->preparedMenu($menus);
         $activity = new Subproduct();
@@ -221,7 +220,7 @@ class ActivityController extends BackendController {
                     }
 
                     if ($profilePhotoType == 'video' && $media->getType() == 'video' && $media->getProfilePhoto()) {
-                        $product->setProfilePhoto($media);
+                        $activity->setProfilePhoto($media);
                         continue;
                     }
                 }
@@ -275,13 +274,14 @@ class ActivityController extends BackendController {
         if (!$subproduct) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
-        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Activity', 'link' => $this->generateUrl('ibtikar_glance_dashboard_activity_create', array('productId' => $product->getId())))
+        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new subProduct','link'=>  $this->generateUrl('ibtikar_glance_dashboard_subproduct_create',array('productId'=>$subproduct->getProduct()->getId()))),array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Activity', 'link' => $this->generateUrl('ibtikar_glance_dashboard_activity_create', array('productId' => $subproduct->getProduct()->getId())))
         );
-
+        $profileImage=NULL;
+        $profileVideo=NULL;
         $medias = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
-            'activity' => $product->getId(),
+            'activity' => $subproduct->getId(),
             'collectionType' => 'Activity',
-            'profilePhoto' => true
+            'ProfilePhoto' => true
         ));
         foreach ($medias as $media) {
             if ($media->getType() == 'image') {
@@ -296,7 +296,7 @@ class ActivityController extends BackendController {
 
         $breadCrumbArray = $this->preparedMenu($menus);
         $form = $this->createFormBuilder($subproduct, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
-                ->add('profileType', formType\ChoiceType::class, array('choices' => SubProduct::$profileTypeChoices, 'expanded' => true, 'attr' => array('data-error-after-selector' => '#form_coverType')))
+                ->add('profileType', formType\ChoiceType::class, array('choices' => SubProduct::$profileTypeChoices, 'expanded' => true, 'attr' => array('data-error-after-selector' => '#form_profileType')))
                 ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 2)))
                 ->add('nameEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 2)))
                 ->add('video', formType\TextType::class, array('mapped' => FALSE, 'required' => FALSE, 'attr' => array('data-rule-youtube' => 'data-rule-youtube')))
@@ -315,37 +315,38 @@ class ActivityController extends BackendController {
 //                      if ($formData['related']) {
 //                    $this->updateRelatedRecipe($product, $formData['related'], $dm,'recipe');
 //                }
-                $images = $formData['profileType'];
+                $profilePhotoType = $formData['profileType'];
 
                 $mediaList = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
-                    'activity' => $product->getId(),
+                    'activity' => $subproduct->getId(),
                     'collectionType' => 'Activity',
-                    'profilePhoto' => true
+                    'ProfilePhoto' => true
                 ));
 
-                foreach ($images as $media) {
+                foreach ($mediaList as $media) {
                     if ($profilePhotoType == 'image' && $media->getType() == 'image' && $media->getProfilePhoto()) {
-                        $activity->setProfilePhoto($media);
+                        $subproduct->setProfilePhoto($media);
                         continue;
                     }
 
                     if ($profilePhotoType == 'video' && $media->getType() == 'video' && $media->getProfilePhoto()) {
-                        $product->setProfilePhoto($media);
+                        $subproduct->setProfilePhoto($media);
                         continue;
                     }
                 }
                 $dm->flush();
                 $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
 
-                return $this->redirect($request->getUri());
+
             }
         }
 
         return $this->render('IbtikarGlanceDashboardBundle:Activity:edit.html.twig', array(
                     'form' => $form->createView(),
                     'breadcrumb' => $breadCrumbArray,
-                    'profileImage' => $subproduct->getProfilePhoto(),
+                    'profileImage' => $profileImage,
                     'profileVideo' => $profileVideo,
+                    'profileType' => $subproduct->getProfileType(),
                     'deletePopoverConfig' => array("question" => "You are about to delete %title%,Are you sure?"),
                     'title' => $this->trans('edit Activity', array(), $this->translationDomain),
                     'translationDomain' => $this->translationDomain
