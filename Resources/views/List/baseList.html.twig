@@ -169,6 +169,30 @@
                                                                   {{ element }}
                                                             {% endfor %}
                                                         </td>
+                                                    {% elseif field.type == "refereceImageOrVideo"  %}
+                                                        <td>
+                                                            <div class="thumbnail small-thumbnail">
+                                                                <div class="thumb thumb-slide">
+                                                                    {% if attribute(attribute(object, field.propertyName), 'type')=='image'%}
+                                                                        <img alt="" src="{{ asset( attribute(attribute(object, field.propertyName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}">
+                                                                        <div class="caption">
+                                                                            <span>
+                                                                                <a data-popup="lightbox" class="btn btn-primary btn-icon" href="{{ asset( attribute(attribute(object, field.propertyName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}"><i class="icon-zoomin3"></i></a>
+                                                                            </span>
+                                                                        </div>
+                                                                    {%else %}
+                                                                        <img alt="" src="{{ 'https://i.ytimg.com/vi/' ~ attribute(attribute(object, field.propertyName), 'vid') ~ '/hqdefault.jpg'  }}">
+                                                                        <div class="caption">
+                                                                            <span>
+                                                                                <a data-popup="lightbox" class="btn btn-primary btn-icon" href="{{ 'https://i.ytimg.com/vi/' ~ attribute(attribute(object, field.propertyName), 'vid') ~ '/hqdefault.jpg'  }}"><i class="icon-zoomin3"></i></a>
+                                                                            </span>
+                                                                        </div>
+
+                                                                    {%endif %}
+                                                                </div>
+
+                                                            </div>
+                                                        </td>
                                                     {% elseif field.type == "refereceImage"  %}
                                                         <td>
                                                             <div class="thumbnail small-thumbnail">

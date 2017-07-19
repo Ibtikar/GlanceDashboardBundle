@@ -20,7 +20,7 @@ class SubProductController extends BackendController {
             "nameEn" => array(),
 //            "description" => array(),
 //            "descriptionEn" => array(),
-            "profilePhoto" => array("type" => "refereceImage", 'isSortable' => FALSE),
+            "profilePhoto" => array("type" => "refereceImageOrVideo", 'isSortable' => FALSE),
             "type" => array("type" => "translated"),
 //            "updatedAt"=> array("type"=>"date")
         );
@@ -342,12 +342,16 @@ array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add
                 } elseif ($value == 'profilePhoto' || $value == 'coverPhoto') {
                     $image = $document->$getfunction();
                     if (!$image) {
-                        $image = 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg';
+                        $image = '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg';
                     } else {
-                        $image = $image->getWebPath();
+                        if ($image->getType() == 'video') {
+                            $image = 'https://i.ytimg.com/vi/' . $image->getVid() . '/hqdefault.jpg';
+                        } else {
+                            $image = '/' . $image->getWebPath();
+                        }
                     }
-                    $oneDocument[$value] = '<div class="thumbnail small-thumbnail"><div class="thumb thumb-slide"><img alt="" src="/' . $image . '">
-                            <div class="caption"><span> <a data-popup="lightbox" class="btn btn-primary btn-icon" href="/' . $image . '"><i class="icon-zoomin3"></i></a>
+                    $oneDocument[$value] = '<div class="thumbnail small-thumbnail"><div class="thumb thumb-slide"><img alt="" src="' . $image . '">
+                            <div class="caption"><span> <a data-popup="lightbox" class="btn btn-primary btn-icon" href="' . $image . '"><i class="icon-zoomin3"></i></a>
                                 </span> </div>  </div> </div>';
                 } elseif ($document->$getfunction() instanceof \DateTime) {
                     $oneDocument[$value] = $document->$getfunction() ? $document->$getfunction()->format('Y-m-d') : null;
