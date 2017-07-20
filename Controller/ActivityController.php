@@ -353,4 +353,53 @@ class ActivityController extends BackendController {
         ));
     }
 
+    public function deleteAction(Request $request) {
+        $securityContext = $this->get('security.authorization_checker');
+        $loggedInUser = $this->getUser();
+        if (!$loggedInUser) {
+            return new JsonResponse(array('status' => 'login'));
+        }
+
+        if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_DELETE') && !$securityContext->isGranted('ROLE_ADMIN')) {
+            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'),'count'=>  $this->getDocumentCount());
+            return new JsonResponse($result);
+        }
+        $id = $request->get('id');
+        if (!$id) {
+            return $this->getFailedResponse();
+        }
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $document = $dm->getRepository($this->getObjectShortName())->find($id);
+
+        if (!$document || $document->getDeleted()) {
+            return new JsonResponse(array('status' => 'failed', 'message' => $this->get('translator')->trans('failed operation'),'count'=>  $this->getDocumentCount()));
+
+        }
+
+        $errorMessage = $this->validateDelete($document);
+
+        if ($errorMessage || is_null($document)) {
+            return $this->getFailedAlertResponse($errorMessage);
+        }
+
+        try {
+            $id = $document->getId();
+            $productId=$document->getProduct()->getId();
+            $document->delete($dm, $this->getUser());
+//            $dm->remove($document);
+            $dm->flush();
+            $this->postDelete($id);
+        } catch (\Exception $e) {
+
+            return $this->getFailedResponse();
+        }
+
+        $count = $dm->createQueryBuilder($this->getObjectShortName())
+                ->field('deleted')->equals(FALSE)
+                ->field('product')->equals($productId)
+                ->getQuery()
+                ->count();
+
+        return new JsonResponse(array('status' => 'success', 'message' => $this->get('translator')->trans('done sucessfully'),'count'=>$count));
+    }
 }
