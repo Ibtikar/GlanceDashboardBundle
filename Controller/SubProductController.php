@@ -428,5 +428,101 @@ array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add
 
         return new JsonResponse(array('status' => 'success', 'message' => $this->get('translator')->trans('done sucessfully'),'count'=>$count));
     }
+    public function bulkAction(Request $request) {
+        $securityContext = $this->get('security.authorization_checker');
+        $loggedInUser = $this->getUser();
+        if (!$loggedInUser) {
+            return new JsonResponse(array('status' => 'login'));
+        }
+        $ids = array_diff($request->get('ids', array()), array(""));
+        if (empty($ids)) {
+            return $this->getFailedResponse();
+        }
+        $bulkAction = $request->get('bulk-action');
 
+        if (!$bulkAction) {
+            return $this->getFailedResponse();
+        }
+
+        $successIds = array();
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $documents = $dm->getRepository($this->getObjectShortName())->findBy(array('id' => array('$in' => array_values($ids))));
+        $translator = $this->get('translator');
+        $message = str_replace(array('%action%', '%item-translation%', '%ids-count%'), array($translator->trans($bulkAction), $this->trans(strtolower($this->oneItem != ""?$this->oneItem:$this->calledClassName)), count($ids)), $translator->trans('successfully %action% %success-count% %item-translation% from %ids-count%.'));
+        $foundDocumentsIds = array();
+        foreach ($documents as $document) {
+            $foundDocumentsIds [] = $document->getId();
+        }
+        $deletedIds = array_diff($ids, $foundDocumentsIds);
+        $data = array(
+            'status' => 'success',
+            'message' => '',
+            'bulk-action' => $bulkAction,
+            'success' => &$successIds,
+            'errors' => array()
+        );
+        $data['errors'][$translator->trans('Already deleted.')] = $deletedIds;
+        if (count($deletedIds) === count($ids)) {
+            $data['message'] = str_replace('%success-count%', 0, $message);
+            $data['count']=  $this->getDocumentCount();
+            return new JsonResponse($data);
+        }
+
+        switch ($bulkAction) {
+            case 'Delete':
+
+                $permission = 'ROLE_' . strtoupper($this->calledClassName) . '_DELETE';
+
+                if (!$securityContext->isGranted($permission) && !$securityContext->isGranted('ROLE_ADMIN')) {
+                    $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'),'count'=>  $this->getDocumentCount());
+                    return new JsonResponse($result);
+                }
+
+                $bulkQueries = array(
+                    'readLater' => array(),
+                    'likes' => array()
+                );
+
+                foreach ($documents as $document) {
+                    $productId=$document->getProduct()->getId();
+                    $errorMessage = $this->validateDelete($document);
+                    if ($document->getNotModified()) {
+                        $data['errors'][$translator->trans('failed operation')] [] = $document->getId();
+                        continue;
+                    }
+                    if ($errorMessage) {
+                        $data['errors'][$errorMessage] [] = $document->getId();
+                        continue;
+                    }
+                    if ($document->getDeleted())
+                        continue;
+                    try {
+
+                            $document->delete($dm, $this->getUser(), $this->container, $request->get('deleteOption'));
+
+                            $dm->flush();
+
+                            $successIds [] = $document->getId();
+
+                    } catch (\Exception $e) {
+                        $data['errors'][$translator->trans('failed operation')] [] = $document->getId();
+                    }
+                }
+                $userPacked = array();
+                $usersIds = array();
+                if (count($successIds) > 0) {
+                    $this->postDelete($successIds);
+                }
+                break;
+            }
+
+            $data['count'] =   $dm->createQueryBuilder($this->getObjectShortName())
+                ->field('deleted')->equals(FALSE)
+                ->field('product')->equals($productId)
+                ->getQuery()
+                ->count();
+
+        $data['message'] = str_replace('%success-count%', count($successIds), $message);
+        return new JsonResponse($data);
+    }
 }
