@@ -68,7 +68,7 @@ class SubProductController extends BackendController {
         if (!$product) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
-        $medias = $dm->getRepository('IbtikarGlanceDashboardBundle:media')->findBy(array('product'=>$product->getId()));
+        $medias = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array('product'=>$product->getId()));
         $coverPhotos=array();
         $activityPhotos=array();
         $relatedTips=array();
