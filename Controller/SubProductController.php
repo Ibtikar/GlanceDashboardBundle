@@ -5,6 +5,7 @@ namespace Ibtikar\GlanceDashboardBundle\Controller;
 use Ibtikar\GlanceDashboardBundle\Controller\base\BackendController;
 use Ibtikar\GlanceDashboardBundle\Document\Document;
 use Ibtikar\GlanceDashboardBundle\Document\SubProduct;
+use Ibtikar\GlanceDashboardBundle\Document\Media;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type as formType;
