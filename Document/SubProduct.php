@@ -80,6 +80,16 @@ class SubProduct extends Document {
     private $profilePhoto;
 
     /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Media", simple=true)
+     */
+    private $coverPhoto;
+
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Media", simple=true)
+     */
+    private $naturalPhoto;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Product", simple=true)
      */
     private $product;
@@ -112,6 +122,11 @@ class SubProduct extends Document {
      * @MongoDB\String
      */
     private $profileType = "image";
+
+    /**
+     * @MongoDB\EmbedMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Sponsor")
+     */
+    private $sponsors;
 
     public function __toString() {
         return (string) $this->name;
@@ -404,5 +419,84 @@ class SubProduct extends Document {
     public function getProfileType()
     {
         return $this->profileType;
+    }
+
+    /**
+     * Set naturalPhoto
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Media $naturalPhoto
+     * @return self
+     */
+    public function setNaturalPhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $naturalPhoto)
+    {
+        $this->naturalPhoto = $naturalPhoto;
+        return $this;
+    }
+
+    /**
+     * Get naturalPhoto
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\Media $naturalPhoto
+     */
+    public function getNaturalPhoto()
+    {
+        return $this->naturalPhoto;
+    }
+
+     public function __construct()
+    {
+        $this->sponsors = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add sponsor
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Sponsor $sponsor
+     */
+    public function addSponsor(\Ibtikar\GlanceDashboardBundle\Document\Sponsor $sponsor)
+    {
+        $this->sponsors[] = $sponsor;
+    }
+
+    /**
+     * Remove sponsor
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Sponsor $sponsor
+     */
+    public function removeSponsor(\Ibtikar\GlanceDashboardBundle\Document\Sponsor $sponsor)
+    {
+        $this->sponsors->removeElement($sponsor);
+    }
+
+    /**
+     * Get sponsors
+     *
+     * @return \Doctrine\Common\Collections\Collection $sponsors
+     */
+    public function getSponsors()
+    {
+        return $this->sponsors;
+    }
+
+    /**
+     * Set coverPhoto
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto
+     * @return self
+     */
+    public function setCoverPhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto)
+    {
+        $this->coverPhoto = $coverPhoto;
+        return $this;
+    }
+
+    /**
+     * Get coverPhoto
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto
+     */
+    public function getCoverPhoto()
+    {
+        return $this->coverPhoto;
     }
 }

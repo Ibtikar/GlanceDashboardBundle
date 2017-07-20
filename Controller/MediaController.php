@@ -188,6 +188,22 @@ class MediaController extends BackendController
                         ));
                         $media->setActivityPhoto(TRUE);
                         break;
+                    case 'naturalPhoto':
+                        $document = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                            'type' => $type,
+                            'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                            'product' => null,
+                            'contactMessage' => null,
+                            'subproduct' => null,
+                            'recipe' => null,
+                            'magazine' => null,
+                            'banner' => null,
+                            'competition' => null,
+                            'collectionType' => $collectionType,
+                            'naturalPhoto' => TRUE
+                        ));
+                        $media->setNaturalPhoto(TRUE);
+                        break;
                 }
 
             }
@@ -250,6 +266,9 @@ class MediaController extends BackendController
                         break;
                         case 'activityPhoto':
                             $media->setActivityPhoto(TRUE);
+                            break;
+                        case 'naturalPhoto':
+                            $media->setNaturalPhoto(TRUE);
                             break;
 
                     }
@@ -590,6 +609,7 @@ class MediaController extends BackendController
         $coverPhoto = '';
         $profilePhoto = '';
         $bannerPhoto = '';
+        $naturalPhoto = '';
 
         /* @var $document Media */
         foreach ($documents as $document) {
@@ -599,6 +619,10 @@ class MediaController extends BackendController
 //            }
             if ($document->getProfilePhoto()) {
                 $profilePhoto = $this->prepareMedia($document,$collectionType);
+                continue;
+            }
+            if ($document->getNaturalPhoto()) {
+                $naturalPhoto = $this->prepareMedia($document,$collectionType);
                 continue;
             }
             if ($document->getBannerPhoto()) {
@@ -614,7 +638,7 @@ class MediaController extends BackendController
             }
         }
 
-        return new JsonResponse(array('images' => $files, 'coverPhoto' => $coverPhoto, 'profilePhoto' => $profilePhoto,'bannerPhoto'=>$bannerPhoto));
+        return new JsonResponse(array('images' => $files, 'coverPhoto' => $coverPhoto, 'profilePhoto' => $profilePhoto,'bannerPhoto'=>$bannerPhoto,'naturalPhoto'=>$naturalPhoto));
     }
 
     /**

@@ -9,6 +9,7 @@ use Ibtikar\GlanceDashboardBundle\Document\Media;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type as formType;
+use Ibtikar\GlanceDashboardBundle\Form\Type\SubProductType;
 
 class SubProductController extends BackendController {
 
@@ -36,11 +37,10 @@ class SubProductController extends BackendController {
 //            "updatedAt"
         );
         $this->listViewOptions->setBundlePrefix("ibtikar_glance_dashboard_");
-
     }
 
     protected function configureListParameters(Request $request) {
-          $id = $request->get('id');
+        $id = $request->get('id');
         if (!$id) {
             throw $this->createNotFoundException();
         }
@@ -49,12 +49,11 @@ class SubProductController extends BackendController {
                         ->field('deleted')->equals(false);
         $this->listViewOptions->setDefaultSortBy("updatedAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
-        $this->listViewOptions->setActions(array ("Edit","Delete"));
+        $this->listViewOptions->setActions(array("Edit", "Delete"));
         $this->listViewOptions->setBulkActions(array("Delete"));
         $this->listViewOptions->setListQueryBuilder($queryBuilder);
 
         $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Product:view.html.twig");
-
     }
 
     protected function doList(Request $request) {
@@ -73,26 +72,27 @@ class SubProductController extends BackendController {
         $activityPhotos=array();
         $relatedTips=array();
         $relatedArticles=array();
+
         foreach ($medias as $media) {
-            if($media->getCoverPhoto()){
-            if ($media->getType() == 'image') {
+            if ($media->getCoverPhoto()) {
+                if ($media->getType() == 'image') {
 
-                $coverPhotos [] = array(
-                    'type' => $media->getType(),
-                    'img' => '/'.$media->getWebPath(),
-                    'caption' =>  $media->getCaptionAr(),
-                    'captionEn' =>  $media->getCaptionEn(),
-                );
-            } else {
+                    $coverPhotos [] = array(
+                        'type' => $media->getType(),
+                        'img' => '/' . $media->getWebPath(),
+                        'caption' => $media->getCaptionAr(),
+                        'captionEn' => $media->getCaptionEn(),
+                    );
+                } else {
 
-                $coverPhotos [] = array(
-                    'type' => $media->getType(),
-                    'videoCode' => $media->getVid(),
-                    'caption' =>  $media->getCaptionAr(),
-                    'captionEn' =>  $media->getCaptionEn() ,
-                );
-            }
-              continue;
+                    $coverPhotos [] = array(
+                        'type' => $media->getType(),
+                        'videoCode' => $media->getVid(),
+                        'caption' => $media->getCaptionAr(),
+                        'captionEn' => $media->getCaptionEn(),
+                    );
+                }
+                continue;
             }
             if ($media->getActivityPhoto()) {
                 if ($media->getType() == 'image') {
@@ -121,10 +121,8 @@ class SubProductController extends BackendController {
             $relatedArticles[] = array(
                 'title' => $relatedArticle->getTitle(),
                 'titleEn' => $relatedArticle->getTitleEn(),
-                'img' => $relatedArticle->getCoverPhoto() ? $relatedArticle->getCoverPhoto()->getType() == 'image' ? '/' . $relatedArticle->getCoverPhoto()->getWebPath():'https://i.ytimg.com/vi/' . $relatedArticle->getCoverPhoto()->getVid().'/hqdefault.jpg' : '',
-
-                'url' =>  $this->generateUrl('ibtikar_goody_frontend_'.trim($relatedArticle->getType()).'_view', array('slug' => $relatedArticle->getSlug()), true)
-
+                'img' => $relatedArticle->getCoverPhoto() ? $relatedArticle->getCoverPhoto()->getType() == 'image' ? '/' . $relatedArticle->getCoverPhoto()->getWebPath() : 'https://i.ytimg.com/vi/' . $relatedArticle->getCoverPhoto()->getVid() . '/hqdefault.jpg' : '',
+                'url' => $this->generateUrl('ibtikar_goody_frontend_' . trim($relatedArticle->getType()) . '_view', array('slug' => $relatedArticle->getSlug()), true)
             );
         }
 
@@ -133,18 +131,16 @@ class SubProductController extends BackendController {
             $relatedTips[] = array(
                 'title' => $relatedTip->getTitle(),
                 'titleEn' => $relatedTip->getTitleEn(),
-                'img' => $relatedTip->getCoverPhoto() ? $relatedTip->getCoverPhoto()->getType() == 'image' ? '/' . $relatedTip->getCoverPhoto()->getWebPath():'https://i.ytimg.com/vi/' . $relatedTip->getCoverPhoto()->getVid().'/hqdefault.jpg' : '',
-
-                'url' =>  $this->generateUrl('ibtikar_goody_frontend_'.trim($relatedTip->getType()).'_view', array('slug' => $relatedTip->getSlug()), true)
-
+                'img' => $relatedTip->getCoverPhoto() ? $relatedTip->getCoverPhoto()->getType() == 'image' ? '/' . $relatedTip->getCoverPhoto()->getWebPath() : 'https://i.ytimg.com/vi/' . $relatedTip->getCoverPhoto()->getVid() . '/hqdefault.jpg' : '',
+                'url' => $this->generateUrl('ibtikar_goody_frontend_' . trim($relatedTip->getType()) . '_view', array('slug' => $relatedTip->getSlug()), true)
             );
         }
 
-        $renderingParams['product']= $product;
-        $renderingParams['coverPhotos']= $coverPhotos;
-        $renderingParams['activityPhotos']= $activityPhotos;
-        $renderingParams['relatedTips']= $relatedTips;
-        $renderingParams['relatedArticles']= $relatedArticles;
+        $renderingParams['product'] = $product;
+        $renderingParams['coverPhotos'] = $coverPhotos;
+        $renderingParams['activityPhotos'] = $activityPhotos;
+        $renderingParams['relatedTips'] = $relatedTips;
+        $renderingParams['relatedArticles'] = $relatedArticles;
 
         return $renderingParams;
     }
@@ -156,49 +152,48 @@ class SubProductController extends BackendController {
     public function createAction(Request $request) {
 
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $profileImage=NULL;
+        $profileImage = NULL;
+        $naturalPhoto = NULL;
+        $bannarPhoto = NULL;
         $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
-                'type' => 'image',
-                'createdBy.$id' => new \MongoId($this->getUser()->getId()),
-                'subproduct' => null,
-                'product' => null,
-                'collectionType' => 'SubProduct'
-            ));
-         foreach ($images as $image){
-                   if($image->getProfilePhoto()){
-                       $profileImage= $image;
-                        continue;
-
-                }
-                }
-        $product='';
-        if($request->get('productId')){
+            'type' => 'image',
+            'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+            'subproduct' => null,
+            'product' => null,
+            'collectionType' => 'SubProduct'
+        ));
+        foreach ($images as $image) {
+            if ($image->getProfilePhoto()) {
+                $profileImage = $image;
+                continue;
+            }
+            if ($image->getNaturalPhoto()) {
+                $naturalPhoto = $image;
+                continue;
+            }
+            if ($image->getBannerPhoto()) {
+                $bannarPhoto = $image;
+                continue;
+            }
+        }
+        $product = '';
+        if ($request->get('productId')) {
             $product = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($request->get('productId'));
         }
-        if(!$product){
+        if (!$product) {
             throw $this->createNotFoundException();
         }
-        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new subProduct','link'=>  $this->generateUrl('ibtikar_glance_dashboard_subproduct_create',array('productId'=>$product->getId()))),
-array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Activity', 'link' => $this->generateUrl('ibtikar_glance_dashboard_activity_create', array('productId' => $product->getId())))            );
+        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new subProduct', 'link' => $this->generateUrl('ibtikar_glance_dashboard_subproduct_create', array('productId' => $product->getId()))),
+            array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Activity', 'link' => $this->generateUrl('ibtikar_glance_dashboard_activity_create', array('productId' => $product->getId()))));
         $breadCrumbArray = $this->preparedMenu($menus);
         $subProduct = new SubProduct();
-        $form = $this->createFormBuilder($subProduct, array('translation_domain' => $this->translationDomain,'attr'=>array('class'=>'dev-page-main-form dev-js-validation form-horizontal')))
-                ->add('name',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 2)))
-                ->add('nameEn',formType\TextType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 150,'data-rule-minlength' => 2)))
-//                ->add('product', \Doctrine\Bundle\MongoDBBundle\Form\Type\DocumentType::class,array('required' => TRUE,
-//                'class' => 'IbtikarGlanceDashboardBundle:Product', 'placeholder' => $this->trans('Choose product',array(),'subproduct'),
-//                'attr' => array('class' => 'select', 'data-error-after-selector' => '.select2-container')
-//        ))
-                ->add('description',  formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 5)))
-                ->add('descriptionEn',formType\TextareaType::class, array('required' => FALSE,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 5)))
-                ->add('weight', formType\NumberType::class, array('scale' => 3,'required' => FALSE,'attr' => array()))
-                ->add('size',formType\NumberType::class, array('scale' => 3,'required' => FALSE,'attr' => array()))
-                ->add('save', formType\SubmitType::class)
-                ->getForm();
+
+        $form = $this->createForm(SubProductType::class, $subProduct, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
 
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
+                $formData=$request->get('sub_product');
                 $subProduct->setProduct($product);
                 $dm->persist($subProduct);
                 $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
@@ -227,9 +222,15 @@ array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add
                         $image->setSubproduct($subProduct);
                         continue;
                     }
+                    if ($image->getNaturalPhoto()) {
+                        $subProduct->setNaturalPhoto($image);
+                        $image->setSubproduct($subProduct);
+                        continue;
+                    }
                 }
 
                 $dm->flush();
+                $this->updateMaterialGallary($subProduct, $formData['media'], $dm);
 
                 $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
                 return $this->redirect($request->getUri());
@@ -237,12 +238,14 @@ array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add
         }
 
         return $this->render('IbtikarGlanceDashboardBundle:SubProduct:create.html.twig', array(
-                'form' => $form->createView(),
-                'breadcrumb' => $breadCrumbArray,
-                'profileImage' => $profileImage,
-                'deletePopoverConfig'=>array("question" => "You are about to delete %title%,Are you sure?"),
-                'title' => $this->trans('Add new subProduct', array(), $this->translationDomain),
-                'translationDomain' => $this->translationDomain
+                    'form' => $form->createView(),
+                    'breadcrumb' => $breadCrumbArray,
+                    'profileImage' => $profileImage,
+                    'naturalPhoto' => $naturalPhoto,
+                    'bannarPhoto' => $bannarPhoto,
+                    'deletePopoverConfig' => array("question" => "You are about to delete %title%,Are you sure?"),
+                    'title' => $this->trans('Add new subProduct', array(), $this->translationDomain),
+                    'translationDomain' => $this->translationDomain
         ));
     }
 
@@ -250,27 +253,41 @@ array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add
      * @author Ola <ola.ali@ibtikar.net.sa>
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    public function editAction(Request $request,$id) {
+    public function editAction(Request $request, $id) {
         $dm = $this->get('doctrine_mongodb')->getManager();
         //prepare form
         $subproduct = $dm->getRepository('IbtikarGlanceDashboardBundle:SubProduct')->find($id);
         if (!$subproduct) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
-        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new subProduct','link'=>  $this->generateUrl('ibtikar_glance_dashboard_subproduct_create',array('productId'=>$subproduct->getProduct()->getId()))),
-        array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Activity', 'link' => $this->generateUrl('ibtikar_glance_dashboard_activity_create', array('productId' => $subproduct->getProduct()->getId())))        );
+        $menus = array(array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new subProduct', 'link' => $this->generateUrl('ibtikar_glance_dashboard_subproduct_create', array('productId' => $subproduct->getProduct()->getId()))),
+            array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add new Activity', 'link' => $this->generateUrl('ibtikar_glance_dashboard_activity_create', array('productId' => $subproduct->getProduct()->getId()))));
         $breadCrumbArray = $this->preparedMenu($menus);
-        $form = $this->createFormBuilder($subproduct, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
-            ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 2)))
-            ->add('nameEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 2)))
-//                ->add('product', \Doctrine\Bundle\MongoDBBundle\Form\Type\DocumentType::class,array('required' => TRUE,
-//                'class' => 'IbtikarGlanceDashboardBundle:Product', 'placeholder' => $this->trans('Choose product',array(),'subproduct'),
-//                'attr' => array('class' => 'select', 'data-error-after-selector' => '.select2-container')
-//        ))
-            ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 5)))
-            ->add('descriptionEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 5)))
-            ->add('save', formType\SubmitType::class)
-            ->getForm();
+        $form = $this->createForm(SubProductType::class, $subproduct, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
+        $profileImage = NULL;
+        $naturalPhoto = NULL;
+        $bannarPhoto = NULL;
+        $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
+            'type' => 'image',
+            'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+            'subproduct' => $subproduct->getId(),
+            'product' => null,
+            'collectionType' => 'SubProduct'
+        ));
+        foreach ($images as $image) {
+            if ($image->getProfilePhoto()) {
+                $profileImage = $image;
+                continue;
+            }
+            if ($image->getNaturalPhoto()) {
+                $naturalPhoto = $image;
+                continue;
+            }
+            if ($image->getBannerPhoto()) {
+                $bannarPhoto = $image;
+                continue;
+            }
+        }
 
         //handle form submission
         if ($request->getMethod() === 'POST') {
@@ -278,23 +295,26 @@ array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add
             $form->handleRequest($request);
 
             if ($form->isValid()) {
+                $formData=$request->get('sub_product');
+
                 $dm->flush();
                 $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
-
+                $this->updateMaterialGallary($subproduct, $formData['media'], $dm);
                 return $this->redirect($request->getUri());
             }
         }
 
         return $this->render('IbtikarGlanceDashboardBundle:SubProduct:edit.html.twig', array(
-                'form' => $form->createView(),
-                'breadcrumb' => $breadCrumbArray,
-                'profileImage' => $subproduct->getProfilePhoto(),
-                'deletePopoverConfig'=>array("question" => "You are about to delete %title%,Are you sure?"),
-                'title' => $this->trans('edit subProduct', array(), $this->translationDomain),
-                'translationDomain' => $this->translationDomain
+                    'form' => $form->createView(),
+                    'breadcrumb' => $breadCrumbArray,
+                    'profileImage' => $subproduct->getProfilePhoto(),
+                    'naturalPhoto' => $naturalPhoto,
+                    'bannarPhoto' => $bannarPhoto,
+                    'deletePopoverConfig' => array("question" => "You are about to delete %title%,Are you sure?"),
+                    'title' => $this->trans('edit subProduct', array(), $this->translationDomain),
+                    'translationDomain' => $this->translationDomain
         ));
     }
-
 
     public function getListJsonData($request, $renderingParams) {
         $documentObjects = array();
@@ -388,7 +408,7 @@ array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add
         }
 
         if (!$securityContext->isGranted('ROLE_' . strtoupper($this->calledClassName) . '_DELETE') && !$securityContext->isGranted('ROLE_ADMIN')) {
-            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'),'count'=>  $this->getDocumentCount());
+            $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'), 'count' => $this->getDocumentCount());
             return new JsonResponse($result);
         }
         $id = $request->get('id');
@@ -399,8 +419,7 @@ array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add
         $document = $dm->getRepository($this->getObjectShortName())->find($id);
 
         if (!$document || $document->getDeleted()) {
-            return new JsonResponse(array('status' => 'failed', 'message' => $this->get('translator')->trans('failed operation'),'count'=>  $this->getDocumentCount()));
-
+            return new JsonResponse(array('status' => 'failed', 'message' => $this->get('translator')->trans('failed operation'), 'count' => $this->getDocumentCount()));
         }
 
         $errorMessage = $this->validateDelete($document);
@@ -411,7 +430,7 @@ array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add
 
         try {
             $id = $document->getId();
-            $productId=$document->getProduct()->getId();
+            $productId = $document->getProduct()->getId();
             $document->delete($dm, $this->getUser());
 //            $dm->remove($document);
             $dm->flush();
@@ -427,8 +446,9 @@ array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add
                 ->getQuery()
                 ->count();
 
-        return new JsonResponse(array('status' => 'success', 'message' => $this->get('translator')->trans('done sucessfully'),'count'=>$count));
+        return new JsonResponse(array('status' => 'success', 'message' => $this->get('translator')->trans('done sucessfully'), 'count' => $count));
     }
+
     public function bulkAction(Request $request) {
         $securityContext = $this->get('security.authorization_checker');
         $loggedInUser = $this->getUser();
@@ -449,7 +469,7 @@ array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add
         $dm = $this->get('doctrine_mongodb')->getManager();
         $documents = $dm->getRepository($this->getObjectShortName())->findBy(array('id' => array('$in' => array_values($ids))));
         $translator = $this->get('translator');
-        $message = str_replace(array('%action%', '%item-translation%', '%ids-count%'), array($translator->trans($bulkAction), $this->trans(strtolower($this->oneItem != ""?$this->oneItem:$this->calledClassName)), count($ids)), $translator->trans('successfully %action% %success-count% %item-translation% from %ids-count%.'));
+        $message = str_replace(array('%action%', '%item-translation%', '%ids-count%'), array($translator->trans($bulkAction), $this->trans(strtolower($this->oneItem != "" ? $this->oneItem : $this->calledClassName)), count($ids)), $translator->trans('successfully %action% %success-count% %item-translation% from %ids-count%.'));
         $foundDocumentsIds = array();
         foreach ($documents as $document) {
             $foundDocumentsIds [] = $document->getId();
@@ -465,7 +485,7 @@ array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add
         $data['errors'][$translator->trans('Already deleted.')] = $deletedIds;
         if (count($deletedIds) === count($ids)) {
             $data['message'] = str_replace('%success-count%', 0, $message);
-            $data['count']=  $this->getDocumentCount();
+            $data['count'] = $this->getDocumentCount();
             return new JsonResponse($data);
         }
 
@@ -475,7 +495,7 @@ array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add
                 $permission = 'ROLE_' . strtoupper($this->calledClassName) . '_DELETE';
 
                 if (!$securityContext->isGranted($permission) && !$securityContext->isGranted('ROLE_ADMIN')) {
-                    $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'),'count'=>  $this->getDocumentCount());
+                    $result = array('status' => 'reload-table', 'message' => $this->trans('You are not authorized to do this action any more'), 'count' => $this->getDocumentCount());
                     return new JsonResponse($result);
                 }
 
@@ -485,7 +505,7 @@ array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add
                 );
 
                 foreach ($documents as $document) {
-                    $productId=$document->getProduct()->getId();
+                    $productId = $document->getProduct()->getId();
                     $errorMessage = $this->validateDelete($document);
                     if ($document->getNotModified()) {
                         $data['errors'][$translator->trans('failed operation')] [] = $document->getId();
@@ -499,12 +519,11 @@ array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add
                         continue;
                     try {
 
-                            $document->delete($dm, $this->getUser(), $this->container, $request->get('deleteOption'));
+                        $document->delete($dm, $this->getUser(), $this->container, $request->get('deleteOption'));
 
-                            $dm->flush();
+                        $dm->flush();
 
-                            $successIds [] = $document->getId();
-
+                        $successIds [] = $document->getId();
                     } catch (\Exception $e) {
                         $data['errors'][$translator->trans('failed operation')] [] = $document->getId();
                     }
@@ -515,9 +534,9 @@ array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add
                     $this->postDelete($successIds);
                 }
                 break;
-            }
+        }
 
-            $data['count'] =   $dm->createQueryBuilder($this->getObjectShortName())
+        $data['count'] = $dm->createQueryBuilder($this->getObjectShortName())
                 ->field('deleted')->equals(FALSE)
                 ->field('product')->equals($productId)
                 ->getQuery()
@@ -526,4 +545,59 @@ array('type' => 'create', 'active' => true, 'linkType' => 'add', 'title' => 'Add
         $data['message'] = str_replace('%success-count%', count($successIds), $message);
         return new JsonResponse($data);
     }
+
+    public function updateMaterialGallary($document, $gallary, $dm = null) {
+        if (!$dm) {
+            $dm = $this->get('doctrine_mongodb')->getManager();
+        }
+
+        $gallary = json_decode($gallary, true);
+
+        if (isset($gallary[0]) && is_array($gallary[0])) {
+
+            $imagesIds = array();
+            $imagesData = array();
+            foreach ($gallary as $galleryImageData) {
+                $imagesIds [] = $galleryImageData['id'];
+                $imagesData[$galleryImageData['id']] = $galleryImageData;
+            }
+            $images = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array('id' => array('$in' => $imagesIds)));
+            if (count($images) > 0) {
+                $firstImg = $images[0];
+                $this->oldDir = $firstImg->getUploadRootDir();
+                $newDir = substr($this->oldDir, 0, strrpos($this->oldDir, "/")) . "/" . $document->getId();
+                if (!file_exists($newDir)) {
+                    @mkdir($newDir);
+                }
+            }
+            $documentImages = 0;
+
+            $documentImages = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array('product' => $document->getId(), 'coverPhoto' => false));
+
+            $count = count($documentImages);
+            $coverExist = FALSE;
+
+            foreach ($images as $mediaObj) {
+                $image = $imagesData[$mediaObj->getId()];
+                $oldFilePath = $this->oldDir . "/" . $mediaObj->getPath();
+                $newFilePath = $newDir . "/" . $mediaObj->getPath();
+                @rename($oldFilePath, $newFilePath);
+                  $mediaObj->setCoverPhoto(FALSE);
+                if (isset($image['cover']) && $image['cover']) {
+                    $document->setCoverPhoto($mediaObj);
+                    $mediaObj->setCoverPhoto(TRUE);
+                    $coverExist = TRUE;
+                }
+                $mediaObj->setSubproduct($document);
+                $mediaObj->setOrder($image['order']);
+                $mediaObj->setCaptionAr($image['captionAr']);
+                $mediaObj->setCaptionEn($image['captionEn']);
+            }
+//
+            $dm->flush();
+        }
+
+        $dm->flush();
+    }
+
 }

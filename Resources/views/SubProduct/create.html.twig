@@ -8,10 +8,11 @@
 
     {{ form_start(form)}}
 
+ {% form_theme form 'IbtikarGlanceDashboardBundle:SubProduct:form_theme_subproduct.html.twig' %}
 
 
     <div class="row">
-  {% set deleteAttrs = popover_factory(deletePopoverConfig is defined?deletePopoverConfig:[]) %}
+        {% set deleteAttrs = popover_factory(deletePopoverConfig is defined?deletePopoverConfig:[]) %}
 
         <div class="col-md-12">
 
@@ -56,7 +57,7 @@
                                 <h4>صوره المنتج الفرعى</h4>
                                 <ul class="text-grey-300">
                                     <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
-                                    <li> يجب الا تقل ابعاد الصورة عن 200*200 </li>
+                                    <li> يجب الا تقل ابعاد الصورة عن 1170*600 </li>
                                     <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
                                 </ul>
                             </td>
@@ -71,6 +72,57 @@
                             </td>
 
                         </tr>
+
+
+
+                        <tr id="dev-naturalPhoto">
+                            <td style="width: 150px">
+
+                                <div class="thumbnail">
+                                    <div class="thumb thumb-slide">
+
+                                        {% if naturalPhoto is not empty %}
+                                            <img src="{{ asset(naturalPhoto.getWebPath())}}" alt="">
+
+                                        {% else %}
+                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
+
+                                        {% endif %}
+                                        <div class="caption">
+                                            <span>
+                                                {% if naturalPhoto is not empty %}
+                                                    <a href="{{ asset(naturalPhoto.getWebPath())}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% else %}
+                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td class="thumbnail-caption">
+                                <h4>صوره المكونات </h4>
+                                <ul class="text-grey-300">
+                                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                                    <li> يجب الا تقل ابعاد الصورة عن 1170*600 </li>
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                                </ul>
+                            </td>
+                            <td style="width: 300px" data-name="naturalPhoto">
+                                {% if naturalPhoto is empty %}
+                                    <a class="btn btn-default upload-image-modal-open dev-upload-image-natural"  > رفع الصورة</a>
+                                {% endif %}
+                                <a class="btn btn-default dev-crop-images-natural"   {% if naturalPhoto is empty %}style="display: none"{%else%} data-image-id="{{ naturalPhoto.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':naturalPhoto.id,'collectionType':'SubProduct'})}}"{%endif%}   >  رفع الصورة </a>
+                                <a class="btn btn-default dev-trash-image" {% if naturalPhoto is empty %}style="display: none" {%else%}  data-image-id="{{ naturalPhoto.id }}"  data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': naturalPhoto.id,'collectionType':'SubProduct'}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%} > <i class="icon-trash"></i></a>
+
+
+                            </td>
+
+                        </tr>
+
 
 
 
@@ -98,7 +150,7 @@
 
                 {{ form_row(form.description) }}
 
-{#                {{ form_row(form.images) }}#}
+                {#                {{ form_row(form.images) }}#}
 
             </div><!-- arabic end -->
 
@@ -116,14 +168,405 @@
             </div><!-- english end -->
 
         </div>
+                {{ form_row(form.size)}}
+                {{ form_row(form.weight)}}
+                {{ form_row(form.sponsors)}}
+                    <div class="col-9 clearfix">
+            <div class="col-md-9">
+                <a class="btn btn-lg btn-primary pull-left addSponsor dev-add-event-sponsor">اضافه جهة شراء</a>
+            </div>
+        </div>
     </div>
-{#                <hr/>#}
-{#  {{ form_row(form.product) }}#}
+    {#                <hr/>#}
+    {#  {{ form_row(form.product) }}#}
 
     {{ form_end(form) }}
+    <div class="form-group has-feedback">
+        <label class="control-label col-lg-2" for="recipe_relatedSubProduct"></label><div class="col-lg-10" style="padding: 0;"><ul class='dev-related-list media-list width-350 notificationList'></ul></div></div>
+    <div id="GoogleImportImg-modal" class="modal fade">
+        <div class="modal-dialog  modal-full">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h6 class="modal-title"> الصورة
+                    </h6>
+                </div>
+
+                <div class="modal-body googleResults">
+
+
+                    <!-- Main content -->
+                    <div class="">
+
+                        <!-- Search field -->
+                        <div class="panel panel-flat">
+                            <div class="panel-heading">
+                                <h5 class="panel-title">نتائج بحث جوجل </h5>
+                            </div>
+
+                            <div class="panel-body">
+                                <form  class="main-search">
+                                    <div id="google-field" class="input-group content-group">
+                                        <div class="has-feedback has-feedback-left">
+                                            <input type="text" id="dev-search-gimage-box" class="form-control input-xlg" value="بحث جوجل">
+                                            <div class="form-control-feedback">
+                                                <i class="icon-search4 text-muted text-size-base"></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="input-group-btn">
+                                            <button id="search-img-btn" type="submit" class="btn btn-primary btn-xlg">بحث</button>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                        <!-- /search field -->
+
+
+
+                        <!-- Search results -->
+                        <div class="content-group">
+
+                            <div class="row">
+                                <div id="dev-google" class="search-results-list GoogleImages">
+                                </div><!-- row end -->
+
+                                <div class="dropdown-content-footer dev-gimage-footer">
+                                    <a href="#" id="dev-load-more-gimage">
+                                        <i class="icon-menu display-block"></i>
+                                    </a>
+                                    <div id="dev-loading-more-gimage" class="moreNotifications" style="display: none">
+                                        <i class="icon-spinner6 spinner" ></i>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+
+                        </div>
+                        <div style="display: none;" id="google-no-result">
+                            نأسف، لا توجد نتائج
+                        </div>
+                        <!-- /search results -->
+
+                    </div>
+                    <!-- /main content -->
+
+
+
+                </div>
+
+                <span id="google-hr"></span>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">الغاء</button>
+                    <button type="button" class="btn btn-link dev-google-crop-spinner" style="display: none"><i class="spinner icon-spinner text-success"></i></button>
+
+                    <button type="button" class="btn btn-primary dev-google-upload">ادخال</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="GoogleImportVideos-modal" class="modal fade">
+        <div class="modal-dialog  modal-full">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h6 class="modal-title"> الفيديو
+                    </h6>
+                </div>
+
+                <div class="modal-body googleResults">
+
+
+                    <!-- Main content -->
+                    <div class="content-wrapper">
+
+                        <!-- Search field -->
+                        <div class="panel panel-flat media-body">
+                            <div class="panel-heading">
+                                <h5 class="panel-title"> بحث اليوتيوب </h5>
+                            </div>
+
+                            <div class="panel-body">
+                                <form  class="main-search">
+                                    <div class="input-group content-group">
+                                        <div class="has-feedback has-feedback-left">
+                                            <input type="text" id="dev-search-gvideo-box" class="form-control input-xlg youtube-query-input" value="بحث اليوتيوب">
+                                            <div class="form-control-feedback">
+                                                <i class="icon-search4 text-muted text-size-base"></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="input-group-btn">
+                                            <button type="submit" id="search-vid-btn" class="btn btn-primary btn-xlg dev-youtube-upload">بحث</button>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                        <!-- /search field -->
+
+
+
+                        <!-- Search results -->
+                        <div class="content-group">
+                            <div style="" id="youtube-no-result">
+                                نأسف، لا توجد نتائج
+                            </div>
+                            <div class="videossearch-results-list">
+
+                                <ul class="media-list search-results-list content-group">
+
+                                </ul>
+
+                            </div>
+
+
+
+
+
+                        </div>
+                        <!-- /search results -->
+
+
+
+
+                    </div>
+                    <!-- /main content -->
+
+
+
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">الغاء</button>
+                    <button type="button" class="btn btn-primary dev-youtube-submit">ادخال</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 {% endblock %}
+
+{% block form_extras %}
+    <div class="actions">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-labeled btn-labeled-left dropdown-toggle" data-toggle="dropdown"><b><i class="icon-image2"></i></b> رفع الصور <span class="caret"></span></button>
+                    <ul class="dropdown-menu dropdown-menu-left libraryDrop">
+                        <li>
+
+                            {#                            <input type="file" class="multiUploadImgBtn" multiple>#}
+                            <button class="dev-upload-recipe-img">
+                                رفع الصور
+                            </button>
+
+                        </li>
+                        <li class="divider"></li>
+                        <li>  بحث جوجل
+
+
+                            <div class="input-group content-group">
+                                <div class="has-feedback">
+                                    <input id="dev-search-gimage-box-small" class="form-control input-xs click-on-enter" value="" type="text">
+                                </div>
+
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-primary btn-xs" id="search-img-btn-small" >بحث</button>
+                                </div>
+                            </div>
+
+
+                        </li>
+                        <li class="divider"></li>
+                        <li>  رابط مباشر
+
+
+                            <div class="input-group content-group">
+                                <div class="has-feedback">
+                                    <input class="form-control input-xs dev-recipe-imgeUrl click-on-enter" value=" " type="text">
+                                </div>
+
+                                <div class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary btn-xs dev-imageurl-submit">أضف</button>
+                                </div>
+                            </div>
+
+
+                        </li>
+                    </ul>
+                </div><!-- btn-group -->
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-labeled btn-labeled-left dropdown-toggle" data-toggle="dropdown"><b><i class="icon-video-camera"></i></b> رفع الفيديوهات <span class="caret"></span></button>
+                    <ul class="dropdown-menu dropdown-menu-left libraryDrop">
+                        <li>  بحث يوتيوب
+
+
+                            <div class="input-group content-group">
+                                <div class="has-feedback">
+                                    <input id="dev-search-gvideo-box-small" class="form-control input-xs click-on-enter" value="" type="text">
+                                </div>
+
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-primary btn-xs" id="search-vid-btn-small" >بحث</button>
+                                </div>
+                            </div>
+
+
+                        </li>
+                        <li class="divider"></li>
+                        <li>  رابط مباشر
+
+
+                            <div class="input-group content-group">
+                                <div class="has-feedback">
+                                    <input class="form-control input-xs dev-recipe-videoUrl" value=" " type="text">
+                                </div>
+
+                                <div class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary btn-xs dev-videourl-submit">أضف</button>
+                                </div>
+                            </div>
+
+
+                        </li>
+                    </ul>
+                </div><!-- btn-group -->
+            </div>
+
+        </div>
+    </div>
+    <div class="panel-body">
+
+
+
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <ul class="LibraryFilter">
+                    <li class="filterActive imagesFilter">
+                        <span><span class="dev-image-count">0</span> صورة</span>
+
+                    </li>
+                    <li class="filterActive videosFilter">
+
+                        <span><span class="dev-video-count">0</span> فيديو</span>
+
+                    </li>
+
+                </ul>
+
+                <div class="noFilterSelected">
+                    لا يوجد ملفات مختارة
+                </div>
+                <div class="table-responsive filesUploaded">
+
+                    <table class="table table-bordered">
+                        <tbody class="media-list media-list-container" id="media-list-target-right">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% set imageSortTemplate %}
+    <tr class="media videoRow" id="%image-id%">
+        <td class="library-drag">
+            <i class="icon icon-move dragula-handle"></i>
+        </td>
+        <td class="UploadkindIcon">
+            <i class="%image-icon%"></i>
+        </td>
+        <td style="width: 150px">
+            <div class="thumbnail">
+                <div class="thumb thumb-slide">
+                    <img src="%image-src%" data-image-id="%image-id%" alt="%image-name%">
+                    <div class="caption">
+                        <span>
+                            <a href="%image-src%" data-image-id="%image-id%" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+        </td>
+        <td class="thumbnail-caption">
+            <h4>  %image-name%</h4>
+            <div class="row">
+                <div class="col-lg-6">
+                    <input class="form-control dev-caption-ar" value="%caption-ar%" placeholder="ادخل الاسم بالعربيه" type="text">
+                </div>
+
+                <div class="col-lg-6">
+                    <input class="form-control dev-caption-en" value="%caption-en%" placeholder="ادخل الاسم بالانجليزيه" type="text">
+                </div>
+            </div>
+
+            <label class="radio-inline" style="margin-top:10px;">
+                <input type="radio" name="radio-inline-left" class="styled dev-cover-img" value="%image-id%">
+                تعيين صورة للغلاف
+            </label>
+        </td>
+        <td style="width: 120px">
+
+            <a class="btn btn-default" data-href="%delete-url%" {{popover_factory({})|replace({'%type%': "recipe"|lower|trans})|raw}} > <i class="icon-trash"></i></a>
+        </td>
+    </tr>
+{% endset %}
+
+{% set videoSearchTemplate %}
+    <li class="media stack-media-on-mobile">
+        <div class="media-left">
+            <div class="thumb">
+                <a href="#">
+                    <img src="%video-thumb%" alt="%video-title%" name="%video-title%" class="img-responsive img-rounded media-preview" alt="">
+                    <span class="zoom-image"><i class="icon-play3"></i></span>
+                </a>
+            </div>
+        </div>
+
+        <div class="media-body">
+            <div class="radio">
+                <label>
+                    <input type="checkbox" name="stacked-radio-left" class="styled" value="%video-id%">
+                    <h6 class="media-heading"><a href="#">%video-title%</a></h6>
+                </label>
+            </div>
+            <ul class="list-inline list-inline-separate text-muted">
+                <li><i class="icon-book-play position-left"></i> %video-channel%</li>
+                <li>%video-date%</li>
+            </ul>
+            %video-desc%
+        </div>
+    </li>
+    {#<div class=" col-md-4 col-sm-6">
+        <div class="searchItem">
+            <span class="videoCaption">%video-title%</span>
+            <span class="inputWrapper">
+                <input type="checkbox" value="%video-id%" title="%video-title%" thumb-url="%video-thumb%" name="check" class="check" />
+            </span>
+            <span class="fa-stack fa-lg video-overlay" video-id="%video-id%">
+                <img src="{{ asset('design/sabq-new/img/play-button.svg')}}" alt="video"  class="youtube-play-sign"/>
+            </span>
+            <img src="%video-thumb%" alt="%video-title%" name="%video-title%" class="video-thumb" />
+        </div>
+    </div>#}
+{% endset %}
 {% block form_buttons %}
     <div class="row actionButtons">
         <div class="col-xs-12">
@@ -138,7 +581,7 @@
 
 
 {% block javascripts %}
-     {{ parent() }}
+    {{ parent() }}
     <!-- uploadImg modal -->
     <div id="uploadImg" class="modal fade">
         <div class="modal-dialog  modal-full">
@@ -191,51 +634,148 @@
         </div>
     </div>
     <!-- /uploadImg modal -->
+    <!-- uploadImg modal -->
+    <div id="uploadImg-natural" class="modal fade">
+        <div class="modal-dialog  modal-full">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h6 class="modal-title"> الصورة
+                    </h6>
+                </div>
 
- {% set imageTempelate %}
-            <tr id="dev-%name%">
-                            <td style="width: 150px">
+                <div class="modal-body">
 
-                                <div class="thumbnail">
-                                    <div class="thumb thumb-slide">
-                                            <img src="%image-url%" alt="">
-                                        <div class="caption">
-                                            <span>
-                                            <a href="%image-url%" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
-                                            </span>
-                                        </div>
-                                    </div>
+                    <div id="image-cropper-natural-modal">
+                        <!-- This is where the preview image is displayed -->
+                        <div class="cropit-preview"></div>
 
-                                </div>
-                            </td>
-                            <td class="thumbnail-caption">
-                                <h4>   %arabicName%</h4>
-                                <ul class="text-grey-300">
-                                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
-                                    <li> يجب الا تقل ابعاد الصورة عن 200*200 </li>
-                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
-                                </ul>
-                            </td>
-                            <td style="width: 300px" data-name="%name%">
-                                %uploadButton%
-                                %cropButton%
-                                %deleteButton%
+                        <!-- This range input controls zoom -->
 
 
-                            </td>
+                        <div class="controls-wrapper">
+                            <div class="rotation-btns">
+                                <span class="icon-rotate-cw2 rotate-ccw-btn"></span>
+                                <span class="icon-rotate-ccw2 rotate-cw-btn"></span>
+                            </div>
 
-                        </tr>
+
+                            <!-- You can add additional elements here, e.g. the image icons -->
+                            <div class="slider-wrapper">
+                                <span class="icon icon-image2 smallIcon"></span>
+                                <input type="range" min="0" max="50" value="5" step="5" class="cropit-image-zoom-input" />
+                                <span class="icon icon-image2 bigIcon"></span>
+                            </div>
+                        </div><!-- controls-wrapper -->
+
+                        <!-- This is where user selects new image -->
+                        <input type="file" class="cropit-image-input" />
+
+                        <!-- The cropit- classes above are needed
+                             so cropit can identify these elements -->
+                    </div>
+
+                </div>
+
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-link dev-crop-spinner" style="display: none"><i class="spinner icon-spinner text-success"></i></button>
+                    <button type="button" class="btn btn-link dev-submit-image-natural" data-url="" data-id=""><i class="icon-checkmark4 text-success"></i></button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal"><i class="icon-cross2 text-danger-400"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /uploadImg modal -->
+
+    {% set imageTempelate %}
+        <tr id="dev-%name%">
+            <td style="width: 150px">
+
+                <div class="thumbnail">
+                    <div class="thumb thumb-slide">
+                        <img src="%image-url%" alt="">
+                        <div class="caption">
+                            <span>
+                                <a href="%image-url%" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </td>
+            <td class="thumbnail-caption">
+                <h4>   %arabicName%</h4>
+                <ul class="text-grey-300">
+                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                    <li> يجب الا تقل ابعاد الصورة عن 1170*600 </li>
+                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                </ul>
+            </td>
+            <td style="width: 300px" data-name="%name%">
+                %uploadButton%
+                %cropButton%
+                %deleteButton%
+
+
+            </td>
+
+        </tr>
 
     {% endset %}
-     {% set uploadButton %}
+    {% set uploadButton %}
         <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
-     {% endset %}
-     {% set cropButton %}
+    {% endset %}
+    {% set cropButton %}
         <a class="btn btn-default dev-crop-images"    data-image-id="%image-id%" data-crop-url="%crop-url%">  رفع الصورة </a>
-     {% endset %}
-     {% set deleteButton %}
-         <a class="btn btn-default dev-trash-image" data-image-id="%image-id%"  data-href = "%image-delete-url%"  %pop-block%> <i class="icon-trash"></i></a>
-         {% endset %}
+    {% endset %}
+    {% set deleteButton %}
+        <a class="btn btn-default dev-trash-image" data-image-id="%image-id%"  data-href = "%image-delete-url%"  %pop-block%> <i class="icon-trash"></i></a>
+        {% endset %}
+
+    {% set imageNaturalTempelate %}
+        <tr id="dev-%name%">
+            <td style="width: 150px">
+
+                <div class="thumbnail">
+                    <div class="thumb thumb-slide">
+                        <img src="%image-url%" alt="">
+                        <div class="caption">
+                            <span>
+                                <a href="%image-url%" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </td>
+            <td class="thumbnail-caption">
+                <h4>   صوره المكونات</h4>
+                <ul class="text-grey-300">
+                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                    <li> يجب الا تقل ابعاد الصورة عن 1170*600 </li>
+                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                </ul>
+            </td>
+            <td style="width: 300px" data-name="%name%">
+                %uploadButton%
+                %cropButton%
+                %deleteButton%
+
+
+            </td>
+
+        </tr>
+
+    {% endset %}
+    {% set uploadNaturalButton %}
+        <a class="btn btn-default upload-image-modal-open dev-upload-image-natural"  > رفع الصورة</a>
+    {% endset %}
+    {% set cropnaturalButton %}
+        <a class="btn btn-default dev-crop-images-natural"    data-image-id="%image-id%" data-crop-url="%crop-url%">  رفع الصورة </a>
+    {% endset %}
+    {% set deleteNaturalButton %}
+        <a class="btn btn-default dev-trash-image" data-image-id="%image-id%"  data-href = "%image-delete-url%"  %pop-block%> <i class="icon-trash"></i></a>
+        {% endset %}
 
 
 
@@ -256,8 +796,32 @@
 
 
     <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/jquery.cropit.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/dragula.min.js')}}"></script>
 
     <script>
+
+        var googleStopSearch = 1;
+        var uploadImageUrl = '{{ path('recipe_upload_imageUrl') }}';
+        var imageTempelate = '{{ imageTempelate|escape('js') }}';
+        var cropButton = '{{ cropButton|escape('js') }}';
+        var deleteButton = '{{ deleteButton|escape('js') }}';
+        var uploadButton = '{{ uploadButton|escape('js') }}';
+
+
+
+        var imageNaturalTempelate = '{{ imageNaturalTempelate|escape('js') }}';
+        var cropNaturalButton = '{{ cropnaturalButton|escape('js') }}';
+        var deleteNaturalButton = '{{ deleteNaturalButton|escape('js') }}';
+        var uploadNaturalButton = '{{ uploadNaturalButton|escape('js') }}';
+
+        var cropperPluginInitialized = false;
+        var corsBroxy = "{{ path('ibtikar_glance_dashboard_media_get_external')}}";
+        var googleUploadImage = '{{ path('google_upload_image', {'documentId':'null', 'collectionType':'SubProduct'}) }}';
+        var imageSortTemplate = '{{ imageSortTemplate|escape('js') }}';
+        var relatedMaterialSearchUrl = "{{ path('ibtikar_glance_dashboard_recipe_related_material_search', {'collectionType':'recipe'})}}";
+        var videoSearchTemplate = '{{ videoSearchTemplate|escape('js') }}';
+        var youtubeUploadVideo = '{{ path('ibtikar_glance_dashboard_media_youtube_upload_video',{'type':'video','documentId':'null','collectionType':'SubProduct'}) }}';
+        var validateVideoUrl = '{{ path('youtube_validate_videoUrl') }}';
 
         var imageTempelate = '{{ imageTempelate|escape('js') }}';
         var cropButton = '{{ cropButton|escape('js') }}';
@@ -269,22 +833,85 @@
         var element;
         var name;
         var type;
-        var imageErrorMessages={
+        var imageErrorMessages = {
             'imageExtension': '{% trans from 'validators'%}picture not correct.{%endtrans%}',
-            'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 200*200{%endtrans%}',
+            'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 1170*600{%endtrans%}',
             'sizeError': '{% trans from 'validators'%}File size must be less than 4mb{%endtrans%}',
             'generalError': '{% trans %}failed operation{%endtrans%}',
             'profilePhoto': '{% trans from translationDomain %}sub profilePhoto{%endtrans%}',
         }
-        $(document).ready(function(){
-                $(".alert.alert-success").fadeTo(5000, 500).slideUp(500, function () {
+        $(document).ready(function () {
+            $(".alert.alert-success").fadeTo(5000, 500).slideUp(500, function () {
                 $(".alert.alert-success").slideUp(500);
             });
         })
 
 
+var nextId = 0;
+
+function addSponsorsErrorMessage() {
+
+}
+
+function removeSponsorsErrorMessage() {
+    $('#dev-event-sponsors-error').remove();
+}
+
+function correctlyPositionAddButton() {
+    var sponsorsInputsContainer = $('.inputBody');
+    sponsorsInputsContainer.each(function(index) {
+        var $this = $(this);
+        $this.find('.deleteSponsor').removeClass('last');
+        $this.find('.addSponsor').remove();
+    });
+}
+
+   correctlyPositionAddButton();
+
+    $('.dev-event-sponsor-container input').each(function () {
+        var id = parseInt($(this).attr('id').replace('sub_product_sponsors_', '').replace('_sponsor', ''));
+        id++;
+        if (id > nextId) {
+            nextId = id;
+        }
+     {#   if(eventType == "edit"){
+            $(this).removeAttr("required");
+        }#}
+    });
+
+
+    $('body').on('preAjaxCallback', function() {
+populateData();
+        removeSponsorsErrorMessage();
+    });
+
+    $(document).on('click', '.dev-add-event-sponsor', function() {
+            var $sponsorsContainer = $('#sub_product_sponsors');
+            var prototype = $sponsorsContainer.data('prototype');
+            $sponsorsContainer.append(prototype.replace(/__name__/g, nextId));
+            nextId++;
+        correctlyPositionAddButton();
+
+      {#  if(eventType == "edit"){
+            $('.fileupload').each(function () {
+                        if($(this).find('.thumbnail img').attr('src').contains("/avatars/")){
+                            $(this).find('.thumbnail input').removeAttr('required');
+                        }
+            });
+        }#}
+
+    });
+
+    $(document).on('click', '.dev-remove-event-sponsor', function() {
+            $(this).closest('.panel-flat').remove();
+
+        correctlyPositionAddButton();
+    });
+
     </script>
-    <script src="{{ asset('bundles/ibtikarglancedashboard/js/product.js') }}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/subproduct.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/js/subproductmediaHandler.js')}}"></script>
+    <script src="https://apis.google.com/js/client.js?onload=initgapi"></script>
 
 
 {% endblock %}

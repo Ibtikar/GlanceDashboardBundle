@@ -139,6 +139,11 @@ class Media extends Document {
     /**
      * @MongoDB\Boolean
      */
+    private $naturalPhoto = false;
+
+    /**
+     * @MongoDB\Boolean
+     */
     private $bannerPhoto = false;
 
     /**
@@ -1026,5 +1031,27 @@ class Media extends Document {
     public function getActivity()
     {
         return $this->activity;
+    }
+
+    /**
+     * Set naturalPhoto
+     *
+     * @param boolean $naturalPhoto
+     * @return self
+     */
+    public function setNaturalPhoto($naturalPhoto)
+    {
+        $this->naturalPhoto = $naturalPhoto;
+        return $this;
+    }
+
+    /**
+     * Get naturalPhoto
+     *
+     * @return boolean $naturalPhoto
+     */
+    public function getNaturalPhoto()
+    {
+        return $this->naturalPhoto;
     }
 }
