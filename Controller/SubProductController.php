@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type as formType;
 use Ibtikar\GlanceDashboardBundle\Form\Type\SubProductType;
+use Ibtikar\GlanceDashboardBundle\Service\ArabicMongoRegex;
+use Ibtikar\GlanceDashboardBundle\Document\Slug;
 
 class SubProductController extends BackendController {
 
@@ -94,26 +96,7 @@ class SubProductController extends BackendController {
                 }
                 continue;
             }
-            if ($media->getActivityPhoto()) {
-                if ($media->getType() == 'image') {
 
-                    $activityPhotos [] = array(
-                        'type' => $media->getType(),
-                        'img' => '/' . $media->getWebPath(),
-                        'caption' => $media->getCaptionAr(),
-                        'captionEn' => $media->getCaptionEn(),
-                    );
-                } else {
-
-                    $activityPhotos [] = array(
-                        'type' => $media->getType(),
-                        'videoCode' => $media->getVid(),
-                        'caption' => $media->getCaptionAr(),
-                        'captionEn' => $media->getCaptionEn(),
-                    );
-                }
-                continue;
-            }
         }
 
 
@@ -138,7 +121,6 @@ class SubProductController extends BackendController {
 
         $renderingParams['product'] = $product;
         $renderingParams['coverPhotos'] = $coverPhotos;
-        $renderingParams['activityPhotos'] = $activityPhotos;
         $renderingParams['relatedTips'] = $relatedTips;
         $renderingParams['relatedArticles'] = $relatedArticles;
 
@@ -196,6 +178,8 @@ class SubProductController extends BackendController {
                 $formData=$request->get('sub_product');
                 $subProduct->setProduct($product);
                 $dm->persist($subProduct);
+                $this->slugifier($subProduct);
+
                 $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
                     'type' => 'image',
                     'createdBy.$id' => new \MongoId($this->getUser()->getId()),
@@ -597,6 +581,40 @@ class SubProductController extends BackendController {
             $dm->flush();
         }
 
+        $dm->flush();
+    }
+
+    public function slugifier($subproduct) {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $slugAr = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($subproduct->getName(), 100));
+        $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringEn($subproduct->getNameEn(), 100));
+        $arabicCount = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:SubProduct')
+                ->field('deleted')->equals(FALSE)
+                ->field('slug')->equals($slugAr)
+                ->field('id')->notEqual($subproduct->getId())->
+                getQuery()->execute()->count();
+
+        $englishCount = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:SubProduct')
+                ->field('deleted')->equals(FALSE)
+                ->field('slugEn')->equals($slugEn)
+                ->field('id')->notEqual($subproduct->getId())->
+                getQuery()->execute()->count();
+        if ($arabicCount != 0) {
+            $slugAr = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($subproduct->getName(), 100) . "-" . date('ymdHis'));
+        }
+        if ($englishCount != 0) {
+            $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringEn($subproduct->getNameEn(), 100) . "-" . date('ymdHis'));
+        }
+
+        $subproduct->setSlug($slugAr);
+        $subproduct->setSlugEn($slugEn);
+
+        $slug = new Slug();
+        $slug->setReferenceId($subproduct->getId());
+        $slug->setType(Slug::$TYPE_SUBPRODUCT);
+        $slug->setSlugAr($slugAr);
+        $slug->setSlugEn($slugEn);
+        $dm->persist($slug);
         $dm->flush();
     }
 

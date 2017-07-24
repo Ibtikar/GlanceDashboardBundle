@@ -116,7 +116,7 @@
                     {% endif %}
 
                     {# adding profile file upload input style #}
-                    {%- if type is defined and type == 'file' and form.parent.vars.value and objectType == "subproduct" -%}
+                    {%- if type is defined and type == 'file' and objectType == "subproduct" -%}
                 </span>
                 <a href="#" class="btn btn-default fileupload-exists btn-primary dev-btn-fileupload-remove" data-dismiss="fileupload">{% trans %}Delete{% endtrans %}</a>
             </div>

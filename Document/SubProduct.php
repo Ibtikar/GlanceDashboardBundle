@@ -128,6 +128,25 @@ class SubProduct extends Document {
      */
     private $sponsors;
 
+
+    /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      max = 125,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $slug;
+
+    /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      max = 125,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $slugEn;
+
     public function __toString() {
         return (string) $this->name;
     }
@@ -498,5 +517,49 @@ class SubProduct extends Document {
     public function getCoverPhoto()
     {
         return $this->coverPhoto;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return self
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string $slug
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Set slugEn
+     *
+     * @param string $slugEn
+     * @return self
+     */
+    public function setSlugEn($slugEn)
+    {
+        $this->slugEn = $slugEn;
+        return $this;
+    }
+
+    /**
+     * Get slugEn
+     *
+     * @return string $slugEn
+     */
+    public function getSlugEn()
+    {
+        return $this->slugEn;
     }
 }

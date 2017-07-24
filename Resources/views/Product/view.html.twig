@@ -88,7 +88,7 @@
 
                                                         </tbody>
                                                     </table>
-                            {% if activityPhotos|length > 0 %}
+                            {% if coverPhotos|length > 0 %}
 
                                         <div class="row">
 
@@ -105,7 +105,7 @@
                                                     <table class="table table-bordered">
 
                                                         <tbody id="media-list-target-right" class="media-list media-list-container">
-                                                            {% for media in activityPhotos %}
+                                                            {% for media in coverPhotos %}
                                                                 {% if media['type']=='image' %}
                                                             <tr class="media imageRow">
 
@@ -307,115 +307,6 @@
                         </div>
                                 {% endif %}
 <hr/>
-{% if coverPhotos|length > 0 %}
-
-                                        <div class="row">
-
-                                            <div class="col-md-12">
-
-        <h5>   صور الانشطه</h5>
-
-
-
-                                                <div class="table-responsive filesUploaded">
-
-                                                    <table class="table table-bordered">
-
-                                                        <tbody id="media-list-target-right" class="media-list media-list-container">
-                                                            {% for media in coverPhotos %}
-                                                                {% if media['type']=='image' %}
-                                                            <tr class="media imageRow">
-
-                                                                <td class="UploadkindIcon">
-                                                                    <i class="icon-image2"></i>
-                                                                </td>
-                                                                <td style="width: 150px">
-
-                                                                    <div class="thumbnail">
-                                                                        <div class="thumb thumb-slide">
-                                                                            <img alt="" src="{{ asset(media['img']|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg'))}}">
-                                                                            <div class="caption">
-                                                                                <span>
-                                                                                    <a data-popup="lightbox" class="btn btn-primary btn-icon" href="{{ asset(media['img']|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg'))}}"><i class="icon-zoomin3"></i></a>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-
-                                                                    </div>
-                                                                </td>
-                                                                <td class="thumbnail-caption">
-{#                                                                    <h4>   اسم الصورة اللي رافعها يتكتب هنا</h4>#}
-                                                                    <div class="row">
-                                                                        <div class="col-lg-12 marginBottom-20">
-                                                                     <img width="30" height="20" alt="arabic" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}">
-                                                                  {{ media['caption']}}
-                                                                        </div>
-
-                                                                        <div class="col-lg-12">
-                                                                               <img width="30" height="20" alt="arabic" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}">
-                                                                  {{ media['captionEn']}}
-
-                                                                        </div>
-                                                                    </div>
-
-
-                                                                </td>
-
-                                                            </tr>
-
-{% else %}
-
-                                                            <tr class="media videoRow">
-
-                                                                <td class="UploadkindIcon">
-                                                                    <i class="icon-video-camera"></i>
-                                                                </td>
-                                                                <td style="width: 150px">
-                                                                    <div class="thumbnail">
-                                                                        <div class="thumb thumb-slide">
-                                                                            <img alt="" src="{{ 'https://i.ytimg.com/vi/' ~media['videoCode']~ '/hqdefault.jpg'  }}">
-                                                                            <div class="caption">
-                                                                                <span>
-                                                                                    <a data-popup="lightbox" class="btn btn-primary btn-icon" href="{{ 'https://i.ytimg.com/vi/' ~media['videoCode']~ '/hqdefault.jpg'  }}"><i class="icon-zoomin3"></i></a>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                </td>
-                                                                <td class="thumbnail-caption">
-{#                                                                    <h4>   اسم الصورة اللي رافعها يتكتب هنا</h4>
-#}                                                                    <div class="row">
-                                                                        <div class="col-lg-12 marginBottom-20">
-                                                                     <img width="30" height="20" alt="arabic" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}">
-                                                                 {{ media['caption']}}
-                                                                        </div>
-
-                                                                        <div class="col-lg-12">
-                                                                               <img width="30" height="20" alt="arabic" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}">
-                                                                                                                                 {{ media['captionEn']}}
-
-
-                                                                        </div>
-                                                                    </div>
-
-
-                                                                </td>
-
-                                                            </tr>
-                                                            {% endif %}
-{% endfor %}
-
-
-
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-
-                                            </div>
-                                        </div>
-{% endif %}<hr/>
 
 
                                         </div>

@@ -16,7 +16,7 @@ class SubproductSponsorType extends AbstractType {
                 ->add('id', formType\HiddenType::class)
                 ->add('name', formType\TextType::class, array('attr' => array('data-rule-minlength' => 3)))
                 ->add('nameEn', formType\TextType::class, array('attr' => array('data-rule-minlength' => 3)))
-                ->add('price', formType\TextType::class, array('attr' => array('data-rule-minlength' => 3)))
+                ->add('price', formType\TextType::class, array('attr' => array()))
                 ->add('website', formType\TextType::class, array('attr' => array('data-rule-minlength' => 3)))
 //                ->add('file', formType\FileType::class, array('label' => 'image', 'attr' => array('class' => 'dev-image-input', 'accept' => '.jpg,.jpeg,.png', 'data-error-after-selector' => '.fileupload','data-msg-accept' => 'يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG', 'data-rule-filesize' => '4', 'data-rule-dimensions' => '200', 'data-error-right' => '')));
                ->add('file', formType\FileType::class, array('required' => TRUE,

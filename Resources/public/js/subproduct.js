@@ -43,7 +43,7 @@ function refreshImages() {
             if (data.status == 'login') {
                 window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
             } else {
-
+                $('#media-list-target-right').html('');
                 if (data.profilePhoto) {
                     var media = data.profilePhoto;
                     var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
@@ -574,6 +574,7 @@ $(document).ready(function () {
 
     $(document).on('onFailSubmitForm', function () {
         refreshImages();
+        refreshMediaSortView();
     })
 
 })

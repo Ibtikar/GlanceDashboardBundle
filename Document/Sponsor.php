@@ -225,14 +225,14 @@ class Sponsor {
 
             if ($this->file->guessExtension() == $this->file->getExtension() && $this->file->getExtension() == "png") {
                 $this->convertImage($this->file->getPathname(), $this->getUploadRootDir() . "/" . str_replace('png', 'jpg', $this->path), 85);
-                $this->setPath(str_replace('png', 'jpg', $this->path));
+                $this->setPath(str_replace('png', 'jpg', $this->image));
             } else {
                 if ($this->file->guessExtension() == 'png' && in_array($this->file->getExtension(), array('jpg', "jpeg"))) {
                     $imageTmp = imagecreatefrompng($this->file->getPathname());
-                    imagejpeg($imageTmp, $this->getUploadRootDir() . "/" .  $this->path, 85);
+                    imagejpeg($imageTmp, $this->getUploadRootDir() . "/" .  $this->image, 85);
                     imagedestroy($imageTmp);
                 } else {
-                    $this->file->move($this->getUploadRootDir(), $this->path);
+                    $this->file->move($this->getUploadRootDir(), $this->image);
                 }
             }
 
