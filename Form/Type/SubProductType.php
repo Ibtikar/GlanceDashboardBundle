@@ -28,8 +28,8 @@ class SubProductType extends AbstractType {
                 ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 5)))
                 ->add('descriptionEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 5)))
 
-                ->add('weight', formType\NumberType::class, array('scale' => 3, 'required' => FALSE, 'attr' => array()))
-                ->add('size', formType\NumberType::class, array('scale' => 3, 'required' => FALSE, 'attr' => array()))
+                ->add('weight', formType\TextType::class, array('required' => FALSE, 'attr' => array()))
+                ->add('size', formType\TextType::class, array( 'required' => FALSE, 'attr' => array()))
                 ->add('media', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
                 ->add('sponsors', formType\CollectionType::class, array('entry_type' => SubproductSponsorType::class, 'allow_add' => true, 'allow_delete' => true, 'by_reference' => TRUE, 'attr' => array('class' => 'competitionQuestion')))
 

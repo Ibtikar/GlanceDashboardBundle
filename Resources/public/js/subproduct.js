@@ -210,11 +210,24 @@ $(document).ready(function () {
                 $('.dev-submit-image').attr('data-id', element.attr('id'))
 
             }
+            $('#image-cropper-modal').cropit('previewSize', {width: 585, height: 300});
+            $('#image-cropper-modal').cropit('exportZoom', 2);
             var elementDimessionWidth = 1170;
             var elementDimessionHeight = 600;
+            var typeAllowed = ['jpeg', 'jpg', 'png', 'gif'];
             var errorDimension = imageErrorMessages.imageDimension;
+            var errorExtension = imageErrorMessages.imageGifExtension;
             if ($(element).closest('td').attr('data-name') == 'bannerPhoto') {
                 errorDimension = imageErrorMessages.BannerimageDimension;
+            }
+            if ($(element).closest('td').attr('data-name') == 'profilePhoto') {
+                errorDimension = imageErrorMessages.profileImageDimension;
+                errorExtension = imageErrorMessages.imageExtension;
+                var elementDimessionWidth = 200;
+                var elementDimessionHeight = 200;
+                $('#image-cropper-modal').cropit('previewSize', {width: 300, height: 300});
+                $('#image-cropper-modal').cropit('exportZoom', .7);
+                typeAllowed = ['jpeg', 'jpg', 'png'];
             }
             var elementObject = $('#uploadImg .cropit-image-input');
             if (elementObject.val()) {
@@ -223,8 +236,8 @@ $(document).ready(function () {
                         file = value.toLowerCase(),
                         extension = file.substring(file.lastIndexOf('.') + 1);
 
-                if ($.inArray(extension, ['jpeg', 'jpg', 'png', 'gif']) == -1) {
-                    showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
+                if ($.inArray(extension, typeAllowed) == -1) {
+                    showNotificationMsg(errorExtension, "", 'error');
                     $('#uploadImg').modal('hide');
                     return;
 
@@ -256,8 +269,7 @@ $(document).ready(function () {
         }
 
     })
-    $('#image-cropper-modal').cropit('previewSize', {width: 585, height: 300});
-    $('#image-cropper-modal').cropit('exportZoom', 2);
+
 
 
     $('#image-cropper-natural-modal').cropit({
@@ -274,10 +286,10 @@ $(document).ready(function () {
                 $('.dev-submit-image-natural').attr('data-id', element.attr('id'))
 
             }
-            var elementDimessionWidth = 1170;
+            var elementDimessionWidth = 300;
             var elementDimessionHeight = 600;
-            alert('haaa')
-            var errorDimension = imageErrorMessages.imageDimension;
+           // alert('haaa')
+            var errorDimension = imageErrorMessages.NaturalImageDimension;
             if ($(element).closest('td').attr('data-name') == 'bannerPhoto') {
                 errorDimension = imageErrorMessages.BannerimageDimension;
             }
@@ -288,7 +300,7 @@ $(document).ready(function () {
                         file = value.toLowerCase(),
                         extension = file.substring(file.lastIndexOf('.') + 1);
 
-                if ($.inArray(extension, ['jpeg', 'jpg', 'png', 'gif']) == -1) {
+                if ($.inArray(extension, ['jpeg', 'jpg', 'png']) == -1) {
                     showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
                     $('#uploadImg-natural').modal('hide');
                     return;
@@ -321,8 +333,8 @@ $(document).ready(function () {
         }
 
     })
-    $('#image-cropper-natural-modal').cropit('previewSize', {width: 300, height: 500});
-    $('#image-cropper-natural-modal').cropit('exportZoom', 2);
+    $('#image-cropper-natural-modal').cropit('previewSize', {width: 200, height: 400});
+    $('#image-cropper-natural-modal').cropit('exportZoom', 1.5);
 
 
 

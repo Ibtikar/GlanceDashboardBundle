@@ -100,11 +100,11 @@ class SubProduct extends Document {
      */
     protected $editAt;
     /**
-     * @MongoDB\Field(type="float")
+     * @MongoDB\String
      */
     protected $weight;
     /**
-     * @MongoDB\Field(type="float")
+     * @MongoDB\String
      */
     protected $size;
 

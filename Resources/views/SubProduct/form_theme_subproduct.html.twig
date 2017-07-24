@@ -86,7 +86,7 @@
         {% set objectType = form.vars.translation_domain %}
 
         <div class="fileupload fileupload-new" data-provides="fileupload">
-            <div class="fileupload-new thumbnail" style="width: 150px; height: 150px;">
+            <div class="fileupload-new thumbnail" style="width: 150px;">
                 {% if form.parent.vars.value and objectType == "subproduct" %}
                     <img src="{{ asset(form.parent.vars.value.getWebPath())|default('bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg') }}" alt="{{ attr['data-image-alt']|default('Profile image'|trans) }}">
                 {% else%}
@@ -118,7 +118,7 @@
                     {# adding profile file upload input style #}
                     {%- if type is defined and type == 'file' and form.parent.vars.value and objectType == "subproduct" -%}
                 </span>
-                <a href="#" class="btn btn-default fileupload-exists btn-primary {% if attr['data-image-url'] is defined and attr['data-image-url']!='' %}dev-btn-fileupload-remove{%endif%}" data-dismiss="fileupload">{% trans %}Delete{% endtrans %}</a>
+                <a href="#" class="btn btn-default fileupload-exists btn-primary dev-btn-fileupload-remove" data-dismiss="fileupload">{% trans %}Delete{% endtrans %}</a>
             </div>
         </div>
         {%- endif -%}

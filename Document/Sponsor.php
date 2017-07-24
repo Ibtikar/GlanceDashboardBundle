@@ -54,10 +54,10 @@ class Sponsor {
     private $temp;
 
     /**
-     * @Assert\Image(maxSize="4194304", maxSizeMessage="Image size must be less than 4mb", minWidth=819, maxWidth = 819, minHeight=1091,maxHeight = 1091, minWidthMessage="Image dimension must than 819*1091", minHeightMessage="Image dimension must than 819*1091", minWidthMessage="Image dimension must than 819*1091", minHeightMessage="Image dimension must than 819*1091", mimeTypes={"image/jpeg", "image/pjpeg", "image/png", "image/gif"}, mimeTypesMessage="picture extension not correct.", groups={"Magazine"})
-     * @ImageValid(groups={"image","contactMessageImage"})
-     * @ImageExtensionValid(groups={"image", "contactMessageImage"})
-     * @Assert\NotBlank(groups={"image", "file"})
+     * @Assert\Image(maxSize="2097152", maxSizeMessage="Image size must be less than 2mb", minWidth=200, maxWidth = 200, minHeight=200,maxHeight = 200, minWidthMessage="Image dimension must than 819*1091", minHeightMessage="Image dimension must than 200*200", minWidthMessage="Image dimension must than 200*200", minHeightMessage="Image dimension must than 200*200", mimeTypes={"image/jpeg", "image/pjpeg", "image/png", "image/gif"}, mimeTypesMessage="picture extension not correct.")
+     * @ImageValid
+     * @ImageExtensionValid
+     * @Assert\NotBlank
      * @var \Symfony\Component\HttpFoundation\File\UploadedFile
      */
     private $file;
@@ -220,21 +220,30 @@ class Sponsor {
     public function upload() {
         if (NULL !== $this->file) {
             // you must throw an exception here if the file cannot be moved
-            // so that the entity is not persisted to the database
+            // so that the document is not persisted to the database
             // which the UploadedFile move() method does
-            $this->file->move($this->getUploadRootDir(), $this->image);
-//            $image = new ImageResize($this->getUploadRootDir() . "/" . $this->image);
-//            $image->resizeToHeight(200);
-//            $image->save($this->getUploadRootDir() . "/" . $this->image);
 
-            //remove the file as you do not need it any more
+            if ($this->file->guessExtension() == $this->file->getExtension() && $this->file->getExtension() == "png") {
+                $this->convertImage($this->file->getPathname(), $this->getUploadRootDir() . "/" . str_replace('png', 'jpg', $this->path), 85);
+                $this->setPath(str_replace('png', 'jpg', $this->path));
+            } else {
+                if ($this->file->guessExtension() == 'png' && in_array($this->file->getExtension(), array('jpg', "jpeg"))) {
+                    $imageTmp = imagecreatefrompng($this->file->getPathname());
+                    imagejpeg($imageTmp, $this->getUploadRootDir() . "/" .  $this->path, 85);
+                    imagedestroy($imageTmp);
+                } else {
+                    $this->file->move($this->getUploadRootDir(), $this->path);
+                }
+            }
+
+            // remove the file as you do not need it any more
             $this->file = NULL;
         }
-        //check if we have an old image
+        // check if we have an old file
         if ($this->temp) {
-            //try to delete the old image
+            // try to delete the old file
             @unlink($this->getUploadRootDir() . '/' . $this->temp);
-            //clear the temp image
+            // clear the temp file
             $this->temp = NULL;
         }
     }
@@ -278,6 +287,18 @@ class Sponsor {
      */
     protected function getUploadDir() {
         return 'uploads/sponsor';
+    }
+
+    function convertImage($originalImage, $outputImage, $quality){
+        $exploded = explode('.',$originalImage);
+        $ext = $exploded[count($exploded) - 1];
+        if (preg_match('/png/i',$ext)){$imageTmp=imagecreatefrompng($originalImage);}
+        else    {    return false;}
+        // quality is a value from 0 (worst) to 100 (best)
+        imagejpeg($imageTmp, $outputImage, $quality);
+        imagedestroy($imageTmp);
+        unlink($originalImage);
+        return true;
     }
 
 
