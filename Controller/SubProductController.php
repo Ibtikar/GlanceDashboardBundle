@@ -349,7 +349,7 @@ class SubProductController extends BackendController {
                     if (!$image) {
                         $image = '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg';
                     } else {
-                        if ($image->getType() == 'video') {
+                        if ($document->getProfileType() == 'video') {
                             $image = 'https://i.ytimg.com/vi/' . $image->getVid() . '/hqdefault.jpg';
                         } else {
                             $image = '/' . $image->getWebPath();

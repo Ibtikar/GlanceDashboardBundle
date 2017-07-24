@@ -173,7 +173,7 @@
                                                         <td>
                                                             <div class="thumbnail small-thumbnail">
                                                                 <div class="thumb thumb-slide">
-                                                                    {% if attribute(attribute(object, field.propertyName), 'type')=='image'%}
+                                                                    {% if attribute(object, 'profileType')=='image'%}
                                                                         <img alt="" src="{{ asset( attribute(attribute(object, field.propertyName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}">
                                                                         <div class="caption">
                                                                             <span>
