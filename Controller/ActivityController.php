@@ -324,19 +324,14 @@ class ActivityController extends BackendController {
                 ));
 
                 foreach ($mediaList as $media) {
-                    if ($profilePhotoType == 'image' && $media->getType() == 'image' && $media->getProfilePhoto()) {
-                        $subproduct->setProfilePhoto($media);
-                        continue;
-                    }
-
-                    if ($profilePhotoType == 'video' && $media->getType() == 'video' && $media->getProfilePhoto()) {
+                    if ($profilePhotoType == $media->getType() && $media->getProfilePhoto()) {
                         $subproduct->setProfilePhoto($media);
                         continue;
                     }
                 }
                 $dm->flush();
                 $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
-
+                return $this->redirect($request->getUri());
 
             }
         }
