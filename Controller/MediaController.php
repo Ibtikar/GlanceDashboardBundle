@@ -1069,6 +1069,7 @@ class MediaController extends BackendController
                         if ($reponse) {
                             return $reponse;
                         }
+                        $videoObj->setCompetition($competition);
                     } elseif($request->get('collectionType') == 'Product') {
 
                         $subproduct = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($documentId);
@@ -1082,6 +1083,7 @@ class MediaController extends BackendController
                         if (!$subproduct) {
                             throw $this->createNotFoundException($this->trans('Wrong id'));
                         }
+                        $videoObj->setActivity($subproduct);
                     }
                     else {
                         $task = $dm->getRepository('IbtikarBackendBundle:Task')->find($documentId);
