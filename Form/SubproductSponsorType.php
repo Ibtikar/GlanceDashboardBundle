@@ -22,8 +22,8 @@ class SubproductSponsorType extends AbstractType {
                ->add('file', formType\FileType::class, array('required' => TRUE,
                 'attr' => array('accept' => 'image/jpg,image/jpeg,image/png', 'data-msg-accept' => 'يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG',
                     'data-error-after-selector' => '.uploadCoverImg', 'data-rule-filesize' => 2,
-                    'data-rule-dimensions' => '200',
-                    'data-msg-dimensions'=>'يجب الا تقل ابعاد الصورة عن 200*200',
+                    'data-rule-exactdimensions' => '200',
+                    'data-msg-exactdimensions'=>'يجب ان تكون ابعاد الصورة 200*200',
                     'data-msg-filesize'=>'يجب الا يزيد حجم الصوره عن 2 ميجا',
                     'data-image-url' => $builder->getForm()->getData() ? $builder->getForm()->getData()->getWebPath(): '')));
         }

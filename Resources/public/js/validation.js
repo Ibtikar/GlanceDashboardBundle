@@ -111,6 +111,17 @@ $.validator.addMethod('dimensions', function (value, element, param) {
     }
 }, 'image dimensions must be greater than 200*200');
 
+$.validator.addMethod('exactdimensions', function (value, element, param) {
+
+    var width = $(element).attr('data-image-width');
+    var height = $(element).attr('data-image-height');
+    if (width && height) {
+        return this.optional(element) || (width == param && height == param)
+    } else {
+        return true;
+    }
+}, 'image dimensions must be equal 200*200');
+
 
 
 $.validator.addMethod('password', function (value, element) {

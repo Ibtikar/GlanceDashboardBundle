@@ -402,7 +402,7 @@ $(document).ready(function () {
         var formData = new FormData();
         formData.append("media[file]", imageFile);
         $('.dev-crop-spinner').show();
-        $('.dev-submit-image').hide();
+        $('.dev-submit-image-natural').hide();
         $.ajax({
             url: $(this).attr('data-url') + '?imageType=' + name,
             type: 'POST',
@@ -448,7 +448,7 @@ $(document).ready(function () {
                     refreshImages();
                 }
                 $('.dev-crop-spinner').hide();
-                $('.dev-submit-image').show();
+                $('.dev-submit-image-natural').show();
             }
 
         });
