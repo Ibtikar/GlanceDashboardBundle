@@ -721,6 +721,7 @@ class MediaController extends BackendController
         if (!$securityContext->isGranted('ROLE_SUBPRODUCT_EDIT') && !$securityContext->isGranted('ROLE_ADMIN')) {
             return $this->getAccessDeniedResponse();
         }
+        $document='';
         if ($imageType) {
             switch ($imageType) {
                 case 'profilePhoto':
