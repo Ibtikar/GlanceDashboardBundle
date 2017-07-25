@@ -345,7 +345,12 @@ class SubProductController extends BackendController {
                     $request->setLocale('ar');
                     $oneDocument[$value] = '<a href="' . $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $document->$getfunction()), UrlGeneratorInterface::ABSOLUTE_URL) . '" target="_blank">' . $this->generateUrl('ibtikar_goody_frontend_view', array('slug' => $document->$getfunction()), UrlGeneratorInterface::ABSOLUTE_URL) . ' </a>';
                 } elseif ($value == 'profilePhoto' || $value == 'coverPhoto') {
-                    $image = $document->$getfunction();
+                    if($document->getType()=='subproduct'){
+                        $image = $document->getCoverPhoto();
+                    }else{
+                        $image = $document->$getfunction();
+
+                    }
                     if (!$image) {
                         $image = '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg';
                     } else {

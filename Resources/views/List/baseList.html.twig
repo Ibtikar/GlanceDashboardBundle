@@ -173,18 +173,24 @@
                                                         <td>
                                                             <div class="thumbnail small-thumbnail">
                                                                 <div class="thumb thumb-slide">
+                                                                    {% if object.type=='subproduct' %}
+                                                                        {% set fieldName='coverPhoto' %}
+                                                                    {% else %}
+                                                                        {% set fieldName= field.propertyName %}
+                                                                    {% endif %}
                                                                     {% if attribute(object, 'profileType')=='image'%}
-                                                                        <img alt="" src="{{ asset( attribute(attribute(object, field.propertyName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}">
+
+                                                                        <img alt="" src="{{ asset( attribute(attribute(object, fieldName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}">
                                                                         <div class="caption">
                                                                             <span>
-                                                                                <a data-popup="lightbox" class="btn btn-primary btn-icon" href="{{ asset( attribute(attribute(object, field.propertyName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}"><i class="icon-zoomin3"></i></a>
+                                                                                <a data-popup="lightbox" class="btn btn-primary btn-icon" href="{{ asset( attribute(attribute(object, fieldName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}"><i class="icon-zoomin3"></i></a>
                                                                             </span>
                                                                         </div>
                                                                     {%else %}
-                                                                        <img alt="" src="{{ 'https://i.ytimg.com/vi/' ~ attribute(attribute(object, field.propertyName), 'vid') ~ '/hqdefault.jpg'  }}">
+                                                                        <img alt="" src="{{ 'https://i.ytimg.com/vi/' ~ attribute(attribute(object, fieldName), 'vid') ~ '/hqdefault.jpg'  }}">
                                                                         <div class="caption">
                                                                             <span>
-                                                                                <a data-popup="lightbox" class="btn btn-primary btn-icon" href="{{ 'https://i.ytimg.com/vi/' ~ attribute(attribute(object, field.propertyName), 'vid') ~ '/hqdefault.jpg'  }}"><i class="icon-zoomin3"></i></a>
+                                                                                <a data-popup="lightbox" class="btn btn-primary btn-icon" href="{{ 'https://i.ytimg.com/vi/' ~ attribute(attribute(object, fieldName), 'vid') ~ '/hqdefault.jpg'  }}"><i class="icon-zoomin3"></i></a>
                                                                             </span>
                                                                         </div>
 
