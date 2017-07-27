@@ -18,7 +18,7 @@ class ProductRepository extends DocumentRepository
     {
         return $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Product')
                 ->field('deleted')->equals(FALSE)
-                ->field('coverPhoto')->prime(true)
+                ->field('profilePhoto')->prime(true)
                 ->sort('createdAt', 'DESC')
                 ->eagerCursor()
                 ->limit($limit)
