@@ -20,7 +20,7 @@ class RedirectOldUrlsCommand extends ContainerAwareCommand {
     protected function execute(InputInterface $input, OutputInterface $output) {
 
 
-        $filePath = __DIR__ . '/404pages-9th.csv';
+        $filePath = __DIR__ . '/404pages-9th1.csv';
         if (!is_file($filePath)) {
             $output->writeln("<error>The file $filePath was not found</error>");
             return;
