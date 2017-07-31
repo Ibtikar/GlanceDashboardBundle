@@ -727,7 +727,7 @@ class Product extends Document
      * @param Ibtikar\GlanceDashboardBundle\Document\Media $bannerPhoto
      * @return self
      */
-    public function setBannerPhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $bannerPhoto)
+    public function setBannerPhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $bannerPhoto =null)
     {
         $this->bannerPhoto = $bannerPhoto;
         return $this;
