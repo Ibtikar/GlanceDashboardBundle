@@ -137,6 +137,69 @@ function tdLoadingToggle(elm) {
         }
     }
 }
+
+function uploadImageToServer(imageFile, url) {
+        var formData = new FormData();
+        formData.append("media[file]", imageFile);
+        formData.append("fileName", fileName);
+        $('.dev-crop-spinner').show();
+        $('.dev-submit-image').hide();
+        $.ajax({
+            url: url ,
+            type: 'POST',
+            data: formData,
+//            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+         success: function (data) {
+                if (data.status == 'login') {
+                    window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
+                } else if (data.status == 'success') {
+                var errorDimission = imageErrorMessages.imageDimension;
+                if (name == 'bannerPhoto') {
+                    errorDimission = imageErrorMessages.BannerimageDimension;
+                }
+                var media = data.media;
+                if (name != 'profilePhoto' && name != 'bannerPhoto') {
+                        addImageToSortView($('.filesUploaded table tbody'), media);
+
+
+
+                } else {
+
+                    var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
+                            .replace(/%image-id%/g, media.id)
+                            .replace(/%name%/g, name)
+                            .replace(/%image-delete-url%/g, media.deleteUrl)
+                            .replace(/%arabicName%/g, imageErrorMessages[name])
+                            .replace(/%errorDimission%/g, errorDimission)
+                            .replace(/%uploadButton%/g, '')
+                            .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
+                            .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
+                    element.closest('tr').replaceWith(temepelate);
+                }
+                showNotificationMsg(data.message, "", data.status);
+                $('#uploadImg').modal('hide');
+                $('[data-popup="popover"]').popover();
+
+
+                // Tooltip
+                    $('[data-popup="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    });
+
+                } else {
+                    $('#uploadImg').modal('hide');
+                    showNotificationMsg(imageErrorMessages.generalError, "", 'error');
+                    refreshImages();
+                }
+                $('.dev-crop-spinner').hide();
+                $('.dev-submit-image').show();
+            }
+
+        });
+    }
 var uploadpopup = false;
 $(document).ready(function () {
 
@@ -235,6 +298,7 @@ $(document).ready(function () {
                 var value = elementObject.val(),
                         file = value.toLowerCase(),
                         extension = file.substring(file.lastIndexOf('.') + 1);
+                fileName = file;
 
                 if ($.inArray(extension, typeAllowed) == -1) {
                     showNotificationMsg(errorExtension, "", 'error');
@@ -255,7 +319,11 @@ $(document).ready(function () {
 
                 } else {
 
-                    $('#uploadImg').modal('show');
+                   if (extension == 'gif') {
+                        uploadImageToServer($('.cropit-preview-image').attr('src'), uploadUrl);
+                    } else {
+                        $('#uploadImg').modal('show');
+                    }
                 }
             }
 

@@ -53,7 +53,7 @@
                                 <ul class="text-grey-300">
                                     <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
                                     <li> يجب الا تقل ابعاد الصورة عن 1170*600 </li>
-                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG او GIF </li>
                                 </ul>
                             </td>
                             <td style="width: 300px" data-name="profilePhoto">
@@ -256,7 +256,7 @@
                                 <ul class="text-grey-300">
                                     <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
                                     <li>  %errorDimission%  </li>
-                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG او GIF </li>
                                 </ul>
                             </td>
                             <td style="width: 300px" data-name="%name%">
@@ -315,7 +315,7 @@
         var name;
         var type;
         var imageErrorMessages={
-            'imageExtension': '{% trans from 'validators'%}picture not correct.{%endtrans%}',
+            'imageExtension': '{% trans from 'validators'%}picture extension not correct.{%endtrans%}',
             'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 1170*600{%endtrans%}',
             'sizeError': '{% trans from 'validators'%}File size must be less than 4mb{%endtrans%}',
             'generalError': '{% trans %}failed operation{%endtrans%}',
@@ -431,7 +431,7 @@
       }
 
     </script>
-    <script src="{{ asset('bundles/ibtikarglancedashboard/js/product.js') }}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/activity.js') }}"></script>
 
 
 {% endblock %}
