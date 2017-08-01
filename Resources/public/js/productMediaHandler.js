@@ -314,6 +314,14 @@ function sendgoogleImageToserver(selectedImage) {
             if (data.status == 'login') {
                 window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
             } else if (data.status == 'success') {
+                for (message in data.errors) {
+                    for (index in data.errors[message]) {
+                        showNotificationMsg(index, "", 'error');
+                        $('.dev-google-crop-spinner').hide();
+                        $('.dev-google-upload').show();
+                    }
+
+                }
                 var media = data.media;
                 if (name == 'coverPhoto') {
                     addImageToSortView($('.filesUploaded table tbody'), media);
@@ -622,7 +630,7 @@ jQuery(document).ready(function ($) {
                     events[i].handler.call(event.target, event);
                 }
 
-                // Check if any of the clicked element parents matches the 
+                // Check if any of the clicked element parents matches the
                 // delegated event selector (Emulating propagation)
                 $(event.target).parents(events[i].selector).each(function () {
                     events[i].handler.call(this, event);
@@ -726,7 +734,7 @@ jQuery(document).ready(function ($) {
   $('input').bind('keypress keydown', function(e){
        if(e.keyCode == 13) { e.preventDefault(); }
   });
-    
+
     $(document).on('click', '#search-img-btn-small', function () {
         if ($('#dev-search-gimage-box-small').val().trim() != "") {
             $('#dev-search-gimage-box').val($('#dev-search-gimage-box-small').val());
@@ -747,7 +755,7 @@ jQuery(document).ready(function ($) {
 
 
 
-  
+
     $(document).on('keyup', '.dev-recipe-imgeUrl-activity,.dev-recipe-imgeUrl,.dev-recipe-videoUrl,.dev-recipe-videoUrl-activity,#dev-search-gimage-box,#dev-search-gimage-box-small,#dev-search-gimage-box-small-activity,#dev-search-gvideo-box,#dev-search-gvideo-box-small,#dev-search-gvideo-box-small-activity', function (e) {
         e.preventDefault();
 
@@ -809,7 +817,7 @@ jQuery(document).ready(function ($) {
             $('#search-vid-btn').trigger('click');
             name = 'coverPhoto';
         }else{
-          $('#dev-search-gvideo-box-small').trigger('keyup');  
+          $('#dev-search-gvideo-box-small').trigger('keyup');
         }
     });
 
@@ -1001,7 +1009,7 @@ jQuery(document).ready(function ($) {
             name = 'activityPhoto';
 
         }else{
-           $('#dev-search-gvideo-box-small-activity').trigger('keyup'); 
+           $('#dev-search-gvideo-box-small-activity').trigger('keyup');
         }
     });
     $(document).on('click', '.dev-imageurl-submit-activity', function () {
