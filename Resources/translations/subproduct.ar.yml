@@ -25,7 +25,6 @@
 'activity profilePhoto': 'صوره الجديدنا'
 'edit subProduct': 'تعديل منتج فرعى'
 'Edit SubProduct': 'تعديل منتج فرعى'
-'List SubProduct': 'المنتجات الفرعيه والانشطه'
 'subproduct': 'منتج فرعى'
 'Subproducts': 'منتجات فرعيه'
 Delete SubProduct: حذف
@@ -35,7 +34,8 @@ Edit: تعديل
 'Size': 'المقاس'
 type: النوع
 activity: جديدنا
-subproducts and activity: منتجات فرعيه وانشطه
+subproducts and activity: منتجات فرعيه /جديدنا/خيارات عاليه الجوده
+List SubProduct: منتجات فرعيه /جديدنا/خيارات عاليه الجوده
 'Price': 'السعر'
 'Website': 'الرابط'
 'File': 'الصوره'
