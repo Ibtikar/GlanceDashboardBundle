@@ -6,7 +6,15 @@ ibtikar_glance_dashboard_activity_edit:
     path:  /edit/{id}
     defaults: { _controller: IbtikarGlanceDashboardBundle:Activity:edit}
 
+ibtikar_glance_dashboard_bestproduct_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Activity:edit}
+
 ibtikar_glance_dashboard_activity_delete:
+    path:  /delete/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Activity:delete }
+
+ibtikar_glance_dashboard_bestproduct_delete:
     path:  /delete/{id}
     defaults: { _controller: IbtikarGlanceDashboardBundle:Activity:delete }
 

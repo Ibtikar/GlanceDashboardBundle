@@ -186,6 +186,7 @@ class ActivityController extends BackendController {
         $breadCrumbArray = $this->preparedMenu($menus);
         $activity = new Subproduct();
         $form = $this->createFormBuilder($activity, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
+                ->add('type', formType\ChoiceType::class, array('choices' => SubProduct::$TypeChoices, 'expanded' => true,  'data' => SubProduct::$TypeChoices['activity'], 'attr' => array('data-error-after-selector' => '#form_coverType')))
                 ->add('profileType', formType\ChoiceType::class, array('choices' => SubProduct::$profileTypeChoices, 'expanded' => true, 'attr' => array('data-error-after-selector' => '#form_coverType')))
                 ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 2)))
                 ->add('nameEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 2)))
@@ -204,7 +205,6 @@ class ActivityController extends BackendController {
                 $profilePhotoType = $formData['profileType'];
 
                 $activity->setProduct($product);
-                $activity->setType('activity');
                 $dm->persist($activity);
                 $medias = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
                     'createdBy.$id' => new \MongoId($this->getUser()->getId()),
@@ -296,6 +296,8 @@ class ActivityController extends BackendController {
 
         $breadCrumbArray = $this->preparedMenu($menus);
         $form = $this->createFormBuilder($subproduct, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
+                ->add('type', formType\ChoiceType::class, array('choices' => SubProduct::$TypeChoices, 'expanded' => true,  'data' => SubProduct::$TypeChoices['activity'], 'attr' => array('data-error-after-selector' => '#form_coverType')))
+
                 ->add('profileType', formType\ChoiceType::class, array('choices' => SubProduct::$profileTypeChoices, 'expanded' => true, 'attr' => array('data-error-after-selector' => '#form_profileType')))
                 ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 2)))
                 ->add('nameEn', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 2)))

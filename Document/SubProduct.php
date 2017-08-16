@@ -22,6 +22,10 @@ class SubProduct extends Document {
         "image" => "image",
         "video" => "video"
     );
+    public static $TypeChoices = array(
+        "activity" => "activity",
+        "bestProduct" => "bestProduct"
+    );
 
     /**
      * @MongoDB\Id

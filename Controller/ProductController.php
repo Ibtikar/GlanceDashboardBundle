@@ -108,30 +108,30 @@ class ProductController extends BackendController {
 
 
                 $dm->persist($product);
-                $ids=array();
-                $relatedArray = json_decode($formData['related_article'], true);
-
-                foreach($relatedArray as $relatedArticle){
-                    $ids[]=$relatedArticle['id'];
-                }
-                $relatedArray = json_decode($formData['related_tip'], true);
-
-                foreach($relatedArray as $relatedArticle){
-                    $ids[]=$relatedArticle['id'];
-                }
-                $recipes=$dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findBy(array('id'=>array('$in'=>$ids)));
-                $recipeArray=array();
-                foreach($recipes as $recipe){
-                    $recipeArray[$recipe->getId()]=$recipe;
-
-                }
-                if ($formData['related_article']) {
-                    $this->updateRelatedRecipe($product, $formData['related_article'], $dm,'article',$recipeArray);
-                }
-
-                if ($formData['related_tip']) {
-                    $this->updateRelatedRecipe($product, $formData['related_tip'], $dm,'tip',$recipeArray);
-                }
+//                $ids=array();
+//                $relatedArray = json_decode($formData['related_article'], true);
+//
+//                foreach($relatedArray as $relatedArticle){
+//                    $ids[]=$relatedArticle['id'];
+//                }
+//                $relatedArray = json_decode($formData['related_tip'], true);
+//
+//                foreach($relatedArray as $relatedArticle){
+//                    $ids[]=$relatedArticle['id'];
+//                }
+//                $recipes=$dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findBy(array('id'=>array('$in'=>$ids)));
+//                $recipeArray=array();
+//                foreach($recipes as $recipe){
+//                    $recipeArray[$recipe->getId()]=$recipe;
+//
+//                }
+//                if ($formData['related_article']) {
+//                    $this->updateRelatedRecipe($product, $formData['related_article'], $dm,'article',$recipeArray);
+//                }
+//
+//                if ($formData['related_tip']) {
+//                    $this->updateRelatedRecipe($product, $formData['related_tip'], $dm,'tip',$recipeArray);
+//                }
                 $this->slugifier($product);
                 $images = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findBy(array(
 //                    'type' => 'image',
@@ -266,30 +266,30 @@ class ProductController extends BackendController {
 
             if ($form->isValid()) {
                 $formData = $request->get('product');
-                $ids=array();
-                $relatedArray = json_decode($formData['related_article'], true);
-
-                foreach($relatedArray as $relatedArticle){
-                    $ids[]=$relatedArticle['id'];
-                }
-                $relatedArray = json_decode($formData['related_tip'], true);
-
-                foreach($relatedArray as $relatedArticle){
-                    $ids[]=$relatedArticle['id'];
-                }
-                $recipes=$dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findBy(array('id'=>array('$in'=>$ids)));
-                $recipeArray=array();
-                foreach($recipes as $recipe){
-                    $recipeArray[$recipe->getId()]=$recipe;
-
-                }
-                if ($formData['related_article']) {
-                    $this->updateRelatedRecipe($product, $formData['related_article'], $dm,'article',$recipeArray);
-                }
-
-                if ($formData['related_tip']) {
-                    $this->updateRelatedRecipe($product, $formData['related_tip'], $dm,'tip',$recipeArray);
-                }
+//                $ids=array();
+//                $relatedArray = json_decode($formData['related_article'], true);
+//
+//                foreach($relatedArray as $relatedArticle){
+//                    $ids[]=$relatedArticle['id'];
+//                }
+//                $relatedArray = json_decode($formData['related_tip'], true);
+//
+//                foreach($relatedArray as $relatedArticle){
+//                    $ids[]=$relatedArticle['id'];
+//                }
+//                $recipes=$dm->getRepository('IbtikarGlanceDashboardBundle:Recipe')->findBy(array('id'=>array('$in'=>$ids)));
+//                $recipeArray=array();
+//                foreach($recipes as $recipe){
+//                    $recipeArray[$recipe->getId()]=$recipe;
+//
+//                }
+//                if ($formData['related_article']) {
+//                    $this->updateRelatedRecipe($product, $formData['related_article'], $dm,'article',$recipeArray);
+//                }
+//
+//                if ($formData['related_tip']) {
+//                    $this->updateRelatedRecipe($product, $formData['related_tip'], $dm,'tip',$recipeArray);
+//                }
                 $this->get('history_logger')->log($product, History::$EDIT);
 
                 $dm->flush();

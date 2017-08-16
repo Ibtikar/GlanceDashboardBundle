@@ -8,7 +8,7 @@
 {% block breadCrumb %}
     <a class="btn btn-link btn-float has-text" href="{{path('ibtikar_glance_dashboard_product_create')}}"><i class="icon-add"></i><span>إدخال منتج</span></a>
     <a class="btn btn-link btn-float has-text" href="{{path('ibtikar_glance_dashboard_subproduct_create',{'productId':app.request.get('id')})}}"><i class="icon-add"></i><span>إدخال منتج فرعى جديد </span></a>
-    <a class="btn btn-link btn-float has-text" href="{{path('ibtikar_glance_dashboard_activity_create',{'productId':app.request.get('id')})}}"><i class="icon-add"></i><span>إدخال نشاط جديد </span></a>
+    <a class="btn btn-link btn-float has-text" href="{{path('ibtikar_glance_dashboard_activity_create',{'productId':app.request.get('id')})}}"><i class="icon-add"></i><span>إدخال جديدنا/ خيارات عاليه الجوده </span></a>
     <a class="btn btn-link btn-float has-text activeLink" href="{{path('ibtikar_glance_dashboard_product_list')}}"><i class="icon-table2"></i> <span> المنتجات</span></a>
 
 {% endblock %}
