@@ -49,6 +49,9 @@ class SubProductController extends BackendController {
 
         $queryBuilder = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder("IbtikarGlanceDashboardBundle:SubProduct")->field('product')->equals(new \MongoId($id))
                         ->field('deleted')->equals(false);
+         if ($request->get('type')) {
+            $queryBuilder->field('type')->in($request->get('type'));
+        }
         $this->listViewOptions->setDefaultSortBy("updatedAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
         $this->listViewOptions->setActions(array("Edit", "Delete"));
@@ -621,6 +624,21 @@ class SubProductController extends BackendController {
         $slug->setSlugEn($slugEn);
         $dm->persist($slug);
         $dm->flush();
+    }
+
+
+    public function contentCountAction(Request $request)
+    {
+        $renderingParams['draftRecipeCountRecipe'] = $this->buildQueryBuilder($request)->field('type')->equals('subproduct')->getQuery()->execute()->count();
+        $renderingParams['draftRecipeCountArticle'] = $this->buildQueryBuilder($request)->field('type')->equals(SubProduct::$TypeChoices['activity'])->getQuery()->execute()->count();
+        $renderingParams['draftRecipeCountTip'] = $this->buildQueryBuilder($request)->field('type')->equals(SubProduct::$TypeChoices['bestProduct'])->getQuery()->execute()->count();
+        return new JsonResponse($renderingParams);
+    }
+
+
+    public function buildQueryBuilder(Request $request) {
+        return $this->get('doctrine_mongodb')->getManager()->createQueryBuilder("IbtikarGlanceDashboardBundle:SubProduct")->field('product')->equals(new \MongoId($request->get('id')))
+                        ->field('deleted')->equals(false);
     }
 
 }
