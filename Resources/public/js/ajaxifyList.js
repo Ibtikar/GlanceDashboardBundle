@@ -669,6 +669,9 @@ $(document).ready(function () {
                             $('.dev-document-count').html(json.count)
                         }
                         showNotificationMsg(json.message, "", status);
+                        if(typeof modifyNoAccordingToSearch =='function'){
+                            modifyNoAccordingToSearch();
+                        }
                         unblockPage();
                         $('.dev-bulk-action-container').hide();
                         table.ajax.reload(function () {
