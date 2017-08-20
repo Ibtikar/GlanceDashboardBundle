@@ -296,7 +296,7 @@ class ActivityController extends BackendController {
 
         $breadCrumbArray = $this->preparedMenu($menus);
         $form = $this->createFormBuilder($subproduct, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
-                ->add('type', formType\ChoiceType::class, array('choices' => SubProduct::$TypeChoices, 'expanded' => true,  'data' => SubProduct::$TypeChoices['activity'], 'attr' => array('data-error-after-selector' => '#form_coverType')))
+                ->add('type', formType\ChoiceType::class, array('choices' => SubProduct::$TypeChoices, 'expanded' => true,  'attr' => array('data-error-after-selector' => '#form_coverType')))
 
                 ->add('profileType', formType\ChoiceType::class, array('choices' => SubProduct::$profileTypeChoices, 'expanded' => true, 'attr' => array('data-error-after-selector' => '#form_profileType')))
                 ->add('name', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 2)))
