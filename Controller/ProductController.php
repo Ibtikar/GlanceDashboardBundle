@@ -556,7 +556,7 @@ class ProductController extends BackendController {
                                 ->field('products')->in(array($product->getId()))
                                 ->field('status')->equals(Recipe::$statuses['publish'])
                                 ->field('type')->equals(Recipe::$types['recipe']);
-                    }, 'attr' => array('data-maximum-selection-length' => 3, 'data-img-method' => 'coverPhoto', 'data-img-default' => 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg', 'class' => 'select-with-thumb')))
+                    }, 'attr' => array('data-maximum-selection-length' => 3, 'data-img-method' => 'getDefaultCoverPhotoVideoOrImage', 'data-img-default' => 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg', 'class' => 'select-with-thumb')))
                 ->add('bestProduct', DocumentType::class, array('required' => false, 'multiple' => 'multiple', 'placeholder' => 'Choose Product', 'class' => 'IbtikarGlanceDashboardBundle:SubProduct', 'query_builder' => function ( $er)use($product) {
                         return $er->createQueryBuilder('u')
                                 ->field('product')->equals($product->getId())

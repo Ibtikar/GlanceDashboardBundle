@@ -1446,6 +1446,19 @@ class Recipe extends Publishable
         return $array;
     }
 
+    public function getDefaultCoverPhotoVideoOrImage(){
+        if($this->coverPhoto){
+            $type=$this->coverPhoto->getType();
+            if($type=='image'){
+            return  '/'.$this->coverPhoto->getWebPath()   ;
+            }else{
+                return  'https://i.ytimg.com/vi/' . $this->coverPhoto->getVid() . '/default.jpg' ;
+            }
+
+        }
+        return '';
+    }
+
     /**
      * Set migrated
      *
