@@ -162,6 +162,19 @@ class SubProduct extends Document {
         }
     }
 
+
+    public function getDefaultProfilePhotoVideoOrImage() {
+        if ($this->profilePhoto) {
+            $type = $this->profilePhoto->getType();
+            if ($type == 'image') {
+                return '/' . $this->profilePhoto->getWebPath();
+            } else {
+                return 'https://i.ytimg.com/vi/' . $this->profilePhoto->getVid() . '/default.jpg';
+            }
+        }
+        return '';
+    }
+
     /**
      * @return array
      */
