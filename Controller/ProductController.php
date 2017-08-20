@@ -10,10 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Ibtikar\GlanceDashboardBundle\Document\Slug;
 use Ibtikar\GlanceDashboardBundle\Document\Related;
 use Symfony\Component\Form\Extension\Core\Type as formType;
+use Doctrine\Bundle\MongoDBBundle\Form\Type\DocumentType;
 use Ibtikar\GlanceDashboardBundle\Service\ArabicMongoRegex;
 use Ibtikar\GlanceDashboardBundle\Document\History;
 use Ibtikar\GlanceDashboardBundle\Document\Recipe;
 use Ibtikar\GlanceDashboardBundle\Form\Type\ProductType;
+use Ibtikar\GlanceDashboardBundle\Document\SubProduct;
 
 class ProductController extends BackendController {
 
@@ -49,7 +51,7 @@ class ProductController extends BackendController {
     protected function configureListParameters(Request $request) {
         $this->listViewOptions->setDefaultSortBy("updatedAt");
         $this->listViewOptions->setDefaultSortOrder("desc");
-        $this->listViewOptions->setActions(array ("Edit","Delete","ViewOne"));
+        $this->listViewOptions->setActions(array ("Edit","Delete","ViewOne",'Order'));
         $this->listViewOptions->setBulkActions(array("Delete"));
         $this->listViewOptions->setTemplate("IbtikarGlanceDashboardBundle:Product:list.html.twig");
 
@@ -538,5 +540,63 @@ class ProductController extends BackendController {
         $dm->flush();
     }
 
+
+    public function orderAction(Request $request,$id) {
+
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $product = $dm->getRepository('IbtikarGlanceDashboardBundle:Product')->find($id);
+        if (!$product) {
+            throw $this->createNotFoundException($this->trans('Wrong id'));
+        }
+
+          $form = $this->createFormBuilder($product, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
+                ->add('recipes', DocumentType::class, array('required' => false, 'multiple' => 'multiple', 'placeholder' => 'Choose Product', 'class' => 'IbtikarGlanceDashboardBundle:Recipe', 'query_builder' => function ( $er) use($product) {
+                        return $er->createQueryBuilder('u')
+                                ->field('products')->in(array($product->getId()))
+                                ->field('status')->equals(Recipe::$statuses['publish'])
+                                ->field('type')->equals(Recipe::$types['recipe']);
+                    }, 'attr' => array('data-maximum-selection-length' => 3, 'data-img-method' => 'coverPhoto', 'data-img-default' => 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg', 'class' => 'select-with-thumb')))
+                ->add('bestProduct', DocumentType::class, array('required' => false, 'multiple' => 'multiple', 'placeholder' => 'Choose Product', 'class' => 'IbtikarGlanceDashboardBundle:SubProduct', 'query_builder' => function ( $er)use($product) {
+                        return $er->createQueryBuilder('u')
+                                ->field('product')->equals($product->getId())
+                                ->field('type')->equals(SubProduct::$TypeChoices['bestProduct']);
+                    }, 'attr' => array('data-maximum-selection-length' => 4, 'data-img-method' => 'coverPhoto', 'data-img-default' => 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg', 'class' => 'select-with-thumb')))
+                ->add('whatHappening', DocumentType::class, array('required' => false, 'multiple' => 'multiple', 'placeholder' => 'Choose Product', 'class' => 'IbtikarGlanceDashboardBundle:SubProduct', 'query_builder' => function ( $er)use($product) {
+                        return $er->createQueryBuilder('u')
+                                ->field('product')->equals($product->getId())
+                                ->field('type')->equals(SubProduct::$TypeChoices['activity']);
+                    }, 'attr' => array('data-maximum-selection-length' => 8, 'data-img-method' => 'coverPhoto', 'data-img-default' => 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg', 'class' => 'select-with-thumb')))
+                ->add('subproduct', DocumentType::class, array('required' => false, 'multiple' => 'multiple', 'placeholder' => 'Choose Product', 'class' => 'IbtikarGlanceDashboardBundle:SubProduct', 'query_builder' => function ( $er)use($product) {
+                        return $er->createQueryBuilder('u')
+                                ->field('product')->equals($product->getId())
+                                ->field('type')->equals('subproduct');
+                    }, 'attr' => array('data-maximum-selection-length' => 6, 'data-img-method' => 'coverPhoto', 'data-img-default' => 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg', 'class' => 'select-with-thumb')))
+                ->add('save', formType\SubmitType::class)
+                ->getForm();
+
+        //handle form submission
+        if ($request->getMethod() === 'POST') {
+
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+
+
+                $dm->flush();
+
+                $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
+
+                    return new JsonResponse(array('status' => 'redirect', 'url' => $this->generateUrl('ibtikar_glance_dashboard_product_list'), array(), true));
+            }
+        }
+
+
+        return $this->render('IbtikarGlanceDashboardBundle:Product:order.html.twig', array(
+                'form' => $form->createView(),
+                'title' => $this->trans('dispalay content  OnProduct', array(), $this->translationDomain),
+                'translationDomain' => $this->translationDomain
+        ));
+    }
 
 }
