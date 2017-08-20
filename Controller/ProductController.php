@@ -555,23 +555,27 @@ class ProductController extends BackendController {
                         return $er->createQueryBuilder('u')
                                 ->field('products')->in(array($product->getId()))
                                 ->field('status')->equals(Recipe::$statuses['publish'])
+                                ->field('coverPhoto')->prime(true)
                                 ->field('type')->equals(Recipe::$types['recipe']);
                     }, 'attr' => array('data-maximum-selection-length' => 3, 'data-img-method' => 'getDefaultCoverPhotoVideoOrImage', 'data-img-default' => 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg', 'class' => 'select-with-thumb')))
                 ->add('bestProduct', DocumentType::class, array('required' => false, 'multiple' => 'multiple', 'placeholder' => 'Choose Product', 'class' => 'IbtikarGlanceDashboardBundle:SubProduct', 'query_builder' => function ( $er)use($product) {
                         return $er->createQueryBuilder('u')
+                                ->field('profilePhoto')->prime(true)
                                 ->field('product')->equals($product->getId())
                                 ->field('type')->equals(SubProduct::$TypeChoices['bestProduct']);
-                    }, 'attr' => array('data-maximum-selection-length' => 4, 'data-img-method' => 'coverPhoto', 'data-img-default' => 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg', 'class' => 'select-with-thumb')))
+                    }, 'attr' => array('data-maximum-selection-length' => 4, 'data-img-method' => 'profilePhoto', 'data-img-default' => 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg', 'class' => 'select-with-thumb')))
                 ->add('whatHappening', DocumentType::class, array('required' => false, 'multiple' => 'multiple', 'placeholder' => 'Choose Product', 'class' => 'IbtikarGlanceDashboardBundle:SubProduct', 'query_builder' => function ( $er)use($product) {
                         return $er->createQueryBuilder('u')
                                 ->field('product')->equals($product->getId())
+                                ->field('profilePhoto')->prime(true)
                                 ->field('type')->equals(SubProduct::$TypeChoices['activity']);
-                    }, 'attr' => array('data-maximum-selection-length' => 8, 'data-img-method' => 'coverPhoto', 'data-img-default' => 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg', 'class' => 'select-with-thumb')))
+                    }, 'attr' => array('data-maximum-selection-length' => 8, 'data-img-method' => 'profilePhoto', 'data-img-default' => 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg', 'class' => 'select-with-thumb')))
                 ->add('subproduct', DocumentType::class, array('required' => false, 'multiple' => 'multiple', 'placeholder' => 'Choose Product', 'class' => 'IbtikarGlanceDashboardBundle:SubProduct', 'query_builder' => function ( $er)use($product) {
                         return $er->createQueryBuilder('u')
                                 ->field('product')->equals($product->getId())
+                                ->field('profilePhoto')->prime(true)
                                 ->field('type')->equals('subproduct');
-                    }, 'attr' => array('data-maximum-selection-length' => 6, 'data-img-method' => 'coverPhoto', 'data-img-default' => 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg', 'class' => 'select-with-thumb')))
+                    }, 'attr' => array('data-maximum-selection-length' => 6, 'data-img-method' => 'profilePhoto', 'data-img-default' => 'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg', 'class' => 'select-with-thumb')))
                 ->add('save', formType\SubmitType::class)
                 ->getForm();
 
