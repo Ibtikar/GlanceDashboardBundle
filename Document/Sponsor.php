@@ -32,7 +32,6 @@ class Sponsor {
     protected $nameEn;
 
     /**
-     * @Assert\NotBlank
      * @MongoDB\String
      */
     protected $price;

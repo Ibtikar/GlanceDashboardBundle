@@ -173,11 +173,11 @@
                                                         <td>
                                                             <div class="thumbnail small-thumbnail">
                                                                 <div class="thumb thumb-slide">
-                                                                    {% if object.type=='subproduct' %}
+                                                                   {# {% if object.type=='subproduct' %}
                                                                         {% set fieldName='coverPhoto' %}
-                                                                    {% else %}
+                                                                    {% else %}#}
                                                                         {% set fieldName= field.propertyName %}
-                                                                    {% endif %}
+{#                                                                    {% endif %}#}
                                                                     {% if attribute(object, 'profileType')=='image'%}
 
                                                                         <img alt="" src="{{ asset( attribute(attribute(object, fieldName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}">
