@@ -728,7 +728,7 @@ class Recipe extends Publishable
      * @param Ibtikar\GlanceUMSBundle\Document\Staff $chef
      * @return self
      */
-    public function setChef(\Ibtikar\GlanceUMSBundle\Document\Staff $chef)
+    public function setChef(\Ibtikar\GlanceUMSBundle\Document\Staff $chef =NULL)
     {
         $this->chef = $chef;
         return $this;
