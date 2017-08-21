@@ -116,7 +116,7 @@ function makeRequest(q, googleStart) {
         showGImageLoading();
         var request = gapi.client.search.cse.list({
             'q': q,
-            'cx': '000148653625495857602:hle-bc_dfj4', //https://www.google.com/cse/all -> create search engin and edit it to accept images -> set Restrict Pages using Schema.org Types to [ImageObject]
+            'cx': '000005614798088592640:jwarqnfwxtg', //https://www.google.com/cse/all -> create search engin and edit it to accept images -> set Restrict Pages using Schema.org Types to [ImageObject]
             'searchType': 'image',
             'fileType': 'jpg,png,gif',
             'num': 10, // max 10 items per page
@@ -125,6 +125,9 @@ function makeRequest(q, googleStart) {
             'start': googleStartIndex
         }
         );
+//https://www.googleapis.com/customsearch/v1?q=test&cref=AIzaSyAreDhTh3IqaGPqC44t08sQF_qbSGzzA7Q&cx=010855067127206535986%3Aqdh_vhglb4u&fileType=jpg&filter=1&imgSize=medium&imgType=news&num=4&searchType=image&start=1&key=AIzaSyDDQ69XA7TFEzlKEYPggM_a0SMhKf4To38
+//https://content.googleapis.com/customsearch/v1?cx=000148653625495857602%3Ahle-bc_dfj4&fileType=jpg%2Cpng%2Cgif&filter=0&imgSize=xxlarge&num=10&q=test&searchType=image&start=1&key=AIzaSyDDQ69XA7TFEzlKEYPggM_a0SMhKf4To38
+//  https://developers.google.com/apis-explorer/#s/customsearch/v1/search.cse.list?q=test&cx=002715630024689775911%25253Ajczmrpp_vpo&filter=0&imgSize=xxlarge&num=10&searchType=image&start=1&_h=6&
         request.then(function(response) {
             hideGImageLoading();
             imageSearch = response;
@@ -139,7 +142,7 @@ function makeRequest(q, googleStart) {
                 $('#googlesearchResult').hide();
             }
             if ($('#tab2').find('.alert-danger').length == 0) {
-                $('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#" aria-hidden="true">×</a>'+messages.googleError+'</div>').insertAfter('#google-hr');
+                $('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#" aria-hidden="true">×</a>عذرا! لا يوجد نتائج بسبب مشكله فى الأتصال بجوجل...من فضلك حاول مره اخرى</div>').insertAfter('#google-hr');
             }
         }
         );
@@ -583,7 +586,7 @@ jQuery(document).ready(function($) {
                     events[i].handler.call(event.target, event);
                 }
 
-                // Check if any of the clicked element parents matches the 
+                // Check if any of the clicked element parents matches the
                 // delegated event selector (Emulating propagation)
                 $(event.target).parents(events[i].selector).each(function () {
                     events[i].handler.call(this, event);
@@ -729,7 +732,7 @@ jQuery(document).ready(function($) {
             $('#dev-search-gvideo-box').val($('#dev-search-gvideo-box-small').val());
             $('#search-vid-btn').trigger('click');
         }else{
-          $('#dev-search-gvideo-box-small').trigger('keyup');  
+          $('#dev-search-gvideo-box-small').trigger('keyup');
         }
     });
 
@@ -743,7 +746,7 @@ jQuery(document).ready(function($) {
 $(document).on('submit','.main-search',function() {
   return false;
 });
- 
+
 $(document).on('keyup', '.dev-recipe-imgeUrl-activity,.dev-recipe-imgeUrl,.dev-recipe-videoUrl,#dev-search-gimage-box,#dev-search-gimage-box-small,#dev-search-gvideo-box,#dev-search-gvideo-box-small', function (e) {
         e.preventDefault();
 

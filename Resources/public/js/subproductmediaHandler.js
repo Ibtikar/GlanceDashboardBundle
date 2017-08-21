@@ -117,7 +117,7 @@ function makeRequest(q, googleStart) {
         showGImageLoading();
         var request = gapi.client.search.cse.list({
             'q': q,
-            'cx': '000148653625495857602:hle-bc_dfj4', //https://www.google.com/cse/all -> create search engin and edit it to accept images -> set Restrict Pages using Schema.org Types to [ImageObject]
+            'cx': '000005614798088592640:jwarqnfwxtg', //https://www.google.com/cse/all -> create search engin and edit it to accept images -> set Restrict Pages using Schema.org Types to [ImageObject]
             'searchType': 'image',
             'fileType': 'jpg,png,gif',
             'num': 10, // max 10 items per page
@@ -140,7 +140,7 @@ function makeRequest(q, googleStart) {
                 $('#googlesearchResult').hide();
             }
             if ($('#tab2').find('.alert-danger').length == 0) {
-                $('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#" aria-hidden="true">×</a>'+messages.googleError+'</div>').insertAfter('#google-hr');
+                $('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#" aria-hidden="true">×</a>عذرا! لا يوجد نتائج بسبب مشكله فى الأتصال بجوجل...من فضلك حاول مره اخرى</div>').insertAfter('#google-hr');
             }
         }
         );
