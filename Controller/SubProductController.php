@@ -595,7 +595,7 @@ class SubProductController extends BackendController {
     public function slugifier($subproduct) {
         $dm = $this->get('doctrine_mongodb')->getManager();
         $slugAr = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($subproduct->getName(), 100));
-        $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringEn($subproduct->getNameEn(), 100));
+        $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($subproduct->getNameEn(), 100));
         $arabicCount = $dm->createQueryBuilder('IbtikarGlanceDashboardBundle:SubProduct')
                 ->field('deleted')->equals(FALSE)
                 ->field('slug')->equals($slugAr)
@@ -611,7 +611,7 @@ class SubProductController extends BackendController {
             $slugAr = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($subproduct->getName(), 100) . "-" . date('ymdHis'));
         }
         if ($englishCount != 0) {
-            $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringEn($subproduct->getNameEn(), 100) . "-" . date('ymdHis'));
+            $slugEn = ArabicMongoRegex::slugify($this->getShortDescriptionStringAr($subproduct->getNameEn(), 100) . "-" . date('ymdHis'));
         }
 
         $subproduct->setSlug($slugAr);
