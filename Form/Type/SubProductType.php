@@ -25,8 +25,8 @@ class SubProductType extends AbstractType {
 //                'class' => 'IbtikarGlanceDashboardBundle:Product', 'placeholder' => $this->trans('Choose product',array(),'subproduct'),
 //                'attr' => array('class' => 'select', 'data-error-after-selector' => '.select2-container')
 //        ))
-                ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 5)))
-                ->add('descriptionEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 5)))
+                ->add('description', formType\TextareaType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 5)))
+                ->add('descriptionEn', formType\TextareaType::class, array('required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 5)))
 
 //                ->add('weight', formType\TextType::class, array('required' => FALSE, 'attr' => array()))
 //                ->add('size', formType\TextType::class, array( 'required' => FALSE, 'attr' => array()))
