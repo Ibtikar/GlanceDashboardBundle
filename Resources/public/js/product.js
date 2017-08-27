@@ -471,9 +471,17 @@ $(document).ready(function () {
 
                 typeAllowed = ['jpeg', 'jpg', 'png'];
             }
+            $('#image-cropper-modal').cropit('previewSize', {width: 585, height: 300});
+            $('#image-cropper-modal').cropit('exportZoom', 2);
+
+
             var errorDimension = imageErrorMessages.imageDimension;
             if ($(element).closest('td').attr('data-name') == 'bannerPhoto') {
                 errorDimension = imageErrorMessages.BannerimageDimension;
+                $('#image-cropper-modal').cropit('previewSize', {width: 1170, height: 200});
+                $('#image-cropper-modal').cropit('exportZoom', 1);
+
+
             }
             var elementObject = $('#uploadImg .cropit-image-input');
             if (elementObject.val()) {
@@ -520,8 +528,6 @@ $(document).ready(function () {
         }
 
     })
-    $('#image-cropper-modal').cropit('previewSize', {width: 585, height: 300});
-    $('#image-cropper-modal').cropit('exportZoom', 2);
 
     $(document).on('click', '.dev-submit-image', function () {
         var imageFile = $('#image-cropper-modal').cropit('export')
