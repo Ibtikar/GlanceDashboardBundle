@@ -31,6 +31,10 @@ ibtikar_glance_dashboard_subproduct:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/subproduct.yml"
     prefix:   /subproduct
 
+ibtikar_glance_dashboard_activity:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/activity.yml"
+    prefix:   /activity
+
 ibtikar_glance_dashboard_magazine:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/magazine.yml"
     prefix:   /magazine
@@ -46,7 +50,7 @@ ibtikar_glance_dashboard_category:
 ibtikar_glance_dashboard_media:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/media.yml"
     prefix:   /
-    
+
 ibtikar_glance_dashboard_page:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/page.yml"
     prefix:   /

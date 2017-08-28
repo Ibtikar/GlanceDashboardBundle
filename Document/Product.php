@@ -189,6 +189,28 @@ class Product extends Document
      */
     private $coverType = "image";
 
+    /**
+     * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\SubProduct" , simple=true)
+     */
+    private $bestProduct;
+
+
+    /**
+     * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\SubProduct" , simple=true)
+     */
+    private $whatHappening;
+
+    /**
+     * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\SubProduct" , simple=true)
+     */
+    private $subproduct;
+
+    /**
+     * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe" , simple=true)
+     */
+    private $recipes;
+
+
     public static $coverTypeChoices = array(
         "image" => "image",
         "video" => "video"
@@ -747,7 +769,7 @@ class Product extends Document
      * @param Ibtikar\GlanceDashboardBundle\Document\Media $bannerPhoto
      * @return self
      */
-    public function setBannerPhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $bannerPhoto)
+    public function setBannerPhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $bannerPhoto =null)
     {
         $this->bannerPhoto = $bannerPhoto;
         return $this;
@@ -805,6 +827,126 @@ class Product extends Document
         $this->relatedKitchen911->removeElement($relatedKitchen911);
     }
 
+    /**
+     * Add bestProduct
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\SubProduct $bestProduct
+     */
+    public function addBestProduct(\Ibtikar\GlanceDashboardBundle\Document\SubProduct $bestProduct)
+    {
+        $this->bestProduct[] = $bestProduct;
+    }
+
+    /**
+     * Remove bestProduct
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\SubProduct $bestProduct
+     */
+    public function removeBestProduct(\Ibtikar\GlanceDashboardBundle\Document\SubProduct $bestProduct)
+    {
+        $this->bestProduct->removeElement($bestProduct);
+    }
+
+    /**
+     * Get bestProduct
+     *
+     * @return \Doctrine\Common\Collections\Collection $bestProduct
+     */
+    public function getBestProduct()
+    {
+        return $this->bestProduct;
+    }
+
+    /**
+     * Add whatHappening
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\SubProduct $whatHappening
+     */
+    public function addWhatHappening(\Ibtikar\GlanceDashboardBundle\Document\SubProduct $whatHappening)
+    {
+        $this->whatHappening[] = $whatHappening;
+    }
+
+    /**
+     * Remove whatHappening
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\SubProduct $whatHappening
+     */
+    public function removeWhatHappening(\Ibtikar\GlanceDashboardBundle\Document\SubProduct $whatHappening)
+    {
+        $this->whatHappening->removeElement($whatHappening);
+    }
+
+    /**
+     * Get whatHappening
+     *
+     * @return \Doctrine\Common\Collections\Collection $whatHappening
+     */
+    public function getWhatHappening()
+    {
+        return $this->whatHappening;
+    }
+
+    /**
+     * Add subproduct
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\SubProduct $subproduct
+     */
+    public function addSubproduct(\Ibtikar\GlanceDashboardBundle\Document\SubProduct $subproduct)
+    {
+        $this->subproduct[] = $subproduct;
+    }
+
+    /**
+     * Remove subproduct
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\SubProduct $subproduct
+     */
+    public function removeSubproduct(\Ibtikar\GlanceDashboardBundle\Document\SubProduct $subproduct)
+    {
+        $this->subproduct->removeElement($subproduct);
+    }
+
+    /**
+     * Get subproduct
+     *
+     * @return \Doctrine\Common\Collections\Collection $subproduct
+     */
+    public function getSubproduct()
+    {
+        return $this->subproduct;
+    }
+
+    /**
+     * Add recipe
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $recipe
+     */
+    public function addRecipe(\Ibtikar\GlanceDashboardBundle\Document\Recipe $recipe)
+    {
+        $this->recipes[] = $recipe;
+    }
+
+    /**
+     * Remove recipe
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $recipe
+     */
+    public function removeRecipe(\Ibtikar\GlanceDashboardBundle\Document\Recipe $recipe)
+    {
+        $this->recipes->removeElement($recipe);
+    }
+
+    /**
+     * Get recipes
+     *
+     * @return \Doctrine\Common\Collections\Collection $recipes
+     */
+    public function getRecipes()
+    {
+        return $this->recipes;
+    }
+    
     /**
      * Set metaTagTitleAr
      *

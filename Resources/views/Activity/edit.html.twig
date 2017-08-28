@@ -1,0 +1,443 @@
+{% extends 'IbtikarGlanceDashboardBundle::formLayout.html.twig' %}
+
+
+
+{% block form_container %}
+
+
+
+    {{ form_start(form)}}
+
+    {{ form_row(form.type) }}
+
+    {{ form_row(form.profileType) }}
+
+
+    <div class="row">
+        {% set deleteAttrs = popover_factory(deletePopoverConfig is defined?deletePopoverConfig:[]) %}
+
+        <div class="col-md-12">
+
+             <h5>ادخل
+                الصورة المطلوبة
+            </h5>
+
+
+      <div class="table-responsive">
+                <table class="table table-bordered">
+                 <tbody>
+                     <tr id="dev-profilePhoto" {% if profileType =='video' %}style="display: none;"{%endif%}>
+                            <td style="width: 150px">
+                                <div class="thumbnail">
+                                    <div class="thumb thumb-slide">
+                                        {% if profileImage is not empty %}
+                                            <img src="{{ asset(profileImage.getWebPath())}}" alt="">
+                                        {% else %}
+                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
+
+                                        {% endif %}
+                                        <div class="caption">
+                                            <span>
+                                                {% if profileImage is not empty %}
+                                                    <a href="{{ asset(profileImage.getWebPath())}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% else %}
+                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% endif %}                                                                                </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </td>
+                            <td class="thumbnail-caption">
+                                <h4>   </h4>
+                                <ul class="text-grey-300">
+                                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                                    <li> يجب الا تقل ابعاد الصورة عن 1170*600 </li>
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG او GIF </li>
+                                </ul>
+                            </td>
+                            <td style="width: 300px" data-name="profilePhoto">
+                                {% if profileImage is empty %}
+                                <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
+                                 {% endif %}
+                                 <a class="btn btn-default  dev-crop-images"   {% if profileImage is empty %}style="display: none"{%else %} data-image-id="{{ profileImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':profileImage.id,'collectionType':'Product'})}}"{%endif%}  >  رفع الصورة </a>
+                                <a class="btn btn-default dev-trash-image" {% if profileImage is empty %}style="display: none" {%else %} data-image-id="{{ profileImage.id }}"   data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': profileImage.id,'collectionType':'Product'}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%}> <i class="icon-trash"></i></a>
+
+
+                            </td>
+                        </tr>
+                        <tr id="dev-profileVideo"  {% if profileType =='image' %}style="display: none;"{%endif%}>
+                            <td style="width: 150px">
+
+                                <div class="thumbnail">
+                                    <div class="thumb thumb-slide">
+
+                                        {% if profileVideo is not empty %}
+                                            <img src="https://i.ytimg.com/vi/{{ profileVideo.vid }}/hqdefault.jpg" alt="">
+
+                                        {% else %}
+                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
+
+                                        {% endif %}
+                                        <div class="caption">
+                                            <span>
+                                                {% if profileVideo is not empty %}
+                                                    <a href="https://i.ytimg.com/vi/{{ profileVideo.vid }}/hqdefault.jpg" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% else %}
+                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+
+
+                            <td class="thumbnail-caption">
+                                <h4>أضف رابط الفيديو</h4>
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        {{ form_widget(form.video) }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="width: 300px" data-name="profileVideo">
+                                {% if profileVideo is empty %}
+                                    <a class="btn btn-default dev-upload-video"  > رفع الفيديو</a>
+                                {% endif %}
+                                <a class="btn btn-default dev-upload-video"   {% if profileVideo is empty %}style="display: none"{%else%} data-video-id="{{ profileVideo.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':profileVideo.id,'collectionType':'Competition'})}}"{%endif%}   >   تغير الفيديو </a>
+
+
+                            </td>
+
+                        </tr>
+
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <hr>
+    <div class="tabbable">
+        <ul class="nav nav-tabs nav-tabs-highlight">
+            <li class="active"><a href="#arabic" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}" alt="arabic" width="30" height="20"/></a></li>
+            <li><a href="#english" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}" alt="english" width="30" height="20"/></a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="arabic">
+
+
+                {{ form_row(form.name) }}
+
+
+
+                {{ form_row(form.description) }}
+
+                {#                {{ form_row(form.images) }}#}
+
+            </div><!-- arabic end -->
+
+            <div class="tab-pane" id="english">
+
+
+                {{ form_row(form.nameEn) }}
+
+
+
+                {{ form_row(form.descriptionEn) }}
+
+
+
+            </div><!-- english end -->
+
+        </div>
+    </div>
+    {#                <hr/>#}
+    {#  {{ form_row(form.product) }}#}
+      {{ form_row(form.url) }}
+
+
+    {{ form_end(form) }}
+
+
+{% endblock %}
+{% block form_buttons %}
+    <div class="row actionButtons">
+        <div class="col-xs-12">
+            <button class="btn btn-primary  dev-form-submit-btn" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
+            <button class="btn btn-default dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
+
+
+
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- uploadImg modal -->
+    <div id="uploadImg" class="modal fade">
+        <div class="modal-dialog  modal-full">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h6 class="modal-title"> الصورة
+                    </h6>
+                </div>
+
+                <div class="modal-body">
+
+                    <div id="image-cropper-modal">
+                        <!-- This is where the preview image is displayed -->
+                        <div class="cropit-preview"></div>
+
+                        <!-- This range input controls zoom -->
+
+
+                        <div class="controls-wrapper">
+                            <div class="rotation-btns">
+                                <span class="icon-rotate-cw2 rotate-ccw-btn"></span>
+                                <span class="icon-rotate-ccw2 rotate-cw-btn"></span>
+                            </div>
+
+
+                            <!-- You can add additional elements here, e.g. the image icons -->
+                            <div class="slider-wrapper">
+                                <span class="icon icon-image2 smallIcon"></span>
+                                <input type="range" min="0" max="50" value="5" step="5" class="cropit-image-zoom-input" />
+                                <span class="icon icon-image2 bigIcon"></span>
+                            </div>
+                        </div><!-- controls-wrapper -->
+
+                        <!-- This is where user selects new image -->
+                        <input type="file" class="cropit-image-input" />
+
+                        <!-- The cropit- classes above are needed
+                             so cropit can identify these elements -->
+                    </div>
+
+                </div>
+
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-link dev-crop-spinner" style="display: none"><i class="spinner icon-spinner text-success"></i></button>
+                    <button type="button" class="btn btn-link dev-submit-image" data-url="" data-id=""><i class="icon-checkmark4 text-success"></i></button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal"><i class="icon-cross2 text-danger-400"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /uploadImg modal -->
+
+    {% set imageTempelate %}
+        <tr id="dev-%name%">
+            <td style="width: 150px">
+
+                <div class="thumbnail">
+                    <div class="thumb thumb-slide">
+                        <img src="%image-url%" alt="">
+                        <div class="caption">
+                            <span>
+                                <a href="%image-url%" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </td>
+            <td class="thumbnail-caption">
+                <h4>   </h4>
+                <ul class="text-grey-300">
+                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                    <li>  %errorDimission%  </li>
+                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG او GIF </li>
+                </ul>
+            </td>
+            <td style="width: 300px" data-name="%name%">
+                %uploadButton%
+                %cropButton%
+                %deleteButton%
+
+
+            </td>
+
+        </tr>
+
+    {% endset %}
+    {% set uploadButton %}
+        <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
+    {% endset %}
+    {% set cropButton %}
+        <a class="btn btn-default dev-crop-images"    data-image-id="%image-id%" data-crop-url="%crop-url%">  رفع الصورة </a>
+    {% endset %}
+    {% set deleteButton %}
+        <a class="btn btn-default dev-trash-image" data-image-id="%image-id%"  data-href = "%image-delete-url%"  %pop-block%> <i class="icon-trash"></i></a>
+        {% endset %}
+
+
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
+
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/media/fancybox.min.js')}}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_thumbnails.js')}}"></script>
+
+
+    <!-- Plugin file uploaded JS -->
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/bootstrap-fileupload.js')}}"></script>
+
+
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/jquery.cropit.js')}}"></script>
+
+    <script>
+
+        var imageTempelate = '{{ imageTempelate|escape('js') }}';
+        var cropButton = '{{ cropButton|escape('js') }}';
+        var deleteButton = '{{ deleteButton|escape('js') }}';
+        var uploadButton = '{{ uploadButton|escape('js') }}';
+        var cropperPluginInitialized = false;
+        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':app.request.get('id'),'collectionType':'Activity'})}}";
+        var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'image','documentId':app.request.get('id'),'collectionType':'Activity'})}}";
+        var youtubeUploadVideo = "{{ path('ibtikar_glance_dashboard_media_youtube_upload_video',{'type':'video','documentId':app.request.get('id'),'collectionType':'Activity'}) }}?imageType=profilePhoto";
+        var validateVideoUrl = '{{ path('youtube_validate_videoUrl') }}';
+        var element;
+        var name;
+        var type;
+        var imageErrorMessages = {
+            'imageExtension': '{% trans from 'validators'%}picture extension not correct.{%endtrans%}',
+            'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 1170*600{%endtrans%}',
+            'sizeError': '{% trans from 'validators'%}File size must be less than 4mb{%endtrans%}',
+            'generalError': '{% trans %}failed operation{%endtrans%}',
+            'profilePhoto': '{% trans from translationDomain %}activity profilePhoto{%endtrans%}',
+        }
+
+
+        $(document).ready(function () {
+            $(".alert.alert-success").fadeTo(5000, 500).slideUp(500, function () {
+                $(".alert.alert-success").slideUp(500);
+            });
+
+   })
+
+        $('body').on('ajaxCallback', function () {
+            $('[name="form[profileType]"]').on('click',function(){
+           if($(this).val() == "image"){
+               $('#dev-profilePhoto').show();
+               $('#dev-profileVideo').hide();
+           }else if($(this).val() == "video"){
+               $('#dev-profileVideo').show();
+               $('#dev-profilePhoto').hide();
+           }
+        });
+           })
+
+
+            $('[name="form[profileType]"]').on('click', function () {
+                if ($(this).val() == "image") {
+                    $('#dev-profilePhoto').show();
+                    $('#dev-profileVideo').hide();
+                } else if ($(this).val() == "video") {
+                    $('#dev-profileVideo').show();
+                    $('#dev-profilePhoto').hide();
+                }
+            });
+
+            $(document).on('click', '.dev-upload-video', function () {
+
+                if (typeof ytXhr !== "undefined")
+                    ytXhr.abort();
+
+
+                var obj = $('#form_video').val();
+                var videoUrl = $.trim(obj);
+                errorContainer=$('#form_video').closest('form-group')
+
+                if (videoUrl === "") {
+                    errorContainer.removeClass('has-error');
+                    return;
+                }
+
+                if (!valid_youtubeUrl(videoUrl)) {
+                    showNotificationMsg(messages.wrongURL, '', 'error');
+                    $('.dev-recipe-videoUrl').val('');
+                    return;
+                }
+
+                var videoId = getIDFromURL(videoUrl);
+
+                if (videoId.indexOf("https://www.youtube") > -1) {
+                    showNotificationMsg(messages.wrongURL, '', 'error');
+                    $('.dev-recipe-videoUrl').val('');
+                    return;
+                }
+
+                ytXhr = $.ajax({
+                    url: validateVideoUrl,
+                    method: 'post',
+                    data: {'videoUrl': videoUrl},
+                    success: function (data) {
+                        if (data == 'error') {
+                            showNotificationMsg(messages.wrongURL, '', 'error');
+                        } else {
+                            $('.dev-videourl-submit').attr('disabled', 'disabled');
+                            var videos = [];
+                            videos[0] = videoId;
+
+                            $.ajax({
+                                url: youtubeUploadVideo,
+                                method: "POST",
+                                data: {videos: videos},
+                                success: function (data) {
+                                    if (data.status === 'success') {
+                                        showNotificationMsg(data.message, "", data.status);
+                                        $(data.video).each(function () {
+                                            $('#dev-profileVideo img').attr('src', this.imageUrl);
+                                            $('#dev-profileVideo [data-popup="lightbox"]').attr('href', this.imageUrl);
+                                        });
+                                    }
+
+                                    $('.dev-recipe-videoUrl').val('');
+                                    $('.dev-videourl-submit').removeAttr('disabled');
+                                }
+                            });
+
+                        }
+                    }
+                });
+            });
+
+        function valid_youtubeUrl(videoUrl) {
+            return videoUrl.match(/^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/);
+        }
+
+        function getIDFromURL(url) {
+            var ID = '';
+            url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+            if (url[2] !== undefined) {
+                ID = url[2].split(/[^0-9a-z_\-]/i);
+                ID = ID[0];
+            } else {
+                ID = url;
+            }
+            return ID;
+        }
+    </script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/activity.js') }}"></script>
+
+
+{% endblock %}

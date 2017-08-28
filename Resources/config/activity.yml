@@ -1,0 +1,39 @@
+ibtikar_glance_dashboard_activity_create:
+    path:  /create
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Activity:create }
+
+ibtikar_glance_dashboard_activity_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Activity:edit}
+
+ibtikar_glance_dashboard_bestproduct_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Activity:edit}
+
+ibtikar_glance_dashboard_activity_delete:
+    path:  /delete/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Activity:delete }
+
+ibtikar_glance_dashboard_bestproduct_delete:
+    path:  /delete/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Activity:delete }
+
+ibtikar_glance_dashboard_activity_list:
+    path: /list
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Activity:list }
+
+ibtikar_glance_dashboard_activity_delete:
+    path: /delete
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Activity:delete}
+
+ibtikar_glance_dashboard_activity_bulk_actions:
+    path: /bulk
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Activity:bulk}
+
+ibtikar_glance_dashboard_activity_check_field_unique:
+    path: /checkfieldUnique
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Activity:checkFieldUnique }
+
+ibtikar_glance_dashboard_activity_change_list_columns:
+    path:  /change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Activity:changeListColumns }

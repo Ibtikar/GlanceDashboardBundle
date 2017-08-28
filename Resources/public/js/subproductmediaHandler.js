@@ -67,8 +67,9 @@ function quoteattr(s, preserveCR) {
  * add image to the sort view
  * @param {object} media
  */
-function addImageToSortView(media) {
-    $('.filesUploaded table tbody').append(
+function addImageToSortView(selector,media) {
+
+    selector.append(
         imageSortTemplate
         .replace(/%image-id%/g, media.id)
         .replace(/%image-name%|%title%/g, media.path?media.path:media.vid)
@@ -125,9 +126,6 @@ function makeRequest(q, googleStart) {
             'start': googleStartIndex
         }
         );
-//https://www.googleapis.com/customsearch/v1?q=test&cref=AIzaSyAreDhTh3IqaGPqC44t08sQF_qbSGzzA7Q&cx=010855067127206535986%3Aqdh_vhglb4u&fileType=jpg&filter=1&imgSize=medium&imgType=news&num=4&searchType=image&start=1&key=AIzaSyDDQ69XA7TFEzlKEYPggM_a0SMhKf4To38
-//https://content.googleapis.com/customsearch/v1?cx=000148653625495857602%3Ahle-bc_dfj4&fileType=jpg%2Cpng%2Cgif&filter=0&imgSize=xxlarge&num=10&q=test&searchType=image&start=1&key=AIzaSyDDQ69XA7TFEzlKEYPggM_a0SMhKf4To38
-//  https://developers.google.com/apis-explorer/#s/customsearch/v1/search.cse.list?q=test&cx=002715630024689775911%25253Ajczmrpp_vpo&filter=0&imgSize=xxlarge&num=10&searchType=image&start=1&_h=6&
         request.then(function(response) {
             hideGImageLoading();
             imageSearch = response;
@@ -268,47 +266,49 @@ $(document).on('click', '.dev-google-upload', function () {
 
 });
 
-function sendgoogleImageToserver(selectedImage){
-     $.ajax({
-            url: googleUploadImage,
-            method: "POST",
-            data: {
-                images: selectedImage,
-            },
-            success: function (data) {
-                if (data.status == 'login') {
-                    window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
-                }
-                else if (data.status == 'success') {
-                    var media = data.media;
-                    addImageToSortView(media);
-                    showNotificationMsg(data.message, "", data.status);
-                    $('#uploadImg').modal('hide');
-                    $('#GoogleImportImg-modal').modal('hide')
-                    $('[data-popup="popover"]').popover({
-                        delay: {"hide": 500}
-                    });
+function sendgoogleImageToserver(selectedImage) {
+    $.ajax({
+        url: googleUploadImage,
+        method: "POST",
+        data: {
+            images: selectedImage,
+        },
+        success: function (data) {
+            if (data.status == 'login') {
+                window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
+            } else if (data.status == 'success') {
+                var media = data.media;
+                    addImageToSortView($('.filesUploaded table tbody'), media);
 
 
-                    // Tooltip
-                    $('[data-popup="tooltip"]').tooltip({
-                        trigger: 'hover'
-                    });
-
-
-                } else {
-                    $('#uploadImg').modal('hide');
-                    $('#GoogleImportImg-modal').modal('hide')
-                    showNotificationMsg(data.message, "", 'error');
-//                    refreshImages();
-                }
-                $(".styled, .multiselect-container input").uniform({
-                    radioClass: 'choice'
+                showNotificationMsg(data.message, "", data.status);
+                $('#uploadImg').modal('hide');
+                $('#GoogleImportImg-modal').modal('hide')
+                $('[data-popup="popover"]').popover({
+                    delay: {"hide": 500}
                 });
-                $('.dev-google-crop-spinner').hide();
-                $('.dev-google-upload').show();
+
+
+                // Tooltip
+                $('[data-popup="tooltip"]').tooltip({
+                    trigger: 'hover'
+                });
+
+
+            } else {
+                $('#uploadImg').modal('hide');
+                $('#GoogleImportImg-modal').modal('hide')
+                showNotificationMsg(data.message, "", 'error');
+//                    refreshImages();
             }
-        });
+
+            $(".styled, .multiselect-container input").uniform({
+                radioClass: 'choice'
+            });
+            $('.dev-google-crop-spinner').hide();
+            $('.dev-google-upload').show();
+        }
+    });
 }
 
 ////////////////   google image search end   /////////////
@@ -505,7 +505,7 @@ function refreshMediaSortView() {
         url: refreshImagesUrl,
         success: function (data) {
             for (var i = 0; i < data.images.length; i++) {
-                addImageToSortView(data.images[i]);
+                addImageToSortView($('.filesUploaded table tbody'),data.images[i]);
             }
             $(".styled, .multiselect-container input").uniform({
                 radioClass: 'choice'
@@ -550,13 +550,7 @@ function isValidKey(keyCode) {
 
     if($.inArray(keyCode, invalidKeysCodes) !== -1) return false;
 }
-function updateGallaryType(){
-    $('[name="dev-gallary-type"]').each(
-            function(){
-                $(this).prop('checked',$(this).val() == $('[id$="_galleryType"]').val());
-            });
-    $.uniform.update();
-}
+
 
 /**
  * @author Gehad Mohamed <gehad.mohamed@ibtikar.net.sa>
@@ -609,7 +603,7 @@ jQuery(document).ready(function($) {
         $('input.cropit-image-input').val('');
         $('.cropit-preview').removeClass('cropit-image-loaded');
         $('.cropit-preview-image').attr('src', '');
-        name = $(this).closest('td').attr('data-name');
+        name = '';
         element = $(this);
         type = 'upload';
         $('#uploadImg .cropit-image-input').click();
@@ -619,20 +613,6 @@ jQuery(document).ready(function($) {
         cropperPluginInitialized = true;
     });
 
-    $('body').on('preAjaxCallback',function(){
-        populateData();
-        $('#recipe_galleryType').val($('input.dev-gallary-type:checked').val())
-        if(!$('.dev-cover-img').is(':checked')){
-            showNotificationMsg("يجب إختيار صورة غلاف", "", "error");
-            return false;
-        }else{
-            updateMinRelated();
-            if($('#recipe_minvalue').val()==''){
-                showNotificationMsg("يجب الا تقل المقالات والنصائح ذات صله عن 2", "", "error");
-                return false;
-            }
-        }
-    });
 
     $(document).on('click', '#search-vid-btn', function(e) {
         e.preventDefault();
@@ -687,7 +667,7 @@ jQuery(document).ready(function($) {
                         YT.reset(true);
 
                         $(data.video).each(function () {
-                            addImageToSortView(this);
+                            addImageToSortView($('.filesUploaded table tbody'),this);
                         });
                         $(".styled, .multiselect-container input").uniform({
                             radioClass: 'choice'
@@ -767,32 +747,32 @@ $(document).on('keyup', '.dev-recipe-imgeUrl-activity,.dev-recipe-imgeUrl,.dev-r
 });
 
 
-    $(document).on('click', '.dev-delete-btn', function (e) {
-        var $this = $(this);
-        var closestTr = $this.parents('[role="tooltip"]').prev().closest('tr');
-        var closestTd = $this.parents('[role="tooltip"]').prev().closest('td');
-        tdLoadingToggle(closestTd);
-        $.ajax
-            ({
-                'dataType': 'json',
-                'url': $this.parents('[role="tooltip"]').prev().data('href'),
-                'success': function (data) {
-                    if(data.status=='login'){
-                        window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
-                    }
-                    else if (data.type == 'success') {
-                        closestTr.remove();
-                        showNotificationMsg(data.message, "", data.status);
-                    }else{
-                        showNotificationMsg(imageErrorMessages.generalError, "", 'error');
-                        refreshImages();
-                    }
-                    setUploadedImagesCount();
-                    setUploadedVideosCount();
-                    tdLoadingToggle(closestTd);
-                }
-            });
-    });
+//    $(document).on('click', '.dev-delete-btn', function (e) {
+//        var $this = $(this);
+//        var closestTr = $this.parents('[role="tooltip"]').prev().closest('tr');
+//        var closestTd = $this.parents('[role="tooltip"]').prev().closest('td');
+//        tdLoadingToggle(closestTd);
+//        $.ajax
+//            ({
+//                'dataType': 'json',
+//                'url': $this.parents('[role="tooltip"]').prev().data('href'),
+//                'success': function (data) {
+//                    if(data.status=='login'){
+//                        window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
+//                    }
+//                    else if (data.type == 'success') {
+//                        closestTr.remove();
+//                        showNotificationMsg(data.message, "", data.status);
+//                    }else{
+//                        showNotificationMsg(imageErrorMessages.generalError, "", 'error');
+//                        refreshImages();
+//                    }
+//                    setUploadedImagesCount();
+//                    setUploadedVideosCount();
+//                    tdLoadingToggle(closestTd);
+//                }
+//            });
+//    });
 
     $('#GoogleImportImg-modal').on('hidden.bs.modal', function(e) {
         $('#dev-search-gimage-box,#dev-search-gimage-box-small').val("");
@@ -940,7 +920,7 @@ $(document).on('keyup', '.dev-recipe-imgeUrl-activity,.dev-recipe-imgeUrl,.dev-r
                                     if (data.status === 'success') {
                                         showNotificationMsg(data.message, "", data.status);
                                         $(data.video).each(function () {
-                                            addImageToSortView(this);
+                                            addImageToSortView($('.filesUploaded table tbody'),this);
                                         });
                                     }
 
@@ -965,7 +945,6 @@ $(document).on('keyup', '.dev-recipe-imgeUrl-activity,.dev-recipe-imgeUrl,.dev-r
 
 
     refreshMediaSortView();
-    updateGallaryType();
     setUploadedImagesCount();
     setUploadedVideosCount();
 });

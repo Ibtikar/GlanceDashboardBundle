@@ -22,18 +22,39 @@
 'Product': 'المنتج'
 'Choose product': 'اختر المنتج'
 'sub profilePhoto': 'صوره المنتج الفرعى'
+'activity profilePhoto': 'صوره الجديدنا'
 'edit subProduct': 'تعديل منتج فرعى'
 'Edit SubProduct': 'تعديل منتج فرعى'
-'List SubProduct': 'المنتجات الفرعيه'
 'subproduct': 'منتج فرعى'
 'Subproducts': 'منتجات فرعيه'
-Delete SubProduct: حذف منتج فرعى
+Delete SubProduct: حذف
+Edit: تعديل
 'subproducts': 'منتجات فرعيه'
+'Weight': 'الوزن'
+'Size': 'المقاس'
+type: النوع
+activity: جديدنا
+subproducts and activity: منتجات فرعيه /جديدنا/خيارات عاليه الجوده
+List SubProduct: منتجات فرعيه /جديدنا/خيارات عاليه الجوده
+'Price': 'السعر'
+'Website': 'الرابط'
+'File': 'الصوره'
 
 # ############Messages############
 
 # ############Titles############
 Add new subProduct: 'إدخال منتج فرعى جديد'
+'Related article': 'مقالات ذات صلة'
+'Related tip': 'نصائح ذات صلة'
+
+'Add new Activity': 'إدخال جديدنا / خيارات عاليه الجوده'
+'edit Activity': 'تعديل جديدنا/ خيارات عاليه الجوده'
+'Profile type': 'نوع صوره الغلاف '
+'video': 'فيديو'
+'Url': 'الرابط'
+'activies': جديدنا
+bestProduct: خيارات عاليه الجوده
+Type: النوع
 
 
 # ############Buttons############

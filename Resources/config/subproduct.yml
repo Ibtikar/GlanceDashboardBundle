@@ -29,3 +29,7 @@ ibtikar_glance_dashboard_subproduct_check_field_unique:
 ibtikar_glance_dashboard_subproduct_change_list_columns:
     path:  /change-list-columns
     defaults: { _controller: IbtikarGlanceDashboardBundle:SubProduct:changeListColumns }
+
+ibtikar_glance_dashboard_subproduct_count:
+    path:  /content-count
+    defaults: { _controller: IbtikarGlanceDashboardBundle:SubProduct:contentCount }

@@ -1,0 +1,145 @@
+{% extends 'IbtikarGlanceDashboardBundle::form_theme_recipe.html.twig' %}
+
+{% block choice_widget_options -%}
+    {% for group_label, choice in options %}
+        {%- if choice is iterable -%}
+        <optgroup label="{{ group_label|trans({}, translation_domain) }}">
+            {% set options = choice %}
+            {{- block('choice_widget_options') -}}
+        </optgroup>
+        {%- else -%}
+        <option value="{{ choice.value }}"{% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ choice.label|trans({}, translation_domain) }}</option>
+        {%- endif -%}
+    {% endfor %}
+    {%- endblock choice_widget_options %}
+
+
+
+    {% block form_widget_compound %}
+        {% spaceless %}
+            {% set attr = attr|merge({class: (attr.class|default(' panel panel-flat '))|trim}) %}
+
+            <div {{ block('widget_container_attributes') }}>
+                {% if form.parent is empty %}
+                    {{ form_errors(form) }}
+                {% endif %}
+
+                {% if form.vars.allow_add is not defined %}
+                    <div class="panel-heading">
+                        <h5 class="panel-title"> اضف الجهة</h5>
+                        <div class="heading-elements">
+                            <button class="btn btn-danger dev-remove-event-sponsor" type="button">مسح الجهة</button>
+                        </div>
+                    </div>
+                {% endif %}
+                {{ block('form_rows') }}
+                {{ form_rest(form) }}
+
+            </div>
+        {% endspaceless %}
+    {% endblock form_widget_compound %}
+
+
+
+
+    {% block form_row %}
+        {% if form.parent.parent.parent is defined %}
+            {% if form.children | length == 0 %}
+                <div class="inputBody form-group noMargin {% if form.vars.errors|length > 0 %} has-error{% endif %}">
+                    {{ form_label(form)  }}
+                    <div class="col-lg-10">
+                        {{ form_widget(form) }}
+                        {{ form_errors(form) }}
+                    </div>
+                </div>
+            {% else %}
+                {{ form_widget(form) }}
+            {% endif %}
+        {% else %}
+            <div class="form-group{% if form.vars.name == "sponsors" %} dev-event-sponsor-container{% endif %}{% if attr['data-form-group-class'] is defined %} {{ attr['data-form-group-class'] }}{% endif %}{% if form.vars.errors|length > 0 or (form.phone is defined and form.phone.vars.errors|length > 0) %} has-error{% endif %}{%  if "_media" in form.vars.id %} hide{% endif %}">
+                {% if form.vars.name != "sponsors" %}
+                    {{ form_label(form)  }}
+                    <div class="{% if form.vars.type is defined and form.vars.type == 'datetime' %}{% else %}col-lg-{{form.vars.compound and form.vars.name not in ["resultsVisibility","allowedToVote","coverType"]?"12":"10"}}{% endif %}">
+                        {{ form_widget(form) }}
+                        {{ form_errors(form) }}
+                    </div>
+                {% else %}
+                    {{ form_widget(form) }}
+                    {{ form_errors(form) }}
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endblock form_row %}
+
+
+
+
+
+    {% block form_widget_simple -%}
+        {# adding bootstrap class #}
+        {%- if type is not defined or type not in ['file', 'hidden'] -%}
+        {%- set attr = attr|merge({class: (attr.class|default('form-control'))}) -%}
+        {%- endif -%}
+
+        {# adding profile file upload input style #}
+        {%- if type is defined and type == 'file'    -%}
+        {% set objectType = form.vars.translation_domain %}
+
+        <div class="fileupload fileupload-new" data-provides="fileupload">
+            <div class="fileupload-new thumbnail" style="width: 150px;">
+                {% if form.parent.vars.value and objectType == "subproduct" %}
+                    <img src="{{ asset(form.parent.vars.value.getWebPath())|default('bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg') }}" alt="{{ attr['data-image-alt']|default('Profile image'|trans) }}">
+                {% else%}
+                    <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg') }}" alt="{{ attr['data-image-alt']|default('Profile image'|trans) }}">
+
+                {% endif %}
+            </div>
+            <div class="fileupload-preview fileupload-exists thumbnail {{id}}_preview" style="max-width: 200px; max-height: 200px; line-height: 20px;">
+                {% if attr['data-image-url'] is defined and attr['data-image-url']!='' %}
+                    <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/profile.jpg') }}" alt="{{ attr['data-image-alt']|default('Profile image'|trans) }}">
+                {% endif %}
+            </div>
+            <div class="uploadCoverImg {{id}}_selector">
+                <span class="btn btn-default btn-file btn-primary" style=" cursor: pointer;">
+                    <span class="fileupload-new" onfocus="myFunction(this)" style="cursor: pointer">{% trans %}Choose picture{% endtrans %}</span>
+                    <span class="fileupload-exists">{% trans %}Change{% endtrans %}</span>
+
+
+
+                    {%- endif -%}
+
+                    {# displaying the widget #}
+                    {{- parent() -}}
+
+                    {% if description is defined and  description | length %}
+                        <span id="helpBlock" class="help-block">{{ description }}</span>
+                    {% endif %}
+
+                    {# adding profile file upload input style #}
+                    {%- if type is defined and type == 'file' and objectType == "subproduct" -%}
+                </span>
+                <a href="#" class="btn btn-default fileupload-exists btn-primary dev-btn-fileupload-remove" data-dismiss="fileupload">{% trans %}Delete{% endtrans %}</a>
+            </div>
+        </div>
+        {%- endif -%}
+
+        {# adding email input style #}
+        {%- if type is defined and type == 'email' and attr['data-validate-element'] is not defined-%}
+        <div class="form-control-feedback">
+            <i class="icon-mail5 text-muted"></i>
+        </div>
+        {%- endif -%}
+        {% if attr['data-validate-element'] is defined %}
+            <div class="form-control-feedback dev-inputLoader dev-loader" style="display: none;">
+                <i class="icon-spinner2 spinner"></i>
+            </div>
+            <div class="form-control-feedback dev-failLoader dev-loader" style="{% if form.vars.errors|length ==0 %}display: none;{%endif %}">
+                <i class="icon-cancel-circle2"></i>
+            </div>
+            <div class="form-control-feedback dev-successLoader dev-loader" style="display: none;">
+                <i class="icon-checkmark-circle"></i>
+            </div>
+        {% endif %}
+        {%- endblock form_widget_simple %}
+
+

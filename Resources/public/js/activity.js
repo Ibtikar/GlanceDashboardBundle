@@ -226,6 +226,22 @@ function refreshImages() {
     })
 }
 
+function tdLoadingToggle(elm) {
+    var loaderDiv = '<div class=" btn dev-spinner-container" disabled=""><i class="spinner icon-spinner"></i></div>';
+    if (!$(elm).is('td')) {
+        elm = $(elm).parent('td');
+    }
+    if ($(elm).length > 0) {
+        if ($(elm).find('.dev-spinner-container').length > 0) {
+            $(elm).find('.dev-spinner-container').remove();
+            $(elm).children().show();
+        } else {
+            $(elm).children().hide();
+            $(elm).append(loaderDiv);
+        }
+    }
+}
+
 function uploadImageToServer(imageFile, url) {
         var formData = new FormData();
         formData.append("media[file]", imageFile);
@@ -250,7 +266,14 @@ function uploadImageToServer(imageFile, url) {
                 }
                 var media = data.media;
                 if (name != 'profilePhoto' && name != 'bannerPhoto') {
-                    addImageToSortView($('.filesUploaded table tbody'), media);
+                    if (data.media.coverPhoto) {
+                        addImageToSortView($('.filesUploaded table tbody'), media);
+
+                    } else {
+                        addImageToSortViewActivity($('.filesActivityUploaded table tbody'), media);
+
+                    }
+
 
                 } else {
 
@@ -286,22 +309,6 @@ function uploadImageToServer(imageFile, url) {
 
         });
     }
-
-function tdLoadingToggle(elm) {
-    var loaderDiv = '<div class=" btn dev-spinner-container" disabled=""><i class="spinner icon-spinner"></i></div>';
-    if (!$(elm).is('td')) {
-        elm = $(elm).parent('td');
-    }
-    if ($(elm).length > 0) {
-        if ($(elm).find('.dev-spinner-container').length > 0) {
-            $(elm).find('.dev-spinner-container').remove();
-            $(elm).children().show();
-        } else {
-            $(elm).children().hide();
-            $(elm).append(loaderDiv);
-        }
-    }
-}
 var uploadpopup = false;
 $(document).ready(function () {
 //    $('#product_minimumRelatedRecipe').val($('.dev-related-list li').length< 4? '':$('.dev-related-list li').length )
@@ -463,25 +470,9 @@ $(document).ready(function () {
             }
             var elementDimessionWidth = 1170;
             var elementDimessionHeight = 600;
-            var typeAllowed = ['jpeg', 'jpg', 'png', 'gif'];
-            var errorExtension = imageErrorMessages.imageGifExtension;
-
-            if ($(element).closest('td').attr('data-name') == 'profilePhoto' || $(element).closest('td').attr('data-name') == 'bannerPhoto') {
-                errorExtension = imageErrorMessages.imageExtension;
-
-                typeAllowed = ['jpeg', 'jpg', 'png'];
-            }
-            $('#image-cropper-modal').cropit('previewSize', {width: 585, height: 300});
-            $('#image-cropper-modal').cropit('exportZoom', 2);
-
-
             var errorDimension = imageErrorMessages.imageDimension;
             if ($(element).closest('td').attr('data-name') == 'bannerPhoto') {
                 errorDimension = imageErrorMessages.BannerimageDimension;
-                $('#image-cropper-modal').cropit('previewSize', {width: 1170, height: 200});
-                $('#image-cropper-modal').cropit('exportZoom', 1);
-
-
             }
             var elementObject = $('#uploadImg .cropit-image-input');
             if (elementObject.val()) {
@@ -491,15 +482,15 @@ $(document).ready(function () {
                         extension = file.substring(file.lastIndexOf('.') + 1);
                 fileName = file;
 
-                if ($.inArray(extension, typeAllowed) == -1) {
-                    showNotificationMsg(errorExtension, "", 'error');
+                if ($.inArray(extension, ['jpeg', 'jpg', 'png', 'gif']) == -1) {
+                    showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
                     $('#uploadImg').modal('hide');
-                    return;
+                    return ;
 
                 } else if (elementObject.attr('data-size') > (4 * 1024 * 1024)) {
                     $('#uploadImg').modal('hide');
                     showNotificationMsg(imageErrorMessages.sizeError, "", 'error');
-                    return;
+                                        return ;
 
 
                 } else if ($('#image-cropper-modal').cropit('imageSize').width < elementDimessionWidth || $('#image-cropper-modal').cropit('imageSize').height < elementDimessionHeight) {
@@ -509,7 +500,6 @@ $(document).ready(function () {
 
 
                 } else {
-
                     if (extension == 'gif') {
                         uploadImageToServer($('.cropit-preview-image').attr('src'), uploadUrl);
                     } else {
@@ -528,6 +518,8 @@ $(document).ready(function () {
         }
 
     })
+    $('#image-cropper-modal').cropit('previewSize', {width: 585, height: 300});
+    $('#image-cropper-modal').cropit('exportZoom', 2);
 
     $(document).on('click', '.dev-submit-image', function () {
         var imageFile = $('#image-cropper-modal').cropit('export')
@@ -596,6 +588,8 @@ $(document).ready(function () {
 
         });
     });
+
+
 
     $(document).on('click', '.dev-delete-btn', function (e) {
         var $this = $(this);

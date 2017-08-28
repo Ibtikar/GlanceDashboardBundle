@@ -101,6 +101,7 @@
                     }
                 }
             });
+ $(".select-with-thumb").on("select2:select", function (evt) { var element = evt.params.data.element; var $element = $(element); $element.detach(); $(this).append($element); $(this).trigger("change"); });
 
 var recipeValue='';
     $(".select-ajax").select2({
@@ -170,6 +171,14 @@ var recipeValue='';
             if(typeof dragula != "undefined"){
                 drake = dragula([document.getElementById('media-list-target-right')], {
                     mirrorContainer: document.querySelector('.media-list-container'),
+                    moves: function (el, container, handle) {
+                        return handle.classList.contains('dragula-handle');
+                    }
+                });
+            }
+                if($('#media-list-target-right-activity').length > 0){
+                    drakeActivty = dragula([document.getElementById('media-list-target-right-activity')], {
+                    mirrorContainer: document.querySelector('.media-list-container-activity'),
                     moves: function (el, container, handle) {
                         return handle.classList.contains('dragula-handle');
                     }

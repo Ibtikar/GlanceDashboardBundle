@@ -20,6 +20,14 @@
                         <i class="icon-eye" data-popup="tooltip"  data-placement="right" title="{{('View One ' ~  listName|capitalize)|trans({},translationDomain)}}" ></i>
                     </a>
                 {% endif %}
+                {% elseif action == "Order" %}
+
+                {% if is_granted('ROLE_' ~ listName|upper ~'_EDIT') or is_granted('ROLE_ADMIN')  %}
+
+                    <a href="{{ path(prefixRoute|lower~'_order', {'id': object.id}) }}" class="btn btn-default">
+                        <i class="icon-cogs" data-popup="tooltip"  data-placement="right" title="{{('dispalay content  On' ~  listName|capitalize)|trans({},translationDomain)}}" ></i>
+                    </a>
+                {% endif %}
                 {% elseif action == "ViewOneAnswer" %}
                     {% if 'unpublish' in app.request.get('route') %}
                     {% set status='unpublish' %}

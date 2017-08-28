@@ -728,7 +728,7 @@ class Recipe extends Publishable
      * @param Ibtikar\GlanceUMSBundle\Document\Staff $chef
      * @return self
      */
-    public function setChef(\Ibtikar\GlanceUMSBundle\Document\Staff $chef)
+    public function setChef(\Ibtikar\GlanceUMSBundle\Document\Staff $chef =NULL)
     {
         $this->chef = $chef;
         return $this;
@@ -1444,6 +1444,19 @@ class Recipe extends Publishable
 
         }
         return $array;
+    }
+
+    public function getDefaultCoverPhotoVideoOrImage(){
+        if($this->coverPhoto){
+            $type=$this->coverPhoto->getType();
+            if($type=='image'){
+            return  '/'.$this->coverPhoto->getWebPath()   ;
+            }else{
+                return  'https://i.ytimg.com/vi/' . $this->coverPhoto->getVid() . '/default.jpg' ;
+            }
+
+        }
+        return '';
     }
 
     /**
