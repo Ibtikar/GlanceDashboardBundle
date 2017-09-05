@@ -177,6 +177,30 @@ class CompetitionController extends BackendController {
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $dm->flush();
+
+                if ($competition->getCoverType() == "image" && isset($coverImage)) {
+                    $coverImage->setCompetition($competition);
+                    $competition->setCover($coverImage);
+                    if (isset($coverVideo))
+                        $dm->remove($coverVideo);
+                }
+
+                if ($competition->getCoverType() == "video" && isset($coverVideo)) {
+                    $coverVideo->setCompetition($competition);
+                    $competition->setCover($coverVideo);
+                    if (isset($coverImage))
+                        $dm->remove($coverImage);
+                }
+
+
+                if ($competition->getCoverType() == "none") {
+                    if (isset($coverVideo))
+                        $dm->remove($coverVideo);
+                    if (isset($coverImage))
+                        $dm->remove($coverImage);
+                }
+                $dm->flush();
+
                 $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('done sucessfully'));
                 return new JsonResponse(array('status' => 'reload-page'));
             }
