@@ -1,0 +1,5 @@
+ibtikar_glance_dashboard_causepage_edit:
+    path:  /edit
+    defaults: { _controller: IbtikarGlanceDashboardBundle:CausePage:edit}
+
+

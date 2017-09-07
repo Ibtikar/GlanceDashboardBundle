@@ -51,6 +51,12 @@ class Media extends Document {
     private $activity;
 
     /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\CausePage", simple=true)
+     * @KeepReference
+     */
+    private $causePage;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe", simple=true)
      * @KeepReference
      */
@@ -1053,5 +1059,27 @@ class Media extends Document {
     public function getNaturalPhoto()
     {
         return $this->naturalPhoto;
+    }
+
+    /**
+     * Set causePage
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\CausePage $causePage
+     * @return self
+     */
+    public function setCausePage(\Ibtikar\GlanceDashboardBundle\Document\CausePage $causePage)
+    {
+        $this->causePage = $causePage;
+        return $this;
+    }
+
+    /**
+     * Get causePage
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\CausePage $causePage
+     */
+    public function getCausePage()
+    {
+        return $this->causePage;
     }
 }

@@ -101,14 +101,24 @@ class MediaController extends BackendController
                     return $response;
                 }
                 $fieldUpdate='Competition';
-            } elseif ($collectionType === 'HomeBanner') {
+            }
+            elseif ($collectionType === 'HomeBanner') {
                 $document = $dm->getRepository('IbtikarGlanceDashboardBundle:HomeBanner')->find($documentId);
                 if (!$document) {
                     throw $this->createNotFoundException($this->trans('Wrong id'));
                 }
 
                 $fieldUpdate = 'Banner';
-            } else {
+            }
+            elseif ($collectionType === 'CausePage') {
+                $document = $dm->getRepository('IbtikarGlanceDashboardBundle:CausePage')->find($documentId);
+                if (!$document) {
+                    throw $this->createNotFoundException($this->trans('Wrong id'));
+                }
+
+                $fieldUpdate = 'CausePage';
+            }
+            else {
                 $document = $dm->getRepository('IbtikarGlanceDashboardBundle:HomeBanner')->find($documentId);
                 if (!$document) {
                     throw $this->createNotFoundException($this->trans('Wrong id'));
@@ -544,7 +554,8 @@ class MediaController extends BackendController
                     'product' => null,
                     'collectionType' => $collectionType
                 ),array('order' => 'ASC'));
-            } elseif ($collectionType === 'Magazine') {
+            }
+            elseif ($collectionType === 'Magazine') {
                 $securityContext = $this->get('security.authorization_checker');
                 if (!$securityContext->isGranted('ROLE_MAGAZINE_EDIT') && !$securityContext->isGranted('ROLE_ADMIN')) {
                     return $this->getAccessDeniedResponse();
@@ -558,7 +569,23 @@ class MediaController extends BackendController
                     'recipe' => null,
                     'collectionType' => $collectionType
                 ));
-            } elseif ($collectionType === 'Blog') {
+            }
+            elseif ($collectionType === 'CausePage') {
+                $securityContext = $this->get('security.authorization_checker');
+                if (!$securityContext->isGranted('ROLE_CAUSEPAGE_EDIT') && !$securityContext->isGranted('ROLE_ADMIN')) {
+                    return $this->getAccessDeniedResponse();
+                }
+                $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                    'type' => $type == "all" ? array('$in' => array('image', 'video')) : $type,
+//                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                    'causePage' => new \MongoId($documentId),
+                    'subproduct' => null,
+                    'product' => null,
+                    'recipe' => null,
+                    'collectionType' => $collectionType
+                ));
+            }
+            elseif ($collectionType === 'Blog') {
                 $reponse = $this->getInvalidResponseForRecipe($documentId, $this->container->get('request_stack')->getCurrentRequest()->get('room'));
                 if ($reponse) {
                     return $reponse;
@@ -1085,6 +1112,14 @@ class MediaController extends BackendController
                             throw $this->createNotFoundException($this->trans('Wrong id'));
                         }
                         $videoObj->setActivity($subproduct);
+                    }
+                     elseif($request->get('collectionType') == 'CausePage') {
+
+                        $causePage = $dm->getRepository('IbtikarGlanceDashboardBundle:CausePage')->find($documentId);
+                        if (!$causePage) {
+                            throw $this->createNotFoundException($this->trans('Wrong id'));
+                        }
+                        $videoObj->setCausePage($causePage);
                     }
                     else {
                         $task = $dm->getRepository('IbtikarBackendBundle:Task')->find($documentId);

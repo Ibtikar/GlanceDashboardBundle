@@ -283,7 +283,7 @@ $(document).ready(function () {
             if ($(element).closest('td').attr('data-name') == 'bannerPhoto') {
                 errorDimension = imageErrorMessages.BannerimageDimension;
             }
-            if ($(element).closest('td').attr('data-name') == 'profilePhoto') {
+            if ($(element).closest('td').attr('data-name') == 'profilePhoto' && typeof page=='undefined') {
                 errorDimension = imageErrorMessages.profileImageDimension;
                 errorExtension = imageErrorMessages.imageExtension;
                 var elementDimessionWidth = 200;
@@ -292,6 +292,10 @@ $(document).ready(function () {
                 $('#image-cropper-modal').cropit('exportZoom', .7);
                 typeAllowed = ['jpeg', 'jpg', 'png'];
             }
+            if ($(element).closest('td').attr('data-name') == 'profilePhoto' && typeof page!='undefined') {
+                typeAllowed = ['jpeg', 'jpg', 'png'];
+            }
+
             var elementObject = $('#uploadImg .cropit-image-input');
             if (elementObject.val()) {
 
