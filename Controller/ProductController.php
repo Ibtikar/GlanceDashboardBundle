@@ -598,7 +598,7 @@ class ProductController extends BackendController {
 
         return $this->render('IbtikarGlanceDashboardBundle:Product:order.html.twig', array(
                 'form' => $form->createView(),
-                'title' => $this->trans('dispalay content  OnProduct', array(), $this->translationDomain),
+                'title' => $this->trans('dispalay content  OnProduct', array(), $this->translationDomain)." (".$product->getName().")",
                 'translationDomain' => $this->translationDomain
         ));
     }
