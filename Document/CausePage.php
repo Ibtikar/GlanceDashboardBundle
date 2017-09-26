@@ -78,16 +78,9 @@ class CausePage extends Document {
     private $defaultProfilePhoto;
 
     /**
-     * @Assert\NotBlank
-     * @MongoDB\String
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Competition", simple=true)
      */
-    private $url;
-
-    /**
-     * @Assert\NotBlank
-     * @MongoDB\String
-     */
-    private $urlEn;
+    protected $competition;
 
 
     /**
@@ -232,47 +225,29 @@ class CausePage extends Document {
         return $this->defaultProfilePhoto;
     }
 
+
+
+ 
+
     /**
-     * Set url
+     * Set competition
      *
-     * @param string $url
+     * @param Ibtikar\GlanceDashboardBundle\Document\Competition $competition
      * @return self
      */
-    public function setUrl($url)
+    public function setCompetition(\Ibtikar\GlanceDashboardBundle\Document\Competition $competition)
     {
-        $this->url = $url;
+        $this->competition = $competition;
         return $this;
     }
 
     /**
-     * Get url
+     * Get competition
      *
-     * @return string $url
+     * @return Ibtikar\GlanceDashboardBundle\Document\Competition $competition
      */
-    public function getUrl()
+    public function getCompetition()
     {
-        return $this->url;
-    }
-
-    /**
-     * Set urlEn
-     *
-     * @param string $urlEn
-     * @return self
-     */
-    public function setUrlEn($urlEn)
-    {
-        $this->urlEn = $urlEn;
-        return $this;
-    }
-
-    /**
-     * Get urlEn
-     *
-     * @return string $urlEn
-     */
-    public function getUrlEn()
-    {
-        return $this->urlEn;
+        return $this->competition;
     }
 }

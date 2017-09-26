@@ -30,9 +30,7 @@ class CausePageController extends BackendController
                 ->add('briefEn',  CKEditorType::class, array('required' => TRUE,'attr' => array('data-validate-element'=>true,'data-rule-ckmin' => 10,'data-rule-ckmax' => 1000,'data-rule-ckreq' => true,'data-error-after-selector' => '.dev-after-element')))
                 ->add('terms',  CKEditorType::class, array('required' => TRUE,'attr' => array('data-validate-element'=>true,'data-rule-ckmin' => 10,'data-rule-ckmax' => 1000,'data-rule-ckreq' => true,'data-error-after-selector' => '.dev-after-element')))
                 ->add('termsEn',  CKEditorType::class, array('required' => TRUE,'attr' => array('data-validate-element'=>true,'data-rule-ckmin' => 10,'data-rule-ckmax' => 1000,'data-rule-ckreq' => true,'data-error-after-selector' => '.dev-after-element')))
-                ->add('url', formType\TextType::class, array('attr' => array()))
-                ->add('urlEn', formType\TextType::class, array('attr' => array()))
-                ->add('media', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
+                ->add('competition', \Doctrine\Bundle\MongoDBBundle\Form\Type\DocumentType::class, array('required' => false,'placeholder' => 'Choose Competition','class' => 'IbtikarGlanceDashboardBundle:Competition', 'attr' => array('data-img-method'=>'profilePhoto','data-img-default'=>'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg','class' => 'select')))
                 ->add('save', formType\SubmitType::class)
                 ->getForm();
 
