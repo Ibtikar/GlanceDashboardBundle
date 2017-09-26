@@ -81,6 +81,12 @@ class Media extends Document {
     private $contactMessage;
 
     /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Season", simple=true)
+     * @KeepReference
+     */
+    private $season;
+
+    /**
      * @MongoDB\String
      */
     private $captionAr;
@@ -136,6 +142,16 @@ class Media extends Document {
      * @MongoDB\Boolean
      */
     private $coverPhoto = false;
+
+    /**
+     * @MongoDB\String
+     */
+    private $descriptionAr;
+
+    /**
+     * @MongoDB\String
+     */
+    private $descriptionEn;
 
     /**
      * @MongoDB\Boolean
@@ -1081,5 +1097,72 @@ class Media extends Document {
     public function getCausePage()
     {
         return $this->causePage;
+    }
+
+    /**
+     * Set season
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Season $season
+     * @return self
+     */
+    public function setSeason(\Ibtikar\GlanceDashboardBundle\Document\Season $season)
+    {
+        $this->season = $season;
+        return $this;
+    }
+
+    /**
+     * Get season
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\Season $season
+     */
+    public function getSeason()
+    {
+        return $this->season;
+    }
+
+
+    /**
+     * Set descriptionEn
+     *
+     * @param string $descriptionEn
+     * @return self
+     */
+    public function setDescriptionEn($descriptionEn)
+    {
+        $this->descriptionEn = $descriptionEn;
+        return $this;
+    }
+
+    /**
+     * Get descriptionEn
+     *
+     * @return string $descriptionEn
+     */
+    public function getDescriptionEn()
+    {
+        return $this->descriptionEn;
+    }
+
+    /**
+     * Set descriptionAr
+     *
+     * @param string $descriptionAr
+     * @return self
+     */
+    public function setDescriptionAr($descriptionAr)
+    {
+        $this->descriptionAr = $descriptionAr;
+        return $this;
+    }
+
+    /**
+     * Get descriptionAr
+     *
+     * @return string $descriptionAr
+     */
+    public function getDescriptionAr()
+    {
+        return $this->descriptionAr;
     }
 }

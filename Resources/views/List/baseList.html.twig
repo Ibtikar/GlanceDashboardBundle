@@ -199,6 +199,46 @@
 
                                                             </div>
                                                         </td>
+                                                        {% elseif field.type == "refereceVideo"  %}
+                                                        <td>
+                                                            <div class="thumbnail small-thumbnail">
+                                                                <div class="thumb thumb-slide">
+                                                                   {# {% if object.type=='subproduct' %}
+                                                                        {% set fieldName='coverPhoto' %}
+                                                                    {% else %}#}
+                                                                        {% set fieldName= field.propertyName %}
+{#                                                                    {% endif %}#}
+                                                                    {% if attribute(object, fieldName)=='image'%}
+
+                                                                        <img alt="" src="{{ asset( attribute(attribute(object, fieldName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}">
+                                                                        <div class="caption">
+                                                                            <span>
+                                                                                <a data-popup="lightbox" class="btn btn-primary btn-icon" href="{{ asset( attribute(attribute(object, fieldName), 'webPath')|default('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')) }}"><i class="icon-zoomin3"></i></a>
+                                                                            </span>
+                                                                        </div>
+                                                                    {%else %}
+                                                                        {% if attribute(object, fieldName) %}
+                                                                            <img alt="" src="{{ 'https://i.ytimg.com/vi/' ~ attribute(attribute(object, fieldName), 'vid') ~ '/hqdefault.jpg'  }}">
+                                                                            <div class="caption">
+                                                                                <span>
+                                                                                    <a data-popup="lightbox" class="btn btn-primary btn-icon" href="{{ 'https://i.ytimg.com/vi/' ~ attribute(attribute(object, fieldName), 'vid') ~ '/hqdefault.jpg'  }}"><i class="icon-zoomin3"></i></a>
+                                                                                </span>
+                                                                            </div>
+                                                                        {%else %}
+                                                                            <img alt="" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg') }}">
+                                                                            <div class="caption">
+                                                                                <span>
+                                                                                    <a data-popup="lightbox" class="btn btn-primary btn-icon" href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg') }}"><i class="icon-zoomin3"></i></a>
+                                                                                </span>
+                                                                            </div>
+                                                                        {% endif %}
+
+
+                                                                    {%endif %}
+                                                                </div>
+
+                                                            </div>
+                                                        </td>
                                                     {% elseif field.type == "refereceImage"  %}
                                                         <td>
                                                             <div class="thumbnail small-thumbnail">

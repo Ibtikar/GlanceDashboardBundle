@@ -517,7 +517,17 @@ class MediaController extends BackendController
                     'subproduct' => null,
                     'collectionType' => $collectionType
                 ), array('order' => 'ASC'));
-            } elseif ($collectionType === 'SubProduct') {
+                } elseif ($collectionType === 'Season') {
+                $securityContext = $this->get('security.authorization_checker');
+                if (!$securityContext->isGranted('ROLE_SEASON_EDIT') && !$securityContext->isGranted('ROLE_ADMIN')) {
+                    return $this->getAccessDeniedResponse();
+                }
+                $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                    'type' => 'video',
+                    'season' => new \MongoId($documentId),
+                    'collectionType' => $collectionType
+                    ), array('order' => 'ASC'));
+               } elseif ($collectionType === 'SubProduct') {
                 $reponse = $this->getInvalidResponseForSubProduct(new \MongoId($documentId), '', 'list');
                 if ($reponse) {
                     return $reponse;
@@ -624,6 +634,7 @@ class MediaController extends BackendController
                 'recipe' => null,
                 'blog' => null,
                 'contactMessage' => null,
+                'season' => null,
                 'magazine' => null,
                 'activity' => null,
                 'subproduct' => null,
@@ -1121,7 +1132,19 @@ class MediaController extends BackendController
                         }
                         $videoObj->setCausePage($causePage);
                     }
-                    else {
+                     elseif ($request->get('collectionType') == 'Season') {
+
+                        $season = $dm->getRepository('IbtikarGlanceDashboardBundle:Season')->find($documentId);
+                        if (!$season) {
+                            throw $this->createNotFoundException($this->trans('Wrong id'));
+                        }
+                        $securityContext = $this->get('security.authorization_checker');
+                        if ((!$securityContext->isGranted('ROLE_SEASON_EDIT') && !$securityContext->isGranted('ROLE_ADMIN'))) {
+
+                            return $this->getAccessDeniedResponse();
+                        }
+                        $videoObj->setSeason($season);
+                    } else {
                         $task = $dm->getRepository('IbtikarBackendBundle:Task')->find($documentId);
                         $lastVideo = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder($this->getObjectShortName())
                                 ->field('task')->equals($documentId)
@@ -1177,6 +1200,8 @@ class MediaController extends BackendController
             'imageUrl'=>'https://i.ytimg.com/vi/' . $video->getVid() . '/hqdefault.jpg',
             'captionAr' => is_null($video->getCaptionAr())?"":$video->getCaptionAr(),
             'captionEn' => is_null($video->getCaptionEn())?"":$video->getCaptionEn(),
+            'descriptionAr' => is_null($video->getDescriptionAr())?"":$video->getDescriptionAr(),
+            'descriptionEn' => is_null($video->getDescriptionEn())?"":$video->getDescriptionEn(),
             'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_video_delete', $routeParameters),
             'type' => $video->getType(),
             'cover'=>$video->getCoverPhoto()?'checked':'',
