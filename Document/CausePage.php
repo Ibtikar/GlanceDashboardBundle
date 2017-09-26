@@ -43,29 +43,6 @@ class CausePage extends Document {
      */
     private $briefEn;
 
-    /**
-     * @Assert\NotBlank
-     * @MongoDB\String
-     * @Assert\Length(
-     *      min = 10,
-     *      minMessage = "Your name must be at least {{ limit }} characters long",
-     *      max = 1000,
-     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
-     * )
-     */
-    private $terms;
-
-    /**
-     * @Assert\NotBlank
-     * @MongoDB\String
-     * @Assert\Length(
-     *      min = 10,
-     *      minMessage = "Your name must be at least {{ limit }} characters long",
-     *      max = 1000,
-     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
-     * )
-     */
-    private $termsEn;
 
     /**
      * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Media", simple=true)
@@ -137,49 +114,7 @@ class CausePage extends Document {
         return $this->briefEn;
     }
 
-    /**
-     * Set terms
-     *
-     * @param string $terms
-     * @return self
-     */
-    public function setTerms($terms)
-    {
-        $this->terms = $terms;
-        return $this;
-    }
 
-    /**
-     * Get terms
-     *
-     * @return string $terms
-     */
-    public function getTerms()
-    {
-        return $this->terms;
-    }
-
-    /**
-     * Set termsEn
-     *
-     * @param string $termsEn
-     * @return self
-     */
-    public function setTermsEn($termsEn)
-    {
-        $this->termsEn = $termsEn;
-        return $this;
-    }
-
-    /**
-     * Get termsEn
-     *
-     * @return string $termsEn
-     */
-    public function getTermsEn()
-    {
-        return $this->termsEn;
-    }
 
     /**
      * Set profilePhoto
@@ -227,7 +162,7 @@ class CausePage extends Document {
 
 
 
- 
+
 
     /**
      * Set competition

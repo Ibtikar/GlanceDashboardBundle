@@ -518,7 +518,7 @@ function refreshMediaSortView() {
             setUploadedImagesCount();
             setUploadedVideosCount();
             selectedCover = $('input.dev-cover-img:checked').val()?$('input.dev-cover-img:checked').val():null;
-            $('#recipe_defaultCoverPhoto').val($('input.dev-cover-img:checked').val())
+            $('#form_defaultCoverPhoto').val($('input.dev-cover-img:checked').val())
             $('a[data-popup="popover"]').popover({
                 delay:{ "hide": 500 }
             });
@@ -568,7 +568,12 @@ function updateCheckedCover() {
 jQuery(document).ready(function($) {
 
     $('body').on('preAjaxCallback', function () {
+        if(!$('.dev-cover-img').is(':checked')){
+            showNotificationMsg("يجب إختيار فيديو للغلاف", "", "error");
+            return false;
+        }
         populateData();
+
     });
 
 

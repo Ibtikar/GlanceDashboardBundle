@@ -66,6 +66,7 @@ class SeasonController extends BackendController {
                 ->add('description', formType\TextareaType::class, array('required' => TRUE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
                 ->add('descriptionEn', formType\TextareaType::class, array('required' => TRUE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
                 ->add('media', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
+                ->add('defaultCoverPhoto', formType\HiddenType::class,array("mapped" => false,'required' => true,'attr'=>array('data-msg-required'=>' ')))
                 ->add('save', formType\SubmitType::class)
                 ->getForm();
 
@@ -126,6 +127,7 @@ class SeasonController extends BackendController {
                 ->add('titleEn', formType\TextType::class, array('required' => TRUE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
                 ->add('description', formType\TextareaType::class, array('required' => TRUE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
                 ->add('descriptionEn', formType\TextareaType::class, array('required' => TRUE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+                ->add('defaultCoverPhoto', formType\HiddenType::class,array("mapped" => false,'required' => true,'attr'=>array('data-msg-required'=>' ')))
                 ->add('media', formType\TextareaType::class, array('required' => FALSE, "mapped" => false, 'attr' => array('parent-class' => 'hidden')))
                 ->add('save', formType\SubmitType::class)
                 ->getForm();

@@ -37,4 +37,12 @@ class MediaRepository extends DocumentRepository {
                         ->sort('order', 'ASC')
                         ->getQuery()->execute();
     }
+
+    public function getSeasonMedia($id) {
+        return $this->dm->createQueryBuilder('IbtikarGlanceDashboardBundle:Media')
+                        ->field('deleted')->equals(FALSE)
+                        ->field('season')->equals($id)
+                        ->sort('order', 'ASC')
+                        ->getQuery()->execute();
+    }
 }
