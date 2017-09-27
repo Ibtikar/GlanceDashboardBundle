@@ -226,6 +226,8 @@ class SeasonController extends BackendController {
                     $document->setCoverPhoto($mediaObj);
                     $mediaObj->setCoverPhoto(TRUE);
                     $coverExist = TRUE;
+                } else {
+                    $mediaObj->setCoverPhoto(FALSE);
                 }
             }
 //
