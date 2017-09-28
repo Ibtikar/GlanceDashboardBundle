@@ -461,6 +461,11 @@ class MediaController extends BackendController
                 }
             }
         }
+        if ($collectionType === 'CausePage' && $document->getCausePage()) {
+            if ($document->getProfilePhoto()) {
+                $document->getCausePage()->setProfilePhoto(NULL);
+            }
+        }
 
         if (strpos(strtolower($collectionType), 'bannar') !==FALSE && $document->getBanner() || strpos(strtolower($collectionType), 'banner') !==FALSE && $document->getBanner()) {
 

@@ -122,7 +122,7 @@ class CausePage extends Document {
      * @param Ibtikar\GlanceDashboardBundle\Document\Media $profilePhoto
      * @return self
      */
-    public function setProfilePhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $profilePhoto)
+    public function setProfilePhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $profilePhoto = null)
     {
         $this->profilePhoto = $profilePhoto;
         return $this;
