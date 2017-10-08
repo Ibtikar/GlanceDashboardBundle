@@ -164,6 +164,26 @@ class Product extends Document
     private $slugEn;
 
     /**
+     * @MongoDB\String
+     */
+    private $metaTagTitleAr;
+
+    /**
+     * @MongoDB\String
+     */
+    private $metaTagDesciptionAr;
+
+    /**
+     * @MongoDB\String
+     */
+    private $metaTagTitleEn;
+
+    /**
+     * @MongoDB\String
+     */
+    private $metaTagDesciptionEn;
+
+    /**
      * @Assert\Choice(callback="getValidMediaTypes")
      * @MongoDB\String
      */
@@ -925,5 +945,93 @@ class Product extends Document
     public function getRecipes()
     {
         return $this->recipes;
+    }
+
+    /**
+     * Set metaTagTitleAr
+     *
+     * @param string $metaTagTitleAr
+     * @return self
+     */
+    public function setMetaTagTitleAr($metaTagTitleAr)
+    {
+        $this->metaTagTitleAr = $metaTagTitleAr;
+        return $this;
+    }
+
+    /**
+     * Get metaTagTitleAr
+     *
+     * @return string $metaTagTitleAr
+     */
+    public function getMetaTagTitleAr()
+    {
+        return $this->metaTagTitleAr;
+    }
+
+    /**
+     * Set metaTagDesciptionAr
+     *
+     * @param string $metaTagDesciptionAr
+     * @return self
+     */
+    public function setMetaTagDesciptionAr($metaTagDesciptionAr)
+    {
+        $this->metaTagDesciptionAr = $metaTagDesciptionAr;
+        return $this;
+    }
+
+    /**
+     * Get metaTagDesciptionAr
+     *
+     * @return string $metaTagDesciptionAr
+     */
+    public function getMetaTagDesciptionAr()
+    {
+        return $this->metaTagDesciptionAr;
+    }
+
+    /**
+     * Set metaTagTitleEn
+     *
+     * @param string $metaTagTitleEn
+     * @return self
+     */
+    public function setMetaTagTitleEn($metaTagTitleEn)
+    {
+        $this->metaTagTitleEn = $metaTagTitleEn;
+        return $this;
+    }
+
+    /**
+     * Get metaTagTitleEn
+     *
+     * @return string $metaTagTitleEn
+     */
+    public function getMetaTagTitleEn()
+    {
+        return $this->metaTagTitleEn;
+    }
+
+    /**
+     * Set metaTagDesciptionEn
+     *
+     * @param string $metaTagDesciptionEn
+     * @return self
+     */
+    public function setMetaTagDesciptionEn($metaTagDesciptionEn)
+    {
+        $this->metaTagDesciptionEn = $metaTagDesciptionEn;
+        return $this;
+    }
+
+    /**
+     * Get metaTagDesciptionEn
+     *
+     * @return string $metaTagDesciptionEn
+     */
+    public function getMetaTagDesciptionEn()
+    {
+        return $this->metaTagDesciptionEn;
     }
 }
