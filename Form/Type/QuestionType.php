@@ -12,7 +12,7 @@ class QuestionType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
                 ->add('id', formType\HiddenType::class)
-                ->add('question', formType\TextType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 150, 'required' => '')))
+                ->add('question', formType\TextType::class, array('attr' => array('data-rule-maxlength' => 150, 'required' => '')))
                 ->add('answerImportance', formType\ChoiceType::class, array('choices' => \Ibtikar\GlanceDashboardBundle\Document\Question::$answerImportanceType, 'expanded' => true))
                 ->add('questionType', formType\ChoiceType::class, array('expanded' => false,'choices' => \Ibtikar\GlanceDashboardBundle\Document\Question::$questionTypes,'attr'  => array('data-form-group-class' => 'bgGrey')))
 //                ->add('answerDisplay', formType\ChoiceType::class, array('choices' => \Ibtikar\GlanceDashboardBundle\Document\Question::$answerDisplayType, 'expanded' => true))

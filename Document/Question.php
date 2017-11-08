@@ -53,7 +53,6 @@ class Question {
     /**
      * @Assert\NotBlank
      * @MongoDB\String
-     * @Assert\Length(min=10)
      */
     private $question;
 
