@@ -946,7 +946,7 @@ class Product extends Document
     {
         return $this->recipes;
     }
-    
+
     /**
      * Set metaTagTitleAr
      *

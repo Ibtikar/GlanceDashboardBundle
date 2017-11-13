@@ -87,9 +87,17 @@ ibtikar_glance_dashboard_blog:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/blog.yml"
     prefix:   /blog
 
+ibtikar_glance_dashboard_season:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/season.yml"
+    prefix:   /season
+
 ibtikar_glance_dashboard_stars:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/stars.yml"
     prefix:   /stars
+
+ibtikar_glance_dashboard_causepage:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/causepage.yml"
+    prefix:   /causepage
 
 ibtikar_glance_dashboard_message:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/message.yml"

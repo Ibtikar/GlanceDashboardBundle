@@ -1,0 +1,26 @@
+ibtikar_glance_dashboard_season_create:
+    path:  /create
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Season:create }
+
+ibtikar_glance_dashboard_season_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Season:edit}
+
+
+ibtikar_glance_dashboard_season_delete:
+    path:  /delete/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Season:delete }
+
+ibtikar_glance_dashboard_season_list:
+    path: /list
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Season:list }
+
+
+ibtikar_glance_dashboard_season_bulk_actions:
+    path: /bulk
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Season:bulk}
+
+
+ibtikar_glance_dashboard_season_change_list_columns:
+    path:  /change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Season:changeListColumns }

@@ -101,14 +101,24 @@ class MediaController extends BackendController
                     return $response;
                 }
                 $fieldUpdate='Competition';
-            } elseif ($collectionType === 'HomeBanner') {
+            }
+            elseif ($collectionType === 'HomeBanner') {
                 $document = $dm->getRepository('IbtikarGlanceDashboardBundle:HomeBanner')->find($documentId);
                 if (!$document) {
                     throw $this->createNotFoundException($this->trans('Wrong id'));
                 }
 
                 $fieldUpdate = 'Banner';
-            } else {
+            }
+            elseif ($collectionType === 'CausePage') {
+                $document = $dm->getRepository('IbtikarGlanceDashboardBundle:CausePage')->find($documentId);
+                if (!$document) {
+                    throw $this->createNotFoundException($this->trans('Wrong id'));
+                }
+
+                $fieldUpdate = 'CausePage';
+            }
+            else {
                 $document = $dm->getRepository('IbtikarGlanceDashboardBundle:HomeBanner')->find($documentId);
                 if (!$document) {
                     throw $this->createNotFoundException($this->trans('Wrong id'));
@@ -451,6 +461,11 @@ class MediaController extends BackendController
                 }
             }
         }
+        if ($collectionType === 'CausePage' && $document->getCausePage()) {
+            if ($document->getProfilePhoto()) {
+                $document->getCausePage()->setProfilePhoto(NULL);
+            }
+        }
 
         if (strpos(strtolower($collectionType), 'bannar') !==FALSE && $document->getBanner() || strpos(strtolower($collectionType), 'banner') !==FALSE && $document->getBanner()) {
 
@@ -507,7 +522,17 @@ class MediaController extends BackendController
                     'subproduct' => null,
                     'collectionType' => $collectionType
                 ), array('order' => 'ASC'));
-            } elseif ($collectionType === 'SubProduct') {
+                } elseif ($collectionType === 'Season') {
+                $securityContext = $this->get('security.authorization_checker');
+                if (!$securityContext->isGranted('ROLE_SEASON_EDIT') && !$securityContext->isGranted('ROLE_ADMIN')) {
+                    return $this->getAccessDeniedResponse();
+                }
+                $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                    'type' => 'video',
+                    'season' => new \MongoId($documentId),
+                    'collectionType' => $collectionType
+                    ), array('order' => 'ASC'));
+               } elseif ($collectionType === 'SubProduct') {
                 $reponse = $this->getInvalidResponseForSubProduct(new \MongoId($documentId), '', 'list');
                 if ($reponse) {
                     return $reponse;
@@ -544,7 +569,8 @@ class MediaController extends BackendController
                     'product' => null,
                     'collectionType' => $collectionType
                 ),array('order' => 'ASC'));
-            } elseif ($collectionType === 'Magazine') {
+            }
+            elseif ($collectionType === 'Magazine') {
                 $securityContext = $this->get('security.authorization_checker');
                 if (!$securityContext->isGranted('ROLE_MAGAZINE_EDIT') && !$securityContext->isGranted('ROLE_ADMIN')) {
                     return $this->getAccessDeniedResponse();
@@ -558,7 +584,23 @@ class MediaController extends BackendController
                     'recipe' => null,
                     'collectionType' => $collectionType
                 ));
-            } elseif ($collectionType === 'Blog') {
+            }
+            elseif ($collectionType === 'CausePage') {
+                $securityContext = $this->get('security.authorization_checker');
+                if (!$securityContext->isGranted('ROLE_CAUSEPAGE_EDIT') && !$securityContext->isGranted('ROLE_ADMIN')) {
+                    return $this->getAccessDeniedResponse();
+                }
+                $documents = $this->get('doctrine_mongodb')->getManager()->getRepository($this->getObjectShortName())->findBy(array(
+                    'type' => $type == "all" ? array('$in' => array('image', 'video')) : $type,
+//                    'createdBy.$id' => new \MongoId($this->getUser()->getId()),
+                    'causePage' => new \MongoId($documentId),
+                    'subproduct' => null,
+                    'product' => null,
+                    'recipe' => null,
+                    'collectionType' => $collectionType
+                ));
+            }
+            elseif ($collectionType === 'Blog') {
                 $reponse = $this->getInvalidResponseForRecipe($documentId, $this->container->get('request_stack')->getCurrentRequest()->get('room'));
                 if ($reponse) {
                     return $reponse;
@@ -597,6 +639,7 @@ class MediaController extends BackendController
                 'recipe' => null,
                 'blog' => null,
                 'contactMessage' => null,
+                'season' => null,
                 'magazine' => null,
                 'activity' => null,
                 'subproduct' => null,
@@ -1086,7 +1129,27 @@ class MediaController extends BackendController
                         }
                         $videoObj->setActivity($subproduct);
                     }
-                    else {
+                     elseif($request->get('collectionType') == 'CausePage') {
+
+                        $causePage = $dm->getRepository('IbtikarGlanceDashboardBundle:CausePage')->find($documentId);
+                        if (!$causePage) {
+                            throw $this->createNotFoundException($this->trans('Wrong id'));
+                        }
+                        $videoObj->setCausePage($causePage);
+                    }
+                     elseif ($request->get('collectionType') == 'Season') {
+
+                        $season = $dm->getRepository('IbtikarGlanceDashboardBundle:Season')->find($documentId);
+                        if (!$season) {
+                            throw $this->createNotFoundException($this->trans('Wrong id'));
+                        }
+                        $securityContext = $this->get('security.authorization_checker');
+                        if ((!$securityContext->isGranted('ROLE_SEASON_EDIT') && !$securityContext->isGranted('ROLE_ADMIN'))) {
+
+                            return $this->getAccessDeniedResponse();
+                        }
+                        $videoObj->setSeason($season);
+                    } else {
                         $task = $dm->getRepository('IbtikarBackendBundle:Task')->find($documentId);
                         $lastVideo = $this->get('doctrine_mongodb')->getManager()->createQueryBuilder($this->getObjectShortName())
                                 ->field('task')->equals($documentId)
@@ -1142,6 +1205,8 @@ class MediaController extends BackendController
             'imageUrl'=>'https://i.ytimg.com/vi/' . $video->getVid() . '/hqdefault.jpg',
             'captionAr' => is_null($video->getCaptionAr())?"":$video->getCaptionAr(),
             'captionEn' => is_null($video->getCaptionEn())?"":$video->getCaptionEn(),
+            'descriptionAr' => is_null($video->getDescriptionAr())?"":$video->getDescriptionAr(),
+            'descriptionEn' => is_null($video->getDescriptionEn())?"":$video->getDescriptionEn(),
             'deleteUrl' => $this->generateUrl('ibtikar_glance_dashboard_video_delete', $routeParameters),
             'type' => $video->getType(),
             'cover'=>$video->getCoverPhoto()?'checked':'',

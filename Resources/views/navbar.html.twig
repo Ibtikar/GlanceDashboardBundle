@@ -107,23 +107,33 @@
  نجمات مطبخ قودي
                                         </a></li>
                                 {% endif %}
-                                {% if is_granted('ROLE_STAFF') or is_granted('ROLE_ADMIN')%}
-                                     <li><a href="{{ path('ibtikar_glance_dashboard_aboutus') }}" {% if 'banner' in app.request.attributes.get('_route') %}class="highlight"{% endif %}> <img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/categories.png')}}" class=" position-left"/> 
+                                      {% if is_granted('ROLE_SEASON_VIEW') or is_granted('ROLE_ADMIN')%}
+                                     <li><a href="{{ path('ibtikar_glance_dashboard_season_list') }}" {% if 'season' in app.request.attributes.get('_route') %}class="highlight"{% endif %}> <img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/categories.png')}}" class=" position-left"/>
+                                               المواسم
+                                    </a></li>
+                                    {% endif %}
+                                      {% if is_granted('ROLE_CAUSEPAGE_EDIT') or is_granted('ROLE_ADMIN')%}
+                                     <li><a href="{{ path('ibtikar_glance_dashboard_causepage_edit') }}" {% if 'banner' in app.request.attributes.get('_route') %}class="highlight"{% endif %}> <img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/categories.png')}}" class=" position-left"/>
+                                               مطبخ العطاء
+                                    </a></li>
+                                    {% endif %}
+                                    {% if is_granted('ROLE_STAFF') or is_granted('ROLE_ADMIN')%}
+                                     <li><a href="{{ path('ibtikar_glance_dashboard_aboutus') }}" {% if 'banner' in app.request.attributes.get('_route') %}class="highlight"{% endif %}> <img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/categories.png')}}" class=" position-left"/>
                                                  عن مطبخ قودى
                                     </a></li>
                                     {% set pageData= get_page_data()  %}
                                     {% for pageinfo in pageData %}
                                         {% if pageinfo.shortName=='HomeBanner'%}
-                                            <li><a href="{{ path('ibtikar_glance_dashboard_banner_edit') }}" {% if 'banner' in app.request.attributes.get('_route') %}class="highlight"{% endif %}> <img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/categories.png')}}" class=" position-left"/> 
+                                            <li><a href="{{ path('ibtikar_glance_dashboard_banner_edit') }}" {% if 'banner' in app.request.attributes.get('_route') %}class="highlight"{% endif %}> <img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/categories.png')}}" class=" position-left"/>
                                                     اعلان الصفحة الرئيسية
                                                 </a></li>
                                             {% else %}
-                                            <li><a href="{{ path('ibtikar_glance_dashboard_page_edit',{'id': pageinfo.id}) }}" {% if 'banner' in app.request.attributes.get('_route') %}class="highlight"{% endif %}> <img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/categories.png')}}" class=" position-left"/> 
+                                            <li><a href="{{ path('ibtikar_glance_dashboard_page_edit',{'id': pageinfo.id}) }}" {% if 'banner' in app.request.attributes.get('_route') %}class="highlight"{% endif %}> <img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/categories.png')}}" class=" position-left"/>
                                                    {{ pageinfo.shortName|trans({},'bannar')}}
                                                 </a></li>
                                             {% endif %}
                                         {% endfor %}
-                   
+
                                 {% endif %}
                             </ul>
                     </li>

@@ -1,0 +1,33 @@
+# #############Labels############
+'Title': 'الاسم بالعربية'
+'TitleEn': 'الاسم بالإنجليزية'
+'title': 'الاسم بالعربية'
+'titleEn': 'الاسم بالإنجليزية'
+'Title en': 'الاسم بالإنجليزية'
+'createdAt': تاريخ الإنشاء
+'Created at': تاريخ الإنشاء
+'createdBy': قام بالإنشاء
+'updatedAt': تاريخ التحديث
+'Updated at': تاريخ التحديث
+'Description': 'الوصف بالعربية'
+'Description en': 'الوصف بالإنجليزية'
+'description': 'الوصف بالعربية'
+'descriptionEn': 'الوصف بالإنجليزية'
+
+Created by:  قام بالإنشاء
+Updated by: 'قام بالتحديث'
+updatedBy: 'قام بالتحديث'
+
+# ############Messages############
+
+# ############Titles############
+'Add new Season': 'ادخال موسم جديد'
+'list Seasons': 'قائمه المواسم'
+'List Season': 'قائمه المواسم'
+'Edit Season': 'تعديل موسم'
+'edit Season': 'تعديل موسم'
+'Delete Season': 'حذف موسم'
+'coverPhoto': 'صوره الغلاف'
+'Cover photo': 'صوره الغلاف'
+'seasons list': 'مواسم'
+

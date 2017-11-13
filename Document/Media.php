@@ -51,6 +51,12 @@ class Media extends Document {
     private $activity;
 
     /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\CausePage", simple=true)
+     * @KeepReference
+     */
+    private $causePage;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe", simple=true)
      * @KeepReference
      */
@@ -73,6 +79,12 @@ class Media extends Document {
      * @KeepReference
      */
     private $contactMessage;
+
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Season", simple=true)
+     * @KeepReference
+     */
+    private $season;
 
     /**
      * @MongoDB\String
@@ -130,6 +142,16 @@ class Media extends Document {
      * @MongoDB\Boolean
      */
     private $coverPhoto = false;
+
+    /**
+     * @MongoDB\String
+     */
+    private $descriptionAr;
+
+    /**
+     * @MongoDB\String
+     */
+    private $descriptionEn;
 
     /**
      * @MongoDB\Boolean
@@ -1053,5 +1075,94 @@ class Media extends Document {
     public function getNaturalPhoto()
     {
         return $this->naturalPhoto;
+    }
+
+    /**
+     * Set causePage
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\CausePage $causePage
+     * @return self
+     */
+    public function setCausePage(\Ibtikar\GlanceDashboardBundle\Document\CausePage $causePage)
+    {
+        $this->causePage = $causePage;
+        return $this;
+    }
+
+    /**
+     * Get causePage
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\CausePage $causePage
+     */
+    public function getCausePage()
+    {
+        return $this->causePage;
+    }
+
+    /**
+     * Set season
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Season $season
+     * @return self
+     */
+    public function setSeason(\Ibtikar\GlanceDashboardBundle\Document\Season $season)
+    {
+        $this->season = $season;
+        return $this;
+    }
+
+    /**
+     * Get season
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\Season $season
+     */
+    public function getSeason()
+    {
+        return $this->season;
+    }
+
+
+    /**
+     * Set descriptionEn
+     *
+     * @param string $descriptionEn
+     * @return self
+     */
+    public function setDescriptionEn($descriptionEn)
+    {
+        $this->descriptionEn = $descriptionEn;
+        return $this;
+    }
+
+    /**
+     * Get descriptionEn
+     *
+     * @return string $descriptionEn
+     */
+    public function getDescriptionEn()
+    {
+        return $this->descriptionEn;
+    }
+
+    /**
+     * Set descriptionAr
+     *
+     * @param string $descriptionAr
+     * @return self
+     */
+    public function setDescriptionAr($descriptionAr)
+    {
+        $this->descriptionAr = $descriptionAr;
+        return $this;
+    }
+
+    /**
+     * Get descriptionAr
+     *
+     * @return string $descriptionAr
+     */
+    public function getDescriptionAr()
+    {
+        return $this->descriptionAr;
     }
 }
