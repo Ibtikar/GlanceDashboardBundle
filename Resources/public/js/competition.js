@@ -132,7 +132,7 @@ $(document).ready(function () {
 
                     showNotificationMsg(imageErrorMessages.sizeError, "", 'error');
 
-                } else if ($('#image-cropper-modal').cropit('imageSize').width <= 1170 || $('#image-cropper-modal').cropit('imageSize').height <= 600) {
+                } else if ($('#image-cropper-modal').cropit('imageSize').width < 1170 || $('#image-cropper-modal').cropit('imageSize').height < 600) {
 
                     showNotificationMsg(imageErrorMessages.imageDimension, "", 'error');
 
