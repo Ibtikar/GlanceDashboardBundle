@@ -140,6 +140,8 @@ $(document).ready(function () {
                     if (extension == 'gif') {
                         uploadImageToServer($('.cropit-preview-image').attr('src'), uploadUrl);
                     } else {
+                        $('#image-cropper-modal').cropit('exportZoom', 2);
+
                         $('#uploadImg').modal('show');
                     }
 
