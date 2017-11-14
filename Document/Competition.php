@@ -123,7 +123,6 @@ sa     */
 
     /**
      * @Assert\NotBlank
-
      * @MongoDB\String
      * @Assert\Length(
      *      min = 10,
@@ -136,7 +135,6 @@ sa     */
 
     /**
      * @Assert\NotBlank
-
      * @MongoDB\String
      * @Assert\Length(
      *      min = 10,

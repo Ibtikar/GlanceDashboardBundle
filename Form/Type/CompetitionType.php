@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Ibtikar\GlanceDashboardBundle\Form\DataTransformer\DateTimeTransformer;
 use Symfony\Component\Form\Extension\Core\Type as formType;
 use Doctrine\Bundle\MongoDBBundle\Form\Type\DocumentType;
+use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Ibtikar\GlanceDashboardBundle\Document\Competition;
 
 /**
@@ -35,8 +36,11 @@ class CompetitionType extends AbstractType {
                 ->add('SecondaryTitleEn', formType\TextType::class, array('required'=>FALSE,'attr' => array('data-rule-minlength' => 3,'data-rule-maxlength' => 150)))
                 ->add('brief', formType\TextareaType::class, array('required'=>FALSE,'attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 1000)))
                 ->add('briefEn', formType\TextareaType::class, array('required'=>FALSE,'attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 1000)))
-                ->add('termsAndConditions', formType\TextareaType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 2000)))
-                ->add('termsAndConditionsEn', formType\TextareaType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 2000)))
+                ->add('termsAndConditions',  CKEditorType::class, array('required' => true,'attr' => array('data-validate-element'=>true,'data-rule-ckmin' => 10,'data-rule-ckmax' => 2000,'data-rule-ckreq' => true,'data-error-after-selector' => '.dev-after-element')))
+                ->add('termsAndConditionsEn',  CKEditorType::class, array('required' => true,'config' => array('contentsLangDirection' => 'ltr'),'attr' => array('data-validate-element'=>true,'data-rule-ckmin' => 10,'data-rule-ckmax' => 2000,'data-rule-ckreq' => true,'data-error-after-selector' => '.dev-after-element')))
+
+//                ->add('termsAndConditions', formType\TextareaType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 2000)))
+//                ->add('termsAndConditionsEn', formType\TextareaType::class, array('attr' => array('data-rule-minlength' => 10,'data-rule-maxlength' => 2000)))
                 ->add('video', formType\TextType::class, array('mapped'=>FALSE,'required'=>FALSE,'attr'=>array('data-rule-youtube'=>'data-rule-youtube')));
 
         if($this->isNew){

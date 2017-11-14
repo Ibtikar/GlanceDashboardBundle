@@ -78,6 +78,8 @@
 {#                    {{dump(form.vars)}}#}
                     {{ form_widget(form) }}
                     {{ form_errors(form) }}
+                    {% if attr['data-error-after-selector'] is defined and attr['data-error-after-selector'] == '.dev-after-element' %}<div class="dev-after-element"></div>{% endif %}
+
                 </div>
             {% else %}
                 {{ form_widget(form) }}
