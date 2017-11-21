@@ -121,6 +121,7 @@
 
 
                                                                          {% for image in (answer.answer|unserialize) %}
+                                                                             {% if competitionAnswer.uid in  image %}
                                                                             <div class="col-lg-2 col-sm-4">
                                                                                 <div class="thumbnail">
                                                                                     <div class="thumb">
@@ -129,6 +130,7 @@
 
                                                                                 </div>
                                                                             </div>
+                                                                                    {% endif %}
                                                                         {% endfor%}
 
 
