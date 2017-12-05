@@ -26,8 +26,8 @@ class CausePageController extends BackendController
 
 
         $form = $this->createFormBuilder($causePage, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
-                ->add('brief',  CKEditorType::class, array('required' => TRUE,'attr' => array('data-validate-element'=>true,'data-rule-ckmin' => 10,'data-rule-ckmax' => 1000,'data-rule-ckreq' => true,'data-error-after-selector' => '.dev-after-element')))
-                ->add('briefEn',  CKEditorType::class, array('required' => TRUE,'attr' => array('data-validate-element'=>true,'data-rule-ckmin' => 10,'data-rule-ckmax' => 1000,'data-rule-ckreq' => true,'data-error-after-selector' => '.dev-after-element')))
+                ->add('brief',  CKEditorType::class, array('required' => TRUE,'attr' => array('data-validate-element'=>true,'data-rule-ckmin' => 10,'data-rule-ckmax' => 2000,'data-rule-ckreq' => true,'data-error-after-selector' => '.dev-after-element')))
+                ->add('briefEn',  CKEditorType::class, array('required' => TRUE,'attr' => array('data-validate-element'=>true,'data-rule-ckmin' => 10,'data-rule-ckmax' => 2000,'data-rule-ckreq' => true,'data-error-after-selector' => '.dev-after-element')))
                 ->add('competition', \Doctrine\Bundle\MongoDBBundle\Form\Type\DocumentType::class, array('required' => FALSE,'placeholder' => 'Choose Competition','class' => 'IbtikarGlanceDashboardBundle:Competition', 'attr' => array('data-img-method'=>'profilePhoto','data-img-default'=>'bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg','class' => 'select')))
                 ->add('save', formType\SubmitType::class)
                 ->getForm();

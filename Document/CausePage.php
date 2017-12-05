@@ -25,7 +25,7 @@ class CausePage extends Document {
      * @Assert\Length(
      *      min = 10,
      *      minMessage = "Your name must be at least {{ limit }} characters long",
-     *      max = 1000,
+     *      max = 2000,
      *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
      * )
      */
@@ -37,7 +37,7 @@ class CausePage extends Document {
      * @Assert\Length(
      *      min = 10,
      *      minMessage = "Your name must be at least {{ limit }} characters long",
-     *      max = 1000,
+     *      max = 2000,
      *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
      * )
      */
