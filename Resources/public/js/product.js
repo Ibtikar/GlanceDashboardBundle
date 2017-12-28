@@ -479,6 +479,7 @@ $(document).ready(function () {
             if ($(element).closest('td').attr('data-name') == 'bannerPhoto') {
                 errorDimension = imageErrorMessages.BannerimageDimension;
                 $('#image-cropper-modal').cropit('previewSize', {width: 1170, height: 200});
+                var elementDimessionHeight = 200;
                 $('#image-cropper-modal').cropit('exportZoom', 1);
 
 
