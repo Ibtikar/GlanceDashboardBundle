@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\ExecutionContextInterface;
 use Ibtikar\GlanceDashboardBundle\Document\Document;
 use Ibtikar\GlanceDashboardBundle\Document\Publishable;
+
 /**
  * @MongoDB\hasLifeCycleCallbacks
  * @MongoDB\Document(repositoryClass="Ibtikar\GlanceDashboardBundle\Document\RecipeRepository")
@@ -16,42 +17,37 @@ use Ibtikar\GlanceDashboardBundle\Document\Publishable;
  *   @MongoDB\Index(keys={"status"="asc", "slug"="asc", "type"="asc", "deleted"="asc"}, options={"name"="get content by arabic slug"}),
  * })
  */
-class Recipe extends Publishable
-{
+class Recipe extends Publishable {
 
     public static $difficultyMap = array(
         0 => 'easy',
         1 => 'medium',
         2 => 'difficult'
     );
-
     public static $courseMap = array(
-      'Salad' => 'Salad',
-      'Soup' => 'Soup',
-      'Sandwich' => 'Sandwich',
-      'Side Dish' => 'Side Dish',
-      'Main Courses' => 'Main Courses',
-      'Pastry' => 'Pastry',
-      'Dessert' => 'Dessert',
-      'Coffee Desserts' => 'Coffee Desserts',
-      'Drink' => 'Drink'
+        'Salad' => 'Salad',
+        'Soup' => 'Soup',
+        'Sandwich' => 'Sandwich',
+        'Side Dish' => 'Side Dish',
+        'Main Courses' => 'Main Courses',
+        'Pastry' => 'Pastry',
+        'Dessert' => 'Dessert',
+        'Coffee Desserts' => 'Coffee Desserts',
+        'Drink' => 'Drink'
     );
-
     public static $keyIngredientMap = array(
-         'Minced' => 'Minced',
-         'Beef' => 'Beef',
-         'Lamb' => 'Lamb',
-         'Chicken' => 'Chicken',
-         'Seafood' => 'Seafood',
-         'Vegetable' => 'Vegetable'
+        'Minced' => 'Minced',
+        'Beef' => 'Beef',
+        'Lamb' => 'Lamb',
+        'Chicken' => 'Chicken',
+        'Seafood' => 'Seafood',
+        'Vegetable' => 'Vegetable'
     );
-
     public static $mealMap = array(
         'Breakfast' => 'Breakfast',
         'Lunch' => 'Lunch',
         'Dinner' => 'Dinner'
     );
-
     public static $statuses = array(
         "new" => "new",
         "deleted" => "deleted",
@@ -59,7 +55,6 @@ class Recipe extends Publishable
         "autopublish" => "autopublish",
         "draft" => "draft"
     );
-
     public static $types = array(
         "recipe" => "recipe",
         "article" => "article",
@@ -136,8 +131,7 @@ class Recipe extends Publishable
      */
     private $ingredientsEn;
 
-
-        /**
+    /**
      * @MongoDB\String
      * @Assert\Length(
      *      min = 10,
@@ -154,7 +148,6 @@ class Recipe extends Publishable
      * )
      */
     private $textEn;
-
 
     /**
      * @MongoDB\String
@@ -279,7 +272,6 @@ class Recipe extends Publishable
      */
     private $autoPublishDate;
 
-
     /**
      * @MongoDB\String
      */
@@ -333,7 +325,6 @@ class Recipe extends Publishable
      */
     private $relatedArticle;
 
-
     /**
      * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe" , simple=true)
      */
@@ -359,36 +350,52 @@ class Recipe extends Publishable
      */
     protected $migrationData;
 
-    public function __construct()
-    {
+    /**
+     * @MongoDB\String
+     */
+    private $metaTagTitleAr;
+
+    /**
+     * @MongoDB\String
+     */
+    private $metaTagDesciptionAr;
+
+    /**
+     * @MongoDB\String
+     */
+    private $metaTagTitleEn;
+
+    /**
+     * @MongoDB\String
+     */
+    private $metaTagDesciptionEn;
+
+    public function __construct() {
         $this->tag = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tagEn = new \Doctrine\Common\Collections\ArrayCollection();
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
         $this->trackingNumber = 'Recipe' . date('ymdHis') . rand(0, 99);
     }
 
-    public function __toString()
-    {
+    public function __toString() {
         return (string) $this->title;
     }
 
-    public function getRelatedMaterialsJson(){
+    public function getRelatedMaterialsJson() {
         $array = array();
-        if($this->getRelatedRecipe()){
-            foreach($this->getRelatedRecipe() as $material){
+        if ($this->getRelatedRecipe()) {
+            foreach ($this->getRelatedRecipe() as $material) {
                 $array[] = array(
-                            'id'=>$material->getId(),
-                            'title'=>$material->getTitle(),
-                            'slug' =>$material->getSlug()
-                        );
+                    'id' => $material->getId(),
+                    'title' => $material->getTitle(),
+                    'slug' => $material->getSlug()
+                );
             }
-
         }
         return json_encode($array);
     }
 
-    public function getDefaultCoverPhoto()
-    {
+    public function getDefaultCoverPhoto() {
         return $this->coverPhoto;
     }
 
@@ -397,8 +404,7 @@ class Recipe extends Publishable
      *
      * @return id $id
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -408,8 +414,7 @@ class Recipe extends Publishable
      * @param string $title
      * @return self
      */
-    public function setTitle($title)
-    {
+    public function setTitle($title) {
         $this->title = $title;
         return $this;
     }
@@ -419,8 +424,7 @@ class Recipe extends Publishable
      *
      * @return string $title
      */
-    public function getTitle()
-    {
+    public function getTitle() {
         return $this->title;
     }
 
@@ -430,8 +434,7 @@ class Recipe extends Publishable
      * @param string $titleEn
      * @return self
      */
-    public function setTitleEn($titleEn)
-    {
+    public function setTitleEn($titleEn) {
         $this->titleEn = $titleEn;
         return $this;
     }
@@ -441,8 +444,7 @@ class Recipe extends Publishable
      *
      * @return string $titleEn
      */
-    public function getTitleEn()
-    {
+    public function getTitleEn() {
         return $this->titleEn;
     }
 
@@ -452,8 +454,7 @@ class Recipe extends Publishable
      * @param string $brief
      * @return self
      */
-    public function setBrief($brief)
-    {
+    public function setBrief($brief) {
         $this->brief = $brief;
         return $this;
     }
@@ -463,8 +464,7 @@ class Recipe extends Publishable
      *
      * @return string $brief
      */
-    public function getBrief()
-    {
+    public function getBrief() {
         return $this->brief;
     }
 
@@ -474,8 +474,7 @@ class Recipe extends Publishable
      * @param string $briefEn
      * @return self
      */
-    public function setBriefEn($briefEn)
-    {
+    public function setBriefEn($briefEn) {
         $this->briefEn = $briefEn;
         return $this;
     }
@@ -485,8 +484,7 @@ class Recipe extends Publishable
      *
      * @return string $briefEn
      */
-    public function getBriefEn()
-    {
+    public function getBriefEn() {
         return $this->briefEn;
     }
 
@@ -496,8 +494,7 @@ class Recipe extends Publishable
      * @param string $ingredients
      * @return self
      */
-    public function setIngredients($ingredients)
-    {
+    public function setIngredients($ingredients) {
         $this->ingredients = $ingredients;
         return $this;
     }
@@ -507,8 +504,7 @@ class Recipe extends Publishable
      *
      * @return string $ingredients
      */
-    public function getIngredients()
-    {
+    public function getIngredients() {
         return $this->ingredients;
     }
 
@@ -518,8 +514,7 @@ class Recipe extends Publishable
      * @param string $ingredientsEn
      * @return self
      */
-    public function setIngredientsEn($ingredientsEn)
-    {
+    public function setIngredientsEn($ingredientsEn) {
         $this->ingredientsEn = $ingredientsEn;
         return $this;
     }
@@ -529,8 +524,7 @@ class Recipe extends Publishable
      *
      * @return string $ingredientsEn
      */
-    public function getIngredientsEn()
-    {
+    public function getIngredientsEn() {
         return $this->ingredientsEn;
     }
 
@@ -540,8 +534,7 @@ class Recipe extends Publishable
      * @param string $text
      * @return self
      */
-    public function setText($text)
-    {
+    public function setText($text) {
         $this->text = $text;
         return $this;
     }
@@ -551,8 +544,7 @@ class Recipe extends Publishable
      *
      * @return string $text
      */
-    public function getText()
-    {
+    public function getText() {
         return $this->text;
     }
 
@@ -562,8 +554,7 @@ class Recipe extends Publishable
      * @param string $textEn
      * @return self
      */
-    public function setTextEn($textEn)
-    {
+    public function setTextEn($textEn) {
         $this->textEn = $textEn;
         return $this;
     }
@@ -573,12 +564,9 @@ class Recipe extends Publishable
      *
      * @return string $textEn
      */
-    public function getTextEn()
-    {
+    public function getTextEn() {
         return $this->textEn;
     }
-
-
 
     /**
      * Set method
@@ -586,8 +574,7 @@ class Recipe extends Publishable
      * @param string $method
      * @return self
      */
-    public function setMethod($method)
-    {
+    public function setMethod($method) {
         $this->method = $method;
         return $this;
     }
@@ -597,8 +584,7 @@ class Recipe extends Publishable
      *
      * @return string $method
      */
-    public function getMethod()
-    {
+    public function getMethod() {
         return $this->method;
     }
 
@@ -608,8 +594,7 @@ class Recipe extends Publishable
      * @param string $methodEn
      * @return self
      */
-    public function setMethodEn($methodEn)
-    {
+    public function setMethodEn($methodEn) {
         $this->methodEn = $methodEn;
         return $this;
     }
@@ -619,8 +604,7 @@ class Recipe extends Publishable
      *
      * @return string $methodEn
      */
-    public function getMethodEn()
-    {
+    public function getMethodEn() {
         return $this->methodEn;
     }
 
@@ -629,8 +613,7 @@ class Recipe extends Publishable
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Tag $tag
      */
-    public function addTag(\Ibtikar\GlanceDashboardBundle\Document\Tag $tag)
-    {
+    public function addTag(\Ibtikar\GlanceDashboardBundle\Document\Tag $tag) {
         $this->tags[] = $tag;
     }
 
@@ -639,8 +622,7 @@ class Recipe extends Publishable
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Tag $tag
      */
-    public function removeTag(\Ibtikar\GlanceDashboardBundle\Document\Tag $tag)
-    {
+    public function removeTag(\Ibtikar\GlanceDashboardBundle\Document\Tag $tag) {
         $this->tags->removeElement($tag);
     }
 
@@ -649,8 +631,7 @@ class Recipe extends Publishable
      *
      * @return \Doctrine\Common\Collections\Collection $tag
      */
-    public function getTags()
-    {
+    public function getTags() {
         return $this->tags;
     }
 
@@ -658,8 +639,7 @@ class Recipe extends Publishable
      * Set tags
      *
      */
-    public function setTags($tags = array())
-    {
+    public function setTags($tags = array()) {
         return $this->tags = $tags;
     }
 
@@ -667,8 +647,7 @@ class Recipe extends Publishable
      * Set tagsEn
      *
      */
-    public function setTagsEn($tags = array())
-    {
+    public function setTagsEn($tags = array()) {
         return $this->tagsEn = $tags;
     }
 
@@ -677,8 +656,7 @@ class Recipe extends Publishable
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Tag $tagEn
      */
-    public function addTagEn(\Ibtikar\GlanceDashboardBundle\Document\Tag $tagEn)
-    {
+    public function addTagEn(\Ibtikar\GlanceDashboardBundle\Document\Tag $tagEn) {
         $this->tagsEn[] = $tagEn;
     }
 
@@ -687,8 +665,7 @@ class Recipe extends Publishable
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Tag $tagEn
      */
-    public function removeTagEn(\Ibtikar\GlanceDashboardBundle\Document\Tag $tagEn)
-    {
+    public function removeTagEn(\Ibtikar\GlanceDashboardBundle\Document\Tag $tagEn) {
         $this->tagsEn->removeElement($tagEn);
     }
 
@@ -697,8 +674,7 @@ class Recipe extends Publishable
      *
      * @return \Doctrine\Common\Collections\Collection $tagEn
      */
-    public function getTagsEn()
-    {
+    public function getTagsEn() {
         return $this->tagsEn;
     }
 
@@ -707,8 +683,7 @@ class Recipe extends Publishable
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Tag $tagsEn
      */
-    public function addTagsEn(\Ibtikar\GlanceDashboardBundle\Document\Tag $tagsEn)
-    {
+    public function addTagsEn(\Ibtikar\GlanceDashboardBundle\Document\Tag $tagsEn) {
         $this->tagsEn[] = $tagsEn;
     }
 
@@ -717,8 +692,7 @@ class Recipe extends Publishable
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Tag $tagsEn
      */
-    public function removeTagsEn(\Ibtikar\GlanceDashboardBundle\Document\Tag $tagsEn)
-    {
+    public function removeTagsEn(\Ibtikar\GlanceDashboardBundle\Document\Tag $tagsEn) {
         $this->tagsEn->removeElement($tagsEn);
     }
 
@@ -728,8 +702,7 @@ class Recipe extends Publishable
      * @param Ibtikar\GlanceUMSBundle\Document\Staff $chef
      * @return self
      */
-    public function setChef(\Ibtikar\GlanceUMSBundle\Document\Staff $chef =NULL)
-    {
+    public function setChef(\Ibtikar\GlanceUMSBundle\Document\Staff $chef = NULL) {
         $this->chef = $chef;
         return $this;
     }
@@ -739,8 +712,7 @@ class Recipe extends Publishable
      *
      * @return Ibtikar\GlanceUMSBundle\Document\Staff $chef
      */
-    public function getChef()
-    {
+    public function getChef() {
         return $this->chef;
     }
 
@@ -750,8 +722,7 @@ class Recipe extends Publishable
      * @param int $preparationTime
      * @return self
      */
-    public function setPreparationTime($preparationTime)
-    {
+    public function setPreparationTime($preparationTime) {
         $this->preparationTime = $preparationTime;
         return $this;
     }
@@ -761,8 +732,7 @@ class Recipe extends Publishable
      *
      * @return int $preparationTime
      */
-    public function getPreparationTime()
-    {
+    public function getPreparationTime() {
         return $this->preparationTime;
     }
 
@@ -772,8 +742,7 @@ class Recipe extends Publishable
      * @param int $cookingTime
      * @return self
      */
-    public function setCookingTime($cookingTime)
-    {
+    public function setCookingTime($cookingTime) {
         $this->cookingTime = $cookingTime;
         return $this;
     }
@@ -783,8 +752,7 @@ class Recipe extends Publishable
      *
      * @return int $cookingTime
      */
-    public function getCookingTime()
-    {
+    public function getCookingTime() {
         return $this->cookingTime;
     }
 
@@ -794,8 +762,7 @@ class Recipe extends Publishable
      * @param int $difficulty
      * @return self
      */
-    public function setDifficulty($difficulty)
-    {
+    public function setDifficulty($difficulty) {
         $this->difficulty = $difficulty;
         return $this;
     }
@@ -805,8 +772,7 @@ class Recipe extends Publishable
      *
      * @return int $difficulty
      */
-    public function getDifficulty()
-    {
+    public function getDifficulty() {
         return $this->difficulty;
     }
 
@@ -816,8 +782,7 @@ class Recipe extends Publishable
      * @param int $servingCount
      * @return self
      */
-    public function setServingCount($servingCount)
-    {
+    public function setServingCount($servingCount) {
         $this->servingCount = $servingCount;
         return $this;
     }
@@ -827,8 +792,7 @@ class Recipe extends Publishable
      *
      * @return int $servingCount
      */
-    public function getServingCount()
-    {
+    public function getServingCount() {
         return $this->servingCount;
     }
 
@@ -837,8 +801,7 @@ class Recipe extends Publishable
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Product $product
      */
-    public function addProduct(\Ibtikar\GlanceDashboardBundle\Document\Product $product)
-    {
+    public function addProduct(\Ibtikar\GlanceDashboardBundle\Document\Product $product) {
         $this->products[] = $product;
     }
 
@@ -847,8 +810,7 @@ class Recipe extends Publishable
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Product $product
      */
-    public function removeProduct(\Ibtikar\GlanceDashboardBundle\Document\Product $product)
-    {
+    public function removeProduct(\Ibtikar\GlanceDashboardBundle\Document\Product $product) {
         $this->products->removeElement($product);
     }
 
@@ -857,8 +819,7 @@ class Recipe extends Publishable
      *
      * @return \Doctrine\Common\Collections\Collection $products
      */
-    public function getProducts()
-    {
+    public function getProducts() {
         return $this->products;
     }
 
@@ -868,8 +829,7 @@ class Recipe extends Publishable
      * @param int $course
      * @return self
      */
-    public function setCourse($course)
-    {
+    public function setCourse($course) {
         $courese = array();
         foreach ($course as $value) {
             $courese[$value] = $value;
@@ -883,8 +843,7 @@ class Recipe extends Publishable
      *
      * @return int $course
      */
-    public function getCourse()
-    {
+    public function getCourse() {
         return $this->course;
     }
 
@@ -894,8 +853,7 @@ class Recipe extends Publishable
      * @param int $meal
      * @return self
      */
-    public function setMeal($meal)
-    {
+    public function setMeal($meal) {
         $meals = array();
         foreach ($meal as $mealType) {
             $meals[$mealType] = $mealType;
@@ -909,8 +867,7 @@ class Recipe extends Publishable
      *
      * @return int $meal
      */
-    public function getMeal()
-    {
+    public function getMeal() {
         return $this->meal;
     }
 
@@ -920,8 +877,7 @@ class Recipe extends Publishable
      * @param int $keyIngredient
      * @return self
      */
-    public function setKeyIngredient($keyIngredient)
-    {
+    public function setKeyIngredient($keyIngredient) {
         $ingrediant = array();
         foreach ($keyIngredient as $value) {
             $ingrediant[$value] = $value;
@@ -935,8 +891,7 @@ class Recipe extends Publishable
      *
      * @return int $keyIngredient
      */
-    public function getKeyIngredient()
-    {
+    public function getKeyIngredient() {
         return $this->keyIngredient;
     }
 
@@ -946,8 +901,7 @@ class Recipe extends Publishable
      * @param Ibtikar\GlanceUMSBundle\Document\Country $country
      * @return self
      */
-    public function setCountry(\Ibtikar\GlanceUMSBundle\Document\Country $country= NULL)
-    {
+    public function setCountry(\Ibtikar\GlanceUMSBundle\Document\Country $country = NULL) {
         $this->country = $country;
         return $this;
     }
@@ -957,8 +911,7 @@ class Recipe extends Publishable
      *
      * @return Ibtikar\GlanceUMSBundle\Document\Country $country
      */
-    public function getCountry()
-    {
+    public function getCountry() {
         return $this->country;
     }
 
@@ -968,8 +921,7 @@ class Recipe extends Publishable
      * @param string $status
      * @return self
      */
-    public function setStatus($status)
-    {
+    public function setStatus($status) {
         $this->status = $status;
         return $this;
     }
@@ -979,12 +931,9 @@ class Recipe extends Publishable
      *
      * @return string $status
      */
-    public function getStatus()
-    {
+    public function getStatus() {
         return $this->status;
     }
-
-
 
     /**
      * Set assignedTo
@@ -992,8 +941,7 @@ class Recipe extends Publishable
      * @param Ibtikar\GlanceUMSBundle\Document\Staff $assignedTo
      * @return self
      */
-    public function setAssignedTo(\Ibtikar\GlanceUMSBundle\Document\Staff $assignedTo =NULL)
-    {
+    public function setAssignedTo(\Ibtikar\GlanceUMSBundle\Document\Staff $assignedTo = NULL) {
         $this->assignedTo = $assignedTo;
         return $this;
     }
@@ -1003,18 +951,15 @@ class Recipe extends Publishable
      *
      * @return Ibtikar\GlanceUMSBundle\Document\Staff $assignedTo
      */
-    public function getAssignedTo()
-    {
+    public function getAssignedTo() {
         return $this->assignedTo;
     }
 
-    public function getDocumentTranslation()
-    {
+    public function getDocumentTranslation() {
 
     }
 
-    public function getSlug()
-    {
+    public function getSlug() {
         return $this->slug;
     }
 
@@ -1024,8 +969,7 @@ class Recipe extends Publishable
      * @param string $type
      * @return self
      */
-    public function setType($type)
-    {
+    public function setType($type) {
         $this->type = $type;
         return $this;
     }
@@ -1035,8 +979,7 @@ class Recipe extends Publishable
      *
      * @return string $type
      */
-    public function getType()
-    {
+    public function getType() {
         return $this->type;
     }
 
@@ -1046,8 +989,7 @@ class Recipe extends Publishable
      * @param Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto
      * @return self
      */
-    public function setCoverPhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto)
-    {
+    public function setCoverPhoto(\Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto) {
         $this->coverPhoto = $coverPhoto;
         return $this;
     }
@@ -1057,8 +999,7 @@ class Recipe extends Publishable
      *
      * @return Ibtikar\GlanceDashboardBundle\Document\Media $coverPhoto
      */
-    public function getCoverPhoto()
-    {
+    public function getCoverPhoto() {
         return $this->coverPhoto;
     }
 
@@ -1068,8 +1009,7 @@ class Recipe extends Publishable
      * @param date $autoPublishDate
      * @return self
      */
-    public function setAutoPublishDate($autoPublishDate)
-    {
+    public function setAutoPublishDate($autoPublishDate) {
         $this->autoPublishDate = $autoPublishDate;
         return $this;
     }
@@ -1079,8 +1019,7 @@ class Recipe extends Publishable
      *
      * @return date $autoPublishDate
      */
-    public function getAutoPublishDate()
-    {
+    public function getAutoPublishDate() {
         return $this->autoPublishDate;
     }
 
@@ -1090,8 +1029,7 @@ class Recipe extends Publishable
      * @param string $galleryType
      * @return self
      */
-    public function setGalleryType($galleryType)
-    {
+    public function setGalleryType($galleryType) {
         $this->galleryType = $galleryType;
         return $this;
     }
@@ -1101,8 +1039,7 @@ class Recipe extends Publishable
      *
      * @return string $galleryType
      */
-    public function getGalleryType()
-    {
+    public function getGalleryType() {
         return $this->galleryType;
     }
 
@@ -1112,19 +1049,18 @@ class Recipe extends Publishable
      * @param string $defaultCoverPhoto
      * @return self
      */
-    public function setDefaultCoverPhoto($defaultCoverPhoto)
-    {
+    public function setDefaultCoverPhoto($defaultCoverPhoto) {
         $this->defaultCoverPhoto = $defaultCoverPhoto;
         return $this;
     }
+
     /**
      * Set reason
      *
      * @param string $reason
      * @return self
      */
-    public function setReason($reason)
-    {
+    public function setReason($reason) {
         $this->reason = $reason;
         return $this;
     }
@@ -1134,8 +1070,7 @@ class Recipe extends Publishable
      *
      * @return string $reason
      */
-    public function getReason()
-    {
+    public function getReason() {
         return $this->reason;
     }
 
@@ -1145,8 +1080,7 @@ class Recipe extends Publishable
      * @param date $dailysolutionDate
      * @return self
      */
-    public function setDailysolutionDate($dailysolutionDate)
-    {
+    public function setDailysolutionDate($dailysolutionDate) {
         $this->dailysolutionDate = $dailysolutionDate;
         return $this;
     }
@@ -1156,8 +1090,7 @@ class Recipe extends Publishable
      *
      * @return date $dailysolutionDate
      */
-    public function getDailysolutionDate()
-    {
+    public function getDailysolutionDate() {
         return $this->dailysolutionDate;
     }
 
@@ -1167,8 +1100,7 @@ class Recipe extends Publishable
      * @param increment $noOfViews
      * @return self
      */
-    public function setNoOfViews($noOfViews)
-    {
+    public function setNoOfViews($noOfViews) {
         $this->noOfViews = $noOfViews;
         return $this;
     }
@@ -1178,8 +1110,7 @@ class Recipe extends Publishable
      *
      * @return increment $noOfViews
      */
-    public function getNoOfViews()
-    {
+    public function getNoOfViews() {
         return $this->noOfViews;
     }
 
@@ -1189,8 +1120,7 @@ class Recipe extends Publishable
      * @param string $slug
      * @return self
      */
-    public function setSlug($slug)
-    {
+    public function setSlug($slug) {
         $this->slug = $slug;
         return $this;
     }
@@ -1201,8 +1131,7 @@ class Recipe extends Publishable
      * @param string $slugEn
      * @return self
      */
-    public function setSlugEn($slugEn)
-    {
+    public function setSlugEn($slugEn) {
         $this->slugEn = $slugEn;
         return $this;
     }
@@ -1212,8 +1141,7 @@ class Recipe extends Publishable
      *
      * @return string $slugEn
      */
-    public function getSlugEn()
-    {
+    public function getSlugEn() {
         return $this->slugEn;
     }
 
@@ -1237,15 +1165,13 @@ class Recipe extends Publishable
         return $this;
     }
 
-
     /**
      * Set noOfLikes
      *
      * @param increment $noOfLikes
      * @return self
      */
-    public function setNoOfLikes($noOfLikes)
-    {
+    public function setNoOfLikes($noOfLikes) {
         $this->noOfLikes = $noOfLikes;
         return $this;
     }
@@ -1255,8 +1181,7 @@ class Recipe extends Publishable
      *
      * @return increment $noOfLikes
      */
-    public function getNoOfLikes()
-    {
+    public function getNoOfLikes() {
         return $this->noOfLikes;
     }
 
@@ -1265,8 +1190,7 @@ class Recipe extends Publishable
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedRecipe
      */
-    public function addRelatedRecipe(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedRecipe)
-    {
+    public function addRelatedRecipe(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedRecipe) {
         $this->relatedRecipe[] = $relatedRecipe;
     }
 
@@ -1275,8 +1199,7 @@ class Recipe extends Publishable
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedRecipe
      */
-    public function removeRelatedRecipe(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedRecipe)
-    {
+    public function removeRelatedRecipe(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedRecipe) {
         $this->relatedRecipe->removeElement($relatedRecipe);
     }
 
@@ -1285,8 +1208,7 @@ class Recipe extends Publishable
      *
      * @return \Doctrine\Common\Collections\Collection $relatedRecipe
      */
-    public function getRelatedRecipe()
-    {
+    public function getRelatedRecipe() {
         return $this->relatedRecipe;
     }
 
@@ -1295,8 +1217,7 @@ class Recipe extends Publishable
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle
      */
-    public function addRelatedArticle(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle)
-    {
+    public function addRelatedArticle(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle) {
         $this->relatedArticle[] = $relatedArticle;
     }
 
@@ -1305,8 +1226,7 @@ class Recipe extends Publishable
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle
      */
-    public function removeRelatedArticle(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle)
-    {
+    public function removeRelatedArticle(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedArticle) {
         $this->relatedArticle->removeElement($relatedArticle);
     }
 
@@ -1315,8 +1235,7 @@ class Recipe extends Publishable
      *
      * @return \Doctrine\Common\Collections\Collection $relatedArticle
      */
-    public function getRelatedArticle()
-    {
+    public function getRelatedArticle() {
         return $this->relatedArticle;
     }
 
@@ -1325,8 +1244,7 @@ class Recipe extends Publishable
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip
      */
-    public function addRelatedTip(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip)
-    {
+    public function addRelatedTip(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip) {
         $this->relatedTip[] = $relatedTip;
     }
 
@@ -1335,8 +1253,7 @@ class Recipe extends Publishable
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip
      */
-    public function removeRelatedTip(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip)
-    {
+    public function removeRelatedTip(\Ibtikar\GlanceDashboardBundle\Document\Recipe $relatedTip) {
         $this->relatedTip->removeElement($relatedTip);
     }
 
@@ -1345,25 +1262,20 @@ class Recipe extends Publishable
      *
      * @return \Doctrine\Common\Collections\Collection $relatedTip
      */
-    public function getRelatedTip()
-    {
+    public function getRelatedTip() {
         return $this->relatedTip;
     }
 
-
-    public function setRelatedTip($tip=array())
-    {
-       $this->relatedTip= $tip;
+    public function setRelatedTip($tip = array()) {
+        $this->relatedTip = $tip;
     }
 
-    public function setRelatedArticle($article=array())
-    {
-       $this->relatedArticle= $article;
+    public function setRelatedArticle($article = array()) {
+        $this->relatedArticle = $article;
     }
 
-    public function setRelatedRecipe($recipe=array())
-    {
-       $this->relatedRecipe= $recipe;
+    public function setRelatedRecipe($recipe = array()) {
+        $this->relatedRecipe = $recipe;
     }
 
     /**
@@ -1372,8 +1284,7 @@ class Recipe extends Publishable
      * @param boolean $hideEnglishContent
      * @return self
      */
-    public function setHideEnglishContent($hideEnglishContent)
-    {
+    public function setHideEnglishContent($hideEnglishContent) {
         $this->hideEnglishContent = $hideEnglishContent;
         return $this;
     }
@@ -1383,78 +1294,72 @@ class Recipe extends Publishable
      *
      * @return boolean $hideEnglishContent
      */
-    public function getHideEnglishContent()
-    {
+    public function getHideEnglishContent() {
         return $this->hideEnglishContent;
     }
 
-    public function getRelatedRecipeJson(){
+    public function getRelatedRecipeJson() {
         $array = array();
-        if($this->getRelatedRecipe()){
-            foreach($this->getRelatedRecipe() as $recipe){
+        if ($this->getRelatedRecipe()) {
+            foreach ($this->getRelatedRecipe() as $recipe) {
                 $array[] = array(
-                            'id'=>$recipe->getId(),
-                            'text'=>$recipe->getTitle(),
-                            'img' => $this->getDefaultCoverImage($recipe)
-                        );
+                    'id' => $recipe->getId(),
+                    'text' => $recipe->getTitle(),
+                    'img' => $this->getDefaultCoverImage($recipe)
+                );
             }
-
         }
         return $array;
     }
 
-    public function getDefaultCoverImage($document){
-        if($document->getCoverPhoto()){
-            $type=$document->getCoverPhoto()->getType();
-            if($type=='image'){
-            return  '/'.$document->getCoverPhoto()->getWebPath()   ;
-            }else{
-              return  'https://i.ytimg.com/vi/' . $document->getCoverPhoto()->getVid() . '/default.jpg' ;
+    public function getDefaultCoverImage($document) {
+        if ($document->getCoverPhoto()) {
+            $type = $document->getCoverPhoto()->getType();
+            if ($type == 'image') {
+                return '/' . $document->getCoverPhoto()->getWebPath();
+            } else {
+                return 'https://i.ytimg.com/vi/' . $document->getCoverPhoto()->getVid() . '/default.jpg';
             }
-
         }
         return '';
     }
 
-    public function getRelatedArticleJson(){
+    public function getRelatedArticleJson() {
         $array = array();
-        if($this->getRelatedArticle()){
-            foreach($this->getRelatedArticle() as $article){
+        if ($this->getRelatedArticle()) {
+            foreach ($this->getRelatedArticle() as $article) {
                 $array[] = array(
-                            'id'=>$article->getId(),
-                            'text'=>$article->getTitle(),
-                            'img' => $this->getDefaultCoverImage($article)
-                        );
+                    'id' => $article->getId(),
+                    'text' => $article->getTitle(),
+                    'img' => $this->getDefaultCoverImage($article)
+                );
             }
-
         }
         return $array;
     }
 
-    public function getRelatedTipJson(){
+    public function getRelatedTipJson() {
         $array = array();
-        if($this->getRelatedTip()){
-            foreach($this->getRelatedTip() as $tip){
+        if ($this->getRelatedTip()) {
+            foreach ($this->getRelatedTip() as $tip) {
                 $array[] = array(
-                            'id'=>$tip->getId(),
-                            'text'=>$tip->getTitle(),
-                            'img' => $this->getDefaultCoverImage($tip)
-                        );
+                    'id' => $tip->getId(),
+                    'text' => $tip->getTitle(),
+                    'img' => $this->getDefaultCoverImage($tip)
+                );
             }
-
         }
         return $array;
     }
 
-    public function getDefaultCoverPhotoVideoOrImage(){
-        if($this->coverPhoto){
-            $type=$this->coverPhoto->getType();
-            if($type=='image'){
-            return  '/'.$this->coverPhoto->getWebPath()   ;
-            }else{
-                return  'https://i.ytimg.com/vi/' . $this->coverPhoto->getVid() . '/default.jpg' ;
+    public function getDefaultCoverPhotoVideoOrImage() {
+        if ($this->coverPhoto) {
+            $type = $this->coverPhoto->getType();
+            if ($type == 'image') {
+                return '/' . $this->coverPhoto->getWebPath();
+            } else {
+                return 'https://i.ytimg.com/vi/' . $this->coverPhoto->getVid() . '/default.jpg';
             }
-
         }
         return '';
     }
@@ -1465,8 +1370,7 @@ class Recipe extends Publishable
      * @param string $migrated
      * @return self
      */
-    public function setMigrated($migrated)
-    {
+    public function setMigrated($migrated) {
         $this->migrated = $migrated;
         return $this;
     }
@@ -1476,8 +1380,7 @@ class Recipe extends Publishable
      *
      * @return string $migrated
      */
-    public function getMigrated()
-    {
+    public function getMigrated() {
         return $this->migrated;
     }
 
@@ -1487,8 +1390,7 @@ class Recipe extends Publishable
      * @param string $migrationData
      * @return self
      */
-    public function setMigrationData($migrationData)
-    {
+    public function setMigrationData($migrationData) {
         $this->migrationData = $migrationData;
         return $this;
     }
@@ -1498,11 +1400,9 @@ class Recipe extends Publishable
      *
      * @return string $migrationData
      */
-    public function getMigrationData()
-    {
+    public function getMigrationData() {
         return $this->migrationData;
     }
-
 
     /**
      * Set goodyStar
@@ -1510,8 +1410,7 @@ class Recipe extends Publishable
      * @param boolean $goodyStar
      * @return self
      */
-    public function setGoodyStar($goodyStar)
-    {
+    public function setGoodyStar($goodyStar) {
         $this->goodyStar = $goodyStar;
         return $this;
     }
@@ -1521,8 +1420,7 @@ class Recipe extends Publishable
      *
      * @return boolean $goodyStar
      */
-    public function getGoodyStar()
-    {
+    public function getGoodyStar() {
         return $this->goodyStar;
     }
 
@@ -1531,8 +1429,7 @@ class Recipe extends Publishable
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\RecipeTag $recipeTag
      */
-    public function addRecipeTag(\Ibtikar\GlanceDashboardBundle\Document\RecipeTag $recipeTag)
-    {
+    public function addRecipeTag(\Ibtikar\GlanceDashboardBundle\Document\RecipeTag $recipeTag) {
         $this->recipeTags[] = $recipeTag;
     }
 
@@ -1541,8 +1438,7 @@ class Recipe extends Publishable
      *
      * @param Ibtikar\GlanceDashboardBundle\Document\RecipeTag $recipeTag
      */
-    public function removeRecipeTag(\Ibtikar\GlanceDashboardBundle\Document\RecipeTag $recipeTag)
-    {
+    public function removeRecipeTag(\Ibtikar\GlanceDashboardBundle\Document\RecipeTag $recipeTag) {
         $this->recipeTags->removeElement($recipeTag);
     }
 
@@ -1551,18 +1447,17 @@ class Recipe extends Publishable
      *
      * @return \Doctrine\Common\Collections\Collection $recipeTags
      */
-    public function getRecipeTags()
-    {
+    public function getRecipeTags() {
         return $this->recipeTags;
     }
+
     /**
      * Set order
      *
      * @param int $order
      * @return self
      */
-    public function setOrder($order)
-    {
+    public function setOrder($order) {
         $this->order = $order;
         return $this;
     }
@@ -1572,8 +1467,88 @@ class Recipe extends Publishable
      *
      * @return int $order
      */
-    public function getOrder()
-    {
+    public function getOrder() {
         return $this->order;
     }
+
+    /**
+     * Set metaTagTitleAr
+     *
+     * @param string $metaTagTitleAr
+     * @return self
+     */
+    public function setMetaTagTitleAr($metaTagTitleAr) {
+        $this->metaTagTitleAr = $metaTagTitleAr;
+        return $this;
+    }
+
+    /**
+     * Get metaTagTitleAr
+     *
+     * @return string $metaTagTitleAr
+     */
+    public function getMetaTagTitleAr() {
+        return $this->metaTagTitleAr;
+    }
+
+    /**
+     * Set metaTagDesciptionAr
+     *
+     * @param string $metaTagDesciptionAr
+     * @return self
+     */
+    public function setMetaTagDesciptionAr($metaTagDesciptionAr) {
+        $this->metaTagDesciptionAr = $metaTagDesciptionAr;
+        return $this;
+    }
+
+    /**
+     * Get metaTagDesciptionAr
+     *
+     * @return string $metaTagDesciptionAr
+     */
+    public function getMetaTagDesciptionAr() {
+        return $this->metaTagDesciptionAr;
+    }
+
+    /**
+     * Set metaTagTitleEn
+     *
+     * @param string $metaTagTitleEn
+     * @return self
+     */
+    public function setMetaTagTitleEn($metaTagTitleEn) {
+        $this->metaTagTitleEn = $metaTagTitleEn;
+        return $this;
+    }
+
+    /**
+     * Get metaTagTitleEn
+     *
+     * @return string $metaTagTitleEn
+     */
+    public function getMetaTagTitleEn() {
+        return $this->metaTagTitleEn;
+    }
+
+    /**
+     * Set metaTagDesciptionEn
+     *
+     * @param string $metaTagDesciptionEn
+     * @return self
+     */
+    public function setMetaTagDesciptionEn($metaTagDesciptionEn) {
+        $this->metaTagDesciptionEn = $metaTagDesciptionEn;
+        return $this;
+    }
+
+    /**
+     * Get metaTagDesciptionEn
+     *
+     * @return string $metaTagDesciptionEn
+     */
+    public function getMetaTagDesciptionEn() {
+        return $this->metaTagDesciptionEn;
+    }
+
 }

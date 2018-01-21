@@ -3,7 +3,7 @@
 
 
 {% block form_container %}
- {% form_theme form   'IbtikarGlanceDashboardBundle::form_theme_recipe.html.twig' %}
+    {% form_theme form   'IbtikarGlanceDashboardBundle::form_theme_recipe.html.twig' %}
 
 
 
@@ -12,7 +12,7 @@
 
 
     <div class="row">
-  {% set deleteAttrs = popover_factory(deletePopoverConfig is defined?deletePopoverConfig:[]) %}
+        {% set deleteAttrs = popover_factory(deletePopoverConfig is defined?deletePopoverConfig:[]) %}
 
         <div class="col-md-12">
 
@@ -72,7 +72,7 @@
 
                             </td>
                         </tr>
-    <tr id="dev-bannerPhoto">
+                        <tr id="dev-bannerPhoto">
                             <td style="width: 150px">
 
                                 <div class="thumbnail">
@@ -126,7 +126,7 @@
     </div>
     <hr>
 
-                {{ form_row(form.bannerUrl) }}
+    {{ form_row(form.bannerUrl) }}
 
     <hr>
 
@@ -144,11 +144,13 @@
 
 
 
-{#                {{ form_row(form.description) }}#}
-                                {{ form_row(form.about) }}
+                {#                {{ form_row(form.description) }}#}
+                {{ form_row(form.about) }}
+                {{ form_row(form.metaTagTitleAr) }}
+                {{ form_row(form.metaTagDesciptionAr) }}
 
 
-{#                {{ form_row(form.images) }}#}
+                {#                {{ form_row(form.images) }}#}
 
             </div><!-- arabic end -->
 
@@ -159,8 +161,11 @@
 
 
 
-{#                {{ form_row(form.descriptionEn) }}#}
-                                {{ form_row(form.aboutEn) }}
+
+                {#                {{ form_row(form.descriptionEn) }}#}
+                {{ form_row(form.aboutEn) }}
+                {{ form_row(form.metaTagTitleEn) }}
+                {{ form_row(form.metaTagDesciptionEn) }}
 
 
 
@@ -170,8 +175,8 @@
     </div>
     {{form_row(form.submitButton)}}
     {{ form_end(form) }}
-<div class="form-group has-feedback">
-    <label class="control-label col-lg-2" for="recipe_relatedRecipe"></label><div class="col-lg-10" style="padding: 0;"><ul class='dev-related-list media-list width-350 notificationList'></ul></div></div>
+    <div class="form-group has-feedback">
+        <label class="control-label col-lg-2" for="recipe_relatedRecipe"></label><div class="col-lg-10" style="padding: 0;"><ul class='dev-related-list media-list width-350 notificationList'></ul></div></div>
     <div id="GoogleImportImg-modal" class="modal fade">
         <div class="modal-dialog  modal-full">
             <div class="modal-content">
@@ -434,7 +439,7 @@
                     </ul>
                 </div><!-- btn-group -->
             </div>
-            </div>
+        </div>
     </div>
     <div class="panel-body">
 
@@ -560,10 +565,10 @@
     <div class="row actionButtons">
         <div class="col-xs-12">
             <button class="btn btn-primary  dev-form-submit-btn dev-save" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
-            {% if app.user  and (is_granted('ROLE_SUBPRODUCT_CREATE') or is_granted('ROLE_ADMIN'))  %}
-            <button  class="btn btn-primary dev-form-submit-btn dev-save-add" type="button">حفظ و اضافة منتج فرعي<i class="icon-plus2 position-right"></i></button>
-            <button  class="btn btn-primary dev-form-submit-btn dev-save-add-activity" type="button">حفظ و اضافة  جديدنا/ خيارات عاليه الجوده <i class="icon-plus2 position-right"></i></button>
-            {% endif %}
+                {% if app.user  and (is_granted('ROLE_SUBPRODUCT_CREATE') or is_granted('ROLE_ADMIN'))  %}
+                <button  class="btn btn-primary dev-form-submit-btn dev-save-add" type="button">حفظ و اضافة منتج فرعي<i class="icon-plus2 position-right"></i></button>
+                <button  class="btn btn-primary dev-form-submit-btn dev-save-add-activity" type="button">حفظ و اضافة  جديدنا/ خيارات عاليه الجوده <i class="icon-plus2 position-right"></i></button>
+                {% endif %}
             <button class="btn btn-default dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
 
 
@@ -574,7 +579,7 @@
 
 
 {% block javascripts %}
-   <div id="uploadImg" class="modal fade">
+    <div id="uploadImg" class="modal fade">
         <div class="modal-dialog  modal-full">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
@@ -625,89 +630,89 @@
         </div>
     </div>
 
-   {% set imageSortTemplateActivity %}
-    <tr class="media videoRow" id="%image-id%">
-        <td class="library-drag">
-            <i class="icon icon-move dragula-handle"></i>
-        </td>
-        <td class="UploadkindIcon">
-            <i class="%image-icon%"></i>
-        </td>
-        <td style="width: 150px">
-            <div class="thumbnail">
-                <div class="thumb thumb-slide">
-                    <img src="%image-src%" data-image-id="%image-id%" alt="%image-name%">
-                    <div class="caption">
-                        <span>
-                            <a href="%image-src%" data-image-id="%image-id%" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
-                        </span>
+    {% set imageSortTemplateActivity %}
+        <tr class="media videoRow" id="%image-id%">
+            <td class="library-drag">
+                <i class="icon icon-move dragula-handle"></i>
+            </td>
+            <td class="UploadkindIcon">
+                <i class="%image-icon%"></i>
+            </td>
+            <td style="width: 150px">
+                <div class="thumbnail">
+                    <div class="thumb thumb-slide">
+                        <img src="%image-src%" data-image-id="%image-id%" alt="%image-name%">
+                        <div class="caption">
+                            <span>
+                                <a href="%image-src%" data-image-id="%image-id%" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                            </span>
+                        </div>
                     </div>
+
                 </div>
 
-            </div>
+            </td>
+            <td class="thumbnail-caption">
+                <h4>  %image-name%</h4>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <input class="form-control dev-caption-ar" value="%caption-ar%" placeholder="ادخل الرابط " type="text">
+                    </div>
 
-        </td>
-        <td class="thumbnail-caption">
-            <h4>  %image-name%</h4>
-            <div class="row">
-                <div class="col-lg-6">
-                    <input class="form-control dev-caption-ar" value="%caption-ar%" placeholder="ادخل الرابط " type="text">
                 </div>
 
-            </div>
+
+            </td>
+            <td style="width: 120px">
+
+                <a class="btn btn-default" data-href="%delete-url%" {{popover_factory({})|replace({'%type%': "recipe"|lower|trans})|raw}} > <i class="icon-trash"></i></a>
+            </td>
+        </tr>
+    {% endset %}
+    {% set imageTempelate %}
+        <tr id="dev-%name%">
+            <td style="width: 150px">
+
+                <div class="thumbnail">
+                    <div class="thumb thumb-slide">
+                        <img src="%image-url%" alt="">
+                        <div class="caption">
+                            <span>
+                                <a href="%image-url%" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </td>
+            <td class="thumbnail-caption">
+                <h4>   %arabicName%</h4>
+                <ul class="text-grey-300">
+                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                    <li>  %errorDimission%  </li>
+                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                </ul>
+            </td>
+            <td style="width: 300px" data-name="%name%">
+                %uploadButton%
+                %cropButton%
+                %deleteButton%
 
 
-        </td>
-        <td style="width: 120px">
+            </td>
 
-            <a class="btn btn-default" data-href="%delete-url%" {{popover_factory({})|replace({'%type%': "recipe"|lower|trans})|raw}} > <i class="icon-trash"></i></a>
-        </td>
-    </tr>
-{% endset %}
- {% set imageTempelate %}
-            <tr id="dev-%name%">
-                            <td style="width: 150px">
-
-                                <div class="thumbnail">
-                                    <div class="thumb thumb-slide">
-                                            <img src="%image-url%" alt="">
-                                        <div class="caption">
-                                            <span>
-                                            <a href="%image-url%" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </td>
-                            <td class="thumbnail-caption">
-                                <h4>   %arabicName%</h4>
-                                <ul class="text-grey-300">
-                                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
-                                    <li>  %errorDimission%  </li>
-                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
-                                </ul>
-                            </td>
-                            <td style="width: 300px" data-name="%name%">
-                                %uploadButton%
-                                %cropButton%
-                                %deleteButton%
-
-
-                            </td>
-
-                        </tr>
+        </tr>
 
     {% endset %}
-     {% set uploadButton %}
+    {% set uploadButton %}
         <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
-     {% endset %}
-     {% set cropButton %}
+    {% endset %}
+    {% set cropButton %}
         <a class="btn btn-default dev-crop-images"    data-image-id="%image-id%" data-crop-url="%crop-url%">  رفع الصورة </a>
-     {% endset %}
-     {% set deleteButton %}
-         <a class="btn btn-default dev-trash-image" data-image-id="%image-id%"  data-href = "%image-delete-url%"  %pop-block%> <i class="icon-trash"></i></a>
-         {% endset %}
+    {% endset %}
+    {% set deleteButton %}
+        <a class="btn btn-default dev-trash-image" data-image-id="%image-id%"  data-href = "%image-delete-url%"  %pop-block%> <i class="icon-trash"></i></a>
+        {% endset %}
 
 
     {{ parent() }}
@@ -760,7 +765,7 @@
         var element;
         var name;
         var type;
-         var imageErrorMessages={
+        var imageErrorMessages = {
             'imageExtension': '{% trans from 'validators'%}picture not correct.{%endtrans%}',
             'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 1170*600{%endtrans%}',
             'BannerimageDimension': '{% trans from 'validators'%}Image dimension must be more than 1170*200{%endtrans%}',
@@ -774,39 +779,38 @@
         };
 
 
-    /**
-     * @author ahmad Gamal <a.gamal@ibtikar.net.sa>
-     */
-    function valid_youtubeUrl(videoUrl) {
-        return videoUrl.match(/^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/);
-    }
+        /**
+         * @author ahmad Gamal <a.gamal@ibtikar.net.sa>
+         */
+        function valid_youtubeUrl(videoUrl) {
+            return videoUrl.match(/^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/);
+        }
 
-    function getIDFromURL(url){
-        var ID = '';
-        url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-        if(url[2] !== undefined) {
-          ID = url[2].split(/[^0-9a-z_\-]/i);
-          ID = ID[0];
+        function getIDFromURL(url) {
+            var ID = '';
+            url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+            if (url[2] !== undefined) {
+                ID = url[2].split(/[^0-9a-z_\-]/i);
+                ID = ID[0];
+            } else {
+                ID = url;
+            }
+            return ID;
         }
-        else {
-          ID = url;
-        }
-          return ID;
-      }
 
-    $('[name="form[coverType]"]').on('click',function(){
-        if($(this).val() == "image"){
-            $('#dev-coverPhoto').show();
-            $('#dev-coverVideo').hide();
-        }else if($(this).val() == "video"){
-            $('#dev-coverVideo').show();
-            $('#dev-coverPhoto').hide();
-        }
-    });
+        $('[name="form[coverType]"]').on('click', function () {
+            if ($(this).val() == "image") {
+                $('#dev-coverPhoto').show();
+                $('#dev-coverVideo').hide();
+            } else if ($(this).val() == "video") {
+                $('#dev-coverVideo').show();
+                $('#dev-coverPhoto').hide();
+            }
+        });
         $('[name="form[coverType]"]:checked').trigger('click');
-        $(document).on('click', '.dev-upload-video', function() {
+        $(document).on('click', '.dev-upload-video', function () {
 
-            if(typeof ytXhr !== "undefined")
+            if (typeof ytXhr !== "undefined")
                 ytXhr.abort();
 
 
@@ -819,7 +823,7 @@
             }
 
             if (!valid_youtubeUrl(videoUrl)) {
-                showNotificationMsg(messages.wrongURL,'','error');
+                showNotificationMsg(messages.wrongURL, '', 'error');
                 $('.dev-recipe-videoUrl').val('');
                 return;
             }
@@ -827,7 +831,7 @@
             var videoId = getIDFromURL(videoUrl);
 
             if (videoId.indexOf("https://www.youtube") > -1) {
-                showNotificationMsg(messages.wrongURL,'','error');
+                showNotificationMsg(messages.wrongURL, '', 'error');
                 $('.dev-recipe-videoUrl').val('');
                 return;
             }
@@ -836,69 +840,69 @@
                 url: validateVideoUrl,
                 method: 'post',
                 data: {'videoUrl': videoUrl},
-                success: function(data) {
+                success: function (data) {
                     if (data == 'error') {
-                        showNotificationMsg(messages.wrongURL,'','error');
+                        showNotificationMsg(messages.wrongURL, '', 'error');
                     } else {
-                            $('.dev-videourl-submit').attr('disabled','disabled');
-                            var videos = [];
-                            videos[0] = videoId;
+                        $('.dev-videourl-submit').attr('disabled', 'disabled');
+                        var videos = [];
+                        videos[0] = videoId;
 
-                            $.ajax({
-                                url: youtubeUploadVideo,
-                                method: "POST",
-                                data: {videos: videos},
-                                success: function(data) {
-                                    if (data.status === 'success') {
-                                        showNotificationMsg(data.message, "", data.status);
-                                        $(data.video).each(function () {
-                                            $('#dev-coverVideo img').attr('src',this.imageUrl);
-                                            $('#dev-coverVideo [data-popup="lightbox"]').attr('href',this.imageUrl);
-                                        });
-                                    }
-
-                                    $('.dev-recipe-videoUrl').val('');
-                                    $('.dev-videourl-submit').removeAttr('disabled');
+                        $.ajax({
+                            url: youtubeUploadVideo,
+                            method: "POST",
+                            data: {videos: videos},
+                            success: function (data) {
+                                if (data.status === 'success') {
+                                    showNotificationMsg(data.message, "", data.status);
+                                    $(data.video).each(function () {
+                                        $('#dev-coverVideo img').attr('src', this.imageUrl);
+                                        $('#dev-coverVideo [data-popup="lightbox"]').attr('href', this.imageUrl);
+                                    });
                                 }
-                            });
+
+                                $('.dev-recipe-videoUrl').val('');
+                                $('.dev-videourl-submit').removeAttr('disabled');
+                            }
+                        });
 
                     }
                 }
             });
 
-    });
-
-    RelatedTipObj = '{{product.relatedTipJson|json_encode|raw}}';
-    $('#product_related_tip').val(RelatedTipObj);
-    if($('#product_related_tip').val()!=''){
-        updateRelatedTip();
-
-    }
-
-    RelatedArticleObj = '{{product.getRelatedArticleJson()|json_encode|raw}}';
-    $('#product_related_article').val(RelatedArticleObj);
-    if($('#product_related_article').val()!=''){
-        updateRelatedArticle();
-    }
-
-    $(document).on('onFailSubmitForm', function () {
-
+        });
 
         RelatedTipObj = '{{product.relatedTipJson|json_encode|raw}}';
         $('#product_related_tip').val(RelatedTipObj);
-        if($('#product_related_tip').val()!=''){
-                  updateRelatedTip();
+        if ($('#product_related_tip').val() != '') {
+            updateRelatedTip();
 
         }
 
         RelatedArticleObj = '{{product.getRelatedArticleJson()|json_encode|raw}}';
         $('#product_related_article').val(RelatedArticleObj);
-        if($('#product_related_article').val()!=''){
-        updateRelatedArticle();
-    }
-    })
+        if ($('#product_related_article').val() != '') {
+            updateRelatedArticle();
+        }
+
+        $(document).on('onFailSubmitForm', function () {
+
+
+            RelatedTipObj = '{{product.relatedTipJson|json_encode|raw}}';
+            $('#product_related_tip').val(RelatedTipObj);
+            if ($('#product_related_tip').val() != '') {
+                updateRelatedTip();
+
+            }
+
+            RelatedArticleObj = '{{product.getRelatedArticleJson()|json_encode|raw}}';
+            $('#product_related_article').val(RelatedArticleObj);
+            if ($('#product_related_article').val() != '') {
+                updateRelatedArticle();
+            }
+        })
     </script>
-  <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/js/productMediaHandler.js')}}"></script>
-  <script src="https://apis.google.com/js/client.js?onload=initgapi"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/js/productMediaHandler.js')}}"></script>
+    <script src="https://apis.google.com/js/client.js?onload=initgapi"></script>
 
 {% endblock %}
