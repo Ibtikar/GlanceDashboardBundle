@@ -14,23 +14,25 @@ use Ibtikar\GlanceDashboardBundle\Document\HomeBanner;
  */
 class PageType extends AbstractType {
 
- 
 
     /**
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        
+
         $builder->add('description', formType\TextareaType::class, array('required' => FALSE))
-                ->add('descriptionEn', formType\TextareaType::class, array('required' => FALSE));
+                ->add('descriptionEn', formType\TextareaType::class, array('required' => FALSE))
+                ->add('metaTagTitleAr', formType\TextType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+                ->add('metaTagTitleEn', formType\TextType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+                ->add('metaTagDesciptionAr', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+                ->add('metaTagDesciptionEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+        ;
 
         if ($options['attr']['shortName'] == 'MagazineBannar') {
             $builder->add('bannerUrl', formType\TextType::class, array('required' => true, 'attr' => array('data-validate-element' => true)));
         }
         $builder->add('save', formType\SubmitType::class);
-
-      
     }
 
 
