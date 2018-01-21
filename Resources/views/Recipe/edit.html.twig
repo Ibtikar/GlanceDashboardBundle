@@ -21,11 +21,14 @@
 
                 {{ form_row(form.brief) }}
 
+
 {#                {{ form_row(form.tags) }}#}
                 <hr/>
                 {{ form_row(form.ingredients) }}
                 <hr/>
                 {{ form_row(form.method) }}
+                {{ form_row(form.metaTagTitleAr) }}
+                {{ form_row(form.metaTagDesciptionAr) }}
             </div><!-- arabic end -->
 
             <div class="tab-pane" id="english">
@@ -45,11 +48,14 @@
 
                 {{ form_row(form.briefEn) }}
 
-{#                {{ form_row(form.tagsEn) }}#}
+
+                {#                {{ form_row(form.tagsEn) }}#}
                 <hr/>
                 {{ form_row(form.ingredientsEn) }}
                 <hr/>
                 {{ form_row(form.methodEn) }}
+                {{ form_row(form.metaTagTitleEn) }}
+                {{ form_row(form.metaTagDesciptionEn) }}
             </div><!-- english end -->
 
         </div>
