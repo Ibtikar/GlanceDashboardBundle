@@ -209,6 +209,19 @@ class ProductController extends BackendController {
         if (!$product) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
+
+        if (!$product->getMetaTagTitleAr()) {
+            $product->setMetaTagTitleAr($product->getName());
+        }
+        if (!$product->getMetaTagDesciptionAr()) {
+            $product->setMetaTagDesciptionAr($product->getAbout());
+        }
+        if (!$product->getMetaTagTitleEn()) {
+            $product->setMetaTagTitleEn($product->getNameEn());
+        }
+        if (!$product->getMetaTagDesciptionEn()) {
+            $product->setMetaTagDesciptionEn($product->getAboutEn());
+        }
         $profileImage=$product->getProfilePhoto();
         $bannerImage=$product->getBannerPhoto();
 

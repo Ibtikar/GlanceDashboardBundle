@@ -350,23 +350,48 @@ class Recipe extends Publishable {
      */
     protected $migrationData;
 
+
     /**
      * @MongoDB\String
+     * @Assert\Length(
+     *      min = 3,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 150,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
      */
     private $metaTagTitleAr;
 
     /**
      * @MongoDB\String
+     * @Assert\Length(
+     *      min = 10,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 1000,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
      */
     private $metaTagDesciptionAr;
 
     /**
      * @MongoDB\String
+     * @Assert\Length(
+     *      min = 3,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 150,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
      */
     private $metaTagTitleEn;
 
     /**
      * @MongoDB\String
+     * @Assert\Length(
+     *      min = 10,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 1000,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
      */
     private $metaTagDesciptionEn;
 
