@@ -656,7 +656,21 @@
 
     $(document).ready(function() {
         getTags();
+       $('body').on('blur', '#recipe_title', function () {
+                $('#recipe_metaTagTitleAr').val($('#recipe_title').val());//.blur().focus();
 
+            });
+            $('body').on('blur', '#recipe_titleEn', function () {
+                $('#recipe_metaTagTitleEn').val($('#recipe_titleEn').val());//.blur().focus();
+
+            });
+            $('body').on('blur', '#recipe_brief', function () {
+                $('#recipe_metaTagDesciptionAr').val($('#recipe_brief').val());//.blur().focus();
+            });
+            $('body').on('blur', '#recipe_briefEn', function () {
+                $('#recipe_metaTagDesciptionEn').val($('#recipe_briefEn').val());//.blur().focus();
+
+            });
 
     })
     </script>
