@@ -870,6 +870,30 @@
                 }
             });
     });
+
+           $('body').on('blur', '#product_name', function () {
+                if($('#product_metaTagTitleAr').val()==""){
+                $('#product_metaTagTitleAr').val($('#product_name').val());//.blur().focus();
+            }
+
+            });
+            $('body').on('blur', '#product_nameEn', function () {
+                if($('#product_metaTagTitleEn').val()==""){
+                $('#product_metaTagTitleEn').val($('#product_nameEn').val());//.blur().focus();
+            }
+
+            });
+            $('body').on('blur', '#product_about', function () {
+                if($('#product_metaTagDesciptionAr').val()==""){
+                $('#product_metaTagDesciptionAr').val($('#product_about').val());//.blur().focus();
+                }
+            });
+            $('body').on('blur', '#product_aboutEn', function () {
+                  if($('#product_metaTagDesciptionEn').val()==""){
+                $('#product_metaTagDesciptionEn').val($('#product_aboutEn').val());//.blur().focus();
+            }
+
+            });
     </script>
     <script src="{{ asset('bundles/ibtikarglancedashboard/js/product.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/ibtikarglancedashboard/js/productMediaHandler.js')}}"></script>

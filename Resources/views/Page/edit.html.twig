@@ -287,6 +287,17 @@
                 });
     });
 
+            $('body').on('blur', '#page_description', function () {
+                if($('#page_metaTagDesciptionAr').val()==""){
+                $('#page_metaTagDesciptionAr').val($('#page_description').val());//.blur().focus();
+                }
+            });
+            $('body').on('blur', '#page_descriptionEn', function () {
+                  if($('#page_metaTagDesciptionEn').val()==""){
+                $('#page_metaTagDesciptionEn').val($('#page_descriptionEn').val());//.blur().focus();
+            }
+
+            });
     </script>
 
 

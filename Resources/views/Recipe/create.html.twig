@@ -659,7 +659,29 @@
     $(document).ready(function() {
         getTags();
 
+             $('body').on('blur', '#recipe_title', function () {
+                 if($('#recipe_metaTagTitleAr').val()==""){
+                $('#recipe_metaTagTitleAr').val($('#recipe_title').val());//.blur().focus();
+            }
 
+            });
+            $('body').on('blur', '#recipe_titleEn', function () {
+                if($('#recipe_metaTagTitleEn').val()==""){
+                $('#recipe_metaTagTitleEn').val($('#recipe_titleEn').val());//.blur().focus();
+            }
+
+            });
+            $('body').on('blur', '#recipe_brief', function () {
+                if($('#recipe_metaTagDesciptionAr').val()==""){
+                $('#recipe_metaTagDesciptionAr').val($('#recipe_brief').val());//.blur().focus();
+                }
+            });
+            $('body').on('blur', '#recipe_briefEn', function () {
+                  if($('#recipe_metaTagDesciptionEn').val()==""){
+                $('#recipe_metaTagDesciptionEn').val($('#recipe_briefEn').val());//.blur().focus();
+            }
+
+            });
     })
     </script>
 
