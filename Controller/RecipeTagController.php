@@ -73,7 +73,7 @@ class RecipeTagController extends BackendController {
                 return $this->redirect($request->getUri());
             }
         }
-        return $this->render('IbtikarGlanceDashboardBundle::formLayout.html.twig', array(
+        return $this->render('IbtikarGlanceDashboardBundle:Tag:create.html.twig', array(
                     'form' => $form->createView(),
                     'breadcrumb'=>$breadCrumbArray,
                     'title'=>$this->trans('Add new tag',array(),  $this->translationDomain),
