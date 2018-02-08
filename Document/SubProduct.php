@@ -120,6 +120,11 @@ class SubProduct extends Document {
     /**
      * @MongoDB\String
      */
+    private $urlEn;
+
+    /**
+     * @MongoDB\String
+     */
     private $type = 'subproduct';
 
     /**
@@ -578,5 +583,27 @@ class SubProduct extends Document {
     public function getSlugEn()
     {
         return $this->slugEn;
+    }
+
+    /**
+     * Set urlEn
+     *
+     * @param string $urlEn
+     * @return self
+     */
+    public function setUrlEn($urlEn)
+    {
+        $this->urlEn = $urlEn;
+        return $this;
+    }
+
+    /**
+     * Get urlEn
+     *
+     * @return string $urlEn
+     */
+    public function getUrlEn()
+    {
+        return $this->urlEn;
     }
 }

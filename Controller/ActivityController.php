@@ -194,6 +194,7 @@ class ActivityController extends BackendController {
                 ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 5)))
                 ->add('descriptionEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 5)))
                 ->add('url', formType\TextType::class, array('required' => FALSE, 'attr' => array()))
+                ->add('urlEn', formType\TextType::class, array('required' => FALSE, 'attr' => array()))
                 ->add('save', formType\SubmitType::class)
                 ->getForm();
 
@@ -305,7 +306,7 @@ class ActivityController extends BackendController {
                 ->add('description', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 5)))
                 ->add('descriptionEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 5)))
                 ->add('url', formType\TextType::class, array('required' => FALSE, 'attr' => array()))
-
+                ->add('urlEn', formType\TextType::class, array('required' => FALSE, 'attr' => array()))
                 ->add('save', formType\SubmitType::class)
                 ->getForm();
 

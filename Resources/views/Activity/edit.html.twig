@@ -143,6 +143,8 @@
 
 
                 {{ form_row(form.description) }}
+                      {{ form_row(form.url) }}
+
 
                 {#                {{ form_row(form.images) }}#}
 
@@ -157,6 +159,7 @@
 
                 {{ form_row(form.descriptionEn) }}
 
+                  {{ form_row(form.urlEn) }}
 
 
             </div><!-- english end -->
@@ -165,7 +168,6 @@
     </div>
     {#                <hr/>#}
     {#  {{ form_row(form.product) }}#}
-      {{ form_row(form.url) }}
 
 
     {{ form_end(form) }}
