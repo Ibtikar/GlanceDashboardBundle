@@ -43,6 +43,10 @@ ibtikar_glance_dashboard_tag:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/tag.yml"
     prefix:   /tag
 
+ibtikar_glance_dashboard_recipesubcategory:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/recipesubcategory.yml"
+    prefix:   /recipesubcategory
+
 ibtikar_glance_dashboard_category:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/category.yml"
     prefix:   /category

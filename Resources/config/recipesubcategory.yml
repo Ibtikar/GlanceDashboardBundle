@@ -1,0 +1,19 @@
+#ibtikar_glance_dashboard_recipesubcategory_create:
+#    path:  /create
+#    defaults: { _controller: IbtikarGlanceDashboardBundle:RecipeSubCategory:create }
+
+ibtikar_glance_dashboard_recipesubcategory_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:RecipeSubCategory:edit}
+
+ibtikar_glance_dashboard_recipesubcategory_list:
+    path: /list
+    defaults: { _controller: IbtikarGlanceDashboardBundle:RecipeSubCategory:list }
+
+ibtikar_glance_dashboard_recipesubcategory_check_field_unique:
+    path: /checkfieldUnique
+    defaults: { _controller: IbtikarGlanceDashboardBundle:RecipeSubCategory:checkFieldUnique }
+
+ibtikar_glance_dashboard_recipesubcategory_change_list_columns:
+    path:  /change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:RecipeSubCategory:changeListColumns }

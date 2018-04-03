@@ -1,0 +1,44 @@
+{% extends 'IbtikarGlanceDashboardBundle::formLayout.html.twig' %}
+
+
+
+{% block form_container %}
+
+
+    {{ form(form)}}
+
+
+{% endblock %}
+{% block form_buttons %}
+    <div class="row actionButtons">
+        <div class="col-xs-12">
+            <button class="btn btn-primary btn-lg dev-form-submit-btn " type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
+            <button class="btn btn-default btn-lg dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
+
+
+
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+
+    <script>
+        $(document).ready(function () {
+            $('body').on('blur', '#form_name', function () {
+                $('#form_metaTagTitleAr').val($('#form_name').val());//.blur().focus();
+
+            });
+            $('body').on('blur', '#form_nameEn', function () {
+                $('#form_metaTagTitleEn').val($('#form_nameEn').val());//.blur().focus();
+
+            });
+
+
+        })
+    </script>
+
+{% endblock %}
