@@ -186,8 +186,10 @@ abstract class PublishOperations
         $document->setStatus(Recipe::$statuses['publish']);
 
 
+        if(!$document instanceof Magazine){
         $this->showFrontEndUrl($document);
         $this->showFrontEndUrlEn($document);
+        }
 //        if (php_sapi_name() !== 'cli') {
         if ($document instanceof \Ibtikar\GlanceDashboardBundle\Document\Recipe && $document->getStatus() == 'autopublish') {
             $document->setAutoPublishDate(null);
