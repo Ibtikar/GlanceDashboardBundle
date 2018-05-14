@@ -54,8 +54,22 @@ class RecipeType extends AbstractType {
                 if($options['attr']['contentType'] == 'blog') {
                     $blogTypes = Recipe::$types;
                     array_shift($blogTypes);
-                    $builder->add('text',  CKEditorType::class, array('required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
-                            ->add('textEn',CKEditorType::class, array('required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')));
+                    $builder->add('text',  CKEditorType::class, array(                   'config' => array(
+     //   'filebrowserBrowseRoute' => 'ckeditor_upload_image',
+//        'filebrowserBrowseRouteParameters' => array(/* optional parameters */),
+
+        'filebrowserUploadUrl' => 'ckeditor_upload_image',
+        'filebrowserUploadRoute' => 'ckeditor_upload_image',
+        'filebrowserUploadRouteParameters' => array('command'=>'QuickUpload','type'=>'Files','responseType'=>'json'),
+    ),'required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
+                            ->add('textEn',CKEditorType::class, array(                   'config' => array(
+     //   'filebrowserBrowseRoute' => 'ckeditor_upload_image',
+//        'filebrowserBrowseRouteParameters' => array(/* optional parameters */),
+
+        'filebrowserUploadUrl' => 'ckeditor_upload_image',
+        'filebrowserUploadRoute' => 'ckeditor_upload_image',
+        'filebrowserUploadRouteParameters' => array('command'=>'QuickUpload','type'=>'Files','responseType'=>'json'),
+    ),'required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')));
 
                         if($options['attr']['type']=='add'){
                             $type=$blogTypes['article'];
@@ -86,9 +100,31 @@ class RecipeType extends AbstractType {
         'filebrowserUploadRouteParameters' => array('command'=>'QuickUpload','type'=>'Files','responseType'=>'json'),
     ),
                         'required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
-                        ->add('ingredientsEn',CKEditorType::class, array('required' => TRUE,'config' => array('contentsLangDirection' => 'ltr'),'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
-                        ->add('method',  CKEditorType::class, array('required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
-                        ->add('methodEn',CKEditorType::class, array('required' => TRUE,'config' => array('contentsLangDirection' => 'ltr'),'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
+                        ->add('ingredientsEn',CKEditorType::class, array(                   'config' => array(
+     //   'filebrowserBrowseRoute' => 'ckeditor_upload_image',
+//        'filebrowserBrowseRouteParameters' => array(/* optional parameters */),
+
+        'filebrowserUploadUrl' => 'ckeditor_upload_image',
+        'filebrowserUploadRoute' => 'ckeditor_upload_image',
+        'filebrowserUploadRouteParameters' => array('command'=>'QuickUpload','type'=>'Files','responseType'=>'json'),
+    'contentsLangDirection' => 'ltr'),'required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
+                        ->add('method',  CKEditorType::class, array(                   'config' => array(
+     //   'filebrowserBrowseRoute' => 'ckeditor_upload_image',
+//        'filebrowserBrowseRouteParameters' => array(/* optional parameters */),
+
+        'filebrowserUploadUrl' => 'ckeditor_upload_image',
+        'filebrowserUploadRoute' => 'ckeditor_upload_image',
+        'filebrowserUploadRouteParameters' => array('command'=>'QuickUpload','type'=>'Files','responseType'=>'json'),
+    ),'required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
+                        ->add('methodEn', CKEditorType::class, array(                   'config' => array(
+     //   'filebrowserBrowseRoute' => 'ckeditor_upload_image',
+//        'filebrowserBrowseRouteParameters' => array(/* optional parameters */),
+
+        'filebrowserUploadUrl' => 'ckeditor_upload_image',
+        'filebrowserUploadRoute' => 'ckeditor_upload_image',
+                            'contentsLangDirection' => 'ltr',
+        'filebrowserUploadRouteParameters' => array('command'=>'QuickUpload','type'=>'Files','responseType'=>'json'),
+    ),'required' => TRUE,'attr' => array('dev-full-width-widget'=>true,'data-validate-element'=>true,'data-rule-ckmin' => 10,'data-error-after-selector' => '.dev-after-element')))
                 ;
                 }
                 $builder->add('recipeTags', DocumentType::class, array('required' => false,'multiple' => 'multiple','placeholder' => 'Choose tag','class' => 'IbtikarGlanceDashboardBundle:RecipeTag', 'attr' => array('data-maximum-selection-length'=> 10,'class' => 'select-multiple')));

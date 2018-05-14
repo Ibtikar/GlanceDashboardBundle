@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Ibtikar\GlanceDashboardBundle\Document\Media;
+use Ibtikar\GlanceDashboardBundle\Document\CkeditorMedia;
 use Symfony\Component\HttpFoundation\File\File;
 use Ibtikar\GlanceDashboardBundle\Form\Type\MediaType;
 use Symfony\Component\Filesystem\Filesystem;
@@ -1366,7 +1367,10 @@ class MediaController extends BackendController
 
 
         $dm = $this->get('doctrine_mongodb')->getManager();
-
+$ckeditorName=$request->get('CKEditor');
+$CKEditorFuncNum=$request->get('CKEditorFuncNum');
+//var_dump($CKEditorFuncNum);
+//exit;
 
         $image = $request->files->get('upload');
 
@@ -1381,7 +1385,7 @@ class MediaController extends BackendController
             }
         }
 
-        $media = new Media();
+        $media = new CkeditorMedia();
         $media->setCreatedBy($this->getUser());
         $media->setCollectionType('ckeditor');
         $name = $media->getImagePath($extension);
@@ -1392,26 +1396,27 @@ class MediaController extends BackendController
         $dm->persist($media);
         $dm->flush();
 
-$response = new Response();
+        $response = new Response();
 
-$response->headers->set('Content-Type', 'text/html');
+        $response->headers->set('Content-Type', 'text/html');
 
-$content = "<script type=\"text/javascript\">\n";
-$content .= "window.parent.CKEDITOR.tools.callFunction(1, '".$request->getSchemeAndHttpHost().'/'.$media->getWebPath()."', '' );\n";
-$content .= "</script>";
+        $content = "<script type=\"text/javascript\">\n";
+        $content .= "window.parent.CKEDITOR.tools.callFunction(".$CKEditorFuncNum.", '" . $request->getSchemeAndHttpHost() . '/' . $media->getWebPath() . "', '' );\n";
+//       $content ="<script type='text/javascript'>var CE = window.parent.CKEDITOR; CE.instances.".$ckeditorName.".insertHtml(<img src='" . $request->getSchemeAndHttpHost() . '/' . $media->getWebPath() . "/>'); CE.dialog.getCurrent().hide();</script>";
+        $content .= "</script>";
 
-$response->setContent($content);
+        $response->setContent($content);
+        return $response;
 
-return $response;
-
-        if($media) {
+        if ($media) {
             $response = array(
                 "uploaded" => 1,
                 "fileName" => $originalName,
-                "url" => $request->getSchemeAndHttpHost().'/'.$media->getWebPath(),
+                "url" => $request->getSchemeAndHttpHost() . '/' . $media->getWebPath(),
             );
             return new JsonResponse($response, 200);
         }
         return new JsonResponse($response, 200);
     }
+
 }
