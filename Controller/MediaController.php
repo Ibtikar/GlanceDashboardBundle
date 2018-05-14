@@ -1344,4 +1344,74 @@ class MediaController extends BackendController
 
         return new JsonResponse(array('status' => 'success'));
     }
+
+    public function uploadCkeditorAction(Request $request) {
+        $translator = $this->get('translator');
+        $loggedInUser = $this->getUser();
+//        if (!$loggedInUser) {
+//            return new JsonResponse(array('status' => 'login'));
+//        }
+//
+//        if(!$loggedInUser instanceof \Ibtikar\BackendBundle\Document\Staff) {
+//            $response = [
+//                "uploaded" => 0,
+//                "fileName" => '',
+//                "url" => '',
+//                "error" => [
+//                    "message" => $translator->trans('failed operation'),
+//                ]
+//            ];
+//            return new JsonResponse($response, 200);
+//        }
+
+
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+
+        $image = $request->files->get('upload');
+
+        $pathName = $image->getPathName();
+        $originalName = $image->getClientOriginalName();
+        $extension = $image->getClientOriginalExtension();
+
+        $documentDir = __DIR__ . '/../../../../web/uploads/ckeditor-file/';
+        if (!empty($images)) {
+            if (!file_exists($documentDir)) {
+                mkdir($documentDir, 0755, true);
+            }
+        }
+
+        $media = new Media();
+        $media->setCreatedBy($this->getUser());
+        $media->setCollectionType('ckeditor');
+        $name = $media->getImagePath($extension);
+        $filePath = $documentDir . $name;
+        $media->setFile($image);
+        $media->setPath($media->getImagePath($extension));
+
+        $dm->persist($media);
+        $dm->flush();
+
+$response = new Response();
+
+$response->headers->set('Content-Type', 'text/html');
+
+$content = "<script type=\"text/javascript\">\n";
+$content .= "window.parent.CKEDITOR.tools.callFunction(1, '".$request->getSchemeAndHttpHost().'/'.$media->getWebPath()."', '' );\n";
+$content .= "</script>";
+
+$response->setContent($content);
+
+return $response;
+
+        if($media) {
+            $response = array(
+                "uploaded" => 1,
+                "fileName" => $originalName,
+                "url" => $request->getSchemeAndHttpHost().'/'.$media->getWebPath(),
+            );
+            return new JsonResponse($response, 200);
+        }
+        return new JsonResponse($response, 200);
+    }
 }

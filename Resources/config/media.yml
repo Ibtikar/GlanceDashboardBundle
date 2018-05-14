@@ -47,6 +47,9 @@ google_upload_image:
     defaults: { _controller: IbtikarGlanceDashboardBundle:Media:uploadImageFromGoogle ,documentId: ~, collectionType: ~ }
 
 
+ckeditor_upload_image:
+    path:  /ckeditor-uplaod
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Media:uploadCkeditor }
 
 ibtikar_glance_dashboard_media_youtube_upload_video:
     path:  /upload-video-from-youtube/{type}/{documentId}/{collectionType}
