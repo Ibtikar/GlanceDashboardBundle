@@ -1348,30 +1348,9 @@ class MediaController extends BackendController
 
     public function uploadCkeditorAction(Request $request) {
         $translator = $this->get('translator');
-        $loggedInUser = $this->getUser();
-//        if (!$loggedInUser) {
-//            return new JsonResponse(array('status' => 'login'));
-//        }
-//
-//        if(!$loggedInUser instanceof \Ibtikar\BackendBundle\Document\Staff) {
-//            $response = [
-//                "uploaded" => 0,
-//                "fileName" => '',
-//                "url" => '',
-//                "error" => [
-//                    "message" => $translator->trans('failed operation'),
-//                ]
-//            ];
-//            return new JsonResponse($response, 200);
-//        }
-
-
         $dm = $this->get('doctrine_mongodb')->getManager();
-$ckeditorName=$request->get('CKEditor');
-$CKEditorFuncNum=$request->get('CKEditorFuncNum');
-//var_dump($CKEditorFuncNum);
-//exit;
-
+        $ckeditorName = $request->get('CKEditor');
+        $CKEditorFuncNum = $request->get('CKEditorFuncNum');
         $image = $request->files->get('upload');
 
         $pathName = $image->getPathName();
@@ -1392,19 +1371,24 @@ $CKEditorFuncNum=$request->get('CKEditorFuncNum');
         $filePath = $documentDir . $name;
         $media->setFile($image);
         $media->setPath($media->getImagePath($extension));
-
-        $dm->persist($media);
-        $dm->flush();
-
+        $validator = $this->get('validator');
+        $errors = $validator->validate($media, null, array('ckeditor', 'image'));
+        $error = '';
+        foreach ($errors as $violation) {
+            $error .= $violation->getMessage();
+        }
         $response = new Response();
-
         $response->headers->set('Content-Type', 'text/html');
-
-        $content = "<script type=\"text/javascript\">\n";
-        $content .= "window.parent.CKEDITOR.tools.callFunction(".$CKEditorFuncNum.", '" . $request->getSchemeAndHttpHost() . '/' . $media->getWebPath() . "', '' );\n";
-//       $content ="<script type='text/javascript'>var CE = window.parent.CKEDITOR; CE.instances.".$ckeditorName.".insertHtml(<img src='" . $request->getSchemeAndHttpHost() . '/' . $media->getWebPath() . "/>'); CE.dialog.getCurrent().hide();</script>";
-        $content .= "</script>";
-
+        if (count($errors) > 0) {
+            $content = "<script type='text/javascript'>var CE = window.parent.CKEDITOR; CE.instances." . $ckeditorName . ".showNotification('" . $error . "'); CE.dialog.getCurrent().hide();</script>";
+            $content .= "</script>";
+        } else {
+            $dm->persist($media);
+            $dm->flush();
+            $content = "<script type=\"text/javascript\">\n";
+            $content .= "window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '" . $request->getSchemeAndHttpHost() . '/' . $media->getWebPath() . "', '' );\n";
+            $content .= "</script>";
+        }
         $response->setContent($content);
         return $response;
 
