@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Ibtikar\GlanceDashboardBundle\Document\Media;
+use Ibtikar\GlanceDashboardBundle\Document\CkeditorMedia;
 use Symfony\Component\HttpFoundation\File\File;
 use Ibtikar\GlanceDashboardBundle\Form\Type\MediaType;
 use Symfony\Component\Filesystem\Filesystem;
@@ -1344,4 +1345,62 @@ class MediaController extends BackendController
 
         return new JsonResponse(array('status' => 'success'));
     }
+
+    public function uploadCkeditorAction(Request $request) {
+        $translator = $this->get('translator');
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $ckeditorName = $request->get('CKEditor');
+        $CKEditorFuncNum = $request->get('CKEditorFuncNum');
+        $image = $request->files->get('upload');
+
+        $pathName = $image->getPathName();
+        $originalName = $image->getClientOriginalName();
+        $extension = $image->getClientOriginalExtension();
+
+        $documentDir = __DIR__ . '/../../../../web/uploads/ckeditor-file/';
+        if (!empty($images)) {
+            if (!file_exists($documentDir)) {
+                mkdir($documentDir, 0755, true);
+            }
+        }
+
+        $media = new CkeditorMedia();
+        $media->setCreatedBy($this->getUser());
+        $media->setCollectionType('ckeditor');
+        $name = $media->getImagePath($extension);
+        $filePath = $documentDir . $name;
+        $media->setFile($image);
+        $media->setPath($media->getImagePath($extension));
+        $validator = $this->get('validator');
+        $errors = $validator->validate($media, null, array('ckeditor', 'image'));
+        $error = '';
+        foreach ($errors as $violation) {
+            $error .= $violation->getMessage();
+        }
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/html');
+        if (count($errors) > 0) {
+            $content = "<script type='text/javascript'>var CE = window.parent.CKEDITOR; CE.instances." . $ckeditorName . ".showNotification('" . $error . "'); CE.dialog.getCurrent().hide();</script>";
+            $content .= "</script>";
+        } else {
+            $dm->persist($media);
+            $dm->flush();
+            $content = "<script type=\"text/javascript\">\n";
+            $content .= "window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '" . $request->getSchemeAndHttpHost() . '/' . $media->getWebPath() . "', '' );\n";
+            $content .= "</script>";
+        }
+        $response->setContent($content);
+        return $response;
+
+        if ($media) {
+            $response = array(
+                "uploaded" => 1,
+                "fileName" => $originalName,
+                "url" => $request->getSchemeAndHttpHost() . '/' . $media->getWebPath(),
+            );
+            return new JsonResponse($response, 200);
+        }
+        return new JsonResponse($response, 200);
+    }
+
 }
