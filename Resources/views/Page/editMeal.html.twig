@@ -1,0 +1,231 @@
+{% extends 'IbtikarGlanceDashboardBundle::formLayout.html.twig' %}
+
+
+
+{% block form_container %}
+ {% form_theme form   'IbtikarGlanceDashboardBundle::form_theme_recipe.html.twig' %}
+
+
+
+    {{ form_start(form)}}
+
+
+
+
+    <hr>
+
+                <div class="tabbable">
+        <ul class="nav nav-tabs nav-tabs-highlight">
+            <li class="active"><a href="#arabic" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}" alt="arabic" width="30" height="20"/></a></li>
+            <li><a href="#english" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}" alt="english" width="30" height="20"/></a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="arabic">
+
+
+
+
+{{ form_row(form.metaTagTitleAr) }}
+                {{ form_row(form.metaTagDesciptionAr) }}
+
+{#                {{ form_row(form.images) }}#}
+
+            </div><!-- arabic end -->
+
+            <div class="tab-pane" id="english">
+
+
+
+
+
+                {{ form_row(form.metaTagTitleEn) }}
+                {{ form_row(form.metaTagDesciptionEn) }}
+
+
+
+
+            </div><!-- english end -->
+
+        </div>
+    </div>
+
+    <hr>
+
+    {{ form_end(form) }}
+
+
+{% endblock %}
+{% block form_buttons %}
+    <div class="row actionButtons">
+        <div class="col-xs-12">
+            <button class="btn btn-primary  dev-form-submit-btn dev-save" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
+            <button class="btn btn-default dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
+
+
+
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    <!-- uploadImg modal -->
+    <div id="uploadImg" class="modal fade">
+        <div class="modal-dialog  modal-full">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h6 class="modal-title"> الصورة
+                    </h6>
+                </div>
+
+                <div class="modal-body">
+
+                    <div id="image-cropper-modal">
+                        <!-- This is where the preview image is displayed -->
+                        <div class="cropit-preview"></div>
+
+                        <!-- This range input controls zoom -->
+
+
+                        <div class="controls-wrapper">
+                            <div class="rotation-btns">
+                                <span class="icon-rotate-cw2 rotate-ccw-btn"></span>
+                                <span class="icon-rotate-ccw2 rotate-cw-btn"></span>
+                            </div>
+
+
+                            <!-- You can add additional elements here, e.g. the image icons -->
+                            <div class="slider-wrapper">
+                                <span class="icon icon-image2 smallIcon"></span>
+                                <input type="range" min="0" max="50" value="5" step="5" class="cropit-image-zoom-input" />
+                                <span class="icon icon-image2 bigIcon"></span>
+                            </div>
+                        </div><!-- controls-wrapper -->
+
+                        <!-- This is where user selects new image -->
+                        <input type="file" class="cropit-image-input" />
+
+                        <!-- The cropit- classes above are needed
+                             so cropit can identify these elements -->
+                    </div>
+
+                </div>
+
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-link dev-crop-spinner" style="display: none"><i class="spinner icon-spinner text-success"></i></button>
+                    <button type="button" class="btn btn-link dev-submit-image" data-url="" data-id=""><i class="icon-checkmark4 text-success"></i></button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal"><i class="icon-cross2 text-danger-400"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /uploadImg modal -->
+
+ {% set imageTempelate %}
+            <tr id="dev-%name%">
+                            <td style="width: 150px">
+
+                                <div class="thumbnail">
+                                    <div class="thumb thumb-slide">
+                                            <img src="%image-url%" alt="">
+                                        <div class="caption">
+                                            <span>
+                                            <a href="%image-url%" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td class="thumbnail-caption">
+                                <h4>   %arabicName%</h4>
+                                <ul class="text-grey-300">
+                                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                                    <li>  %errorDimission%  </li>
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                                </ul>
+                            </td>
+                            <td style="width: 300px" data-name="%name%">
+                                %uploadButton%
+                                %cropButton%
+                                %deleteButton%
+
+
+                            </td>
+
+                        </tr>
+
+    {% endset %}
+     {% set uploadButton %}
+        <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
+     {% endset %}
+     {% set cropButton %}
+        <a class="btn btn-default dev-crop-images"    data-image-id="%image-id%" data-crop-url="%crop-url%">  رفع الصورة </a>
+     {% endset %}
+     {% set deleteButton %}
+         <a class="btn btn-default dev-trash-image" data-image-id="%image-id%"  data-href = "%image-delete-url%"  %pop-block%> <i class="icon-trash"></i></a>
+         {% endset %}
+
+
+    {{ parent() }}
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
+
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/media/fancybox.min.js')}}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_thumbnails.js')}}"></script>
+
+
+    <!-- Plugin file uploaded JS -->
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/bootstrap-fileupload.js')}}"></script>
+
+
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/jquery.cropit.js')}}"></script>
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/banner.js') }}"></script>
+
+    <script>
+
+        var imageTempelate = '{{ imageTempelate|escape('js') }}';
+        var cropButton = '{{ cropButton|escape('js') }}';
+        var deleteButton = '{{ deleteButton|escape('js') }}';
+        var uploadButton = '{{ uploadButton|escape('js') }}';
+        var cropperPluginInitialized = false;
+        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':id,'collectionType':page })}}";
+        var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'image','documentId':id,'collectionType': page })}}";
+
+
+        var element;
+        var name;
+        var type;
+         var imageErrorMessages={
+            'imageExtension': '{% trans from 'validators'%}picture not correct.{%endtrans%}',
+            'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 1170*600{%endtrans%}',
+            'BannerimageDimension': '{% trans from 'validators'%}Image dimension must be more than 1170*600{%endtrans%}',
+            'sizeError': '{% trans from 'validators'%}File size must be less than 4mb{%endtrans%}',
+            'generalError': '{% trans %}failed operation{%endtrans%}',
+            'coverPhoto': '{% trans from translationDomain %}coverPhoto{%endtrans%}',
+            'profilePhoto': '{% trans from translationDomain %}profilePhoto{%endtrans%}',
+            'bannerPhoto': '{% trans from translationDomain %}bannerPhoto{%endtrans%}',
+            'bannerImage': '{% trans from translationDomain %}bannerPhoto{%endtrans%}',
+        };
+    $('body').on('ajaxCallback', function () {
+      $(".styled, .multiselect-container input").uniform({
+                });
+    });
+
+            $('body').on('blur', '#page_description', function () {
+                $('#page_metaTagDesciptionAr').val($('#page_description').val());//.blur().focus();
+            });
+            $('body').on('blur', '#page_descriptionEn', function () {
+                $('#page_metaTagDesciptionEn').val($('#page_descriptionEn').val());//.blur().focus();
+            });
+    </script>
+
+
+{% endblock %}

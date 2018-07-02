@@ -131,6 +131,10 @@
                                             <li><a href="{{ path('ibtikar_glance_dashboard_banner_edit') }}" {% if 'banner' in app.request.attributes.get('_route') %}class="highlight"{% endif %}> <img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/categories.png')}}" class=" position-left"/>
                                                     اعلان الصفحة الرئيسية
                                                 </a></li>
+                                            {% elseif pageinfo.shortName=='MealBannar' or pageinfo.shortName=='CoursesBannar'%}
+                                            <li><a href="{{ path('ibtikar_glance_dashboard_meal_course_edit',{'id': pageinfo.id}) }}" {% if 'banner' in app.request.attributes.get('_route') %}class="highlight"{% endif %}> <img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/categories.png')}}" class=" position-left"/>
+                                                   {{ pageinfo.shortName|trans({},'bannar')}}
+                                                </a></li>
                                             {% else %}
                                             <li><a href="{{ path('ibtikar_glance_dashboard_page_edit',{'id': pageinfo.id}) }}" {% if 'banner' in app.request.attributes.get('_route') %}class="highlight"{% endif %}> <img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/categories.png')}}" class=" position-left"/>
                                                    {{ pageinfo.shortName|trans({},'bannar')}}

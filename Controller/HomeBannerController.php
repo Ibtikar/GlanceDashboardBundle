@@ -119,6 +119,55 @@ class HomeBannerController extends BackendController
                 'translationDomain' => $this->translationDomain
         ));
     }
+    public function editMealCourseContentAction(Request $request,$id)
+    {
+
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $banner = $dm->getRepository('IbtikarGlanceDashboardBundle:HomeBanner')->find($id);
+        if(!$banner){
+            throw $this->createNotFoundException($this->trans('Wrong id'));
+        }
+
+        if (!$banner->getMetaTagDesciptionAr()) {
+            $banner->setMetaTagDesciptionAr($banner->getDescription());
+        }
+
+        if (!$banner->getMetaTagDesciptionEn()) {
+            $banner->setMetaTagDesciptionEn($banner->getDescriptionEn());
+        }
+
+
+        $form = $this->createForm(\Ibtikar\GlanceDashboardBundle\Form\Type\MealType::class, $banner, array('translation_domain' => $this->translationDomain,
+                'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal','shortName' => $banner->getShortName())));
+
+
+
+
+        //handle form submission
+        if ($request->getMethod() === 'POST') {
+
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $dm->persist($banner);
+                $dm->flush();
+
+                $this->addFlash('success', $this->get('translator')->trans('done sucessfully'));
+            }
+        }
+
+
+
+        return $this->render('IbtikarGlanceDashboardBundle:Page:editMeal.html.twig', array(
+                'form' => $form->createView(),
+                'page' => $banner->getShortName(),
+                'id' => $banner->getId()? $banner->getId(): 'null',
+                'deletePopoverConfig' => array("question" => "You are about to delete %title%,Are you sure?"),
+                'title' => $this->trans('edit '.$banner->getShortName(), array(), $this->translationDomain),
+                'translationDomain' => $this->translationDomain
+        ));
+    }
 
 
 
