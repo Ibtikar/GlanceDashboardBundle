@@ -23,13 +23,18 @@ class PageController extends BackendController
         $dm = $this->get('doctrine_mongodb')->getManager();
 
         $aboutUs = $dm->getRepository('IbtikarGlanceDashboardBundle:Page')->findOneBy(array('name'=>'about us'));
-  
+
 
         $form = $this->createFormBuilder($aboutUs, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
                 ->add('title', formType\TextType::class, array('required' => TRUE))
                 ->add('titleEn', formType\TextType::class, array('required' => TRUE))
                 ->add('brief', formType\TextareaType::class, array('required' => TRUE))
                 ->add('briefEn', formType\TextareaType::class, array('required' => TRUE))
+                ->add('metaTagTitleAr', formType\TextType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
+                ->add('metaTagTitleEn', formType\TextType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
+                ->add('metaTagDesciptionAr', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+                ->add('metaTagDesciptionEn', formType\TextareaType::class, array('required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+
                 ->add('save', formType\SubmitType::class)
                 ->getForm();
 
@@ -54,9 +59,9 @@ class PageController extends BackendController
                 'translationDomain' => $this->translationDomain
         ));
     }
-    
 
-   
-        
-    
+
+
+
+
 }

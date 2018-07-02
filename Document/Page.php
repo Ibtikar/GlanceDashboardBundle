@@ -11,8 +11,7 @@ use Ibtikar\GlanceDashboardBundle\Document\Document;
 /**
  * @MongoDB\Document(repositoryClass="Ibtikar\GlanceDashboardBundle\Document\PageRepository")
  */
-class Page extends Document
-{
+class Page extends Document {
 
     /**
      * @MongoDB\Id
@@ -23,13 +22,13 @@ class Page extends Document
      * @MongoDB\String
      */
     private $name;
-    
+
     /**
      * @Assert\NotBlank
      * @MongoDB\String
      */
     private $title;
-    
+
     /**
      * @Assert\NotBlank
      * @MongoDB\String
@@ -66,8 +65,51 @@ class Page extends Document
      */
     private $url;
 
-    public function __toString()
-    {
+    /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 3,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 150,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $metaTagTitleAr;
+
+    /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 10,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 1000,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $metaTagDesciptionAr;
+
+    /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 3,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 150,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $metaTagTitleEn;
+
+    /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 10,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 1000,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $metaTagDesciptionEn;
+
+    public function __toString() {
         return (string) $this->brief;
     }
 
@@ -76,8 +118,7 @@ class Page extends Document
      *
      * @return id $id
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -87,8 +128,7 @@ class Page extends Document
      * @param string $brief
      * @return self
      */
-    public function setBrief($brief)
-    {
+    public function setBrief($brief) {
         $this->brief = $brief;
         return $this;
     }
@@ -98,8 +138,7 @@ class Page extends Document
      *
      * @return string $brief
      */
-    public function getBrief()
-    {
+    public function getBrief() {
         return $this->brief;
     }
 
@@ -109,8 +148,7 @@ class Page extends Document
      * @param string $briefEn
      * @return self
      */
-    public function setBriefEn($briefEn)
-    {
+    public function setBriefEn($briefEn) {
         $this->briefEn = $briefEn;
         return $this;
     }
@@ -120,8 +158,7 @@ class Page extends Document
      *
      * @return string $briefEn
      */
-    public function getBriefEn()
-    {
+    public function getBriefEn() {
         return $this->briefEn;
     }
 
@@ -131,8 +168,7 @@ class Page extends Document
      * @param string $url
      * @return self
      */
-    public function setUrl($url)
-    {
+    public function setUrl($url) {
         $this->url = $url;
         return $this;
     }
@@ -142,8 +178,7 @@ class Page extends Document
      *
      * @return string $url
      */
-    public function getUrl()
-    {
+    public function getUrl() {
         return $this->url;
     }
 
@@ -153,8 +188,7 @@ class Page extends Document
      * @param string $title
      * @return self
      */
-    public function setTitle($title)
-    {
+    public function setTitle($title) {
         $this->title = $title;
         return $this;
     }
@@ -164,8 +198,7 @@ class Page extends Document
      *
      * @return string $title
      */
-    public function getTitle()
-    {
+    public function getTitle() {
         return $this->title;
     }
 
@@ -175,8 +208,7 @@ class Page extends Document
      * @param string $titleEn
      * @return self
      */
-    public function setTitleEn($titleEn)
-    {
+    public function setTitleEn($titleEn) {
         $this->titleEn = $titleEn;
         return $this;
     }
@@ -186,8 +218,7 @@ class Page extends Document
      *
      * @return string $titleEn
      */
-    public function getTitleEn()
-    {
+    public function getTitleEn() {
         return $this->titleEn;
     }
 
@@ -197,8 +228,7 @@ class Page extends Document
      * @param string $name
      * @return self
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
         return $this;
     }
@@ -208,8 +238,88 @@ class Page extends Document
      *
      * @return string $name
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
+
+    /**
+     * Set metaTagTitleAr
+     *
+     * @param string $metaTagTitleAr
+     * @return self
+     */
+    public function setMetaTagTitleAr($metaTagTitleAr) {
+        $this->metaTagTitleAr = $metaTagTitleAr;
+        return $this;
+    }
+
+    /**
+     * Get metaTagTitleAr
+     *
+     * @return string $metaTagTitleAr
+     */
+    public function getMetaTagTitleAr() {
+        return $this->metaTagTitleAr;
+    }
+
+    /**
+     * Set metaTagDesciptionAr
+     *
+     * @param string $metaTagDesciptionAr
+     * @return self
+     */
+    public function setMetaTagDesciptionAr($metaTagDesciptionAr) {
+        $this->metaTagDesciptionAr = $metaTagDesciptionAr;
+        return $this;
+    }
+
+    /**
+     * Get metaTagDesciptionAr
+     *
+     * @return string $metaTagDesciptionAr
+     */
+    public function getMetaTagDesciptionAr() {
+        return $this->metaTagDesciptionAr;
+    }
+
+    /**
+     * Set metaTagTitleEn
+     *
+     * @param string $metaTagTitleEn
+     * @return self
+     */
+    public function setMetaTagTitleEn($metaTagTitleEn) {
+        $this->metaTagTitleEn = $metaTagTitleEn;
+        return $this;
+    }
+
+    /**
+     * Get metaTagTitleEn
+     *
+     * @return string $metaTagTitleEn
+     */
+    public function getMetaTagTitleEn() {
+        return $this->metaTagTitleEn;
+    }
+
+    /**
+     * Set metaTagDesciptionEn
+     *
+     * @param string $metaTagDesciptionEn
+     * @return self
+     */
+    public function setMetaTagDesciptionEn($metaTagDesciptionEn) {
+        $this->metaTagDesciptionEn = $metaTagDesciptionEn;
+        return $this;
+    }
+
+    /**
+     * Get metaTagDesciptionEn
+     *
+     * @return string $metaTagDesciptionEn
+     */
+    public function getMetaTagDesciptionEn() {
+        return $this->metaTagDesciptionEn;
+    }
+
 }

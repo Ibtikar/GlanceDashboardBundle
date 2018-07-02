@@ -103,16 +103,21 @@ class StarsController extends BackendController {
         $settings = $this->get('systemSettings')->getSettingsRecordsByCategory('stars');
         $settingsArray = $this->convertRecordsToArray($settings);
 
-        if(count($settingsArray) != 4){
+
+        if(count($settingsArray) != 8){
             throw new \Exception("Settings fixtures are not loaded.");
         }
 
-        $form = $this->createFormBuilder(null,array('translation_domain' => $this->translationDomain,'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
-        ->add('briefAr',  formType\TextareaType::class, array('data'=> $settingsArray["stars-brief-ar"],'required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
-        ->add('briefEn',formType\TextareaType::class, array('data'=>$settingsArray["stars-brief-en"],'required' => true,'attr' => array('data-validate-element'=>true,'data-rule-maxlength' => 1000,'data-rule-minlength' => 10)))
-        ->add('benefitsAr',  CKEditorType::class, array('data'=>$settingsArray["stars-benefits-ar"],'required' => true,'attr' => array('data-validate-element'=>true,'data-rule-ckmin' => 10,'data-rule-ckmax' => 1000,'data-rule-ckreq' => true,'data-error-after-selector' => '.dev-after-element')))
-        ->add('benefitsEn',CKEditorType::class, array('data'=>$settingsArray["stars-benefits-en"],'required' => true,'attr' => array('data-validate-element'=>true,'data-rule-ckmin' => 10,'data-rule-ckmax' => 1000,'data-rule-ckreq' => true,'data-error-after-selector' => '.dev-after-element')))
-        ->getForm();
+        $form = $this->createFormBuilder(null, array('translation_domain' => $this->translationDomain, 'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')))
+                ->add('briefAr', formType\TextareaType::class, array('data' => $settingsArray["stars-brief-ar"], 'required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+                ->add('briefEn', formType\TextareaType::class, array('data' => $settingsArray["stars-brief-en"], 'required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+                ->add('benefitsAr', CKEditorType::class, array('data' => $settingsArray["stars-benefits-ar"], 'required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-ckmin' => 10, 'data-rule-ckmax' => 1000, 'data-rule-ckreq' => true, 'data-error-after-selector' => '.dev-after-element')))
+                ->add('benefitsEn', CKEditorType::class, array('data' => $settingsArray["stars-benefits-en"], 'required' => true, 'attr' => array('data-validate-element' => true, 'data-rule-ckmin' => 10, 'data-rule-ckmax' => 1000, 'data-rule-ckreq' => true, 'data-error-after-selector' => '.dev-after-element')))
+                ->add('metaTagTitleAr', formType\TextType::class, array('data' => $settingsArray["metaTagTitleAr"],'required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
+                ->add('metaTagTitleEn', formType\TextType::class, array('data' => $settingsArray["metaTagTitleEn"],'required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 150, 'data-rule-minlength' => 3)))
+                ->add('metaTagDesciptionAr', formType\TextareaType::class, array('data' => $settingsArray["metaTagDesciptionAr"],'required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+                ->add('metaTagDesciptionEn', formType\TextareaType::class, array('data' => $settingsArray["metaTagDesciptionEn"],'required' => FALSE, 'attr' => array('data-validate-element' => true, 'data-rule-maxlength' => 1000, 'data-rule-minlength' => 10)))
+                ->getForm();
 
         $image = $this->get('doctrine_mongodb')->getManager()->getRepository('IbtikarGlanceDashboardBundle:Media')->findOneBy(array(
             'collectionType' => 'Stars'
@@ -127,6 +132,10 @@ class StarsController extends BackendController {
                     switch ($record->getKey()) {
                         case "stars-brief-ar":
                             $record->setValue($data['briefAr']);
+                            $record->setMetaTagTitleAr($data['metaTagTitleAr']);
+                            $record->setMetaTagDesciptionAr($data['metaTagDesciptionAr']);
+                            $record->setMetaTagTitleEn($data['metaTagTitleEn']);
+                            $record->setMetaTagDesciptionEn($data['metaTagDesciptionEn']);
                             break;
                         case "stars-brief-en":
                             $record->setValue($data['briefEn']);
@@ -156,6 +165,12 @@ class StarsController extends BackendController {
     private function convertRecordsToArray($settingsRecords) {
         $settings = array();
         foreach ($settingsRecords as $record) {
+            if($record->getKey()=='stars-brief-ar'){
+                $settings['metaTagTitleAr']=$record->getMetaTagTitleAr();
+                $settings['metaTagDesciptionAr']=$record->getMetaTagDesciptionAr();
+                $settings['metaTagTitleEn']=$record->getMetaTagTitleEn();
+                $settings['metaTagDesciptionEn']=$record->getMetaTagDesciptionEn();
+            }
             $settings[$record->getKey()] = $record->getValue();
         }
         return $settings;
@@ -247,7 +262,7 @@ class StarsController extends BackendController {
                 ;
                 $mailer->send($message);
     }
-    
+
         public function viewAction(Request $request, $id)
     {
 
@@ -264,7 +279,7 @@ class StarsController extends BackendController {
 
         ));
     }
-    
+
       public function exportAction(Request $request)
     {
         $loggedInUser = $this->getUser();

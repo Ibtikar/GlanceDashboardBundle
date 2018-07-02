@@ -61,6 +61,51 @@ class CausePage extends Document {
 
 
     /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 3,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 150,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $metaTagTitleAr;
+
+    /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 10,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 1000,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $metaTagDesciptionAr;
+
+    /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 3,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 150,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $metaTagTitleEn;
+
+    /**
+     * @MongoDB\String
+     * @Assert\Length(
+     *      min = 10,
+     *      minMessage = "Your name must be at least {{ limit }} characters long",
+     *      max = 1000,
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters long"
+     * )
+     */
+    private $metaTagDesciptionEn;
+
+
+    /**
      * Get id
      *
      * @return id $id
@@ -184,5 +229,86 @@ class CausePage extends Document {
     public function getCompetition()
     {
         return $this->competition;
+    }
+
+
+     /**
+     * Set metaTagTitleAr
+     *
+     * @param string $metaTagTitleAr
+     * @return self
+     */
+    public function setMetaTagTitleAr($metaTagTitleAr) {
+        $this->metaTagTitleAr = $metaTagTitleAr;
+        return $this;
+    }
+
+    /**
+     * Get metaTagTitleAr
+     *
+     * @return string $metaTagTitleAr
+     */
+    public function getMetaTagTitleAr() {
+        return $this->metaTagTitleAr;
+    }
+
+    /**
+     * Set metaTagDesciptionAr
+     *
+     * @param string $metaTagDesciptionAr
+     * @return self
+     */
+    public function setMetaTagDesciptionAr($metaTagDesciptionAr) {
+        $this->metaTagDesciptionAr = $metaTagDesciptionAr;
+        return $this;
+    }
+
+    /**
+     * Get metaTagDesciptionAr
+     *
+     * @return string $metaTagDesciptionAr
+     */
+    public function getMetaTagDesciptionAr() {
+        return $this->metaTagDesciptionAr;
+    }
+
+    /**
+     * Set metaTagTitleEn
+     *
+     * @param string $metaTagTitleEn
+     * @return self
+     */
+    public function setMetaTagTitleEn($metaTagTitleEn) {
+        $this->metaTagTitleEn = $metaTagTitleEn;
+        return $this;
+    }
+
+    /**
+     * Get metaTagTitleEn
+     *
+     * @return string $metaTagTitleEn
+     */
+    public function getMetaTagTitleEn() {
+        return $this->metaTagTitleEn;
+    }
+
+    /**
+     * Set metaTagDesciptionEn
+     *
+     * @param string $metaTagDesciptionEn
+     * @return self
+     */
+    public function setMetaTagDesciptionEn($metaTagDesciptionEn) {
+        $this->metaTagDesciptionEn = $metaTagDesciptionEn;
+        return $this;
+    }
+
+    /**
+     * Get metaTagDesciptionEn
+     *
+     * @return string $metaTagDesciptionEn
+     */
+    public function getMetaTagDesciptionEn() {
+        return $this->metaTagDesciptionEn;
     }
 }

@@ -40,6 +40,12 @@ class SystemSettings {
     private function convertRecordsToArray($settingsRecords) {
         $settings = array();
         foreach ($settingsRecords as $record) {
+            if($record->getKey()=='stars-brief-ar'){
+                $settings['metaTagTitleAr']=$record->getMetaTagTitleAr();
+                $settings['metaTagDesciptionAr']=$record->getMetaTagDesciptionAr();
+                $settings['metaTagTitleEn']=$record->getMetaTagTitleEn();
+                $settings['metaTagDesciptionEn']=$record->getMetaTagDesciptionEn();
+            }
             $settings[$record->getKey()] = $record->getValue();
         }
         return $settings;
