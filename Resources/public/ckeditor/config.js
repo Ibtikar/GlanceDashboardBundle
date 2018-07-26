@@ -24,6 +24,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 	config.toolbarGroups = [
+                {name:"document",groups:["mode"]},
 		{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
 		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
 		{ name: 'links' },
@@ -59,7 +60,8 @@ CKEDITOR.editorConfig = function( config ) {
 	// ------------------------------
 
 	// CKEDITOR PLUGINS LOADING
-    config.extraPlugins = 'pbckcode'; // add other plugins here (comma separated)
+    config.extraPlugins = 'pbckcode,sourcedialog'; // add other plugins here (comma separated)
+    config.removePlugins = 'sourcearea';
 
 	// PBCKCODE CUSTOMIZATION
     config.pbckcode = {
