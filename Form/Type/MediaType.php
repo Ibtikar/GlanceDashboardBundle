@@ -13,6 +13,7 @@ class MediaType extends AbstractType
 {
 
     private $extension;
+    private $fileName;
 
      public function __construct(array $options = array())
     {
@@ -26,6 +27,7 @@ class MediaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
         $this->extension=$options['extension'];
+        $this->fileName=$options['attr']['fileName'];
         $builder->add('file', \Symfony\Component\Form\Extension\Core\Type\FileType::class, array('error_bubbling' => true))
         ->addModelTransformer(new CallbackTransformer(
             function ($file) {
@@ -38,20 +40,25 @@ class MediaType extends AbstractType
             $imageString = base64_decode($fileData[1]);
             $fileSystem = new \Symfony\Component\Filesystem\Filesystem();
             if ($imageString) {
-
-                $imageRandomName = uniqid();
-                $uploadDirectory = $media->getUploadRootDir() . '/temp/';
-                $fileSystem->mkdir($uploadDirectory, 0755);
-                $uploadPath = $uploadDirectory . $imageRandomName;
-
-                if (@file_put_contents($uploadPath, $imageString)) {
-                    $file = new \Symfony\Component\HttpFoundation\File\File($uploadPath, false);
-                    $imageExtension = $file->guessExtension();
-                    if ($this->extension) {
-                        $imageExtension = $this->extension;
+                    $imageRandomName = uniqid();
+                    if($this->fileName){
+                    $fileNameArray = explode('\\', $this->fileName);
+                    if (count($fileNameArray) > 0) {
+                        $imageRandomName = $fileNameArray[count($fileNameArray) - 1];
                     }
+                    }
+                    $uploadDirectory = $media->getUploadRootDir() . '/temp/';
+                    $fileSystem->mkdir($uploadDirectory, 0755);
+                    $uploadPath = $uploadDirectory . $imageRandomName;
+
+                    if (@file_put_contents($uploadPath, $imageString)) {
+                        $file = new \Symfony\Component\HttpFoundation\File\File($uploadPath, false);
+                        $imageExtension = $file->guessExtension();
+                        if ($this->extension) {
+                            $imageExtension = $this->extension;
+                        }
                     $uploadPath = "$uploadDirectory$imageRandomName.$imageExtension";
-                    $fileSystem->rename($uploadDirectory . $imageRandomName, $uploadPath);
+                    $fileSystem->rename($uploadDirectory . $imageRandomName, $uploadPath,TRUE);
                     $imageRandomName = "$imageRandomName.$imageExtension";
                     $tempUrlPath = $uploadPath;
 

@@ -271,17 +271,18 @@ class Media extends Document {
             // get the file extension
             $extension = strtolower($this->file->getClientOriginalExtension());
             // generate a random file name
-            $img = uniqid();
+             $img = $this->file->getClientOriginalName();
             // get the upload directory
             $uploadDir = $this->getUploadRootDir();
             $this->createDirectory($uploadDir);
             // check that the file name does not exist
             while (@file_exists("$uploadDir/$img.$extension")) {
                 //try to find a new unique name
-                $img = uniqid();
+                $img = uniqid().$extension;
             }
             // set the new name
-            $this->path = "$img.$extension";
+            $this->path = "$img";
+            // set the new name
             if (in_array($extension, array('xls', 'xlsx'))) {
                 $this->fileType = 'excel';
             }

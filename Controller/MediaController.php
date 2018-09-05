@@ -230,11 +230,14 @@ class MediaController extends BackendController
             $media->$functionName($document);
         }
         $extension = '';
+        $fileName='';
         if ($request->get('fileName')) {
             $fileNameArray = explode('.', $request->get('fileName'));
             if (count($fileNameArray) > 0) {
                 if (in_array($fileNameArray[count($fileNameArray) - 1], array('gif', 'png', 'jpeg', 'jpg'))) {
                     $extension = $fileNameArray[count($fileNameArray) - 1];
+                    $name = $fileNameArray[count($fileNameArray) - 2];
+                    $fileName=$name;
                 }
             }
         }
@@ -245,7 +248,9 @@ class MediaController extends BackendController
             'translation_domain' => $this->translationDomain,
             'validation_groups' => $validationGroup,
             'csrf_protection' => false,
-            'extension' => $extension
+            'extension' => $extension,
+            'attr'=>array('fileName' => $fileName)
+
         ));
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);

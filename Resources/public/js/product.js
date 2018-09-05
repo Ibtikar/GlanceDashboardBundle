@@ -446,6 +446,7 @@ $(document).ready(function () {
     });
 
 
+var fileName='';
 
     $('#image-cropper-modal').cropit({
         smallImage: 'stretch',
@@ -534,6 +535,8 @@ $(document).ready(function () {
         var imageFile = $('#image-cropper-modal').cropit('export')
         var formData = new FormData();
         formData.append("media[file]", imageFile);
+        formData.append("fileName", fileName);
+
         $('.dev-crop-spinner').show();
         $('.dev-submit-image').hide();
         $.ajax({
