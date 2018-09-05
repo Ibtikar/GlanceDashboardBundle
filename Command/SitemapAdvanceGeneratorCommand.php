@@ -170,17 +170,15 @@ class SitemapAdvanceGeneratorCommand extends ContainerAwareCommand {
                 break;
             case 'meal':
                 foreach(Recipe::$mealMap as $meal){
-                    $this->addLinkNormal('ibtikar_goody_frontend_category',array(
-                        'filter' => 'meal',
-                        'value' => str_replace(' ','-',strtolower($meal))
+                    $this->addLinkNormal('ibtikar_goody_frontend_meal',array(
+                        'mealValue' => str_replace(' ','-',strtolower($meal))
                         ));
                 }
                 break;
             case 'course':
                 foreach(Recipe::$courseMap as $course){
-                    $this->addLinkNormal('ibtikar_goody_frontend_category',array(
-                        'filter' => 'courses',
-                        'value' => str_replace(' ','-',strtolower($course))
+                    $this->addLinkNormal('ibtikar_goody_frontend_course',array(
+                        'course' => str_replace(' ','-',strtolower($course))
                         ));
                 }
                 break;
