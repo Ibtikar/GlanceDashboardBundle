@@ -428,19 +428,27 @@ class CkeditorMedia extends Document {
 
 
 
-    public function getImagePath($extension) {
+    public function getImagePath($extension,$name=null) {
+
+
+        if ($name) {
+            $imagePath = $name;
+        } else {
+            $img = uniqid();
+            $imagePath = $img . "." . $extension;
+        }
         // generate a random file name
-        $img = uniqid();
         // get the upload directory
         $uploadDir = $this->getUploadRootDir();
         $this->createDirectory($uploadDir);
         // check that the file name does not exist
-        while (@file_exists("$uploadDir/$img.$extension")) {
+        while (@file_exists("$uploadDir/$imagePath")) {
             //try to find a new unique name
             $img = uniqid();
+            $imagePath=$img . "." . $extension;
         }
         // set the new name
-        return "$img.$extension";
+        return "$imagePath";
     }
 
     /**

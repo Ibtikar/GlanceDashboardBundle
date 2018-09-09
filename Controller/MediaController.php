@@ -1372,10 +1372,10 @@ class MediaController extends BackendController
         $media = new CkeditorMedia();
         $media->setCreatedBy($this->getUser());
         $media->setCollectionType('ckeditor');
-        $name = $media->getImagePath($extension);
+        $name = $media->getImagePath($extension,$originalName);
         $filePath = $documentDir . $name;
         $media->setFile($image);
-        $media->setPath($media->getImagePath($extension));
+        $media->setPath($media->getImagePath($extension,$originalName));
         $validator = $this->get('validator');
         $errors = $validator->validate($media, null, array('ckeditor', 'image'));
         $error = '';
