@@ -130,3 +130,17 @@ a > img {
 	border: none;
 	outline: 1px solid #0782C1;
 }
+
+
+
+
+li {
+  padding-left: 2em;
+  text-indent: -.10em;
+}
+
+li::before {
+  content: "• ";
+  color: #bf292c;
+  size: 20px/* or whatever color you prefer */
+}
