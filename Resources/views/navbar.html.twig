@@ -125,6 +125,11 @@
                                                 الاطباق والوجبات والمكونات
                                     </a></li>
 
+                                     <li><a href="{{ path('ibtikar_glance_dashboard_metatag_tempelate') }}" {% if 'banner' in app.request.attributes.get('_route') %}class="highlight"{% endif %}> <img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/categories.png')}}" class=" position-left"/>
+                                               قالب محركات البحث
+
+                                    </a></li>
+
                                     {% set pageData= get_page_data()  %}
                                     {% for pageinfo in pageData %}
                                         {% if pageinfo.shortName=='HomeBanner'%}

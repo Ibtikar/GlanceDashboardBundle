@@ -2,4 +2,8 @@ ibtikar_glance_dashboard_aboutus:
     path:  /aboutus
     defaults: { _controller: IbtikarGlanceDashboardBundle:Page:editAboutUs}
 
+ibtikar_glance_dashboard_metatag_tempelate:
+    path:  /metatag-tempelate
+    defaults: { _controller: IbtikarGlanceDashboardBundle:MetaTagTempelate:edit}
+
 

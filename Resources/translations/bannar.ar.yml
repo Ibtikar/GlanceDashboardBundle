@@ -51,3 +51,15 @@
 'Meta tag desciption ar': 'وصف محرك البحث بالعربية'
 'Meta tag title en': 'عنوان محرك البحث بالانجليزية'
 'Meta tag desciption en': 'وصف محرك البحث بالانجليزية'
+
+'Recipe meta tag title ar': ' للوصفات عنوان محرك البحث بالعربية'
+'Recipe meta tag description ar': 'وصف محرك البحث بالعربية للوصفات'
+'Article meta tag title ar': ' للمقالات عنوان محرك البحث بالعربية'
+'Article meta tagdecription ar':  'وصف محرك البحث بالعربية للمقالات'
+
+'Recipe meta tag title en': ' للوصفات عنوان محرك البحث بالانجليزية'
+'Recipe meta tag description en': 'وصف محرك البحث بالانجليزية للوصفات'
+'Article meta tag title en': ' للمقالات عنوان محرك البحث بالانجليزية'
+'Article meta tagdecription en':  'وصف محرك البحث بالانجليزية للمقالات'
+
+'metatag tempelate': 'قالب محركات البحث'
