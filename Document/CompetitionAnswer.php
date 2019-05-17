@@ -71,6 +71,12 @@ class CompetitionAnswer extends Document {
      * @MongoDB\String
      */
     private $gender;
+    
+    /**
+     * @Assert\NotBlank
+     * @MongoDB\String
+     */
+    private $age;
 
     /**
      * @MongoDB\ReferenceMany(targetDocument="Ibtikar\GlanceDashboardBundle\Document\QuestionAnswer" , simple=true)
@@ -277,6 +283,27 @@ class CompetitionAnswer extends Document {
     public function getGender()
     {
         return $this->gender;
+    }
+    /**
+     * Set age
+     *
+     * @param string $age
+     * @return self
+     */
+    public function setAge($age)
+    {
+        $this->age = $age;
+        return $this;
+    }
+
+    /**
+     * Get age
+     *
+     * @return string $age
+     */
+    public function getAge()
+    {
+        return $this->age;
     }
 
     /**

@@ -81,6 +81,12 @@
                                         <h5>  {{ competitionAnswer.gender|trans({},translationDomain)}}  </h5>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="control-label col-lg-2"> العمر  </label>
+                                    <div class="col-lg-10">
+                                        <h5>  {{ competitionAnswer.age }}  </h5>
+                                    </div>
+                                </div>
 
                                 <hr/>
                                 {% if competitionAnswer.getLocale()=='ar' %}
