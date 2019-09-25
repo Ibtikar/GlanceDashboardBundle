@@ -827,18 +827,18 @@ class RecipeController extends BackendController
         }
 
         $contentType =  $recipe->getType() == Recipe::$types['recipe'] ? 'Recipe' : 'Blog';
-        if (!$recipe->getMetaTagTitleAr()) {
-            $recipe->setMetaTagTitleAr($recipe->getTitle());
-        }
-        if (!$recipe->getMetaTagDesciptionAr()) {
-            $recipe->setMetaTagDesciptionAr($recipe->getBrief());
-        }
-        if (!$recipe->getMetaTagTitleEn()) {
-            $recipe->setMetaTagTitleEn($recipe->getTitleEn());
-        }
-        if (!$recipe->getMetaTagDesciptionEn()) {
-            $recipe->setMetaTagDesciptionEn($recipe->getBriefEn());
-        }
+//        if (!$recipe->getMetaTagTitleAr()) {
+//            $recipe->setMetaTagTitleAr($recipe->getTitle());
+//        }
+//        if (!$recipe->getMetaTagDesciptionAr()) {
+//            $recipe->setMetaTagDesciptionAr($recipe->getBrief());
+//        }
+//        if (!$recipe->getMetaTagTitleEn()) {
+//            $recipe->setMetaTagTitleEn($recipe->getTitleEn());
+//        }
+//        if (!$recipe->getMetaTagDesciptionEn()) {
+//            $recipe->setMetaTagDesciptionEn($recipe->getBriefEn());
+//        }
 
 //        $tagSelected = $this->getTagsForDocument($recipe);
 //        $tagSelectedEn = $this->getTagsForDocument($recipe, "en");
