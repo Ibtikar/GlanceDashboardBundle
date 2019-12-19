@@ -1,0 +1,36 @@
+ibtikar_glance_dashboard_coursepublish_list_publish_course:
+    path:  /list-publish-course
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\Publish:listPublishCourse }
+
+ibtikar_glance_dashboard_coursepublish_view:
+    path:  /view/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\Publish:view }
+
+ibtikar_glance_dashboard_coursepublish_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\Publish:edit }
+
+ibtikar_glance_dashboard_coursepublish_list_publish_course_change_list_columns:
+    path:  /publish-course-change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\Publish:changeListPublishCourseColumns }
+
+ibtikar_glance_dashboard_coursepublish_bulk_actions:
+    path:  /bulk
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\Publish:bulk }
+
+ibtikar_glance_dashboard_coursepublish_delete:
+    path:  /delete
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\Publish:delete }
+
+ibtikar_glance_dashboard_coursepublish_unpublish:
+    path:  /unpublish
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\Publish:unpublish }
+
+ibtikar_glance_dashboard_coursepublish_updateAnswerStatus:
+    path:  /updateAnswerStatus
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\Publish:updateAnswerStatus }
+
+ibtikar_glance_dashboard_coursepublish_viewAnswers:
+    path:  /view-answers
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\CourseAnswer:list }
+

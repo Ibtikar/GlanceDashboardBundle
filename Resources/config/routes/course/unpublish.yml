@@ -1,0 +1,33 @@
+ibtikar_glance_dashboard_courseunpublish_list_unpublish_course:
+    path:  /list-unpublish-course
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\Unpublish:listUnpublishCourse }
+
+ibtikar_glance_dashboard_courseunpublish_view:
+    path:  /view/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\Unpublish:view }
+
+ibtikar_glance_dashboard_courseunpublish_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\Unpublish:edit }
+
+ibtikar_glance_dashboard_courseunpublish_list_unpublish_course_change_list_columns:
+    path:  /unpublish-course-change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\Unpublish:changeListUnpublishCourseColumns }
+
+ibtikar_glance_dashboard_courseunpublish_bulk_actions:
+    path:  /bulk
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\Unpublish:bulk }
+
+ibtikar_glance_dashboard_courseunpublish_delete:
+    path:  /delete
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\Unpublish:delete }
+
+ibtikar_glance_dashboard_courseunpublish_publish:
+    path:  /ajax/publish
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\Unpublish:publish }
+
+ibtikar_glance_dashboard_courseunpublish_viewAnswers:
+    path:  /view-answers
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\CourseAnswer:list }
+
+

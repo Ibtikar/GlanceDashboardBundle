@@ -1,0 +1,28 @@
+ibtikar_glance_dashboard_coursenew_list_new_course:
+    path:  /list-new-course
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\New:listNewCourse }
+
+ibtikar_glance_dashboard_coursenew_view:
+    path:  /view/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\New:view }
+
+ibtikar_glance_dashboard_coursenew_edit:
+    path:  /edit/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\New:edit }
+
+ibtikar_glance_dashboard_coursenew_list_new_course_change_list_columns:
+    path:  /new-course-change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\New:changeListNewCourseColumns }
+
+ibtikar_glance_dashboard_coursenew_bulk_actions:
+    path:  /bulk
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\New:bulk }
+
+ibtikar_glance_dashboard_coursenew_delete:
+    path:  /delete
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\New:delete }
+
+ibtikar_glance_dashboard_coursenew_publish:
+    path:  /ajax/publish
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\New:publish }
+

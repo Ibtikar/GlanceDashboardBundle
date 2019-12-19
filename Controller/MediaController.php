@@ -119,6 +119,14 @@ class MediaController extends BackendController
 
                 $fieldUpdate = 'CausePage';
             }
+            elseif ($collectionType === 'OnlineAcademy') {
+                $document = $dm->getRepository('IbtikarGlanceDashboardBundle:OnlineAcademy')->find($documentId);
+                if (!$document) {
+                    throw $this->createNotFoundException($this->trans('Wrong id'));
+                }
+
+                $fieldUpdate = 'OnlineAcademy';
+            }
             else {
                 $document = $dm->getRepository('IbtikarGlanceDashboardBundle:HomeBanner')->find($documentId);
                 if (!$document) {

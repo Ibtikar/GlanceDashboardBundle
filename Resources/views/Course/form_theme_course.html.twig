@@ -1,0 +1,92 @@
+{% extends 'IbtikarGlanceDashboardBundle::form_theme_recipe.html.twig' %}
+
+{% block choice_widget_options -%}
+    {% for group_label, choice in options %}
+        {%- if choice is iterable -%}
+            <optgroup label="{{ group_label|trans({}, translation_domain) }}">
+                {% set options = choice %}
+                {{- block('choice_widget_options') -}}
+            </optgroup>
+        {%- else -%}
+            <option value="{{ choice.value }}"{% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ choice.label|trans({}, translation_domain) }}</option>
+        {%- endif -%}
+    {% endfor %}
+{%- endblock choice_widget_options %}
+
+{%- block form_widget_compound -%}
+    {% set prefix = '_questions_' in form.vars.unique_block_prefix?'':'_questionsEn_' in form.vars.unique_block_prefix?'En':'' %}
+    {% if form.vars.unique_block_prefix in ['_course_questions_entry','_course_questionsEn_entry'] %}
+        {% set attr = attr|merge({class: (attr.class|default(' panel panel-flat '))|trim}) %}
+    {% endif %}
+    <div {{ block('widget_container_attributes') }}>
+        {%- if form.parent is empty -%}
+            {{ form_errors(form) }}
+        {% elseif prototype is defined %}
+            {% set prefix = '_questionsEn' in form.vars.id?'En':'' %}
+            {# question answers add button render #}
+            <div class="dev-add-question-answer-container">
+            </div>
+        {% endif %}
+        {% if form.vars.unique_block_prefix in ['_course_questions_entry','_course_questionsEn_entry'] %}
+            <div class="panel-heading">
+                <h5 class="panel-title"> اضف السؤال</h5>
+                <div class="heading-elements">
+                    <button class="btn btn-danger dev-remove-course-question{{prefix}} " type="button">مسح السؤال</button>
+                </div>
+            </div>
+{#            <a class="btn btn-primary DeleteBTN pull-left deleteQuestion dev-remove-course-question hide" style="position:relative;z-index:1;">
+                <i class="fa fa-times"></i>
+            </a>#}
+        {% endif %}
+
+        {{- block('form_rows') -}}
+        {{- form_rest(form) -}}
+    </div>
+{%- endblock form_widget_compound -%}
+
+{% block form_row %}
+    {% set allowLabelElm = ['_course_questions_entry_answers','_course_questions_entry_answerDisplay','_course_questions_entry_answerImportance','_course_questions_entry_resultDisplay'
+,'_course_questionsEn_entry_answers','_course_questionsEn_entry_answerDisplay','_course_questionsEn_entry_answerImportance','_course_questionsEn_entry_resultDisplay'] %}
+    {% if form.parent.parent.parent is defined %}
+{#        {% if form.vars.name == "question" %}<hr/>{% endif %}#}
+        {% if form.children | length == 0 or form.vars.unique_block_prefix in allowLabelElm %}
+        <div class="{% if "answer" == form.vars.name %} input-group inputBody noMargin dev-question-answer-container marginBottom-20 {% else %} form-group {% endif %}{% if form.vars.errors|length > 0 %} has-error{% endif %}{% if form.vars.unique_block_prefix in ['_course_questions_entry_answers','_course_questions_entry_answerDisplay','_course_questionsEn_entry_answers','_course_questionsEn_entry_answerDisplay'] %} dependant-fields{% endif %}">
+            {% if "_answer" not in form.vars.id or form.vars.unique_block_prefix in allowLabelElm  %}
+                {{ form_label(form)  }}
+            <div class="col-lg-10">
+                {{ form_widget(form) }}
+                {{ form_errors(form) }}
+            </div>
+            {% else %}
+                {{ form_widget(form) }}
+                {% if  'correctAnswer' not in form.vars.id %}
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default deleteAnswer dev-remove-question-answer"><i class="icon-cancel-circle2"></i></button>
+                </div>
+                {% endif %}
+                {{ form_errors(form) }}
+            {% endif %}
+
+        </div>
+        {% else %}
+            {{ form_widget(form) }}
+        {% endif %}
+    {% else %}
+{% if form.vars.id == 'question_questions' %}<hr/>{% endif %}
+        <div class="form-group{% if form.vars.name == "sponsors"%} inputBody noMargin dev-event-sponsor-container{% endif %}{% if attr['data-form-group-class'] is defined %} {{ attr['data-form-group-class'] }}{% endif %}{% if form.vars.errors|length > 0 or (form.phone is defined and form.phone.vars.errors|length > 0) %} has-error{% endif %}{%  if "_media" in form.vars.id %} hide{% endif %}">
+            {% if form.vars.name != "sponsors" %}
+                {{ form_label(form)  }}
+                <div class="{% if form.vars.type is defined and form.vars.type == 'datetime' %}{% else %}col-lg-{{form.vars.compound and form.vars.name not in ["resultsVisibility","allowedToVote","coverType"]?"12":"10"}}{% endif %}">
+{#                    {{dump(form.vars)}}#}
+                    {{ form_widget(form) }}
+                    {{ form_errors(form) }}
+                    {% if attr['data-error-after-selector'] is defined and attr['data-error-after-selector'] == '.dev-after-element' %}<div class="dev-after-element"></div>{% endif %}
+
+                </div>
+            {% else %}
+                {{ form_widget(form) }}
+                {{ form_errors(form) }}
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock form_row %}

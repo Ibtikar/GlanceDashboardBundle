@@ -1,0 +1,574 @@
+{% extends 'IbtikarGlanceDashboardBundle::formLayout.html.twig' %}
+
+
+
+{% block form_container %}
+
+ {% form_theme form   'IbtikarGlanceDashboardBundle::form_theme_recipe.html.twig' %}
+
+    {{ form_start(form)}}
+        <div class="row">
+  {% set deleteAttrs = popover_factory(deletePopoverConfig is defined?deletePopoverConfig:[]) %}
+
+        <div class="col-md-12">
+
+            <h5>ادخل
+                الصور المطلوبة
+            </h5>
+
+
+            <div class="table-responsive">
+                <table class="table table-bordered">
+
+                    <tbody>
+                        <tr id="dev-profilePhoto">
+                            <td style="width: 150px">
+
+                                <div class="thumbnail">
+                                    <div class="thumb thumb-slide">
+
+                                        {% if profilePhoto is not empty %}
+                                            <img src="{{ asset(profilePhoto.getWebPath())}}" alt="">
+
+                                        {% else %}
+                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
+
+                                        {% endif %}
+                                        <div class="caption">
+                                            <span>
+                                                {% if profilePhoto is not empty %}
+                                                    <a href="{{ asset(profilePhoto.getWebPath())}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% else %}
+                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </td>
+                            <td class="thumbnail-caption">
+                                <h4>  صورة الغلاف</h4>
+                                <ul class="text-grey-300">
+                                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                                    <li> يجب الا تقل ابعاد الصورة عن 1170*600 </li>
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                                </ul>
+                            </td>
+                            <td style="width: 300px" data-name="profilePhoto">
+                                {% if profilePhoto is empty %}
+                                    <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
+                                {% endif %}
+                                <a class="btn btn-default dev-crop-images"   {% if profilePhoto is empty %}style="display: none"{%else%} data-image-id="{{ profilePhoto.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':profilePhoto.id,'collectionType':'CausePage'})}}"{%endif%}   >  رفع الصورة </a>
+                                <a class="btn btn-default dev-trash-image" {% if profilePhoto is empty %}style="display: none" {%else%}  data-image-id="{{ profilePhoto.id }}"  data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': profilePhoto.id,'collectionType':'CausePage'}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%} > <i class="icon-trash"></i></a>
+
+
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="tabbable">
+        <ul class="nav nav-tabs nav-tabs-highlight">
+            <li class="active"><a href="#arabic" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}" alt="arabic" width="30" height="20"/></a></li>
+            <li><a href="#english" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}" alt="english" width="30" height="20"/></a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="arabic">
+
+
+
+{{ form_row(form.metaTagTitleAr) }}
+                {{ form_row(form.metaTagDesciptionAr) }}
+            </div><!-- arabic end -->
+
+            <div class="tab-pane" id="english">
+
+
+
+                {{ form_row(form.metaTagTitleEn) }}
+                {{ form_row(form.metaTagDesciptionEn) }}
+
+            </div><!-- english end -->
+
+        </div>
+    </div>
+    <hr/>
+{#    {{ form_row(form.competition) }}
+#}
+
+    {{form_row(form.save)}}
+    {{ form_end(form) }}
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <!-- uploadImg modal -->
+    <div id="uploadImg" class="modal fade">
+        <div class="modal-dialog  modal-full">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h6 class="modal-title"> الصورة
+                    </h6>
+                </div>
+
+                <div class="modal-body">
+
+                    <div id="image-cropper-modal">
+                        <!-- This is where the preview image is displayed -->
+                        <div class="cropit-preview"></div>
+
+                        <!-- This range input controls zoom -->
+
+
+                        <div class="controls-wrapper">
+                            <div class="rotation-btns">
+                                <span class="icon-rotate-cw2 rotate-ccw-btn"></span>
+                                <span class="icon-rotate-ccw2 rotate-cw-btn"></span>
+                            </div>
+
+
+                            <!-- You can add additional elements here, e.g. the image icons -->
+                            <div class="slider-wrapper">
+                                <span class="icon icon-image2 smallIcon"></span>
+                                <input type="range" min="0" max="50" value="5" step="5" class="cropit-image-zoom-input" />
+                                <span class="icon icon-image2 bigIcon"></span>
+                            </div>
+                        </div><!-- controls-wrapper -->
+
+                        <!-- This is where user selects new image -->
+                        <input type="file" class="cropit-image-input" />
+
+                        <!-- The cropit- classes above are needed
+                             so cropit can identify these elements -->
+                    </div>
+
+                </div>
+
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-link dev-crop-spinner" style="display: none"><i class="spinner icon-spinner text-success"></i></button>
+                    <button type="button" class="btn btn-link dev-submit-image" data-url="" data-id=""><i class="icon-checkmark4 text-success"></i></button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal"><i class="icon-cross2 text-danger-400"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /uploadImg modal -->
+
+    {% set imageTempelate %}
+        <tr id="dev-%name%">
+            <td style="width: 150px">
+
+                <div class="thumbnail">
+                    <div class="thumb thumb-slide">
+                        <img src="%image-url%" alt="">
+                        <div class="caption">
+                            <span>
+                                <a href="%image-url%" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </td>
+            <td class="thumbnail-caption">
+                <h4>   %arabicName%</h4>
+                <ul class="text-grey-300">
+                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                    <li> يجب الا تقل ابعاد الصورة عن 200*200 </li>
+                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                </ul>
+            </td>
+            <td style="width: 300px" data-name="%name%">
+                %uploadButton%
+                %cropButton%
+                %deleteButton%
+
+
+            </td>
+
+        </tr>
+
+    {% endset %}
+    {% set uploadButton %}
+        <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
+    {% endset %}
+    {% set cropButton %}
+        <a class="btn btn-default dev-crop-images"    data-image-id="%image-id%" data-crop-url="%crop-url%">  رفع الصورة </a>
+    {% endset %}
+    {% set deleteButton %}
+        <a class="btn btn-default dev-trash-image" data-image-id="%image-id%"  data-href = "%image-delete-url%"  %pop-block%> <i class="icon-trash"></i></a>
+        {% endset %}
+
+
+    {{ parent() }}
+
+    {#    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
+    #}
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/media/fancybox.min.js')}}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_thumbnails.js')}}"></script>
+
+
+    <!-- Plugin file uploaded JS -->
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/bootstrap-fileupload.js')}}"></script>
+
+
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/jquery.cropit.js')}}"></script>
+
+    <script>
+
+        var imageTempelate = '{{ imageTempelate|escape('js') }}';
+        var cropButton = '{{ cropButton|escape('js') }}';
+        var deleteButton = '{{ deleteButton|escape('js') }}';
+        var uploadButton = '{{ uploadButton|escape('js') }}';
+        var cropperPluginInitialized = false;
+
+
+        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':id,'collectionType':'CausePage'})}}";
+        var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'all','documentId':id,'collectionType':'CausePage'})}}";
+        var element;
+        var name;
+        var type;
+        var imageErrorMessages = {
+            'imageExtension': '{% trans from 'validators'%}picture not correct.{%endtrans%}',
+            'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 200*200{%endtrans%}',
+            'sizeError': '{% trans from 'validators'%}File size must be less than 4mb{%endtrans%}',
+            'generalError': '{% trans %}failed operation{%endtrans%}',
+            'coverPhoto': '{% trans from translationDomain %}coverPhoto{%endtrans%}',
+            'profilePhoto': '{% trans from translationDomain %}profilePhoto{%endtrans%}',
+        }
+
+        function showNotificationMsg(title, text, type) {
+
+            var notificationIcons = {
+                success: {
+                    icon: "icon-checkmark3",
+                    class: "bg-success"
+                },
+                info: {
+                    icon: "icon-info22",
+                    class: "bg-info"
+                },
+                error: {
+                    icon: "icon-blocked",
+                    class: "bg-danger"
+                }
+
+            };
+
+            type = (typeof type == "undefined" ? "success" : type);
+
+            new PNotify({
+                title: title,
+                text: text,
+                icon: notificationIcons[type]['icon'],
+                addclass: notificationIcons[type]['class'],
+                type: type,
+                buttons: {
+                    sticker: false
+                },
+                stack: {"dir1": "down", "dir2": "right", "firstpos1": 0, "firstpos2": 0}
+
+            });
+        }
+
+
+        function refreshImages() {
+            $.ajax({
+                url: refreshImagesUrl,
+                success: function (data) {
+                    if (data.status == 'login') {
+                        window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
+                    } else {
+                        if (data.coverPhoto) {
+                            var media = data.coverPhoto;
+                            var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
+                                    .replace(/%image-id%/g, media.id)
+                                    .replace(/%name%/g, 'coverPhoto')
+                                    .replace(/%arabicName%/g, imageErrorMessages.coverPhoto)
+                                    .replace(/%image-delete-url%/g, media.deleteUrl)
+                                    .replace(/%uploadButton%/g, '')
+                                    .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
+                                    .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
+                            $('#dev-coverPhoto').closest('tr').replaceWith(temepelate);
+                            $('[data-popup="popover"]').popover();
+
+
+                            // Tooltip
+                            $('[data-popup="tooltip"]').tooltip({
+                                trigger: 'hover'
+                            });
+
+                        } else {
+                            var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
+                                    .replace(/%image-id%/g, '')
+                                    .replace(/%name%/g, 'coverPhoto')
+                                    .replace(/%arabicName%/g, imageErrorMessages.coverPhoto)
+                                    .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, 'coverPhoto'))
+                                    .replace(/%cropButton%/g, '')
+                                    .replace(/%deleteButton%/g, '');
+                            $('#dev-coverPhoto').replaceWith(temepelate);
+                        }
+                        if (data.profilePhoto) {
+                            var media = data.profilePhoto;
+                            var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
+                                    .replace(/%image-id%/g, media.id)
+                                    .replace(/%name%/g, 'profilePhoto')
+                                    .replace(/%arabicName%/g, imageErrorMessages.profilePhoto)
+
+                                    .replace(/%image-delete-url%/g, media.deleteUrl)
+                                    .replace(/%uploadButton%/g, '')
+                                    .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
+                                    .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
+                            $('#dev-profilePhoto').closest('tr').replaceWith(temepelate);
+                            $('[data-popup="popover"]').popover();
+
+
+                            // Tooltip
+                            $('[data-popup="tooltip"]').tooltip({
+                                trigger: 'hover'
+                            });
+
+                        } else {
+                            var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
+                                    .replace(/%image-id%/g, '')
+                                    .replace(/%name%/g, 'profilePhoto')
+                                    .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, 'profilePhoto'))
+                                    .replace(/%arabicName%/g, imageErrorMessages.profilePhoto)
+                                    .replace(/%cropButton%/g, '')
+                                    .replace(/%deleteButton%/g, '');
+                            $('#dev-profilePhoto').replaceWith(temepelate);
+                        }
+                    }
+                }
+
+
+            })
+        }
+
+        function tdLoadingToggle(elm) {
+            var loaderDiv = '<div class=" btn dev-spinner-container" disabled=""><i class="spinner icon-spinner"></i></div>';
+            if (!$(elm).is('td')) {
+                elm = $(elm).parent('td');
+            }
+            if ($(elm).length > 0) {
+                if ($(elm).find('.dev-spinner-container').length > 0) {
+                    $(elm).find('.dev-spinner-container').remove();
+                    $(elm).children().show();
+                } else {
+                    $(elm).children().hide();
+                    $(elm).append(loaderDiv);
+                }
+            }
+        }
+
+        $(document).ready(function () {
+            $(document).on('click', '.upload-image-modal-open', function () {
+                $('input.cropit-image-input').val('');
+                $('.cropit-preview').removeClass('cropit-image-loaded');
+                $('.cropit-preview-image').attr('src', '');
+                name = $(this).closest('td').attr('data-name');
+                element = $(this);
+                type = 'upload';
+                $('#uploadImg .cropit-image-input').click();
+                if (cropperPluginInitialized) {
+                    return;
+                }
+
+                cropperPluginInitialized = true;
+            });
+
+            $('.image-editor').cropit({smallImage: 'allow',
+                imageState: {
+//            src: '/images/cover.jpg'
+                }
+            });
+
+
+
+            $('#image-cropper-modal').cropit({
+                smallImage: 'allow',
+                imageBackground: true,
+                imageBackgroundBorderWidth: 30,
+                onImageLoaded: function () {
+                    if (type == 'upload') {
+                        $('.dev-submit-image').attr('data-url', uploadUrl)
+                        $('.dev-submit-image').attr('data-id', '')
+                    } else if (type == 'crop') {
+                        $('.dev-submit-image').attr('data-url', element.attr('data-crop-url'))
+                        $('.dev-submit-image').attr('data-id', element.attr('id'))
+
+                    }
+                    var elementObject = $('#uploadImg .cropit-image-input');
+                    if (elementObject.val()) {
+
+                        var value = elementObject.val(),
+                                file = value.toLowerCase(),
+                                extension = file.substring(file.lastIndexOf('.') + 1);
+
+                        if ($.inArray(extension, ['jpeg', 'jpg', 'png']) == -1) {
+                            showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
+
+                        } else if (elementObject.attr('data-size') > (4 * 1024 * 1024)) {
+
+                            showNotificationMsg(imageErrorMessages.sizeError, "", 'error');
+
+                        } else if ($('#image-cropper-modal').cropit('imageSize').width < 200 || $('#image-cropper-modal').cropit('imageSize').height < 200) {
+
+                            showNotificationMsg(imageErrorMessages.imageDimension, "", 'error');
+
+                        } else {
+
+                            $('#uploadImg').modal('show');
+                        }
+                    }
+
+                }, onImageError: function () {
+                    $('#uploadImg').modal('hide');
+                    showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
+                },
+                onFileReaderError: function () {
+                    $('#uploadImg').modal('hide');
+                    showNotificationMsg(imageErrorMessages.imageExtension, "", 'error');
+                }
+
+            })
+            $(document).on('click', '.dev-submit-image', function () {
+                var imageFile = $('#image-cropper-modal').cropit('export')
+                var formData = new FormData();
+                formData.append("media[file]", imageFile);
+                $('.dev-crop-spinner').show();
+                $('.dev-submit-image').hide();
+                $.ajax({
+                    url: $(this).attr('data-url') + '?imageType=' + name,
+                    type: 'POST',
+                    data: formData,
+//            async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data.status == 'login') {
+                            window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
+                        } else if (data.status == 'success') {
+                            var media = data.media;
+                            var temepelate = imageTempelate.replace(/%image-url%/g, '/' + media.imageUrl)
+                                    .replace(/%image-id%/g, media.id)
+                                    .replace(/%name%/g, name)
+                                    .replace(/%image-delete-url%/g, media.deleteUrl)
+                                    .replace(/%arabicName%/g, imageErrorMessages[name])
+                                    .replace(/%uploadButton%/g, '')
+                                    .replace(/%cropButton%/g, cropButton.replace(/%image-id%/g, media.id).replace(/%crop-url%/g, media.cropUrl))
+                                    .replace(/%deleteButton%/g, deleteButton.replace(/%pop-block%/g, media.pop).replace(/%image-delete-url%/g, media.deleteUrl).replace(/%image-id%/g, media.id))
+                            element.closest('tr').replaceWith(temepelate);
+                            showNotificationMsg(data.message, "", data.status);
+                            $('#uploadImg').modal('hide');
+                            $('[data-popup="popover"]').popover();
+
+
+                            // Tooltip
+                            $('[data-popup="tooltip"]').tooltip({
+                                trigger: 'hover'
+                            });
+
+                        } else {
+                            $('#uploadImg').modal('hide');
+                            showNotificationMsg(imageErrorMessages.generalError, "", 'error');
+                            refreshImages();
+                        }
+                        $('.dev-crop-spinner').hide();
+                        $('.dev-submit-image').show();
+                    }
+
+                });
+            });
+
+            $(document).on('click', '.dev-delete-btn', function (e) {
+                var $this = $(this);
+                var closestTr = $this.parents('[role="tooltip"]').prev().closest('tr');
+                var closestTd = $this.parents('[role="tooltip"]').prev().closest('td');
+                tdLoadingToggle(closestTd);
+                $.ajax
+                        ({
+                            'dataType': 'json',
+                            'url': $this.parents('[role="tooltip"]').prev().data('href'),
+                            'success': function (data) {
+                                if (data.status == 'login') {
+                                    window.location = loginUrl + '?redirectUrl=' + encodeURIComponent(window.location.href);
+                                } else if (data.type == 'success') {
+                                    var temepelate = imageTempelate.replace(/%image-url%/g, '/bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')
+                                            .replace(/%image-id%/g, '')
+                                            .replace(/%name%/g, (closestTr.attr('id')).replace(/dev-/g, ''))
+                                            .replace(/%arabicName%/g, imageErrorMessages[(closestTr.attr('id')).replace(/dev-/g, '')])
+                                            .replace(/%uploadButton%/g, uploadButton.replace(/%name%/g, (closestTr.attr('id')).replace(/dev-/g, '')))
+                                            .replace(/%cropButton%/g, '')
+                                            .replace(/%deleteButton%/g, '');
+                                    closestTr.replaceWith(temepelate);
+                                    showNotificationMsg(data.message, "", data.status);
+
+                                } else {
+                                    showNotificationMsg(imageErrorMessages.generalError, "", 'error');
+                                    refreshImages();
+                                }
+                                tdLoadingToggle(closestTd);
+                            }
+                        });
+            })
+            $(document).on('click', '.dev-crop-images', function () {
+//        type = 'crop';
+//        name = $(this).closest('td').attr('data-name');
+//        element = $(this);
+//        var imageSrc = $(this).closest('tr').find('img:first').attr('src')
+//        $('#image-cropper-modal').cropit('imageSrc', imageSrc);
+
+                $('input.cropit-image-input').val('');
+                $('.cropit-preview').removeClass('cropit-image-loaded');
+                $('.cropit-preview-image').attr('src', '');
+                name = $(this).closest('td').attr('data-name');
+                element = $(this);
+                type = 'crop';
+                $('#uploadImg .cropit-image-input').click();
+//        $('#uploadImg').modal('show');
+
+            })
+            // Handle rotation
+            $(document).on('click', '.rotate-cw-btn', function () {
+                $('#image-cropper-modal').cropit('rotateCW');
+            });
+            $(document).on('click', '.rotate-ccw-btn', function () {
+                $('#image-cropper-modal').cropit('rotateCCW');
+            });
+
+            $("form.form-horizontal").data("validator").settings.ignore = "";
+
+            $(document).on('openTab', function () {
+                $("form.form-horizontal").data("validator").settings.ignore = "";
+                if ($('.help-block:eq(0)').closest('.tab-pane').length > 0) {
+                    $('a[href="#' + $('.help-block:eq(0)').closest('.tab-pane').attr('id') + '"').click();
+                }
+            });
+
+        });
+
+
+    </script>
+    {#    <script src="{{ asset('bundles/ibtikarglancedashboard/js/product.js') }}"></script>#}
+
+
+
+{% endblock %}
+

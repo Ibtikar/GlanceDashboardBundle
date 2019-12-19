@@ -57,6 +57,18 @@ class Media extends Document {
     private $causePage;
 
     /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\OnlineAcademy", simple=true)
+     * @KeepReference
+     */
+    private $onlineAcademy;
+
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Course", simple=true)
+     * @KeepReference
+     */
+    private $course;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="Ibtikar\GlanceDashboardBundle\Document\Recipe", simple=true)
      * @KeepReference
      */
@@ -1166,5 +1178,49 @@ class Media extends Document {
     public function getDescriptionAr()
     {
         return $this->descriptionAr;
+    }
+
+    /**
+     * Set onlineAcademy
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\OnlineAcademy $onlineAcademy
+     * @return self
+     */
+    public function setOnlineAcademy(\Ibtikar\GlanceDashboardBundle\Document\OnlineAcademy $onlineAcademy)
+    {
+        $this->onlineAcademy = $onlineAcademy;
+        return $this;
+    }
+
+    /**
+     * Get onlineAcademy
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\OnlineAcademy $onlineAcademy
+     */
+    public function getOnlineAcademy()
+    {
+        return $this->onlineAcademy;
+    }
+
+    /**
+     * Set course
+     *
+     * @param Ibtikar\GlanceDashboardBundle\Document\Course $course
+     * @return self
+     */
+    public function setCourse(\Ibtikar\GlanceDashboardBundle\Document\Course $course)
+    {
+        $this->course = $course;
+        return $this;
+    }
+
+    /**
+     * Get course
+     *
+     * @return Ibtikar\GlanceDashboardBundle\Document\Course $course
+     */
+    public function getCourse()
+    {
+        return $this->course;
     }
 }

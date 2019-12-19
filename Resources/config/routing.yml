@@ -63,6 +63,10 @@ ibtikar_glance_dashboard_competition:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/competition.yml"
     prefix:   /competition
 
+ibtikar_glance_dashboard_course:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/course.yml"
+    prefix:   /course
+
 ibtikar_glance_dashboard_recipe:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/recipe.yml"
     prefix:   /recipe
@@ -102,6 +106,10 @@ ibtikar_glance_dashboard_stars:
 ibtikar_glance_dashboard_causepage:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/causepage.yml"
     prefix:   /causepage
+
+ibtikar_goody_backend_onlineaccadmy:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/onlineacademy.yml"
+    prefix:   /online-academy
 
 ibtikar_glance_dashboard_message:
     resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/message.yml"

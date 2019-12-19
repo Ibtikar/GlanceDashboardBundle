@@ -1,0 +1,512 @@
+{% extends 'IbtikarGlanceDashboardBundle::formLayout.html.twig' %}
+
+
+
+{% block form_container %}
+
+ {% form_theme form form_theme %}
+
+
+
+    {{ form_start(form)}}
+    {{ form_errors(form)}}
+
+    <div class="dev-media-container">
+
+    <div class="row dev-image-container" style="">
+
+        <div class="col-md-12">
+
+            <h5>ادخل
+                الصوره المطلوبة
+            </h5>
+
+
+            <div class="table-responsive">
+                <table class="table table-bordered">
+
+                    <tbody>
+                        <tr id="dev-coverPhoto">
+                            <td style="width: 150px">
+
+                                <div class="thumbnail">
+                                    <div class="thumb thumb-slide">
+
+                                        {% if coverImage is not empty %}
+                                            <img src="{{ asset(coverImage.getWebPath())}}" alt="">
+
+                                        {% else %}
+                                            <img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" alt="">
+
+                                        {% endif %}
+                                        <div class="caption">
+                                            <span>
+                                                {% if coverImage is not empty %}
+                                                    <a href="{{ asset(coverImage.getWebPath())}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% else %}
+                                                    <a href="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/placeholder.jpg')}}" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td class="thumbnail-caption">
+                                <h4> صورة الغلاف</h4>
+                                <ul class="text-grey-300">
+                                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                                    <li> يجب ان تكون ابعاد الصورة 1170*600 </li>
+                                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG او GIF </li>
+                                </ul>
+                            </td>
+                            <td style="width: 300px" data-name="coverPhoto">
+                                {% if coverImage is empty %}
+                                    <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
+                                {% endif %}
+                                <a class="btn btn-default dev-crop-images"   {% if coverImage is empty %}style="display: none"{%else%} data-image-id="{{ coverImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':coverImage.id,'collectionType':'Course'})}}"{%endif%}   >   تغير الصورة </a>
+
+
+                            </td>
+
+                        </tr>
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+                                    {{ form_row(form.youtubeChannel) }}
+    <hr>
+    <div class="tabbable">
+        <ul class="nav nav-tabs nav-tabs-highlight">
+            <li class="active"><a href="#arabic" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/arabic.png')}}" alt="arabic" width="30" height="20"/></a></li>
+            <li><a href="#english" data-toggle="tab"><img src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/english.png')}}" alt="english" width="30" height="20"/></a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="arabic">
+
+
+                {{ form_row(form.name) }}
+
+
+
+
+                {{ form_row(form.questions) }}
+{#                {{ form_row(form.images) }}#}
+        <div class="col-9 clearfix">
+            <div class="col-md-9">
+                <a class="btn btn-lg btn-primary pull-left addQuestion dev-add-course-questions">{% trans from translationDomain %}Add Question{% endtrans %}</a>
+            </div>
+        </div>
+            </div><!-- arabic end -->
+
+            <div class="tab-pane" id="english">
+
+
+                {{ form_row(form.nameEn) }}
+
+
+
+
+                {{ form_row(form.questionsEn) }}
+        <div class="col-9 clearfix">
+            <div class="col-md-9">
+                <a class="btn btn-lg btn-primary pull-left addQuestionEn dev-add-course-questionsEn">{% trans from translationDomain %}Add Question{% endtrans %}</a>
+            </div>
+        </div>
+            </div><!-- english end -->
+
+        </div>
+    </div>
+        <hr/>
+    {{ form_end(form) }}
+
+
+{% endblock %}
+{% block form_buttons %}
+    <div class="row actionButtons">
+        <div class="col-xs-12">
+            <button class="btn btn-primary  dev-form-submit-btn" type="button">{% trans %}Save{% endtrans %}<i class="icon-checkmark4 position-right"></i></button>
+            <button class="btn btn-default dev-form-reset-button" type="button">{% trans %}Reset{% endtrans %}<i class="icon-cross2 position-right"></i></button>
+
+
+
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+
+    <div id="iframeModal" class="modal fade">
+       <div class="modal-dialog">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                   <h3 class="modal-title"></h3>
+               </div>
+               <div class="modal-body">
+                   <div id="iframe-loader" class="loading">
+                   </div>
+                   <iframe class="dev-iframe-auto-resize" src="" scrolling="no" width="100%" style="border: none;"></iframe>
+               </div>
+           </div><!-- /.modal-content -->
+       </div><!-- /.modal-dialog -->
+   </div><!-- /.modal -->
+    <!-- uploadImg modal -->
+    <div id="uploadImg" class="modal fade">
+        <div class="modal-dialog  modal-full">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h6 class="modal-title"> الصورة
+                    </h6>
+                </div>
+
+                <div class="modal-body">
+
+                    <div id="image-cropper-modal">
+                        <!-- This is where the preview image is displayed -->
+                        <div class="cropit-preview"></div>
+
+                        <!-- This range input controls zoom -->
+
+
+                        <div class="controls-wrapper">
+                            <div class="rotation-btns">
+                                <span class="icon-rotate-cw2 rotate-ccw-btn"></span>
+                                <span class="icon-rotate-ccw2 rotate-cw-btn"></span>
+                            </div>
+
+
+                            <!-- You can add additional elements here, e.g. the image icons -->
+                            <div class="slider-wrapper">
+                                <span class="icon icon-image2 smallIcon"></span>
+                                <input type="range" min="0" max="50" value="5" step="5" class="cropit-image-zoom-input" />
+                                <span class="icon icon-image2 bigIcon"></span>
+                            </div>
+                        </div><!-- controls-wrapper -->
+
+                        <!-- This is where user selects new image -->
+                        <input type="file" class="cropit-image-input" />
+
+                        <!-- The cropit- classes above are needed
+                             so cropit can identify these elements -->
+                    </div>
+
+                </div>
+
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-link dev-crop-spinner" style="display: none"><i class="spinner icon-spinner text-success"></i></button>
+                    <button type="button" class="btn btn-link dev-submit-image" data-url="" data-id=""><i class="icon-checkmark4 text-success"></i></button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal"><i class="icon-cross2 text-danger-400"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /uploadImg modal -->
+
+    {% set imageTempelate %}
+        <tr id="dev-%name%">
+            <td style="width: 150px">
+
+                <div class="thumbnail">
+                    <div class="thumb thumb-slide">
+                        <img src="%image-url%" alt="">
+                        <div class="caption">
+                            <span>
+                                <a href="%image-url%" class="btn btn-primary btn-icon" data-popup="lightbox"><i class="icon-zoomin3"></i></a>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </td>
+
+            <td class="thumbnail-caption">
+                <h4> صورة الغلاف</h4>
+                <ul class="text-grey-300">
+                    <li> يجب الا يزيد حجم الصوره عن 4 ميجا</li>
+                    <li> يجب ان تكون ابعاد الصورة 1170*600 </li>
+                    <li>يجب ان تكون الصورة بصيغة JPG أو JPEG أو PNG </li>
+                </ul>
+            </td>
+
+            <td style="width: 300px" data-name="%name%">
+                %uploadButton%
+            </td>
+
+        </tr>
+
+    {% endset %}
+    {% set uploadButton %}
+       <a class="btn btn-default dev-crop-images"    data-image-id="%image-id%" data-crop-url="%crop-url%">  تغير الصورة </a>
+    {% endset %}
+
+
+     {{ parent() }}
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switchery.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/forms/styling/switch.min.js')}}"></script>
+
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/form_checkboxes_radios.js')}}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/media/fancybox.min.js')}}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/pages/components_thumbnails.js')}}"></script>
+
+
+    <!-- Plugin file uploaded JS -->
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/bootstrap-fileupload.js')}}"></script>
+
+
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/fileupload/jquery.cropit.js')}}"></script>
+
+    <!-- drag and drop files -->
+    <script type="text/javascript" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/ui/dragula.min.js')}}"></script>
+
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/date/moment-lang.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/date/bootstrap-datetimepicker.min.js')}}" type="text/javascript"></script>
+    <script>
+            var months$2 = [
+                'يناير',
+                'فبراير',
+                ' مارس',
+                ' أبريل',
+                ' مايو',
+                ' يونيو',
+                ' يوليو',
+                ' أغسطس',
+                ' سبتمبر',
+                ' أكتوبر',
+                ' نوفمبر',
+                ' ديسمبر'
+            ];
+            moment.updateLocale('en', {
+                months: months$2,
+                monthsShort: months$2,
+                weekdays: 'الأحد_الإثنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت'.split('_'),
+                weekdaysShort: 'أحد_إثنين_ثلاثاء_أربعاء_خميس_جمعة_سبت'.split('_'),
+                weekdaysMin: 'ح_ن_ث_ر_خ_ج_س'.split('_'),
+            })
+            moment.locale("en");
+            $('#course_expiryDate').datetimepicker({
+                format: 'MM/DD/YYYY',
+                minDate: moment($('#stars_birthDate').attr("data-min-date"))
+            });
+
+    </script>
+    <script>
+        var answersLimitErrorMessage = '{% trans from 'course' %}You must add only from 2 to 5 answers{% endtrans %}';
+        var cropperPluginInitialized = true;
+        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':'null','collectionType':'Course'})}}";
+        var youtubeUploadVideo = "{{ path('ibtikar_glance_dashboard_media_youtube_upload_video',{'type':'video','documentId':'null','collectionType':'Course'}) }}";
+        var validateVideoUrl = '{{ path('youtube_validate_videoUrl') }}';
+        var imageTempelate = '{{ imageTempelate|escape('js') }}';
+        var uploadButton = '{{ uploadButton|escape('js') }}';
+        var imageErrorMessages = {
+            'imageExtension': '{% trans from 'validators'%}picture not correct.{%endtrans%}',
+            'imageDimension': '{% trans from 'validators'%}Image dimension must be more than 1000*700{%endtrans%}',
+            'sizeError': '{% trans from 'validators'%}File size must be less than 4mb{%endtrans%}',
+            'generalError': '{% trans %}failed operation{%endtrans%}',
+            'coverPhoto': '{% trans from translationDomain %}coverPhoto{%endtrans%}',
+            'profilePhoto': '{% trans from translationDomain %}profilePhoto{%endtrans%}',
+        }
+    </script>
+
+    <script>
+
+        $('select').select2();
+
+    $(document).on('onFailSubmitForm', function () {
+        $('select').select2();
+    })
+        var questionNextId = 1;
+        var questionNextIdEn = 1;
+        $(document).on('click', '.dev-add-course-questions,.dev-add-course-questionsEn', function() {
+            var identifier = $(this).attr('class').split(' ').pop().replace('dev-add-course-','');
+            var lang = identifier=="questions"?"ar":"en";
+            var $questionContainer = $('#course_'+identifier);
+            var placeHolderRegex = new RegExp(identifier+'___name__','g');
+            var arrIndexRegex = new RegExp('\\['+identifier+'\\]\\[__name__\\]','g');
+            var prototype = $questionContainer.data('prototype').replace(placeHolderRegex, identifier+"_"+(lang=="ar"?questionNextId:questionNextIdEn)).replace(arrIndexRegex, "["+identifier+"]["+(lang=="ar"?questionNextId:questionNextIdEn)+"]");
+
+            $questionContainer.append(prototype);
+            if(lang=="ar"){
+                questionNextId++;
+            }else{
+                questionNextIdEn++;
+            }
+            addNewAnswer($questionContainer.find('.voteAnswer:last'));
+            addNewAnswer($questionContainer.find('.voteAnswer:last'));
+            $questionContainer.find('[id$="_answerDisplay"]:last input[type="radio"]:first').prop('checked',true);
+            $questionContainer.find('[id$="_resultDisplay"]:last input[type="radio"]:first').prop('checked',true);
+            $questionContainer.find('[id$="_answerImportance"]:last input[type="radio"]:first').prop('checked',true);
+
+            $questionContainer.find("[type='radio']").uniform({
+                radioClass: 'choice'
+            });
+            $questionContainer.find('select').select2();
+    });
+
+    $(document).on('click', '.dev-remove-course-question', function() {
+            $(this).parents('[id^="course_questions_"]').remove();
+            checkIfLastQuestion($('#arabic'));
+    });
+
+    $(document).on('click', '.dev-remove-course-questionEn', function() {
+            $(this).parents('[id^="course_questionsEn_"]').remove();
+            checkIfLastQuestion($('#english'));
+    });
+
+
+
+
+    /////////////////////////////////////////////////////
+    //question.js
+    /////////////////////////////////////////////////////
+    var nextId = 1;
+
+
+function  checkIfLastQuestion(parent){
+    if(typeof prefix == 'undefined'){
+        prefix = '';
+    }
+    $questionsLength = $(parent).find('.courseQuestion').children('[id^="course_questions"]').length;
+    if($questionsLength < 2){
+        $(parent).find('.dev-remove-course-question,.dev-remove-course-questionEn').addClass('hide');
+    } else {
+        $(parent).find('.dev-remove-course-question,.dev-remove-course-questionEn').removeClass('hide');
+    }
+}
+
+function addAnswersErrorMessage(parent) {
+    if(parent.find('.dev-question-answers-error').length === 0) {
+        parent.find('.dev-add-question-answer-container').after('<div class="dev-question-answers-error noMargin form-group has-error"><div for="question_answers_0_answer" class="help-block">' + answersLimitErrorMessage + '</div></div>');
+    }
+}
+
+function removeAnswersErrorMessage(parent) {
+    parent.find('.dev-question-answers-error').remove();
+}
+
+function correctlyPositionAddButton(parent) {
+    var answersInputsContainer = parent.find('.dev-question-answer-container');
+    answersInputsContainer.each(function(index) {
+        var $this = $(this);
+        $this.find('.deleteAnswer').removeClass('last');
+        $this.find('.addAnswer').remove();
+        if(index === (answersInputsContainer.length - 1)) {
+            $this.find('.input-group-btn').prepend('<button class="btn btn-default addAnswer dev-add-question-answer" type="button"><i class="icon-plus2"></i></button>');
+            $this.find('.deleteAnswer').addClass('last');
+        }
+    });
+}
+
+function addNewAnswer(elm) {
+        var parent = $(elm).hasClass('voteAnswer')?elm:$(elm).parents('.voteAnswer');
+        var answersCount = parent.find('input[id^="'+parent.attr('id')+'_"]:visible').length;
+        if(answersCount < 5) {
+            var $answersContainer = parent;
+            var prototype = $answersContainer.data('prototype');
+            $answersContainer.append(prototype.replace(/__name__/g, nextId));
+            nextId++;
+            removeAnswersErrorMessage(parent);
+        } else {
+            addAnswersErrorMessage(parent);
+        }
+        checkIfLastQuestion(parent.parents('.tab-pane'));
+        correctlyPositionAddButton(parent);
+}
+
+
+jQuery(document).ready(function ($) {
+    correctlyPositionAddButton($('#course_questions'));
+    correctlyPositionAddButton($('#course_questionsEn'));
+    checkIfLastQuestion($('#arabic'));
+    checkIfLastQuestion($('#english'));
+    $('[id$="question_answers_"]input').each(function () {
+        var id = parseInt($(this).attr('id').replace('question_answers_', '').replace('_answer', ''));
+        id++;
+        if (id > nextId) {
+            nextId = id;
+        }
+    });
+
+    $('body').on('change','select[id$="_questionType"]',function(e){
+        var parent = $(this).parents('.panel.panel-flat').eq(0);
+        if($(this).val() != "single answer" && $(this).val() != "multiple answer"){
+            parent.find('.dependant-fields').addClass('hide');
+        }else{
+            parent.find('.dependant-fields').removeClass('hide');
+        }
+    });
+
+    $('body').on('ajaxCallback', function() {
+        $('.voteAnswer').each(function(){
+            correctlyPositionAddButton($(this));
+        });
+        $.each($('[name="course[coverType]"]'),function(index,value){
+
+
+  if($(value).prop('checked'))
+  {
+      if($(value).val() == "none"){
+            $('.dev-media-container .row').slideUp();
+        }else{
+            $('.dev-media-container .row').not('.dev-'+$(value).val()+'-container').slideUp();
+            $('.dev-'+$(value).val()+'-container').slideDown();
+        }
+  }
+})
+        $('#course_expiryDate').datetimepicker({
+                format: 'MM/DD/YYYY',
+                minDate: moment($('#stars_birthDate').attr("data-min-date"))
+            });
+
+        $('select[id$="_questionType"]').each(function(){
+            $(this).trigger('change');
+        });
+        $('.dependant-fields').removeClass('hide');
+    });
+
+    $('body').on('preAjaxCallback', function() {
+        removeAnswersErrorMessage($('.dev-page-main-form'));
+    });
+
+    $(document).on('click', '.dev-add-question-answer', function() {
+        addNewAnswer(this);
+    });
+
+
+
+    $(document).on('click', '.dev-remove-question-answer', function() {
+        var parent = $(this).parents('.voteAnswer');
+
+        var answersCount = parent.find('input[id^="'+parent.attr('id')+'_"]:visible').length;
+
+        if(answersCount > 2) {
+            $(this).parents('.dev-question-answer-container').parent().remove();
+            removeAnswersErrorMessage(parent);
+        } else {
+            addAnswersErrorMessage(parent);
+        }
+        correctlyPositionAddButton(parent);
+    });
+
+});
+
+    </script>
+
+    <script src="{{ asset('bundles/ibtikarglancedashboard/js/course.js') }}"></script>
+{% endblock %}

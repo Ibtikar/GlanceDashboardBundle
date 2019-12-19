@@ -1,0 +1,32 @@
+ibtikar_glance_dashboard_course_create:
+    path:  /create
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course:create }
+
+ibtikar_glance_dashboard_course_new:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/course/new.yml"
+    prefix:   /course-new
+
+ibtikar_glance_dashboard_message_inprogress:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/course/publish.yml"
+    prefix:   /course-publish
+
+ibtikar_glance_dashboard_message_close:
+    resource: "@IbtikarGlanceDashboardBundle/Resources/config/routes/course/unpublish.yml"
+    prefix:   /course-unpublish
+
+ibtikar_glance_dashboard_courseanswer_list:
+    path: /list
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\CourseAnswer:list }
+
+
+ibtikar_glance_dashboard_courseanswer_change_list_columns:
+    path:  /change-list-columns
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\CourseAnswer:changeListColumns }
+
+ibtikar_glance_dashboard_courseanswer_viewanswerone:
+    path:  /view-answer-one/{id}
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course\CourseAnswer:view }
+
+ibtikar_glance_dashboard_course_statistics:
+    path: /ajax/course-statistics
+    defaults: { _controller: IbtikarGlanceDashboardBundle:Course:courseStatistics }

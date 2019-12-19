@@ -189,6 +189,24 @@
             </ul>
         </li>
      {% endif %}
+  {% if  is_granted('ROLE_COURSENEW_VIEW') or is_granted('ROLE_COURSEPUBLISH_VIEW') or is_granted('ROLE_COURSEUNPUBLISH_VIEW') or is_granted('ROLE_ADMIN')%}
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/sections.png')}}" class=" position-left"/>
+                {% trans from 'course' %}List Courses{% endtrans%}
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu width-250">
+                {% if is_granted('ROLE_COURSENEW_VIEW') or is_granted('ROLE_ADMIN')%}
+                    <li><a href="{{ path('ibtikar_glance_dashboard_coursenew_list_new_course') }}" {% if 'message' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/categories.png')}}" class=" position-left"/> {% trans from 'course'%}List courses{% endtrans %}</a></li>
+                {% elseif is_granted('ROLE_COURSEPUBLISH_VIEW') or is_granted('ROLE_ADMIN')%}
+                    <li><a href="{{ path('ibtikar_glance_dashboard_coursepublish_list_publish_course') }}" {% if 'message' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/magazines.png')}}" class=" position-left"/> {% trans from 'course'%}List courses{% endtrans %}</a></li>
+                {% elseif is_granted('ROLE_COURSEUNPUBLISH_VIEW') or is_granted('ROLE_ADMIN')%}
+                    <li><a href="{{ path('ibtikar_glance_dashboard_courseunpublish_list_unpublish_course') }}" {% if 'message' in app.request.attributes.get('_route') %}class="highlight"{% endif %}><img width="20" height="20" src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/images/nav/magazines.png')}}" class=" position-left"/> {% trans from 'course'%}List courses{% endtrans %}</a></li>
+                {% endif %}
+            </ul>
+        </li>
+     {% endif %}
 
                 </ul>
 

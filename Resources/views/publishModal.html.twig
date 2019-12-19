@@ -13,6 +13,7 @@
          <hr/>
             <div class="row">
                 <div class="col-lg-12">
+                    {% if displaylocations is not defined %}
                     <label class="control-label">اماكن  النشر</label>
                     {% for location in locations %}
                         <div class="checkbox">
@@ -22,6 +23,7 @@
                             </label>
                         </div>
                     {% endfor %}
+                    {% endif %}
                     {% if displayGoodyStar is defined %}
                         <div class="checkbox">
                             <label>
