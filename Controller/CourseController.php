@@ -668,7 +668,7 @@ class CourseController extends BackendController {
         $renderingParams['pageNumber'] = $pageNumber;
         $renderingParams['pagination'] = $pagination;
         $renderingParams['paginationData'] = $pagination->getPaginationData();
-        $renderingParams['translationDomain'] = 'course';
+        $renderingParams['translationDomain'] = $this->translationDomain;
         $renderingParams['type'] = $type;
         return $this->render('IbtikarGlanceDashboardBundle:Course:answersList.html.twig', $renderingParams);
     }

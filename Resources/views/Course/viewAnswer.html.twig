@@ -1,90 +1,18 @@
 {% extends  'IbtikarGlanceDashboardBundle:List:baseList.html.twig' %}
 
-{% block title %}{% trans from translationDomain %}List courseanswer{% endtrans%}{% endblock%}
+{% block title %}{% trans from translationDomain %}List competitionanswer{% endtrans%}{% endblock%}
 {% block statistic %}
     <span class="label bg-number heading-text"><span class="dev-document-count">{{total}}</span> {% trans from translationDomain %}answers{% endtrans %}</span>
 {% endblock %}
 {% block breadCrumb %}
-    {% if is_granted('ROLE_COMPETITION_CREATE') or is_granted('ROLE_ADMIN') %}
-        <a class="btn btn-link btn-float has-text" href="{{ path('ibtikar_glance_dashboard_course_create')}}"><i class="icon-add"></i><span>إدخال مسابقه</span></a>
-                {#                        <a class="btn btn-link btn-float has-text activeLink" href="Role-view.php"><i class="icon-table2"></i> <span>مشاهدة الادوار</span></a>
-                #}
-            {% endif %}
+
 
 {% endblock %}
 
 {% block statisctic %}
-    <div class="row">
-        <div class="col-lg-12">
 
+{% endblock%}
 
-            <div class="row">
-
-                <div class="col-lg-12">
-
-
-
-                    <!-- Navigation -->
-                    <div class="panel panel-flat">
-                        <div class="panel-heading">
-                            <h5 class="panel-title">بيانات </h5>
-
-                        </div>
-
-                        <div class="panel-body">
-                            <div class="form-group">
-                                {% if course.noOfAnswer > 0 %}
-                                <div class="row">
-
-                         
-
-
-                                    <div class="col-lg-3">
-                                        <!-- Kitchens -->
-                                        <div class="panel panel-flat">
-                                            <div class="panel-heading">
-                                                <h6 class="panel-title">النوع</h6>
-                                            </div>
-
-
-                                            <div class="chart-container text-center">
-                                                <div class="display-inline-block" id="c3-donut-chart" style="direction: ltr"></div>
-                                            </div>
-
-                                        </div>
-                                        <!-- /Kitchens -->
-
-
-                                    </div>
-
-
-
-
-                                </div>
-                                {% else %}
-                                    <img src="{{ asset('bundles/ibtikarglancedashboard/images/noResult.png')}}" class="img-responsive" style="margin: 0px auto;"/>
-                                {% endif %}
-                            </div>
-
-
-
-
-                        </div><!-- panel-body end -->
-                    </div><!-- panel end -->
-
-
-
-
-                </div><!-- col-lg-12 -->
-            </div><!-- row end -->
-
-
-        </div><!-- col-lg-12 tabs -->
-
-
-    </div>
-
-{% endblock %}
 {% block actions %}
 
 {% endblock%}
