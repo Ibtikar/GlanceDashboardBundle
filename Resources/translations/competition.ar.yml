@@ -100,7 +100,19 @@ created by:  قام بالإنشاء
 'Meta tag desciption ar': 'وصف محرك البحث بالعربية'
 'Meta tag title en': 'عنوان محرك البحث بالانجليزية'
 'Meta tag desciption en': 'وصف محرك البحث بالانجليزية'
-
+'List Courses': 'دورات الطهى'
+'course' : دوره طهى
+'name': الاسم
+'Name': الاسم
+new courses: دورات الطهى الجديدة
+'publish courses': دورات الطهى المنشوره
+unpublish courses: دورات الطهى الغير منشوره
+'unpublish Coursepublish': ايقاف نشر
+View One coursepublish: عرض
+Delete coursepublish: حذف
+Edit coursepublish: تعديل
+Edit Course: تعديل
+Name en: 'الاسم بالإنجليزية'
 # #############General############
 
 

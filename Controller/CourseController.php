@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class CourseController extends BackendController {
 
-    protected $translationDomain = 'course';
+    protected $translationDomain = 'competition';
 
     protected function getObjectShortName() {
         return 'IbtikarGlanceDashboardBundle:Course';
