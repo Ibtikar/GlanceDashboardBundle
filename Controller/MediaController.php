@@ -103,6 +103,17 @@ class MediaController extends BackendController
                 }
                 $fieldUpdate='Competition';
             }
+            elseif ($collectionType === 'Course') {
+                $document = $dm->getRepository('IbtikarGlanceDashboardBundle:Course')->find($documentId);
+                if (!$document) {
+                    throw $this->createNotFoundException($this->trans('Wrong id'));
+                }
+                $response = $this->getInvalidResponseForCourse($documentId, $this->container->get('request_stack')->getCurrentRequest()->get('room'));
+                if ($response) {
+                    return $response;
+                }
+                $fieldUpdate='Course';
+            }
             elseif ($collectionType === 'HomeBanner') {
                 $document = $dm->getRepository('IbtikarGlanceDashboardBundle:HomeBanner')->find($documentId);
                 if (!$document) {
@@ -167,6 +178,7 @@ class MediaController extends BackendController
                             'recipe' => null,
                             'magazine' => null,
                             'competition' => null,
+                            'course' => null,
                             'collectionType' => $collectionType,
                             'coverPhoto' => TRUE
                         ));
@@ -183,6 +195,8 @@ class MediaController extends BackendController
                             'magazine' => null,
                             'banner' => null,
                             'competition' => null,
+                            'course' => null,
+
                             'collectionType' => $collectionType,
                             'bannerPhoto' => TRUE
                         ));
@@ -285,7 +299,13 @@ class MediaController extends BackendController
                             $media->setCoverPhoto(TRUE);
                             if ($documentId && $documentId != 'null') {
                                 $functionName = "get$fieldUpdate";
+                                if($collectionType=='Course'){
+                                    $media->$functionName()->setCover($media);
+
+                                }else{
                                 $media->$functionName()->setCoverPhoto($media);
+                                }
+
                         }
                         break;
                         case 'activityPhoto':
@@ -304,6 +324,11 @@ class MediaController extends BackendController
                     $media->setName($request->get('fileName'));
                 }
 
+                if($media->getCourse()){
+                    $media->setCoverPhoto(true);
+                    $media->getCourse()->setCover($media);
+
+                }
                 $dm->flush();
 
 
@@ -368,6 +393,11 @@ class MediaController extends BackendController
                 $media = $dm->getRepository('IbtikarGlanceDashboardBundle:Media')->find($id);
                 if (!$media) {
                     return new JsonResponse(array('status', 'reload'));
+                }
+                if($media->getCourse()){
+                    $media->setCoverPhoto(true);
+                    $media->getCourse()->setCover($media);
+
                 }
                 if ($media->getProduct()) {
                     $reponse = $this->getInvalidResponseForProduct($media->getProduct()->getId(), '', 'crop');
@@ -1317,6 +1347,25 @@ class MediaController extends BackendController
         $roomArray=  explode('?', $room);
         $dm = $this->get('doctrine_mongodb')->getManager();
         $material = $dm->getRepository('IbtikarGlanceDashboardBundle:Competition')->find($documentId);
+        if (!$material) {
+            throw $this->createNotFoundException($this->trans('Wrong id'));
+        }
+
+        $securityContext = $this->get('security.authorization_checker');
+        if (!$room || (!$securityContext->isGranted('ROLE_' . strtoupper($roomArray[0]) . '_EDIT') && !$securityContext->isGranted('ROLE_ADMIN'))) {
+
+            return $this->getAccessDeniedResponse();
+        }
+
+    }
+
+    public function getInvalidResponseForCourse($documentId, $room) {
+        if (!$this->getUser()) {
+            return $this->getLoginResponse();
+        }
+        $roomArray=  explode('?', $room);
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $material = $dm->getRepository('IbtikarGlanceDashboardBundle:Course')->find($documentId);
         if (!$material) {
             throw $this->createNotFoundException($this->trans('Wrong id'));
         }
