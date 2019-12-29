@@ -62,8 +62,8 @@
                                 {% if profilePhoto is empty %}
                                     <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
                                 {% endif %}
-                                <a class="btn btn-default dev-crop-images"   {% if profilePhoto is empty %}style="display: none"{%else%} data-image-id="{{ profilePhoto.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':profilePhoto.id,'collectionType':'CausePage'})}}"{%endif%}   >  رفع الصورة </a>
-                                <a class="btn btn-default dev-trash-image" {% if profilePhoto is empty %}style="display: none" {%else%}  data-image-id="{{ profilePhoto.id }}"  data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': profilePhoto.id,'collectionType':'CausePage'}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%} > <i class="icon-trash"></i></a>
+                                <a class="btn btn-default dev-crop-images"   {% if profilePhoto is empty %}style="display: none"{%else%} data-image-id="{{ profilePhoto.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':profilePhoto.id,'collectionType':'OnlineAcademy'})}}"{%endif%}   >  رفع الصورة </a>
+                                <a class="btn btn-default dev-trash-image" {% if profilePhoto is empty %}style="display: none" {%else%}  data-image-id="{{ profilePhoto.id }}"  data-href = "{{ path('ibtikar_glance_dashboard_media_delete', {'id': profilePhoto.id,'collectionType':'OnlineAcademy'}) }}" {{ deleteAttrs|replace({'%title%': 'image'|trans({},translationDomain)})|raw }} {%endif%} > <i class="icon-trash"></i></a>
 
 
                             </td>
@@ -238,8 +238,8 @@
         var cropperPluginInitialized = false;
 
 
-        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':id,'collectionType':'CausePage'})}}";
-        var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'all','documentId':id,'collectionType':'CausePage'})}}";
+        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':id,'collectionType':'OnlineAcademy'})}}";
+        var refreshImagesUrl = "{{ path('ibtikar_glance_dashboard_media_user_files',{'type':'all','documentId':id,'collectionType':'OnlineAcademy'})}}";
         var element;
         var name;
         var type;

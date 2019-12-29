@@ -110,12 +110,16 @@ unpublish courses: دورات الطهى الغير منشوره
 'unpublish Coursepublish': ايقاف نشر
 View One coursepublish: عرض
 Delete coursepublish: حذف
+Delete coursenew: حذف
 Edit coursepublish: تعديل
+Edit coursenew: تعديل
 Edit Course: تعديل
 Name en: 'الاسم بالإنجليزية'
 List courseanswer: عرض الاجابات
 'View One Courseanswer': عرض
+'View One coursenew': عرض
 publish Courseunpublish: نشر
+publish Coursenew: نشر
 # #############General############
 
 
