@@ -112,7 +112,7 @@
                                                                                 {% if is_granted('ROLE_' ~ listName|upper ~'_VIEWONEANSWER') or is_granted('ROLE_ADMIN')  %}
 
                                                                                     <a href="{{ path(prefixRoute|lower~'_viewAnswers', {'id': object.id}) }}" class="btn btn-default">
-                                                                                        <i class="icon-list" data-popup="tooltip"  data-placement="right" title="{{('List competitionanswer')|trans({},translationDomain)}}" ></i>
+                                                                                        <i class="icon-list" data-popup="tooltip"  data-placement="right" title="{{('List courseanswer')|trans({},translationDomain)}}" ></i>
                                                                                     </a>
                                                                             {% endif %}
                                                                             {% elseif action == "ViewOneAnswer" %}
@@ -123,7 +123,7 @@
 
                                                                             {% endif %}
 
-                                                                            {% if is_granted('ROLE_COMPETITION' ~ status|upper ~'_VIEWONEANSWER') or is_granted('ROLE_ADMIN')  %}
+                                                                            {% if is_granted('ROLE_COURSE' ~ status|upper ~'_VIEWONEANSWER') or is_granted('ROLE_ADMIN')  %}
                                                                                 <a href="{{ path(prefixRoute|lower~'_viewanswerone', {'id': object.id}) }}" class="btn btn-default">
                                                                                     <i class="icon-eye" data-popup="tooltip"  data-placement="right" title="{{('View One ' ~  listName|capitalize)|trans({},translationDomain)}}" ></i>
                                                                                 </a>

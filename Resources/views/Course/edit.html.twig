@@ -66,7 +66,7 @@
                                 {% if coverImage is empty %}
                                     <a class="btn btn-default upload-image-modal-open dev-upload-image"  > رفع الصورة</a>
                                 {% endif %}
-                                <a class="btn btn-default dev-crop-images"   {% if coverImage is empty %}style="display: none"{%else%} data-image-id="{{ coverImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':coverImage.id,'collectionType':'Competition'})}}"{%endif%}   >   تغير الصورة </a>
+                                <a class="btn btn-default dev-crop-images"   {% if coverImage is empty %}style="display: none"{%else%} data-image-id="{{ coverImage.id }}" data-crop-url="{{ path('ibtikar_glance_dashboard_media_crop',{'id':coverImage.id,'collectionType':'Course'})}}"{%endif%}   >   تغير الصورة </a>
 
 
                             </td>
@@ -286,8 +286,8 @@
     <script>
         var answersLimitErrorMessage = '{% trans from 'course' %}You must add only from 2 to 5 answers{% endtrans %}';
         var cropperPluginInitialized = true;
-        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':app.request.get('id'),'collectionType':'Competition','room':room})}}";
-        var youtubeUploadVideo = "{{ path('ibtikar_glance_dashboard_media_youtube_upload_video',{'type':'video','documentId':app.request.get('id'),'collectionType':'Competition','room':room}) }}";
+        var uploadUrl = "{{ path('ibtikar_glance_dashboard_media_upload',{'type':'image','documentId':app.request.get('id'),'collectionType':'Course','room':room})}}";
+        var youtubeUploadVideo = "{{ path('ibtikar_glance_dashboard_media_youtube_upload_video',{'type':'video','documentId':app.request.get('id'),'collectionType':'Course','room':room}) }}";
         var validateVideoUrl = '{{ path('youtube_validate_videoUrl') }}';
         var imageTempelate = '{{ imageTempelate|escape('js') }}';
         var uploadButton = '{{ uploadButton|escape('js') }}';
