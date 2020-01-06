@@ -135,7 +135,7 @@ class CourseController extends BackendController {
 
         $form = $this->createForm(CourseType::class, $course, array('translation_domain' => $this->translationDomain,
             'isNew' => $course->getStatus() == "new"?true:false,
-                'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal')));
+                'attr' => array('class' => 'dev-page-main-form dev-js-validation form-horizontal', 'admin' => $this->getUser()->getAdmin())));
 
         $coverImage = NULL;
         $coverVideo = NULL;

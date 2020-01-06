@@ -34,10 +34,10 @@ class CourseType extends AbstractType {
                 ->add('nameEn', formType\TextType::class, array('attr' => array('data-rule-minlength' => 3,'data-rule-maxlength' => 150)))
                 ->add('youtubeChannel', formType\UrlType::class, array('required' => true));
 
-//        if($this->isNew){
+        if($this->isNew || $options['attr']['admin']){
             $builder->add('questions', formType\CollectionType::class, array('label' => false,'entry_type' => CourseQuestionType::class, 'allow_add' => true, 'allow_delete' => true, 'by_reference' => true, 'attr' => array('class' => 'courseQuestion')));
             $builder->add('questionsEn', formType\CollectionType::class, array('label' => false,'entry_type' => CourseQuestionType::class, 'allow_add' => true, 'allow_delete' => true, 'by_reference' => true, 'attr' => array('class' => 'courseQuestion')));
-//        }
+        }
 
 
 
