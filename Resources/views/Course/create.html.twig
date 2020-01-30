@@ -416,10 +416,11 @@ function correctlyPositionAddButton(parent) {
 function addNewAnswer(elm) {
         var parent = $(elm).hasClass('voteAnswer')?elm:$(elm).parents('.voteAnswer');
         var answersCount = parent.find('input[id^="'+parent.attr('id')+'_"]:visible').length;
+        answersCount=answersCount/2;
         if(answersCount < 5) {
             var $answersContainer = parent;
             var prototype = $answersContainer.data('prototype');
-            $answersContainer.append(prototype.replace(/__name__/g, nextId));
+            $answersContainer.append(prototype.replace(/__name__/g, answersCount));
             nextId++;
             removeAnswersErrorMessage(parent);
         } else {
